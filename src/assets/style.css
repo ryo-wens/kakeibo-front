@@ -1,0 +1,38 @@
+.section__display {
+  background-color: #ebeae8;
+  width: 100%;
+}
+
+.box__input {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  box-sizing: border-box;
+  height: 420px;
+  max-width: 320px;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.box__recent {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.3);
+  border-radius: 5px;
+  box-sizing: border-box;
+  height: 560px;
+  max-width: 320px;
+  padding: 0 1rem;
+  width: 100%;
+}
+
+.grid__column {
+  align-items: center;
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  height: auto;
+}
+
+.box-right {
+  margin: 16px 0 0 auto;
+}
