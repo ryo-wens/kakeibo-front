@@ -1,6 +1,6 @@
 import React from 'react';
 import './assets/style.css';
-import { TextInput } from './components/index';
+import { InputForm } from './components/index';
 import Router from './Router';
 
 const App = () => {
@@ -8,7 +8,7 @@ const App = () => {
     <section className="section__display">
       <div className="box__input box-right">
         <h3>入力フォーム</h3>
-        <TextInput />
+        <InputForm />
       </div>
       <Router />
     </section>

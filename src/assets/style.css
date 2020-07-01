@@ -14,6 +14,10 @@
   text-align: center;
 }
 
+.module-spacer--small {
+  height: 12px;
+}
+
 .box__input {
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.3);

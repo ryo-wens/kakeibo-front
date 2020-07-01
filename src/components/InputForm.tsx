@@ -1,20 +1,12 @@
 import React, { useState, useCallback } from 'react';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import TextField from '@material-ui/core/TextField';
-import { GenericButton, DatePicker, CategoryInput } from './uikit/index';
+import {
+  GenericButton,
+  DatePicker,
+  CategoryInput,
+  TextInput,
+} from './uikit/index';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    text: {
-      fontSize: 15,
-      fontWeight: 600,
-      width: 225,
-      marginBottom: 20,
-    },
-  })
-);
-
-const TextInput = () => {
+const InputForm = () => {
   const [price, setPrice] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const [category, setCategory] = useState<string>('');
@@ -49,7 +41,6 @@ const TextInput = () => {
   };
 
   const unInput = price === '' || category === '';
-  const classes = useStyles();
 
   return (
     <form className="grid__column" autoComplete="on">
@@ -60,23 +51,24 @@ const TextInput = () => {
         onChange={handleDateChange}
         required={true}
       />
-      <TextField
-        className={classes.text}
+      <TextInput
         value={price}
         type={'tel'}
         id={'price'}
         label={'金額'}
         onChange={handlePriceChange}
         required={true}
+        fullWidth={false}
       />
       <CategoryInput value={category} onChange={handleChange} required={true} />
-      <TextField
-        className={classes.text}
+      <TextInput
         value={memo}
         type={'text'}
         id={'memo'}
         label={'メモ'}
         onChange={handleMemo}
+        required={false}
+        fullWidth={false}
       />
       <GenericButton
         onClick={() => addEntry(price, memo, category, selectedDate)}
@@ -86,4 +78,4 @@ const TextInput = () => {
     </form>
   );
 };
-export default TextInput;
+export default InputForm;

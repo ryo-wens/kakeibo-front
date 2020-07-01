@@ -1,7 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import TextField from '@material-ui/core/TextField';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import Box from '@material-ui/core/Box';
@@ -9,7 +8,7 @@ import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { GenericButton } from '../components/uikit/index';
+import { GenericButton, TextInput } from '../components/uikit/index';
 import { useDispatch } from 'react-redux';
 import { signUp } from '../reducks/users/operations';
 
@@ -108,61 +107,55 @@ const SignUp = () => {
           </Typography>
           <form className={classes.form} noValidate>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="userid"
-                  variant="outlined"
-                  required
-                  fullWidth
+              <Grid item xs={12} className="center">
+                <TextInput
+                  id={'userId'}
+                  required={true}
+                  fullWidth={true}
                   label="ユーザーID"
                   value={userId}
                   type="userId"
-                  autoFocus
                   onChange={inputUserId}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="name"
-                  variant="outlined"
-                  required
-                  fullWidth
+              <Grid item xs={12} className="center">
+                <TextInput
+                  id={'userName'}
+                  required={true}
+                  fullWidth={true}
                   label="名前"
                   value={userName}
-                  type="userName"
+                  type="name"
                   onChange={inputUserName}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="email"
-                  variant="outlined"
-                  required
-                  fullWidth
+              <Grid item xs={12} className="center">
+                <TextInput
+                  id={'email'}
+                  required={true}
+                  fullWidth={true}
                   label="メールアドレス"
                   value={email}
                   type="email"
                   onChange={inputEmail}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="current-password"
-                  variant="outlined"
-                  required
-                  fullWidth
+              <Grid item xs={12} className="center">
+                <TextInput
+                  id={'password'}
+                  required={true}
+                  fullWidth={true}
                   label="パスワード"
                   value={password}
                   type="password"
                   onChange={inputPassword}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <TextField
-                  autoComplete="current-password"
-                  variant="outlined"
-                  required
-                  fullWidth
+              <Grid item xs={12} className="center">
+                <TextInput
+                  id={'confirmPassword'}
+                  required={true}
+                  fullWidth={true}
                   label="パスワードの確認"
                   value={confirmPassword}
                   type="password"
@@ -181,7 +174,8 @@ const SignUp = () => {
                 }
               />
             </div>
-            <Grid container justify="flex-end">
+            <div className="module-spacer--small" />
+            <Grid container justify="center">
               <Grid item>
                 <Link href="#" variant="body2">
                   すでにアカウントをお持ちの方はこちら
