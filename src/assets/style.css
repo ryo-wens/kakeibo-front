@@ -3,6 +3,17 @@
   width: 100%;
 }
 
+.sign__form {
+  position: absolute;
+  top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.center {
+  text-align: center;
+}
+
 .box__input {
   background: #fff;
   border: 1px solid rgba(0, 0, 0, 0.3);

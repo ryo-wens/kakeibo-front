@@ -23,6 +23,7 @@ type DatePickerProps = {
   label: string;
   value: Date | null;
   onChange: (date: Date | null) => void;
+  required: boolean;
 };
 
 const DatePicker = (props: DatePickerProps) => {
@@ -36,6 +37,7 @@ const DatePicker = (props: DatePickerProps) => {
           format="yyyy/MM/dd"
           value={props.value}
           onChange={props.onChange}
+          required={props.required}
           KeyboardButtonProps={{
             'aria-label': 'change date',
           }}

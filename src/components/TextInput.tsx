@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { InputButton, DatePicker, CategoryInput } from './uikit/index';
+import { GenericButton, DatePicker, CategoryInput } from './uikit/index';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,6 +48,7 @@ const TextInput = () => {
     setSelectedDate(date);
   };
 
+  const unInput = price === '' || category === '';
   const classes = useStyles();
 
   return (
@@ -57,6 +58,7 @@ const TextInput = () => {
         label={'日付'}
         value={selectedDate}
         onChange={handleDateChange}
+        required={true}
       />
       <TextField
         className={classes.text}
@@ -65,8 +67,9 @@ const TextInput = () => {
         id={'price'}
         label={'金額'}
         onChange={handlePriceChange}
+        required={true}
       />
-      <CategoryInput value={category} onChange={handleChange} />
+      <CategoryInput value={category} onChange={handleChange} required={true} />
       <TextField
         className={classes.text}
         value={memo}
@@ -75,9 +78,10 @@ const TextInput = () => {
         label={'メモ'}
         onChange={handleMemo}
       />
-      <InputButton
+      <GenericButton
         onClick={() => addEntry(price, memo, category, selectedDate)}
         label={'入力する'}
+        disabled={unInput}
       />
     </form>
   );

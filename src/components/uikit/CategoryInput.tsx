@@ -17,6 +17,7 @@ const useStyles = makeStyles((theme: Theme) =>
 type CategoryProps = {
   value: string;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  required: boolean;
 };
 
 const CategoryInput = (props: CategoryProps) => {
@@ -24,7 +25,9 @@ const CategoryInput = (props: CategoryProps) => {
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel id="category">カテゴリー</InputLabel>
+      <InputLabel id="category" required={props.required}>
+        カテゴリー
+      </InputLabel>
       <Select value={props.value} onChange={props.onChange}>
         <MenuItem value=""></MenuItem>
         <MenuItem value={'食費'}>食費</MenuItem>
