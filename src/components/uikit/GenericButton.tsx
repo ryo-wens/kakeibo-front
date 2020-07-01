@@ -20,12 +20,13 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-type InputButtonProps = {
+type GenericButtonProps = {
   label: string;
   onClick: () => void;
+  disabled: boolean;
 };
 
-const InputButton = (props: InputButtonProps) => {
+const GenericButton = (props: GenericButtonProps) => {
   const classes = useStyles();
   return (
     <div>
@@ -34,10 +35,11 @@ const InputButton = (props: InputButtonProps) => {
         className={classes.button}
         startIcon={<AddCircleOutlineIcon />}
         onClick={() => props.onClick()}
+        disabled={props.disabled}
       >
         {props.label}
       </Button>
     </div>
   );
 };
-export default InputButton;
+export default GenericButton;
