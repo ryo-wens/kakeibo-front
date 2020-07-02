@@ -1,15 +1,5 @@
-import { signUpAction } from './actions';
+import { signUpAction, signInAction } from './actions';
 import { Dispatch, Action } from 'redux';
-
-export const isValidRequiredInput = (...args: string[]) => {
-  let validator = true;
-  for (let i = 0; i < args.length; i = (i + 1) | 0) {
-    if (args[i] === '') {
-      validator = false;
-    }
-  }
-  return validator;
-};
 
 export const isValidEmailFormat = (email: string) => {
   const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -62,5 +52,17 @@ export const signUp = (
       return null;
     }
     dispatch(signUpAction(userId, userName, email, password, confirmPassword));
+  };
+};
+
+export const signIn = (email: string, password: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    if (!isValidEmailFormat(email)) {
+      alert(
+        'メールアドレスの形式に誤りがあります。正しく入力し直してください。'
+      );
+      return null;
+    }
+    dispatch(signInAction(email, password));
   };
 };

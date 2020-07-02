@@ -1,5 +1,3 @@
-import { UserState } from './types';
-
 export type UserActions = ReturnType<
   typeof signUpAction | typeof signInAction | typeof signOutAction
 >;
@@ -25,10 +23,13 @@ export const signUpAction = (
 };
 
 export const SIGN_IN = 'SIGN_IN';
-export const signInAction = (userState: UserState) => {
+export const signInAction = (email: string, password: string) => {
   return {
     type: SIGN_IN,
-    payload: userState,
+    payload: {
+      email: email,
+      password: password,
+    },
   };
 };
 
