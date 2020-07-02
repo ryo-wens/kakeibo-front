@@ -3,7 +3,6 @@ import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
-import Box from '@material-ui/core/Box';
 import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
@@ -11,19 +10,6 @@ import Container from '@material-ui/core/Container';
 import { GenericButton, TextInput } from '../components/uikit/index';
 import { useDispatch } from 'react-redux';
 import { signUp } from '../reducks/users/operations';
-
-function Copyright() {
-  return (
-    <Typography variant="body2" color="primary" align="center">
-      {'Copyright © '}
-      <Link color="inherit" href="">
-        開発者
-      </Link>{' '}
-      {new Date().getFullYear()}
-      {'.'}
-    </Typography>
-  );
-}
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -95,7 +81,7 @@ const SignUp = () => {
   const classes = useStyles();
 
   return (
-    <section className="sign__form">
+    <section className="signup__form">
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -145,7 +131,7 @@ const SignUp = () => {
                   id={'password'}
                   required={true}
                   fullWidth={true}
-                  label="パスワード"
+                  label="パスワード(半角英数字で8文字以上)"
                   value={password}
                   type="password"
                   onChange={inputPassword}
@@ -163,6 +149,7 @@ const SignUp = () => {
                 />
               </Grid>
             </Grid>
+            <div className="module-spacer--bit-small" />
             <div className="center">
               <GenericButton
                 label={'アカウントを登録する'}
@@ -174,19 +161,16 @@ const SignUp = () => {
                 }
               />
             </div>
-            <div className="module-spacer--small" />
+            <div className="module-spacer--bit-small" />
             <Grid container justify="center">
               <Grid item>
-                <Link href="#" variant="body2">
+                <Link href="/signin" variant="body2">
                   すでにアカウントをお持ちの方はこちら
                 </Link>
               </Grid>
             </Grid>
           </form>
         </div>
-        <Box mt={5}>
-          <Copyright />
-        </Box>
       </Container>
     </section>
   );

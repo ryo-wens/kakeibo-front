@@ -3,9 +3,16 @@
   width: 100%;
 }
 
-.sign__form {
+.signup__form {
   position: absolute;
   top: 35%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.signin__form {
+  position: absolute;
+  top: 28%;
   left: 50%;
   transform: translate(-50%, -50%);
 }
@@ -14,8 +21,12 @@
   text-align: center;
 }
 
-.module-spacer--small {
+.module-spacer--bit-small {
   height: 12px;
+}
+
+.module-spacer--small {
+  height: 20px;
 }
 
 .box__input {
