@@ -1,5 +1,6 @@
-import { signUpAction, signInAction } from './actions';
+import { signUpAction, signInAction, signOutAction } from './actions';
 import { Dispatch, Action } from 'redux';
+import { push } from 'connected-react-router';
 
 export const isValidEmailFormat = (email: string) => {
   const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
@@ -63,6 +64,14 @@ export const signIn = (email: string, password: string) => {
       );
       return null;
     }
+
     dispatch(signInAction(email, password));
+  };
+};
+
+export const signOut = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(signOutAction());
+    dispatch(push('/signin'));
   };
 };
