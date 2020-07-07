@@ -4,7 +4,7 @@ import {
   DatePicker,
   CategoryInput,
   TextInput,
-} from './uikit/index';
+} from '../uikit/index';
 
 const InputForm = () => {
   const [price, setPrice] = useState<string>('');
@@ -43,7 +43,8 @@ const InputForm = () => {
   const unInput = price === '' || category === '';
 
   return (
-    <form className="grid__column" autoComplete="on">
+    <form className="grid__column box__input box-right" autoComplete="on">
+      <h3>入力フォーム</h3>
       <DatePicker
         id={'date-picker-dialog'}
         label={'日付'}

@@ -6,14 +6,14 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     button: {
-      borderColor: '#2da3f7',
-      color: '#2da3f7',
+      borderColor: '#3086f0',
+      color: '#3086f0',
       fontWeight: 700,
       fontSize: 16,
       width: 235,
       margin: theme.spacing(2),
       '&:hover': {
-        backgroundColor: '#2da3f7',
+        backgroundColor: '#3086f0',
         color: '#fff',
       },
     },
