@@ -1,5 +1,5 @@
 export type UserActions = ReturnType<
-  typeof signUpAction | typeof signInAction | typeof signOutAction
+  typeof signUpAction | typeof logInAction | typeof logOutAction
 >;
 
 export const SIGN_UP = 'SIGN_UP';
@@ -22,10 +22,10 @@ export const signUpAction = (
   };
 };
 
-export const SIGN_IN = 'SIGN_IN';
-export const signInAction = (email: string, password: string) => {
+export const LOG_IN = 'LOG_IN';
+export const logInAction = (email: string, password: string) => {
   return {
-    type: SIGN_IN,
+    type: LOG_IN,
     payload: {
       email: email,
       password: password,
@@ -33,10 +33,10 @@ export const signInAction = (email: string, password: string) => {
   };
 };
 
-export const SIGN_OUT = 'SIGN_OUT';
-export const signOutAction = () => {
+export const LOG_OUT = 'LOG_OUT';
+export const logOutAction = () => {
   return {
-    type: SIGN_OUT,
+    type: LOG_OUT,
     payload: null,
   };
 };

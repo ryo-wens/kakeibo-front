@@ -12,12 +12,12 @@ export const usersReducer = (
         ...state,
         ...action.payload,
       };
-    case Actions.SIGN_IN:
+    case Actions.LOG_IN:
       return {
         ...state,
         ...action.payload,
       };
-    case Actions.SIGN_OUT:
+    case Actions.LOG_OUT:
       return {
         ...initialState.users,
       };

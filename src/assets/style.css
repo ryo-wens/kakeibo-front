@@ -32,7 +32,7 @@
   transform: translate(-50%, -50%);
 }
 
-.signin__form {
+.login__form {
   position: absolute;
   top: 28%;
   left: 50%;

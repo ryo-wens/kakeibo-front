@@ -3,9 +3,9 @@ import { UserState } from './types';
 
 const usersSelector = (state: UserState) => state;
 
-export const getSignedIn = createSelector(
+export const getLogedIn = createSelector(
   [usersSelector],
-  (state) => state.isSignedIn
+  (state) => state.isLogedIn
 );
 export const getUserId = createSelector(
   [usersSelector],

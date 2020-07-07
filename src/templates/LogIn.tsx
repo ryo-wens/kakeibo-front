@@ -9,7 +9,7 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { GenericButton, TextInput } from '../components/uikit/index';
 import { useDispatch } from 'react-redux';
-import { signIn } from '../reducks/users/operations';
+import { logIn } from '../reducks/users/operations';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -28,7 +28,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignIn = () => {
+const LogIn = () => {
   const dispatch = useDispatch();
 
   const [email, setEmail] = useState<string>('');
@@ -48,12 +48,12 @@ const SignIn = () => {
     [setPassword]
   );
 
-  const unSignIn = email === '' || password === '';
+  const unLogIn = email === '' || password === '';
 
   const classes = useStyles();
 
   return (
-    <section className="signin__form">
+    <section className="login__form">
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -94,8 +94,8 @@ const SignIn = () => {
             <div className="center">
               <GenericButton
                 label={'ログインする'}
-                disabled={unSignIn}
-                onClick={() => dispatch(signIn(email, password))}
+                disabled={unLogIn}
+                onClick={() => dispatch(logIn(email, password))}
               />
             </div>
             <div className="module-spacer--small" />
@@ -112,4 +112,4 @@ const SignIn = () => {
     </section>
   );
 };
-export default SignIn;
+export default LogIn;
