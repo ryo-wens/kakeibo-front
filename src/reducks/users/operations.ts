@@ -1,4 +1,4 @@
-import { signUpAction, signInAction, signOutAction } from './actions';
+import { signUpAction, logInAction, logOutAction } from './actions';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 
@@ -56,7 +56,7 @@ export const signUp = (
   };
 };
 
-export const signIn = (email: string, password: string) => {
+export const logIn = (email: string, password: string) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidEmailFormat(email)) {
       alert(
@@ -65,13 +65,13 @@ export const signIn = (email: string, password: string) => {
       return null;
     }
 
-    dispatch(signInAction(email, password));
+    dispatch(logInAction(email, password));
   };
 };
 
-export const signOut = () => {
+export const logOut = () => {
   return async (dispatch: Dispatch<Action>) => {
-    dispatch(signOutAction());
-    dispatch(push('/signin'));
+    dispatch(logOutAction());
+    dispatch(push('/login'));
   };
 };

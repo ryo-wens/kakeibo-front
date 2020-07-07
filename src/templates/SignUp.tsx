@@ -164,7 +164,7 @@ const SignUp = () => {
             <div className="module-spacer--bit-small" />
             <Grid container justify="center">
               <Grid item>
-                <Link href="/signin" variant="body2">
+                <Link href="/login" variant="body2">
                   すでにアカウントをお持ちの方はこちら
                 </Link>
               </Grid>

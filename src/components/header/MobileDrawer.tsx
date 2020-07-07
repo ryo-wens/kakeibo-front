@@ -15,7 +15,7 @@ import ComputerIcon from '@material-ui/icons/Computer';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import GroupIcon from '@material-ui/icons/Group';
 import SettingsIcon from '@material-ui/icons/Settings';
-import { signOut } from '../../reducks/users/operations';
+import { logOut } from '../../reducks/users/operations';
 
 const useStyles = makeStyles({
   drawer: {
@@ -27,9 +27,9 @@ const MobileDrawer = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
-  const signOutCheck = () => {
+  const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {
-      dispatch(signOut());
+      dispatch(logOut());
     } else {
       alert('ログアウトを中止しました');
     }
@@ -115,7 +115,7 @@ const MobileDrawer = () => {
               <ListItemText primary={menu.label} />
             </ListItem>
           ))}
-          <ListItem button key="logout" onClick={() => signOutCheck()}>
+          <ListItem button key="logout" onClick={() => logOutCheck()}>
             <ListItemIcon>
               <ExitToAppIcon />
             </ListItemIcon>
