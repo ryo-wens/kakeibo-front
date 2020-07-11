@@ -33,6 +33,7 @@ const TextInput = (props: TextInputProps) => {
   return (
     <TextField
       className={textStyle}
+      type={props.type}
       value={props.value}
       id={props.id}
       label={props.label}
