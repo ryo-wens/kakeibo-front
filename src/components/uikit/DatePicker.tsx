@@ -1,5 +1,6 @@
 import 'date-fns';
 import React from 'react';
+import { makeStyles } from '@material-ui/core/styles';
 import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import jaLocale from 'date-fns/locale/ja';
@@ -18,6 +19,12 @@ class ExtendedUtils extends DateFnsUtils {
   }
 }
 
+const useStyles = makeStyles({
+  root: {
+    margin: '0px 8px 16px',
+  },
+});
+
 type DatePickerProps = {
   id: string;
   label: string;
@@ -27,11 +34,12 @@ type DatePickerProps = {
 };
 
 const DatePicker = (props: DatePickerProps) => {
+  const classes = useStyles();
   return (
     <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
       <Grid container justify="space-around">
         <KeyboardDatePicker
-          margin="normal"
+          className={classes.root}
           id={props.id}
           label={props.label}
           format="yyyy/MM/dd"

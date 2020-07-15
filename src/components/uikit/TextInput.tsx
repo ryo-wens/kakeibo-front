@@ -12,7 +12,7 @@ const useStyles = makeStyles(() =>
       marginRight: 8,
       marginBottom: 16,
       minWidth: 130,
-      width: 'calc(85% - 16px)',
+      width: 'calc(84.3% - 16px)',
     },
   })
 );

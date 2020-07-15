@@ -9,6 +9,7 @@ import {
 const InputForm = () => {
   const [price, setPrice] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
+  const [shop, setShop] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
 
@@ -30,6 +31,10 @@ const InputForm = () => {
 
   const handleMemo = (event: React.ChangeEvent<{ value: string }>) => {
     setMemo(event.target.value as string);
+  };
+
+  const handleShop = (event: React.ChangeEvent<{ value: string }>) => {
+    setShop(event.target.value as string);
   };
 
   const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -63,10 +68,19 @@ const InputForm = () => {
       />
       <CategoryInput value={category} onChange={handleChange} required={true} />
       <TextInput
+        value={shop}
+        type={'text'}
+        id={'shop'}
+        label={'お店名(任意)'}
+        onChange={handleShop}
+        required={false}
+        fullWidth={false}
+      />
+      <TextInput
         value={memo}
         type={'text'}
         id={'memo'}
-        label={'メモ'}
+        label={'メモ(任意)'}
         onChange={handleMemo}
         required={false}
         fullWidth={false}
