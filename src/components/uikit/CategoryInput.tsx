@@ -4,9 +4,13 @@ import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import Divider from '@material-ui/core/Divider';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    bigcategory: {
+      padding: 8,
+    },
     formControl: {
       marginTop: 0,
       marginBottom: 16,
@@ -15,6 +19,17 @@ const useStyles = makeStyles((theme: Theme) =>
     },
   })
 );
+
+const ITEM_HEIGHT = 55;
+const ITEM_PADDING_TOP = 8;
+const MenuProps = {
+  PaperProps: {
+    style: {
+      maxHeight: ITEM_HEIGHT * 5 + ITEM_PADDING_TOP,
+      width: 225,
+    },
+  },
+};
 
 interface CategoryProps {
   value: string;
@@ -30,9 +45,15 @@ const CategoryInput = (props: CategoryProps) => {
       <InputLabel id="category" required={props.required}>
         カテゴリー
       </InputLabel>
-      <Select value={props.value} onChange={props.onChange}>
-        <MenuItem value=""></MenuItem>
-        <MenuItem value={'食費'}>食費</MenuItem>
+      <Select
+        MenuProps={MenuProps}
+        value={props.value}
+        onChange={props.onChange}
+      >
+        <MenuItem className={classes.bigcategory} value={'食費'}>
+          食費
+        </MenuItem>
+        <Divider />
         <MenuItem value={'日用品'}>日用品</MenuItem>
         <MenuItem value={'趣味・娯楽'}>趣味・娯楽</MenuItem>
         <MenuItem value={'交際費'}>交際費</MenuItem>
