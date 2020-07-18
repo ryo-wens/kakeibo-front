@@ -17,10 +17,6 @@
   box-sizing: border-box;
 }
 
-.box-right {
-  margin: 16px 0 0 auto;
-}
-
 .center {
   text-align: center;
 }
@@ -48,7 +44,7 @@
   max-width: 320px;
   padding: 0 1rem;
   width: 100%;
-  margin: 0 0 0 auto;
+  margin: 0 auto 0 0;
 }
 
 .box__recent {

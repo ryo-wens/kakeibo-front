@@ -20,7 +20,8 @@ const InputForm = () => {
       category: string,
       selectedDate: Date | null
     ) => {
-      console.log(price, memo, category, selectedDate);
+      const foo = JSON.stringify(selectedDate);
+      console.log(price, memo, category, foo);
     },
     []
   );

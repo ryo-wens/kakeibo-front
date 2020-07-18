@@ -35,6 +35,7 @@ type DatePickerProps = {
 
 const DatePicker = (props: DatePickerProps) => {
   const classes = useStyles();
+
   return (
     <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
       <Grid container justify="space-around">
