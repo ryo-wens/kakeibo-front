@@ -6,10 +6,16 @@ export type incomeCategoriesActions = ReturnType<
 >;
 
 export const GET_CATEGORIES = 'GET_CATEGORIES';
-export const getCategoriesAction = () => {
+export const getCategoriesAction = (
+  incomeCategories: [],
+  expenseCategories: []
+) => {
   return {
     type: GET_CATEGORIES,
-    payload: null,
+    payload: {
+      incomeCategories: incomeCategories,
+      expenseCategories: expenseCategories,
+    },
   };
 };
 
