@@ -1,17 +1,5 @@
 const initialState = {
-  categories: {},
-  bigCategory: {
-    type: '',
-    id: '',
-    name: '',
-    associated_categories_list: '',
-  },
-  mediumCategory: {
-    type: '',
-    id: '',
-    name: '',
-    big_category_id: '',
-  },
+  incomeCategories: [],
   users: {
     isLogedIn: false,
     userId: '',
