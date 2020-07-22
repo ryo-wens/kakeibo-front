@@ -1,5 +1,8 @@
 const initialState = {
-  incomeCategories: [],
+  categories: {
+    income: [],
+    expense: [],
+  },
   users: {
     isLogedIn: false,
     userId: '',
