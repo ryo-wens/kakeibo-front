@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
-import { UserState } from './types';
+import { State } from '../store/types';
 
-const usersSelector = (state: UserState) => state;
+const usersSelector = (state: State) => state.users;
 
 export const getLogedIn = createSelector(
   [usersSelector],
