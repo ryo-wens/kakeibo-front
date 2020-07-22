@@ -1,4 +1,4 @@
-export type UserActions = ReturnType<
+export type userActions = ReturnType<
   typeof signUpAction | typeof logInAction | typeof logOutAction
 >;
 

@@ -9,7 +9,7 @@ export interface State {
     isLogedIn: boolean;
     userId: string;
     userName: string;
-    emailAddress: string;
+    email: string;
     password: string;
   };
 }
