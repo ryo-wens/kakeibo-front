@@ -1,13 +1,13 @@
 const initialState = {
   categories: {
-    income: [],
-    expense: [],
+    incomeList: [],
+    expenseList: [],
   },
   users: {
     isLogedIn: false,
     userId: '',
     userName: '',
-    emailAddress: '',
+    email: '',
     password: '',
   },
 };
