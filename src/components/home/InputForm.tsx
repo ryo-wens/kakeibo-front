@@ -4,7 +4,7 @@ import {
   DatePicker,
   CategoryInput,
   TextInput,
-  KindSelector,
+  KindSelectBox,
 } from '../uikit/index';
 
 const InputForm = () => {
@@ -65,7 +65,7 @@ const InputForm = () => {
         onChange={handleDateChange}
         required={true}
       />
-      <KindSelector onChange={handleSelect} required={true} value={kind} />
+      <KindSelectBox onChange={handleSelect} required={true} value={kind} />
       <TextInput
         value={price}
         type={'tel'}

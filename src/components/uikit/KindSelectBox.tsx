@@ -22,7 +22,7 @@ interface KindProps {
   required: boolean;
 }
 
-const KindSelector = (props: KindProps) => {
+const KindSelectBox = (props: KindProps) => {
   const classes = useStyles();
 
   return (
@@ -37,4 +37,4 @@ const KindSelector = (props: KindProps) => {
     </FormControl>
   );
 };
-export default KindSelector;
+export default KindSelectBox;
