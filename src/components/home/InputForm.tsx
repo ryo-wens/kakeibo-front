@@ -4,6 +4,7 @@ import {
   DatePicker,
   CategoryInput,
   TextInput,
+  KindSelectBox,
 } from '../uikit/index';
 
 const InputForm = () => {
@@ -12,16 +13,18 @@ const InputForm = () => {
   const [shop, setShop] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
-
+  const [kind, setKind] = useState<string>('');
   const addEntry = useCallback(
     (
       price: string,
       memo: string,
       category: string,
-      selectedDate: Date | null
+      selectedDate: Date | null,
+      shop: string,
+      kind: string
     ) => {
       const foo = JSON.stringify(selectedDate);
-      console.log(price, memo, category, foo);
+      console.log(foo, kind, price, category, shop, memo);
     },
     []
   );
@@ -42,11 +45,15 @@ const InputForm = () => {
     setCategory(event.target.value as string);
   };
 
+  const handleSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setKind(event.target.value as string);
+  };
+
   const handleDateChange = (date: Date | null) => {
     setSelectedDate(date);
   };
 
-  const unInput = price === '' || category === '';
+  const unInput = price === '' || category === '' || kind === '';
 
   return (
     <form className="grid__column box__input box-right" autoComplete="on">
@@ -58,6 +65,7 @@ const InputForm = () => {
         onChange={handleDateChange}
         required={true}
       />
+      <KindSelectBox onChange={handleSelect} required={true} value={kind} />
       <TextInput
         value={price}
         type={'tel'}
@@ -72,7 +80,7 @@ const InputForm = () => {
         value={shop}
         type={'text'}
         id={'shop'}
-        label={'お店名(任意)'}
+        label={'店名(任意)'}
         onChange={handleShop}
         required={false}
         fullWidth={false}
@@ -87,7 +95,9 @@ const InputForm = () => {
         fullWidth={false}
       />
       <GenericButton
-        onClick={() => addEntry(price, memo, category, selectedDate)}
+        onClick={() =>
+          addEntry(price, memo, category, selectedDate, shop, kind)
+        }
         label={'入力する'}
         disabled={unInput}
       />

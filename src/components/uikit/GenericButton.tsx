@@ -11,6 +11,7 @@ const useStyles = makeStyles((theme: Theme) =>
       fontWeight: 700,
       fontSize: 16,
       width: 235,
+      marginTop: 2,
       margin: theme.spacing(2),
       '&:hover': {
         backgroundColor: '#3086f0',
