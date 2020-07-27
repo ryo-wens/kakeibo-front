@@ -89,16 +89,14 @@ export const signUp = (
       .post<SignupRes>('http://127.0.0.1:8080/signup', JSON.stringify(data), {
         withCredentials: true,
       })
-      .then(function (res) {
-        if (res.status === 200) {
-          console.log(res.data);
-          dispatch(
-            signUpAction(userId, userName, email, password, confirmPassword)
-          );
-          dispatch(push('/login'));
-        }
+      .then((res) => {
+        console.log(res.data);
+        dispatch(
+          signUpAction(userId, userName, email, password, confirmPassword)
+        );
+        dispatch(push('/login'));
       })
-      .catch(function (error) {
+      .catch((error) => {
         if (error.response.status === 400) {
           let errorMessages: string[] = [];
           if (error.response.data.error.id !== '') {
@@ -149,12 +147,10 @@ export const logIn = (email: string, password: string) => {
       .post<LoginRes>('http://127.0.0.1:8080/login', JSON.stringify(data), {
         withCredentials: true,
       })
-      .then(function (res) {
-        if (res.status === 200) {
-          console.log(res.data);
-          dispatch(logInAction(email, password));
-          dispatch(push('/'));
-        }
+      .then((res) => {
+        console.log(res.data);
+        dispatch(logInAction(email, password));
+        dispatch(push('/'));
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -185,14 +181,12 @@ export const logOut = () => {
       .delete<LogoutRes>('http://127.0.0.1:8080/logout', {
         withCredentials: true,
       })
-      .then(function (res) {
-        if (res.status === 200) {
-          console.log(res.data);
-          dispatch(logOutAction());
-          dispatch(push('/login'));
-        }
+      .then((res) => {
+        console.log(res.data);
+        dispatch(logOutAction());
+        dispatch(push('/login'));
       })
-      .catch(function (error) {
+      .catch((error) => {
         if (error.response.status === 400) {
           alert(error.response.data.error.message);
         }
