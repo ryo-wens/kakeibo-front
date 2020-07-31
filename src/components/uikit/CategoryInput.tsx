@@ -1,10 +1,17 @@
-import React from 'react';
+import React, { useEffect, useMemo, ReactElement } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
-import Divider from '@material-ui/core/Divider';
+import { State } from '../../reducks/store/types';
+import {
+  getIncomeCategories,
+  getExpenseCategories,
+} from '../../reducks/categories/selectors';
+import { fetchCategories } from '../../reducks/categories/operations';
+import { Categories } from '../../reducks/categories/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,6 +39,7 @@ const MenuProps = {
 };
 
 interface CategoryProps {
+  kind: string;
   value: string;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   required: boolean;
@@ -39,35 +47,74 @@ interface CategoryProps {
 
 const CategoryInput = (props: CategoryProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const selector = useSelector((state: State) => state);
+  const incomeCategories = getIncomeCategories(selector);
+  const expenseCategories = getExpenseCategories(selector);
+
+  useEffect(() => {
+    if (incomeCategories.length === 0 || expenseCategories.length === 0) {
+      dispatch(fetchCategories());
+    }
+  }, []);
+
+  const categories = useMemo(() => {
+    let tmpCategories: ReactElement<Categories>[] = [];
+
+    if (props.kind === '収入') {
+      for (const incomeCategory of incomeCategories) {
+        tmpCategories = [
+          ...tmpCategories,
+          <MenuItem key={incomeCategory.name} value={incomeCategory.name}>
+            {incomeCategory.name}
+          </MenuItem>,
+        ];
+
+        for (const category of incomeCategory.associated_categories_list) {
+          tmpCategories = [
+            ...tmpCategories,
+            <MenuItem key={category.name} value={category.name}>
+              {category.name}
+            </MenuItem>,
+          ];
+        }
+      }
+    }
+
+    if (props.kind === '支出') {
+      for (const expenseCategory of expenseCategories) {
+        tmpCategories = [
+          ...tmpCategories,
+          <MenuItem key={expenseCategory.name} value={expenseCategory.name}>
+            {expenseCategory.name}
+          </MenuItem>,
+        ];
+
+        for (const category of expenseCategory.associated_categories_list) {
+          tmpCategories = [
+            ...tmpCategories,
+            <MenuItem key={category.name} value={category.name}>
+              {category.name}
+            </MenuItem>,
+          ];
+        }
+      }
+    }
+
+    return tmpCategories;
+  }, [incomeCategories, expenseCategories, props.kind]);
 
   return (
     <FormControl className={classes.formControl}>
       <InputLabel id="category" required={props.required}>
-        カテゴリー
+        カテゴリー(必須)
       </InputLabel>
       <Select
         MenuProps={MenuProps}
         value={props.value}
         onChange={props.onChange}
       >
-        <MenuItem className={classes.bigcategory} value={'食費'}>
-          食費
-        </MenuItem>
-        <Divider />
-        <MenuItem value={'日用品'}>日用品</MenuItem>
-        <MenuItem value={'趣味・娯楽'}>趣味・娯楽</MenuItem>
-        <MenuItem value={'交際費'}>交際費</MenuItem>
-        <MenuItem value={'交通費'}>交通費</MenuItem>
-        <MenuItem value={'衣服・美容'}>衣服・美容</MenuItem>
-        <MenuItem value={'健康・医療'}>健康・医療</MenuItem>
-        <MenuItem value={'通信費'}>通信費</MenuItem>
-        <MenuItem value={'住宅'}>住宅</MenuItem>
-        <MenuItem value={'水道・光熱費'}>水道・光熱費</MenuItem>
-        <MenuItem value={'自動車'}>自動車</MenuItem>
-        <MenuItem value={'保険'}>保険</MenuItem>
-        <MenuItem value={'税金・社会保険'}>税金・社会保険</MenuItem>
-        <MenuItem value={'現金・カード'}>現金・カード</MenuItem>
-        <MenuItem value={'その他'}>その他</MenuItem>
+        {categories}
       </Select>
     </FormControl>
   );

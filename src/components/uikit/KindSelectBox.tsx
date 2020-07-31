@@ -28,7 +28,7 @@ const KindSelectBox = (props: KindProps) => {
   return (
     <FormControl className={classes.formControl}>
       <InputLabel id="kind" required={props.required}>
-        収入or支出
+        収入or支出(必須)
       </InputLabel>
       <Select id="kind" value={props.value} onChange={props.onChange}>
         <MenuItem value={'収入'}>収入</MenuItem>

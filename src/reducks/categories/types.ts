@@ -1,16 +1,16 @@
 export interface Category {
-  categoryType: string;
-  transactionType: string;
+  category_type: string;
+  transaction_type: string;
   id: number;
   name: string;
-  associatedCategoriesList: AssociatedCategories;
+  associated_categories_list: AssociatedCategories;
 }
 
 export interface AssociatedCategory {
-  categoryType: string;
+  category_type: string;
   id: number;
   name: string;
-  bigCategoryId: number;
+  big_category_id: number;
 }
 export interface AssociatedCategories extends Array<AssociatedCategory> {}
 export interface Categories extends Array<Category> {}
