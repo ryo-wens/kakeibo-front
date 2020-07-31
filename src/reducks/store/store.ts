@@ -8,14 +8,20 @@ import { categoriesReducer } from '../categories/reducers';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { History } from 'history';
+import { createLogger } from 'redux-logger';
 
 export default function createStore(history: History) {
+  const logger = createLogger({
+    collapsed: true,
+    diff: true,
+  });
+
   return reduxCreateStore(
     combineReducers({
       router: connectRouter(history),
       users: usersReducer,
       categories: categoriesReducer,
     }),
-    applyMiddleware(routerMiddleware(history), thunk)
+    applyMiddleware(routerMiddleware(history), thunk, logger)
   );
 }

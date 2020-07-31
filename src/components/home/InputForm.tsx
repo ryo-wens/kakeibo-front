@@ -14,6 +14,7 @@ const InputForm = () => {
   const [category, setCategory] = useState<string>('');
   const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
   const [kind, setKind] = useState<string>('');
+
   const addEntry = useCallback(
     (
       price: string,
@@ -60,7 +61,7 @@ const InputForm = () => {
       <h3>入力フォーム</h3>
       <DatePicker
         id={'date-picker-dialog'}
-        label={'日付'}
+        label={'日付(必須)'}
         value={selectedDate}
         onChange={handleDateChange}
         required={true}
@@ -70,12 +71,17 @@ const InputForm = () => {
         value={price}
         type={'tel'}
         id={'price'}
-        label={'金額'}
+        label={'金額(必須)'}
         onChange={handlePriceChange}
         required={true}
         fullWidth={false}
       />
-      <CategoryInput value={category} onChange={handleChange} required={true} />
+      <CategoryInput
+        value={category}
+        onChange={handleChange}
+        required={true}
+        kind={kind}
+      />
       <TextInput
         value={shop}
         type={'text'}
