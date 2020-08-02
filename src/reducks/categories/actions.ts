@@ -1,20 +1,18 @@
 import { Categories } from './types';
-export type categoriesActions = ReturnType<
-  typeof getIncomeCategoriesAction | typeof getExpenseCategoriesAction
->;
+export type categoriesActions = ReturnType<typeof updateIncomeCategoriesAction | typeof updateExpenseCategoriesAction>;
 
-export const GET_INCOME_CATEGORIES = 'GET_INCOME_CATEGORIES';
-export const getIncomeCategoriesAction = (incomeCategories: Categories) => {
+export const UPDATE_INCOME_CATEGORIES = 'UPDATE_INCOME_CATEGORIES';
+export const updateIncomeCategoriesAction = (incomeCategories: Categories) => {
   return {
-    type: GET_INCOME_CATEGORIES,
+    type: UPDATE_INCOME_CATEGORIES,
     payload: incomeCategories,
   };
 };
 
-export const GET_EXPENSE_CATEGORIES = 'GET_EXPENSE_CATEGORIES';
-export const getExpenseCategoriesAction = (expenseCategories: Categories) => {
+export const UPDATE_EXPENSE_CATEGORIES = 'UPDATE_EXPENSE_CATEGORIES';
+export const updateExpenseCategoriesAction = (expenseCategories: Categories) => {
   return {
-    type: GET_EXPENSE_CATEGORIES,
+    type: UPDATE_EXPENSE_CATEGORIES,
     payload: expenseCategories,
   };
 };
