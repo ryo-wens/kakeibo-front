@@ -27,7 +27,7 @@ interface editCustomReq {
 }
 
 interface editCustomRes {
-  type: string;
+  category_type: string;
   id: number;
   name: string;
   big_category_id: number;
@@ -108,49 +108,56 @@ export const addCustomCategories = (name: string, bigCategoryId: number, transac
   };
 };
 
-export const editCustomCategories = (id: number, name: string, bigCategoryId: number, transactionType: string) => {
+export const editCustomCategories = (
+  id: number,
+  name: string,
+  bigCategoryId: number,
+  transactionType: string,
+  categoryType: string
+) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
     const data: editCustomReq = {
       id: id,
       name: name,
       big_category_id: bigCategoryId,
     };
+
     await axios
-      .put<editCustomRes>('http://127.0.0.1:8081/custom-category/', JSON.stringify(data), { withCredentials: true })
+      .put<editCustomRes>(`http://127.0.0.1:8081/custom-category/${id}`, JSON.stringify(data), {
+        withCredentials: true,
+      })
       .then((res) => {
-        if (res.status === 200) {
-          console.log(res.data);
-          if (transactionType === 'income') {
-            const incomeCategories = getState().categories.incomeList;
-            const prevCategories = incomeCategories.associated_categories_list;
-            const index = prevCategories.findIndex((prevCategory: AssociatedCategory) => {
-              return prevCategory.id === id && prevCategory.big_category_id === bigCategoryId;
-            });
-            prevCategories[index] = {
-              id: id,
-              name: name,
-              bigCategoryId: bigCategoryId,
-              transactionType: transactionType,
-            };
-            const nextCategories = [...prevCategories];
-            incomeCategories.associated_categories_list = nextCategories;
-            dispatch(updateIncomeCategoriesAction(incomeCategories));
-          } else if (transactionType === 'expense') {
-            const expenseCategories = getState().categories.expenseList;
-            const prevCategories = expenseCategories.associated_categories_list;
-            const index = prevCategories.findIndex((prevCategory: AssociatedCategory) => {
-              return prevCategory.id === id && prevCategory.big_category_id === bigCategoryId;
-            });
-            prevCategories[index] = {
-              id: id,
-              name: name,
-              bigCategoryId: bigCategoryId,
-              transactionType: transactionType,
-            };
-            const nextCategories = [...prevCategories];
-            expenseCategories.associated_categories_list = nextCategories;
-            dispatch(updateExpenseCategoriesAction(expenseCategories));
-          }
+        console.log(res.data);
+        if (transactionType === 'income') {
+          const incomeCategories = getState().categories.incomeList;
+          const prevCategories = incomeCategories.associated_categories_list;
+          const index = prevCategories.findIndex((prevCategory: AssociatedCategory) => {
+            return prevCategory.id === id && prevCategory.big_category_id === bigCategoryId;
+          });
+          prevCategories[index] = {
+            type: categoryType,
+            id: id,
+            name: name,
+            big_category_id: bigCategoryId,
+          };
+          const nextCategories = [...prevCategories];
+          incomeCategories.associated_categories_list = nextCategories;
+          dispatch(updateIncomeCategoriesAction(incomeCategories));
+        } else if (transactionType === 'expense') {
+          const expenseCategories = getState().categories.expenseList;
+          const prevCategories = expenseCategories.associated_categories_list;
+          const index = prevCategories.findIndex((prevCategory: AssociatedCategory) => {
+            return prevCategory.id === id && prevCategory.big_category_id === bigCategoryId;
+          });
+          prevCategories[index] = {
+            type: categoryType,
+            id: id,
+            name: name,
+            big_category_id: bigCategoryId,
+          };
+          const nextCategories = [...prevCategories];
+          expenseCategories.associated_categories_list = nextCategories;
+          dispatch(updateExpenseCategoriesAction(expenseCategories));
         }
       })
       .catch((error) => {
