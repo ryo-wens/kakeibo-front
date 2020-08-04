@@ -64,7 +64,11 @@ export const fetchCategories = () => {
   };
 };
 
-export const addCustomCategories = (name: string, bigCategoryId: number, transactionType: string) => {
+export const addCustomCategories = (
+  name: string,
+  bigCategoryId: number,
+  transactionType: string
+) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
     const data: addCustomReq = {
       name: 'チーズケーキ',
