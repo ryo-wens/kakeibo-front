@@ -10,5 +10,9 @@ const initialState = {
     email: '',
     password: '',
   },
+  groups: {
+    groupId: '',
+    groupName: '',
+  },
 };
 export default initialState;
