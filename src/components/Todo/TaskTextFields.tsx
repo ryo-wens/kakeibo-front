@@ -28,20 +28,16 @@ const TaskTextFields = () => {
   return (
     <form noValidate autoComplete="off">
       <Box border={1} className={classes.box}>
-        <TextField
-          className={classes.textarea}
-          id="filled-basic"
-          variant="filled"
-        />
+        <TextField className={classes.textarea} id="filled-basic" variant="filled" />
         <div className={classes.buttons} style={{ justifyContent: 'flex-end' }}>
-          <TodoButton label={'画像をアップロード'} />
-          <TodoButton label={'期限'} />
+          <TodoButton label={'画像をアップロード'} onClick={() => console.log('クリック')} />
+          <TodoButton label={'期限'} onClick={() => console.log('クリック')} />
         </div>
       </Box>
 
       <div className={classes.buttons}>
-        <TodoButton label={'タスクを追加'} />
-        <TodoButton label={'キャンセル'} />
+        <TodoButton label={'タスクを追加'} onClick={() => console.log('クリック')} />
+        <TodoButton label={'キャンセル'} onClick={() => console.log('クリック')} />
       </div>
     </form>
   );
