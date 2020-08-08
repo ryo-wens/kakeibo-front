@@ -1,7 +1,7 @@
 import { updateIncomeCategoriesAction, updateExpenseCategoriesAction } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
-import { AssociatedCategory } from './types';
+import { Category } from './types';
 
 interface fetchCategoriesRes {
   income_categories_list: [];
@@ -14,7 +14,7 @@ interface addCustomReq {
 }
 
 interface addCustomRes {
-  type: string;
+  category_type: string;
   id: number;
   name: string;
   big_category_id: number;
@@ -71,38 +71,58 @@ export const addCustomCategories = (
 ) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
     const data: addCustomReq = {
-      name: 'チーズケーキ',
-      big_category_id: 2,
+      name: name,
+      big_category_id: bigCategoryId,
     };
     await axios
-      .post<addCustomRes>('http://127.0.0.1:8081/custom-category/', JSON.stringify(data), {
-        withCredentials: true,
-      })
+      .post<addCustomRes>(
+        'http://127.0.0.1:8081/categories/custom-categories',
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
-        const customCategory = res.data;
-        console.log(customCategory);
+        const addCategory = res.data;
+        console.log(addCategory);
         if (transactionType === 'income') {
           const incomeCategories = getState().categories.incomeList;
-          const prevCategories = incomeCategories.associated_categories_list;
-          const nextCategories = [customCategory, ...prevCategories];
-          incomeCategories.associated_categories_list = nextCategories;
-          dispatch(updateIncomeCategoriesAction(incomeCategories));
+          const nextCategories = incomeCategories.map((incomeCategory: Category) => {
+            if (incomeCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = incomeCategory.associated_categories_list;
+              incomeCategory.associated_categories_list = [
+                addCategory,
+                ...prevAssociatedCategories,
+              ];
+            }
+            return incomeCategory;
+          });
+          console.log(nextCategories);
+          dispatch(updateIncomeCategoriesAction(nextCategories));
         } else if (transactionType === 'expense') {
           const expenseCategories = getState().categories.expenseList;
-          const prevCategories = expenseCategories.associated_categories_list;
-          const nextCategories = [customCategory, ...prevCategories];
-          expenseCategories.associated_categories_list = nextCategories;
-          dispatch(updateExpenseCategoriesAction(expenseCategories));
+          const nextCategories = expenseCategories.map((expenseCategory: Category) => {
+            if (expenseCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = expenseCategory.associated_categories_list;
+              expenseCategory.associated_categories_list = [
+                addCategory,
+                ...prevAssociatedCategories,
+              ];
+            }
+            return expenseCategory;
+          });
+          console.log(nextCategories);
+          dispatch(updateExpenseCategoriesAction(nextCategories));
         }
       })
       .catch((error) => {
         if (error.response.status === 400) {
           alert(error.response.data.error.message);
         }
-        if (error.response && error.response.status === 401) {
+        if (error.response.status === 401) {
           alert(error.response.data.error.message);
         }
-        if (error.resopnse.status === 409) {
+        if (error.response.status === 409) {
           alert(error.response.data.error.message);
         }
         if (error.response.status === 500) {
@@ -116,8 +136,7 @@ export const editCustomCategories = (
   id: number,
   name: string,
   bigCategoryId: number,
-  transactionType: string,
-  categoryType: string
+  transactionType: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
     const data: editCustomReq = {
@@ -125,53 +144,120 @@ export const editCustomCategories = (
       name: name,
       big_category_id: bigCategoryId,
     };
-
     await axios
-      .put<editCustomRes>(`http://127.0.0.1:8081/custom-category/${id}`, JSON.stringify(data), {
-        withCredentials: true,
-      })
+      .put<editCustomRes>(
+        `http://127.0.0.1:8081/categories/custom-categories/${id}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
-        console.log(res.data);
+        const editCategory = res.data;
+        console.log(editCategory);
         if (transactionType === 'income') {
           const incomeCategories = getState().categories.incomeList;
-          const prevCategories = incomeCategories.associated_categories_list;
-          const index = prevCategories.findIndex((prevCategory: AssociatedCategory) => {
-            return prevCategory.id === id && prevCategory.big_category_id === bigCategoryId;
+          const nextCategories = incomeCategories.map((incomeCategory: Category) => {
+            if (incomeCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = incomeCategory.associated_categories_list;
+              incomeCategory.associated_categories_list = prevAssociatedCategories.map(
+                (associatedCategory) => {
+                  if (associatedCategory.id === id) {
+                    return editCategory;
+                  }
+                  return associatedCategory;
+                }
+              );
+            }
+            return incomeCategory;
           });
-          prevCategories[index] = {
-            type: categoryType,
-            id: id,
-            name: name,
-            big_category_id: bigCategoryId,
-          };
-          const nextCategories = [...prevCategories];
-          incomeCategories.associated_categories_list = nextCategories;
-          dispatch(updateIncomeCategoriesAction(incomeCategories));
+          console.log(nextCategories);
+          dispatch(updateIncomeCategoriesAction(nextCategories));
         } else if (transactionType === 'expense') {
           const expenseCategories = getState().categories.expenseList;
-          const prevCategories = expenseCategories.associated_categories_list;
-          const index = prevCategories.findIndex((prevCategory: AssociatedCategory) => {
-            return prevCategory.id === id && prevCategory.big_category_id === bigCategoryId;
+          const nextCategories = expenseCategories.map((expenseCategory: Category) => {
+            if (expenseCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = expenseCategory.associated_categories_list;
+              expenseCategory.associated_categories_list = prevAssociatedCategories.map(
+                (associatedCategory) => {
+                  if (associatedCategory.id === id) {
+                    return editCategory;
+                  }
+                  return associatedCategory;
+                }
+              );
+            }
+            return expenseCategory;
           });
-          prevCategories[index] = {
-            type: categoryType,
-            id: id,
-            name: name,
-            big_category_id: bigCategoryId,
-          };
-          const nextCategories = [...prevCategories];
-          expenseCategories.associated_categories_list = nextCategories;
-          dispatch(updateExpenseCategoriesAction(expenseCategories));
+          console.log(nextCategories);
+          dispatch(updateExpenseCategoriesAction(nextCategories));
         }
       })
       .catch((error) => {
         if (error.response.status === 400) {
           alert(error.response.data.error.message);
         }
-        if (error.response && error.response.status === 401) {
+        if (error.response.status === 401) {
           alert(error.response.data.error.message);
         }
         if (error.response.status === 409) {
+          alert(error.response.data.error.message);
+        }
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+        }
+      });
+  };
+};
+
+export const deleteCustomCategories = (
+  id: number,
+  transactionType: string,
+  bigCategoryId: number
+) => {
+  return async (dispatch: Dispatch<Action>, getState: any) => {
+    const data: deleteCustomReq = { id: id };
+    await axios
+      .delete<deleteCustomRes>(`http://127.0.0.1:8081/categories/custom-categories/${id}`, {
+        data: data,
+        withCredentials: true,
+      })
+      .then((res) => {
+        console.log(res.data.message);
+        const resMessage = res.data.message;
+        if (transactionType === 'income') {
+          const incomeCategories = getState().categories.incomeList;
+          const nextCategories = incomeCategories.map((incomeCategory: Category) => {
+            if (incomeCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = incomeCategory.associated_categories_list;
+              incomeCategory.associated_categories_list = prevAssociatedCategories.filter(
+                (associatedCategory) => associatedCategory.id !== id
+              );
+              return incomeCategory;
+            }
+          });
+          console.log(nextCategories);
+          alert(resMessage);
+          dispatch(updateIncomeCategoriesAction(nextCategories));
+        } else if (transactionType === 'expense') {
+          const resMessage = res.data.message;
+          const expenseCategories = getState().categories.expenseList;
+          const nextCategories = expenseCategories.map((expenseCategory: Category) => {
+            if (expenseCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = expenseCategory.associated_categories_list;
+              expenseCategory.associated_categories_list = prevAssociatedCategories.filter(
+                (associatedCategory) => associatedCategory.id !== id
+              );
+            }
+            return expenseCategory;
+          });
+          console.log(nextCategories);
+          alert(resMessage);
+          dispatch(updateIncomeCategoriesAction(nextCategories));
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
           alert(error.response.data.error.message);
         }
         if (error.response.status === 500) {
