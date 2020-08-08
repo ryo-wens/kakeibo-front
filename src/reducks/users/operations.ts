@@ -44,7 +44,6 @@ export const signUp = (
   confirmPassword: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
-    // Validations
     let errorMessages: string[] = [];
     if (userId.length > 10) {
       errorMessages.push('ユーザーIDは10文字以下で入力してください。');
@@ -59,9 +58,7 @@ export const signUp = (
       errorMessages.push('メールアドレスは50文字以下で入力してください。');
     }
     if (!isValidEmailFormat(email)) {
-      errorMessages.push(
-        'メールアドレスの形式に誤りがあります。正しく入力し直してください。'
-      );
+      errorMessages.push('メールアドレスの形式に誤りがあります。正しく入力し直してください。');
     }
     if (password.length < 8) {
       errorMessages.push('パスワードは8文字以上で入力してください。');
@@ -70,9 +67,7 @@ export const signUp = (
       errorMessages.push('パスワードは50文字以下で入力してください。');
     }
     if (password !== confirmPassword) {
-      errorMessages.push(
-        'パスワードと確認パスワードが一致しません。もう一度入力してください。'
-      );
+      errorMessages.push('パスワードと確認パスワードが一致しません。もう一度入力してください。');
     }
     if (errorMessages.length > 0) {
       alert(errorMessages.join('\n'));
@@ -90,10 +85,7 @@ export const signUp = (
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
-        dispatch(
-          signUpAction(userId, userName, email, password, confirmPassword)
-        );
+        dispatch(signUpAction(userId, userName, email, password, confirmPassword));
         dispatch(push('/login'));
       })
       .catch((error) => {
@@ -137,9 +129,7 @@ export const signUp = (
 export const logIn = (email: string, password: string) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidEmailFormat(email)) {
-      alert(
-        'メールアドレスの形式に誤りがあります。正しく入力し直してください。'
-      );
+      alert('メールアドレスの形式に誤りがあります。正しく入力し直してください。');
       return null;
     }
     const data: LoginReq = { email: email, password: password };
@@ -148,7 +138,6 @@ export const logIn = (email: string, password: string) => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         dispatch(logInAction(email, password));
         dispatch(push('/'));
       })
@@ -182,7 +171,6 @@ export const logOut = () => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         dispatch(logOutAction());
         dispatch(push('/login'));
       })

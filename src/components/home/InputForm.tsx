@@ -1,13 +1,9 @@
 import React, { useState, useCallback } from 'react';
-import {
-  GenericButton,
-  DatePicker,
-  CategoryInput,
-  TextInput,
-  KindSelectBox,
-} from '../uikit/index';
+import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
+import { useDispatch } from 'react-redux';
 
 const InputForm = () => {
+  const dispatch = useDispatch();
   const [price, setPrice] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const [shop, setShop] = useState<string>('');
@@ -76,12 +72,7 @@ const InputForm = () => {
         required={true}
         fullWidth={false}
       />
-      <CategoryInput
-        value={category}
-        onChange={handleChange}
-        required={true}
-        kind={kind}
-      />
+      <CategoryInput value={category} onChange={handleChange} required={true} kind={kind} />
       <TextInput
         value={shop}
         type={'text'}
@@ -101,9 +92,7 @@ const InputForm = () => {
         fullWidth={false}
       />
       <GenericButton
-        onClick={() =>
-          addEntry(price, memo, category, selectedDate, shop, kind)
-        }
+        onClick={() => addEntry(price, memo, category, selectedDate, shop, kind)}
         label={'入力する'}
         disabled={unInput}
       />
