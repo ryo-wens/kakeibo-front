@@ -3,7 +3,7 @@ import { useDispatch } from 'react-redux';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TodoButton, TextInput } from './index';
-import { createGroup } from '../../reducks/todo/operations';
+import { createGroup } from '../../reducks/groups/operations';
 
 function rand() {
   return Math.round(Math.random() * 20) - 10;
@@ -53,7 +53,6 @@ const TodoModal = (props: TodoModalProps) => {
   // getModalStyle is not a pure function, we roll the style only on the first render
   const [modalStyle] = useState(getModalStyle);
   const [open, setOpen] = useState(false);
-  const [groupId, setGroupId] = useState<string>('');
   const [groupName, setGroupName] = useState<string>('');
 
   const handleOpen = () => {
@@ -63,13 +62,6 @@ const TodoModal = (props: TodoModalProps) => {
   const handleClose = () => {
     setOpen(false);
   };
-
-  const inputGroupId = useCallback(
-    (event) => {
-      setGroupId(event.target.value);
-    },
-    [setGroupId]
-  );
 
   const inputGroupName = useCallback(
     (event) => {
@@ -92,7 +84,7 @@ const TodoModal = (props: TodoModalProps) => {
         onChange={inputGroupName}
       />
       <div className={classes.buttons}>
-        <TodoButton label={'作成'} onClick={() => dispatch(createGroup(groupId, groupName))} />
+        <TodoButton label={'作成'} onClick={() => dispatch(createGroup(groupName))} />
         <TodoButton label={'キャンセル'} onClick={() => console.log('クリック')} />
       </div>
     </div>

@@ -1,12 +1,12 @@
+import { Groups } from './types';
 export type groupAction = ReturnType<typeof createGroupAction>;
 
 export const CREATE_GROUP = 'CREATE_GROUP';
-export const createGroupAction = (groupId: string, groupName: string) => {
+export const createGroupAction = (groups: Groups) => {
   return {
     type: CREATE_GROUP,
     payload: {
-      groupId: groupId,
-      groupName: groupName,
+      approvedGroups: groups,
     },
   };
 };

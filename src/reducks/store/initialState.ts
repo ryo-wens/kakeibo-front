@@ -11,8 +11,8 @@ const initialState = {
     password: '',
   },
   groups: {
-    groupId: '',
-    groupName: '',
+    approvedGroups: [],
+    unapprovedGroups: [],
   },
 };
 export default initialState;

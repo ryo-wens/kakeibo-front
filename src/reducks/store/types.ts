@@ -1,4 +1,5 @@
 import { Categories } from '../categories/types';
+import { Groups } from '../groups/types';
 
 export interface State {
   categories: {
@@ -13,7 +14,7 @@ export interface State {
     password: string;
   };
   groups: {
-    groupId: string;
-    groupName: string;
+    approvedGroups: Groups;
+    unapprovedGroups: Groups;
   };
 }
