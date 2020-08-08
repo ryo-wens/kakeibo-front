@@ -36,12 +36,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface TodoModalProps {
+interface EditGroupNameProps {
   label: string;
   label2: string;
 }
 
-const TodoModal = (props: TodoModalProps) => {
+const EditGroupName = (props: EditGroupNameProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -101,4 +101,4 @@ const TodoModal = (props: TodoModalProps) => {
   );
 };
 
-export default TodoModal;
+export default EditGroupName;

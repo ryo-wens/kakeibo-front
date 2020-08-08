@@ -5,3 +5,4 @@ export { default as AddButton } from './AddButton';
 export { default as TodayDate } from './TodayDate';
 export { default as TodoModal } from './TodoModal';
 export { default as TextInput } from './TextInput';
+export { default as EditGroupName } from './EditGroupName';
