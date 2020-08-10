@@ -53,7 +53,7 @@ const InputForm = () => {
   const unInput = price === '' || category === '' || kind === '';
 
   return (
-    <form className="grid__column box__input box-right" autoComplete="on">
+    <form className="grid__column box__input" autoComplete="on">
       <h3>入力フォーム</h3>
       <DatePicker
         id={'date-picker-dialog'}
