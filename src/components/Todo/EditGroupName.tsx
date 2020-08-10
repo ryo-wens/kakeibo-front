@@ -21,12 +21,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface TodoModalProps {
-  createGroup: string;
+interface EditGroupNameProps {
+  editGroupName: string;
   groupName: string;
 }
 
-const TodoModal = (props: TodoModalProps) => {
+const EditGroupName = (props: EditGroupNameProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -50,7 +50,7 @@ const TodoModal = (props: TodoModalProps) => {
 
   const body = (
     <div className={classes.paper}>
-      <h3 id="simple-modal-title">{props.createGroup}</h3>
+      <h3 id="simple-modal-title">{props.editGroupName}</h3>
       <p>{props.groupName}</p>
       <TextInput
         id="filled-basic"
@@ -71,7 +71,7 @@ const TodoModal = (props: TodoModalProps) => {
   return (
     <div>
       <button type="button" onClick={handleOpen}>
-        {props.createGroup}
+        {props.editGroupName}
       </button>
       <Modal
         open={open}
@@ -85,4 +85,4 @@ const TodoModal = (props: TodoModalProps) => {
   );
 };
 
-export default TodoModal;
+export default EditGroupName;

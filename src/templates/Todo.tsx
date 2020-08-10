@@ -1,6 +1,6 @@
 import React from 'react';
-import { TodoMenu } from '../components/header';
-import { TodayTask, TodoModal } from '../components/todo';
+import { TodoMenu } from '../components/Todo';
+import { TodayTask, TodoModal, EditGroupName } from '../components/todo';
 
 class Todo extends React.Component {
   render() {
@@ -8,7 +8,8 @@ class Todo extends React.Component {
       <div>
         {/* <TodoMenu /> */}
         {/* <TodayTask /> */}
-        <TodoModal label={'グループ作成'} label2={'グループ名'} />
+        <TodoModal createGroup={'グループ作成'} groupName={'グループ名'} />
+        <EditGroupName editGroupName={'グループ名を編集'} groupName={'グループ名'} />
       </div>
     );
   }
