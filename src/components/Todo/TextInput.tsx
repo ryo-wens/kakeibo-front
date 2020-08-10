@@ -7,7 +7,7 @@ const useStyles = makeStyles((theme: Theme) =>
     textarea: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '40ch',
+        width: '360px',
       },
     },
   })
