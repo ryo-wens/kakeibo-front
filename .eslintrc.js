@@ -2,10 +2,10 @@ module.exports = {
     extends: [
         "react-app",
         "eslint:recommended",
-        "plugin:prettier/recommended",
         "plugin:@typescript-eslint/recommended",
         "prettier/@typescript-eslint",
-        "prettier"
+        "prettier",
+        "plugin:prettier/recommended",
     ],
     plugins: ["@typescript-eslint"],
     env: {

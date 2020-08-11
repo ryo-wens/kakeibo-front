@@ -2,7 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
 import { useDispatch } from 'react-redux';
 
-const InputForm = () => {
+const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
   const [price, setPrice] = useState<string>('');
   const [memo, setMemo] = useState<string>('');

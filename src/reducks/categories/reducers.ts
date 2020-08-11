@@ -1,8 +1,20 @@
 import * as Actions from './actions';
 import { categoriesActions } from './actions';
 import initialState from '../store/initialState';
+import { Category } from './types';
 
-export const categoriesReducer = (state = initialState.categories, action: categoriesActions) => {
+export const categoriesReducer = (
+  state = initialState.categories,
+  action: categoriesActions
+):
+  | {
+      incomeList: Category[];
+      expenseList: never[];
+    }
+  | {
+      expenseList: Category[];
+      incomeList: never[];
+    } => {
   switch (action.type) {
     case Actions.UPDATE_INCOME_CATEGORIES:
       return {

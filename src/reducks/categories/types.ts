@@ -12,5 +12,5 @@ export interface AssociatedCategory {
   name: string;
   big_category_id: number;
 }
-export interface AssociatedCategories extends Array<AssociatedCategory> {}
-export interface Categories extends Array<Category> {}
+export type AssociatedCategories = Array<AssociatedCategory>;
+export type Categories = Array<Category>;

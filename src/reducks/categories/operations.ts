@@ -2,6 +2,7 @@ import { updateIncomeCategoriesAction, updateExpenseCategoriesAction } from './a
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
 import { Category } from './types';
+import { State } from '../store/types';
 
 interface fetchCategoriesRes {
   income_categories_list: [];
@@ -42,7 +43,7 @@ interface deleteCustomRes {
 }
 
 export const fetchCategories = () => {
-  return async (dispatch: Dispatch<Action>) => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<fetchCategoriesRes>('http://127.0.0.1:8081/categories', {
         withCredentials: true,
@@ -69,7 +70,7 @@ export const addCustomCategories = (
   bigCategoryId: number,
   transactionType: string
 ) => {
-  return async (dispatch: Dispatch<Action>, getState: any) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: addCustomReq = {
       name: name,
       big_category_id: bigCategoryId,
@@ -138,7 +139,7 @@ export const editCustomCategories = (
   bigCategoryId: number,
   transactionType: string
 ) => {
-  return async (dispatch: Dispatch<Action>, getState: any) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: editCustomReq = {
       id: id,
       name: name,
@@ -154,7 +155,6 @@ export const editCustomCategories = (
       )
       .then((res) => {
         const editCategory = res.data;
-        console.log(editCategory);
         if (transactionType === 'income') {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
@@ -171,7 +171,6 @@ export const editCustomCategories = (
             }
             return incomeCategory;
           });
-          console.log(nextCategories);
           dispatch(updateIncomeCategoriesAction(nextCategories));
         } else if (transactionType === 'expense') {
           const expenseCategories = getState().categories.expenseList;
@@ -189,7 +188,6 @@ export const editCustomCategories = (
             }
             return expenseCategory;
           });
-          console.log(nextCategories);
           dispatch(updateExpenseCategoriesAction(nextCategories));
         }
       })
@@ -215,7 +213,7 @@ export const deleteCustomCategories = (
   transactionType: string,
   bigCategoryId: number
 ) => {
-  return async (dispatch: Dispatch<Action>, getState: any) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: deleteCustomReq = { id: id };
     await axios
       .delete<deleteCustomRes>(`http://127.0.0.1:8081/categories/custom-categories/${id}`, {
@@ -233,10 +231,9 @@ export const deleteCustomCategories = (
               incomeCategory.associated_categories_list = prevAssociatedCategories.filter(
                 (associatedCategory) => associatedCategory.id !== id
               );
-              return incomeCategory;
             }
+            return incomeCategory;
           });
-          console.log(nextCategories);
           alert(resMessage);
           dispatch(updateIncomeCategoriesAction(nextCategories));
         } else if (transactionType === 'expense') {
@@ -251,9 +248,8 @@ export const deleteCustomCategories = (
             }
             return expenseCategory;
           });
-          console.log(nextCategories);
           alert(resMessage);
-          dispatch(updateIncomeCategoriesAction(nextCategories));
+          dispatch(updateExpenseCategoriesAction(nextCategories));
         }
       })
       .catch((error) => {
