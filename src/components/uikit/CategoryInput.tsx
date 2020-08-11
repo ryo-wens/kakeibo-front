@@ -6,10 +6,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { State } from '../../reducks/store/types';
-import {
-  getIncomeCategories,
-  getExpenseCategories,
-} from '../../reducks/categories/selectors';
+import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { Categories } from '../../reducks/categories/types';
 
@@ -45,7 +42,7 @@ interface CategoryProps {
   required: boolean;
 }
 
-const CategoryInput = (props: CategoryProps) => {
+const CategoryInput = (props: CategoryProps): JSX.Element => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
@@ -109,11 +106,7 @@ const CategoryInput = (props: CategoryProps) => {
       <InputLabel id="category" required={props.required}>
         カテゴリー(必須)
       </InputLabel>
-      <Select
-        MenuProps={MenuProps}
-        value={props.value}
-        onChange={props.onChange}
-      >
+      <Select MenuProps={MenuProps} value={props.value} onChange={props.onChange}>
         {categories}
       </Select>
     </FormControl>
