@@ -7,3 +7,4 @@ export { default as TodoModal } from './TodoModal';
 export { default as TextInput } from './TextInput';
 export { default as EditGroupName } from './EditGroupName';
 export { default as TodoMenu } from './TodoMenu';
+export { default as GroupName } from './GroupName';
