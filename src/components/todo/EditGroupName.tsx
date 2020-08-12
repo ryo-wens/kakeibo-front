@@ -2,6 +2,7 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
+import MenuItem from '@material-ui/core/MenuItem';
 import { TodoButton, TextInput } from './index';
 import { createGroup } from '../../reducks/groups/operations';
 
@@ -62,17 +63,15 @@ const EditGroupName = (props: EditGroupNameProps) => {
         onChange={inputGroupName}
       />
       <div className={classes.buttons}>
-        <TodoButton label={'作成'} onClick={() => dispatch(createGroup(groupName))} />
+        <TodoButton label={'保存'} onClick={() => dispatch(createGroup(groupName))} />
         <TodoButton label={'キャンセル'} onClick={() => console.log('クリック')} />
       </div>
     </div>
   );
 
   return (
-    <div>
-      <button type="button" onClick={handleOpen}>
-        {props.editGroupName}
-      </button>
+    <>
+      <MenuItem onClick={handleOpen}>グループ名の編集</MenuItem>
       <Modal
         open={open}
         onClose={handleClose}
@@ -81,7 +80,7 @@ const EditGroupName = (props: EditGroupNameProps) => {
       >
         {body}
       </Modal>
-    </div>
+    </>
   );
 };
 

@@ -8,7 +8,6 @@ class Todo extends React.Component {
         {/* <TodoMenu /> */}
         {/* <TodayTask /> */}
         <TodoModal createGroup={'グループ作成'} groupName={'グループ名'} />
-        <EditGroupName editGroupName={'グループ名を編集'} groupName={'グループ名'} />
         <GroupName />
       </div>
     );
