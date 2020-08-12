@@ -1,8 +1,18 @@
 import React, { useState, useCallback } from 'react';
 import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
 import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+import { makeStyles } from '@material-ui/core/styles';
 
+const useStyles = makeStyles({
+  link: {
+    cursor: 'pointer',
+    color: '#1879f0',
+    textDecoration: 'underLine',
+  },
+});
 const InputForm = (): JSX.Element => {
+  const classes = useStyles();
   const dispatch = useDispatch();
   const [price, setPrice] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
@@ -96,6 +106,9 @@ const InputForm = (): JSX.Element => {
         label={'入力する'}
         disabled={unInput}
       />
+      <a className={classes.link} onClick={() => dispatch(push('/big-categories'))}>
+        ＋カテゴリーを追加する
+      </a>
     </form>
   );
 };
