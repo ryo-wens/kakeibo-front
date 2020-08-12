@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
+import { push } from 'connected-react-router';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
@@ -28,6 +28,11 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  link: {
+    cursor: 'pointer',
+    color: '#154bd4',
+    textDecoration: 'underLine',
   },
 }));
 
@@ -72,11 +77,7 @@ const SignUp = () => {
   );
 
   const unSignUp =
-    userId === '' ||
-    userName === '' ||
-    email === '' ||
-    password === '' ||
-    confirmPassword === '';
+    userId === '' || userName === '' || email === '' || password === '' || confirmPassword === '';
 
   const classes = useStyles();
 
@@ -154,19 +155,15 @@ const SignUp = () => {
               <GenericButton
                 label={'アカウントを登録する'}
                 disabled={unSignUp}
-                onClick={() =>
-                  dispatch(
-                    signUp(userId, userName, email, password, confirmPassword)
-                  )
-                }
+                onClick={() => dispatch(signUp(userId, userName, email, password, confirmPassword))}
               />
             </div>
             <div className="module-spacer--bit-small" />
             <Grid container justify="center">
               <Grid item>
-                <Link href="/login" variant="body2">
+                <a className={classes.link} onClick={() => dispatch(push('/login'))}>
                   すでにアカウントをお持ちの方はこちら
-                </Link>
+                </a>
               </Grid>
             </Grid>
           </form>
