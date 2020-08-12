@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
+import { push } from 'connected-react-router';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
-import Link from '@material-ui/core/Link';
 import Grid from '@material-ui/core/Grid';
 import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
@@ -25,6 +25,11 @@ const useStyles = makeStyles((theme) => ({
   form: {
     width: '100%',
     marginTop: theme.spacing(1),
+  },
+  link: {
+    cursor: 'pointer',
+    color: '#154bd4',
+    textDecoration: 'underLine',
   },
 }));
 
@@ -102,9 +107,9 @@ const LogIn = () => {
 
             <div className="module-spacer--small" />
             <Grid item className="center">
-              <Link href="/signup" variant="body2">
-                アカウント登録がまだの方はこちら
-              </Link>
+              <a className={classes.link} onClick={() => dispatch(push('/signup'))}>
+                アカウント登録がお済みでない方はこちら
+              </a>
             </Grid>
           </form>
         </div>

@@ -7,7 +7,7 @@ import { makeStyles } from '@material-ui/core/styles';
 const useStyles = makeStyles({
   link: {
     cursor: 'pointer',
-    color: '#1879f0',
+    color: '#154bd4',
     textDecoration: 'underLine',
   },
 });
