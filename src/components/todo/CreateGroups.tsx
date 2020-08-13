@@ -22,12 +22,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface TodoModalProps {
+interface CreateGroupsProps {
   createGroup: string;
   groupName: string;
 }
 
-const CreateGroups = (props: TodoModalProps) => {
+const CreateGroups = (props: CreateGroupsProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // getModalStyle is not a pure function, we roll the style only on the first render

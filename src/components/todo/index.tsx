@@ -8,4 +8,3 @@ export { default as TodayDate } from './TodayDate';
 export { default as TodayTask } from './TodayTask';
 export { default as TodoButton } from './TodoButton';
 export { default as TodoMenu } from './TodoMenu';
-export { default as TodoModal } from './CreateGroups';

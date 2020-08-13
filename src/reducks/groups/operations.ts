@@ -1,4 +1,4 @@
-import { createGroupAction, updataGroupAction } from './actions';
+import { createGroupAction, updateGroupAction } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
 
@@ -48,7 +48,7 @@ export const createGroup = (groupName: string) => {
   };
 };
 
-export const updataGroup = (groupName: string) => {
+export const updateGroup = (groupName: string) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
     const data: createGroupReq = {
       group_name: groupName,
@@ -79,7 +79,7 @@ export const updataGroup = (groupName: string) => {
 
         const nextApprovedGroups = [newGroup, ...prevApprovedGroups];
 
-        dispatch(updataGroupAction(nextApprovedGroups));
+        dispatch(updateGroupAction(nextApprovedGroups));
       });
   };
 };
