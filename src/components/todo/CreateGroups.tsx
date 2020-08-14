@@ -4,6 +4,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TodoButton, TextInput } from './index';
 import { createGroup } from '../../reducks/groups/operations';
+import { AddButton } from './index';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -21,12 +22,12 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface TodoModalProps {
+interface CreateGroupsProps {
   createGroup: string;
   groupName: string;
 }
 
-const TodoModal = (props: TodoModalProps) => {
+const CreateGroups = (props: CreateGroupsProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   // getModalStyle is not a pure function, we roll the style only on the first render
@@ -69,10 +70,10 @@ const TodoModal = (props: TodoModalProps) => {
   );
 
   return (
-    <div>
-      <button type="button" onClick={handleOpen}>
-        {props.createGroup}
-      </button>
+    <>
+      <div onClick={handleOpen}>
+        <AddButton label={'グループ作成'} />
+      </div>
       <Modal
         open={open}
         onClose={handleClose}
@@ -81,8 +82,8 @@ const TodoModal = (props: TodoModalProps) => {
       >
         {body}
       </Modal>
-    </div>
+    </>
   );
 };
 
-export default TodoModal;
+export default CreateGroups;

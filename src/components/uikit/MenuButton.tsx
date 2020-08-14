@@ -3,6 +3,7 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
+import { EditGroupName } from '../todo';
 
 const MenuButton = () => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
@@ -27,7 +28,7 @@ const MenuButton = () => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        <MenuItem onClick={handleClose}>グループ名の編集</MenuItem>
+        <EditGroupName editGroupName={'グループ名を編集'} groupName={'グループ名'} />
         <MenuItem onClick={handleClose}>メンバーの編集</MenuItem>
         <MenuItem onClick={handleClose}>グループを削除</MenuItem>
       </Menu>
