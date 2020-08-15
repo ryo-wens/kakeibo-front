@@ -74,41 +74,21 @@ const Header = () => {
       <AppBar className={classes.header} position="static">
         <Toolbar>
           <Typography variant="h6" noWrap>
-            <Button
-              color="inherit"
-              className={classes.title}
-              onClick={() => dispatch(push('/'))}
-            >
+            <Button color="inherit" className={classes.title} onClick={() => dispatch(push('/'))}>
               家計簿App
             </Button>
           </Typography>
           <div className={classes.sectionDesktop}>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<HistoryIcon />}
-            >
+            <Button size="large" className={classes.button} startIcon={<HistoryIcon />}>
               履歴
             </Button>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<ComputerIcon />}
-            >
+            <Button size="large" className={classes.button} startIcon={<ComputerIcon />}>
               分析
             </Button>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<CreditCardIcon />}
-            >
+            <Button size="large" className={classes.button} startIcon={<CreditCardIcon />}>
               集計
             </Button>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<GroupIcon />}
-            >
+            <Button size="large" className={classes.button} startIcon={<GroupIcon />}>
               グループ
             </Button>
           </div>
@@ -130,6 +110,7 @@ const Header = () => {
               aria-label="settings"
               aria-controls={menuId}
               aria-haspopup="true"
+              onClick={() => dispatch(push('/todo'))}
             >
               設定
             </Button>

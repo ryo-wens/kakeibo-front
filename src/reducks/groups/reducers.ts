@@ -9,6 +9,11 @@ export const groupsReducer = (state = initialState.groups, action: groupAction) 
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_GROUPS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

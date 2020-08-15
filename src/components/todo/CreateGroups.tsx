@@ -63,8 +63,11 @@ const CreateGroups = (props: CreateGroupsProps) => {
         onChange={inputGroupName}
       />
       <div className={classes.buttons}>
-        <TodoButton label={'作成'} onClick={() => dispatch(createGroup(groupName))} />
-        <TodoButton label={'キャンセル'} onClick={() => console.log('クリック')} />
+        <TodoButton
+          label={'作成'}
+          onClick={() => dispatch(createGroup(groupName)) && handleClose()}
+        />
+        <TodoButton label={'キャンセル'} onClick={handleClose} />
       </div>
     </div>
   );

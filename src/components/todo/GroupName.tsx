@@ -3,8 +3,10 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import Divider from '@material-ui/core/Divider';
 import { MenuButton } from '../uikit';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { useSelector } from 'react-redux';
+import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,22 +21,21 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface GroupNameProps {
-  name: string;
-}
-
 const GroupName = () => {
   const classes = useStyles();
+  const selector = useSelector((state: State) => state);
+  const approvedGroups = getApprovedGroups(selector);
 
   return (
     <List className={classes.root}>
-      <div className={classes.groupMenu}>
-        <ListItem>
-          <ListItemText primary="グループ名" />
-        </ListItem>
-        <MenuButton />
-      </div>
-      <Divider />
+      {approvedGroups.map((approvedGroup) => (
+        <div className={classes.groupMenu} key={approvedGroup.group_id}>
+          <ListItem>
+            <ListItemText primary={approvedGroup.group_name} />
+          </ListItem>
+          <MenuButton />
+        </div>
+      ))}
     </List>
   );
 };
