@@ -1,6 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
-import { Todo, SignUp, LogIn, Home, SelectBigCategory } from './templates';
+import { Todo, SignUp, LogIn, Home, SelectBigCategory, InputCustomCategory } from './templates';
 
 const Router = (): JSX.Element => {
   return (
@@ -10,7 +10,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/login'} component={LogIn} />
       <Route exact path={'/'} component={Home} />
       <Route exact path={'/big-categories'} component={SelectBigCategory} />
-      <Route exact path={'/custom-categories/:id'} component={SelectBigCategory} />
+      <Route exact path={'/custom-categories/:id'} component={InputCustomCategory} />
     </Switch>
   );
 };
