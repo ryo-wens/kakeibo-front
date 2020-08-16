@@ -64,7 +64,7 @@ const EditGroupName = (props: EditGroupNameProps) => {
       />
       <div className={classes.buttons}>
         <TodoButton label={'保存'} onClick={() => dispatch(createGroup(groupName))} />
-        <TodoButton label={'キャンセル'} onClick={() => console.log('クリック')} />
+        <TodoButton label={'キャンセル'} onClick={handleClose} />
       </div>
     </div>
   );

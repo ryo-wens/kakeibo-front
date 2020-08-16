@@ -1,4 +1,4 @@
-import { createGroupAction, updateGroupAction } from './actions';
+import { createGroupAction, updateGroupAction, fetchGroupsAction } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
 
@@ -9,7 +9,6 @@ interface createGroupReq {
 interface createGroupRes {
   group_name: string;
   group_id: string;
-  user_name: string;
 }
 
 export const createGroup = (groupName: string) => {
@@ -80,6 +79,18 @@ export const updateGroup = (groupName: string) => {
         const nextApprovedGroups = [newGroup, ...prevApprovedGroups];
 
         dispatch(updateGroupAction(nextApprovedGroups));
+      });
+  };
+};
+
+export const fetchGroups = () => {
+  return async (dispatch: Dispatch<Action>, getState: any) => {
+    await axios
+      .get('http://127.0.0.1:8080/groups', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        dispatch(fetchGroupsAction(res.data.approved_group_list, res.data.unapproved_group_list));
       });
   };
 };
