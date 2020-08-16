@@ -49,6 +49,7 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
 
+
   useEffect(() => {
     if (incomeCategories.length === 0 || expenseCategories.length === 0) {
       dispatch(fetchCategories());

@@ -68,7 +68,6 @@ export const fetchCategories = () => {
 export const addCustomCategories = (
   name: string,
   bigCategoryId: number,
-  transactionType: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: addCustomReq = {
@@ -86,7 +85,7 @@ export const addCustomCategories = (
       .then((res) => {
         const addCategory = res.data;
         console.log(addCategory);
-        if (transactionType === 'income') {
+        if ( bigCategoryId=== 1) {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
@@ -100,7 +99,7 @@ export const addCustomCategories = (
           });
           console.log(nextCategories);
           dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else if (transactionType === 'expense') {
+        } else  {
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
             if (expenseCategory.id === bigCategoryId) {
