@@ -25,7 +25,7 @@ const useStyles = makeStyles({
     marginTop: '20px',
   },
   tableMain: {
-    maxWidth: 650,
+    maxWidth: 660,
     margin: 'auto',
     marginTop: '30px',
     height: 'auto',
@@ -33,9 +33,6 @@ const useStyles = makeStyles({
   },
   tableTop: {
     backgroundColor: '#4db5fa',
-  },
-  table: {
-    border: 'solid 1px',
   },
 });
 
@@ -45,8 +42,8 @@ const InputCustomCategory = () => {
   const selector = useSelector((state: State) => state);
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
-
-  const [customCategory, setCustomCategory] = useState<string>('');
+  const [name, setName] = useState<string>('');
+  const isNameInput = name === '';
 
   useEffect(() => {
     if (incomeCategories.length === 0 || expenseCategories.length === 0) {
@@ -54,41 +51,34 @@ const InputCustomCategory = () => {
     }
   }, []);
 
+  const handleChange = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setName(event.target.value as string);
+    },
+    [setName]
+  );
+
   const paths = window.location.pathname.split('/');
   const bigCategoryId = parseInt(paths[paths.length - 1], 10);
 
-  const mediumCategories: AssociatedCategories = useMemo(() => {
-    let associatedCategories: AssociatedCategories = [];
+  const mediumCategories: AssociatedCategories|string  = useMemo(() => {
+    let associatedCategories: AssociatedCategories | string = [];
     // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
-    if (bigCategoryId === 1) {
+    if (bigCategoryId === 1 ) {
       for (const incomeCategory of incomeCategories) {
         if (incomeCategory.id === bigCategoryId) {
-          associatedCategories = incomeCategory.associated_categories_list;
+          associatedCategories = incomeCategory.associated_categories_list
         }
       }
     } else {
       for (const expenseCategory of expenseCategories) {
         if (expenseCategory.id === bigCategoryId) {
-          associatedCategories = expenseCategory.associated_categories_list;
+          associatedCategories = expenseCategory.associated_categories_list
         }
       }
     }
-
-    return associatedCategories;
-  }, [incomeCategories, expenseCategories, bigCategoryId]);
-
-  const unAddCustomCategory = customCategory === '';
-
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setCustomCategory(event.target.value as string);
-    },
-    [setCustomCategory]
-  );
-
-  const addCustom = (customCategory: string) => {
-    console.log(customCategory);
-  };
+    return associatedCategories
+  }, [incomeCategories, expenseCategories, bigCategoryId,]);
 
   return (
     <>
@@ -96,7 +86,7 @@ const InputCustomCategory = () => {
       <TableContainer className={classes.tableMain} component={Paper}>
         <TextInput
           label={'追加するカテゴリー名'}
-          value={customCategory}
+          value={name}
           id={'customCategory'}
           type={'text'}
           fullWidth={false}
@@ -104,20 +94,20 @@ const InputCustomCategory = () => {
           onChange={handleChange}
         />
         <GenericButton
-          onClick={() => {
-            addCustom(customCategory);
-          }}
+          onClick={() => dispatch(
+            addCustomCategories(name,bigCategoryId))
+          }
           label={'追加する'}
-          disabled={unAddCustomCategory}
+          disabled={isNameInput}
         />
         <h3 className={classes.tableTitle}>カテゴリー編集</h3>
         <Table aria-label="simple table">
           <TableHead>
             <TableRow>
-              <TableCell className={classes.tableTop} align="left">
+              <TableCell className={classes.tableTop} align='center'>
                 中カテゴリー
               </TableCell>
-              <TableCell className={classes.tableTop} align="justify">
+              <TableCell className={classes.tableTop} align="center">
                 操作
               </TableCell>
             </TableRow>
@@ -128,7 +118,7 @@ const InputCustomCategory = () => {
                 <TableCell component="th" scope="row">
                   {mediumCategory.name}
                 </TableCell>
-                <TableCell align="right">{mediumCategory.id}</TableCell>
+                <TableCell align="right">{mediumCategory.category_type}</TableCell>
               </TableRow>
             ))}
           </TableBody>
