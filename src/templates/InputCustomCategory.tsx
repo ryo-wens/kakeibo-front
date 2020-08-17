@@ -118,7 +118,7 @@ const InputCustomCategory = () => {
                 <TableCell component="th" scope="row">
                   {mediumCategory.name}
                 </TableCell>
-                <TableCell align="right">{mediumCategory.category_type}</TableCell>
+                <TableCell align="right">{mediumCategory.id}</TableCell>
               </TableRow>
             ))}
           </TableBody>

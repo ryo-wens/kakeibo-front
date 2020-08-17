@@ -22,7 +22,6 @@ interface addCustomRes {
 }
 
 interface editCustomReq {
-  id: number;
   name: string;
   big_category_id: number;
 }
@@ -32,10 +31,6 @@ interface editCustomRes {
   id: number;
   name: string;
   big_category_id: number;
-}
-
-interface deleteCustomReq {
-  id: number;
 }
 
 interface deleteCustomRes {
@@ -139,7 +134,6 @@ export const editCustomCategories = (
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: editCustomReq = {
-      id: id,
       name: name,
       big_category_id: bigCategoryId,
     };
@@ -212,10 +206,8 @@ export const deleteCustomCategories = (
   bigCategoryId: number
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    const data: deleteCustomReq = { id: id };
     await axios
       .delete<deleteCustomRes>(`http://127.0.0.1:8081/categories/custom-categories/${id}`, {
-        data: data,
         withCredentials: true,
       })
       .then((res) => {
