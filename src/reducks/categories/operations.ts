@@ -84,7 +84,7 @@ export const addCustomCategories = (
       )
       .then((res) => {
         const addCategory = res.data;
-        console.log(addCategory);
+        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
         if ( bigCategoryId=== 1) {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
@@ -136,7 +136,6 @@ export const editCustomCategories = (
   id: number,
   name: string,
   bigCategoryId: number,
-  transactionType: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: editCustomReq = {
@@ -154,7 +153,8 @@ export const editCustomCategories = (
       )
       .then((res) => {
         const editCategory = res.data;
-        if (transactionType === 'income') {
+        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
+        if (bigCategoryId=== 1) {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
@@ -171,7 +171,7 @@ export const editCustomCategories = (
             return incomeCategory;
           });
           dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else if (transactionType === 'expense') {
+        } else  {
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
             if (expenseCategory.id === bigCategoryId) {
@@ -209,7 +209,6 @@ export const editCustomCategories = (
 
 export const deleteCustomCategories = (
   id: number,
-  transactionType: string,
   bigCategoryId: number
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
@@ -220,9 +219,9 @@ export const deleteCustomCategories = (
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data.message);
         const resMessage = res.data.message;
-        if (transactionType === 'income') {
+        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
+        if (bigCategoryId=== 1) {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
@@ -235,7 +234,7 @@ export const deleteCustomCategories = (
           });
           alert(resMessage);
           dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else if (transactionType === 'expense') {
+        } else  {
           const resMessage = res.data.message;
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {

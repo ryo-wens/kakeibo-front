@@ -43,7 +43,7 @@ const InputCustomCategory = () => {
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
   const [name, setName] = useState<string>('');
-  const unAddCustomCategory = name === '';
+  const isNameInput = name === '';
 
   useEffect(() => {
     if (incomeCategories.length === 0 || expenseCategories.length === 0) {
@@ -98,7 +98,7 @@ const InputCustomCategory = () => {
             addCustomCategories(name,bigCategoryId))
           }
           label={'追加する'}
-          disabled={unAddCustomCategory}
+          disabled={isNameInput}
         />
         <h3 className={classes.tableTitle}>カテゴリー編集</h3>
         <Table aria-label="simple table">
