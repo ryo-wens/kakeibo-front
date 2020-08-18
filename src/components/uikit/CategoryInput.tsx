@@ -12,7 +12,7 @@ import { Categories } from '../../reducks/categories/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    bigcategory: {
+    bigCategory: {
       padding: 8,
     },
     formControl: {
