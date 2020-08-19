@@ -60,10 +60,7 @@ export const fetchCategories = () => {
   };
 };
 
-export const addCustomCategories = (
-  name: string,
-  bigCategoryId: number,
-) => {
+export const addCustomCategories = (name: string, bigCategoryId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: addCustomReq = {
       name: name,
@@ -80,7 +77,7 @@ export const addCustomCategories = (
       .then((res) => {
         const addCategory = res.data;
         // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
-        if ( bigCategoryId=== 1) {
+        if (bigCategoryId === 1) {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
@@ -92,9 +89,8 @@ export const addCustomCategories = (
             }
             return incomeCategory;
           });
-          console.log(nextCategories);
           dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else  {
+        } else {
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
             if (expenseCategory.id === bigCategoryId) {
@@ -106,7 +102,6 @@ export const addCustomCategories = (
             }
             return expenseCategory;
           });
-          console.log(nextCategories);
           dispatch(updateExpenseCategoriesAction(nextCategories));
         }
       })
@@ -127,11 +122,7 @@ export const addCustomCategories = (
   };
 };
 
-export const editCustomCategories = (
-  id: number,
-  name: string,
-  bigCategoryId: number,
-) => {
+export const editCustomCategories = (id: number, name: string, bigCategoryId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const data: editCustomReq = {
       name: name,
@@ -148,14 +139,17 @@ export const editCustomCategories = (
       .then((res) => {
         const editCategory = res.data;
         // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
-        if (bigCategoryId=== 1) {
+        if (bigCategoryId === 1) {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
               const prevAssociatedCategories = incomeCategory.associated_categories_list;
               incomeCategory.associated_categories_list = prevAssociatedCategories.map(
                 (associatedCategory) => {
-                  if (associatedCategory.id === id) {
+                  if (
+                    associatedCategory.id === id &&
+                    associatedCategory.category_type === 'CustomCategory'
+                  ) {
                     return editCategory;
                   }
                   return associatedCategory;
@@ -165,14 +159,17 @@ export const editCustomCategories = (
             return incomeCategory;
           });
           dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else  {
+        } else {
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
             if (expenseCategory.id === bigCategoryId) {
               const prevAssociatedCategories = expenseCategory.associated_categories_list;
               expenseCategory.associated_categories_list = prevAssociatedCategories.map(
                 (associatedCategory) => {
-                  if (associatedCategory.id === id) {
+                  if (
+                    associatedCategory.id === id &&
+                    associatedCategory.category_type === 'CustomCategory'
+                  ) {
                     return editCategory;
                   }
                   return associatedCategory;
@@ -201,10 +198,7 @@ export const editCustomCategories = (
   };
 };
 
-export const deleteCustomCategories = (
-  id: number,
-  bigCategoryId: number
-) => {
+export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     await axios
       .delete<deleteCustomRes>(`http://127.0.0.1:8081/categories/custom-categories/${id}`, {
@@ -213,7 +207,7 @@ export const deleteCustomCategories = (
       .then((res) => {
         const resMessage = res.data.message;
         // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
-        if (bigCategoryId=== 1) {
+        if (bigCategoryId === 1) {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
@@ -226,7 +220,7 @@ export const deleteCustomCategories = (
           });
           alert(resMessage);
           dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else  {
+        } else {
           const resMessage = res.data.message;
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
