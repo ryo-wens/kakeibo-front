@@ -3,6 +3,7 @@ import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } fr
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/core/styles';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 
 const useStyles = makeStyles({
   link: {
@@ -36,29 +37,29 @@ const InputForm = (): JSX.Element => {
     []
   );
 
-  const handlePriceChange = (event: React.ChangeEvent<{ value: string }>) => {
+  const handlePriceChange =useCallback( (event: React.ChangeEvent<{ value: string }>) => {
     setPrice(event.target.value as string);
-  };
+  },[setPrice])
 
-  const handleMemo = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleMemo =useCallback( (event: React.ChangeEvent<{ value: string }>) => {
     setMemo(event.target.value as string);
-  };
+  },[setMemo])
 
-  const handleShop = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleShop =useCallback( (event: React.ChangeEvent<{ value: string }>) => {
     setShop(event.target.value as string);
-  };
+  },[setShop])
 
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleChange = useCallback((event: React.ChangeEvent<{ value: unknown }>) => {
     setCategory(event.target.value as string);
-  };
+  },[setCategory])
 
-  const handleSelect = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelect =useCallback( (event: React.ChangeEvent<{ value: unknown }>) => {
     setKind(event.target.value as string);
-  };
+  },[setKind])
 
-  const handleDateChange = (date: Date | null) => {
+  const handleDateChange =useCallback( (date: Date | null) => {
     setSelectedDate(date);
-  };
+  },[setSelectedDate])
 
   const unInput = price === '' || category === '' || kind === '';
 
@@ -102,6 +103,7 @@ const InputForm = (): JSX.Element => {
         fullWidth={false}
       />
       <GenericButton
+        startIcon={<AddCircleOutlineIcon/>}
         onClick={() => addEntry(price, memo, category, selectedDate, shop, kind)}
         label={'入力する'}
         disabled={unInput}
