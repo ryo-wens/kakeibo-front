@@ -17,8 +17,9 @@ import {
 } from '../reducks/categories/operations';
 import { getIncomeCategories, getExpenseCategories } from '../reducks/categories/selectors';
 import { State } from '../reducks/store/types';
-import { AssociatedCategories, Categories } from '../reducks/categories/types';
+import { AssociatedCategories } from '../reducks/categories/types';
 import IconButton from '@material-ui/core/IconButton';
+import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Modal from '@material-ui/core/Modal';
@@ -48,7 +49,14 @@ const useStyles = makeStyles((theme: Theme) =>
       border: 'solid 1px #e1e3e3',
     },
     tableCell: {
-      borderLeft: 'solid 1px #e1e3e3',
+      border: 'solid 1px #e1e3e3',
+      lineHeight:"initial"
+    },
+    textSize: {
+      fontSize: "0.889rem;"
+    },
+    root: {
+      fontSize:"initial",
     },
     modalPosition: {
       width: 520,
@@ -73,20 +81,19 @@ const InputCustomCategory = () => {
   const selector = useSelector((state: State) => state);
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
-
   const isNameInput = name === '';
 
-  const handleOpen = (selectedId: number, selectedName: string) => {
+  const handleOpen =useCallback( (selectedId: number, selectedName: string) => {
     setName(selectedName);
     setId(selectedId);
     setOpen(true);
-  };
+  },[setName,setId,setOpen])
 
-  const handleClose = () => {
+  const handleClose =useCallback( () => {
     setName('');
     setId(0);
     setOpen(false);
-  };
+  },[setName,setId,setOpen])
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -101,7 +108,7 @@ const InputCustomCategory = () => {
     }
   }, []);
 
-  const deleteCategroyCheck = (id: number, bigCategoryId: number) => {
+  const deleteCategoryCheck = (id: number, bigCategoryId: number) => {
     if (window.confirm('カテゴリーを削除しても良いですか？ ')) {
       dispatch(deleteCustomCategories(id, bigCategoryId));
     } else {
@@ -138,10 +145,14 @@ const InputCustomCategory = () => {
         nextCategories = [
           ...nextCategories,
           <TableRow key={mediumCategory.name}>
-            <TableCell className={ classes.tableCell} component="th" scope="row">
+            <TableCell className={ classes.tableCell } component="th" scope="row">
               {mediumCategory.name}
             </TableCell>
-            <TableCell  className={classes.tableCell} align="center">デフォルトのカテゴリーは編集できません</TableCell>
+            <TableCell  className={classes.tableCell} align="center">
+              <div className={classes.textSize }>
+              デフォルトのカテゴリーは編集できません
+              </div>
+            </TableCell>
           </TableRow>,
         ];
       } else if (mediumCategory.category_type === 'CustomCategory') {
@@ -154,17 +165,19 @@ const InputCustomCategory = () => {
             <TableCell className = {classes.tableCell} align="center">
               <IconButton
                 color="primary"
+                size={"small"}
                 onClick={() => handleOpen(mediumCategory.id, mediumCategory.name)}
               >
-                <CreateIcon />
+                <CreateIcon className={ classes.root} />
               </IconButton>
               <IconButton
                 color="primary"
+                size = {"small"}
                 onClick={() =>
-                  deleteCategroyCheck(mediumCategory.id, mediumCategory.big_category_id)
+                  deleteCategoryCheck(mediumCategory.id, mediumCategory.big_category_id)
                 }
               >
-                <DeleteIcon />
+                <DeleteIcon className={ classes.root} />
               </IconButton>
             </TableCell>
           </TableRow>,
@@ -189,6 +202,7 @@ const InputCustomCategory = () => {
           onChange={handleChange}
         />
         <GenericButton
+          startIcon={<AddCircleOutlineIcon/>}
           onClick={() => dispatch(addCustomCategories(name, bigCategoryId)) && setName('')}
           label={'追加する'}
           disabled={isNameInput}
@@ -228,7 +242,7 @@ const InputCustomCategory = () => {
                 dispatch(editCustomCategories(id, name, bigCategoryId)) && handleClose();
               }}
             />
-            <GenericButton disabled={false} label={'編集をキャンセル'} onClick={handleClose} />
+            <GenericButton  disabled={false} label={'キャンセル'} onClick={handleClose} />
           </div>
         </div>
       </Modal>
