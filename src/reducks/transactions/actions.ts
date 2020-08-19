@@ -1,4 +1,4 @@
-export type transactionsType = ReturnType<typeof addTransactions>
+export type transactionsActions = ReturnType<typeof addTransactions>
 
 export const ADD_TRANSACTIONS = 'ADD_TRANSACTIONS'
 export const addTransactions = (
