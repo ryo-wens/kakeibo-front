@@ -19,4 +19,7 @@ export const getPassword = createSelector(
   [usersSelector],
   (state) => state.password
 );
-export const getEmail = createSelector([usersSelector], (state) => state.email);
+export const getEmail = createSelector(
+  [usersSelector],
+  (state) => state.email
+);
