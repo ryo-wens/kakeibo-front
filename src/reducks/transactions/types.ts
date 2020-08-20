@@ -1,4 +1,4 @@
-export interface Transaction {
+export interface GetTransaction {
   id:number,
   transaction_type:string,
   updated_date:Date,
@@ -11,4 +11,14 @@ export interface Transaction {
   custom_category_id?:number
 }
 
-export interface Transactions extends Array<Transaction>{}
+export interface AddTransactions {
+  transaction_type: string,
+  transaction_date: Date,
+  shop?: string,
+  mem?: string,
+  amount: number,
+  big_category_id: number,
+  medium_category_id?: number,
+  custom_category_id?: number
+}
+export interface Transactions extends Array<GetTransaction>{}
