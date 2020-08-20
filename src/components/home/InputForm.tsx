@@ -15,7 +15,7 @@ const useStyles = makeStyles({
 const InputForm = (): JSX.Element => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [price, setPrice] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const [shop, setShop] = useState<string>('');
   const [category, setCategory] = useState<string>('');
@@ -24,7 +24,7 @@ const InputForm = (): JSX.Element => {
 
   const addEntry = useCallback(
     (
-      price: string,
+      amount: string,
       memo: string,
       category: string,
       selectedDate: Date | null,
@@ -32,14 +32,14 @@ const InputForm = (): JSX.Element => {
       kind: string
     ) => {
       const foo = JSON.stringify(selectedDate);
-      console.log(foo, kind, price, category, shop, memo);
+      console.log(foo, kind, amount, category, shop, memo);
     },
     []
   );
 
-  const handlePriceChange =useCallback( (event: React.ChangeEvent<{ value: string }>) => {
-    setPrice(event.target.value as string);
-  },[setPrice])
+  const handleAmountChange =useCallback( (event: React.ChangeEvent<{ value: string }>) => {
+    setAmount(event.target.value as string);
+  },[setAmount])
 
   const handleMemo =useCallback( (event: React.ChangeEvent<{ value: string }>) => {
     setMemo(event.target.value as string);
@@ -61,7 +61,7 @@ const InputForm = (): JSX.Element => {
     setSelectedDate(date);
   },[setSelectedDate])
 
-  const unInput = price === '' || category === '' || kind === '';
+  const unInput = amount === '' || category === '' || kind === '';
 
   return (
     <form className="grid__column box__input" autoComplete="on">
@@ -75,11 +75,11 @@ const InputForm = (): JSX.Element => {
       />
       <KindSelectBox onChange={handleSelect} required={true} value={kind} />
       <TextInput
-        value={price}
-        type={'tel'}
-        id={'price'}
+        value={amount}
+        type={'tell'}
+        id={'amount'}
         label={'金額(必須)'}
-        onChange={handlePriceChange}
+        onChange={handleAmountChange}
         required={true}
         fullWidth={false}
       />
@@ -104,7 +104,7 @@ const InputForm = (): JSX.Element => {
       />
       <GenericButton
         startIcon={<AddCircleOutlineIcon/>}
-        onClick={() => addEntry(price, memo, category, selectedDate, shop, kind)}
+        onClick={() => addEntry(amount, memo, category, selectedDate, shop, kind)}
         label={'入力する'}
         disabled={unInput}
       />
