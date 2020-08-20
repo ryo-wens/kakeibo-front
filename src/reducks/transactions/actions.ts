@@ -1,7 +1,7 @@
 export type transactionsActions = ReturnType<typeof addTransactions>
 
 export const ADD_TRANSACTIONS = 'ADD_TRANSACTIONS'
-export const addTransactions = (
+export const addTransactionsAction = (
   transaction_type:string,
   transaction_date:Date,
   shop:string,

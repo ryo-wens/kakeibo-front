@@ -4,14 +4,7 @@ const initialState = {
     expenseList: [],
   },
   transactions: {
-    transaction_type:'',
-    transaction_date:'',
-    shop:'',
-    memo:'',
-    amount:'',
-    big_category_id:'',
-    medium_category_id:'',
-    custom_category_id:'',
+    transactionsList:[]
   },
   users: {
     isLoggedIn: false,
