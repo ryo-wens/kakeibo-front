@@ -1,6 +1,8 @@
 export interface Transaction {
+  id:number,
   transaction_type:string,
-  transaction_date:Date,
+  updated_date:Date,
+  transaction_date:string,
   shop?:string,
   memo?:string,
   amount:number,
