@@ -6,8 +6,18 @@ export interface State {
     incomeList: Categories;
     expenseList: Categories;
   };
+  transactions: {
+    transaction_type:string,
+    transaction_date:Date,
+    shop:string,
+    memo:string,
+    amount:number,
+    big_category_id:number,
+    medium_category_id:number,
+    custom_category_id:number
+  },
   users: {
-    isLogedIn: boolean;
+    isLoggedIn: boolean;
     userId: string;
     userName: string;
     email: string;
