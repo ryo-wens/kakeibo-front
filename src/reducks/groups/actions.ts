@@ -1,7 +1,7 @@
 import { Groups } from './types';
 export type groupAction = ReturnType<
-  typeof createGroupAction | typeof updateGroupAction | typeof fetchGroupsAction
-  >;
+  typeof createGroupAction | typeof updateGroupNameAction | typeof fetchGroupsAction
+>;
 
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const createGroupAction = (groups: Groups) => {
@@ -13,10 +13,10 @@ export const createGroupAction = (groups: Groups) => {
   };
 };
 
-export const UPDATE_GROUP = 'UPDATE_GROUP';
-export const updateGroupAction = (groups: Groups) => {
+export const UPDATE_GROUP_NAME = 'UPDATE_GROUP_NAME';
+export const updateGroupNameAction = (groups: Groups) => {
   return {
-    type: UPDATE_GROUP,
+    type: UPDATE_GROUP_NAME,
     payload: {
       approvedGroups: groups,
     },

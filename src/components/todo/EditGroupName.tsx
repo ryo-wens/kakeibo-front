@@ -4,7 +4,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
 import { TodoButton, TextInput } from './index';
-import { createGroup } from '../../reducks/groups/operations';
+import { updateGroupName } from '../../reducks/groups/operations';
+import { Group } from '../../reducks/groups/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,23 +24,29 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface EditGroupNameProps {
-  editGroupName: string;
-  groupName: string;
+  approvedGroup: Group;
+  modalTitleLabel: string;
+  modalTextFieldLabel: string;
 }
 
 const EditGroupName = (props: EditGroupNameProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // getModalStyle is not a pure function, we roll the style only on the first render
   const [open, setOpen] = useState(false);
   const [groupName, setGroupName] = useState<string>('');
 
-  const handleOpen = () => {
+  const groupId = props.approvedGroup.group_id;
+
+  const initialGroupName = props.approvedGroup.group_name;
+
+  const handleOpen = (initialGroupName: string) => {
     setOpen(true);
+    setGroupName(initialGroupName);
   };
 
   const handleClose = () => {
     setOpen(false);
+    setGroupName('');
   };
 
   const inputGroupName = useCallback(
@@ -51,8 +58,8 @@ const EditGroupName = (props: EditGroupNameProps) => {
 
   const body = (
     <div className={classes.paper}>
-      <h3 id="simple-modal-title">{props.editGroupName}</h3>
-      <p>{props.groupName}</p>
+      <h3 id="simple-modal-title">{props.modalTitleLabel}</h3>
+      <p>{props.modalTextFieldLabel}</p>
       <TextInput
         id="filled-basic"
         variant="filled"
@@ -63,15 +70,18 @@ const EditGroupName = (props: EditGroupNameProps) => {
         onChange={inputGroupName}
       />
       <div className={classes.buttons}>
-        <TodoButton label={'保存'} onClick={() => dispatch(createGroup(groupName))} />
-        <TodoButton label={'キャンセル'} onClick={handleClose} />
+        <TodoButton
+          label={'保存'}
+          onClick={() => dispatch(updateGroupName(groupId, groupName)) && handleClose()}
+        />
+        <TodoButton label={'キャンセル'} onClick={() => handleClose()} />
       </div>
     </div>
   );
 
   return (
     <>
-      <MenuItem onClick={handleOpen}>グループ名の編集</MenuItem>
+      <MenuItem onClick={() => handleOpen(initialGroupName)}>グループ名の編集</MenuItem>
       <Modal
         open={open}
         onClose={handleClose}
