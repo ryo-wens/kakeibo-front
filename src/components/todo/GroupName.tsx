@@ -33,7 +33,6 @@ const GroupName = () => {
           <ListItem>
             <ListItemText primary={approvedGroup.group_name} />
           </ListItem>
-          {console.log(approvedGroup)}
           <MenuButton approvedGroup={approvedGroup} />
         </div>
       ))}

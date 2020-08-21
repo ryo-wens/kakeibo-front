@@ -36,10 +36,8 @@ const EditGroupName = (props: EditGroupNameProps) => {
   const [groupName, setGroupName] = useState<string>('');
 
   const groupId = props.approvedGroup.group_id;
-  console.log(groupId);
 
   const initialGroupName = props.approvedGroup.group_name;
-  console.log(initialGroupName);
 
   const handleOpen = (initialGroupName: string) => {
     setOpen(true);

@@ -39,7 +39,6 @@ export const createGroup = (groupName: string) => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         const currentUser = getState().users;
 
         const user = {
@@ -77,7 +76,6 @@ export const updateGroupName = (groupId: number, groupName: string) => {
       })
 
       .then((res) => {
-        console.log(res.data);
         const prevApprovedGroups: Groups = getState().groups.approvedGroups;
 
         const updateGroups = prevApprovedGroups.map((prevApprovedGroup) => {
@@ -93,7 +91,6 @@ export const updateGroupName = (groupId: number, groupName: string) => {
             return prevApprovedGroup;
           }
         });
-        console.log(updateGroups);
         dispatch(updateGroupNameAction(updateGroups));
       });
   };
