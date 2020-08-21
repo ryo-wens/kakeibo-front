@@ -1,5 +1,6 @@
 import { Categories } from '../categories/types';
 import { Groups } from '../groups/types';
+import {Transactions} from '../transactions/types'
 
 export interface State {
   categories: {
@@ -7,14 +8,7 @@ export interface State {
     expenseList: Categories;
   };
   transactions: {
-    transaction_type:string,
-    transaction_date:Date,
-    shop:string,
-    memo:string,
-    amount:number,
-    big_category_id:number,
-    medium_category_id:number,
-    custom_category_id:number
+    transactionsList:Transactions
   },
   users: {
     isLoggedIn: boolean;
