@@ -23,8 +23,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface CreateGroupsProps {
-  createGroup: string;
-  groupName: string;
+  modalTitleLabel: string;
+  modalTextFieldLabel: string;
 }
 
 const CreateGroups = (props: CreateGroupsProps) => {
@@ -51,8 +51,8 @@ const CreateGroups = (props: CreateGroupsProps) => {
 
   const body = (
     <div className={classes.paper}>
-      <h3 id="simple-modal-title">{props.createGroup}</h3>
-      <p>{props.groupName}</p>
+      <h3 id="simple-modal-title">{props.modalTitleLabel}</h3>
+      <p>{props.modalTextFieldLabel}</p>
       <TextInput
         id="filled-basic"
         variant="filled"

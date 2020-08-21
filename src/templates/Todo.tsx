@@ -21,7 +21,7 @@ const Todo = () => {
     <div>
       {/* <TodoMenu /> */}
       {/* <TodayTask /> */}
-      <CreateGroups createGroup={'グループ作成'} groupName={'グループ名'} />
+      <CreateGroups modalTitleLabel={'グループ作成'} modalTextFieldLabel={'グループ名'} />
       <GroupName />
     </div>
   );

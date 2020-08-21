@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { MenuButton } from '../uikit';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,7 +33,8 @@ const GroupName = () => {
           <ListItem>
             <ListItemText primary={approvedGroup.group_name} />
           </ListItem>
-          <MenuButton />
+          {console.log(approvedGroup)}
+          <MenuButton approvedGroup={approvedGroup} />
         </div>
       ))}
     </List>

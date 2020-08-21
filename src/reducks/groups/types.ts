@@ -1,13 +1,13 @@
 export interface Group {
-  group_id: string;
+  group_id: number;
   group_name: string;
   approved_users_list: GroupUsers;
   unapproved_users_list: GroupUsers;
 }
 
 export interface GroupUser {
-  group_id: string;
-  user_id: string;
+  group_id: number;
+  user_id: number;
   user_name: string;
 }
 
