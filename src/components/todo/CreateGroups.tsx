@@ -49,6 +49,8 @@ const CreateGroups = (props: CreateGroupsProps) => {
     [setGroupName]
   );
 
+  const isBlankGroupName = groupName === '';
+
   const body = (
     <div className={classes.paper}>
       <h3 id="simple-modal-title">{props.modalTitleLabel}</h3>
@@ -65,9 +67,10 @@ const CreateGroups = (props: CreateGroupsProps) => {
       <div className={classes.buttons}>
         <TodoButton
           label={'作成'}
+          disabled={isBlankGroupName}
           onClick={() => dispatch(createGroup(groupName)) && handleClose()}
         />
-        <TodoButton label={'キャンセル'} onClick={handleClose} />
+        <TodoButton label={'キャンセル'} disabled={false} onClick={handleClose} />
       </div>
     </div>
   );
