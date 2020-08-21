@@ -3,9 +3,9 @@ import { State } from '../store/types';
 
 const usersSelector = (state: State) => state.users;
 
-export const getLogedIn = createSelector(
+export const getLoggedIn = createSelector(
   [usersSelector],
-  (state) => state.isLogedIn
+  (state) => state.isLoggedIn
 );
 export const getUserId = createSelector(
   [usersSelector],
@@ -19,4 +19,7 @@ export const getPassword = createSelector(
   [usersSelector],
   (state) => state.password
 );
-export const getEmail = createSelector([usersSelector], (state) => state.email);
+export const getEmail = createSelector(
+  [usersSelector],
+  (state) => state.email
+);

@@ -3,8 +3,11 @@ const initialState = {
     incomeList: [],
     expenseList: [],
   },
+  transactions: {
+    transactionsList:[]
+  },
   users: {
-    isLogedIn: false,
+    isLoggedIn: false,
     userId: '',
     userName: '',
     email: '',
