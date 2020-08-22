@@ -39,6 +39,8 @@ const EditGroupName = (props: EditGroupNameProps) => {
 
   const initialGroupName = props.approvedGroup.group_name;
 
+  const isBlankGroupName = groupName === '';
+
   const handleOpen = (initialGroupName: string) => {
     setOpen(true);
     setGroupName(initialGroupName);
@@ -72,9 +74,10 @@ const EditGroupName = (props: EditGroupNameProps) => {
       <div className={classes.buttons}>
         <TodoButton
           label={'保存'}
+          disabled={isBlankGroupName}
           onClick={() => dispatch(updateGroupName(groupId, groupName)) && handleClose()}
         />
-        <TodoButton label={'キャンセル'} onClick={() => handleClose()} />
+        <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
       </div>
     </div>
   );

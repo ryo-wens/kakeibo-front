@@ -30,6 +30,9 @@ interface fetchGroupRes {
 
 export const createGroup = (groupName: string) => {
   return async (dispatch: Dispatch<Action>, getState: any) => {
+    if (groupName === '') {
+      return;
+    }
     const data: createGroupReq = {
       group_name: groupName,
     };
@@ -65,6 +68,9 @@ export const createGroup = (groupName: string) => {
 
 export const updateGroupName = (groupId: number, groupName: string) => {
   return async (dispatch: Dispatch, getState: () => State) => {
+    if (groupName === '') {
+      return;
+    }
     const data: updateGroupNameReq = {
       group_id: groupId,
       group_name: groupName,

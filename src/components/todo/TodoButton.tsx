@@ -12,6 +12,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface TodoButtonProps {
   label: string;
+  disabled: boolean;
   onClick: () => void;
 }
 
@@ -20,7 +21,13 @@ const TodoButton = (props: TodoButtonProps) => {
 
   return (
     <div>
-      <Button variant="contained" color="default" className={classes.button} onClick={() => props.onClick()}>
+      <Button
+        variant="contained"
+        color="default"
+        className={classes.button}
+        disabled={props.disabled}
+        onClick={() => props.onClick()}
+      >
         {props.label}
       </Button>
     </div>

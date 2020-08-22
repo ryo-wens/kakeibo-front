@@ -30,14 +30,22 @@ const TaskTextFields = () => {
       <Box border={1} className={classes.box}>
         <TextField className={classes.textarea} id="filled-basic" variant="filled" />
         <div className={classes.buttons} style={{ justifyContent: 'flex-end' }}>
-          <TodoButton label={'画像をアップロード'} onClick={() => console.log('クリック')} />
-          <TodoButton label={'期限'} onClick={() => console.log('クリック')} />
+          <TodoButton
+            label={'画像をアップロード'}
+            disabled={false}
+            onClick={() => console.log('クリック')}
+          />
+          <TodoButton label={'期限'} disabled={false} onClick={() => console.log('クリック')} />
         </div>
       </Box>
 
       <div className={classes.buttons}>
-        <TodoButton label={'タスクを追加'} onClick={() => console.log('クリック')} />
-        <TodoButton label={'キャンセル'} onClick={() => console.log('クリック')} />
+        <TodoButton
+          label={'タスクを追加'}
+          disabled={false}
+          onClick={() => console.log('クリック')}
+        />
+        <TodoButton label={'キャンセル'} disabled={false} onClick={() => console.log('クリック')} />
       </div>
     </form>
   );
