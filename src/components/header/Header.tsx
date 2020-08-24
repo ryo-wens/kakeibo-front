@@ -9,6 +9,7 @@ import HistoryIcon from '@material-ui/icons/History';
 import ComputerIcon from '@material-ui/icons/Computer';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import GroupIcon from '@material-ui/icons/Group';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { logOut } from '../../reducks/users/operations';
 import { useDispatch } from 'react-redux';
@@ -73,6 +74,9 @@ const Header = () => {
     <div className={classes.grow}>
       <AppBar className={classes.header} position="static">
         <Toolbar>
+          <div className={classes.sectionMobile}>
+            <MobileDrawer />
+          </div>
           <Typography variant="h6" noWrap>
             <Button color="inherit" className={classes.title} onClick={() => dispatch(push('/'))}>
               家計簿App
@@ -90,6 +94,14 @@ const Header = () => {
             </Button>
             <Button size="large" className={classes.button} startIcon={<GroupIcon />}>
               グループ
+            </Button>
+            <Button
+              size="large"
+              className={classes.button}
+              startIcon={<PlaylistAddCheckIcon />}
+              onClick={() => dispatch(push('/todo'))}
+            >
+              Todo
             </Button>
           </div>
           <div className={classes.grow} />
@@ -110,13 +122,9 @@ const Header = () => {
               aria-label="settings"
               aria-controls={menuId}
               aria-haspopup="true"
-              onClick={() => dispatch(push('/todo'))}
             >
               設定
             </Button>
-          </div>
-          <div className={classes.sectionMobile}>
-            <MobileDrawer />
           </div>
         </Toolbar>
       </AppBar>

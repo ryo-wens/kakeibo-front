@@ -1,124 +1,95 @@
-import React from 'react';
-import CssBaseline from '@material-ui/core/CssBaseline';
-import Divider from '@material-ui/core/Divider';
+import React, { useCallback, useState } from 'react';
+import { useSelector } from 'react-redux';
+import {
+  makeStyles,
+  createMuiTheme,
+  ThemeProvider,
+  Theme,
+  createStyles,
+} from '@material-ui/core/styles';
 import Drawer from '@material-ui/core/Drawer';
-import Hidden from '@material-ui/core/Hidden';
-import InboxIcon from '@material-ui/icons/MoveToInbox';
-import List from '@material-ui/core/List';
-import ListItem from '@material-ui/core/ListItem';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
-import MailIcon from '@material-ui/icons/Mail';
-import { makeStyles, useTheme, Theme, createStyles } from '@material-ui/core/styles';
-
-const drawerWidth = 240;
+import Divider from '@material-ui/core/Divider';
+import DateRangeIcon from '@material-ui/icons/DateRange';
+import GroupIcon from '@material-ui/icons/Group';
+import List from '@material-ui/core/List';
+import ListItem from '@material-ui/core/ListItem';
+import TodayIcon from '@material-ui/icons/Today';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { State } from '../../reducks/store/types';
+import { CreateGroups } from './index';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    root: {
-      display: 'flex',
-    },
     drawer: {
-      [theme.breakpoints.up('sm')]: {
-        width: drawerWidth,
-        flexShrink: 0,
-      },
-    },
-    appBar: {
-      [theme.breakpoints.up('sm')]: {
-        width: `calc(100% - ${drawerWidth}px)`,
-        marginLeft: drawerWidth,
-      },
-    },
-    menuButton: {
-      marginRight: theme.spacing(2),
-      [theme.breakpoints.up('sm')]: {
+      [theme.breakpoints.down('xs')]: {
         display: 'none',
       },
     },
-    // necessary for content to be below app bar
-    toolbar: theme.mixins.toolbar,
-    drawerPaper: {
-      width: drawerWidth,
+    list: {
+      margin: '70px 20px 0px 20px ',
+      width: 200,
+      backgroundColor: theme.palette.background.paper,
     },
-    content: {
-      flexGrow: 1,
-      padding: theme.spacing(3),
+    BackdropProps: {
+      backgroundColor: 'none',
     },
   })
 );
 
-interface Props {
-  /**
-   * Injected by the documentation to work in an iframe.
-   * You won't need it on your project.
-   */
-  window?: () => Window;
-}
-
-const TodoMenu = (props: Props) => {
-  const { window } = props;
+const TodoMenu = () => {
   const classes = useStyles();
-  const theme = useTheme();
-  const [mobileOpen, setMobileOpen] = React.useState(false);
+  const [open, setOpen] = useState<boolean>(true);
+  const selector = useSelector((state: State) => state);
+  const approvedGroups = getApprovedGroups(selector);
 
-  const handleDrawerToggle = () => {
-    setMobileOpen(!mobileOpen);
-  };
+  const theme = createMuiTheme({
+    overrides: {
+      MuiBackdrop: {
+        root: {
+          backgroundColor: 'rgba(0,0,0,0.0)',
+        },
+      },
+    },
+  });
 
-  const drawer = (
-    <div>
-      <div className={classes.toolbar} />
-      <Divider />
-      <List>
-        {['今日', '近日予定', 'グループ作成'].map((text, index) => (
-          <ListItem button key={text}>
-            <ListItemIcon>{index % 2 === 0 ? <InboxIcon /> : <MailIcon />}</ListItemIcon>
-            <ListItemText primary={text} />
-          </ListItem>
-        ))}
-      </List>
-      <Divider />
-    </div>
-  );
-
-  const container = window !== undefined ? () => window().document.body : undefined;
+  const handleDrawerToggle = useCallback(() => {
+    setOpen(!open);
+  }, [setOpen, open]);
 
   return (
-    <div className={classes.root}>
-      <CssBaseline />
-      <nav className={classes.drawer} aria-label="mailbox folders">
-        {/* The implementation can be swapped with js to avoid SEO duplication of links. */}
-        <Hidden smUp implementation="css">
-          <Drawer
-            container={container}
-            variant="temporary"
-            anchor={theme.direction === 'rtl' ? 'right' : 'left'}
-            open={mobileOpen}
-            onClose={handleDrawerToggle}
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            ModalProps={{
-              keepMounted: true, // Better open performance on mobile.
-            }}
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-        <Hidden xsDown implementation="css">
-          <Drawer
-            classes={{
-              paper: classes.drawerPaper,
-            }}
-            variant="permanent"
-            open
-          >
-            {drawer}
-          </Drawer>
-        </Hidden>
-      </nav>
-    </div>
+    <ThemeProvider theme={theme}>
+      <Drawer style={{ zIndex: 1050 }} anchor={'left'} open={open} className={classes.drawer}>
+        <List className={classes.list} component="nav">
+          <ListItem button={true}>
+            <ListItemIcon>
+              <TodayIcon />
+            </ListItemIcon>
+            <ListItemText primary={'今日'} />
+          </ListItem>
+          <ListItem button={true}>
+            <ListItemIcon>
+              <DateRangeIcon />
+            </ListItemIcon>
+            <ListItemText primary={'近日予定'} />
+          </ListItem>
+          <Divider />
+          {approvedGroups.map((approvedGroup) => {
+            return (
+              <ListItem button={true} key={approvedGroup.group_id}>
+                <ListItemIcon>
+                  <GroupIcon />
+                </ListItemIcon>
+                <ListItemText primary={approvedGroup.group_name} />
+              </ListItem>
+            );
+          })}
+
+          <CreateGroups modalTitleLabel={'グループ作成'} modalTextFieldLabel={'グループ名'} />
+        </List>
+      </Drawer>
+    </ThemeProvider>
   );
 };
 

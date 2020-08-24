@@ -14,6 +14,7 @@ import HistoryIcon from '@material-ui/icons/History';
 import ComputerIcon from '@material-ui/icons/Computer';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import GroupIcon from '@material-ui/icons/Group';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { logOut } from '../../reducks/users/operations';
 
@@ -47,10 +48,7 @@ const MobileDrawer = () => {
     },
     [setSideBarOpen, sideBarOpen]
   );
-  const selectMenu = (
-    event: React.KeyboardEvent | React.MouseEvent,
-    path: string
-  ) => {
+  const selectMenu = (event: React.KeyboardEvent | React.MouseEvent, path: string) => {
     dispatch(push(path));
     handleDrawerToggle(event);
   };
@@ -86,6 +84,13 @@ const MobileDrawer = () => {
     },
     {
       func: selectMenu,
+      label: 'Todo',
+      icon: <PlaylistAddCheckIcon />,
+      id: 'todo',
+      value: '/todo',
+    },
+    {
+      func: selectMenu,
       label: '設定',
       icon: <SettingsIcon />,
       id: 'setting',
@@ -98,19 +103,10 @@ const MobileDrawer = () => {
       <IconButton color="inherit" onClick={(e) => handleDrawerToggle(e)}>
         <MenuIcon />
       </IconButton>
-      <Drawer
-        keepMounted={true}
-        anchor={'right'}
-        open={sideBarOpen}
-        onClose={handleDrawerToggle}
-      >
+      <Drawer keepMounted={true} anchor={'left'} open={sideBarOpen} onClose={handleDrawerToggle}>
         <List className={classes.drawer}>
           {menus.map((menu) => (
-            <ListItem
-              button
-              key={menu.id}
-              onClick={(e) => menu.func(e, menu.value)}
-            >
+            <ListItem button key={menu.id} onClick={(e) => menu.func(e, menu.value)}>
               <ListItemIcon>{menu.icon}</ListItemIcon>
               <ListItemText primary={menu.label} />
             </ListItem>
