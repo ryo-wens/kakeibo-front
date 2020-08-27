@@ -28,8 +28,8 @@ const useStyles = makeStyles({
 type DatePickerProps = {
   id: string;
   label: string;
-  value: Date | null;
-  onChange: (date: Date | null) => void;
+  value: Date | null ;
+  onChange: (date: Date | null ) => void;
   required: boolean;
 };
 

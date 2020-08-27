@@ -1,16 +1,18 @@
-import * as Actions from './actions'
-import {transactionActions} from './actions'
+import * as Actions from './actions';
+import { transactionActions } from './actions';
 import initialState from '../store/initialState';
 
-export const transactionsReducers = (
+export const transactionsReducer = (
   state = initialState.transactions,
-  action : transactionActions
+  action: transactionActions
 ) => {
   switch (action.type) {
     case Actions.ADD_TRANSACTIONS:
       return {
         ...state,
-        ...action.payload
-      }
+        transactionsList: [...action.payload],
+      };
+    default:
+      return state;
   }
-}
+};
