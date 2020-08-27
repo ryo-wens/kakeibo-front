@@ -96,8 +96,8 @@ const InputCustomCategory = () => {
   },[setName,setId,setOpen])
 
   const handleChange = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setName(event.target.value as string);
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setName(event.target.value);
     },
     [setName]
   );
