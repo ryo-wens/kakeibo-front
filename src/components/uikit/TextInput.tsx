@@ -18,13 +18,13 @@ const useStyles = makeStyles(() =>
 );
 
 type TextInputProps = {
-  value: string;
+  value?: string | number | null;
   id: string;
   label: string;
   type: string;
   required: boolean;
   fullWidth: boolean;
-  onChange: (event: React.ChangeEvent<{ value: string }>) => void;
+  onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
 const TextInput = (props: TextInputProps) => {

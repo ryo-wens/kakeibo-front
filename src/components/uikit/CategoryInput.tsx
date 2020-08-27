@@ -39,6 +39,7 @@ interface CategoryProps {
   kind: string;
   value: string;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  onClick: (bigCategoryId: number,associatedCategoryId:number | null,category_type: string) => void;
   required: boolean;
 }
 
@@ -49,7 +50,6 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
 
-
   useEffect(() => {
     if (incomeCategories.length === 0 || expenseCategories.length === 0) {
       dispatch(fetchCategories());
@@ -59,11 +59,15 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
   const categories = useMemo(() => {
     let tmpCategories: ReactElement<Categories>[] = [];
 
-    if (props.kind === '収入') {
+    if (props.kind === 'income') {
       for (const incomeCategory of incomeCategories) {
         tmpCategories = [
           ...tmpCategories,
-          <MenuItem key={incomeCategory.name} value={incomeCategory.name}>
+          <MenuItem
+            key={incomeCategory.name}
+            value = {incomeCategory.name}
+            onClick={() => props.onClick(incomeCategory.id,null, incomeCategory.category_type)}
+          >
             {incomeCategory.name}
           </MenuItem>,
         ];
@@ -71,7 +75,11 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
         for (const category of incomeCategory.associated_categories_list) {
           tmpCategories = [
             ...tmpCategories,
-            <MenuItem key={category.name} value={category.name}>
+            <MenuItem
+              key={category.name}
+              value={category.name}
+              onClick = {() => props.onClick(category.big_category_id,category.id,category.category_type)}
+            >
               {category.name}
             </MenuItem>,
           ];
@@ -79,11 +87,15 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
       }
     }
 
-    if (props.kind === '支出') {
+    if (props.kind === 'expense') {
       for (const expenseCategory of expenseCategories) {
         tmpCategories = [
           ...tmpCategories,
-          <MenuItem key={expenseCategory.name} value={expenseCategory.name}>
+          <MenuItem
+            key={expenseCategory.name}
+            value={expenseCategory.name}
+            onClick = {() =>props.onClick(expenseCategory.id,null,expenseCategory.category_type)}
+          >
             {expenseCategory.name}
           </MenuItem>,
         ];
@@ -91,7 +103,11 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
         for (const category of expenseCategory.associated_categories_list) {
           tmpCategories = [
             ...tmpCategories,
-            <MenuItem key={category.name} value={category.name}>
+            <MenuItem
+              key={category.name}
+              value={category.name}
+              onClick={() =>props.onClick(category.big_category_id,category.id,category.category_type)}
+            >
               {category.name}
             </MenuItem>,
           ];
@@ -107,7 +123,7 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
       <InputLabel id="category" required={props.required}>
         カテゴリー(必須)
       </InputLabel>
-      <Select MenuProps={MenuProps} value={props.value} onChange={props.onChange}>
+      <Select MenuProps={MenuProps} value={props.value} onChange = {props.onChange} >
         {categories}
       </Select>
     </FormControl>
