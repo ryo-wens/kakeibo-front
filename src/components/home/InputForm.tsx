@@ -98,19 +98,13 @@ const InputForm = (): JSX.Element => {
           setCustomCategoryId(associatedCategoryId);
           break;
       }
-      console.log(bigCategoryId);
-      console.log(associatedCategoryId);
+
     },
     [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
   );
 
   const unInput = amount === '' || category === '' || transactionsType === '';
-  console.log(transactionDate);
-  console.log(amount);
-  console.log(transactionsType);
-  console.log(memo);
-  console.log(shop);
-  console.log(category);
+
 
   return (
     <form className="grid__column box__input" autoComplete="on">
@@ -125,7 +119,7 @@ const InputForm = (): JSX.Element => {
       <KindSelectBox onChange={handleSelect} required={true} value={transactionsType} />
       <TextInput
         value={amount}
-        type={'tell'}
+        type={'tel'}
         id={'amount'}
         label={'金額(必須)'}
         onChange={handleAmountChange}

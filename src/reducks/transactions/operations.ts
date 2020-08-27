@@ -75,7 +75,7 @@ export const addTransactions = (
       })
       .then((res) => {
         const newTransaction = res.data;
-        console.log(newTransaction);
+
         const prevTransactions = getState().transactions.transactionsList;
 
         const transactionList = [newTransaction, ...prevTransactions];
@@ -83,7 +83,6 @@ export const addTransactions = (
         dispatch(addTransactionsAction(transactionList));
       })
       .catch((error) => {
-        console.log('error');
         if (error.response.status === 400) {
           const errMessages: string[] = [];
           if (error.response.data.error.transaction_type.length > 0) {
