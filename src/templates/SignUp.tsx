@@ -46,32 +46,32 @@ const SignUp = () => {
   const [confirmPassword, setConfirmPassword] = useState<string>('');
 
   const inputUserId = useCallback(
-    (e) => {
-      setUserId(e.target.value);
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setUserId(event.target.value);
     },
     [setUserId]
   );
   const inputUserName = useCallback(
-    (e) => {
-      setUserName(e.target.value);
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setUserName(event.target.value);
     },
     [setUserName]
   );
   const inputEmail = useCallback(
-    (e) => {
-      setEmail(e.target.value);
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(event.target.value);
     },
     [setEmail]
   );
   const inputPassword = useCallback(
-    (e) => {
-      setPassword(e.target.value);
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(event.target.value);
     },
     [setPassword]
   );
   const inputConfirmPassword = useCallback(
-    (e) => {
-      setConfirmPassword(e.target.value);
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setConfirmPassword(event.target.value);
     },
     [setConfirmPassword]
   );
