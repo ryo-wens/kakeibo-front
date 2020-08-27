@@ -17,6 +17,7 @@ import GroupIcon from '@material-ui/icons/Group';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { logOut } from '../../reducks/users/operations';
+import { MobileTodoMenu } from '../todo';
 
 const useStyles = makeStyles({
   drawer: {
@@ -28,6 +29,14 @@ const MobileDrawer = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
+  const [mainMenu, setMainMenu] = useState<boolean>(true);
+  const [showTodoMenu, setShowTodoMenu] = useState<boolean>(false);
+
+  const switchMenu = () => {
+    setMainMenu(!mainMenu);
+    setShowTodoMenu(!showTodoMenu);
+  };
+
   const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {
       dispatch(logOut());
@@ -84,13 +93,6 @@ const MobileDrawer = () => {
     },
     {
       func: selectMenu,
-      label: 'Todo',
-      icon: <PlaylistAddCheckIcon />,
-      id: 'todo',
-      value: '/todo',
-    },
-    {
-      func: selectMenu,
       label: '設定',
       icon: <SettingsIcon />,
       id: 'setting',
@@ -104,20 +106,29 @@ const MobileDrawer = () => {
         <MenuIcon />
       </IconButton>
       <Drawer keepMounted={true} anchor={'left'} open={sideBarOpen} onClose={handleDrawerToggle}>
-        <List className={classes.drawer}>
-          {menus.map((menu) => (
-            <ListItem button key={menu.id} onClick={(e) => menu.func(e, menu.value)}>
-              <ListItemIcon>{menu.icon}</ListItemIcon>
-              <ListItemText primary={menu.label} />
+        {mainMenu && (
+          <List className={classes.drawer}>
+            {menus.map((menu) => (
+              <ListItem button key={menu.id} onClick={(e) => menu.func(e, menu.value)}>
+                <ListItemIcon>{menu.icon}</ListItemIcon>
+                <ListItemText primary={menu.label} />
+              </ListItem>
+            ))}
+            <ListItem button key="todo" onClick={() => switchMenu()}>
+              <ListItemIcon>
+                <PlaylistAddCheckIcon />
+              </ListItemIcon>
+              <ListItemText primary="TODO" />
             </ListItem>
-          ))}
-          <ListItem button key="logout" onClick={() => logOutCheck()}>
-            <ListItemIcon>
-              <ExitToAppIcon />
-            </ListItemIcon>
-            <ListItemText primary="ログアウト" />
-          </ListItem>
-        </List>
+            <ListItem button key="logout" onClick={() => logOutCheck()}>
+              <ListItemIcon>
+                <ExitToAppIcon />
+              </ListItemIcon>
+              <ListItemText primary="ログアウト" />
+            </ListItem>
+          </List>
+        )}
+        {showTodoMenu && <MobileTodoMenu onClick={() => switchMenu()} />}
       </Drawer>
     </nav>
   );

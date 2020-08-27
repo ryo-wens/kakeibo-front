@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import {
   makeStyles,
@@ -53,10 +53,6 @@ const TodoMenu = () => {
       },
     },
   });
-
-  const handleDrawerToggle = useCallback(() => {
-    setOpen(!open);
-  }, [setOpen, open]);
 
   return (
     <ThemeProvider theme={theme}>
