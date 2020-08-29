@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { TodayTask, TodoMenu, GroupName } from '../components/todo';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
+import { GroupTodo } from './index';
 
 const Todo = () => {
   const dispatch = useDispatch();
@@ -19,9 +19,8 @@ const Todo = () => {
 
   return (
     <div>
-      <TodoMenu />
       {/* <TodayTask /> */}
-      <GroupName />
+      {/*<GroupTodo />*/}
     </div>
   );
 };

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   makeStyles,
   createMuiTheme,
@@ -19,6 +19,7 @@ import TodayIcon from '@material-ui/icons/Today';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
 import { CreateGroups } from './index';
+import { push } from 'connected-react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,6 +44,7 @@ interface MobileTodoMenuProps {
 
 const MobileTodoMenu = (props: MobileTodoMenuProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
 
@@ -79,8 +81,13 @@ const MobileTodoMenu = (props: MobileTodoMenuProps) => {
         </ListItem>
         <Divider />
         {approvedGroups.map((approvedGroup) => {
+          const selectedGroupId: number = approvedGroup.group_id;
           return (
-            <ListItem button={true} key={approvedGroup.group_id}>
+            <ListItem
+              button={true}
+              key={approvedGroup.group_id}
+              onClick={() => dispatch(push('/group-todo/' + selectedGroupId))}
+            >
               <ListItemIcon>
                 <GroupIcon />
               </ListItemIcon>
