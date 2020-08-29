@@ -7,7 +7,7 @@ const App = () => {
   return (
     <>
       <Header />
-      <main className="section__display">
+      <main className="section__container">
         <Router />
       </main>
     </>
