@@ -40,15 +40,15 @@ const LogIn = () => {
   const [password, setPassword] = useState<string>('');
 
   const inputEmail = useCallback(
-    (e) => {
-      setEmail(e.target.value);
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setEmail(event.target.value);
     },
     [setEmail]
   );
 
   const inputPassword = useCallback(
-    (e) => {
-      setPassword(e.target.value);
+    (event:React.ChangeEvent<HTMLInputElement>) => {
+      setPassword(event.target.value);
     },
     [setPassword]
   );
