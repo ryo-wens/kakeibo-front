@@ -10,7 +10,7 @@ export const transactionsReducer = (
     case Actions.FETCH_TRANSACTIONS:
       return {
         ...state,
-        ...action.payload
+        transactionsList: [...action.payload]
       }
     case Actions.ADD_TRANSACTIONS:
       return {
