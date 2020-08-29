@@ -1,6 +1,6 @@
 import { Categories } from '../categories/types';
 import { Groups } from '../groups/types';
-import {Transactions} from '../transactions/types'
+import {TransactionsList} from '../transactions/types'
 
 export interface State {
   categories: {
@@ -8,7 +8,7 @@ export interface State {
     expenseList: Categories;
   };
   transactions: {
-    transactionsList:Transactions
+    transactionsList:TransactionsList
   },
   users: {
     isLoggedIn: boolean;
