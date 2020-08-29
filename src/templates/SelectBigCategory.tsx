@@ -15,6 +15,9 @@ import { Category } from '../reducks/categories/types';
 import { getIncomeCategories, getExpenseCategories } from '../reducks/categories/selectors';
 
 const useStyles = makeStyles({
+  tablePosition: {
+    margin:'0 auto'
+  },
   tableParent: {
     maxWidth: 480,
     margin: 'auto',
@@ -33,6 +36,9 @@ const useStyles = makeStyles({
   tableCategory: {
     cursor: 'pointer',
     textAlign: 'center',
+    '&:hover':{
+      textDecoration:'underline',
+    },
   },
 });
 
@@ -65,6 +71,7 @@ const SelectBigCategory = () => {
 
   return (
     <>
+      <div className={classes.tablePosition}>
       <h4 className={classes.tableMain}>カテゴリーを追加したい大カテゴリーを選択してください</h4>
       <TableContainer className={classes.tableParent} component={Paper}>
         <Table className={classes.table} aria-label="simple table">
@@ -87,6 +94,7 @@ const SelectBigCategory = () => {
           </TableBody>
         </Table>
       </TableContainer>
+      </div>
     </>
   );
 };

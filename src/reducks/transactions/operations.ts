@@ -3,8 +3,6 @@ import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { State } from '../store/types';
 
-
-
 interface addTransactionsReq {
   transaction_type: string;
   transaction_date: Date | null;
@@ -33,7 +31,6 @@ const isValidAmountFormat = (amount:string) => {
   const regex = /^([1-9]\d*|0)$/;
   return regex.test(amount)
 }
-
 
 export const addTransactions = (
   transaction_type: string,
@@ -85,25 +82,32 @@ export const addTransactions = (
       .catch((error) => {
         if (error.response.status === 400) {
           const errMessages: string[] = [];
+
           if (error.response.data.error.transaction_type.length > 0) {
             errMessages.push(error.response.data.error.transaction_type);
           }
+
           if (error.response.data.err.shop.length > 0) {
             errMessages.push(error.response.data.error.shop);
           }
+
           if (error.response.data.error.memo.length > 0) {
             errMessages.push(error.response.data.error.memo);
           }
+
           if (error.response.data.error.password.big_category_id > 0) {
             errMessages.push(error.response.data.error.big_category_id);
           }
+
           if (errMessages.length > 0) {
             alert(errMessages.join('\n'));
           }
         }
+
         if (error.response.status === 401) {
           alert(error.response.data.error.message);
         }
+
         if (error.response.status === 500) {
           alert(error.response.data.error.message);
         }
