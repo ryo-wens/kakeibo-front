@@ -1,4 +1,4 @@
-export interface GetTransactions {
+export interface FetchTransactions {
   id: number;
   transaction_type: string;
   updated_date: Date;
@@ -22,4 +22,4 @@ export interface AddTransactions {
   custom_category_id?: number | null;
 }
 
-export interface Transactions extends Array<GetTransactions> {}
+export interface TransactionsList extends Array<FetchTransactions> {}
