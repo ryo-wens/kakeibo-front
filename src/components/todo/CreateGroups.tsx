@@ -40,6 +40,7 @@ const CreateGroups = (props: CreateGroupsProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    setGroupName('');
   };
 
   const inputGroupName = useCallback(

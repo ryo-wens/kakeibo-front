@@ -3,14 +3,14 @@ import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { EditGroupName } from '../todo';
+import { EditGroupMembers, EditGroupName } from '../todo';
 import { Group } from '../../reducks/groups/types';
 
 interface MenuButtonProps {
   approvedGroup: Group;
 }
 
-const MenuButton = (props: MenuButtonProps) => {
+const GroupMenuButton = (props: MenuButtonProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -38,11 +38,11 @@ const MenuButton = (props: MenuButtonProps) => {
           modalTextFieldLabel={'グループ名'}
           approvedGroup={props.approvedGroup}
         />
-        <MenuItem onClick={handleClose}>メンバーの編集</MenuItem>
+        <EditGroupMembers modalTitleLabel={'メンバーの編集'} approvedGroup={props.approvedGroup} />
         <MenuItem onClick={handleClose}>グループを削除</MenuItem>
       </Menu>
     </>
   );
 };
 
-export default MenuButton;
+export default GroupMenuButton;
