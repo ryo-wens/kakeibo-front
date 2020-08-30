@@ -1,4 +1,8 @@
 import React from 'react';
+import { useSelector } from 'react-redux'
+import { useDispatch } from 'react-redux';
+import { push } from 'connected-react-router';
+import {getIsLoggedIn} from '../../reducks/users/selectors'
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -12,9 +16,8 @@ import GroupIcon from '@material-ui/icons/Group';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { logOut } from '../../reducks/users/operations';
-import { useDispatch } from 'react-redux';
-import { push } from 'connected-react-router';
 import { MobileDrawer } from './index';
+import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,7 +42,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'none',
       [theme.breakpoints.up('xs')]: {
         display: 'block',
-      },
+      }
     },
     sectionDesktop: {
       display: 'none',
@@ -59,16 +62,20 @@ const useStyles = makeStyles((theme: Theme) =>
 const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: State) => state);
+  const isLoggedIn = getIsLoggedIn(selector)
 
   const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {
-      dispatch(logOut());
+        dispatch(logOut());
     } else {
-      alert('ログアウトを中止しました');
+        alert('ログアウトを中止しました');
     }
   };
 
   const menuId = 'primary-search-account-menu';
+
+
 
   return (
     <div className={classes.grow}>
@@ -78,7 +85,7 @@ const Header = () => {
             <MobileDrawer />
           </div>
           <Typography variant="h6" noWrap>
-            <Button color="inherit" className={classes.title} onClick={() => dispatch(push('/'))}>
+            <Button color="inherit" className={classes.title}   onClick={() => dispatch(push('/'))}>
               家計簿App
             </Button>
           </Typography>
