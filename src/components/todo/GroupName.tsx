@@ -3,15 +3,17 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { MenuButton } from '../uikit';
+import { GroupMenuButton } from '../uikit';
 import { Group } from '../../reducks/groups/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
+      height: '40px',
       width: '100%',
       maxWidth: 720,
       margin: '40px 0px 0px 270px',
+      borderBottom: 'solid #333',
       zIndex: 1100,
       backgroundColor: theme.palette.background.paper,
     },
@@ -34,7 +36,7 @@ const GroupName = (props: GroupNameProps) => {
         <ListItem>
           <ListItemText primary={props.approvedGroup.group_name} />
         </ListItem>
-        <MenuButton approvedGroup={props.approvedGroup} />
+        <GroupMenuButton approvedGroup={props.approvedGroup} />
       </div>
     </List>
   );

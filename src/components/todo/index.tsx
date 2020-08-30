@@ -1,5 +1,6 @@
 export { default as AddButton } from './AddButton';
 export { default as CreateGroups } from './CreateGroups';
+export { default as EditGroupMembers } from './EditGroupMembers';
 export { default as EditGroupName } from './EditGroupName';
 export { default as GroupName } from './GroupName';
 export { default as MobileTodoMenu } from './MobileTodoMenu';

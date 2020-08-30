@@ -8,8 +8,8 @@ import { fetchGroups } from '../reducks/groups/operations';
 const GroupTodo = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const pathname = window.location.pathname; // /group-todo/6
-  const paths = pathname.split('/'); // ['group-todo', '6']
+  const pathname = window.location.pathname;
+  const paths = pathname.split('/');
   const groupId = Number(paths[paths.length - 1]);
 
   const approvedGroups = getApprovedGroups(selector);
@@ -40,7 +40,7 @@ const GroupTodo = () => {
   return (
     <>
       <TodoMenu />
-      <GroupName approvedGroup={approvedGroup} />;
+      <GroupName approvedGroup={approvedGroup} />
     </>
   );
 };

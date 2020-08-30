@@ -30,8 +30,7 @@ interface CreateGroupsProps {
 const CreateGroups = (props: CreateGroupsProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  // getModalStyle is not a pure function, we roll the style only on the first render
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>('');
 
   const handleOpen = () => {
@@ -40,6 +39,7 @@ const CreateGroups = (props: CreateGroupsProps) => {
 
   const handleClose = () => {
     setOpen(false);
+    setGroupName('');
   };
 
   const inputGroupName = useCallback(

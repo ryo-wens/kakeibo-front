@@ -32,7 +32,7 @@ interface EditGroupNameProps {
 const EditGroupName = (props: EditGroupNameProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>('');
 
   const groupId = props.approvedGroup.group_id;
