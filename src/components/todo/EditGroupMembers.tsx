@@ -59,7 +59,7 @@ interface EditGroupMembersProps {
 
 const EditGroupMembers = (props: EditGroupMembersProps) => {
   const classes = useStyles();
-  const [open, setOpen] = useState(false);
+  const [open, setOpen] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>('');
 
   const isBlankUserId = userId === '';
