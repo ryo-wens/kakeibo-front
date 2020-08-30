@@ -151,7 +151,7 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
         const prevUnapprovedGroups = getState().groups.unapprovedGroups;
 
         const updateApprovedGroups: Groups = prevApprovedGroups.map((prevApprovedGroup) => {
-          if (res.data.group_id === groupId && res.data.user_id === userId) {
+          if (prevApprovedGroup.group_id === groupId && res.data.user_id === userId) {
             const inviteUser: GroupUser = {
               group_id: res.data.group_id,
               user_id: res.data.user_id,
@@ -171,7 +171,7 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
         });
 
         const updateUnapprovedGroups: Groups = prevUnapprovedGroups.map((prevUnapprovedGroup) => {
-          if (res.data.group_id === groupId && res.data.user_id === userId) {
+          if (prevUnapprovedGroup.group_id === groupId && res.data.user_id === userId) {
             const inviteUser: GroupUser = {
               group_id: res.data.group_id,
               user_id: res.data.user_id,
