@@ -26,6 +26,9 @@ import Modal from '@material-ui/core/Modal';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
+    tablePosition: {
+      margin:'0 auto'
+    },
     tableTitle: {
       textAlign: 'center',
       marginTop: '30px',
@@ -36,7 +39,6 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tableMain: {
       maxWidth: 660,
-      margin: 'auto',
       marginTop: '30px',
       height: 'auto',
       textAlign: 'center',
@@ -189,6 +191,7 @@ const InputCustomCategory = () => {
 
   return (
     <>
+      <div className={classes.tablePosition}>
       <h3 className={classes.tableTitle}>追加するカテゴリー名を入力してください</h3>
       <TableContainer className={classes.tableMain} component={Paper}>
         <h3 className={classes.tableSubTitle}>追加</h3>
@@ -246,6 +249,7 @@ const InputCustomCategory = () => {
           </div>
         </div>
       </Modal>
+      </div>
     </>
   );
 };
