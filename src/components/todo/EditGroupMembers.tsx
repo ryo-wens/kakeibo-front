@@ -13,7 +13,6 @@ import { Group } from '../../reducks/groups/types';
 import ListItemText from '@material-ui/core/ListItemText';
 import { TodoButton } from './index';
 import { useDispatch } from 'react-redux';
-import { inviteGroupUsersAction } from '../../reducks/groups/actions';
 import { inviteGroupUsers } from '../../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -122,9 +121,7 @@ const EditGroupMembers = (props: EditGroupMembersProps) => {
       )}
       <p>メンバーを招待する</p>
       <Paper component="form" className={classes.root}>
-        {/*<IconButton type="submit" className={classes.iconButton} aria-label="search">*/}
         <SearchIcon className={classes.icon} />
-        {/*</IconButton>*/}
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
