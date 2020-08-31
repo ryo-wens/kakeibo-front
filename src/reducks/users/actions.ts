@@ -23,13 +23,12 @@ export const signUpAction = (
 };
 
 export const LOG_IN = 'LOG_IN';
-export const logInAction = (email: string, password: string, isLoggedIn: boolean) => {
+export const logInAction = (email: string, password: string) => {
   return {
     type: LOG_IN,
     payload: {
       email: email,
       password: password,
-      isLoggedIn: isLoggedIn
     },
   };
 };

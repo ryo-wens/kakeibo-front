@@ -1,5 +1,4 @@
 import React, { useState, useCallback } from 'react';
-import { useSelector } from 'react-redux'
 import { push } from 'connected-react-router';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -11,7 +10,7 @@ import Container from '@material-ui/core/Container';
 import { GenericButton, TextInput } from '../components/uikit/index';
 import { useDispatch } from 'react-redux';
 import { logIn } from '../reducks/users/operations';
-import { State } from '../reducks/store/types';
+
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -40,8 +39,7 @@ const LogIn = () => {
 
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('')
-  const selector = useSelector((state: State) => state);
-  const isLoggedIn = selector.users.isLoggedIn
+
 
   const inputEmail = useCallback(
     (event:React.ChangeEvent<HTMLInputElement>) => {
@@ -104,7 +102,7 @@ const LogIn = () => {
               <GenericButton
                 label={'ログインする'}
                 disabled={unLogIn}
-                onClick={() => dispatch(logIn(email, password, isLoggedIn))}
+                onClick={() => dispatch(logIn(email, password))}
               />
             </div>
             <div className="module-spacer--small" />
