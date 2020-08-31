@@ -145,7 +145,7 @@ export const signUp = (
   };
 };
 
-export const logIn = (email: string, password: string, isLoggedIn: boolean) => {
+export const logIn = (email: string, password: string) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidEmailFormat(email)) {
       alert('メールアドレスの形式に誤りがあります。正しく入力し直してください。');
@@ -157,7 +157,7 @@ export const logIn = (email: string, password: string, isLoggedIn: boolean) => {
         withCredentials: true,
       })
       .then((res) => {
-          dispatch(logInAction(email, password, !isLoggedIn))
+          dispatch(logInAction(email, password))
           dispatch(push('/'));
 
       })
