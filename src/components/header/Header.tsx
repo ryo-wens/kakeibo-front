@@ -1,23 +1,28 @@
 import React from 'react';
-import { useSelector } from 'react-redux'
+import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
-import {getIsLoggedIn} from '../../reducks/users/selectors'
+import { getIsLoggedIn } from '../../reducks/users/selectors';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import { Badge } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
-import HistoryIcon from '@material-ui/icons/History';
 import ComputerIcon from '@material-ui/icons/Computer';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GroupIcon from '@material-ui/icons/Group';
+import HistoryIcon from '@material-ui/icons/History';
+import IconButton from '@material-ui/core/IconButton';
+import NotificationsIcon from '@material-ui/icons/Notifications';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
+import Toolbar from '@material-ui/core/Toolbar';
+import Typography from '@material-ui/core/Typography';
 import { logOut } from '../../reducks/users/operations';
 import { MobileDrawer } from './index';
 import { State } from '../../reducks/store/types';
+import { InvitationNotifications } from '../todo';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -42,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'none',
       [theme.breakpoints.up('xs')]: {
         display: 'block',
-      }
+      },
     },
     sectionDesktop: {
       display: 'none',
@@ -63,19 +68,17 @@ const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const isLoggedIn = getIsLoggedIn(selector)
+  const isLoggedIn = getIsLoggedIn(selector);
 
   const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {
-        dispatch(logOut());
+      dispatch(logOut());
     } else {
-        alert('ログアウトを中止しました');
+      alert('ログアウトを中止しました');
     }
   };
 
   const menuId = 'primary-search-account-menu';
-
-
 
   return (
     <div className={classes.grow}>
@@ -85,7 +88,7 @@ const Header = () => {
             <MobileDrawer />
           </div>
           <Typography variant="h6" noWrap>
-            <Button color="inherit" className={classes.title}   onClick={() => dispatch(push('/'))}>
+            <Button color="inherit" className={classes.title} onClick={() => dispatch(push('/'))}>
               家計簿App
             </Button>
           </Typography>
@@ -112,6 +115,7 @@ const Header = () => {
             </Button>
           </div>
           <div className={classes.grow} />
+          <InvitationNotifications />
           <div className={classes.sectionDesktop}>
             <Button
               startIcon={<ExitToAppIcon />}
