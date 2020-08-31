@@ -1,5 +1,5 @@
 export interface UserState {
-  isLogedIn: boolean;
+  isLoggedIn: boolean;
   userId: string;
   userName: string;
   email: string;

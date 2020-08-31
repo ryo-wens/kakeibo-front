@@ -1,6 +1,7 @@
 import { addTransactionsAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
+import { push } from 'connected-react-router';
 import { State } from '../store/types';
 
 interface addTransactionsReq {
@@ -45,15 +46,15 @@ export const addTransactions = (
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
 
     if (shop === '') {
-      shop = null;
+        shop = null;
     }
 
     if (memo === '') {
-      memo = null;
+        memo = null;
     }
 
-    if(!isValidAmountFormat(amount as string )) {
-      alert('金額は数字で入力してください。')
+    if (!isValidAmountFormat(amount as string )) {
+        alert('金額は数字で入力してください。')
     }
 
     const data: addTransactionsReq = {
@@ -81,35 +82,36 @@ export const addTransactions = (
       })
       .catch((error) => {
         if (error.response.status === 400) {
-          const errMessages: string[] = [];
+            const errMessages: string[] = [];
 
           if (error.response.data.error.transaction_type.length > 0) {
-            errMessages.push(error.response.data.error.transaction_type);
+              errMessages.push(error.response.data.error.transaction_type);
           }
 
           if (error.response.data.err.shop.length > 0) {
-            errMessages.push(error.response.data.error.shop);
+              errMessages.push(error.response.data.error.shop);
           }
 
           if (error.response.data.error.memo.length > 0) {
-            errMessages.push(error.response.data.error.memo);
+              errMessages.push(error.response.data.error.memo);
           }
 
           if (error.response.data.error.password.big_category_id > 0) {
-            errMessages.push(error.response.data.error.big_category_id);
+              errMessages.push(error.response.data.error.big_category_id);
           }
 
           if (errMessages.length > 0) {
-            alert(errMessages.join('\n'));
+              alert(errMessages.join('\n'));
           }
         }
 
         if (error.response.status === 401) {
-          alert(error.response.data.error.message);
+            alert(error.response.data.error.message);
+            dispatch(push('/login'))
         }
 
         if (error.response.status === 500) {
-          alert(error.response.data.error.message);
+            alert(error.response.data.error.message);
         }
       });
   };

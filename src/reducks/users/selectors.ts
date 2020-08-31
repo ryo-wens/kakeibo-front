@@ -3,7 +3,7 @@ import { State } from '../store/types';
 
 const usersSelector = (state: State) => state.users;
 
-export const getLoggedIn = createSelector(
+export const getIsLoggedIn = createSelector(
   [usersSelector],
   (state) => state.isLoggedIn
 );
