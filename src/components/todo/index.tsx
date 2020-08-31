@@ -3,6 +3,7 @@ export { default as CreateGroups } from './CreateGroups';
 export { default as EditGroupMembers } from './EditGroupMembers';
 export { default as EditGroupName } from './EditGroupName';
 export { default as GroupName } from './GroupName';
+export { default as InvitationNotifications } from './InvitationNotifications';
 export { default as MobileTodoMenu } from './MobileTodoMenu';
 export { default as TaskTextFields } from './TaskTextFields';
 export { default as TextInput } from './TextInput';
