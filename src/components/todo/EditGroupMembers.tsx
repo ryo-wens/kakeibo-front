@@ -12,6 +12,8 @@ import SearchIcon from '@material-ui/icons/Search';
 import { Group } from '../../reducks/groups/types';
 import ListItemText from '@material-ui/core/ListItemText';
 import { TodoButton } from './index';
+import { useDispatch } from 'react-redux';
+import { inviteGroupUsers } from '../../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -29,7 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
       height: 28,
       margin: 4,
     },
-    iconButton: {
+    icon: {
       padding: 8,
     },
     input: {
@@ -59,8 +61,11 @@ interface EditGroupMembersProps {
 
 const EditGroupMembers = (props: EditGroupMembersProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const [userId, setUserId] = useState<string>('');
+
+  const groupId = props.approvedGroup.group_id;
 
   const isBlankUserId = userId === '';
 
@@ -116,9 +121,7 @@ const EditGroupMembers = (props: EditGroupMembersProps) => {
       )}
       <p>メンバーを招待する</p>
       <Paper component="form" className={classes.root}>
-        <IconButton type="submit" className={classes.iconButton} aria-label="search">
-          <SearchIcon />
-        </IconButton>
+        <SearchIcon className={classes.icon} />
         <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
@@ -128,7 +131,11 @@ const EditGroupMembers = (props: EditGroupMembersProps) => {
         />
       </Paper>
       <div className={classes.buttons}>
-        <TodoButton label={'招待を送る'} disabled={isBlankUserId} onClick={() => handleClose()} />
+        <TodoButton
+          label={'招待を送る'}
+          disabled={isBlankUserId}
+          onClick={() => dispatch(inviteGroupUsers(groupId, userId)) && handleClose()}
+        />
         <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
       </div>
     </div>
