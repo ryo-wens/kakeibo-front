@@ -7,7 +7,7 @@ export interface Group {
 
 export interface GroupUser {
   group_id: number;
-  user_id: number;
+  user_id: string;
   user_name: string;
 }
 

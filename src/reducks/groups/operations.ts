@@ -1,7 +1,12 @@
-import { createGroupAction, updateGroupNameAction, fetchGroupsAction } from './actions';
+import {
+  createGroupAction,
+  updateGroupNameAction,
+  fetchGroupsAction,
+  inviteGroupUsersAction,
+} from './actions';
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
-import { Group, Groups } from './types';
+import { Group, Groups, GroupUser } from './types';
 import { State } from '../store/types';
 
 interface createGroupReq {
@@ -26,6 +31,17 @@ interface updateGroupNameRes {
 interface fetchGroupRes {
   approved_group_list: Groups;
   unapproved_group_list: Groups;
+}
+
+interface inviteGroupUsersReq {
+  group_id: number;
+  user_id: string;
+}
+
+interface inviteGroupUsersRes {
+  group_id: number;
+  user_id: string;
+  user_name: string;
 }
 
 export const createGroup = (groupName: string) => {
@@ -110,6 +126,71 @@ export const fetchGroups = () => {
       })
       .then((res) => {
         dispatch(fetchGroupsAction(res.data.approved_group_list, res.data.unapproved_group_list));
+      });
+  };
+};
+
+export const inviteGroupUsers = (groupId: number, userId: string) => {
+  if (userId === '') {
+    return;
+  }
+  const data: inviteGroupUsersReq = {
+    group_id: groupId,
+    user_id: userId,
+  };
+
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .post<inviteGroupUsersRes>(
+        `http://127.0.0.1:8080/groups/${groupId}/users`,
+        JSON.stringify(data),
+        { withCredentials: true }
+      )
+      .then((res) => {
+        const prevApprovedGroups = getState().groups.approvedGroups;
+        const prevUnapprovedGroups = getState().groups.unapprovedGroups;
+
+        const updateApprovedGroups: Groups = prevApprovedGroups.map((prevApprovedGroup) => {
+          if (prevApprovedGroup.group_id === groupId && res.data.user_id === userId) {
+            const inviteUser: GroupUser = {
+              group_id: res.data.group_id,
+              user_id: res.data.user_id,
+              user_name: res.data.user_name,
+            };
+            const prevUnapprovedUserList = prevApprovedGroup.unapproved_users_list;
+            const updateApprovedGroup: Group = {
+              group_id: prevApprovedGroup.group_id,
+              group_name: prevApprovedGroup.group_name,
+              approved_users_list: prevApprovedGroup.approved_users_list,
+              unapproved_users_list: [...prevUnapprovedUserList, inviteUser],
+            };
+            return updateApprovedGroup;
+          } else {
+            return prevApprovedGroup;
+          }
+        });
+
+        const updateUnapprovedGroups: Groups = prevUnapprovedGroups.map((prevUnapprovedGroup) => {
+          if (prevUnapprovedGroup.group_id === groupId && res.data.user_id === userId) {
+            const inviteUser: GroupUser = {
+              group_id: res.data.group_id,
+              user_id: res.data.user_id,
+              user_name: res.data.user_name,
+            };
+            const prevUnapprovedUserList = prevUnapprovedGroup.unapproved_users_list;
+            const updateUnapprovedGroup: Group = {
+              group_id: prevUnapprovedGroup.group_id,
+              group_name: prevUnapprovedGroup.group_name,
+              approved_users_list: prevUnapprovedGroup.approved_users_list,
+              unapproved_users_list: [...prevUnapprovedUserList, inviteUser],
+            };
+            return updateUnapprovedGroup;
+          } else {
+            return prevUnapprovedGroup;
+          }
+        });
+
+        dispatch(inviteGroupUsersAction(updateApprovedGroups, updateUnapprovedGroups));
       });
   };
 };
