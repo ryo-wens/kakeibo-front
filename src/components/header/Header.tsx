@@ -5,15 +5,12 @@ import { push } from 'connected-react-router';
 import { getIsLoggedIn } from '../../reducks/users/selectors';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
-import { Badge } from '@material-ui/core';
 import Button from '@material-ui/core/Button';
 import ComputerIcon from '@material-ui/icons/Computer';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GroupIcon from '@material-ui/icons/Group';
 import HistoryIcon from '@material-ui/icons/History';
-import IconButton from '@material-ui/core/IconButton';
-import NotificationsIcon from '@material-ui/icons/Notifications';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -22,7 +19,6 @@ import { logOut } from '../../reducks/users/operations';
 import { MobileDrawer } from './index';
 import { State } from '../../reducks/store/types';
 import { InvitationNotifications } from '../todo';
-import { getApprovedGroups } from '../../reducks/groups/selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

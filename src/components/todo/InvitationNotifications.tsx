@@ -9,6 +9,7 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getUnapprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
+import { inviteGroupReject } from '../../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,6 +45,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const InvitationNotifications = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const selector = useSelector((state: State) => state);
   const unapprovedGroups = getUnapprovedGroups(selector);
@@ -66,13 +68,18 @@ const InvitationNotifications = () => {
       )}
       {unapprovedGroups.length > 0 &&
         unapprovedGroups.map((unapprovedGroup) => {
+          const groupId: number = unapprovedGroup.group_id;
           return (
-            <div className={classes.invitationList} key={unapprovedGroup.group_id}>
+            <div className={classes.invitationList} key={groupId}>
               <ListItemText secondary={'グループ名'} />
               <p className={classes.groupName}>{unapprovedGroup.group_name}</p>
               <div className={classes.buttons}>
                 <TodoButton label={'参加'} disabled={false} onClick={() => handleClose()} />
-                <TodoButton label={'拒否'} disabled={false} onClick={() => handleClose()} />
+                <TodoButton
+                  label={'拒否'}
+                  disabled={false}
+                  onClick={() => dispatch(inviteGroupReject(groupId)) && handleClose()}
+                />
               </div>
             </div>
           );
