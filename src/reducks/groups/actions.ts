@@ -4,6 +4,7 @@ export type groupAction = ReturnType<
   | typeof updateGroupNameAction
   | typeof fetchGroupsAction
   | typeof inviteGroupUsersAction
+  | typeof inviteGroupRejectAction
 >;
 
 export const CREATE_GROUP = 'CREATE_GROUP';
@@ -43,6 +44,16 @@ export const inviteGroupUsersAction = (approvedGroups: Groups, unapprovedGroups:
     type: INVITE_GROUP_USERS,
     payload: {
       approvedGroups: approvedGroups,
+      unapprovedGroups: unapprovedGroups,
+    },
+  };
+};
+
+export const INVITE_GROUP_REJECT = 'INVITE_GROUP_REJECT';
+export const inviteGroupRejectAction = (unapprovedGroups: Groups) => {
+  return {
+    type: INVITE_GROUP_REJECT,
+    payload: {
       unapprovedGroups: unapprovedGroups,
     },
   };

@@ -3,6 +3,7 @@ import {
   updateGroupNameAction,
   fetchGroupsAction,
   inviteGroupUsersAction,
+  inviteGroupRejectAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
@@ -42,6 +43,10 @@ interface inviteGroupUsersRes {
   group_id: number;
   user_id: string;
   user_name: string;
+}
+
+interface inviteGroupRejectRes {
+  message: string;
 }
 
 export const createGroup = (groupName: string) => {
@@ -191,6 +196,25 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
         });
 
         dispatch(inviteGroupUsersAction(updateApprovedGroups, updateUnapprovedGroups));
+      });
+  };
+};
+
+export const inviteGroupReject = (groupId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .delete<inviteGroupRejectRes>(`http://127.0.0.1:8080/groups/${groupId}/users/unapproved`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const prevUnapprovedGroups = getState().groups.unapprovedGroups;
+
+        const updateUnapprovedGroups: Groups = prevUnapprovedGroups.filter(
+          (prevUnapprovedGroup: Group) => {
+            return prevUnapprovedGroup.group_id !== groupId;
+          }
+        );
+        dispatch(inviteGroupRejectAction(updateUnapprovedGroups));
       });
   };
 };
