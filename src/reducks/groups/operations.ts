@@ -211,12 +211,7 @@ export const inviteGroupReject = (groupId: number) => {
 
         const updateUnapprovedGroups: Groups = prevUnapprovedGroups.filter(
           (prevUnapprovedGroup: Group) => {
-            if (prevUnapprovedGroup.group_id === groupId) {
-              const nextUnapprovedGroups = prevUnapprovedGroup.group_id !== groupId;
-              return nextUnapprovedGroups;
-            } else {
-              return prevUnapprovedGroups;
-            }
+            return prevUnapprovedGroup.group_id !== groupId;
           }
         );
         dispatch(inviteGroupRejectAction(updateUnapprovedGroups));
