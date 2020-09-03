@@ -4,7 +4,7 @@ const initialState = {
     expenseList: [],
   },
   transactions: {
-    transactionsList:[]
+    transactionsList: [],
   },
   users: {
     isLoggedIn: false,
@@ -16,6 +16,7 @@ const initialState = {
   groups: {
     approvedGroups: [],
     unapprovedGroups: [],
+    message: '',
   },
 };
 export default initialState;
