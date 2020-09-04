@@ -1,9 +1,9 @@
-export type modalAction = ReturnType<typeof inviteGroupRejectModalAction>;
+export type modalAction = ReturnType<typeof openTextModalAction>;
 
-export const INVITE_GROUP_REJECT_MODAL = 'INVITE_GROUP_REJECT_MODAL';
-export const inviteGroupRejectModalAction = (message: string) => {
+export const OPEN_TEXT_MODAL = 'OPEN_TEXT_MODAL';
+export const openTextModalAction = (message: string) => {
   return {
-    type: INVITE_GROUP_REJECT_MODAL,
+    type: OPEN_TEXT_MODAL,
     payload: {
       message: message,
       open: true,

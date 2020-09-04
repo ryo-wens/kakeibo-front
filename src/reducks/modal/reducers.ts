@@ -4,7 +4,7 @@ import initialState from '../store/initialState';
 
 export const modalReducers = (state = initialState.modal, action: modalAction) => {
   switch (action.type) {
-    case Actions.INVITE_GROUP_REJECT_MODAL:
+    case Actions.OPEN_TEXT_MODAL:
       return {
         ...state,
         ...action.payload,
