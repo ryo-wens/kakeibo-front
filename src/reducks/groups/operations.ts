@@ -9,6 +9,7 @@ import { Dispatch, Action } from 'redux';
 import axios from 'axios';
 import { Group, Groups, GroupUser } from './types';
 import { State } from '../store/types';
+import { openTextModalAction } from '../modal/actions';
 
 interface createGroupReq {
   group_name: string;
@@ -214,6 +215,7 @@ export const inviteGroupReject = (groupId: number) => {
             return prevUnapprovedGroup.group_id !== groupId;
           }
         );
+        dispatch(openTextModalAction(res.data.message));
         dispatch(inviteGroupRejectAction(updateUnapprovedGroups));
       });
   };
