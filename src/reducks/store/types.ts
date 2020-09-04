@@ -20,6 +20,9 @@ export interface State {
   groups: {
     approvedGroups: Groups;
     unapprovedGroups: Groups;
+  };
+  modal: {
     message: string;
+    open: boolean;
   };
 }

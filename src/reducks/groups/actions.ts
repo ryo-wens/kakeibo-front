@@ -50,12 +50,11 @@ export const inviteGroupUsersAction = (approvedGroups: Groups, unapprovedGroups:
 };
 
 export const INVITE_GROUP_REJECT = 'INVITE_GROUP_REJECT';
-export const inviteGroupRejectAction = (unapprovedGroups: Groups, message: string) => {
+export const inviteGroupRejectAction = (unapprovedGroups: Groups) => {
   return {
     type: INVITE_GROUP_REJECT,
     payload: {
       unapprovedGroups: unapprovedGroups,
-      message: message,
     },
   };
 };

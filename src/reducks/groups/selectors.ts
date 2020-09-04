@@ -8,4 +8,3 @@ export const getUnapprovedGroups = createSelector(
   [groupSelector],
   (state) => state.unapprovedGroups
 );
-export const getMessage = createSelector([groupSelector], (state) => state.message);

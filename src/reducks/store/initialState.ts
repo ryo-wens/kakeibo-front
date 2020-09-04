@@ -16,7 +16,10 @@ const initialState = {
   groups: {
     approvedGroups: [],
     unapprovedGroups: [],
+  },
+  modal: {
     message: '',
+    boolean: false,
   },
 };
 export default initialState;
