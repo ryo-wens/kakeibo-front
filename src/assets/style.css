@@ -77,7 +77,7 @@
   width: 100%;
 }
 
-.box__monthlyexpense {
+.box__monthlyExpense {
   align-self: center;
   background-color: #fff;
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -86,6 +86,22 @@
   margin-top: 15px;
   height: 650px;
   width: 100%;
+  padding: 16px;
+}
+
+.box__monthlyExpense__container {
+  display: flex;
+  flex-flow: row nowrap;
+  height: auto;
+  width: 100%;
+}
+
+.box__monthlyExpense__item {
+  display: flex;
+  flex-flow: column;
+  height: auto;
+  max-width: 25%;
+  min-width: 16.7%;
 }
 
 .box__recent {
