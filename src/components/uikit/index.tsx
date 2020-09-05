@@ -4,3 +4,4 @@ export { default as CategoryInput } from './CategoryInput';
 export { default as TextInput } from './TextInput';
 export { default as KindSelectBox } from './KindSelectBox';
 export { default as GroupMenuButton } from './GroupMenuButton';
+export { default as ModalInform } from './ModalInform';

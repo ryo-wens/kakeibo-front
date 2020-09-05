@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
-import { GroupTodo } from './index';
 
 const Todo = () => {
   const dispatch = useDispatch();

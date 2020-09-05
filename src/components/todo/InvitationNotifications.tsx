@@ -10,13 +10,14 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { getUnapprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
 import { inviteGroupReject } from '../../reducks/groups/operations';
+import { getModalMessage } from '../../reducks/modal/selectors';
+import { ModalInform } from '../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     buttons: {
       display: 'flex',
       justifyContent: 'center',
-      // width: '100%',
     },
     paper: {
       width: 400,
@@ -49,6 +50,7 @@ const InvitationNotifications = () => {
   const [open, setOpen] = useState<boolean>(false);
   const selector = useSelector((state: State) => state);
   const unapprovedGroups = getUnapprovedGroups(selector);
+  const modalMessage = getModalMessage(selector);
 
   const handleOpen = () => {
     setOpen(true);
@@ -99,6 +101,7 @@ const InvitationNotifications = () => {
           <NotificationsIcon />
         </Badge>
       </IconButton>
+      <ModalInform message={modalMessage} />
       <Modal
         open={open}
         onClose={handleClose}

@@ -215,8 +215,8 @@ export const inviteGroupReject = (groupId: number) => {
             return prevUnapprovedGroup.group_id !== groupId;
           }
         );
-        dispatch(openTextModalAction(res.data.message));
         dispatch(inviteGroupRejectAction(updateUnapprovedGroups));
+        dispatch(openTextModalAction(res.data.message));
       });
   };
 };

@@ -7,6 +7,7 @@ import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { History } from 'history';
 import { createLogger } from 'redux-logger';
+import { modalReducer } from '../modal/reducers';
 
 export default function createStore(history: History) {
   const logger = createLogger({
@@ -21,6 +22,7 @@ export default function createStore(history: History) {
       categories: categoriesReducer,
       groups: groupsReducer,
       transactions: transactionsReducer,
+      modal: modalReducer,
     }),
     applyMiddleware(routerMiddleware(history), thunk, logger)
   );

@@ -19,7 +19,7 @@ const initialState = {
   },
   modal: {
     message: '',
-    boolean: false,
+    open: false,
   },
 };
 export default initialState;

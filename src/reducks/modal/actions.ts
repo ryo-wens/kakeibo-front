@@ -10,3 +10,14 @@ export const openTextModalAction = (message: string) => {
     },
   };
 };
+
+export const CLOSE_MODAL = 'CLOSE_MODAL';
+export const closeModalAction = () => {
+  return {
+    type: CLOSE_MODAL,
+    payload: {
+      message: '',
+      open: false,
+    },
+  };
+};
