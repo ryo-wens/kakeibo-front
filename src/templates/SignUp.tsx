@@ -36,7 +36,7 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
-const SignUp = () => {
+const SignUp = (): JSX.Element => {
   const dispatch = useDispatch();
 
   const [userId, setUserId] = useState<string>('');

@@ -96,7 +96,7 @@ const MonthlyHistory = () => {
 
       historyRow = [
         ...historyRow,
-        <TableCell className={classes.tableCell} key={index}></TableCell>,
+        <TableCell className={classes.tableCell} key={index}>家計簿</TableCell>,
       ];
 
       operationRow = [

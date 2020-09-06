@@ -1,8 +1,6 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
-import { getIsLoggedIn } from '../../reducks/users/selectors';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
@@ -17,7 +15,6 @@ import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { logOut } from '../../reducks/users/operations';
 import { MobileDrawer } from './index';
-import { State } from '../../reducks/store/types';
 import { InvitationNotifications } from '../todo';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -63,8 +60,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const isLoggedIn = getIsLoggedIn(selector);
 
   const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {

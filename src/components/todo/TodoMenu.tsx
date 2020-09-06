@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   makeStyles,
@@ -42,7 +42,6 @@ const useStyles = makeStyles((theme: Theme) =>
 const TodoMenu = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [open, setOpen] = useState<boolean>(true);
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
 
@@ -58,7 +57,7 @@ const TodoMenu = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Drawer style={{ zIndex: 1050 }} anchor={'left'} open={open} className={classes.drawer}>
+      <Drawer style={{ zIndex: 1050 }} anchor={'left'} open={true} className={classes.drawer}>
         <List className={classes.list} component="nav">
           <ListItem button={true}>
             <ListItemIcon>

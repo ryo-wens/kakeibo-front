@@ -1,5 +1,5 @@
 name: kakeibo test
-on: pull_request
+on: [commit,pull_request]
 jobs:
   run_lint_and_test:
     runs-on: ubuntu-latest
