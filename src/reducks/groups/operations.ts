@@ -16,7 +16,7 @@ interface createGroupReq {
 }
 
 interface createGroupRes {
-  group_id: string;
+  group_id: number;
   group_name: string;
 }
 
@@ -51,7 +51,7 @@ interface inviteGroupRejectRes {
 }
 
 export const createGroup = (groupName: string) => {
-  return async (dispatch: Dispatch<Action>, getState: any) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (groupName === '') {
       return;
     }
@@ -81,7 +81,7 @@ export const createGroup = (groupName: string) => {
 
         const prevApprovedGroups = getState().groups.approvedGroups;
 
-        const nextApprovedGroups = [newGroup, ...prevApprovedGroups];
+        const nextApprovedGroups = [...prevApprovedGroups, newGroup];
 
         dispatch(createGroupAction(nextApprovedGroups));
       });
