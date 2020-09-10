@@ -1,14 +1,15 @@
 import React from 'react';
 import 'date-fns';
-import { AddButton, TaskTextFields, TodayDate } from './index';
+import { TaskTextFields, TodayDate } from './index';
+import { AddButton } from '../uikit';
 
 const TodayTask = () => {
   return (
-    <React.Fragment>
+    <>
       <TodayDate />
-      <AddButton label={'タスクを追加'} />
+      <AddButton label={'タスクを追加'} onClick={() => false} />
       <TaskTextFields />
-    </React.Fragment>
+    </>
   );
 };
 

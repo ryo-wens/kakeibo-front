@@ -10,9 +10,7 @@ const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     root: {
       height: '40px',
-      width: '100%',
-      maxWidth: 720,
-      margin: '40px 0px 0px 270px',
+      width: '700px',
       borderBottom: 'solid #333',
       zIndex: 1100,
       backgroundColor: theme.palette.background.paper,

@@ -1,13 +1,6 @@
 import React from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  makeStyles,
-  createMuiTheme,
-  ThemeProvider,
-  Theme,
-  createStyles,
-} from '@material-ui/core/styles';
-import Drawer from '@material-ui/core/Drawer';
+import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ListItemText from '@material-ui/core/ListItemText';
 import Divider from '@material-ui/core/Divider';
@@ -23,15 +16,12 @@ import { push } from 'connected-react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    drawer: {
+    list: {
+      width: 200,
+      backgroundColor: theme.palette.background.paper,
       [theme.breakpoints.down('xs')]: {
         display: 'none',
       },
-    },
-    list: {
-      margin: '70px 20px 0px 20px ',
-      width: 200,
-      backgroundColor: theme.palette.background.paper,
     },
     BackdropProps: {
       backgroundColor: 'none',
@@ -45,53 +35,39 @@ const TodoMenu = () => {
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
 
-  const theme = createMuiTheme({
-    overrides: {
-      MuiBackdrop: {
-        root: {
-          backgroundColor: 'rgba(0,0,0,0.0)',
-        },
-      },
-    },
-  });
-
   return (
-    <ThemeProvider theme={theme}>
-      <Drawer style={{ zIndex: 1050 }} anchor={'left'} open={true} className={classes.drawer}>
-        <List className={classes.list} component="nav">
-          <ListItem button={true}>
+    <List className={classes.list} component="nav">
+      <ListItem button={true}>
+        <ListItemIcon>
+          <TodayIcon />
+        </ListItemIcon>
+        <ListItemText primary={'今日'} />
+      </ListItem>
+      <ListItem button={true}>
+        <ListItemIcon>
+          <DateRangeIcon />
+        </ListItemIcon>
+        <ListItemText primary={'近日予定'} />
+      </ListItem>
+      <Divider />
+      {approvedGroups.map((approvedGroup) => {
+        const selectedGroupId: number = approvedGroup.group_id;
+        return (
+          <ListItem
+            button={true}
+            key={approvedGroup.group_id}
+            onClick={() => dispatch(push('/group-todo/' + selectedGroupId))}
+          >
             <ListItemIcon>
-              <TodayIcon />
+              <GroupIcon />
             </ListItemIcon>
-            <ListItemText primary={'今日'} />
+            <ListItemText primary={approvedGroup.group_name} />
           </ListItem>
-          <ListItem button={true}>
-            <ListItemIcon>
-              <DateRangeIcon />
-            </ListItemIcon>
-            <ListItemText primary={'近日予定'} />
-          </ListItem>
-          <Divider />
-          {approvedGroups.map((approvedGroup) => {
-            const selectedGroupId: number = approvedGroup.group_id;
-            return (
-              <ListItem
-                button={true}
-                key={approvedGroup.group_id}
-                onClick={() => dispatch(push('/group-todo/' + selectedGroupId))}
-              >
-                <ListItemIcon>
-                  <GroupIcon />
-                </ListItemIcon>
-                <ListItemText primary={approvedGroup.group_name} />
-              </ListItem>
-            );
-          })}
+        );
+      })}
 
-          <CreateGroups modalTitleLabel={'グループ作成'} modalTextFieldLabel={'グループ名'} />
-        </List>
-      </Drawer>
-    </ThemeProvider>
+      <CreateGroups modalTitleLabel={'グループ作成'} modalTextFieldLabel={'グループ名'} />
+    </List>
   );
 };
 

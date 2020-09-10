@@ -13,14 +13,20 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface AddButtonProps {
   label: string;
-  // onClick: () => void;
+  onClick: () => void;
 }
 
 const AddButton = (props: AddButtonProps) => {
   const classes = useStyles();
 
   return (
-    <Button variant="contained" color="default" className={classes.button} startIcon={<AddIcon />}>
+    <Button
+      variant="contained"
+      color="default"
+      className={classes.button}
+      startIcon={<AddIcon />}
+      onClick={props.onClick}
+    >
       {props.label}
     </Button>
   );
