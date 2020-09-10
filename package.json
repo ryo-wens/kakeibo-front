@@ -11,12 +11,13 @@
     "@testing-library/jest-dom": "^4.2.4",
     "@testing-library/react": "^9.3.2",
     "@testing-library/user-event": "^7.1.2",
-    "@types/jest": "^24.0.0",
     "@types/node": "^12.0.0",
+    "@types/redux-mock-store": "^1.0.2",
     "axios": "^0.19.2",
     "connected-react-router": "^6.8.0",
     "date-fns": "^2.14.0",
     "history": "^4.10.1",
+    "identity-obj-proxy": "^3.0.0",
     "lodash": "^4.17.19",
     "moment": "^2.27.0",
     "react": "^16.13.1",
@@ -35,8 +36,26 @@
     "lint:fix": "eslint --fix --ext .ts,.tsx",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "react-scripts test",
+    "test": "jest",
     "eject": "react-scripts eject"
+  },
+  "jest": {
+    "transform": {
+      "^.+\\.tsx?$": "ts-jest"
+    },
+    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "jsx",
+      "json",
+      "node"
+    ],
+    "moduleNameMapper": {
+      "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__test__/__mocks__/fileMock.js",
+      "\\.(css|less)$": "identity-obj-proxy"
+    }
   },
   "browserslist": {
     "production": [
@@ -53,6 +72,7 @@
   "devDependencies": {
     "@material-ui/pickers": "^3.2.10",
     "@types/axios": "^0.14.0",
+    "@types/jest": "^24.9.1",
     "@types/moment": "^2.13.0",
     "@types/react": "^16.9.38",
     "@types/react-dom": "^16.9.8",
@@ -61,10 +81,15 @@
     "@types/redux-logger": "^3.0.8",
     "@types/redux-thunk": "^2.1.0",
     "@typescript-eslint/eslint-plugin": "^3.8.0",
+    "axios-mock-adapter": "^1.18.2",
     "eslint-config-prettier": "^6.11.0",
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-react-app": "^6.2.2",
+    "fetch-mock": "^9.10.7",
+    "msw": "^0.20.5",
     "prettier": "^2.0.5",
-    "redux-logger": "^3.0.6"
+    "redux-logger": "^3.0.6",
+    "redux-mock-store": "^1.5.4",
+    "ts-jest": "^26.3.0"
   }
 }
