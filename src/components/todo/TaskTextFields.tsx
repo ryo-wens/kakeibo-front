@@ -9,11 +9,11 @@ const useStyles = makeStyles((theme: Theme) =>
     textarea: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '60ch',
+        width: '600px',
       },
     },
     box: {
-      width: '60ch',
+      width: '600px',
       borderColor: '#ccc',
     },
     buttons: {
@@ -28,7 +28,7 @@ const TaskTextFields = () => {
   return (
     <form noValidate autoComplete="off">
       <Box border={1} className={classes.box}>
-        <TextField className={classes.textarea} id="filled-basic" variant="filled" />
+        <TextField className={classes.textarea} id="filled-basic" variant="outlined" />
         <div className={classes.buttons} style={{ justifyContent: 'flex-end' }}>
           <TodoButton
             label={'画像をアップロード'}

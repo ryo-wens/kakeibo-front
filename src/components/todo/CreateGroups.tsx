@@ -4,7 +4,7 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TodoButton, TextInput } from './index';
 import { createGroup } from '../../reducks/groups/operations';
-import { AddButton } from './index';
+import { AddButton } from '../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,9 +77,7 @@ const CreateGroups = (props: CreateGroupsProps) => {
 
   return (
     <>
-      <div onClick={handleOpen}>
-        <AddButton label={'グループ作成'} />
-      </div>
+      <AddButton label={'グループ作成'} onClick={() => handleOpen()} />
       <Modal
         open={open}
         onClose={handleClose}
