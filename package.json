@@ -29,29 +29,20 @@
     "redux-actions": "^2.6.5",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "typescript": "~3.7.2"
+    "typescript": "^3.8.0"
   },
   "scripts": {
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint --fix --ext .ts,.tsx",
     "start": "react-scripts start",
     "build": "react-scripts build",
-    "test": "jest",
+    "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
   "jest": {
     "transform": {
       "^.+\\.tsx?$": "ts-jest"
     },
-    "testRegex": "(/__tests__/.*|(\\.|/)(test|spec))\\.(jsx?|tsx?)$",
-    "moduleFileExtensions": [
-      "ts",
-      "tsx",
-      "js",
-      "jsx",
-      "json",
-      "node"
-    ],
     "moduleNameMapper": {
       "\\.(jpg|jpeg|png|gif|eot|otf|webp|svg|ttf|woff|woff2|mp4|webm|wav|mp3|m4a|aac|oga)$": "<rootDir>/src/__test__/__mocks__/fileMock.js",
       "\\.(css|less)$": "identity-obj-proxy"
