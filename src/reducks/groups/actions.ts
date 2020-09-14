@@ -4,6 +4,7 @@ export type groupAction = ReturnType<
   | typeof updateGroupNameAction
   | typeof fetchGroupsAction
   | typeof inviteGroupUsersAction
+  | typeof groupWithdrawalAction
   | typeof inviteGroupRejectAction
 >;
 
@@ -45,6 +46,16 @@ export const inviteGroupUsersAction = (approvedGroups: Groups, unapprovedGroups:
     payload: {
       approvedGroups: approvedGroups,
       unapprovedGroups: unapprovedGroups,
+    },
+  };
+};
+
+export const GROUP_WITHDRAWAL = 'GROUP_WITHDRAWAL';
+export const groupWithdrawalAction = (approvedGroups: Groups) => {
+  return {
+    type: GROUP_WITHDRAWAL,
+    payload: {
+      approvedGroups: approvedGroups,
     },
   };
 };
