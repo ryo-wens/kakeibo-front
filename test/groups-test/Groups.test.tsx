@@ -252,4 +252,48 @@ describe('async actions groups', () => {
       expect(store.getActions()).toEqual(expectedActions);
     });
   });
+
+  it('When INVITE_GROUP_REJECT succeeds,sends the approved groups except the requested group_id to inviteGroupRejectAction, and sends the response message to openTextModalAction', async () => {
+    const groupId = 2;
+    const url = `http://127.0.0.1:8080/groups/${groupId}/users/unapproved`;
+
+    const mockResponse = {
+      message: 'グループ招待を拒否しました。',
+    };
+
+    const expectedGroupActions = {
+      type: GroupsActions.INVITE_GROUP_REJECT,
+      payload: {
+        unapprovedGroups: [],
+      },
+    };
+
+    const expectedModalActions = {
+      type: ModalActions.OPEN_TEXT_MODAL,
+      payload: {
+        message: mockResponse.message,
+        open: true,
+      },
+    };
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    await axios.delete(url, { withCredentials: true }).then((res) => {
+      const state: any = store.getState();
+      const prevUnapprovedGroups: Groups = state.unapproved_group_list;
+
+      const updateUnapprovedGroups: Groups = prevUnapprovedGroups.filter(
+        (prevUnapprovedGroup: Group) => {
+          return prevUnapprovedGroup.group_id !== groupId;
+        }
+      );
+
+      expect(store.dispatch(GroupsActions.inviteGroupRejectAction(updateUnapprovedGroups))).toEqual(
+        expectedGroupActions
+      );
+      expect(store.dispatch(ModalActions.openTextModalAction(res.data.message))).toEqual(
+        expectedModalActions
+      );
+    });
+  });
 });
