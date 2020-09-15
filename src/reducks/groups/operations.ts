@@ -4,12 +4,14 @@ import {
   fetchGroupsAction,
   inviteGroupUsersAction,
   inviteGroupRejectAction,
+  inviteGroupParticipateAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
 import { Group, Groups, GroupUser } from './types';
 import { State } from '../store/types';
 import { openTextModalAction } from '../modal/actions';
+import { push } from 'connected-react-router';
 
 interface createGroupReq {
   group_name: string;
@@ -41,6 +43,12 @@ interface inviteGroupUsersReq {
 }
 
 interface inviteGroupUsersRes {
+  group_id: number;
+  user_id: string;
+  user_name: string;
+}
+
+interface inviteGroupParticipateRes {
   group_id: number;
   user_id: string;
   user_name: string;
@@ -197,6 +205,58 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
         });
 
         dispatch(inviteGroupUsersAction(updateApprovedGroups, updateUnapprovedGroups));
+      });
+  };
+};
+
+export const inviteGroupParticipate = (groupId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .post<inviteGroupParticipateRes>(
+        `http://127.0.0.1:8080/groups/${groupId}/users/approved`,
+        null,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const prevApprovedGroups = getState().groups.approvedGroups;
+        const prevUnapprovedGroups = getState().groups.unapprovedGroups;
+
+        const matchedGroups = prevUnapprovedGroups.filter((prevUnapprovedGroup: Group) => {
+          return prevUnapprovedGroup.group_id === res.data.group_id;
+        });
+
+        const matchedGroup: Group = matchedGroups[0];
+
+        const updateUnapprovedUserList = matchedGroup.unapproved_users_list.filter(
+          (unapprovedUser: GroupUser) => {
+            return unapprovedUser.user_id !== res.data.user_id;
+          }
+        );
+
+        const participateUser = {
+          group_id: res.data.group_id,
+          user_id: res.data.user_id,
+          user_name: res.data.user_name,
+        };
+
+        const participateGroup: Group = {
+          group_id: matchedGroup.group_id,
+          group_name: matchedGroup.group_name,
+          approved_users_list: [...matchedGroup.approved_users_list, participateUser],
+          unapproved_users_list: updateUnapprovedUserList,
+        };
+
+        const updateApprovedGroups: Groups = [...prevApprovedGroups, participateGroup];
+
+        const updateUnapprovedGroups: Groups = prevUnapprovedGroups.filter(
+          (prevUnapprovedGroup: Group) => {
+            return prevUnapprovedGroup.group_id !== res.data.group_id;
+          }
+        );
+        dispatch(inviteGroupParticipateAction(updateApprovedGroups, updateUnapprovedGroups));
+        dispatch(push(`/group-todo/` + res.data.group_id));
       });
   };
 };

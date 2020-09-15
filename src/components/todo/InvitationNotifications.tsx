@@ -9,9 +9,10 @@ import IconButton from '@material-ui/core/IconButton';
 import ListItemText from '@material-ui/core/ListItemText';
 import { getUnapprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
-import { inviteGroupReject } from '../../reducks/groups/operations';
+import { inviteGroupParticipate, inviteGroupReject } from '../../reducks/groups/operations';
 import { getModalMessage } from '../../reducks/modal/selectors';
 import { ModalInform } from '../uikit';
+import { inviteGroupParticipateAction } from '../../reducks/groups/actions';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,7 +77,11 @@ const InvitationNotifications = () => {
               <ListItemText secondary={'グループ名'} />
               <p className={classes.groupName}>{unapprovedGroup.group_name}</p>
               <div className={classes.buttons}>
-                <TodoButton label={'参加'} disabled={false} onClick={() => handleClose()} />
+                <TodoButton
+                  label={'参加'}
+                  disabled={false}
+                  onClick={() => dispatch(inviteGroupParticipate(groupId)) && handleClose()}
+                />
                 <TodoButton
                   label={'拒否'}
                   disabled={false}
