@@ -29,6 +29,11 @@ export const groupsReducer = (state = initialState.groups, action: groupAction) 
         ...state,
         ...action.payload,
       };
+    case Actions.INVITE_GROUP_PARTICIPATE:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.INVITE_GROUP_REJECT:
       return {
         ...state,
