@@ -60,6 +60,17 @@ export const groupWithdrawalAction = (approvedGroups: Groups) => {
   };
 };
 
+export const INVITE_GROUP_PARTICIPATE = 'INVITE_GROUP_PARTICIPATE';
+export const inviteGroupParticipateAction = (approvedGroups: Groups, unapprovedGroups: Groups) => {
+  return {
+    type: INVITE_GROUP_PARTICIPATE,
+    payload: {
+      approvedGroups: approvedGroups,
+      unapprovedGroups: unapprovedGroups,
+    },
+  };
+};
+
 export const INVITE_GROUP_REJECT = 'INVITE_GROUP_REJECT';
 export const inviteGroupRejectAction = (unapprovedGroups: Groups) => {
   return {
