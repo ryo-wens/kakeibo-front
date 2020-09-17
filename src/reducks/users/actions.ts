@@ -4,20 +4,20 @@ export type userActions = ReturnType<
 
 export const SIGN_UP = 'SIGN_UP';
 export const signUpAction = (
-  userId: string,
-  userName: string,
+  user_id: string,
+  user_name: string,
   email: string,
   password: string,
-  confirmPassword: string
+  confirm_password: string
 ) => {
   return {
     type: SIGN_UP,
     payload: {
-      userId: userId,
-      userName: userName,
+      user_id: user_id,
+      user_name: user_name,
       email: email,
       password: password,
-      confirmPassword: confirmPassword,
+      confirm_password: confirm_password,
     },
   };
 };

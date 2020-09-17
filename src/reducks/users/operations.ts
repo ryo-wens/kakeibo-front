@@ -163,13 +163,13 @@ export const logIn = (email: string, password: string) => {
         if (error.response.status === 400) {
           const errorMessages: string[] = [];
 
-          if (error.response.data.error.email.length > 0) {
+          if (error.response.data.error.email) {
             errorMessages.push(error.response.data.error.email);
           }
-          if (error.response.data.error.password.length > 0) {
+          if (error.response.data.error.password) {
             errorMessages.push(error.response.data.error.password);
           }
-          if (errorMessages.length > 0) {
+          if (errorMessages) {
             alert(errorMessages.join('\n'));
           }
         }
