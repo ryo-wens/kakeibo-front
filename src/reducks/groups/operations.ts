@@ -76,8 +76,8 @@ export const createGroup = (groupName: string) => {
 
         const user = {
           group_id: res.data.group_id,
-          user_id: currentUser.userId,
-          user_name: currentUser.userName,
+          user_id: currentUser.user_id,
+          user_name: currentUser.user_name,
         };
 
         const newGroup = {

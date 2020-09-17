@@ -1,8 +1,7 @@
 export interface UserState {
-  isLoggedIn: boolean;
-  userId: string;
-  userName: string;
+  user_id: string;
+  user_name: string;
   email: string;
   password: string;
-  confirmPassword: string;
+  confirm_password: string;
 }
