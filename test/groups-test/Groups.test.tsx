@@ -113,7 +113,7 @@ describe('async actions groups', () => {
       },
     ];
 
-    axiosMock.onPost(url).reply(200, mockResponse);
+    axiosMock.onPost(url, mockRequest).reply(200, mockResponse);
 
     await axios.post(url, JSON.stringify(mockRequest), { withCredentials: true }).then((res) => {
       const groupsState: any = groupsStore.getState();
