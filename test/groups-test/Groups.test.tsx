@@ -12,41 +12,54 @@ const mockStore = configureMockStore(middlewares);
 
 const axiosMock = new MockAdapter(axios);
 
-const store = mockStore({
-  approved_group_list: [
-    {
-      group_id: 1,
-      group_name: 'シェアハウス',
-      approved_users_list: [
-        {
-          group_id: 1,
-          user_id: 'furusawa',
-          user_name: '古澤',
-        },
-      ],
-      unapproved_users_list: [{ group_id: 1, user_id: 'go2', user_name: '郷ひろみ' }],
-    },
-  ],
-  unapproved_group_list: [
-    {
-      group_id: 2,
-      group_name: '代表',
-      approved_users_list: [
-        {
-          group_id: 2,
-          user_id: 'honda',
-          user_name: '本田',
-        },
-      ],
-      unapproved_users_list: [
-        {
-          group_id: 2,
-          user_id: 'furusawa',
-          user_name: '古澤',
-        },
-      ],
-    },
-  ],
+const store = mockStore({});
+
+const usersStore = mockStore({
+  users: {
+    user_id: 'furusawa',
+    user_name: '古澤',
+    email: 'test@gmail.com',
+    password: 'password',
+  },
+});
+
+const groupsStore = mockStore({
+  groups: {
+    approved_group_list: [
+      {
+        group_id: 1,
+        group_name: 'シェアハウス',
+        approved_users_list: [
+          {
+            group_id: 1,
+            user_id: 'furusawa',
+            user_name: '古澤',
+          },
+        ],
+        unapproved_users_list: [{ group_id: 1, user_id: 'go2', user_name: '郷ひろみ' }],
+      },
+    ],
+    unapproved_group_list: [
+      {
+        group_id: 2,
+        group_name: '代表',
+        approved_users_list: [
+          {
+            group_id: 2,
+            user_id: 'honda',
+            user_name: '本田',
+          },
+        ],
+        unapproved_users_list: [
+          {
+            group_id: 2,
+            user_id: 'furusawa',
+            user_name: '古澤',
+          },
+        ],
+      },
+    ],
+  },
 });
 
 describe('async actions groups', () => {
@@ -54,9 +67,87 @@ describe('async actions groups', () => {
     store.clearActions();
   });
 
+  it('Created group is added to approvedGroups when CREATE_GROUP succeeds.', async () => {
+    const url = `http://127.0.0.1:8080/groups`;
+
+    const mockRequest = {
+      group_name: '古澤家',
+    };
+
+    const mockResponse = {
+      group_id: 3,
+      group_name: '古澤家',
+    };
+
+    const expectedAction = [
+      {
+        type: GroupsActions.CREATE_GROUP,
+        payload: {
+          approvedGroups: [
+            {
+              group_id: 1,
+              group_name: 'シェアハウス',
+              approved_users_list: [
+                {
+                  group_id: 1,
+                  user_id: 'furusawa',
+                  user_name: '古澤',
+                },
+              ],
+              unapproved_users_list: [{ group_id: 1, user_id: 'go2', user_name: '郷ひろみ' }],
+            },
+            {
+              group_id: 3,
+              group_name: '古澤家',
+              approved_users_list: [
+                {
+                  group_id: 3,
+                  user_id: 'furusawa',
+                  user_name: '古澤',
+                },
+              ],
+              unapproved_users_list: [],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPost(url).reply(200, mockResponse);
+
+    await axios.post(url, JSON.stringify(mockRequest), { withCredentials: true }).then((res) => {
+      const groupsState: any = groupsStore.getState();
+      const usersState: any = usersStore.getState();
+      const prevApprovedGroups: Groups = groupsState.groups.approved_group_list;
+      const currentUser: {
+        user_id: string;
+        user_name: string;
+        email: string;
+        password: string;
+      } = usersState.users;
+
+      const user = {
+        group_id: res.data.group_id,
+        user_id: currentUser.user_id,
+        user_name: currentUser.user_name,
+      };
+
+      const newGroup = {
+        group_id: res.data.group_id,
+        group_name: res.data.group_name,
+        approved_users_list: [user],
+        unapproved_users_list: [],
+      };
+
+      const nextApprovedGroups = [...prevApprovedGroups, newGroup];
+
+      store.dispatch(GroupsActions.createGroupAction(nextApprovedGroups));
+      expect(store.getActions()).toEqual(expectedAction);
+    });
+  });
+
   it('Get approvedGroups and unapprovedGroups when fetch is successful', async () => {
-    const url = 'http://127.0.0.1:8080/groups';
-    const store = mockStore({});
+    const url = `http://127.0.0.1:8080/groups`;
     const mockResponse = {
       approved_group_list: [
         {
@@ -141,8 +232,8 @@ describe('async actions groups', () => {
     axiosMock.onDelete(url).reply(200, mockResponse);
 
     await axios.delete(url).then((res) => {
-      const state: any = store.getState();
-      const prevApprovedGroups: Groups = state.approved_group_list;
+      const groupsState: any = groupsStore.getState();
+      const prevApprovedGroups: Groups = groupsState.groups.approved_group_list;
 
       const updateApprovedGroups: Groups = prevApprovedGroups.filter((prevApprovedGroup) => {
         return prevApprovedGroup.group_id !== groupId;
@@ -210,9 +301,9 @@ describe('async actions groups', () => {
     axiosMock.onPost(url).reply(200, mockResponse);
 
     await axios.post(url, null, { withCredentials: true }).then((res) => {
-      const state: any = store.getState();
-      const prevApprovedGroups: Groups = state.approved_group_list;
-      const prevUnapprovedGroups: Groups = state.unapproved_group_list;
+      const groupsState: any = groupsStore.getState();
+      const prevApprovedGroups: Groups = groupsState.groups.approved_group_list;
+      const prevUnapprovedGroups: Groups = groupsState.groups.unapproved_group_list;
 
       const matchedGroups = prevUnapprovedGroups.filter((prevUnapprovedGroup: Group) => {
         return prevUnapprovedGroup.group_id === res.data.group_id;
@@ -279,8 +370,8 @@ describe('async actions groups', () => {
     axiosMock.onDelete(url).reply(200, mockResponse);
 
     await axios.delete(url, { withCredentials: true }).then((res) => {
-      const state: any = store.getState();
-      const prevUnapprovedGroups: Groups = state.unapproved_group_list;
+      const groupsState: any = groupsStore.getState();
+      const prevUnapprovedGroups: Groups = groupsState.groups.unapproved_group_list;
 
       const updateUnapprovedGroups: Groups = prevUnapprovedGroups.filter(
         (prevUnapprovedGroup: Group) => {
