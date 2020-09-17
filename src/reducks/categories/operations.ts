@@ -1,6 +1,6 @@
 import { updateIncomeCategoriesAction, updateExpenseCategoriesAction } from './actions';
 import axios from 'axios';
-import { Dispatch, Action } from 'redux'
+import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import { Category } from './types';
 import { State } from '../store/types';
@@ -52,11 +52,11 @@ export const fetchCategories = () => {
       })
       .catch((error) => {
         if (error.response.status === 401) {
-            alert(error.response.data.error.message);
-            dispatch(push('/login'))
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
         }
         if (error.response.status === 500) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
       });
   };
@@ -83,8 +83,8 @@ export const addCustomCategories = (name: string, bigCategoryId: number) => {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
-                const prevAssociatedCategories = incomeCategory.associated_categories_list;
-                incomeCategory.associated_categories_list = [
+              const prevAssociatedCategories = incomeCategory.associated_categories_list;
+              incomeCategory.associated_categories_list = [
                 addCategory,
                 ...prevAssociatedCategories,
               ];
@@ -96,8 +96,8 @@ export const addCustomCategories = (name: string, bigCategoryId: number) => {
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
             if (expenseCategory.id === bigCategoryId) {
-                const prevAssociatedCategories = expenseCategory.associated_categories_list;
-                expenseCategory.associated_categories_list = [
+              const prevAssociatedCategories = expenseCategory.associated_categories_list;
+              expenseCategory.associated_categories_list = [
                 addCategory,
                 ...prevAssociatedCategories,
               ];
@@ -109,20 +109,20 @@ export const addCustomCategories = (name: string, bigCategoryId: number) => {
       })
       .catch((error) => {
         if (error.response.status === 400) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
 
         if (error.response.status === 401) {
-            dispatch(push('/login'))
-            alert(error.response.data.error.message);
+          dispatch(push('/login'));
+          alert(error.response.data.error.message);
         }
 
         if (error.response.status === 409) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
 
         if (error.response.status === 500) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
       });
   };
@@ -149,8 +149,8 @@ export const editCustomCategories = (id: number, name: string, bigCategoryId: nu
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
-                const prevAssociatedCategories = incomeCategory.associated_categories_list;
-                incomeCategory.associated_categories_list = prevAssociatedCategories.map(
+              const prevAssociatedCategories = incomeCategory.associated_categories_list;
+              incomeCategory.associated_categories_list = prevAssociatedCategories.map(
                 (associatedCategory) => {
                   if (
                     associatedCategory.id === id &&
@@ -169,8 +169,8 @@ export const editCustomCategories = (id: number, name: string, bigCategoryId: nu
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
             if (expenseCategory.id === bigCategoryId) {
-                const prevAssociatedCategories = expenseCategory.associated_categories_list;
-                expenseCategory.associated_categories_list = prevAssociatedCategories.map(
+              const prevAssociatedCategories = expenseCategory.associated_categories_list;
+              expenseCategory.associated_categories_list = prevAssociatedCategories.map(
                 (associatedCategory) => {
                   if (
                     associatedCategory.id === id &&
@@ -189,20 +189,20 @@ export const editCustomCategories = (id: number, name: string, bigCategoryId: nu
       })
       .catch((error) => {
         if (error.response.status === 400) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
 
         if (error.response.status === 401) {
-            alert(error.response.data.error.message);
-            dispatch(push('/login'))
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
         }
 
         if (error.response.status === 409) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
 
         if (error.response.status === 500) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
       });
   };
@@ -221,10 +221,10 @@ export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
           const incomeCategories = getState().categories.incomeList;
           const nextCategories = incomeCategories.map((incomeCategory: Category) => {
             if (incomeCategory.id === bigCategoryId) {
-                const prevAssociatedCategories = incomeCategory.associated_categories_list;
-                incomeCategory.associated_categories_list = prevAssociatedCategories.filter(
-                  (associatedCategory) => associatedCategory.id !== id
-                );
+              const prevAssociatedCategories = incomeCategory.associated_categories_list;
+              incomeCategory.associated_categories_list = prevAssociatedCategories.filter(
+                (associatedCategory) => associatedCategory.id !== id
+              );
             }
             return incomeCategory;
           });
@@ -235,10 +235,10 @@ export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
           const expenseCategories = getState().categories.expenseList;
           const nextCategories = expenseCategories.map((expenseCategory: Category) => {
             if (expenseCategory.id === bigCategoryId) {
-                const prevAssociatedCategories = expenseCategory.associated_categories_list;
-                expenseCategory.associated_categories_list = prevAssociatedCategories.filter(
-                  (associatedCategory) => associatedCategory.id !== id
-                );
+              const prevAssociatedCategories = expenseCategory.associated_categories_list;
+              expenseCategory.associated_categories_list = prevAssociatedCategories.filter(
+                (associatedCategory) => associatedCategory.id !== id
+              );
             }
             return expenseCategory;
           });
@@ -248,12 +248,12 @@ export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
       })
       .catch((error) => {
         if (error.response.status === 401) {
-            alert(error.response.data.error.message);
-            dispatch(push('/login'))
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
         }
 
         if (error.response.status === 500) {
-            alert(error.response.data.error.message);
+          alert(error.response.data.error.message);
         }
       });
   };
