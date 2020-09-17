@@ -7,9 +7,8 @@ const initialState = {
     transactionsList: [],
   },
   users: {
-    isLoggedIn: false,
-    userId: '',
-    userName: '',
+    user_id: '',
+    user_name: '',
     email: '',
     password: '',
   },

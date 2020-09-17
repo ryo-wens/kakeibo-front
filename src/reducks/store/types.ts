@@ -11,9 +11,8 @@ export interface State {
     transactionsList: TransactionsList;
   };
   users: {
-    isLoggedIn: boolean;
-    userId: string;
-    userName: string;
+    user_id: string;
+    user_name: string;
     email: string;
     password: string;
   };
