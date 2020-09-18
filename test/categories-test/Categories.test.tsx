@@ -4,9 +4,14 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { fetchCategories, addCustomCategories } from '../../src/reducks/categories/operations';
+import {
+  fetchCategories,
+  addCustomCategories,
+  editCustomCategories,
+} from '../../src/reducks/categories/operations';
 import categories from './categories.json';
 import addCategories from './addCategories.json';
+import editCategories from './editCategories.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -120,6 +125,94 @@ describe('async actions addCustomCategories', () => {
 
     // @ts-ignore
     await addCustomCategories('調味料', 2)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedExpenseActions);
+  });
+});
+
+describe('async actions editCustomCategories', () => {
+  const store = mockStore({ addCategories });
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Edit customCategory in income_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        categories: {
+          incomeList: addCategories.income_categories_list,
+        },
+      };
+    };
+
+    const reqIncomeCategory = {
+      name: '株配当金',
+      big_category_id: 1,
+    };
+
+    const mockIncomeResponse = {
+      category_type: 'CustomCategory',
+      id: 16,
+      name: '株配当金',
+      big_category_id: 1,
+    };
+
+    const id = mockIncomeResponse.id;
+    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+
+    const mockIncomeList = editCategories.income_categories_list;
+
+    const expectedIncomeActions = [
+      {
+        type: actionTypes.UPDATE_INCOME_CATEGORIES,
+        payload: mockIncomeList,
+      },
+    ];
+
+    axiosMock.onPut(url, reqIncomeCategory).reply(200, mockIncomeResponse);
+
+    // @ts-ignore
+    await editCustomCategories(16, '株配当金', 1)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedIncomeActions);
+  });
+
+  it('Edit customCategory in expense_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        categories: {
+          expenseList: addCategories.expense_categories_list,
+        },
+      };
+    };
+
+    const reqExpenseCategory = {
+      name: '牛肉ブロック',
+      big_category_id: 2,
+    };
+
+    const mockExpenseResponse = {
+      category_type: 'CustomCategory',
+      id: 17,
+      name: '牛肉ブロック',
+      big_category_id: 2,
+    };
+
+    const id = mockExpenseResponse.id;
+    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+
+    const mockExpenseList = editCategories.expense_categories_list;
+
+    const expectedExpenseActions = [
+      {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORIES,
+        payload: mockExpenseList,
+      },
+    ];
+
+    axiosMock.onPut(url, reqExpenseCategory).reply(200, mockExpenseResponse);
+
+    // @ts-ignore
+    await editCustomCategories(17, '牛肉ブロック', 2)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedExpenseActions);
   });
 });
