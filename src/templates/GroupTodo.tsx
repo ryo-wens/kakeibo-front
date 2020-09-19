@@ -52,7 +52,7 @@ const GroupTodo = () => {
       <TodoMenu />
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
-        <AddTodo />
+        <AddTodo groupId={groupId} />
       </div>
     </>
   );
