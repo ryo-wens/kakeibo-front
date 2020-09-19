@@ -52,7 +52,6 @@ describe('async actions getCategories', () => {
 describe('async actions addCustomCategories', () => {
   const store = mockStore({ categories });
   const url = 'http://127.0.0.1:8081/categories/custom-categories';
-  const addDefaultCategories = categories;
 
   beforeEach(() => {
     store.clearActions();
@@ -78,7 +77,7 @@ describe('async actions addCustomCategories', () => {
       big_category_id: 1,
     };
 
-    const mockIncomeList = addDefaultCategories.income_categories_list;
+    const mockIncomeList = addCategories.income_categories_list;
 
     const expectedIncomeActions = [
       {
