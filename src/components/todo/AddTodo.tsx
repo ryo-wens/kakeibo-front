@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useState, useEffect } from 'react';
 import 'date-fns';
 import { TaskTextFields, TodoButton } from './index';
 import { AddButton } from '../uikit';
@@ -24,7 +24,11 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AddTodo = () => {
+interface AddTodoProps {
+  groupId: number;
+}
+
+const AddTodo = (props: AddTodoProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [todo, setTodo] = useState<string>('');
@@ -37,6 +41,10 @@ const AddTodo = () => {
     setOpen(false);
     setTodo('');
   };
+
+  useEffect(() => {
+    handleClose();
+  }, [props.groupId]);
 
   const inputTodo = useCallback(
     (event) => {
