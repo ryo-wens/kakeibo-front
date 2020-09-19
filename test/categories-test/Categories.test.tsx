@@ -8,10 +8,12 @@ import {
   fetchCategories,
   addCustomCategories,
   editCustomCategories,
+  deleteCustomCategories,
 } from '../../src/reducks/categories/operations';
 import categories from './categories.json';
 import addCategories from './addCategories.json';
 import editCategories from './editCategories.json';
+import deleteCategories from './deleteCategories.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -50,6 +52,7 @@ describe('async actions getCategories', () => {
 describe('async actions addCustomCategories', () => {
   const store = mockStore({ categories });
   const url = 'http://127.0.0.1:8081/categories/custom-categories';
+  const addDefaultCategories = categories;
 
   beforeEach(() => {
     store.clearActions();
@@ -75,7 +78,7 @@ describe('async actions addCustomCategories', () => {
       big_category_id: 1,
     };
 
-    const mockIncomeList = addCategories.income_categories_list;
+    const mockIncomeList = addDefaultCategories.income_categories_list;
 
     const expectedIncomeActions = [
       {
@@ -214,5 +217,76 @@ describe('async actions editCustomCategories', () => {
     // @ts-ignore
     await editCustomCategories(17, '牛肉ブロック', 2)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedExpenseActions);
+  });
+});
+
+describe('async actions deleteCustomCategories', () => {
+  const store = mockStore({ editCategories });
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  const mockResponse = {
+    message: 'カスタムカテゴリーを削除しました。',
+  };
+
+  it('Delete customCategory in income_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        categories: {
+          incomeList: editCategories.income_categories_list,
+        },
+      };
+    };
+
+    const id = 16;
+    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+
+    const mockIncomeList = deleteCategories.income_categories_list;
+
+    const expectedIncomeActions = [
+      {
+        type: actionTypes.UPDATE_INCOME_CATEGORIES,
+        payload: mockIncomeList,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+    window.alert = jest.fn(() => ({ mockResponse }));
+
+    // @ts-ignore
+    await deleteCustomCategories(16, 1)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedIncomeActions);
+    expect(window.alert).toHaveBeenCalledWith('カスタムカテゴリーを削除しました。');
+  });
+
+  it('Delete customCategory in expense_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        categories: {
+          expenseList: editCategories.expense_categories_list,
+        },
+      };
+    };
+
+    const id = 17;
+    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+
+    const mockExpenseList = deleteCategories.expense_categories_list;
+    const expectedExpenseActions = [
+      {
+        type: actionTypes.UPDATE_EXPENSE_CATEGORIES,
+        payload: mockExpenseList,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+    window.alert = jest.fn(() => ({ mockResponse }));
+
+    // @ts-ignore
+    await deleteCustomCategories(17, 2)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedExpenseActions);
+    expect(window.alert).toHaveBeenCalledWith('カスタムカテゴリーを削除しました。');
   });
 });
