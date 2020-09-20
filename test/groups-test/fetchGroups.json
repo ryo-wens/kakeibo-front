@@ -1,0 +1,42 @@
+{
+  "approved_group_list": [
+    {
+      "group_id": 1,
+      "group_name": "シェアハウス",
+      "approved_users_list": [
+        {
+          "group_id": 1,
+          "user_id": "furusawa",
+          "user_name": "古澤"
+        }
+      ],
+      "unapproved_users_list": [
+        {
+          "group_id": 1,
+          "user_id": "go2",
+          "user_name": "郷ひろみ"
+        }
+      ]
+    }
+  ],
+  "unapproved_group_list": [
+    {
+      "group_id": 2,
+      "group_name": "代表",
+      "approved_users_list": [
+        {
+          "group_id": 2,
+          "user_id": "honda",
+          "user_name": "本田"
+        }
+      ],
+      "unapproved_users_list": [
+        {
+          "group_id": 2,
+          "user_id": "furusawa",
+          "user_name": "古澤"
+        }
+      ]
+    }
+  ]
+}
