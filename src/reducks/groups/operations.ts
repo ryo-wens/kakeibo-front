@@ -23,7 +23,6 @@ interface createGroupRes {
 }
 
 interface updateGroupNameReq {
-  group_id: number;
   group_name: string;
 }
 
@@ -102,7 +101,6 @@ export const updateGroupName = (groupId: number, groupName: string) => {
       return;
     }
     const data: updateGroupNameReq = {
-      group_id: groupId,
       group_name: groupName,
     };
 
