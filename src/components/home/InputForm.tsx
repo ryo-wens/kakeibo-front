@@ -65,7 +65,6 @@ const InputForm = (): JSX.Element => {
     },
     [setTransactionDate]
   );
-
   const resetInputForm = useCallback(() => {
     setAmount('');
     setTransactionType('');
@@ -98,13 +97,11 @@ const InputForm = (): JSX.Element => {
           setCustomCategoryId(associatedCategoryId);
           break;
       }
-
     },
     [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
   );
 
   const unInput = amount === '' || category === '' || transactionsType === '';
-
 
   return (
     <form className="grid__column box__input" autoComplete="on">

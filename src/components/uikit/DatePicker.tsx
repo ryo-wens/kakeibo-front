@@ -5,10 +5,7 @@ import Grid from '@material-ui/core/Grid';
 import DateFnsUtils from '@date-io/date-fns';
 import jaLocale from 'date-fns/locale/ja';
 import format from 'date-fns/format';
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from '@material-ui/pickers';
+import { MuiPickersUtilsProvider, KeyboardDatePicker } from '@material-ui/pickers';
 
 class ExtendedUtils extends DateFnsUtils {
   getCalendarHeaderText(date: Date) {
@@ -28,8 +25,8 @@ const useStyles = makeStyles({
 type DatePickerProps = {
   id: string;
   label: string;
-  value: Date | null ;
-  onChange: (date: Date | null ) => void;
+  value: Date | null;
+  onChange: (date: Date | null) => void;
   required: boolean;
 };
 
