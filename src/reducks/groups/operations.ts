@@ -37,7 +37,6 @@ interface fetchGroupRes {
 }
 
 interface inviteGroupUsersReq {
-  group_id: number;
   user_id: string;
 }
 
@@ -147,7 +146,6 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
     return;
   }
   const data: inviteGroupUsersReq = {
-    group_id: groupId,
     user_id: userId,
   };
 
@@ -160,7 +158,6 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
       )
       .then((res) => {
         const prevApprovedGroups = getState().groups.approvedGroups;
-        const prevUnapprovedGroups = getState().groups.unapprovedGroups;
 
         const updateApprovedGroups: Groups = prevApprovedGroups.map((prevApprovedGroup) => {
           if (prevApprovedGroup.group_id === groupId && res.data.user_id === userId) {
@@ -181,28 +178,7 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
             return prevApprovedGroup;
           }
         });
-
-        const updateUnapprovedGroups: Groups = prevUnapprovedGroups.map((prevUnapprovedGroup) => {
-          if (prevUnapprovedGroup.group_id === groupId && res.data.user_id === userId) {
-            const inviteUser: GroupUser = {
-              group_id: res.data.group_id,
-              user_id: res.data.user_id,
-              user_name: res.data.user_name,
-            };
-            const prevUnapprovedUserList = prevUnapprovedGroup.unapproved_users_list;
-            const updateUnapprovedGroup: Group = {
-              group_id: prevUnapprovedGroup.group_id,
-              group_name: prevUnapprovedGroup.group_name,
-              approved_users_list: prevUnapprovedGroup.approved_users_list,
-              unapproved_users_list: [...prevUnapprovedUserList, inviteUser],
-            };
-            return updateUnapprovedGroup;
-          } else {
-            return prevUnapprovedGroup;
-          }
-        });
-
-        dispatch(inviteGroupUsersAction(updateApprovedGroups, updateUnapprovedGroups));
+        dispatch(inviteGroupUsersAction(updateApprovedGroups));
       });
   };
 };
