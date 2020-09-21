@@ -1,0 +1,16 @@
+{
+  "categories": {
+    "incomeResponse": {
+      "category_type": "CustomCategory",
+      "id": 16,
+      "name": "株配当金",
+      "big_category_id": 1
+    },
+    "expenseResponse": {
+      "category_type": "CustomCategory",
+      "id": 17,
+      "name": "牛肉ブロック",
+      "big_category_id": 2
+    }
+  }
+}
