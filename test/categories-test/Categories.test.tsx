@@ -13,7 +13,6 @@ import {
 import categories from './categories.json';
 import addCategories from './addCategories.json';
 import editCategories from './editCategories.json';
-import deleteCategories from './deleteCategories.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -229,6 +228,8 @@ describe('async actions deleteCustomCategories', () => {
   const mockResponse = {
     message: 'カスタムカテゴリーを削除しました。',
   };
+
+  const deleteCategories = JSON.parse(JSON.stringify(categories));
 
   it('Delete customCategory in income_categories_list if fetch succeeds', async () => {
     const getState = () => {
