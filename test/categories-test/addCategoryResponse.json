@@ -1,0 +1,16 @@
+{
+  "categories": {
+    "incomeResponse": {
+      "category_type": "CustomCategory",
+      "id": 16,
+      "name": "失業手当",
+      "big_category_id": 1
+    },
+    "expenseResponse": {
+      "category_type": "CustomCategory",
+      "id": 17,
+      "name": "調味料",
+      "big_category_id": 2
+    }
+  }
+}
