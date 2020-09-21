@@ -10,12 +10,14 @@ import {
   fetchGroups,
   inviteGroupParticipate,
   inviteGroupReject,
+  inviteGroupUsers,
   updateGroupName,
 } from '../../src/reducks/groups/operations';
 import createGroupResponse from './createGroup.json';
 import fetchGroupsResponse from './fetchGroups.json';
 import inviteGroupParticipateResponse from './inviteGroupParticipate.json';
 import inviteGroupRejectResponse from './inviteGroupReject.json';
+import inviteGroupUsersResponse from './inviteGroupUsers.json';
 import updateGroupNameResponse from './updateGroupName.json';
 
 const middlewares = [thunk];
@@ -232,6 +234,49 @@ describe('async actions groups', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     await fetchGroups()(store.dispatch);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('When INVITE_GROUP_USERS is successful, it will receive the invited users and update the store.', async () => {
+    const groupId = 1;
+    const userId = `anraku8`;
+    const url = `http://127.0.0.1:8080/groups/${groupId}/users`;
+
+    const mockRequest = {
+      user_id: userId,
+    };
+
+    const mockResponse = JSON.stringify(inviteGroupUsersResponse);
+
+    const expectedActions = [
+      {
+        type: GroupsActions.INVITE_GROUP_USERS,
+        payload: {
+          approvedGroups: [
+            {
+              group_id: 1,
+              group_name: 'シェアハウス',
+              approved_users_list: [
+                {
+                  group_id: 1,
+                  user_id: 'furusawa',
+                  user_name: '古澤',
+                },
+              ],
+              unapproved_users_list: [
+                { group_id: 1, user_id: 'go2', user_name: '郷ひろみ' },
+                { group_id: 1, user_id: 'anraku8', user_name: '安楽亮佑' },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPost(url, mockRequest).reply(200, mockResponse);
+
+    // @ts-ignore
+    await inviteGroupUsers(groupId, userId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
