@@ -1,0 +1,12 @@
+{
+  "id": 47,
+  "transaction_type": "expense",
+  "updated_date": "2020-08-08T18:11:15Z",
+  "transaction_date": "07/25(土)",
+  "shop": "コストコ",
+  "memo": null,
+  "amount": 2000,
+  "big_category_name": "食費",
+  "medium_category_name": "食料品",
+  "custom_category_name": null
+}
