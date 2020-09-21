@@ -10,11 +10,13 @@ import {
   fetchGroups,
   inviteGroupParticipate,
   inviteGroupReject,
+  updateGroupName,
 } from '../../src/reducks/groups/operations';
-import fetchGroupsResponse from './fetchGroups.json';
 import createGroupResponse from './createGroup.json';
+import fetchGroupsResponse from './fetchGroups.json';
 import inviteGroupParticipateResponse from './inviteGroupParticipate.json';
 import inviteGroupRejectResponse from './inviteGroupReject.json';
+import updateGroupNameResponse from './updateGroupName.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -134,6 +136,46 @@ describe('async actions groups', () => {
     // @ts-ignore
     await createGroup(groupName)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('When UPDATE_GROUP_NAME is successful, get the changed group name and change the store.', async () => {
+    const groupId = 1;
+    const groupName = 'エミリア家';
+    const url = `http://127.0.0.1:8080/groups/${groupId}`;
+
+    const mockRequest = {
+      group_name: groupName,
+    };
+
+    const mockResponse = JSON.stringify(updateGroupNameResponse);
+
+    const expectedActions = [
+      {
+        type: GroupsActions.UPDATE_GROUP_NAME,
+        payload: {
+          approvedGroups: [
+            {
+              group_id: 1,
+              group_name: 'エミリア家',
+              approved_users_list: [
+                {
+                  group_id: 1,
+                  user_id: 'furusawa',
+                  user_name: '古澤',
+                },
+              ],
+              unapproved_users_list: [{ group_id: 1, user_id: 'go2', user_name: '郷ひろみ' }],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPut(url, mockRequest).reply(200, mockResponse);
+
+    // @ts-ignore
+    await updateGroupName(groupId, groupName)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
   it('Get approvedGroups and unapprovedGroups when fetch is successful', async () => {
