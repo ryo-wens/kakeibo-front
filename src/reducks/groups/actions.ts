@@ -40,12 +40,11 @@ export const fetchGroupsAction = (approvedGroups: Groups, unapprovedGroups: Grou
 };
 
 export const INVITE_GROUP_USERS = 'INVITE_GROUP_USERS';
-export const inviteGroupUsersAction = (approvedGroups: Groups, unapprovedGroups: Groups) => {
+export const inviteGroupUsersAction = (approvedGroups: Groups) => {
   return {
     type: INVITE_GROUP_USERS,
     payload: {
       approvedGroups: approvedGroups,
-      unapprovedGroups: unapprovedGroups,
     },
   };
 };
