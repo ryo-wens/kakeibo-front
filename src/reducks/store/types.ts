@@ -14,7 +14,6 @@ export interface State {
     user_id: string;
     user_name: string;
     email: string;
-    password: string;
   };
   groups: {
     approvedGroups: Groups;

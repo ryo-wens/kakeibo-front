@@ -94,7 +94,7 @@ export const signUp = (
         withCredentials: true,
       })
       .then(() => {
-        dispatch(signUpAction(userId, userName, email, password, confirmPassword));
+        dispatch(signUpAction(userId, userName, email));
         dispatch(push('/login'));
       })
       .catch((error) => {
@@ -156,7 +156,7 @@ export const logIn = (email: string, password: string) => {
         withCredentials: true,
       })
       .then(() => {
-        dispatch(logInAction(email, password));
+        dispatch(logInAction(email));
         dispatch(push('/'));
       })
       .catch((error) => {

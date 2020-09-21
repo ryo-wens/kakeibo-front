@@ -10,7 +10,6 @@ const initialState = {
     user_id: '',
     user_name: '',
     email: '',
-    password: '',
   },
   groups: {
     approvedGroups: [],
