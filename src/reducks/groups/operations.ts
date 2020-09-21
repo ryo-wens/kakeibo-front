@@ -5,6 +5,7 @@ import {
   inviteGroupUsersAction,
   inviteGroupRejectAction,
   inviteGroupParticipateAction,
+  groupWithdrawalAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
@@ -50,6 +51,10 @@ interface inviteGroupParticipateRes {
   group_id: number;
   user_id: string;
   user_name: string;
+}
+
+interface groupWithdrawalRes {
+  message: string;
 }
 
 interface inviteGroupRejectRes {
@@ -179,6 +184,26 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
           }
         });
         dispatch(inviteGroupUsersAction(updateApprovedGroups));
+      });
+  };
+};
+
+export const groupWithdrawal = (groupId: number, nextGroupId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .delete<groupWithdrawalRes>(`http://127.0.0.1:8080/groups/${groupId}/users`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const prevApprovedGroups = getState().groups.approvedGroups;
+
+        const updateApprovedGroups: Groups = prevApprovedGroups.filter((prevApprovedGroup) => {
+          return prevApprovedGroup.group_id !== groupId;
+        });
+
+        dispatch(push(`/group-todo/` + nextGroupId));
+        dispatch(groupWithdrawalAction(updateApprovedGroups));
+        dispatch(openTextModalAction(res.data.message));
       });
   };
 };
