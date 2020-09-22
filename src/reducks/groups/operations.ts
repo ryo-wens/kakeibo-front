@@ -201,9 +201,14 @@ export const groupWithdrawal = (groupId: number, nextGroupId: number) => {
           return prevApprovedGroup.group_id !== groupId;
         });
 
-        dispatch(push(`/group-todo/` + nextGroupId));
         dispatch(groupWithdrawalAction(updateApprovedGroups));
         dispatch(openTextModalAction(res.data.message));
+
+        if (updateApprovedGroups.length > 0) {
+          dispatch(push(`/group-todo/` + nextGroupId));
+        } else {
+          dispatch(push(`/todo`));
+        }
       });
   };
 };

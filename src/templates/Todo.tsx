@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
+import { TodoMenu } from '../components/todo';
 
 const Todo = () => {
   const dispatch = useDispatch();
@@ -17,10 +18,9 @@ const Todo = () => {
   }, [approvedGroups, unapprovedGroups]);
 
   return (
-    <div>
-      {/* <TodayTask /> */}
-      {/*<GroupTodo />*/}
-    </div>
+    <>
+      <TodoMenu />
+    </>
   );
 };
 
