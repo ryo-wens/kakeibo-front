@@ -13,6 +13,9 @@ import {
 import categories from './categories.json';
 import addCategories from './addCategories.json';
 import editCategories from './editCategories.json';
+import addResponse from './addCategoryResponse.json';
+import editResponse from './editCategoryResponse.json';
+import deleteResponse from './deleteCategoryResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -69,12 +72,7 @@ describe('async actions addCustomCategories', () => {
       big_category_id: 1,
     };
 
-    const mockIncomeResponse = {
-      category_type: 'CustomCategory',
-      id: 16,
-      name: '失業手当',
-      big_category_id: 1,
-    };
+    const mockIncomeResponse = addResponse.categories.incomeResponse;
 
     const mockIncomeList = addCategories.income_categories_list;
 
@@ -106,12 +104,7 @@ describe('async actions addCustomCategories', () => {
       big_category_id: 2,
     };
 
-    const mockExpenseResponse = {
-      category_type: 'CustomCategory',
-      id: 17,
-      name: '調味料',
-      big_category_id: 2,
-    };
+    const mockExpenseResponse = addResponse.categories.expenseResponse;
 
     const mockExpenseList = addCategories.expense_categories_list;
 
@@ -151,12 +144,7 @@ describe('async actions editCustomCategories', () => {
       big_category_id: 1,
     };
 
-    const mockIncomeResponse = {
-      category_type: 'CustomCategory',
-      id: 16,
-      name: '株配当金',
-      big_category_id: 1,
-    };
+    const mockIncomeResponse = editResponse.categories.incomeResponse;
 
     const id = mockIncomeResponse.id;
     const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
@@ -191,12 +179,7 @@ describe('async actions editCustomCategories', () => {
       big_category_id: 2,
     };
 
-    const mockExpenseResponse = {
-      category_type: 'CustomCategory',
-      id: 17,
-      name: '牛肉ブロック',
-      big_category_id: 2,
-    };
+    const mockExpenseResponse = editResponse.categories.expenseResponse;
 
     const id = mockExpenseResponse.id;
     const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
@@ -225,9 +208,7 @@ describe('async actions deleteCustomCategories', () => {
     store.clearActions();
   });
 
-  const mockResponse = {
-    message: 'カスタムカテゴリーを削除しました。',
-  };
+  const mockResponse = deleteResponse.message;
 
   const deleteCategories = JSON.parse(JSON.stringify(categories));
 
@@ -253,12 +234,12 @@ describe('async actions deleteCustomCategories', () => {
     ];
 
     axiosMock.onDelete(url).reply(200, mockResponse);
-    window.alert = jest.fn(() => ({ mockResponse }));
+    window.alert = jest.fn(() => mockResponse);
 
     // @ts-ignore
     await deleteCustomCategories(16, 1)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedIncomeActions);
-    expect(window.alert).toHaveBeenCalledWith('カスタムカテゴリーを削除しました。');
+    expect(window.alert).toHaveBeenCalled();
   });
 
   it('Delete customCategory in expense_categories_list if fetch succeeds', async () => {
@@ -282,11 +263,11 @@ describe('async actions deleteCustomCategories', () => {
     ];
 
     axiosMock.onDelete(url).reply(200, mockResponse);
-    window.alert = jest.fn(() => ({ mockResponse }));
+    window.alert = jest.fn(() => mockResponse);
 
     // @ts-ignore
     await deleteCustomCategories(17, 2)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedExpenseActions);
-    expect(window.alert).toHaveBeenCalledWith('カスタムカテゴリーを削除しました。');
+    expect(window.alert).toHaveBeenCalled();
   });
 });
