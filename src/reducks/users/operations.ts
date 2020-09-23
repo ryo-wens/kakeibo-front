@@ -156,7 +156,6 @@ export const logIn = (email: string, password: string) => {
         withCredentials: true,
       })
       .then((res) => {
-        console.log(res.data);
         dispatch(logInAction(email));
         dispatch(push('/'));
       })
