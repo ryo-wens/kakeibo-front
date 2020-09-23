@@ -3,9 +3,8 @@ import * as actionTypes from '../../src/reducks/users/actions';
 import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
-import Router from '../../src/Router';
 import configureStore from 'redux-mock-store';
-import { signUp } from '../../src/reducks/users/operations';
+import { signUp, logIn } from '../../src/reducks/users/operations';
 import signUpResponse from './signUpResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
@@ -52,5 +51,44 @@ describe('async actions signUp', () => {
 
     await signUp('kohh20', '千葉雄喜', 'kohh@gmail.com', 'kohhworst', 'kohhworst')(store.dispatch);
     expect(store.getActions()).toEqual(expectedSignUpActions);
+  });
+});
+
+describe('async actions logIn', () => {
+  const userState = JSON.parse(JSON.stringify(signUpResponse));
+  const store = mockStore({ userState, router: [] });
+  const url = 'http://127.0.0.1:8080/login';
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('LogIn if fetch succeeds', async () => {
+    const logInReq = {
+      email: 'kohh@gmail.com',
+      password: 'kohhworst',
+    };
+
+    const resLogIn = userState;
+
+    const expectedLogInActions = [
+      {
+        payload: {
+          email: 'kohh@gmail.com',
+        },
+        type: actionTypes.LOG_IN,
+      },
+      {
+        payload: {
+          args: ['/'],
+          method: 'push',
+        },
+        type: '@@router/CALL_HISTORY_METHOD',
+      },
+    ];
+
+    axiosMock.onPost(url, logInReq).reply(201, resLogIn);
+
+    await logIn('kohh@gmail.com', 'kohhworst')(store.dispatch);
+    expect(store.getActions()).toEqual(expectedLogInActions);
   });
 });
