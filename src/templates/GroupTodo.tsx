@@ -5,6 +5,7 @@ import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import { fetchGroups } from '../reducks/groups/operations';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { Group } from '../reducks/groups/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,7 +32,11 @@ const GroupTodo = () => {
     }
   }, [approvedGroups, unapprovedGroups]);
 
-  const approvedGroup = useMemo(() => {
+  useEffect(() => {
+    dispatch(fetchGroups());
+  }, [groupId]);
+
+  const approvedGroup: Group = useMemo(() => {
     if (approvedGroups.length > 0) {
       const matchedGroups = approvedGroups.filter(
         (approvedGroup) => approvedGroup.group_id === groupId

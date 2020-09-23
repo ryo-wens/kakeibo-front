@@ -37,7 +37,7 @@ const TodoMenu = () => {
 
   return (
     <List className={classes.list} component="nav">
-      <ListItem button={true}>
+      <ListItem button={true} onClick={() => dispatch(push(`/todo`))}>
         <ListItemIcon>
           <TodayIcon />
         </ListItemIcon>
