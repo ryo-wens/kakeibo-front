@@ -1,4 +1,4 @@
-import { addTransactionsAction } from './actions';
+import { updateTransactionsAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
@@ -76,7 +76,7 @@ export const addTransactions = (
         const prevTransactions = getState().transactions.transactionsList;
 
         const transactionList = [newTransaction, ...prevTransactions];
-        dispatch(addTransactionsAction(transactionList));
+        dispatch(updateTransactionsAction(transactionList));
       })
       .catch((error) => {
         if (error.response.status === 400) {
