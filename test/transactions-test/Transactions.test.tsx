@@ -57,7 +57,7 @@ describe('async actions addTransactions', () => {
 
     const expectedAddActions = [
       {
-        type: actionTypes.ADD_TRANSACTIONS,
+        type: actionTypes.UPDATE_TRANSACTIONS,
         payload: mockTransactionsList,
       },
     ];
