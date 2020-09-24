@@ -4,10 +4,12 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { addTransactions } from '../../src/reducks/transactions/operations';
+import { addTransactions, editTransactions } from '../../src/reducks/transactions/operations';
 import transactionsList from './transactions.json';
 import addResTransaction from './addResponse.json';
 import addTransactionsList from './addTransactions.json';
+import editResTransaction from './editResponse.json';
+import editTransactionsList from './editTransactions.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -79,5 +81,76 @@ describe('async actions addTransactions', () => {
       getState
     );
     expect(store.getActions()).toEqual(expectedAddActions);
+  });
+});
+
+describe('async actions editTransactions', () => {
+  const store = mockStore({ transactionsList });
+
+  let now: Date;
+  let spiedDate: Date;
+  const originalDate = Date;
+  now = new originalDate('2020-08-09T17:00:15Z');
+  Date.now = jest.fn().mockReturnValue(now.valueOf());
+  const actual = new Date();
+
+  // @ts-ignore
+  spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+    if (arg === 0 || arg) {
+      return new originalDate(arg);
+    }
+    return now;
+  });
+
+  afterAll(() => {
+    // @ts-ignore
+    spiedDate.mockRestore();
+  });
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Edit transactionsData in transactionsList if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        transactions: {
+          transactionsList: addTransactionsList.transactions_list,
+        },
+      };
+    };
+
+    const id = 47;
+    const url = `http://127.0.0.1:8081/transactions/${id}`;
+
+    const mockResTransaction = editResTransaction;
+
+    const mockTransactionsList = editTransactionsList.transactions_list;
+
+    const expectedEditActions = [
+      {
+        type: actionTypes.UPDATE_TRANSACTIONS,
+        payload: mockTransactionsList,
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResTransaction);
+
+    await editTransactions(
+      47,
+      'expense',
+      actual,
+      'MIDWEST',
+      'RickOwens',
+      12000,
+      7,
+      39,
+      null
+    )(
+      store.dispatch,
+      // @ts-ignore
+      getState
+    );
+    expect(store.getActions()).toEqual(expectedEditActions);
   });
 });

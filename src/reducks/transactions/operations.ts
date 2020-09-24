@@ -96,6 +96,7 @@ export const addTransactions = (
 };
 
 export const editTransactions = (
+  id: number,
   transaction_type: string,
   transaction_date: Date | null,
   shop: string | null,
@@ -119,9 +120,6 @@ export const editTransactions = (
     }
 
     const transactionsList = getState().transactions.transactionsList;
-    const id = transactionsList.map((transaction) => {
-      return transaction.id;
-    });
 
     const data: transactionsReq = {
       transaction_type: transaction_type,
@@ -147,6 +145,20 @@ export const editTransactions = (
           return transaction;
         });
         dispatch(updateTransactionsAction(nextTransactionsList));
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          alert(error.response.data.error.message.join('\n'));
+        }
+
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+        }
       });
   };
 };
