@@ -1,0 +1,12 @@
+{
+  "id": 47,
+  "transaction_type": "expense",
+  "updated_date": "2020-08-09T17:00:15Z",
+  "transaction_date": "07/26(日)",
+  "shop": "MIDWEST",
+  "memo": "RickOwens",
+  "amount": 12000,
+  "big_category_name": "衣服・美容",
+  "medium_category_name": "衣服",
+  "custom_category_name": null
+}
