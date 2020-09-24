@@ -13,7 +13,7 @@ export const fetchTransactions = (
   };
 };
 
-export const UPDATE_TRANSACTIONS = 'ADD_TRANSACTIONS';
+export const UPDATE_TRANSACTIONS = 'UPDATE_TRANSACTIONS';
 export const updateTransactionsAction = (
   transactionList: TransactionsList
 ): { type: string; payload: TransactionsList } => {
