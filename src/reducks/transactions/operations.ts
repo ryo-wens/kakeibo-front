@@ -79,28 +79,9 @@ export const addTransactions = (
         dispatch(updateTransactionsAction(transactionList));
       })
       .catch((error) => {
+        console.log(error.response);
         if (error.response.status === 400) {
-          const errMessages: string[] = [];
-
-          if (error.response.data.error.transaction_type.length > 0) {
-            errMessages.push(error.response.data.error.transaction_type);
-          }
-
-          if (error.response.data.err.shop.length > 0) {
-            errMessages.push(error.response.data.error.shop);
-          }
-
-          if (error.response.data.error.memo.length > 0) {
-            errMessages.push(error.response.data.error.memo);
-          }
-
-          if (error.response.data.error.password.big_category_id > 0) {
-            errMessages.push(error.response.data.error.big_category_id);
-          }
-
-          if (errMessages.length > 0) {
-            alert(errMessages.join('\n'));
-          }
+          alert(error.response.data.error.message.join('\n'));
         }
 
         if (error.response.status === 401) {
