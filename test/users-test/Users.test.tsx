@@ -4,13 +4,17 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { signUp, logIn } from '../../src/reducks/users/operations';
+import { signUp, logIn, logOut } from '../../src/reducks/users/operations';
 import signUpResponse from './signUpResponse.json';
+import logOutResponse from './logOutResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 process.on('unhandledRejection', console.dir);
+
+const userState = JSON.parse(JSON.stringify(signUpResponse));
+const store = mockStore({ userState, router: [] });
 
 describe('async actions signUp', () => {
   const store = mockStore({ users: [], router: [] });
@@ -55,8 +59,6 @@ describe('async actions signUp', () => {
 });
 
 describe('async actions logIn', () => {
-  const userState = JSON.parse(JSON.stringify(signUpResponse));
-  const store = mockStore({ userState, router: [] });
   const url = 'http://127.0.0.1:8080/login';
   beforeEach(() => {
     store.clearActions();
@@ -90,5 +92,35 @@ describe('async actions logIn', () => {
 
     await logIn('kohh@gmail.com', 'kohhworst')(store.dispatch);
     expect(store.getActions()).toEqual(expectedLogInActions);
+  });
+});
+
+describe('async actions logOut', () => {
+  const url = 'http://127.0.0.1:8080/logout';
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('LogOut if fetch succeeds', async () => {
+    const resLogOut = logOutResponse.message;
+
+    const expectedLogOutActions = [
+      {
+        payload: null,
+        type: actionTypes.LOG_OUT,
+      },
+      {
+        payload: {
+          args: ['/login'],
+          method: 'push',
+        },
+        type: '@@router/CALL_HISTORY_METHOD',
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, resLogOut);
+
+    await logOut()(store.dispatch);
+    expect(store.getActions()).toEqual(expectedLogOutActions);
   });
 });
