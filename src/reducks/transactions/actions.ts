@@ -1,23 +1,24 @@
 import { TransactionsList } from './types';
-export type transactionActions = ReturnType<typeof addTransactionsAction | typeof fetchTransactions>;
+export type transactionActions = ReturnType<
+  typeof updateTransactionsAction | typeof fetchTransactions
+>;
 
-export const FETCH_TRANSACTIONS = 'FETCH_TRANSACTIONS'
+export const FETCH_TRANSACTIONS = 'FETCH_TRANSACTIONS';
 export const fetchTransactions = (
-  transactionsList:TransactionsList
-):{type:string; payload:TransactionsList } => {
-  return{
-    type: FETCH_TRANSACTIONS,
-    payload: transactionsList
-  }
-}
-
-export const ADD_TRANSACTIONS = 'ADD_TRANSACTIONS';
-export const addTransactionsAction = (
-  transactionList: TransactionsList
+  transactionsList: TransactionsList
 ): { type: string; payload: TransactionsList } => {
   return {
-    type: ADD_TRANSACTIONS,
-    payload: transactionList,
+    type: FETCH_TRANSACTIONS,
+    payload: transactionsList,
   };
 };
 
+export const UPDATE_TRANSACTIONS = 'UPDATE_TRANSACTIONS';
+export const updateTransactionsAction = (
+  transactionList: TransactionsList
+): { type: string; payload: TransactionsList } => {
+  return {
+    type: UPDATE_TRANSACTIONS,
+    payload: transactionList,
+  };
+};
