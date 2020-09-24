@@ -7,6 +7,8 @@ import {
   inviteGroupParticipateAction,
   groupWithdrawalAction,
 } from './actions';
+import React, { useMemo } from 'react';
+
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
 import { Group, Groups, GroupUser } from './types';
@@ -35,6 +37,7 @@ interface updateGroupNameRes {
 interface fetchGroupRes {
   approved_group_list: Groups;
   unapproved_group_list: Groups;
+  message: string;
 }
 
 interface inviteGroupUsersReq {
@@ -141,7 +144,18 @@ export const fetchGroups = () => {
         withCredentials: true,
       })
       .then((res) => {
-        dispatch(fetchGroupsAction(res.data.approved_group_list, res.data.unapproved_group_list));
+        const approvedGroups = res.data.approved_group_list;
+        const unapprovedGroups = res.data.unapproved_group_list;
+        const message = res.data.message;
+
+        if (approvedGroups !== undefined && unapprovedGroups !== undefined) {
+          const message = '';
+          dispatch(fetchGroupsAction(approvedGroups, unapprovedGroups, message));
+        } else {
+          const approvedGroups: Groups = [];
+          const unapprovedGroups: Groups = [];
+          dispatch(fetchGroupsAction(approvedGroups, unapprovedGroups, message));
+        }
       });
   };
 };

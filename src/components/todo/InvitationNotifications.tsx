@@ -12,7 +12,7 @@ import { State } from '../../reducks/store/types';
 import { inviteGroupParticipate, inviteGroupReject } from '../../reducks/groups/operations';
 import { getModalMessage } from '../../reducks/modal/selectors';
 import { ModalInform } from '../uikit';
-import { inviteGroupParticipateAction } from '../../reducks/groups/actions';
+import { Groups } from '../../reducks/groups/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,7 +50,7 @@ const InvitationNotifications = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const selector = useSelector((state: State) => state);
-  const unapprovedGroups = getUnapprovedGroups(selector);
+  const unapprovedGroups: Groups = getUnapprovedGroups(selector);
   const modalMessage = getModalMessage(selector);
 
   const handleOpen = () => {

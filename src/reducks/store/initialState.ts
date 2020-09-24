@@ -14,6 +14,7 @@ const initialState = {
   groups: {
     approvedGroups: [],
     unapprovedGroups: [],
+    message: '',
   },
   modal: {
     message: '',

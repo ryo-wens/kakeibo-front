@@ -70,6 +70,7 @@ const getState = () => {
           ],
         },
       ],
+      message: '',
     },
     router: {
       action: 'PUSH',
@@ -227,6 +228,7 @@ describe('async actions groups', () => {
               ],
             },
           ],
+          message: '',
         },
       },
     ];

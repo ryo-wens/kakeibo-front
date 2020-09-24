@@ -13,6 +13,7 @@ import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
 import { CreateGroups } from './index';
 import { push } from 'connected-react-router';
+import { Groups } from '../../reducks/groups/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +34,7 @@ const TodoMenu = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
+  const approvedGroups: Groups = getApprovedGroups(selector);
 
   return (
     <List className={classes.list} component="nav">

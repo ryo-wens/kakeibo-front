@@ -2,7 +2,11 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
-import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
+import {
+  getApprovedGroups,
+  getGroupsMessage,
+  getUnapprovedGroups,
+} from '../reducks/groups/selectors';
 import { TodoMenu } from '../components/todo';
 
 const Todo = () => {
@@ -15,7 +19,7 @@ const Todo = () => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
       dispatch(fetchGroups());
     }
-  }, [approvedGroups, unapprovedGroups]);
+  }, []);
 
   return (
     <>
