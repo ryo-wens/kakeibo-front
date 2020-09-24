@@ -78,7 +78,7 @@ const AddTodo = (props: AddTodoProps) => {
 
           <div className={classes.buttons}>
             <TodoButton
-              label={'タスクを追加'}
+              label={'Todoを追加'}
               disabled={false}
               onClick={() => console.log('クリック')}
             />
