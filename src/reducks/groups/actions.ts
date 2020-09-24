@@ -29,12 +29,17 @@ export const updateGroupNameAction = (groups: Groups) => {
 };
 
 export const FETCH_GROUPS = 'FETCH_GROUPS';
-export const fetchGroupsAction = (approvedGroups: Groups, unapprovedGroups: Groups) => {
+export const fetchGroupsAction = (
+  approvedGroups: Groups,
+  unapprovedGroups: Groups,
+  message: string
+) => {
   return {
     type: FETCH_GROUPS,
     payload: {
       approvedGroups: approvedGroups,
       unapprovedGroups: unapprovedGroups,
+      message: message,
     },
   };
 };

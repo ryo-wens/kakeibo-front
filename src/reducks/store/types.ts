@@ -18,6 +18,7 @@ export interface State {
   groups: {
     approvedGroups: Groups;
     unapprovedGroups: Groups;
+    message: string;
   };
   modal: {
     message: string;
