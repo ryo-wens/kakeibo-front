@@ -162,3 +162,34 @@ export const editTransactions = (
       });
   };
 };
+
+export const deleteTransactions = (id: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    const transactionsList = getState().transactions.transactionsList;
+    await axios
+      .delete<transactionsRes>(`http://127.0.0.1:8081/transactions/${id}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const message = res.data;
+
+        const nextTransactionsList = transactionsList.filter((transaction) => {
+          if (transaction.id === id) {
+            return transaction;
+          }
+        });
+        alert(message);
+        dispatch(updateTransactionsAction(nextTransactionsList));
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+        }
+      });
+  };
+};
