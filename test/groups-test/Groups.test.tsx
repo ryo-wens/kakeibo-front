@@ -8,6 +8,7 @@ import * as ModalActions from '../../src/reducks/modal/actions';
 import {
   createGroup,
   fetchGroups,
+  groupWithdrawal,
   inviteGroupParticipate,
   inviteGroupReject,
   inviteGroupUsers,
@@ -15,6 +16,7 @@ import {
 } from '../../src/reducks/groups/operations';
 import createGroupResponse from './createGroup.json';
 import fetchGroupsResponse from './fetchGroups.json';
+import groupWithdrawalResponse from './groupWithdrawal.json';
 import inviteGroupParticipateResponse from './inviteGroupParticipate.json';
 import inviteGroupRejectResponse from './inviteGroupReject.json';
 import inviteGroupUsersResponse from './inviteGroupUsers.json';
@@ -77,7 +79,7 @@ const getState = () => {
       location: {
         hash: '',
         key: 'hogeho',
-        pathname: '/groups-todo',
+        pathname: '/groups-todo/1',
         search: '',
         state: undefined,
       },
@@ -279,6 +281,43 @@ describe('async actions groups', () => {
 
     // @ts-ignore
     await inviteGroupUsers(groupId, userId)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('When GROUP_WITHDRAWAL is successful, send the approved groups except the requested group_id to groupWithdrawalAction and send the response message to openTextModalAction.', async () => {
+    const groupId = 1;
+    const nextGroupId = 0;
+    const url = `http://127.0.0.1:8080/groups/${groupId}/users`;
+
+    const mockResponse = JSON.stringify(groupWithdrawalResponse);
+
+    const expectedActions = [
+      {
+        type: GroupsActions.GROUP_WITHDRAWAL,
+        payload: {
+          approvedGroups: [],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: 'グループを退会しました。',
+          open: true,
+        },
+      },
+      {
+        type: '@@router/CALL_HISTORY_METHOD',
+        payload: {
+          args: ['/todo'],
+          method: 'push',
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await groupWithdrawal(groupId, nextGroupId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
