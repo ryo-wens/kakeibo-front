@@ -53,7 +53,7 @@ const GroupWithdrawal = (props: GroupWithdrawalProps) => {
     return approvedGroup.group_id;
   });
 
-  const nextGroupIds = approvedGroupIds.filter((approvedGroupId) => {
+  const nextGroupIds: number[] = approvedGroupIds.filter((approvedGroupId) => {
     return approvedGroupId !== groupId;
   });
   const nextGroupId = nextGroupIds[0];
