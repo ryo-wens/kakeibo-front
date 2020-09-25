@@ -44,7 +44,7 @@ const TodoMenu = () => {
         </ListItemIcon>
         <ListItemText primary={'今日'} />
       </ListItem>
-      <ListItem button={true}>
+      <ListItem button={true} onClick={() => dispatch(push('/schedule-todo'))}>
         <ListItemIcon>
           <DateRangeIcon />
         </ListItemIcon>
