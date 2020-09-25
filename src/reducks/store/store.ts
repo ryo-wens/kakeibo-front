@@ -8,6 +8,7 @@ import thunk from 'redux-thunk';
 import { History } from 'history';
 import { createLogger } from 'redux-logger';
 import { modalReducer } from '../modal/reducers';
+import { budgetsReducer } from '../budgets/reducers';
 
 export default function createStore(history: History) {
   const logger = createLogger({
@@ -23,6 +24,7 @@ export default function createStore(history: History) {
       groups: groupsReducer,
       transactions: transactionsReducer,
       modal: modalReducer,
+      budgets: budgetsReducer,
     }),
     applyMiddleware(routerMiddleware(history), thunk, logger)
   );
