@@ -6,6 +6,9 @@ const initialState = {
   transactions: {
     transactionsList: [],
   },
+  budgets: {
+    standard_budgets_list: [],
+  },
   users: {
     user_id: '',
     user_name: '',
