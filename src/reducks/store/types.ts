@@ -2,6 +2,7 @@ import { Categories } from '../categories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
 import { StandardBudgetsList } from '../budgets/types';
+import { TodoLists } from '../todoLists/types';
 
 export interface State {
   categories: {
@@ -22,6 +23,11 @@ export interface State {
   groups: {
     approvedGroups: Groups;
     unapprovedGroups: Groups;
+    message: string;
+  };
+  todoLists: {
+    implementationTodoList: TodoLists;
+    dueTodoList: TodoLists;
     message: string;
   };
   modal: {
