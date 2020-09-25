@@ -1,6 +1,7 @@
 import { Categories } from '../categories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
+import { StandardBudgetsList } from '../budgets/types';
 
 export interface State {
   categories: {
@@ -9,6 +10,9 @@ export interface State {
   };
   transactions: {
     transactionsList: TransactionsList;
+  };
+  budgets: {
+    standard_budgets_list: StandardBudgetsList;
   };
   users: {
     user_id: string;
