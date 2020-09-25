@@ -30,7 +30,7 @@ const GroupTodo = () => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
       dispatch(fetchGroups());
     }
-  }, [approvedGroups, unapprovedGroups]);
+  }, []);
 
   useEffect(() => {
     dispatch(fetchGroups());
