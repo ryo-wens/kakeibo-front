@@ -98,6 +98,7 @@ export const createGroup = (groupName: string) => {
         const nextApprovedGroups = [...prevApprovedGroups, newGroup];
 
         dispatch(createGroupAction(nextApprovedGroups));
+        dispatch(push('/group-todo/' + res.data.group_id));
       });
   };
 };

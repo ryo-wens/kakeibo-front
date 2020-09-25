@@ -134,6 +134,13 @@ describe('async actions groups', () => {
           ],
         },
       },
+      {
+        type: '@@router/CALL_HISTORY_METHOD',
+        payload: {
+          args: ['/group-todo/3'],
+          method: 'push',
+        },
+      },
     ];
 
     axiosMock.onPost(url, mockRequest).reply(200, mockResponse);
