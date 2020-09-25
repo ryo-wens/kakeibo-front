@@ -4,12 +4,17 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { addTransactions, editTransactions } from '../../src/reducks/transactions/operations';
+import {
+  addTransactions,
+  editTransactions,
+  deleteTransactions,
+} from '../../src/reducks/transactions/operations';
 import transactionsList from './transactions.json';
 import addResTransaction from './addResponse.json';
 import addTransactionsList from './addTransactions.json';
 import editResTransaction from './editResponse.json';
 import editTransactionsList from './editTransactions.json';
+import deleteResTransaction from './deleteReponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -85,7 +90,7 @@ describe('async actions addTransactions', () => {
 });
 
 describe('async actions editTransactions', () => {
-  const store = mockStore({ transactionsList });
+  const store = mockStore({ addTransactionsList });
 
   let now: Date;
   let spiedDate: Date;
@@ -152,5 +157,44 @@ describe('async actions editTransactions', () => {
       getState
     );
     expect(store.getActions()).toEqual(expectedEditActions);
+  });
+});
+
+describe('async actions deleteTransactions', () => {
+  const store = mockStore({ editTransactionsList });
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Delete transactionsData in transactionsList if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        transactions: {
+          transactionsList: editTransactionsList.transactions_list,
+        },
+      };
+    };
+
+    const id = 47;
+    const url = `http://127.0.0.1:8081/transactions/${id}`;
+
+    const mockResTransaction = deleteResTransaction.message;
+
+    const mockTransactionsList = transactionsList.transactions_list;
+
+    const expectedDeleteActions = [
+      {
+        type: actionTypes.UPDATE_TRANSACTIONS,
+        payload: mockTransactionsList,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResTransaction);
+    window.alert = jest.fn(() => mockResTransaction);
+
+    // @ts-ignore
+    await deleteTransactions(47)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedDeleteActions);
+    expect(window.alert).toHaveBeenCalled();
   });
 });

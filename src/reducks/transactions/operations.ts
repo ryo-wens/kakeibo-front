@@ -28,6 +28,10 @@ interface transactionsRes {
   custom_category_name: string | null;
 }
 
+interface deleteTransactionRes {
+  message: string;
+}
+
 const isValidAmountFormat = (amount: string) => {
   const regex = /^([1-9]\d*|0)$/;
   return regex.test(amount);
@@ -167,14 +171,14 @@ export const deleteTransactions = (id: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     const transactionsList = getState().transactions.transactionsList;
     await axios
-      .delete<transactionsRes>(`http://127.0.0.1:8081/transactions/${id}`, {
+      .delete<deleteTransactionRes>(`http://127.0.0.1:8081/transactions/${id}`, {
         withCredentials: true,
       })
       .then((res) => {
         const message = res.data;
 
         const nextTransactionsList = transactionsList.filter((transaction) => {
-          if (transaction.id === id) {
+          if (transaction.id !== id) {
             return transaction;
           }
         });

@@ -15,10 +15,10 @@ export const fetchTransactions = (
 
 export const UPDATE_TRANSACTIONS = 'UPDATE_TRANSACTIONS';
 export const updateTransactionsAction = (
-  transactionList: TransactionsList
+  transactionsList: TransactionsList
 ): { type: string; payload: TransactionsList } => {
   return {
     type: UPDATE_TRANSACTIONS,
-    payload: transactionList,
+    payload: transactionsList,
   };
 };
