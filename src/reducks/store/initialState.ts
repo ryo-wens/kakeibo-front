@@ -19,6 +19,11 @@ const initialState = {
     unapprovedGroups: [],
     message: '',
   },
+  groupsTodoLists: {
+    implementationTodoList: [],
+    dueTodoList: [],
+    message: '',
+  },
   modal: {
     message: '',
     open: false,
