@@ -1,19 +1,25 @@
 import React from 'react';
+import { AddTodo, TodoListItem } from './index';
 
-function TodayDate() {
-  const today: Date = new Date();
-  // console.log(today);
-  const month = today.getMonth() + 1;
-  const date = today.getDate();
-  const day = today.getDay();
+const TodayDate = () => {
+  const dt: Date = new Date();
+  const month = dt.getMonth() + 1;
+  const day = dt.getDate();
+  const dateT = ['日', '月', '火', '水', '木', '金', '土'];
+  const date = dateT[dt.getDay()];
+  const groupId = 0;
 
   return (
-    <div>
+    <>
       <span>
-        今日 {month}/{date} ({day})
+        今日 {month}/{day} ({date})
       </span>
-    </div>
+      <TodoListItem />
+      <div>
+        <AddTodo groupId={groupId} />
+      </div>
+    </>
   );
-}
+};
 
 export default TodayDate;
