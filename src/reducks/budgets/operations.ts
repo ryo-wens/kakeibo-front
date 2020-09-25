@@ -1,4 +1,4 @@
-import { fetchStandardBudgets } from './actions';
+import { updateStandardBudgets } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
@@ -7,7 +7,7 @@ interface fetchBudgetsRes {
   standard_budgets: [];
 }
 
-export const fetchBudgets = () => {
+export const fetchStandardBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<fetchBudgetsRes>('http://127.0.0.1:8081/standard-budgets', {
@@ -15,7 +15,7 @@ export const fetchBudgets = () => {
       })
       .then((res) => {
         const standardBudgetsList = res.data.standard_budgets;
-        dispatch(fetchStandardBudgets(standardBudgetsList));
+        dispatch(updateStandardBudgets(standardBudgetsList));
       })
       .catch((error) => {
         if (error.response.status === 401) {

@@ -4,8 +4,9 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { fetchBudgets } from '../../src/reducks/budgets/operations';
+import { fetchStandardBudgets } from '../../src/reducks/budgets/operations';
 import standardBudgets from './fetchBudgetsResponse.json';
+import { UPDATE_STANDARD_BUDGETS } from '../../src/reducks/budgets/actions';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -21,14 +22,14 @@ describe('async actions fetchBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.FETCH_STANDARD_BUDGETS,
+        type: actionTypes.UPDATE_STANDARD_BUDGETS,
         payload: mockStandardBudgets.standard_budgets,
       },
     ];
 
     axiosMock.onGet(url).reply(200, mockStandardBudgets);
 
-    await fetchBudgets()(store.dispatch);
+    await fetchStandardBudgets()(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
