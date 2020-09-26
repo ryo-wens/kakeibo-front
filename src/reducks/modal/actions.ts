@@ -1,4 +1,4 @@
-export type modalAction = ReturnType<typeof openTextModalAction>;
+export type modalActions = ReturnType<typeof openTextModalAction>;
 
 export const OPEN_TEXT_MODAL = 'OPEN_TEXT_MODAL';
 export const openTextModalAction = (message: string) => {

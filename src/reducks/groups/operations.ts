@@ -7,8 +7,6 @@ import {
   inviteGroupParticipateAction,
   groupWithdrawalAction,
 } from './actions';
-import React, { useMemo } from 'react';
-
 import { Dispatch, Action } from 'redux';
 import axios from 'axios';
 import { Group, Groups, GroupUser } from './types';
