@@ -11,3 +11,7 @@ export const getYearlyBudgets = createSelector(
   [budgetsSelector],
   (state) => state.yearly_budgets_list
 );
+export const getCustomBudgets = createSelector(
+  [budgetsSelector],
+  (state) => state.custom_budgets_list
+);
