@@ -7,6 +7,7 @@ import {
   LogIn,
   Home,
   SelectBigCategory,
+  ScheduleTodo,
   InputCustomCategory,
 } from './templates';
 
@@ -16,6 +17,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/group-todo/:id'} component={GroupTodo} />
       <Route exact path={'/todo'} component={Todo} />
       <Route exact path={'/signup'} component={SignUp} />
+      <Route exact path={'/schedule-todo'} component={ScheduleTodo} />
       <Route exact path={'/login'} component={LogIn} />
       <Route exact path={'/'} component={Home} />
       <Route exact path={'/big-categories'} component={SelectBigCategory} />
