@@ -1,5 +1,5 @@
 import { StandardBudgetsList, FetchYearlyBudgetsList } from './types';
-export type budgetsActions = ReturnType<typeof updateStandardBudgets>;
+export type budgetsActions = ReturnType<typeof updateStandardBudgets | typeof fetchYearlyBudgets>;
 
 export const UPDATE_STANDARD_BUDGETS = 'UPDATE_STANDARD_BUDGETS';
 export const updateStandardBudgets = (
