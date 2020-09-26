@@ -9,6 +9,16 @@ export const budgetsReducer = (state = initialState.budgets, action: budgetsActi
         ...state,
         standard_budgets_list: [...action.payload],
       };
+    case Actions.FETCH_YEARLY_BUDGETS:
+      return {
+        ...state,
+        yearly_budgets_list: action.payload,
+      };
+    case Actions.UPDATE_CUSTOM_BUDGETS:
+      return {
+        ...state,
+        custom_budgets_list: [...action.payload],
+      };
     default:
       return state;
   }

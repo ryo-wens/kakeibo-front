@@ -1,8 +1,7 @@
 import { Categories } from '../categories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
-import { StandardBudgetsList } from '../budgets/types';
-import { FetchYearlyBudgetsList } from '../budgets/types';
+import { StandardBudgetsList, FetchYearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import { TodoLists } from '../todoLists/types';
 
 export interface State {
@@ -16,6 +15,7 @@ export interface State {
   budgets: {
     standard_budgets_list: StandardBudgetsList;
     yearly_budgets_list: FetchYearlyBudgetsList;
+    custom_budgets_list: CustomBudgetsList;
   };
   users: {
     user_id: string;
