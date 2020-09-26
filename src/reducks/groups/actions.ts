@@ -1,5 +1,5 @@
 import { Groups } from './types';
-export type groupAction = ReturnType<
+export type groupActions = ReturnType<
   | typeof createGroupAction
   | typeof updateGroupNameAction
   | typeof fetchGroupsAction

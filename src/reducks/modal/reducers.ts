@@ -1,8 +1,8 @@
 import * as Actions from './actions';
-import { modalAction } from './actions';
+import { modalActions } from './actions';
 import initialState from '../store/initialState';
 
-export const modalReducer = (state = initialState.modal, action: modalAction) => {
+export const modalReducer = (state = initialState.modal, action: modalActions) => {
   switch (action.type) {
     case Actions.OPEN_TEXT_MODAL:
       return {

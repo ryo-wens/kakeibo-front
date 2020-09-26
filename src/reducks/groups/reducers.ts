@@ -1,8 +1,8 @@
 import * as Actions from './actions';
-import { groupAction } from './actions';
+import { groupActions } from './actions';
 import initialState from '../store/initialState';
 
-export const groupsReducer = (state = initialState.groups, action: groupAction) => {
+export const groupsReducer = (state = initialState.groups, action: groupActions) => {
   switch (action.type) {
     case Actions.CREATE_GROUP:
       return {
