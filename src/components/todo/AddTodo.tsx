@@ -1,10 +1,12 @@
 import React, { useCallback, useState, useEffect } from 'react';
 import 'date-fns';
-import { TaskTextFields, TodoButton } from './index';
+import { TodoButton } from './index';
 import { AddButton } from '../uikit';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
+import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
+import DateFnsUtils from '@date-io/date-fns';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,7 +34,9 @@ const AddTodo = (props: AddTodoProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [todo, setTodo] = useState<string>('');
-
+  const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
+    new Date()
+  );
   const handleOpen = () => {
     setOpen(true);
   };
@@ -40,6 +44,17 @@ const AddTodo = (props: AddTodoProps) => {
   const handleClose = () => {
     setOpen(false);
     setTodo('');
+  };
+
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
+
+  const handleImplementationDateChange = (date: Date | null) => {
+    setSelectedImplementationDate(date);
+    setSelectedDueDate(date);
+  };
+
+  const handleDueDateChange = (date: Date | null) => {
+    setSelectedDueDate(date);
   };
 
   useEffect(() => {
@@ -72,7 +87,28 @@ const AddTodo = (props: AddTodoProps) => {
                 disabled={false}
                 onClick={() => console.log('クリック')}
               />
-              <TodoButton label={'期限'} disabled={false} onClick={() => console.log('クリック')} />
+              <MuiPickersUtilsProvider utils={DateFnsUtils}>
+                <KeyboardDatePicker
+                  margin="normal"
+                  id="date-picker-dialog"
+                  label="実施日"
+                  format="yyyy年 MM月dd日"
+                  value={selectedImplementationDate}
+                  onChange={handleImplementationDateChange}
+                  minDate={new Date()}
+                  required={true}
+                />
+                <KeyboardDatePicker
+                  margin="normal"
+                  id="date-picker-dialog"
+                  label="期限日"
+                  format="yyyy年 MM月dd日"
+                  value={selectedDueDate}
+                  onChange={handleDueDateChange}
+                  minDate={selectedImplementationDate}
+                  required={true}
+                />
+              </MuiPickersUtilsProvider>
             </div>
           </Box>
 
