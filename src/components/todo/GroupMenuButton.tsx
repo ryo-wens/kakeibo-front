@@ -1,10 +1,10 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { EditGroupMembers, EditGroupName, GroupWithdrawal } from './index';
 import { Group } from '../../reducks/groups/types';
+import { IconButton } from '@material-ui/core';
 
 interface MenuButtonProps {
   approvedGroup: Group;
@@ -23,9 +23,9 @@ const GroupMenuButton = (props: MenuButtonProps) => {
 
   return (
     <>
-      <Button aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
         <MoreHorizIcon />
-      </Button>
+      </IconButton>
       <Menu
         id="simple-menu"
         anchorEl={anchorEl}
@@ -39,7 +39,7 @@ const GroupMenuButton = (props: MenuButtonProps) => {
           approvedGroup={props.approvedGroup}
         />
         <EditGroupMembers modalTitleLabel={'メンバーの編集'} approvedGroup={props.approvedGroup} />
-        <GroupWithdrawal approvedGroup={props.approvedGroup}/>
+        <GroupWithdrawal approvedGroup={props.approvedGroup} />
         <MenuItem onClick={handleClose}>グループを削除</MenuItem>
       </Menu>
     </>
