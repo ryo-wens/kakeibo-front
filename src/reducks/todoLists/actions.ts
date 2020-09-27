@@ -1,13 +1,13 @@
-import { TodoList } from './types';
+import { TodoLists } from './types';
 export type todoListsActions = ReturnType<typeof createTodoAction>;
 
 export const CREATE_TODO = 'CREATE_TODO';
-export const createTodoAction = (implementationTodoList: TodoList, dueTodoList: TodoList) => {
+export const createTodoAction = (implementationTodoList: TodoLists, dueTodoList: TodoLists) => {
   return {
     type: CREATE_TODO,
     payload: {
-      implementationTodoList: implementationTodoList,
-      dueTodoList: dueTodoList,
+      implementationTodoLists: implementationTodoList,
+      dueTodoLists: dueTodoList,
     },
   };
 };

@@ -22,8 +22,8 @@ const initialState = {
     message: '',
   },
   todoLists: {
-    implementationTodoList: [],
-    dueTodoList: [],
+    implementationTodoLists: [],
+    dueTodoLists: [],
     message: '',
   },
   modal: {
