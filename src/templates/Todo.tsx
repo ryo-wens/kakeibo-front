@@ -4,9 +4,9 @@ import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import { TodayDate, TodoMenu } from '../components/todo';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
+import { createStyles, makeStyles } from '@material-ui/core/styles';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
     root: {
       margin: '40px 0px 0px 200px',

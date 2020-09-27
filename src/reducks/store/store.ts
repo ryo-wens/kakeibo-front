@@ -14,7 +14,7 @@ import { todoListsReducer } from '../todoLists/reducers';
 interface ExtendedWindow extends Window {
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
 }
-declare var window: ExtendedWindow;
+declare const window: ExtendedWindow;
 
 const composeEnhancers =
   (typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;

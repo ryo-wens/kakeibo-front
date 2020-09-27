@@ -9,7 +9,6 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { createTodo } from '../../reducks/todoLists/operations';
-import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
