@@ -28,8 +28,8 @@ export interface State {
     message: string;
   };
   todoLists: {
-    implementationTodoList: TodoLists;
-    dueTodoList: TodoLists;
+    implementationTodoLists: TodoLists;
+    dueTodoLists: TodoLists;
     message: string;
   };
   modal: {

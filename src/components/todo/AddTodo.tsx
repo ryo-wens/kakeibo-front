@@ -7,6 +7,9 @@ import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
+import { useDispatch } from 'react-redux';
+import { createTodo } from '../../reducks/todoLists/operations';
+import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,21 +35,22 @@ interface AddTodoProps {
 
 const AddTodo = (props: AddTodoProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
-  const [todo, setTodo] = useState<string>('');
+  const [todoContent, setTodoContent] = useState<string>('');
   const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
     new Date()
   );
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
+
   const handleOpen = () => {
     setOpen(true);
   };
 
   const handleClose = () => {
     setOpen(false);
-    setTodo('');
+    setTodoContent('');
   };
-
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
 
   const handleImplementationDateChange = (date: Date | null) => {
     setSelectedImplementationDate(date);
@@ -63,9 +67,9 @@ const AddTodo = (props: AddTodoProps) => {
 
   const inputTodo = useCallback(
     (event) => {
-      setTodo(event.target.value);
+      setTodoContent(event.target.value);
     },
-    [setTodo]
+    [setTodoContent]
   );
 
   return (
@@ -78,7 +82,7 @@ const AddTodo = (props: AddTodoProps) => {
               id="filled-basic"
               variant="outlined"
               type={'text'}
-              value={todo}
+              value={todoContent}
               onChange={inputTodo}
             />
             <div className={classes.buttons} style={{ justifyContent: 'flex-end' }}>
@@ -116,7 +120,9 @@ const AddTodo = (props: AddTodoProps) => {
             <TodoButton
               label={'Todoを追加'}
               disabled={false}
-              onClick={() => console.log('クリック')}
+              onClick={() =>
+                dispatch(createTodo(selectedImplementationDate, selectedDueDate, todoContent))
+              }
             />
             <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
           </div>
