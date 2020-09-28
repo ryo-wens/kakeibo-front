@@ -155,7 +155,7 @@ export const logIn = (email: string, password: string) => {
       .post<LoginRes>('http://127.0.0.1:8080/login', JSON.stringify(data), {
         withCredentials: true,
       })
-      .then((res) => {
+      .then(() => {
         dispatch(logInAction(email));
         dispatch(push('/'));
       })
