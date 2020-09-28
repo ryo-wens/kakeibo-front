@@ -8,7 +8,7 @@ import TextField from '@material-ui/core/TextField';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
-import { createTodo } from '../../reducks/todoLists/operations';
+import { createTodoListItem } from '../../reducks/todoLists/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -120,7 +120,9 @@ const AddTodo = (props: AddTodoProps) => {
               label={'Todoを追加'}
               disabled={false}
               onClick={() =>
-                dispatch(createTodo(selectedImplementationDate, selectedDueDate, todoContent))
+                dispatch(
+                  createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent)
+                )
               }
             />
             <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
