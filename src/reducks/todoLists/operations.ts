@@ -1,11 +1,11 @@
 import { Dispatch, Action } from 'redux';
 import { State } from '../store/types';
 import axios from 'axios';
-import { createTodoAction } from './actions';
-import { createTodoReq, createTodoRes, TodoListItem, TodoLists } from './types';
+import { createTodoListItemAction } from './actions';
+import { createTodoListItemReq, createTodoListItemRes, TodoListItem, TodoLists } from './types';
 import { push } from 'connected-react-router';
 
-export const createTodo = (
+export const createTodoListItem = (
   implementationDate: Date | null,
   dueDate: Date | null,
   todoContent: string
@@ -21,14 +21,14 @@ export const createTodo = (
       return;
     }
 
-    const data: createTodoReq = {
+    const data: createTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
       todo_content: todoContent,
     };
 
     await axios
-      .post<createTodoRes>('http://127.0.0.1:8082/todo-list', JSON.stringify(data), {
+      .post<createTodoListItemRes>('http://127.0.0.1:8082/todo-list', JSON.stringify(data), {
         withCredentials: true,
       })
       .then((res) => {
@@ -43,7 +43,7 @@ export const createTodo = (
         ];
         const newDueTodoLists: TodoLists = [...prevDueTodoLists, todoListItem];
 
-        dispatch(createTodoAction(newImplementationTodoLists, newDueTodoLists));
+        dispatch(createTodoListItemAction(newImplementationTodoLists, newDueTodoLists));
       })
       .catch((error) => {
         if (error.response.status === 400) {
