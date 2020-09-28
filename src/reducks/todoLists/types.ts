@@ -9,13 +9,13 @@ export interface TodoListItem {
 
 export interface TodoLists extends Array<TodoListItem> {}
 
-export interface createTodoReq {
+export interface createTodoListItemReq {
   implementation_date: Date | null;
   due_date: Date | null;
   todo_content: string;
 }
 
-export interface createTodoRes {
+export interface createTodoListItemRes {
   id: number;
   posted_date: string;
   implementation_date: string;
