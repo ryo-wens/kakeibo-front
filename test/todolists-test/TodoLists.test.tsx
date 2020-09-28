@@ -114,7 +114,6 @@ describe('async actions todoLists', () => {
 
     // @ts-ignore
     await createTodoListItem(implementationDate, dueDate, todoContent)(store.dispatch, getState);
-    console.log(store.getActions());
     expect(store.getActions()).toEqual(expectedAction);
   });
 });
