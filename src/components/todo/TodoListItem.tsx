@@ -4,6 +4,7 @@ import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Checkbox } from '@material-ui/core';
+import { TodoListItemMenuButton } from './index';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -44,7 +45,7 @@ const TodoListItem = () => {
             <Checkbox color="primary" onClick={() => handleChange()} checked={checked} />
             <ListItemText className={strikethrough} secondary={'買い物へゆく。'} />
           </ListItem>
-          <button />
+          <TodoListItemMenuButton />
         </div>
       </List>
     </>
