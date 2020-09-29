@@ -32,3 +32,19 @@ export const fetchDateTodoListsAction = (
     },
   };
 };
+
+export const FETCH_MONTH_TODO_LISTS = 'FETCH_MONTH_TODO_LISTS';
+export const fetchMonthTodoListsAction = (
+  implementationTodoLists: TodoLists,
+  dueTodoLists: TodoLists,
+  message: string
+) => {
+  return {
+    type: FETCH_DATE_TODO_LISTS,
+    payload: {
+      implementationTodoLists: implementationTodoLists,
+      dueTodoLists: dueTodoLists,
+      message: message,
+    },
+  };
+};
