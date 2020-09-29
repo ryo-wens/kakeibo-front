@@ -5,6 +5,7 @@ import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import {
+  fetchTransactionsList,
   addTransactions,
   editTransactions,
   deleteTransactions,
@@ -20,6 +21,31 @@ const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 process.on('unhandledRejection', console.dir);
+
+describe('async actions fetchTransactionsList', () => {
+  const store = mockStore({ transactionsList: [] });
+  const url = 'http://127.0.0.1:8081/transactions/2020-07';
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Get transactionsList if fetch succeeds', async () => {
+    const fetchResTransactions = transactionsList;
+
+    const expectedAddActions = [
+      {
+        type: actionTypes.FETCH_TRANSACTIONS,
+        payload: fetchResTransactions.transactions_list,
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, fetchResTransactions);
+
+    await fetchTransactionsList()(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAddActions);
+  });
+});
 
 describe('async actions addTransactions', () => {
   const store = mockStore({ transactionsList });
