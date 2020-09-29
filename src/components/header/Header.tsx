@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
-import ComputerIcon from '@material-ui/icons/Computer';
+import MoneyIcon from '@material-ui/icons/Money';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import GroupIcon from '@material-ui/icons/Group';
@@ -87,8 +87,13 @@ const Header = () => {
             <Button size="large" className={classes.button} startIcon={<HistoryIcon />}>
               履歴
             </Button>
-            <Button size="large" className={classes.button} startIcon={<ComputerIcon />}>
-              分析
+            <Button
+              size="large"
+              className={classes.button}
+              startIcon={<MoneyIcon />}
+              onClick={() => dispatch(push('/standard-budgets'))}
+            >
+              予算
             </Button>
             <Button size="large" className={classes.button} startIcon={<CreditCardIcon />}>
               集計
