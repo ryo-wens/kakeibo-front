@@ -26,3 +26,11 @@ export interface StandardBudgetsList extends Array<StandardBudget> {}
 export interface MonthlyBudgetsList extends Array<MonthlyBudget> {}
 export interface FetchYearlyBudgetsList extends Array<FetchYearlyBudget> {}
 export interface CustomBudgetsList extends Array<CustomBudget> {}
+
+export interface fetchStandardBudgetsRes {
+  standard_budgets: [];
+}
+
+export interface fetchCustomBudgetsRes {
+  custom_budgets: [];
+}
