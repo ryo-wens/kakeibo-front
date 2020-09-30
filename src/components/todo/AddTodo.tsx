@@ -71,6 +71,8 @@ const AddTodo = (props: AddTodoProps) => {
     [setTodoContent]
   );
 
+  const isBlankTodoContent = todoContent === '';
+
   return (
     <>
       {open ? (
@@ -118,11 +120,11 @@ const AddTodo = (props: AddTodoProps) => {
           <div className={classes.buttons}>
             <TodoButton
               label={'Todoを追加'}
-              disabled={false}
+              disabled={isBlankTodoContent}
               onClick={() =>
                 dispatch(
                   createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent)
-                )
+                ) && handleClose()
               }
             />
             <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
