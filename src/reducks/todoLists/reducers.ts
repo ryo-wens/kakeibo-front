@@ -14,6 +14,11 @@ export const todoListsReducer = (state = initialState.todoLists, action: todoLis
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_MONTH_TODO_LISTS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

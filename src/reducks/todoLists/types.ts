@@ -23,3 +23,9 @@ export interface createTodoListItemRes {
   todo_content: string;
   complete_flag: boolean;
 }
+
+export interface fetchTodayTodoListsRes {
+  implementation_todo_list: TodoLists;
+  due_todo_list: TodoLists;
+  message: string;
+}
