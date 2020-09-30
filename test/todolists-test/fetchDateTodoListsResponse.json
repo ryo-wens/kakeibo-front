@@ -1,0 +1,22 @@
+{
+  "implementation_todo_list": [
+    {
+      "id": 1,
+      "posted_date": "2020-09-27T19:54:46Z",
+      "implementation_date": "09/27(日)",
+      "due_date": "09/28(月)",
+      "todo_content": "食器用洗剤2つ購入",
+      "complete_flag": false
+    }
+  ],
+  "due_todo_list": [
+    {
+      "id": 1,
+      "posted_date": "2020-09-27T19:54:46Z",
+      "implementation_date": "09/27(日)",
+      "due_date": "09/28(月)",
+      "todo_content": "食器用洗剤2つ購入",
+      "complete_flag": false
+    }
+  ]
+}
