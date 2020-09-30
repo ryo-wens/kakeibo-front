@@ -67,7 +67,7 @@ const StandardBudgets = () => {
     if (standardBudgets.length === 0) {
       dispatch(fetchStandardBudgets());
     }
-  }, [setBudget]);
+  }, []);
 
   const inputBudget = useCallback(
     (event) => {
