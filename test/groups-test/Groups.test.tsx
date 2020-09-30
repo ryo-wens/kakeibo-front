@@ -14,13 +14,13 @@ import {
   inviteGroupUsers,
   updateGroupName,
 } from '../../src/reducks/groups/operations';
-import createGroupResponse from './createGroup.json';
-import fetchGroupsResponse from './fetchGroups.json';
-import groupWithdrawalResponse from './groupWithdrawal.json';
-import inviteGroupParticipateResponse from './inviteGroupParticipate.json';
-import inviteGroupRejectResponse from './inviteGroupReject.json';
-import inviteGroupUsersResponse from './inviteGroupUsers.json';
-import updateGroupNameResponse from './updateGroupName.json';
+import createGroupResponse from './createGroupResponse.json';
+import fetchGroupsResponse from './fetchGroupsResponse.json';
+import groupWithdrawalResponse from './groupWithdrawalResponse.json';
+import inviteGroupParticipateResponse from './inviteGroupParticipateResponse.json';
+import inviteGroupRejectResponse from './inviteGroupRejectResponse.json';
+import inviteGroupUsersResponse from './inviteGroupUsersResponse.json';
+import updateGroupNameResponse from './updateGroupNameResponse.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
