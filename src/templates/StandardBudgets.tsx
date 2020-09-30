@@ -61,7 +61,7 @@ const StandardBudgets = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const standardBudgets = selector.budgets.standard_budgets_list;
-  const [budget, setBudget] = useState<string[]>(['']);
+  const [budget, setBudget] = useState<StandardBudgetsList>();
 
   useEffect(() => {
     if (standardBudgets.length === 0) {
@@ -92,11 +92,10 @@ const StandardBudgets = () => {
               id={'budgets'}
               variant="outlined"
               type={'tell'}
+              defaultValue={standardBudget.budget}
               value={budget}
               onChange={inputBudget}
-            >
-              {standardBudget.budget}
-            </TextField>
+            />
           </TableCell>
         </TableRow>,
       ];
