@@ -2,15 +2,7 @@ import { updateStandardBudgets, fetchYearlyBudgets, updateCustomBudgets } from '
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
-import { FetchYearlyBudgetsList } from './types';
-
-interface fetchStandardBudgetsRes {
-  standard_budgets: [];
-}
-
-interface fetchCustomBudgetsRes {
-  custom_budgets: [];
-}
+import { FetchYearlyBudgetsList, fetchStandardBudgetsRes, fetchCustomBudgetsRes } from './types';
 
 export const fetchStandardBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {

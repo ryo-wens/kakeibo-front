@@ -5,6 +5,8 @@ import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import { TodayDate, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { getDueTodoLists, getImplementationTodoLists } from '../reducks/todoLists/selectors';
+import { fetchDateTodoLists } from '../reducks/todoLists/operations';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,10 +22,22 @@ const Todo = () => {
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
+  const implementationTodoLists = getImplementationTodoLists(selector);
+  const dueTodoLists = getDueTodoLists(selector);
+  const dt: Date = new Date();
+  const year = String(dt.getFullYear());
+  const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
+  const date: string = ('0' + dt.getDate()).slice(-2);
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
       dispatch(fetchGroups());
+    }
+  }, []);
+
+  useEffect(() => {
+    if (implementationTodoLists.length === 0 && dueTodoLists.length === 0) {
+      dispatch(fetchDateTodoLists(year, month, date));
     }
   }, []);
 

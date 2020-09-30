@@ -1,40 +1,48 @@
-import { updateTransactionsAction } from './actions';
+import { fetchTransactions, updateTransactionsAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import { State } from '../store/types';
-
-interface transactionsReq {
-  transaction_type: string;
-  transaction_date: Date | null;
-  shop: string | null;
-  memo: string | null;
-  amount: string | number;
-  big_category_id: number;
-  medium_category_id: number | null;
-  custom_category_id: number | null;
-}
-
-interface transactionsRes {
-  id: number;
-  transaction_type: string;
-  updated_date: Date;
-  transaction_date: string;
-  shop: string | null;
-  memo: string | null;
-  amount: number;
-  big_category_name: string;
-  medium_category_name: string | null;
-  custom_category_name: string | null;
-}
-
-interface deleteTransactionRes {
-  message: string;
-}
+import {
+  fetchTransactionsRes,
+  transactionsReq,
+  transactionsRes,
+  deleteTransactionRes,
+} from './types';
 
 const isValidAmountFormat = (amount: string) => {
   const regex = /^([1-9]\d*|0)$/;
   return regex.test(amount);
+};
+
+export const fetchTransactionsList = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    await axios
+      .get<fetchTransactionsRes>('http://127.0.0.1:8081/transactions/2020-07', {
+        withCredentials: true,
+      })
+      .then((res) => {
+        if (res.data.message) {
+          alert(res.data.message);
+        } else {
+          const transactionsList = res.data.transactions_list;
+          dispatch(fetchTransactions(transactionsList));
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          alert(error.response.data.error.message);
+        }
+
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message);
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+        }
+      });
+  };
 };
 
 export const addTransactions = (

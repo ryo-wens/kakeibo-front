@@ -2,41 +2,16 @@ import { updateIncomeCategoriesAction, updateExpenseCategoriesAction } from './a
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
-import { Category } from './types';
+import {
+  Category,
+  fetchCategoriesRes,
+  addCustomReq,
+  addCustomRes,
+  editCustomReq,
+  editCustomRes,
+  deleteCustomRes,
+} from './types';
 import { State } from '../store/types';
-
-interface fetchCategoriesRes {
-  income_categories_list: [];
-  expense_categories_list: [];
-}
-
-interface addCustomReq {
-  name: string;
-  big_category_id: number;
-}
-
-interface addCustomRes {
-  category_type: string;
-  id: number;
-  name: string;
-  big_category_id: number;
-}
-
-interface editCustomReq {
-  name: string;
-  big_category_id: number;
-}
-
-interface editCustomRes {
-  category_type: string;
-  id: number;
-  name: string;
-  big_category_id: number;
-}
-
-interface deleteCustomRes {
-  message: string;
-}
 
 export const fetchCategories = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {

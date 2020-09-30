@@ -32,7 +32,7 @@ interface updateGroupNameRes {
   group_name: string;
 }
 
-interface fetchGroupRes {
+interface fetchGroupsRes {
   approved_group_list: Groups;
   unapproved_group_list: Groups;
   message: string;
@@ -139,7 +139,7 @@ export const updateGroupName = (groupId: number, groupName: string) => {
 export const fetchGroups = () => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
-      .get<fetchGroupRes>(`http://127.0.0.1:8080/groups`, {
+      .get<fetchGroupsRes>(`http://127.0.0.1:8080/groups`, {
         withCredentials: true,
       })
       .then((res) => {

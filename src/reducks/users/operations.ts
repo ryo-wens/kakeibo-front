@@ -2,39 +2,12 @@ import { signUpAction, logInAction, logOutAction } from './actions';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import axios from 'axios';
+import { SignupReq, SignupRes, LoginReq, LoginRes, LogoutRes } from './types';
 
 export const isValidEmailFormat = (email: string): boolean => {
   const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
   return regex.test(email);
 };
-
-interface SignupReq {
-  id: string;
-  name: string;
-  email: string;
-  password: string;
-}
-
-interface SignupRes {
-  id: string;
-  name: string;
-  email: string;
-}
-
-interface LoginReq {
-  email: string;
-  password: string;
-}
-
-interface LoginRes {
-  id: string;
-  name: string;
-  email: string;
-}
-
-interface LogoutRes {
-  message: string;
-}
 
 export const signUp = (
   userId: string,
