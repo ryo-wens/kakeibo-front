@@ -1,6 +1,8 @@
 import { TodoLists } from './types';
 export type todoListsActions = ReturnType<
-  typeof createTodoListItemAction | typeof fetchDateTodoListsAction
+  | typeof createTodoListItemAction
+  | typeof fetchDateTodoListsAction
+  | typeof fetchMonthTodoListsAction
 >;
 
 export const CREATE_TODO_LIST_ITEM = 'CREATE_TODO_LIST_ITEM';
@@ -40,7 +42,7 @@ export const fetchMonthTodoListsAction = (
   message: string
 ) => {
   return {
-    type: FETCH_DATE_TODO_LISTS,
+    type: FETCH_MONTH_TODO_LISTS,
     payload: {
       implementationTodoLists: implementationTodoLists,
       dueTodoLists: dueTodoLists,
