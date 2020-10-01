@@ -11,7 +11,7 @@ import {
   getTodoListsMessage,
 } from '../reducks/todoLists/selectors';
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
-import { TodoListItem } from '../reducks/todoLists/types';
+import { TodoListItem, TodoLists } from '../reducks/todoLists/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -50,6 +50,34 @@ const Todo = () => {
     }
   }, []);
 
+  const existsPlanTodoLists = (todoLists: TodoLists, planName: string) => {
+    if (todoLists.length > 0) {
+      return (
+        <>
+          <p>{planName}のTodo</p>
+          {todoLists.map((todoList: TodoListItem) => {
+            return <TodoList todoListItem={todoList} key={todoList.id} />;
+          })}
+        </>
+      );
+    } else {
+      return <p>{planName}のTodoはありません。</p>;
+    }
+  };
+
+  const existTodoLists = () => {
+    if (implementationTodoLists.length === 0 && dueTodoLists.length === 0) {
+      return <p>{todoListsMessage}</p>;
+    } else {
+      return (
+        <>
+          {existsPlanTodoLists(implementationTodoLists, '実施予定')}
+          {existsPlanTodoLists(dueTodoLists, '締切予定')}
+        </>
+      );
+    }
+  };
+
   return (
     <>
       <TodoMenu />
@@ -57,27 +85,7 @@ const Todo = () => {
         <span>
           今日 {month}/{date} ({weekday})
         </span>
-        {implementationTodoLists.length === 0 && dueTodoLists.length === 0 && (
-          <p>{todoListsMessage}</p>
-        )}
-        {implementationTodoLists.length > 0 && <p>実施予定のTodo</p>}
-        {implementationTodoLists.length > 0 ? (
-          implementationTodoLists.map((implementationTodoList: TodoListItem) => {
-            return (
-              <TodoList todoListItem={implementationTodoList} key={implementationTodoList.id} />
-            );
-          })
-        ) : (
-          <p>実施予定のTodoはありません。</p>
-        )}
-        {dueTodoLists.length > 0 && <p>締切予定のTodo</p>}
-        {dueTodoLists.length > 0 ? (
-          dueTodoLists.map((dueTodoList: TodoListItem) => {
-            return <TodoList todoListItem={dueTodoList} key={dueTodoList.id} />;
-          })
-        ) : (
-          <p>締切予定のTodoはありません。</p>
-        )}
+        {existTodoLists()}
         <div>
           <AddTodo groupId={groupId} />
         </div>
