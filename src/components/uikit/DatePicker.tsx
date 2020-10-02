@@ -19,6 +19,7 @@ class ExtendedUtils extends DateFnsUtils {
 const useStyles = makeStyles({
   root: {
     margin: '0px 8px 16px',
+    width: 'calc(83% - 16px)',
   },
 });
 
