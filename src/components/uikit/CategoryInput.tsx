@@ -20,6 +20,7 @@ const useStyles = makeStyles((theme: Theme) =>
       marginBottom: 16,
       margin: theme.spacing(1),
       minWidth: 225,
+      width: 'calc(83% - 16px)',
     },
   })
 );
@@ -39,7 +40,11 @@ interface CategoryProps {
   kind: string;
   value: string;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  onClick: (bigCategoryId: number,associatedCategoryId:number | null,category_type: string) => void;
+  onClick: (
+    bigCategoryId: number,
+    associatedCategoryId: number | null,
+    category_type: string
+  ) => void;
   required: boolean;
 }
 
@@ -65,8 +70,8 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
           ...tmpCategories,
           <MenuItem
             key={incomeCategory.name}
-            value = {incomeCategory.name}
-            onClick={() => props.onClick(incomeCategory.id,null, incomeCategory.category_type)}
+            value={incomeCategory.name}
+            onClick={() => props.onClick(incomeCategory.id, null, incomeCategory.category_type)}
           >
             {incomeCategory.name}
           </MenuItem>,
@@ -78,7 +83,9 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
             <MenuItem
               key={category.name}
               value={category.name}
-              onClick = {() => props.onClick(category.big_category_id,category.id,category.category_type)}
+              onClick={() =>
+                props.onClick(category.big_category_id, category.id, category.category_type)
+              }
             >
               {category.name}
             </MenuItem>,
@@ -94,7 +101,7 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
           <MenuItem
             key={expenseCategory.name}
             value={expenseCategory.name}
-            onClick = {() =>props.onClick(expenseCategory.id,null,expenseCategory.category_type)}
+            onClick={() => props.onClick(expenseCategory.id, null, expenseCategory.category_type)}
           >
             {expenseCategory.name}
           </MenuItem>,
@@ -106,7 +113,9 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
             <MenuItem
               key={category.name}
               value={category.name}
-              onClick={() =>props.onClick(category.big_category_id,category.id,category.category_type)}
+              onClick={() =>
+                props.onClick(category.big_category_id, category.id, category.category_type)
+              }
             >
               {category.name}
             </MenuItem>,
@@ -123,7 +132,7 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
       <InputLabel id="category" required={props.required}>
         カテゴリー(必須)
       </InputLabel>
-      <Select MenuProps={MenuProps} value={props.value} onChange = {props.onChange} >
+      <Select MenuProps={MenuProps} value={props.value} onChange={props.onChange}>
         {categories}
       </Select>
     </FormControl>
