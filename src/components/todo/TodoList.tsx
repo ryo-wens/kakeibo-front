@@ -5,6 +5,7 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Checkbox } from '@material-ui/core';
 import { TodoListItemMenuButton } from './index';
+import { TodoListItem } from '../../reducks/todoLists/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,7 +23,11 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const TodoListItem = () => {
+interface TodoListProps {
+  todoListItem: TodoListItem;
+}
+
+const TodoList = (props: TodoListProps) => {
   const classes = useStyles();
   const [checked, setChecked] = useState<boolean>(false);
   const [strikethrough, setStrikethrough] = useState<string>('');
@@ -43,7 +48,7 @@ const TodoListItem = () => {
         <div className={classes.groupMenu}>
           <ListItem>
             <Checkbox color="primary" onClick={() => handleChange()} checked={checked} />
-            <ListItemText className={strikethrough} secondary={'買い物へゆく。'} />
+            <ListItemText className={strikethrough} secondary={props.todoListItem.todo_content} />
           </ListItem>
           <TodoListItemMenuButton />
         </div>
@@ -52,4 +57,4 @@ const TodoListItem = () => {
   );
 };
 
-export default TodoListItem;
+export default TodoList;
