@@ -7,3 +7,4 @@ export { default as ScheduleTodo } from './ScheduleTodo';
 export { default as InputCustomCategory } from './InputCustomCategory';
 export { default as GroupTodo } from './GroupTodo';
 export { default as StandardBudgets } from './StandardBudgets';
+export { default as WeeklyHistory } from './WeeklyHistory';
