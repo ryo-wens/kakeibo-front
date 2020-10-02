@@ -1,10 +1,15 @@
 import { Dispatch, Action } from 'redux';
 import { State } from '../store/types';
 import axios from 'axios';
-import { createTodoListItemAction, fetchDateTodoListsAction } from './actions';
+import {
+  createTodoListItemAction,
+  fetchDateTodoListsAction,
+  fetchMonthTodoListsAction,
+} from './actions';
 import {
   createTodoListItemReq,
   createTodoListItemRes,
+  fetchMonthTodoListsRes,
   fetchTodayTodoListsRes,
   TodoListItem,
   TodoLists,
@@ -86,6 +91,43 @@ export const fetchDateTodoLists = (year: string, month: string, date: string) =>
           const implementationTodoLists: TodoLists = [];
           const dueTodoLists: TodoLists = [];
           dispatch(fetchDateTodoListsAction(implementationTodoLists, dueTodoLists, message));
+        }
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          return alert(error.response.data.error.message[0]);
+        }
+
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+        }
+      });
+  };
+};
+
+export const fetchMonthTodoLists = (year: string, month: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    await axios
+      .get<fetchMonthTodoListsRes>(`http://127.0.0.1:8082/todo-list/${year}-${month}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const implementationTodoLists = res.data.implementation_todo_list;
+        const dueTodoLists = res.data.due_todo_list;
+        const message = res.data.message;
+
+        if (implementationTodoLists !== undefined && dueTodoLists !== undefined) {
+          const message = '';
+          dispatch(fetchMonthTodoListsAction(implementationTodoLists, dueTodoLists, message));
+        } else {
+          const implementationTodoLists: TodoLists = [];
+          const dueTodoLists: TodoLists = [];
+          dispatch(fetchMonthTodoListsAction(implementationTodoLists, dueTodoLists, message));
         }
       })
       .catch((error) => {
