@@ -29,3 +29,9 @@ export interface fetchTodayTodoListsRes {
   due_todo_list: TodoLists;
   message: string;
 }
+
+export interface fetchMonthTodoListsRes {
+  implementation_todo_list: TodoLists;
+  due_todo_list: TodoLists;
+  message: string;
+}
