@@ -84,7 +84,12 @@ const Header = () => {
             </Button>
           </Typography>
           <div className={classes.sectionDesktop}>
-            <Button size="large" className={classes.button} startIcon={<HistoryIcon />}>
+            <Button
+              size="large"
+              className={classes.button}
+              startIcon={<HistoryIcon />}
+              onClick={() => dispatch(push('/history-week'))}
+            >
               履歴
             </Button>
             <Button
