@@ -44,9 +44,12 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#fff',
       margin: '0 auto',
     },
-    buttonPosition: {
+    buttonGroupPosition: {
       margin: '0 auto',
       marginLeft: '7%',
+    },
+    updateButton: {
+      textAlign: 'center',
     },
     tableTop: {
       backgroundColor: '#4db5fa',
@@ -106,7 +109,7 @@ const StandardBudgets = () => {
 
   return (
     <div className={classes.root}>
-      <ButtonGroup className={classes.buttonPosition} size="large" aria-label="budgets-kind">
+      <ButtonGroup className={classes.buttonGroupPosition} size="large" aria-label="budgets-kind">
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
           標準
         </Button>
@@ -132,7 +135,7 @@ const StandardBudgets = () => {
           <TableBody>{standardBudgetsList}</TableBody>
         </Table>
       </TableContainer>
-      <div className={classes.buttonPosition}>
+      <div className={classes.updateButton}>
         <GenericButton
           label={'更新する'}
           disabled={false}
