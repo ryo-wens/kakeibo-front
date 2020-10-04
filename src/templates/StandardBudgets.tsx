@@ -45,7 +45,8 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 auto',
     },
     buttonPosition: {
-      textAlign: 'center',
+      margin: '0 auto',
+      marginLeft: '7%',
     },
     tableTop: {
       backgroundColor: '#4db5fa',
@@ -109,7 +110,9 @@ const StandardBudgets = () => {
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
           標準
         </Button>
-        <Button className={classes.buttonSize}>月ごと</Button>
+        <Button className={classes.buttonSize} onClick={() => dispatch(push('/custom-budgets'))}>
+          月ごと
+        </Button>
       </ButtonGroup>
       <TableContainer className={classes.tablePosition} component={Paper}>
         <Table>
