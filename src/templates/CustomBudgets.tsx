@@ -79,9 +79,8 @@ const CustomBudgets = () => {
     [setYears]
   );
 
-  const year = date.getFullYear();
   const month = date.getMonth() + 1;
-  const startDate = new Date(year, month - 1, 1);
+  const startDate = new Date(years, month - 1, 1);
   const startDayCount = startDate.getDate();
   type Day = { date: number };
   type Year = Array<Day>;
