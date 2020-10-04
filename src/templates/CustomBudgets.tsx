@@ -113,7 +113,10 @@ const CustomBudgets = () => {
             ￥180,000
           </TableCell>
           <TableCell className={classes.tableSize} align="center">
-            <IconButton size={'small'} onClick={() => dispatch(push('/standard-budgets'))}>
+            <IconButton
+              size={'small'}
+              onClick={() => dispatch(push(`/custom-budgets/${years}${period.date}`))}
+            >
               <CreateIcon color={'primary'} />
             </IconButton>
           </TableCell>
