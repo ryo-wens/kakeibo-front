@@ -10,6 +10,7 @@ import {
   ScheduleTodo,
   InputCustomCategory,
   StandardBudgets,
+  CustomBudgets,
   WeeklyHistory,
 } from './templates';
 
@@ -25,6 +26,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/big-categories'} component={SelectBigCategory} />
       <Route exact path={'/custom-categories/:id'} component={InputCustomCategory} />
       <Route exact path={'/standard-budgets'} component={StandardBudgets} />
+      <Route exact path={'/custom-budgets'} component={CustomBudgets} />
       <Route exact path={'/history-week'} component={WeeklyHistory} />
     </Switch>
   );
