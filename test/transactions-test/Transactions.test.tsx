@@ -65,7 +65,7 @@ describe('async actions addTransactions', () => {
   // @ts-ignore
   spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
     if (arg === 0 || arg) {
-      return new originalDate(arg);
+      return new originalDate();
     }
     return now;
   });
@@ -128,7 +128,7 @@ describe('async actions editTransactions', () => {
   // @ts-ignore
   spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
     if (arg === 0 || arg) {
-      return new originalDate(arg);
+      return new originalDate();
     }
     return now;
   });

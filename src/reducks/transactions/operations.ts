@@ -9,6 +9,7 @@ import {
   transactionsRes,
   deleteTransactionRes,
 } from './types';
+import moment from 'moment';
 
 const isValidAmountFormat = (amount: string) => {
   const regex = /^([1-9]\d*|0)$/;
@@ -79,9 +80,18 @@ export const addTransactions = (
       custom_category_id: custom_category_id,
     };
     await axios
-      .post<transactionsRes>('http://127.0.0.1:8081/transactions', JSON.stringify(data), {
-        withCredentials: true,
-      })
+      .post<transactionsRes>(
+        'http://127.0.0.1:8081/transactions',
+        JSON.stringify(data, function (key, value) {
+          if (key === 'transaction_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const newTransaction = res.data;
 
