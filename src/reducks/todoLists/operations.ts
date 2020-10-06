@@ -15,6 +15,7 @@ import {
   TodoLists,
 } from './types';
 import { push } from 'connected-react-router';
+import moment from 'moment';
 
 export const createTodoListItem = (
   implementationDate: Date | null,
@@ -39,9 +40,20 @@ export const createTodoListItem = (
     };
 
     await axios
-      .post<createTodoListItemRes>('http://127.0.0.1:8082/todo-list', JSON.stringify(data), {
-        withCredentials: true,
-      })
+      .post<createTodoListItemRes>(
+        'http://127.0.0.1:8082/todo-list',
+        JSON.stringify(data, function (key, value) {
+          if (key === 'implementation_date') {
+            return moment(value).format();
+          } else if (key === 'due_date') {
+            return moment(value).format();
+          }
+          return value;
+        }),
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const prevImplementationTodoLists: TodoLists = getState().todoLists.implementationTodoLists;
         const prevDueTodoLists: TodoLists = getState().todoLists.dueTodoLists;
