@@ -9,7 +9,7 @@ export const todoListsReducer = (state = initialState.todoLists, action: todoLis
         ...state,
         ...action.payload,
       };
-    case Actions.EDIT_TODO_LIST:
+    case Actions.EDIT_TODO_LIST_ITEM:
       return {
         ...state,
         ...action.payload,

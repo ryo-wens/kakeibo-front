@@ -24,6 +24,22 @@ export interface createTodoListItemRes {
   complete_flag: boolean;
 }
 
+export interface editTodoListItemReq {
+  implementation_date: string;
+  due_date: string;
+  todo_content: string;
+  complete_flag: boolean;
+}
+
+export interface editTodoListItemRes {
+  id: number;
+  posted_date: string;
+  implementation_date: string;
+  due_date: string;
+  todo_content: string;
+  complete_flag: boolean;
+}
+
 export interface fetchTodayTodoListsRes {
   implementation_todo_list: TodoLists;
   due_todo_list: TodoLists;

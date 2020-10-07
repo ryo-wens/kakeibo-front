@@ -56,7 +56,6 @@ const Todo = () => {
         <>
           <p>{planName}のTodo</p>
           {todoLists.map((todoList: TodoListItem) => {
-            console.log(todoLists.length);
             return (
               <div key={todoList.id}>
                 <TodoList todoListItem={todoList} />
@@ -77,7 +76,7 @@ const Todo = () => {
       return (
         <>
           {existsPlanTodoLists(implementationTodoLists, '実施予定')}
-          {existsPlanTodoLists(dueTodoLists, '締切予定')}
+          {/*{existsPlanTodoLists(dueTodoLists, '締切予定')}*/}
         </>
       );
     }
