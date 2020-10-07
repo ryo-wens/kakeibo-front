@@ -70,15 +70,13 @@ export const fetchMonthTodoListsAction = (
 export const DELETE_TODO_LIST_ITEM = 'DELETE_TODO_LIST_ITEM';
 export const deleteTodoListItemAction = (
   implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists,
-  message: string
+  dueTodoLists: TodoLists
 ) => {
   return {
     type: DELETE_TODO_LIST_ITEM,
     payload: {
       implementationTodoLists: implementationTodoLists,
       dueTodoLists: dueTodoLists,
-      message: message,
     },
   };
 };
