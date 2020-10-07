@@ -4,6 +4,7 @@ export type todoListsActions = ReturnType<
   | typeof editTodoListItemAction
   | typeof fetchDateTodoListsAction
   | typeof fetchMonthTodoListsAction
+  | typeof deleteTodoListItemAction
 >;
 
 export const CREATE_TODO_LIST_ITEM = 'CREATE_TODO_LIST_ITEM';
@@ -58,6 +59,22 @@ export const fetchMonthTodoListsAction = (
 ) => {
   return {
     type: FETCH_MONTH_TODO_LISTS,
+    payload: {
+      implementationTodoLists: implementationTodoLists,
+      dueTodoLists: dueTodoLists,
+      message: message,
+    },
+  };
+};
+
+export const DELETE_TODO_LIST_ITEM = 'DELETE_TODO_LIST_ITEM';
+export const deleteTodoListItemAction = (
+  implementationTodoLists: TodoLists,
+  dueTodoLists: TodoLists,
+  message: string
+) => {
+  return {
+    type: DELETE_TODO_LIST_ITEM,
     payload: {
       implementationTodoLists: implementationTodoLists,
       dueTodoLists: dueTodoLists,
