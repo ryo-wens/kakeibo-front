@@ -135,7 +135,6 @@ export const editTodoListItem = (
           return prevTodoLists.map((prevTodoList: TodoListItem) => {
             if (prevTodoList.id === todoListItemId) {
               const updateTodoListItem: TodoListItem = res.data;
-              console.log(updateTodoListItem);
               return updateTodoListItem;
             } else {
               return prevTodoList;
