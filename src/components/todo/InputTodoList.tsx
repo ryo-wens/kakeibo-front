@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
-import { createTodoListItem } from '../../reducks/todoLists/operations';
+import { editTodoListItem } from '../../reducks/todoLists/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,14 +32,16 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface InputTodoListProps {
   groupId: number;
-  inputTodoContent: (event: React.ChangeEvent<HTMLInputElement>) => void;
   buttonLabel: string;
-  todoContent: string;
-  selectedImplementationDate: Date | null;
-  selectedDueDate: Date | null;
+  inputTodoContent: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inputImplementationDate: (date: Date | null) => void;
   inputDueDate: (date: Date | null) => void;
   closeInputTodoList: () => void;
+  todoListItemId: number;
+  selectedImplementationDate: Date | null;
+  selectedDueDate: Date | null;
+  todoContent: string;
+  completeFlag: boolean;
 }
 
 const InputTodoList = (props: InputTodoListProps) => {
@@ -97,10 +99,12 @@ const InputTodoList = (props: InputTodoListProps) => {
               disabled={isBlankTodoContent}
               onClick={() =>
                 dispatch(
-                  createTodoListItem(
+                  editTodoListItem(
+                    props.todoListItemId,
                     props.selectedImplementationDate,
                     props.selectedDueDate,
-                    props.todoContent
+                    props.todoContent,
+                    props.completeFlag
                   )
                 ) && props.closeInputTodoList()
               }

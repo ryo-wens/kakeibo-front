@@ -56,7 +56,6 @@ const Todo = () => {
         <>
           <p>{planName}のTodo</p>
           {todoLists.map((todoList: TodoListItem) => {
-            console.log(todoLists.length);
             return (
               <div key={todoList.id}>
                 <TodoList todoListItem={todoList} />
