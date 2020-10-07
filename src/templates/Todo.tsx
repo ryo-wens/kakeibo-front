@@ -76,7 +76,7 @@ const Todo = () => {
       return (
         <>
           {existsPlanTodoLists(implementationTodoLists, '実施予定')}
-          {/*{existsPlanTodoLists(dueTodoLists, '締切予定')}*/}
+          {existsPlanTodoLists(dueTodoLists, '締切予定')}
         </>
       );
     }

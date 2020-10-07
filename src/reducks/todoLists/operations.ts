@@ -105,7 +105,6 @@ export const editTodoListItem = (
       return;
     }
 
-    console.log(todoListItemId);
     const data = {
       implementation_date: implementationDate,
       due_date: dueDate,
