@@ -115,7 +115,10 @@ const TodoList = (props: TodoListProps) => {
             <Checkbox color="primary" checked={checked} onChange={handleChangeChecked} />
             <ListItemText className={strikethrough} secondary={props.todoListItem.todo_content} />
           </ListItem>
-          <TodoListItemMenuButton openInputTodoList={() => openInputTodoList()} />
+          <TodoListItemMenuButton
+            openInputTodoList={() => openInputTodoList()}
+            todoContent={props.todoListItem.todo_content}
+          />
         </>
       );
     } else {

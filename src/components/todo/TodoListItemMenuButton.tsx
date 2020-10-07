@@ -6,6 +6,7 @@ import { IconButton } from '@material-ui/core';
 
 interface TodoListItemMenuButtonProps {
   openInputTodoList: () => void;
+  todoContent: string;
 }
 
 const TodoListItemMenuButton = (props: TodoListItemMenuButtonProps) => {
@@ -32,7 +33,6 @@ const TodoListItemMenuButton = (props: TodoListItemMenuButtonProps) => {
         onClose={() => handleClose()}
       >
         <MenuItem onClick={() => props.openInputTodoList()}>Todoを編集</MenuItem>
-        <MenuItem onClick={() => handleClose()}>Todoを削除</MenuItem>
       </Menu>
     </>
   );
