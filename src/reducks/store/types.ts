@@ -3,6 +3,7 @@ import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
 import { StandardBudgetsList, FetchYearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import { TodoLists } from '../todoLists/types';
+import { GroupTodoLists } from '../groupTodoLists/types';
 
 export interface State {
   categories: {
@@ -30,6 +31,11 @@ export interface State {
   todoLists: {
     implementationTodoLists: TodoLists;
     dueTodoLists: TodoLists;
+    message: string;
+  };
+  groupTodoLists: {
+    implementationTodoLists: GroupTodoLists;
+    dueTodoLists: GroupTodoLists;
     message: string;
   };
   modal: {
