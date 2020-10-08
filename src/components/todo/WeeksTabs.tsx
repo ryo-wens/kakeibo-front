@@ -40,7 +40,7 @@ const WeeksTabs = (props: weeksTabsProps) => {
       const date = new Date(_startDate.setDate(_startDate.getDate() + i));
 
       _week.push(
-        <ListItem button className={classes.listItem}>
+        <ListItem button className={classes.listItem} key={i}>
           <ListItemText secondary={weekdays[i]} />
           <ListItemText primary={date.getDate()} />
         </ListItem>

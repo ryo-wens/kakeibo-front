@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TodoMenu } from '../components/todo';
+import { TodoButton, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchMonthTodoLists } from '../reducks/todoLists/operations';
@@ -14,6 +14,10 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       margin: '40px 0px 0px 200px',
+    },
+    date: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
     datePicker: {
       width: `200px`,
@@ -53,18 +57,25 @@ const ScheduleTodo = () => {
     [setSelectedDate]
   );
 
+  const getTodayDate = useCallback(() => {
+    setSelectedDate(dt);
+  }, [selectedDate]);
+
   return (
     <>
       <TodoMenu />
       <div className={classes.root}>
-        <div className={classes.datePicker}>
-          <DatePicker
-            value={selectedDate}
-            onChange={handleDateChange}
-            id={'date-picker-dialog'}
-            label={''}
-            required={false}
-          />
+        <div className={classes.date}>
+          <div className={classes.datePicker}>
+            <DatePicker
+              value={selectedDate}
+              onChange={handleDateChange}
+              id={'date-picker-dialog'}
+              label={''}
+              required={false}
+            />
+          </div>
+          <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
         <WeeksTabs selectedDate={selectedDate} />
       </div>
