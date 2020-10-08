@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { TodoButton, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
@@ -61,6 +61,20 @@ const ScheduleTodo = () => {
     setSelectedDate(dt);
   }, [selectedDate]);
 
+  const replicatedSelectedDate = new Date(dt);
+
+  const getNextWeek = useCallback(() => {
+    const nextWeek = new Date(replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() + 7));
+    setSelectedDate(nextWeek);
+  }, [setSelectedDate]);
+
+  const getPreviousWeek = useCallback(() => {
+    const previousWeek = new Date(
+      replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() - 7)
+    );
+    setSelectedDate(previousWeek);
+  }, [setSelectedDate]);
+
   return (
     <>
       <TodoMenu />
@@ -75,6 +89,8 @@ const ScheduleTodo = () => {
               required={false}
             />
           </div>
+          <TodoButton label={'<'} disabled={false} onClick={() => getPreviousWeek()} />
+          <TodoButton label={'>'} disabled={false} onClick={() => getNextWeek()} />
           <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
         <WeeksTabs selectedDate={selectedDate} />
