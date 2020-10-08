@@ -4,7 +4,12 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { IconButton } from '@material-ui/core';
 
-const TodoListItemMenuButton = () => {
+interface TodoListItemMenuButtonProps {
+  openInputTodoList: () => void;
+  todoContent: string;
+}
+
+const TodoListItemMenuButton = (props: TodoListItemMenuButtonProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -25,10 +30,9 @@ const TodoListItemMenuButton = () => {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={() => handleClose()}
       >
-        <MenuItem onClick={handleClose}>Todoを編集</MenuItem>
-        <MenuItem onClick={handleClose}>Todoを削除</MenuItem>
+        <MenuItem onClick={() => props.openInputTodoList()}>Todoを編集</MenuItem>
       </Menu>
     </>
   );

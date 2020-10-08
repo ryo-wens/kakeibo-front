@@ -56,7 +56,11 @@ const Todo = () => {
         <>
           <p>{planName}のTodo</p>
           {todoLists.map((todoList: TodoListItem) => {
-            return <TodoList todoListItem={todoList} key={todoList.id} />;
+            return (
+              <div key={todoList.id}>
+                <TodoList todoListItem={todoList} />
+              </div>
+            );
           })}
         </>
       );

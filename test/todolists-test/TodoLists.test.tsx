@@ -6,10 +6,12 @@ import axios from 'axios';
 import * as TodoListsActions from '../../src/reducks/todoLists/actions';
 import {
   createTodoListItem,
+  editTodoListItem,
   fetchDateTodoLists,
   fetchMonthTodoLists,
 } from '../../src/reducks/todoLists/operations';
 import createTodoListItemResponse from './createTodoListItemResponse.json';
+import editTodoListItemResponse from './editTodoListItemResponse.json';
 import fetchDateTodoListsResponse from './fetchDateTodoListsResponse.json';
 import fetchMonthTodoListsResponse from './fetchMonthTodoListsResponse.json';
 
@@ -63,12 +65,11 @@ describe('async actions todoLists', () => {
     store.clearActions();
   });
 
-  const implementationDate = new Date('2020-09-27T21:11:54');
-  const dueDate = new Date('2020-09-29T21:11:54');
-
   it('Created todoListItem is added to implementationTodoLists and dueTodoLists when CREATE_TODO_LIST_ITEM succeeds.', async () => {
     const url = `http://127.0.0.1:8082/todo-list`;
     const todoContent = '買い物へゆく';
+    const implementationDate = new Date('2020-09-27T21:11:54');
+    const dueDate = new Date('2020-09-29T21:11:54');
 
     const mockResponse = JSON.stringify(createTodoListItemResponse);
 
@@ -120,6 +121,61 @@ describe('async actions todoLists', () => {
 
     // @ts-ignore
     await createTodoListItem(implementationDate, dueDate, todoContent)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('Updated todoListItem will be reflected in implementationTodoLists and dueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
+    const todoListItemId = 1;
+    const implementationDate = new Date('2020-09-27T21:11:54');
+    const dueDate = new Date('2020-09-28T21:11:54');
+    const todoContent = '食器用洗剤2つ購入';
+    const completeFlag = true;
+
+    const url = `http://127.0.0.1:8082/todo-list/${todoListItemId}`;
+
+    const mockResponse = JSON.stringify(editTodoListItemResponse);
+
+    const expectedAction = [
+      {
+        type: TodoListsActions.EDIT_TODO_LIST_ITEM,
+        payload: {
+          implementationTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: true,
+            },
+          ],
+          dueTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: true,
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editTodoListItem(
+      todoListItemId,
+      implementationDate,
+      dueDate,
+      todoContent,
+      completeFlag
+    )(
+      store.dispatch,
+      // @ts-ignore
+      getState
+    );
     expect(store.getActions()).toEqual(expectedAction);
   });
 

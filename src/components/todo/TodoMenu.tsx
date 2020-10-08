@@ -14,6 +14,7 @@ import { State } from '../../reducks/store/types';
 import { CreateGroups } from './index';
 import { push } from 'connected-react-router';
 import { Groups } from '../../reducks/groups/types';
+import { fetchDateTodoLists } from '../../reducks/todoLists/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -35,10 +36,17 @@ const TodoMenu = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const approvedGroups: Groups = getApprovedGroups(selector);
+  const dt: Date = new Date();
+  const year = String(dt.getFullYear());
+  const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
+  const date: string = ('0' + dt.getDate()).slice(-2);
 
   return (
     <List className={classes.list} component="nav">
-      <ListItem button={true} onClick={() => dispatch(push(`/todo`))}>
+      <ListItem
+        button={true}
+        onClick={() => dispatch(fetchDateTodoLists(year, month, date)) && dispatch(push(`/todo`))}
+      >
         <ListItemIcon>
           <TodayIcon />
         </ListItemIcon>
