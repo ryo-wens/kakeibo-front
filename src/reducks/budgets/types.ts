@@ -22,6 +22,9 @@ export interface CustomBudget {
   budget: number;
 }
 
+export interface StandardBudgetsListRes {
+  standard_budgets: StandardBudget[];
+}
 export interface StandardBudgetsList extends Array<StandardBudget> {}
 export interface MonthlyBudgetsList extends Array<MonthlyBudget> {}
 export interface FetchYearlyBudgetsList extends Array<FetchYearlyBudget> {}
@@ -34,3 +37,10 @@ export interface fetchStandardBudgetsRes {
 export interface fetchCustomBudgetsRes {
   custom_budgets: [];
 }
+
+export interface editStandardBudgetReq {
+  big_category_id: number;
+  budget: number;
+}
+
+export interface editStandardBudgetsReq extends Array<editStandardBudgetReq> {}

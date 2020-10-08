@@ -1,7 +1,7 @@
-import React, { ReactElement, useCallback, useEffect, useMemo, useState } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
-import { fetchStandardBudgets } from '../reducks/budgets/operations';
+import { fetchStandardBudgets, editStandardBudgets } from '../reducks/budgets/operations';
 import { StandardBudgetsList } from '../reducks/budgets/types';
 import { State } from '../reducks/store/types';
 import Button from '@material-ui/core/Button';
@@ -65,47 +65,48 @@ const StandardBudgets = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const standardBudgets = selector.budgets.standard_budgets_list;
-  const [budget, setBudget] = useState<StandardBudgetsList>();
+  const [budgets, setBudgets] = useState<StandardBudgetsList>([]);
 
   useEffect(() => {
-    if (standardBudgets.length === 0) {
-      dispatch(fetchStandardBudgets());
-    }
+    dispatch(fetchStandardBudgets());
   }, []);
 
-  const inputBudget = useCallback(
-    (event) => {
-      setBudget(event.target.value);
-    },
-    [setBudget]
-  );
+  useEffect(() => {
+    setBudgets(standardBudgets);
+  }, [standardBudgets]);
 
-  const standardBudgetsList = useMemo(() => {
+  const unEditBudgets = budgets === standardBudgets;
+
+  const standardBudgetsList = () => {
     let budgetsList: ReactElement<StandardBudgetsList>[] = [];
-    standardBudgets.map((standardBudget) => {
+    budgets.map((budget, index) => {
+      const onChangeBudget = (event: { target: { value: string } }) => {
+        const newBudgets = [...budgets];
+        newBudgets[index].budget = Number(event.target.value);
+        setBudgets(newBudgets);
+      };
       budgetsList = [
         ...budgetsList,
-        <TableRow key={standardBudget.big_category_id}>
+        <TableRow key={budget.big_category_id}>
           <TableCell className={classes.tableSize} component="th" scope="row">
-            {standardBudget.big_category_name}
+            {budget.big_category_name}
           </TableCell>
-          <TableCell className={classes.tableSize}>{standardBudget.big_category_id}</TableCell>
+          <TableCell className={classes.tableSize}>￥10,000</TableCell>
           <TableCell className={classes.tableSize} align="center">
             <TextField
               size={'small'}
               id={'budgets'}
               variant="outlined"
-              type={'tell'}
-              defaultValue={standardBudget.budget}
-              value={budget}
-              onChange={inputBudget}
+              type={'number'}
+              value={budget.budget}
+              onChange={onChangeBudget}
             />
           </TableCell>
         </TableRow>,
       ];
     });
     return budgetsList;
-  }, [standardBudgets]);
+  };
 
   return (
     <div className={classes.root}>
@@ -132,14 +133,23 @@ const StandardBudgets = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>{standardBudgetsList}</TableBody>
+          <TableBody>{standardBudgetsList()}</TableBody>
         </Table>
       </TableContainer>
       <div className={classes.updateButton}>
         <GenericButton
           label={'更新する'}
-          disabled={false}
-          onClick={() => console.log('予算編集')}
+          disabled={unEditBudgets}
+          onClick={() =>
+            dispatch(
+              editStandardBudgets(
+                budgets.map((budget) => {
+                  delete budget.big_category_name;
+                  return budget;
+                })
+              )
+            )
+          }
         />
       </div>
     </div>
