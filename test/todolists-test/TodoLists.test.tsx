@@ -4,8 +4,10 @@ import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import * as TodoListsActions from '../../src/reducks/todoLists/actions';
+import * as ModalActions from '../../src/reducks/modal/actions';
 import {
   createTodoListItem,
+  deleteTodoListItem,
   editTodoListItem,
   fetchDateTodoLists,
   fetchMonthTodoLists,
@@ -14,6 +16,7 @@ import createTodoListItemResponse from './createTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
 import fetchDateTodoListsResponse from './fetchDateTodoListsResponse.json';
 import fetchMonthTodoListsResponse from './fetchMonthTodoListsResponse.json';
+import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -47,6 +50,10 @@ const getState = () => {
       ],
       message: '',
     },
+    modal: {
+      message: '',
+      open: false,
+    },
     router: {
       action: 'PUSH',
       location: {
@@ -61,7 +68,7 @@ const getState = () => {
 };
 
 describe('async actions todoLists', () => {
-  afterEach(() => {
+  beforeEach(() => {
     store.clearActions();
   });
 
@@ -230,63 +237,93 @@ describe('async actions todoLists', () => {
     await fetchDateTodoLists(year, month, date)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
-});
 
-it('Get implementationTodoLists and dueTodoLists when FETCH_MONTH_TODO_LISTS succeeds.', async () => {
-  const year = '2020';
-  const month = '09';
-  const url = `http://127.0.0.1:8082/todo-list/${year}-${month}`;
+  it('Get implementationTodoLists and dueTodoLists when FETCH_MONTH_TODO_LISTS succeeds.', async () => {
+    const year = '2020';
+    const month = '09';
+    const url = `http://127.0.0.1:8082/todo-list/${year}-${month}`;
 
-  const mockResponse = JSON.stringify(fetchMonthTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchMonthTodoListsResponse);
 
-  const expectedAction = [
-    {
-      type: TodoListsActions.FETCH_MONTH_TODO_LISTS,
-      payload: {
-        implementationTodoLists: [
-          {
-            id: 1,
-            posted_date: '2020-09-27T19:54:46Z',
-            implementation_date: '09/27(日)',
-            due_date: '09/28(月)',
-            todo_content: '食器用洗剤2つ購入',
-            complete_flag: false,
-          },
-          {
-            id: 2,
-            posted_date: '2020-09-27T19:54:46Z',
-            implementation_date: '09/27(日)',
-            due_date: '09/27(日)',
-            todo_content: '買い物へ行く',
-            complete_flag: false,
-          },
-        ],
-        dueTodoLists: [
-          {
-            id: 1,
-            posted_date: '2020-09-27T19:54:46Z',
-            implementation_date: '09/27(日)',
-            due_date: '09/28(月)',
-            todo_content: '食器用洗剤2つ購入',
-            complete_flag: false,
-          },
-          {
-            id: 2,
-            posted_date: '2020-09-27T19:54:46Z',
-            implementation_date: '09/27(日)',
-            due_date: '09/27(日)',
-            todo_content: '買い物へ行く',
-            complete_flag: false,
-          },
-        ],
-        message: '',
+    const expectedAction = [
+      {
+        type: TodoListsActions.FETCH_MONTH_TODO_LISTS,
+        payload: {
+          implementationTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/27(日)',
+              todo_content: '買い物へ行く',
+              complete_flag: false,
+            },
+          ],
+          dueTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/27(日)',
+              todo_content: '買い物へ行く',
+              complete_flag: false,
+            },
+          ],
+          message: '',
+        },
       },
-    },
-  ];
+    ];
 
-  axiosMock.onGet(url).reply(200, mockResponse);
+    axiosMock.onGet(url).reply(200, mockResponse);
 
-  // @ts-ignore
-  await fetchMonthTodoLists(year, month)(store.dispatch);
-  expect(store.getActions()).toEqual(expectedAction);
+    // @ts-ignore
+    await fetchMonthTodoLists(year, month)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('When DELETE_TODO_LIST_ITEM is successful, send the ImplementationTodoLists and dueTodoLists except the requested todoListItemId to deleteTodoListItemAction and send the response message to openTextModalAction.', async () => {
+    const todoListItemId = 1;
+    const url = `http://127.0.0.1:8082/todo-list/${todoListItemId}`;
+
+    const mockResponse = JSON.stringify(deleteTodoListItemResponse);
+
+    const expectedAction = [
+      {
+        type: TodoListsActions.DELETE_TODO_LIST_ITEM,
+        payload: {
+          implementationTodoLists: [],
+          dueTodoLists: [],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: 'todoを削除しました。',
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await deleteTodoListItem(todoListItemId)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
 });
