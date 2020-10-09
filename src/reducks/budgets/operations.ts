@@ -1,8 +1,16 @@
-import { updateStandardBudgets, fetchYearlyBudgets, updateCustomBudgets } from './actions';
+import { fetchYearlyBudgets, updateCustomBudgets, updateStandardBudgets } from './actions';
 import axios from 'axios';
-import { Dispatch, Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 import { push } from 'connected-react-router';
-import { FetchYearlyBudgetsList, fetchStandardBudgetsRes, fetchCustomBudgetsRes } from './types';
+import { State } from '../store/types';
+import {
+  editStandardBudgetsReq,
+  fetchCustomBudgetsRes,
+  fetchStandardBudgetsRes,
+  FetchYearlyBudgetsList,
+  StandardBudgetsList,
+  StandardBudgetsListRes,
+} from './types';
 
 export const fetchStandardBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
@@ -18,6 +26,64 @@ export const fetchStandardBudgets = () => {
         if (error.response.status === 401) {
           alert(error.response.data.error.message);
           dispatch(push('/login'));
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+        }
+      });
+  };
+};
+
+export const editStandardBudgets = (budgets: editStandardBudgetsReq) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+    const isValidBudgetFormat = (budget: number) => {
+      const regex = /^([1-9]\d*|0)$/;
+      return regex.test(String(budget));
+    };
+
+    const checkBudget = (): boolean => {
+      for (const budget of budgets) {
+        if (!isValidBudgetFormat(budget.budget as number)) {
+          return false;
+        }
+      }
+      return true;
+    };
+
+    if (!checkBudget()) {
+      alert('予算は0以上の整数で入力してください。');
+      return;
+    }
+
+    const data = { standard_budgets: budgets };
+    await axios
+      .put<StandardBudgetsListRes>('http://127.0.0.1:8081/standard-budgets', JSON.stringify(data), {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const editStandardBudgetsList: StandardBudgetsList = res.data.standard_budgets;
+        const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
+
+        const nextStandardBudgetsList = standardBudgetsList.map((standardBudget) => {
+          const editStandardBudget = editStandardBudgetsList.find(
+            (item: { big_category_id: number }) =>
+              item.big_category_id === standardBudget.big_category_id
+          );
+          if (editStandardBudget) {
+            return editStandardBudget;
+          }
+          return standardBudget;
+        });
+        dispatch(updateStandardBudgets(nextStandardBudgetsList));
+      })
+      .catch((error) => {
+        if (error.response.status === 400) {
+          alert(error.response.data.error.message);
+        }
+
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message);
         }
 
         if (error.response.status === 500) {
