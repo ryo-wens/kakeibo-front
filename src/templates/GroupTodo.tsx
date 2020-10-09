@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { GroupName, TodoMenu } from '../components/todo';
+import { AddTodo, GroupName, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -22,6 +22,7 @@ const GroupTodo = () => {
   const pathname = window.location.pathname;
   const paths = pathname.split('/');
   const groupId = Number(paths[paths.length - 1]);
+  const operationType = 'createGroupTodoListItem';
 
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
@@ -57,6 +58,7 @@ const GroupTodo = () => {
       <TodoMenu />
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
+        <AddTodo operationType={operationType} groupId={groupId} />
       </div>
     </>
   );

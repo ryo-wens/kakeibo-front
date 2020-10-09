@@ -9,6 +9,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { createTodoListItem } from '../../reducks/todoLists/operations';
+import { createGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,6 +78,16 @@ const AddTodo = (props: AddTodoProps) => {
   const switchOperation = () => {
     if (props.operationType === 'createTodoListItem') {
       return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
+    }
+    if (props.operationType === 'createGroupTodoListItem') {
+      return dispatch(
+        createGroupTodoListItem(
+          props.groupId,
+          selectedImplementationDate,
+          selectedDueDate,
+          todoContent
+        )
+      );
     }
   };
 

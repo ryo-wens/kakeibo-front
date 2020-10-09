@@ -34,8 +34,8 @@ export interface State {
     message: string;
   };
   groupTodoLists: {
-    implementationTodoLists: GroupTodoLists;
-    dueTodoLists: GroupTodoLists;
+    groupImplementationTodoLists: GroupTodoLists;
+    groupDueTodoLists: GroupTodoLists;
     message: string;
   };
   modal: {
