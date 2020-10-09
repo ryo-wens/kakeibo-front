@@ -51,3 +51,7 @@ export interface fetchMonthTodoListsRes {
   due_todo_list: TodoLists;
   message: string;
 }
+
+export interface deleteTodoListItemRes {
+  message: string;
+}

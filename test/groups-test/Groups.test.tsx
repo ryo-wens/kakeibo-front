@@ -74,6 +74,10 @@ const getState = () => {
       ],
       message: '',
     },
+    modal: {
+      message: '',
+      open: false,
+    },
     router: {
       action: 'PUSH',
       location: {

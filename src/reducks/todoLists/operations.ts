@@ -3,6 +3,7 @@ import { State } from '../store/types';
 import axios from 'axios';
 import {
   createTodoListItemAction,
+  deleteTodoListItemAction,
   editTodoListItemAction,
   fetchDateTodoListsAction,
   fetchMonthTodoListsAction,
@@ -10,6 +11,7 @@ import {
 import {
   createTodoListItemReq,
   createTodoListItemRes,
+  deleteTodoListItemRes,
   editTodoListItemRes,
   fetchMonthTodoListsRes,
   fetchTodayTodoListsRes,
@@ -18,6 +20,7 @@ import {
 } from './types';
 import { push } from 'connected-react-router';
 import moment from 'moment';
+import { openTextModalAction } from '../modal/actions';
 
 export const createTodoListItem = (
   implementationDate: Date | null,
@@ -142,10 +145,12 @@ export const editTodoListItem = (
           });
         };
 
-        const updateImplementationLists: TodoLists = updateTodoLists(prevImplementationTodoLists);
-        const updateDueLists: TodoLists = updateTodoLists(prevDueTodoLists);
+        const updateImplementationTodoLists: TodoLists = updateTodoLists(
+          prevImplementationTodoLists
+        );
+        const updateDueTodoLists: TodoLists = updateTodoLists(prevDueTodoLists);
 
-        dispatch(editTodoListItemAction(updateImplementationLists, updateDueLists));
+        dispatch(editTodoListItemAction(updateImplementationTodoLists, updateDueTodoLists));
       })
       .catch((error) => {
         if (error.response.status === 400) {
@@ -228,6 +233,42 @@ export const fetchMonthTodoLists = (year: string, month: string) => {
 
         if (error.response.status === 401) {
           alert(error.response.data.error.message);
+          dispatch(push('/login'));
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+        }
+      });
+  };
+};
+
+export const deleteTodoListItem = (todoListItemId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .delete<deleteTodoListItemRes>(`http://127.0.0.1:8082/todo-list/${todoListItemId}`, {
+        withCredentials: true,
+      })
+      .then((res) => {
+        const prevImplementationTodoLists = getState().todoLists.implementationTodoLists;
+        const prevDueTodoLists = getState().todoLists.dueTodoLists;
+        const message = res.data.message;
+
+        const updateTodoLists = (prevTodoLists: TodoLists) => {
+          return prevTodoLists.filter((prevTodoList) => {
+            return prevTodoList.id !== todoListItemId;
+          });
+        };
+
+        const updateImplementationTodoLists = updateTodoLists(prevImplementationTodoLists);
+        const updateDueTodoLists = updateTodoLists(prevDueTodoLists);
+
+        dispatch(deleteTodoListItemAction(updateImplementationTodoLists, updateDueTodoLists));
+        dispatch(openTextModalAction(message));
+      })
+      .catch((error) => {
+        if (error.response.status === 401) {
+          alert(error.response.data.message);
           dispatch(push('/login'));
         }
 

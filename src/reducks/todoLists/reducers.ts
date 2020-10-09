@@ -24,6 +24,11 @@ export const todoListsReducer = (state = initialState.todoLists, action: todoLis
         ...state,
         ...action.payload,
       };
+    case Actions.DELETE_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

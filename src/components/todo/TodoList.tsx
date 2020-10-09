@@ -117,7 +117,7 @@ const TodoList = (props: TodoListProps) => {
           </ListItem>
           <TodoListItemMenuButton
             openInputTodoList={() => openInputTodoList()}
-            todoContent={props.todoListItem.todo_content}
+            todoListItem={props.todoListItem}
           />
         </>
       );
