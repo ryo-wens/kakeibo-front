@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { AddTodo, GroupName, TodoMenu } from '../components/todo';
+import { GroupName, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -57,7 +57,6 @@ const GroupTodo = () => {
       <TodoMenu />
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
-        <AddTodo groupId={groupId} />
       </div>
     </>
   );

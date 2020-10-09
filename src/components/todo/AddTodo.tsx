@@ -29,6 +29,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface AddTodoProps {
+  operationType: string;
   groupId: number;
 }
 
@@ -72,6 +73,12 @@ const AddTodo = (props: AddTodoProps) => {
   );
 
   const isBlankTodoContent = todoContent === '';
+
+  const switchOperation = () => {
+    if (props.operationType === 'createTodoListItem') {
+      return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
+    }
+  };
 
   return (
     <>
@@ -121,11 +128,7 @@ const AddTodo = (props: AddTodoProps) => {
             <TodoButton
               label={'Todoを追加'}
               disabled={isBlankTodoContent}
-              onClick={() =>
-                dispatch(
-                  createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent)
-                ) && handleClose()
-              }
+              onClick={() => switchOperation() && handleClose()}
             />
             <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
           </div>
