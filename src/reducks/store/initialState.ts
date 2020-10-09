@@ -26,6 +26,11 @@ const initialState = {
     dueTodoLists: [],
     message: '',
   },
+  groupTodoLists: {
+    implementationTodoLists: [],
+    dueTodoLists: [],
+    message: '',
+  },
   modal: {
     message: '',
     open: false,
