@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { TodoMenu } from '../components/todo';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import { TodoButton, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchMonthTodoLists } from '../reducks/todoLists/operations';
@@ -14,6 +14,10 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       margin: '40px 0px 0px 200px',
+    },
+    date: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
     datePicker: {
       width: `200px`,
@@ -53,18 +57,41 @@ const ScheduleTodo = () => {
     [setSelectedDate]
   );
 
+  const getTodayDate = useCallback(() => {
+    setSelectedDate(dt);
+  }, [selectedDate]);
+
+  const replicatedSelectedDate = new Date(dt);
+
+  const getNextWeek = useCallback(() => {
+    const nextWeek = new Date(replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() + 7));
+    setSelectedDate(nextWeek);
+  }, [setSelectedDate]);
+
+  const getPreviousWeek = useCallback(() => {
+    const previousWeek = new Date(
+      replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() - 7)
+    );
+    setSelectedDate(previousWeek);
+  }, [setSelectedDate]);
+
   return (
     <>
       <TodoMenu />
       <div className={classes.root}>
-        <div className={classes.datePicker}>
-          <DatePicker
-            value={selectedDate}
-            onChange={handleDateChange}
-            id={'date-picker-dialog'}
-            label={''}
-            required={false}
-          />
+        <div className={classes.date}>
+          <div className={classes.datePicker}>
+            <DatePicker
+              value={selectedDate}
+              onChange={handleDateChange}
+              id={'date-picker-dialog'}
+              label={''}
+              required={false}
+            />
+          </div>
+          <TodoButton label={'<'} disabled={false} onClick={() => getPreviousWeek()} />
+          <TodoButton label={'>'} disabled={false} onClick={() => getNextWeek()} />
+          <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
         <WeeksTabs selectedDate={selectedDate} />
       </div>
