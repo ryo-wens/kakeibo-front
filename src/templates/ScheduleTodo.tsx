@@ -36,7 +36,7 @@ const ScheduleTodo = () => {
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -61,19 +61,23 @@ const ScheduleTodo = () => {
     setSelectedDate(dt);
   }, [selectedDate]);
 
-  const replicatedSelectedDate = new Date(dt);
-
   const getNextWeek = useCallback(() => {
-    const nextWeek = new Date(replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() + 7));
+    const nextWeek = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate() + 7
+    );
     setSelectedDate(nextWeek);
-  }, [setSelectedDate]);
+  }, [selectedDate, setSelectedDate]);
 
   const getPreviousWeek = useCallback(() => {
     const previousWeek = new Date(
-      replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() - 7)
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate() - 7
     );
     setSelectedDate(previousWeek);
-  }, [setSelectedDate]);
+  }, [selectedDate, setSelectedDate]);
 
   return (
     <>
