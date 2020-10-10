@@ -22,6 +22,7 @@ const GroupTodo = () => {
   const pathname = window.location.pathname;
   const paths = pathname.split('/');
   const groupId = Number(paths[paths.length - 1]);
+  const operationType = 'createGroupTodoListItem';
 
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
@@ -57,7 +58,7 @@ const GroupTodo = () => {
       <TodoMenu />
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
-        <AddTodo groupId={groupId} />
+        <AddTodo operationType={operationType} groupId={groupId} />
       </div>
     </>
   );

@@ -27,8 +27,8 @@ const initialState = {
     message: '',
   },
   groupTodoLists: {
-    implementationTodoLists: [],
-    dueTodoLists: [],
+    groupImplementationTodoLists: [],
+    groupDueTodoLists: [],
     message: '',
   },
   modal: {

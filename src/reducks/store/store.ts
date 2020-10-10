@@ -10,6 +10,7 @@ import { createLogger } from 'redux-logger';
 import { modalReducer } from '../modal/reducers';
 import { budgetsReducer } from '../budgets/reducers';
 import { todoListsReducer } from '../todoLists/reducers';
+import { groupTodoListsReducer } from '../groupTodoLists/reducers';
 
 interface ExtendedWindow extends Window {
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -32,6 +33,7 @@ export default function createStore(history: History) {
       categories: categoriesReducer,
       groups: groupsReducer,
       todoLists: todoListsReducer,
+      groupTodoLists: groupTodoListsReducer,
       transactions: transactionsReducer,
       modal: modalReducer,
       budgets: budgetsReducer,
