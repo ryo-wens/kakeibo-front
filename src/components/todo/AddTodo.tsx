@@ -78,8 +78,7 @@ const AddTodo = (props: AddTodoProps) => {
   const switchOperation = () => {
     if (props.operationType === 'createTodoListItem') {
       return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
-    }
-    if (props.operationType === 'createGroupTodoListItem') {
+    } else if (props.operationType === 'createGroupTodoListItem') {
       return dispatch(
         createGroupTodoListItem(
           props.groupId,
