@@ -1,4 +1,4 @@
-export interface StandardBudget {
+export interface Budget {
   big_category_id: number;
   big_category_name: string;
   budget: number;
@@ -16,19 +16,13 @@ export interface FetchYearlyBudget {
   monthly_budgets: MonthlyBudget;
 }
 
-export interface CustomBudget {
-  big_category_id: number;
-  big_category_name: string;
-  budget: number;
-}
-
 export interface StandardBudgetsListRes {
-  standard_budgets: StandardBudget[];
+  standard_budgets: Budget[];
 }
-export interface StandardBudgetsList extends Array<StandardBudget> {}
+export interface StandardBudgetsList extends Array<Budget> {}
 export interface MonthlyBudgetsList extends Array<MonthlyBudget> {}
 export interface FetchYearlyBudgetsList extends Array<FetchYearlyBudget> {}
-export interface CustomBudgetsList extends Array<CustomBudget> {}
+export interface CustomBudgetsList extends Array<Budget> {}
 
 export interface fetchStandardBudgetsRes {
   standard_budgets: [];
