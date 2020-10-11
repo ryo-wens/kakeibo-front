@@ -135,14 +135,7 @@ const StandardBudgets = () => {
           label={'更新する'}
           disabled={unEditBudgets}
           onClick={() =>
-            dispatch(
-              editStandardBudgets(
-                budgets.map((budget) => {
-                  const { big_category_name, ...rest } = budget;
-                  return rest;
-                })
-              )
-            )
+            dispatch(editStandardBudgets(budgets.filter((budget) => budget.big_category_id)))
           }
         />
       </div>
