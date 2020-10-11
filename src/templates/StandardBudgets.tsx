@@ -1,4 +1,4 @@
-import React, { ReactElement, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { fetchStandardBudgets, editStandardBudgets } from '../reducks/budgets/operations';
@@ -66,6 +66,7 @@ const StandardBudgets = () => {
   const selector = useSelector((state: State) => state);
   const standardBudgets = selector.budgets.standard_budgets_list;
   const [budgets, setBudgets] = useState<StandardBudgetsList>([]);
+  const unEditBudgets = budgets === standardBudgets;
 
   useEffect(() => {
     dispatch(fetchStandardBudgets());
@@ -74,39 +75,6 @@ const StandardBudgets = () => {
   useEffect(() => {
     setBudgets(standardBudgets);
   }, [standardBudgets]);
-
-  const unEditBudgets = budgets === standardBudgets;
-
-  const standardBudgetsList = () => {
-    let budgetsList: ReactElement<StandardBudgetsList>[] = [];
-    budgets.map((budget, index) => {
-      const onChangeBudget = (event: { target: { value: string } }) => {
-        const newBudgets = [...budgets];
-        newBudgets[index].budget = Number(event.target.value);
-        setBudgets(newBudgets);
-      };
-      budgetsList = [
-        ...budgetsList,
-        <TableRow key={budget.big_category_id}>
-          <TableCell className={classes.tableSize} component="th" scope="row">
-            {budget.big_category_name}
-          </TableCell>
-          <TableCell className={classes.tableSize}>￥10,000</TableCell>
-          <TableCell className={classes.tableSize} align="center">
-            <TextField
-              size={'small'}
-              id={'budgets'}
-              variant="outlined"
-              type={'number'}
-              value={budget.budget}
-              onChange={onChangeBudget}
-            />
-          </TableCell>
-        </TableRow>,
-      ];
-    });
-    return budgetsList;
-  };
 
   return (
     <div className={classes.root}>
@@ -133,7 +101,33 @@ const StandardBudgets = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>{standardBudgetsList()}</TableBody>
+          <TableBody>
+            {budgets.map((budget, index) => {
+              const onChangeBudget = (event: { target: { value: string } }) => {
+                const newBudgets = [...budgets];
+                newBudgets[index].budget = Number(event.target.value);
+                setBudgets(newBudgets);
+              };
+              return (
+                <TableRow key={budget.big_category_id}>
+                  <TableCell className={classes.tableSize} component="th" scope="row">
+                    {budget.big_category_name}
+                  </TableCell>
+                  <TableCell className={classes.tableSize}>￥10,000</TableCell>
+                  <TableCell className={classes.tableSize} align="center">
+                    <TextField
+                      size={'small'}
+                      id={'budgets'}
+                      variant="outlined"
+                      type={'number'}
+                      value={budget.budget}
+                      onChange={onChangeBudget}
+                    />
+                  </TableCell>
+                </TableRow>
+              );
+            })}
+          </TableBody>
         </Table>
       </TableContainer>
       <div className={classes.updateButton}>
@@ -144,8 +138,8 @@ const StandardBudgets = () => {
             dispatch(
               editStandardBudgets(
                 budgets.map((budget) => {
-                  delete budget.big_category_name;
-                  return budget;
+                  const { big_category_name, ...rest } = budget;
+                  return rest;
                 })
               )
             )
