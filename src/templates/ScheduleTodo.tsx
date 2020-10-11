@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TodoButton, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchMonthTodoLists } from '../reducks/todoLists/operations';
@@ -7,8 +6,8 @@ import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/select
 import { getDueTodoLists, getImplementationTodoLists } from '../reducks/todoLists/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { WeeksTabs } from '../components/todo';
 import { DatePicker } from '../components/uikit';
+import { TodoButton, TodoMenu, WeeksTabs, WeeksTodoLists } from '../components/todo';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -98,6 +97,7 @@ const ScheduleTodo = () => {
           <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
         <WeeksTabs selectedDate={selectedDate} />
+        <WeeksTodoLists selectedDate={selectedDate} />
       </div>
     </>
   );
