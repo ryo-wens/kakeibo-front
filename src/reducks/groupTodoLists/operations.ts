@@ -27,7 +27,6 @@ export const createGroupTodoListItem = (
     due_date: dueDate,
     todo_content: todoContent,
   };
-  console.log(data);
 
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios

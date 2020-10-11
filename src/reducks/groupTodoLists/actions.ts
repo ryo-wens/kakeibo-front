@@ -1,16 +1,16 @@
-import { TodoLists } from '../todoLists/types';
+import { GroupTodoLists } from './types';
 export type groupTodoListsActions = ReturnType<typeof createGroupTodoListItemAction>;
 
 export const CREATE_GROUP_TODO_LIST_ITEM = 'CREATE_GROUP_TODO_LIST_ITEM';
 export const createGroupTodoListItemAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists
+  groupImplementationTodoLists: GroupTodoLists,
+  groupDueTodoLists: GroupTodoLists
 ) => {
   return {
     type: CREATE_GROUP_TODO_LIST_ITEM,
     payload: {
-      implementationTodoLists: implementationTodoLists,
-      dueTodoLists: dueTodoLists,
+      groupImplementationTodoLists: groupImplementationTodoLists,
+      groupDueTodoLists: groupDueTodoLists,
     },
   };
 };

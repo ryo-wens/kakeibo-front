@@ -5,7 +5,7 @@ export interface GroupTodoListItem {
   due_date: string;
   todo_content: string;
   complete_flag: boolean;
-  user_id: number;
+  user_id: string;
 }
 
 export interface GroupTodoLists extends Array<GroupTodoListItem> {}
@@ -23,5 +23,5 @@ export interface createGroupTodoListItemRes {
   due_date: string;
   todo_content: string;
   complete_flag: boolean;
-  user_id: number;
+  user_id: string;
 }

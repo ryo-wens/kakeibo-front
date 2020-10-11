@@ -23,7 +23,7 @@ const mockStore = configureMockStore(middlewares);
 
 const axiosMock = new MockAdapter(axios);
 
-const store = mockStore({ todoLists: [], router: [] });
+const store = mockStore({ todoLists: [], modal: [], router: [] });
 
 const getState = () => {
   return {
