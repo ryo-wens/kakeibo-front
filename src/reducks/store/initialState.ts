@@ -8,7 +8,11 @@ const initialState = {
   },
   budgets: {
     standard_budgets_list: [],
-    yearly_budgets_list: [],
+    yearly_budgets_list: {
+      year: '',
+      yearly_total_budget: 0,
+      monthly_budgets: [],
+    },
     custom_budgets_list: [],
   },
   users: {
