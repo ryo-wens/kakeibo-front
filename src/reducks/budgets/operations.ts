@@ -3,7 +3,7 @@ import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import { push } from 'connected-react-router';
 import { State } from '../store/types';
-import { isValidBudgetFormat } from '../../lib/constant';
+import { isValidBudgetFormat } from '../../lib/validation';
 import {
   editStandardBudgetsReq,
   fetchCustomBudgetsRes,
@@ -24,11 +24,13 @@ export const fetchStandardBudgets = () => {
         dispatch(updateStandardBudgets(standardBudgetsList));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        } else if (error && error.response) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
@@ -64,11 +66,13 @@ export const editStandardBudgets = (budgets: editStandardBudgetsReq) => {
         dispatch(updateStandardBudgets(nextStandardBudgetsList));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        } else if (error && error.response) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
@@ -85,11 +89,13 @@ export const getYearlyBudgets = () => {
         dispatch(fetchYearlyBudgets(yearlyBudgetsList));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        } else if (error && error.response) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
@@ -106,11 +112,13 @@ export const fetchCustomBudgets = () => {
         dispatch(updateCustomBudgets(customBudgets));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        } else if (error && error.response) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
