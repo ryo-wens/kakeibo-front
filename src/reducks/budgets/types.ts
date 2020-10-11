@@ -11,7 +11,7 @@ export interface MonthlyBudget {
 }
 
 export interface YearlyBudgetsList {
-  year: Date;
+  year: string;
   yearly_total_budget: number;
   monthly_budgets: MonthlyBudgetsList;
 }

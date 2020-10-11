@@ -12,8 +12,8 @@ import { editTodoListItem } from '../../reducks/todoLists/operations';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      height: '40px',
       width: '700px',
+      height: 'auto',
       zIndex: 1100,
     },
     groupMenu: {
@@ -67,83 +67,106 @@ const TodoList = (props: TodoListProps) => {
     [setTodoContent]
   );
 
-  const inputImplementationDate = (date: Date | null) => {
-    setSelectedImplementationDate(date);
-    setSelectedDueDate(date);
-  };
+  const inputImplementationDate = useCallback(
+    (date: Date | null) => {
+      setSelectedImplementationDate(date);
+      setSelectedDueDate(date);
+    },
+    [setSelectedImplementationDate, setSelectedDueDate]
+  );
 
-  const inputDueDate = (date: Date | null) => {
-    setSelectedDueDate(date);
-  };
+  const inputDueDate = useCallback(
+    (date: Date | null) => {
+      setSelectedDueDate(date);
+    },
+    [setSelectedDueDate]
+  );
 
-  const openInputTodoList = () => {
+  const openInputTodoList = useCallback(() => {
     setOpenEditTodoList(true);
     setTodoContent(prevTodoContent);
     setSelectedImplementationDate(prevImplementationDate);
     setSelectedDueDate(prevDueDate);
-  };
+  }, [
+    setOpenEditTodoList,
+    setTodoContent,
+    setSelectedImplementationDate,
+    setSelectedDueDate,
+    prevTodoContent,
+    prevImplementationDate,
+    prevDueDate,
+  ]);
 
-  const closeInputTodoList = () => {
+  const closeInputTodoList = useCallback(() => {
     setOpenEditTodoList(false);
     setTodoContent(prevTodoContent);
-  };
+  }, [setOpenEditTodoList, setTodoContent, prevTodoContent]);
 
-  const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!checked) {
-      setChecked(event.target.checked);
-      setStrikethrough(classes.ListItemText);
-    } else {
-      setChecked(event.target.checked);
-      setStrikethrough('');
-    }
-    return dispatch(
-      editTodoListItem(
-        todoListItemId,
-        selectedImplementationDate,
-        selectedDueDate,
-        todoContent,
-        event.target.checked
-      )
-    );
-  };
-
-  const editTodoList = () => {
-    if (!openEditTodoList) {
-      return (
-        <>
-          <ListItem>
-            <Checkbox color="primary" checked={checked} onChange={handleChangeChecked} />
-            <ListItemText className={strikethrough} secondary={props.todoListItem.todo_content} />
-          </ListItem>
-          <TodoListItemMenuButton
-            openInputTodoList={() => openInputTodoList()}
-            todoListItem={props.todoListItem}
-          />
-        </>
+  const handleChangeChecked = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!checked) {
+        setChecked(event.target.checked);
+        setStrikethrough(classes.ListItemText);
+      } else {
+        setChecked(event.target.checked);
+        setStrikethrough('');
+      }
+      return dispatch(
+        editTodoListItem(
+          todoListItemId,
+          selectedImplementationDate,
+          selectedDueDate,
+          todoContent,
+          event.target.checked
+        )
       );
-    } else {
-      return (
-        <InputTodoList
-          groupId={0}
-          buttonLabel={'保存'}
-          inputTodoContent={inputTodoContent}
-          inputImplementationDate={inputImplementationDate}
-          inputDueDate={inputDueDate}
-          closeInputTodoList={closeInputTodoList}
-          todoListItemId={todoListItemId}
-          selectedImplementationDate={selectedImplementationDate}
-          selectedDueDate={selectedDueDate}
-          todoContent={todoContent}
-          completeFlag={checked}
-        />
-      );
-    }
-  };
+    },
+    [
+      dispatch,
+      setChecked,
+      setStrikethrough,
+      todoListItemId,
+      selectedImplementationDate,
+      selectedDueDate,
+      todoContent,
+      editTodoListItem,
+    ]
+  );
 
   return (
     <>
       <List className={classes.root}>
-        <div className={classes.groupMenu}>{editTodoList()}</div>
+        <div className={classes.groupMenu}>
+          {!openEditTodoList ? (
+            <>
+              <ListItem>
+                <Checkbox color="primary" checked={checked} onChange={handleChangeChecked} />
+                <ListItemText
+                  className={strikethrough}
+                  secondary={props.todoListItem.todo_content}
+                />
+              </ListItem>
+              <TodoListItemMenuButton
+                openInputTodoList={() => openInputTodoList()}
+                todoListItem={props.todoListItem}
+              />
+            </>
+          ) : (
+            <InputTodoList
+              groupId={0}
+              buttonLabel={'保存'}
+              inputTodoContent={inputTodoContent}
+              inputImplementationDate={inputImplementationDate}
+              inputDueDate={inputDueDate}
+              closeInputTodoList={closeInputTodoList}
+              todoListItemId={todoListItemId}
+              selectedImplementationDate={selectedImplementationDate}
+              selectedDueDate={selectedDueDate}
+              todoContent={todoContent}
+              completeFlag={checked}
+            />
+          )}
+        </div>
       </List>
     </>
   );

@@ -1,6 +1,7 @@
-import React, { ReactElement, useState, useMemo, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React, { useState, useCallback } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
+import CustomBudgetsRow from '../components/budget/CustomBudgetsRow';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -11,12 +12,11 @@ import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableCell from '@material-ui/core/TableCell';
-import CreateIcon from '@material-ui/icons/Create';
-import IconButton from '@material-ui/core/IconButton';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
+import { State } from '../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -36,10 +36,6 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 360,
       marginTop: 40,
       backgroundColor: '#fff',
-    },
-    tableSize: {
-      width: 250,
-      textAlign: 'center',
     },
     tablePosition: {
       margin: '0 auto',
@@ -70,6 +66,8 @@ const CustomBudgets = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const date = new Date();
+  const selector = useSelector((state: State) => state);
+  const totalBudge = selector.budgets.yearly_budgets_list.yearly_total_budget;
   const [years, setYears] = useState<number>(date.getFullYear());
 
   const handleDateChange = useCallback(
@@ -78,53 +76,6 @@ const CustomBudgets = () => {
     },
     [setYears]
   );
-
-  const month = date.getMonth() + 1;
-  const startDate = new Date(years, month - 1, 1);
-  const startDayCount = startDate.getDate();
-  type Day = { date: number };
-  type Year = Array<Day>;
-
-  const periodColumn = useMemo(() => {
-    const yearly: Year = [];
-
-    for (let i = 0; i < 12; i++) {
-      yearly.push({ date: i + 1 });
-    }
-    return yearly;
-  }, [date]);
-
-  const customBudgetsTable = useMemo(() => {
-    let budgetsDataList: ReactElement<Year>[] = [];
-    periodColumn.map((period, index) => {
-      const lastDate = new Date(years, period.date, 0).getDate();
-      budgetsDataList = [
-        ...budgetsDataList,
-        <TableRow key={index}>
-          <TableCell className={classes.tableSize} component="th" scope="row">
-            {period.date}月
-          </TableCell>
-          <TableCell className={classes.tableSize}>標準</TableCell>
-          <TableCell className={classes.tableSize} align="center">
-            {years}-{String('0' + period.date).slice(-2)}-{'0' + startDayCount} 〜 {years}-
-            {String('0' + period.date).slice(-2)}-{lastDate}
-          </TableCell>
-          <TableCell className={classes.tableSize} align="center">
-            ￥180,000
-          </TableCell>
-          <TableCell className={classes.tableSize} align="center">
-            <IconButton
-              size={'small'}
-              onClick={() => dispatch(push(`/custom-budgets/${years}${period.date}`))}
-            >
-              <CreateIcon color={'primary'} />
-            </IconButton>
-          </TableCell>
-        </TableRow>,
-      ];
-    });
-    return budgetsDataList;
-  }, [date]);
 
   return (
     <div className={classes.mainPosition}>
@@ -144,6 +95,7 @@ const CustomBudgets = () => {
           <MenuItem value={years - 1}>{years - 1}</MenuItem>
         </Select>
       </FormControl>
+      <h1>総額 ¥ {totalBudge}</h1>
       <TableContainer className={classes.tablePosition} component={Paper}>
         <Table>
           <TableHead>
@@ -165,7 +117,9 @@ const CustomBudgets = () => {
               </TableCell>
             </TableRow>
           </TableHead>
-          <TableBody>{customBudgetsTable}</TableBody>
+          <TableBody>
+            <CustomBudgetsRow years={years} />
+          </TableBody>
         </Table>
       </TableContainer>
     </div>
