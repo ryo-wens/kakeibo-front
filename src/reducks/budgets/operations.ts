@@ -8,7 +8,7 @@ import {
   editStandardBudgetsReq,
   fetchCustomBudgetsRes,
   fetchStandardBudgetsRes,
-  FetchYearlyBudgetsList,
+  YearlyBudgetsList,
   StandardBudgetsList,
   StandardBudgetsListRes,
 } from './types';
@@ -81,7 +81,7 @@ export const editStandardBudgets = (budgets: editStandardBudgetsReq) => {
 export const getYearlyBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
-      .get<FetchYearlyBudgetsList>('http://127.0.0.1:8081/budgets/2020', {
+      .get<YearlyBudgetsList>('http://127.0.0.1:8081/budgets/2020', {
         withCredentials: true,
       })
       .then((res) => {

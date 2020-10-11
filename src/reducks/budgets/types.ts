@@ -10,10 +10,10 @@ export interface MonthlyBudget {
   monthly_total_budget: number;
 }
 
-export interface FetchYearlyBudget {
+export interface YearlyBudgetsList {
   year: Date;
   yearly_total_budget: number;
-  monthly_budgets: MonthlyBudget;
+  monthly_budgets: MonthlyBudgetsList;
 }
 
 export interface StandardBudgetsListRes {
@@ -21,7 +21,6 @@ export interface StandardBudgetsListRes {
 }
 export interface StandardBudgetsList extends Array<Budget> {}
 export interface MonthlyBudgetsList extends Array<MonthlyBudget> {}
-export interface FetchYearlyBudgetsList extends Array<FetchYearlyBudget> {}
 export interface CustomBudgetsList extends Array<Budget> {}
 
 export interface fetchStandardBudgetsRes {

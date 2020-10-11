@@ -1,7 +1,7 @@
 import { Categories } from '../categories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
-import { StandardBudgetsList, FetchYearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
+import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import { TodoLists } from '../todoLists/types';
 import { GroupTodoLists } from '../groupTodoLists/types';
 
@@ -15,7 +15,7 @@ export interface State {
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;
-    yearly_budgets_list: FetchYearlyBudgetsList;
+    yearly_budgets_list: YearlyBudgetsList;
     custom_budgets_list: CustomBudgetsList;
   };
   users: {

@@ -1,4 +1,4 @@
-import { StandardBudgetsList, FetchYearlyBudgetsList, CustomBudgetsList } from './types';
+import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from './types';
 export type budgetsActions = ReturnType<
   typeof updateStandardBudgets | typeof fetchYearlyBudgets | typeof updateCustomBudgets
 >;
@@ -15,8 +15,8 @@ export const updateStandardBudgets = (
 
 export const FETCH_YEARLY_BUDGETS = 'FETCH_YEARLY_BUDGETS';
 export const fetchYearlyBudgets = (
-  yearly_budgets_list: FetchYearlyBudgetsList
-): { type: string; payload: FetchYearlyBudgetsList } => {
+  yearly_budgets_list: YearlyBudgetsList
+): { type: string; payload: YearlyBudgetsList } => {
   return {
     type: FETCH_YEARLY_BUDGETS,
     payload: yearly_budgets_list,
