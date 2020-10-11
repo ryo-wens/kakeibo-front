@@ -13,3 +13,4 @@ export { default as TodoList } from './TodoList';
 export { default as TodoListItemMenuButton } from './TodoListItemMenuButton';
 export { default as TodoMenu } from './TodoMenu';
 export { default as WeeksTabs } from './WeeksTabs';
+export { default as WeeksTodoLists } from './WeeksTodoLists';

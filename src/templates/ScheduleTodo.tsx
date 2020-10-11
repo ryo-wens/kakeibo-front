@@ -1,5 +1,4 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { TodoButton, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchMonthTodoLists } from '../reducks/todoLists/operations';
@@ -7,8 +6,8 @@ import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/select
 import { getDueTodoLists, getImplementationTodoLists } from '../reducks/todoLists/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { WeeksTabs } from '../components/todo';
 import { DatePicker } from '../components/uikit';
+import { TodoButton, TodoMenu, WeeksTabs, WeeksTodoLists } from '../components/todo';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -36,7 +35,7 @@ const ScheduleTodo = () => {
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
-  const [selectedDate, setSelectedDate] = useState<Date | null>(new Date());
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -61,19 +60,23 @@ const ScheduleTodo = () => {
     setSelectedDate(dt);
   }, [selectedDate]);
 
-  const replicatedSelectedDate = new Date(dt);
-
   const getNextWeek = useCallback(() => {
-    const nextWeek = new Date(replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() + 7));
+    const nextWeek = new Date(
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate() + 7
+    );
     setSelectedDate(nextWeek);
-  }, [setSelectedDate]);
+  }, [selectedDate, setSelectedDate]);
 
   const getPreviousWeek = useCallback(() => {
     const previousWeek = new Date(
-      replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() - 7)
+      selectedDate.getFullYear(),
+      selectedDate.getMonth(),
+      selectedDate.getDate() - 7
     );
     setSelectedDate(previousWeek);
-  }, [setSelectedDate]);
+  }, [selectedDate, setSelectedDate]);
 
   return (
     <>
@@ -94,6 +97,7 @@ const ScheduleTodo = () => {
           <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
         <WeeksTabs selectedDate={selectedDate} />
+        <WeeksTodoLists selectedDate={selectedDate} />
       </div>
     </>
   );
