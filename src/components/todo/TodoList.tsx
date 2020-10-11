@@ -87,12 +87,20 @@ const TodoList = (props: TodoListProps) => {
     setTodoContent(prevTodoContent);
     setSelectedImplementationDate(prevImplementationDate);
     setSelectedDueDate(prevDueDate);
-  }, [setOpenEditTodoList, setTodoContent, setSelectedImplementationDate, setSelectedDueDate]);
+  }, [
+    setOpenEditTodoList,
+    setTodoContent,
+    setSelectedImplementationDate,
+    setSelectedDueDate,
+    prevTodoContent,
+    prevImplementationDate,
+    prevDueDate,
+  ]);
 
   const closeInputTodoList = useCallback(() => {
     setOpenEditTodoList(false);
     setTodoContent(prevTodoContent);
-  }, [setOpenEditTodoList, setTodoContent]);
+  }, [setOpenEditTodoList, setTodoContent, prevTodoContent]);
 
   const handleChangeChecked = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
