@@ -3,6 +3,7 @@ import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import { push } from 'connected-react-router';
 import { State } from '../store/types';
+import { isValidBudgetFormat } from '../../lib/validation';
 import {
   editStandardBudgetsReq,
   fetchCustomBudgetsRes,
@@ -23,13 +24,13 @@ export const fetchStandardBudgets = () => {
         dispatch(updateStandardBudgets(standardBudgetsList));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
@@ -37,21 +38,8 @@ export const fetchStandardBudgets = () => {
 
 export const editStandardBudgets = (budgets: editStandardBudgetsReq) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    const isValidBudgetFormat = (budget: number) => {
-      const regex = /^([1-9]\d*|0)$/;
-      return regex.test(String(budget));
-    };
-
-    const checkBudget = (): boolean => {
-      for (const budget of budgets) {
-        if (!isValidBudgetFormat(budget.budget as number)) {
-          return false;
-        }
-      }
-      return true;
-    };
-
-    if (!checkBudget()) {
+    const validBudgets = budgets.every((budget) => isValidBudgetFormat(budget.budget));
+    if (!validBudgets) {
       alert('予算は0以上の整数で入力してください。');
       return;
     }
@@ -78,16 +66,13 @@ export const editStandardBudgets = (budgets: editStandardBudgetsReq) => {
         dispatch(updateStandardBudgets(nextStandardBudgetsList));
       })
       .catch((error) => {
-        if (error.response.status === 400) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
@@ -104,13 +89,13 @@ export const getYearlyBudgets = () => {
         dispatch(fetchYearlyBudgets(yearlyBudgetsList));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
@@ -127,16 +112,13 @@ export const fetchCustomBudgets = () => {
         dispatch(updateCustomBudgets(customBudgets));
       })
       .catch((error) => {
-        if (error.response.status === 400) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
