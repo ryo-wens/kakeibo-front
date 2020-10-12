@@ -6,10 +6,15 @@ import {
   createGroupTodoListItemReq,
   createGroupTodoListItemRes,
   fetchGroupDateTodoListsRes,
+  fetchGroupMonthTodoListsRes,
   GroupTodoListItem,
   GroupTodoLists,
 } from './types';
-import { createGroupTodoListItemAction, fetchGroupDateTodoListsAction } from './actions';
+import {
+  createGroupTodoListItemAction,
+  fetchGroupDateTodoListsAction,
+  fetchGroupMonthTodoListsAction,
+} from './actions';
 import { push } from 'connected-react-router';
 
 export const createGroupTodoListItem = (
@@ -113,6 +118,46 @@ export const fetchGroupDateTodoLists = (
           const groupDueTodoLists: GroupTodoLists = [];
           dispatch(
             fetchGroupDateTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
+          );
+        }
+      })
+      .catch((error) => {
+        if (error && error.response) {
+          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
+        }
+      });
+  };
+};
+
+export const fetchGroupMonthTodoLists = (groupId: number, year: string, month: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    await axios
+      .get<fetchGroupMonthTodoListsRes>(
+        `http://127.0.0.1:8082/groups/${groupId}/todo-list/${year}-${month}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const groupImplementationTodoLists = res.data.implementation_todo_list;
+        const groupDueTodoLists = res.data.due_todo_list;
+        const message = res.data.message;
+
+        if (groupImplementationTodoLists !== undefined && groupDueTodoLists !== undefined) {
+          const message = '';
+          dispatch(
+            fetchGroupMonthTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
+          );
+        } else {
+          const groupImplementationTodoLists: GroupTodoLists = [];
+          const groupDueTodoLists: GroupTodoLists = [];
+          dispatch(
+            fetchGroupMonthTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
           );
         }
       })

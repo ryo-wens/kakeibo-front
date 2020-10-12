@@ -42,7 +42,7 @@ export const fetchGroupMonthTodoListsAction = (
   message: string
 ) => {
   return {
-    type: FETCH_GROUP_DATE_TODO_LISTS,
+    type: FETCH_GROUP_MONTH_TODO_LISTS,
     payload: {
       groupImplementationTodoLists: groupImplementationTodoLists,
       groupDueTodoLists: groupDueTodoLists,

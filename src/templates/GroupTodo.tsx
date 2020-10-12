@@ -10,7 +10,10 @@ import {
   getGroupDueTodoLists,
   getGroupImplementationTodoLists,
 } from '../reducks/groupTodoLists/selectors';
-import { fetchGroupDateTodoLists } from '../reducks/groupTodoLists/operations';
+import {
+  fetchGroupDateTodoLists,
+  fetchGroupMonthTodoLists,
+} from '../reducks/groupTodoLists/operations';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -32,6 +35,7 @@ const GroupTodo = () => {
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
   const date: string = ('0' + dt.getDate()).slice(-2);
   const operationType = 'createGroupTodoListItem';
+
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
   const groupImplementationTodoLists = getGroupImplementationTodoLists(selector);
@@ -50,6 +54,12 @@ const GroupTodo = () => {
   useEffect(() => {
     if (groupImplementationTodoLists.length === 0 && groupDueTodoLists.length === 0) {
       dispatch(fetchGroupDateTodoLists(groupId, year, month, date));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (groupImplementationTodoLists.length === 0 && groupDueTodoLists.length === 0) {
+      dispatch(fetchGroupMonthTodoLists(groupId, year, month));
     }
   }, []);
 

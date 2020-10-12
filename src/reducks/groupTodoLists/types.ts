@@ -31,3 +31,9 @@ export interface fetchGroupDateTodoListsRes {
   due_todo_list: GroupTodoLists;
   message: string;
 }
+
+export interface fetchGroupMonthTodoListsRes {
+  implementation_todo_list: GroupTodoLists;
+  due_todo_list: GroupTodoLists;
+  message: string;
+}
