@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { AddTodo, GroupName, TodoMenu } from '../components/todo';
+import { AddTodo, ExistsTodoLists, GroupName, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -9,6 +9,7 @@ import { Group } from '../reducks/groups/types';
 import {
   getGroupDueTodoLists,
   getGroupImplementationTodoLists,
+  getGroupTodoListsMessage,
 } from '../reducks/groupTodoLists/selectors';
 import {
   fetchGroupDateTodoLists,
@@ -40,6 +41,7 @@ const GroupTodo = () => {
   const unapprovedGroups = getUnapprovedGroups(selector);
   const groupImplementationTodoLists = getGroupImplementationTodoLists(selector);
   const groupDueTodoLists = getGroupDueTodoLists(selector);
+  const groupTodoListsMessage = getGroupTodoListsMessage(selector);
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -84,6 +86,13 @@ const GroupTodo = () => {
       <TodoMenu />
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
+        <ExistsTodoLists
+          planName={'実施予定'}
+          todoLists={groupImplementationTodoLists}
+          implementationTodoLists={groupImplementationTodoLists}
+          dueTodoLists={groupDueTodoLists}
+          todoListsMessage={groupTodoListsMessage}
+        />
         <AddTodo operationType={operationType} groupId={groupId} />
       </div>
     </>

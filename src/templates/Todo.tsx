@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
-import { AddTodo, TodoList, TodoMenu } from '../components/todo';
+import { AddTodo, ExistsTodoLists, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   getDueTodoLists,
@@ -11,7 +11,6 @@ import {
   getTodoListsMessage,
 } from '../reducks/todoLists/selectors';
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
-import { TodoListItem, TodoLists } from '../reducks/todoLists/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -51,38 +50,6 @@ const Todo = () => {
     }
   }, []);
 
-  const existsPlanTodoLists = (todoLists: TodoLists, planName: string) => {
-    if (todoLists.length > 0) {
-      return (
-        <>
-          <p>{planName}のTodo</p>
-          {todoLists.map((todoList: TodoListItem) => {
-            return (
-              <div key={todoList.id}>
-                <TodoList todoListItem={todoList} />
-              </div>
-            );
-          })}
-        </>
-      );
-    } else {
-      return <p>{planName}のTodoはありません。</p>;
-    }
-  };
-
-  const existTodoLists = () => {
-    if (implementationTodoLists.length === 0 && dueTodoLists.length === 0) {
-      return <p>{todoListsMessage}</p>;
-    } else {
-      return (
-        <>
-          {existsPlanTodoLists(implementationTodoLists, '実施予定')}
-          {existsPlanTodoLists(dueTodoLists, '締切予定')}
-        </>
-      );
-    }
-  };
-
   return (
     <>
       <TodoMenu />
@@ -90,7 +57,20 @@ const Todo = () => {
         <span>
           今日 {month}/{date} ({weekday})
         </span>
-        {existTodoLists()}
+        <ExistsTodoLists
+          planName={'実施予定'}
+          todoLists={implementationTodoLists}
+          implementationTodoLists={implementationTodoLists}
+          dueTodoLists={dueTodoLists}
+          todoListsMessage={todoListsMessage}
+        />
+        <ExistsTodoLists
+          planName={'締切予定'}
+          todoLists={dueTodoLists}
+          implementationTodoLists={implementationTodoLists}
+          dueTodoLists={dueTodoLists}
+          todoListsMessage={todoListsMessage}
+        />
         <div>
           <AddTodo operationType={operationType} groupId={groupId} />
         </div>
