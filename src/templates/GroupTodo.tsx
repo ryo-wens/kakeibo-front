@@ -6,6 +6,11 @@ import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/select
 import { fetchGroups } from '../reducks/groups/operations';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Group } from '../reducks/groups/types';
+import {
+  getGroupDueTodoLists,
+  getGroupImplementationTodoLists,
+} from '../reducks/groupTodoLists/selectors';
+import { fetchGroupDateTodoLists } from '../reducks/groupTodoLists/operations';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,10 +27,15 @@ const GroupTodo = () => {
   const pathname = window.location.pathname;
   const paths = pathname.split('/');
   const groupId = Number(paths[paths.length - 1]);
+  const dt: Date = new Date();
+  const year = String(dt.getFullYear());
+  const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
+  const date: string = ('0' + dt.getDate()).slice(-2);
   const operationType = 'createGroupTodoListItem';
-
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
+  const groupImplementationTodoLists = getGroupImplementationTodoLists(selector);
+  const groupDueTodoLists = getGroupDueTodoLists(selector);
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -36,6 +46,12 @@ const GroupTodo = () => {
   useEffect(() => {
     dispatch(fetchGroups());
   }, [groupId]);
+
+  useEffect(() => {
+    if (groupImplementationTodoLists.length === 0 && groupDueTodoLists.length === 0) {
+      dispatch(fetchGroupDateTodoLists(groupId, year, month, date));
+    }
+  }, []);
 
   const approvedGroup: Group = useMemo(() => {
     if (approvedGroups.length > 0) {

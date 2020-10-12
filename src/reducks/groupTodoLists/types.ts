@@ -25,3 +25,9 @@ export interface createGroupTodoListItemRes {
   complete_flag: boolean;
   user_id: string;
 }
+
+export interface fetchGroupDateTodoListsRes {
+  implementation_todo_list: GroupTodoLists;
+  due_todo_list: GroupTodoLists;
+  message: string;
+}
