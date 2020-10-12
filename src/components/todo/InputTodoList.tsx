@@ -49,6 +49,24 @@ const InputTodoList = (props: InputTodoListProps) => {
   const dispatch = useDispatch();
   const isBlankTodoContent = props.todoContent === '';
 
+  const pathName: string = window.location.pathname;
+  const paths = pathName.split('/', 2);
+  const type = paths[1];
+
+  const switchOperation = () => {
+    if (type === ('todo' || 'schedule-todo')) {
+      return dispatch(
+        editTodoListItem(
+          props.todoListItemId,
+          props.selectedImplementationDate,
+          props.selectedDueDate,
+          props.todoContent,
+          props.completeFlag
+        )
+      );
+    }
+  };
+
   return (
     <>
       <div className={classes.inputTodoList}>
@@ -97,17 +115,7 @@ const InputTodoList = (props: InputTodoListProps) => {
             <TodoButton
               label={props.buttonLabel}
               disabled={isBlankTodoContent}
-              onClick={() =>
-                dispatch(
-                  editTodoListItem(
-                    props.todoListItemId,
-                    props.selectedImplementationDate,
-                    props.selectedDueDate,
-                    props.todoContent,
-                    props.completeFlag
-                  )
-                ) && props.closeInputTodoList()
-              }
+              onClick={() => switchOperation() && props.closeInputTodoList()}
             />
             <TodoButton
               label={'キャンセル'}

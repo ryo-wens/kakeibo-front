@@ -35,7 +35,6 @@ const Todo = () => {
   const date: string = ('0' + dt.getDate()).slice(-2);
   const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
   const weekday = weekdays[dt.getDay()];
-  const operationType = 'createTodoListItem';
   const groupId = 0;
 
   useEffect(() => {
@@ -72,7 +71,7 @@ const Todo = () => {
           todoListsMessage={todoListsMessage}
         />
         <div>
-          <AddTodo operationType={operationType} groupId={groupId} />
+          <AddTodo groupId={groupId} />
         </div>
       </div>
     </>

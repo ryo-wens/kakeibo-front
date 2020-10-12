@@ -35,7 +35,6 @@ const GroupTodo = () => {
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
   const date: string = ('0' + dt.getDate()).slice(-2);
-  const operationType = 'createGroupTodoListItem';
 
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
@@ -93,7 +92,7 @@ const GroupTodo = () => {
           dueTodoLists={groupDueTodoLists}
           todoListsMessage={groupTodoListsMessage}
         />
-        <AddTodo operationType={operationType} groupId={groupId} />
+        <AddTodo groupId={groupId} />
       </div>
     </>
   );
