@@ -12,6 +12,11 @@ export const groupTodoListsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.EDIT_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FETCH_GROUP_DATE_TODO_LISTS:
       return {
         ...state,
