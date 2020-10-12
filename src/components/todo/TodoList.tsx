@@ -8,6 +8,7 @@ import { InputTodoList, TodoListItemMenuButton } from './index';
 import { TodoListItem } from '../../reducks/todoLists/types';
 import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
+import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -26,7 +27,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface TodoListProps {
-  todoListItem: TodoListItem;
+  todoListItem: TodoListItem | GroupTodoListItem;
 }
 
 const TodoList = (props: TodoListProps) => {

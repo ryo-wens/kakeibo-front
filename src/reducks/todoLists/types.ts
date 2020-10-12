@@ -25,8 +25,8 @@ export interface createTodoListItemRes {
 }
 
 export interface editTodoListItemReq {
-  implementation_date: string;
-  due_date: string;
+  implementation_date: Date | null;
+  due_date: Date | null;
   todo_content: string;
   complete_flag: boolean;
 }

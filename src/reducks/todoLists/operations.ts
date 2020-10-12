@@ -12,6 +12,7 @@ import {
   createTodoListItemReq,
   createTodoListItemRes,
   deleteTodoListItemRes,
+  editTodoListItemReq,
   editTodoListItemRes,
   fetchMonthTodoListsRes,
   fetchTodayTodoListsRes,
@@ -108,7 +109,7 @@ export const editTodoListItem = (
       return;
     }
 
-    const data = {
+    const data: editTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
       todo_content: todoContent,

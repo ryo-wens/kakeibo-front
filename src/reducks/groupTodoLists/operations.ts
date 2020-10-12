@@ -5,6 +5,8 @@ import moment from 'moment';
 import {
   createGroupTodoListItemReq,
   createGroupTodoListItemRes,
+  editGroupTodoListItemReq,
+  editGroupTodoListItemRes,
   fetchGroupDateTodoListsRes,
   fetchGroupMonthTodoListsRes,
   GroupTodoListItem,
@@ -12,6 +14,7 @@ import {
 } from './types';
 import {
   createGroupTodoListItemAction,
+  editGroupTodoListItemAction,
   fetchGroupDateTodoListsAction,
   fetchGroupMonthTodoListsAction,
 } from './actions';
@@ -84,6 +87,85 @@ export const createGroupTodoListItem = (
 
         if (error.response.status === 500) {
           alert(error.response.data.error.message);
+        }
+      });
+  };
+};
+
+export const editGroupTodoListItem = (
+  groupId: number,
+  todoListItemId: number,
+  implementationDate: Date | null,
+  dueDate: Date | null,
+  todoContent: string,
+  completeFlag: boolean
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (implementationDate === null) {
+      return;
+    }
+    if (dueDate === null) {
+      return;
+    }
+    if (todoContent === '') {
+      return;
+    }
+
+    const data: editGroupTodoListItemReq = {
+      implementation_date: implementationDate,
+      due_date: dueDate,
+      todo_content: todoContent,
+      complete_flag: completeFlag,
+    };
+
+    await axios
+      .put<editGroupTodoListItemRes>(
+        `http://127.0.0.1:8082/groups/${groupId}/todo-list/${todoListItemId}`,
+        JSON.stringify(data, function (key, value) {
+          if (key === 'implementation_date') {
+            return moment(value).format();
+          } else if (key === 'due_date') {
+            return moment(value).format();
+          }
+          return value;
+        }),
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const prevGroupImplementationTodoLists: GroupTodoLists = getState().groupTodoLists
+          .groupImplementationTodoLists;
+        const prevGroupDueTodoLists: GroupTodoLists = getState().groupTodoLists.groupDueTodoLists;
+
+        const updateGroupTodoLists = (prevGroupTodoLists: GroupTodoLists) => {
+          return prevGroupTodoLists.map((prevGroupTodoList: GroupTodoListItem) => {
+            if (prevGroupTodoList.id === todoListItemId) {
+              const updateGroupTodoListItem: GroupTodoListItem = res.data;
+              return updateGroupTodoListItem;
+            } else {
+              return prevGroupTodoList;
+            }
+          });
+        };
+
+        const updateGroupImplementationTodoLists: GroupTodoLists = updateGroupTodoLists(
+          prevGroupImplementationTodoLists
+        );
+        const updateGroupDueTodoLists: GroupTodoLists = updateGroupTodoLists(prevGroupDueTodoLists);
+
+        dispatch(
+          editGroupTodoListItemAction(updateGroupImplementationTodoLists, updateGroupDueTodoLists)
+        );
+      })
+      .catch((error) => {
+        if (error && error.response) {
+          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
         }
       });
   };
