@@ -7,6 +7,9 @@ import { isValidBudgetFormat } from '../../lib/validation';
 import {
   editStandardBudgetsReq,
   fetchCustomBudgetsRes,
+  CustomBudgetsList,
+  AddCustomBudgetsReq,
+  AddCustomBudgetsRes,
   fetchStandardBudgetsRes,
   YearlyBudgetsList,
   StandardBudgetsList,
@@ -101,11 +104,11 @@ export const getYearlyBudgets = () => {
   };
 };
 
-export const fetchCustomBudgets = (selectedYear: string, selectedMonth: string) => {
+export const fetchCustomBudgets = (selectYear: string, selectMonth: string) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<fetchCustomBudgetsRes>(
-        `http://127.0.0.1:8081/custom-budgets/${selectedYear}-${selectedMonth}`,
+        `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }
@@ -113,6 +116,47 @@ export const fetchCustomBudgets = (selectedYear: string, selectedMonth: string) 
       .then((res) => {
         const customBudgets = res.data.custom_budgets;
         dispatch(updateCustomBudgets(customBudgets));
+      })
+      .catch((error) => {
+        if (error && error.response) {
+          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
+        }
+      });
+  };
+};
+
+export const addCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  customBudgets: AddCustomBudgetsReq
+) => {
+  const data = { custom_budgets: customBudgets };
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    const validBudgets = customBudgets.every((budget) => isValidBudgetFormat(budget.budget));
+    if (!validBudgets) {
+      alert('予算は0以上の整数で入力してください。');
+      return;
+    }
+
+    await axios
+      .post<AddCustomBudgetsRes>(
+        `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const addedCustomBudgetsList: CustomBudgetsList = res.data.custom_budgets;
+
+        const nextCustomBudgetsList = [...addedCustomBudgetsList];
+
+        dispatch(updateCustomBudgets(nextCustomBudgetsList));
       })
       .catch((error) => {
         if (error && error.response) {
