@@ -31,7 +31,7 @@ export interface fetchCustomBudgetsRes {
   custom_budgets: [];
 }
 
-export interface AddCustomBudgetReq {
+export interface BudgetReq {
   big_category_id: number;
   budget: number;
 }
@@ -39,11 +39,4 @@ export interface AddCustomBudgetsRes {
   custom_budgets: Budget[];
 }
 
-export interface AddCustomBudgetsReq extends Array<AddCustomBudgetReq> {}
-
-export interface editStandardBudgetReq {
-  big_category_id: number;
-  budget: number;
-}
-
-export interface editStandardBudgetsReq extends Array<editStandardBudgetReq> {}
+export interface BudgetsReq extends Array<BudgetReq> {}
