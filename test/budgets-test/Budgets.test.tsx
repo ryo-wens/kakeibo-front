@@ -7,7 +7,7 @@ import configureStore from 'redux-mock-store';
 import {
   fetchStandardBudgets,
   editStandardBudgets,
-  getYearlyBudgets,
+  fetchYearlyBudgets,
   fetchCustomBudgets,
   addCustomBudgets,
   editCustomBudgets,
@@ -168,7 +168,7 @@ describe('async actions getYearlyBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockYearlyBudgets);
 
-    await getYearlyBudgets()(store.dispatch);
+    await fetchYearlyBudgets()(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

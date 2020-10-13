@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getYearlyBudgets } from '../../reducks/budgets/operations';
+import { fetchYearlyBudgets } from '../../reducks/budgets/operations';
 import { YearlyBudgetsList } from '../../reducks/budgets/types';
 import { State } from '../../reducks/store/types';
 import TableRow from '@material-ui/core/TableRow';
@@ -35,7 +35,7 @@ const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
   });
 
   useEffect(() => {
-    dispatch(getYearlyBudgets());
+    dispatch(fetchYearlyBudgets());
   }, []);
 
   useEffect(() => {

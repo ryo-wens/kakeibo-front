@@ -1,4 +1,8 @@
-import { fetchYearlyBudgets, updateCustomBudgets, updateStandardBudgets } from './actions';
+import {
+  fetchYearlyBudgetsActions,
+  updateCustomBudgetsActions,
+  updateStandardBudgetsActions,
+} from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import { push } from 'connected-react-router';
@@ -23,7 +27,7 @@ export const fetchStandardBudgets = () => {
       })
       .then((res) => {
         const standardBudgetsList = res.data.standard_budgets;
-        dispatch(updateStandardBudgets(standardBudgetsList));
+        dispatch(updateStandardBudgetsActions(standardBudgetsList));
       })
       .catch((error) => {
         if (error && error.response) {
@@ -65,7 +69,7 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
           }
           return standardBudget;
         });
-        dispatch(updateStandardBudgets(nextStandardBudgetsList));
+        dispatch(updateStandardBudgetsActions(nextStandardBudgetsList));
       })
       .catch((error) => {
         if (error && error.response) {
@@ -80,7 +84,7 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
   };
 };
 
-export const getYearlyBudgets = () => {
+export const fetchYearlyBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<YearlyBudgetsList>('http://127.0.0.1:8081/budgets/2020', {
@@ -88,7 +92,7 @@ export const getYearlyBudgets = () => {
       })
       .then((res) => {
         const yearlyBudgetsList = res.data;
-        dispatch(fetchYearlyBudgets(yearlyBudgetsList));
+        dispatch(fetchYearlyBudgetsActions(yearlyBudgetsList));
       })
       .catch((error) => {
         if (error && error.response) {
@@ -114,7 +118,7 @@ export const fetchCustomBudgets = (selectYear: string, selectMonth: string) => {
       )
       .then((res) => {
         const customBudgets = res.data.custom_budgets;
-        dispatch(updateCustomBudgets(customBudgets));
+        dispatch(updateCustomBudgetsActions(customBudgets));
       })
       .catch((error) => {
         if (error && error.response) {
@@ -155,7 +159,7 @@ export const addCustomBudgets = (
 
         const nextCustomBudgetsList = [...addedCustomBudgetsList];
 
-        dispatch(updateCustomBudgets(nextCustomBudgetsList));
+        dispatch(updateCustomBudgetsActions(nextCustomBudgetsList));
       })
       .catch((error) => {
         if (error && error.response) {
@@ -205,7 +209,7 @@ export const editCustomBudgets = (
           }
           return standardBudget;
         });
-        dispatch(updateCustomBudgets(nextCustomBudgetsList));
+        dispatch(updateCustomBudgetsActions(nextCustomBudgetsList));
       })
       .catch((error) => {
         if (error && error.response) {
