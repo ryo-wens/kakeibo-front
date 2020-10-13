@@ -35,7 +35,7 @@ export interface BudgetReq {
   big_category_id: number;
   budget: number;
 }
-export interface AddCustomBudgetsRes {
+export interface CustomBudgetsRes {
   custom_budgets: Budget[];
 }
 
