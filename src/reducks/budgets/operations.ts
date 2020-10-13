@@ -8,7 +8,7 @@ import {
   fetchCustomBudgetsRes,
   CustomBudgetsList,
   BudgetsReq,
-  AddCustomBudgetsRes,
+  CustomBudgetsRes,
   fetchStandardBudgetsRes,
   YearlyBudgetsList,
   StandardBudgetsList,
@@ -143,7 +143,7 @@ export const addCustomBudgets = (
     }
 
     await axios
-      .post<AddCustomBudgetsRes>(
+      .post<CustomBudgetsRes>(
         `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
         JSON.stringify(data),
         {
@@ -184,7 +184,7 @@ export const editCustomBudgets = (
     }
 
     await axios
-      .put<AddCustomBudgetsRes>(
+      .put<CustomBudgetsRes>(
         `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
         JSON.stringify(data),
         {
@@ -205,7 +205,7 @@ export const editCustomBudgets = (
           }
           return standardBudget;
         });
-        dispatch(updateStandardBudgets(nextCustomBudgetsList));
+        dispatch(updateCustomBudgets(nextCustomBudgetsList));
       })
       .catch((error) => {
         if (error && error.response) {
