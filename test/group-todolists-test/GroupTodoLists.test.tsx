@@ -3,9 +3,15 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
 import * as GroupTodoListsActions from '../../src/reducks/groupTodoLists/actions';
-import { createGroupTodoListItem } from '../../src/reducks/groupTodoLists/operations';
+import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
+import fetchGroupDateTodoListsResponse from './fetchGroupDateTodoListsResponse.json';
+import fetchGroupMonthTodoListsResponse from './fetchGroupMonthTodoListsResponse.json';
+import {
+  createGroupTodoListItem,
+  fetchGroupDateTodoLists,
+  fetchGroupMonthTodoLists,
+} from '../../src/reducks/groupTodoLists/operations';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -129,6 +135,124 @@ describe('async actions groupTodoLists', () => {
       // @ts-ignore
       getState
     );
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('Get groupImplementationTodoLists and groupDueTodoLists when FETCH_GROUP_DATE_TODO_LISTS succeeds.', async () => {
+    const groupId = 1;
+    const year = '2020';
+    const month = '09';
+    const date = '27';
+    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${year}-${month}-${date}`;
+
+    const mockResponse = JSON.stringify(fetchGroupDateTodoListsResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTodoListsActions.FETCH_GROUP_DATE_TODO_LISTS,
+        payload: {
+          groupImplementationTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T14:40:00Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/27(日)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T14:50:00Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/29(火)',
+              todo_content: 'お掃除',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupDueTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T14:40:00Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/27(日)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          message: '',
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupDateTodoLists(groupId, year, month, date)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('Get groupImplementationTodoLists and groupDueTodoLists when FETCH_GROUP_MONTH_TODO_LISTS succeeds.', async () => {
+    const groupId = 1;
+    const year = '2020';
+    const month = '09';
+    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${year}-${month}`;
+
+    const mockResponse = JSON.stringify(fetchGroupMonthTodoListsResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTodoListsActions.FETCH_GROUP_MONTH_TODO_LISTS,
+        payload: {
+          groupImplementationTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T14:40:00Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/27(日)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T14:50:00Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/29(火)',
+              todo_content: 'お掃除',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupDueTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T14:40:00Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/27(日)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T14:50:00Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/29(火)',
+              todo_content: 'お掃除',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          message: '',
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupMonthTodoLists(groupId, year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

@@ -8,6 +8,7 @@ import { InputTodoList, TodoListItemMenuButton } from './index';
 import { TodoListItem } from '../../reducks/todoLists/types';
 import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
+import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -26,7 +27,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface TodoListProps {
-  todoListItem: TodoListItem;
+  todoListItem: TodoListItem | GroupTodoListItem;
 }
 
 const TodoList = (props: TodoListProps) => {
@@ -40,6 +41,9 @@ const TodoList = (props: TodoListProps) => {
     new Date()
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
+  const pathName: string = window.location.pathname;
+  const paths = pathName.split('/');
+  const groupId = Number(paths[paths.length - 1]);
 
   const changePrevDateType = (date: string) => {
     const prevDates = date.split(/[/()]/, 3);
@@ -53,7 +57,6 @@ const TodoList = (props: TodoListProps) => {
   const prevImplementationDate: Date = changePrevDateType(props.todoListItem.implementation_date);
   const prevDueDate: Date = changePrevDateType(props.todoListItem.due_date);
 
-  const groupId = 0;
   const todoListItemId = props.todoListItem.id;
 
   useEffect(() => {
@@ -153,7 +156,6 @@ const TodoList = (props: TodoListProps) => {
             </>
           ) : (
             <InputTodoList
-              groupId={0}
               buttonLabel={'保存'}
               inputTodoContent={inputTodoContent}
               inputImplementationDate={inputImplementationDate}
