@@ -23,12 +23,12 @@ interface CustomBudgetsRowProps {
   years: number;
 }
 
-const CustomBudgetsRow = (props: CustomBudgetsRowProps) => {
+const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const yearlyBudgets = selector.budgets.yearly_budgets_list;
-  const [yeaBudget, setYearBudget] = useState<YearlyBudgetsList>({
+  const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
     year: '',
     yearly_total_budget: 0,
     monthly_budgets: [],
@@ -42,18 +42,14 @@ const CustomBudgetsRow = (props: CustomBudgetsRowProps) => {
     setYearBudget(yearlyBudgets);
   }, [yearlyBudgets]);
 
-  const budgetType = () => {
-    for (const budget of yearlyBudgets.monthly_budgets) {
-      if (budget.budget_type === 'StandardBudget') {
-        return '標準';
-      } else if (budget.budget_type === 'CustomBudget') {
-        return 'カスタム';
-      }
-    }
-  };
-
   const customBudgetsTable = () => {
-    return yeaBudget.monthly_budgets.map((budget, index) => {
+    return yearBudget.monthly_budgets.map((budget, index) => {
+      const budgetType = () => {
+        if (budget.budget_type === 'StandardBudget') {
+          return '標準';
+        }
+        return 'カスタム';
+      };
       const month = Number(budget.month.slice(5, 7));
       const lastDate = new Date(props.years, Number(month), 0).getDate();
       return (
@@ -73,11 +69,19 @@ const CustomBudgetsRow = (props: CustomBudgetsRowProps) => {
           <TableCell className={classes.tableSize} align="center">
             <IconButton
               size={'small'}
-              onClick={() =>
-                dispatch(
-                  push(`/custom-budgets/${budget.month.slice(0, 4)}-${budget.month.slice(5, 7)}`)
-                )
-              }
+              onClick={() => {
+                if (budgetType() === 'カスタム') {
+                  dispatch(
+                    push(`/custom-budgets/${budget.month.slice(0, 4)}-${budget.month.slice(5, 7)}`)
+                  );
+                } else if (budgetType() === '標準') {
+                  dispatch(
+                    push(
+                      `/standard-budgets/${budget.month.slice(0, 4)}-${budget.month.slice(5, 7)}`
+                    )
+                  );
+                }
+              }}
             >
               <CreateIcon color={'primary'} />
             </IconButton>
@@ -88,4 +92,4 @@ const CustomBudgetsRow = (props: CustomBudgetsRowProps) => {
   };
   return <>{customBudgetsTable()}</>;
 };
-export default CustomBudgetsRow;
+export default YearlyBudgetsRow;

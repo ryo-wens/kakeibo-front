@@ -9,11 +9,13 @@ import {
   editStandardBudgets,
   getYearlyBudgets,
   fetchCustomBudgets,
+  addCustomBudgets,
 } from '../../src/reducks/budgets/operations';
 import standardBudgets from './fetchBudgetsResponse.json';
-import yearlyBudgets from './fetchYearlyBudgetsReponse.json';
+import yearlyBudgets from './fetchYearlyBudgetsResponse.json';
 import customBudgets from './fetchCustomBudgetsResponse.json';
 import editBudgets from './editBudgetsResponse.json';
+import addCustomBudget from './addCustomBudgetsResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -161,8 +163,10 @@ describe('async actions getYearlyBudgets', () => {
 });
 
 describe('async actions getCustomBudgets', () => {
+  const selectYear = '2020';
+  const selectMonth = '07';
   const store = mockStore({ budgets: { custom_budgets_list: [] } });
-  const url = 'http://127.0.0.1:8081/custom-budgets/2020-07';
+  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Get custom_budgets if fetch succeeds', async () => {
     const mockCustomBudgets = customBudgets;
@@ -176,7 +180,103 @@ describe('async actions getCustomBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockCustomBudgets);
 
-    await fetchCustomBudgets()(store.dispatch);
+    await fetchCustomBudgets(selectYear, selectMonth)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+});
+
+describe('async actions addCustomBudgets', () => {
+  const selectYear = '2020';
+  const selectMonth = '07';
+  const store = mockStore({ customBudgets });
+  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
+
+  it('Add custom_budgets if fetch succeeds', async () => {
+    const mockCustomBudgets = addCustomBudget;
+
+    const nextCustomBudgets = {
+      custom_budgets: [
+        {
+          big_category_id: 2,
+          budget: 25000,
+        },
+        {
+          big_category_id: 3,
+          budget: 5000,
+        },
+        {
+          big_category_id: 4,
+          budget: 4500,
+        },
+        {
+          big_category_id: 5,
+          budget: 1000,
+        },
+        {
+          big_category_id: 6,
+          budget: 1000,
+        },
+        {
+          big_category_id: 7,
+          budget: 0,
+        },
+        {
+          big_category_id: 8,
+          budget: 4900,
+        },
+        {
+          big_category_id: 9,
+          budget: 4400,
+        },
+        {
+          big_category_id: 10,
+          budget: 10000,
+        },
+        {
+          big_category_id: 11,
+          budget: 15000,
+        },
+        {
+          big_category_id: 12,
+          budget: 3000,
+        },
+        {
+          big_category_id: 13,
+          budget: 0,
+        },
+        {
+          big_category_id: 14,
+          budget: 9800,
+        },
+        {
+          big_category_id: 15,
+          budget: 0,
+        },
+        {
+          big_category_id: 16,
+          budget: 0,
+        },
+        {
+          big_category_id: 17,
+          budget: 0,
+        },
+      ],
+    };
+
+    const expectedActions = [
+      {
+        type: actionTypes.UPDATE_CUSTOM_BUDGETS,
+        payload: mockCustomBudgets.custom_budgets,
+      },
+    ];
+
+    axiosMock.onPost(url).reply(200, mockCustomBudgets);
+
+    await addCustomBudgets(
+      selectYear,
+      selectMonth,
+      nextCustomBudgets.custom_budgets
+    )(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
