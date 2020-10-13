@@ -32,7 +32,6 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface InputTodoListProps {
-  groupId: number;
   buttonLabel: string;
   inputTodoContent: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inputImplementationDate: (date: Date | null) => void;

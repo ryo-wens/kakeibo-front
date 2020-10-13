@@ -35,7 +35,6 @@ const Todo = () => {
   const date: string = ('0' + dt.getDate()).slice(-2);
   const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
   const weekday = weekdays[dt.getDay()];
-  const groupId = 0;
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -71,7 +70,7 @@ const Todo = () => {
           todoListsMessage={todoListsMessage}
         />
         <div>
-          <AddTodo groupId={groupId} />
+          <AddTodo />
         </div>
       </div>
     </>

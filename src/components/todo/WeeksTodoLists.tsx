@@ -27,7 +27,6 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
     selectedDate.getMonth(),
     selectedDate.getDate() - selectedWeekDay
   );
-  const groupId = 0;
 
   const changePrevDateType = (date: string) => {
     const prevDates = date.split(/[/()]/, 3);
@@ -67,7 +66,7 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
               {date.getMonth() + 1}/{date.getDate()} （{weekdays[date.getDay()]}）
             </p>
             {dateTodoLists}
-            <AddTodo groupId={groupId} />
+            <AddTodo />
           </div>
         );
       }

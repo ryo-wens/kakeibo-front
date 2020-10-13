@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -54,12 +54,7 @@ const TodoList = (props: TodoListProps) => {
   const prevImplementationDate: Date = changePrevDateType(props.todoListItem.implementation_date);
   const prevDueDate: Date = changePrevDateType(props.todoListItem.due_date);
 
-  const groupId = 0;
   const todoListItemId = props.todoListItem.id;
-
-  useEffect(() => {
-    closeInputTodoList();
-  }, [groupId]);
 
   const inputTodoContent = useCallback(
     (event) => {
@@ -154,7 +149,6 @@ const TodoList = (props: TodoListProps) => {
             </>
           ) : (
             <InputTodoList
-              groupId={0}
               buttonLabel={'保存'}
               inputTodoContent={inputTodoContent}
               inputImplementationDate={inputImplementationDate}

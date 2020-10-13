@@ -30,7 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface AddTodoProps {
-  groupId: number;
+  groupId?: number;
 }
 
 const AddTodo = (props: AddTodoProps) => {
@@ -80,7 +80,7 @@ const AddTodo = (props: AddTodoProps) => {
   const switchOperation = () => {
     if (type === ('todo' || 'schedule-todo')) {
       return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
-    } else if (type === 'group-todo') {
+    } else if (type === 'group-todo' && typeof props.groupId === 'number') {
       return dispatch(
         createGroupTodoListItem(
           props.groupId,
