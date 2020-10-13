@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchStandardBudgets } from '../reducks/budgets/operations';
+import { fetchStandardBudgets, addCustomBudgets } from '../reducks/budgets/operations';
 import { State } from '../reducks/store/types';
 import { StandardBudgetsList } from '../reducks/budgets/types';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -139,7 +139,22 @@ const SelectStandardBudgets = () => {
         </Table>
       </TableContainer>
       <div className={classes.updateButton}>
-        <GenericButton label={'更新する'} disabled={unEditBudgets} onClick={() => alert('test')} />
+        <GenericButton
+          label={'更新する'}
+          disabled={unEditBudgets}
+          onClick={() =>
+            dispatch(
+              addCustomBudgets(
+                selectYear,
+                selectMonth,
+                standardBudgets.map((budget) => {
+                  const { big_category_name, ...rest } = budget; // eslint-disable-line
+                  return rest;
+                })
+              )
+            )
+          }
+        />
       </div>
     </div>
   );
