@@ -30,8 +30,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface AddTodoProps {
-  operationType: string;
-  groupId: number;
+  groupId?: number;
 }
 
 const AddTodo = (props: AddTodoProps) => {
@@ -43,6 +42,9 @@ const AddTodo = (props: AddTodoProps) => {
     new Date()
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
+  const pathName: string = window.location.pathname;
+  const paths = pathName.split('/', 2);
+  const type = paths[1];
 
   const handleOpen = () => {
     setOpen(true);
@@ -76,9 +78,9 @@ const AddTodo = (props: AddTodoProps) => {
   const isBlankTodoContent = todoContent === '';
 
   const switchOperation = () => {
-    if (props.operationType === 'createTodoListItem') {
+    if (type === ('todo' || 'schedule-todo')) {
       return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
-    } else if (props.operationType === 'createGroupTodoListItem') {
+    } else if (type === 'group-todo' && typeof props.groupId === 'number') {
       return dispatch(
         createGroupTodoListItem(
           props.groupId,

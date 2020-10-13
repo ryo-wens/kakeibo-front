@@ -8,12 +8,13 @@ import { InputTodoList, TodoListItemMenuButton } from './index';
 import { TodoListItem } from '../../reducks/todoLists/types';
 import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
+import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      height: '40px',
       width: '700px',
+      height: 'auto',
       zIndex: 1100,
     },
     groupMenu: {
@@ -26,7 +27,7 @@ const useStyles = makeStyles(() =>
 );
 
 interface TodoListProps {
-  todoListItem: TodoListItem;
+  todoListItem: TodoListItem | GroupTodoListItem;
 }
 
 const TodoList = (props: TodoListProps) => {
@@ -40,6 +41,9 @@ const TodoList = (props: TodoListProps) => {
     new Date()
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
+  const pathName: string = window.location.pathname;
+  const paths = pathName.split('/');
+  const groupId = Number(paths[paths.length - 1]);
 
   const changePrevDateType = (date: string) => {
     const prevDates = date.split(/[/()]/, 3);
@@ -53,7 +57,6 @@ const TodoList = (props: TodoListProps) => {
   const prevImplementationDate: Date = changePrevDateType(props.todoListItem.implementation_date);
   const prevDueDate: Date = changePrevDateType(props.todoListItem.due_date);
 
-  const groupId = 0;
   const todoListItemId = props.todoListItem.id;
 
   useEffect(() => {
@@ -67,83 +70,105 @@ const TodoList = (props: TodoListProps) => {
     [setTodoContent]
   );
 
-  const inputImplementationDate = (date: Date | null) => {
-    setSelectedImplementationDate(date);
-    setSelectedDueDate(date);
-  };
+  const inputImplementationDate = useCallback(
+    (date: Date | null) => {
+      setSelectedImplementationDate(date);
+      setSelectedDueDate(date);
+    },
+    [setSelectedImplementationDate, setSelectedDueDate]
+  );
 
-  const inputDueDate = (date: Date | null) => {
-    setSelectedDueDate(date);
-  };
+  const inputDueDate = useCallback(
+    (date: Date | null) => {
+      setSelectedDueDate(date);
+    },
+    [setSelectedDueDate]
+  );
 
-  const openInputTodoList = () => {
+  const openInputTodoList = useCallback(() => {
     setOpenEditTodoList(true);
     setTodoContent(prevTodoContent);
     setSelectedImplementationDate(prevImplementationDate);
     setSelectedDueDate(prevDueDate);
-  };
+  }, [
+    setOpenEditTodoList,
+    setTodoContent,
+    setSelectedImplementationDate,
+    setSelectedDueDate,
+    prevTodoContent,
+    prevImplementationDate,
+    prevDueDate,
+  ]);
 
-  const closeInputTodoList = () => {
+  const closeInputTodoList = useCallback(() => {
     setOpenEditTodoList(false);
     setTodoContent(prevTodoContent);
-  };
+  }, [setOpenEditTodoList, setTodoContent, prevTodoContent]);
 
-  const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (!checked) {
-      setChecked(event.target.checked);
-      setStrikethrough(classes.ListItemText);
-    } else {
-      setChecked(event.target.checked);
-      setStrikethrough('');
-    }
-    return dispatch(
-      editTodoListItem(
-        todoListItemId,
-        selectedImplementationDate,
-        selectedDueDate,
-        todoContent,
-        event.target.checked
-      )
-    );
-  };
-
-  const editTodoList = () => {
-    if (!openEditTodoList) {
-      return (
-        <>
-          <ListItem>
-            <Checkbox color="primary" checked={checked} onChange={handleChangeChecked} />
-            <ListItemText className={strikethrough} secondary={props.todoListItem.todo_content} />
-          </ListItem>
-          <TodoListItemMenuButton
-            openInputTodoList={() => openInputTodoList()}
-            todoListItem={props.todoListItem}
-          />
-        </>
+  const handleChangeChecked = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (!checked) {
+        setChecked(event.target.checked);
+        setStrikethrough(classes.ListItemText);
+      } else {
+        setChecked(event.target.checked);
+        setStrikethrough('');
+      }
+      return dispatch(
+        editTodoListItem(
+          todoListItemId,
+          selectedImplementationDate,
+          selectedDueDate,
+          todoContent,
+          event.target.checked
+        )
       );
-    } else {
-      return (
-        <InputTodoList
-          groupId={0}
-          buttonLabel={'保存'}
-          inputTodoContent={inputTodoContent}
-          inputImplementationDate={inputImplementationDate}
-          inputDueDate={inputDueDate}
-          closeInputTodoList={closeInputTodoList}
-          todoListItemId={todoListItemId}
-          selectedImplementationDate={selectedImplementationDate}
-          selectedDueDate={selectedDueDate}
-          todoContent={todoContent}
-          completeFlag={checked}
-        />
-      );
-    }
-  };
+    },
+    [
+      dispatch,
+      setChecked,
+      setStrikethrough,
+      todoListItemId,
+      selectedImplementationDate,
+      selectedDueDate,
+      todoContent,
+      editTodoListItem,
+    ]
+  );
 
   return (
     <>
       <List className={classes.root}>
-        <div className={classes.groupMenu}>{editTodoList()}</div>
+        <div className={classes.groupMenu}>
+          {!openEditTodoList ? (
+            <>
+              <ListItem>
+                <Checkbox color="primary" checked={checked} onChange={handleChangeChecked} />
+                <ListItemText
+                  className={strikethrough}
+                  secondary={props.todoListItem.todo_content}
+                />
+              </ListItem>
+              <TodoListItemMenuButton
+                openInputTodoList={() => openInputTodoList()}
+                todoListItem={props.todoListItem}
+              />
+            </>
+          ) : (
+            <InputTodoList
+              buttonLabel={'保存'}
+              inputTodoContent={inputTodoContent}
+              inputImplementationDate={inputImplementationDate}
+              inputDueDate={inputDueDate}
+              closeInputTodoList={closeInputTodoList}
+              todoListItemId={todoListItemId}
+              selectedImplementationDate={selectedImplementationDate}
+              selectedDueDate={selectedDueDate}
+              todoContent={todoContent}
+              completeFlag={checked}
+            />
+          )}
+        </div>
       </List>
     </>
   );
