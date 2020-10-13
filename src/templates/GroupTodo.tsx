@@ -50,6 +50,7 @@ const GroupTodo = () => {
 
   useEffect(() => {
     dispatch(fetchGroups());
+    dispatch(fetchGroupMonthTodoLists(groupId, year, month));
   }, [groupId]);
 
   useEffect(() => {

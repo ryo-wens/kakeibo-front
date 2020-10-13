@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
@@ -41,6 +41,9 @@ const TodoList = (props: TodoListProps) => {
     new Date()
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
+  const pathName: string = window.location.pathname;
+  const paths = pathName.split('/');
+  const groupId = Number(paths[paths.length - 1]);
 
   const changePrevDateType = (date: string) => {
     const prevDates = date.split(/[/()]/, 3);
@@ -55,6 +58,10 @@ const TodoList = (props: TodoListProps) => {
   const prevDueDate: Date = changePrevDateType(props.todoListItem.due_date);
 
   const todoListItemId = props.todoListItem.id;
+
+  useEffect(() => {
+    closeInputTodoList();
+  }, [groupId]);
 
   const inputTodoContent = useCallback(
     (event) => {
