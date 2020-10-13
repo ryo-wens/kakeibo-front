@@ -8,6 +8,7 @@ import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
 import { push } from 'connected-react-router';
 import CreateIcon from '@material-ui/icons/Create';
+import DeleteIcon from '@material-ui/icons/Delete';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() =>
@@ -41,6 +42,14 @@ const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
   useEffect(() => {
     setYearBudget(yearlyBudgets);
   }, [yearlyBudgets]);
+
+  const deleteCheck = () => {
+    if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
+      console.log('削除');
+    } else {
+      alert('削除を中止しました');
+    }
+  };
 
   const customBudgetsTable = () => {
     return yearBudget.monthly_budgets.map((budget, index) => {
@@ -85,6 +94,15 @@ const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
             >
               <CreateIcon color={'primary'} />
             </IconButton>
+            {(() => {
+              if (budgetType() === 'カスタム') {
+                return (
+                  <IconButton size={'small'} onClick={() => deleteCheck()}>
+                    <DeleteIcon color={'primary'} />
+                  </IconButton>
+                );
+              }
+            })()}
           </TableCell>
         </TableRow>
       );
