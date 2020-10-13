@@ -161,8 +161,10 @@ describe('async actions getYearlyBudgets', () => {
 });
 
 describe('async actions getCustomBudgets', () => {
+  const selectYear = '2020';
+  const selectMonth = '07';
   const store = mockStore({ budgets: { custom_budgets_list: [] } });
-  const url = 'http://127.0.0.1:8081/custom-budgets/2020-07';
+  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Get custom_budgets if fetch succeeds', async () => {
     const mockCustomBudgets = customBudgets;
@@ -176,7 +178,7 @@ describe('async actions getCustomBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockCustomBudgets);
 
-    await fetchCustomBudgets()(store.dispatch);
+    await fetchCustomBudgets(selectYear, selectMonth)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

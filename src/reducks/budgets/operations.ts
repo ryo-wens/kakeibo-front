@@ -101,12 +101,15 @@ export const getYearlyBudgets = () => {
   };
 };
 
-export const fetchCustomBudgets = () => {
+export const fetchCustomBudgets = (selectedYear: string, selectedMonth: string) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
-      .get<fetchCustomBudgetsRes>('http://127.0.0.1:8081/custom-budgets/2020-07', {
-        withCredentials: true,
-      })
+      .get<fetchCustomBudgetsRes>(
+        `http://127.0.0.1:8081/custom-budgets/${selectedYear}-${selectedMonth}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const customBudgets = res.data.custom_budgets;
         dispatch(updateCustomBudgets(customBudgets));
