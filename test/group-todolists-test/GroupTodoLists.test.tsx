@@ -17,7 +17,6 @@ import {
   fetchGroupMonthTodoLists,
 } from '../../src/reducks/groupTodoLists/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
-import { deleteTodoListItem } from '../../src/reducks/todoLists/operations';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
