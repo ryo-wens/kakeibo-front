@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
 import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
 import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
+import { changePrevDateType } from '../../lib/date';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,14 +46,6 @@ const TodoList = (props: TodoListProps) => {
   const paths = pathName.split('/');
   const groupId = Number(paths[paths.length - 1]);
   const type = paths[1];
-
-  const changePrevDateType = (date: string) => {
-    const prevDates = date.split(/[/()]/, 3);
-    const prevYear = Number(prevDates[0]);
-    const prevMonth = Number(prevDates[1]) - 1;
-    const prevDate = Number(prevDates[2]);
-    return new Date(prevYear, prevMonth, prevDate);
-  };
 
   const prevTodoContent = props.todoListItem.todo_content;
   const prevImplementationDate: Date = changePrevDateType(props.todoListItem.implementation_date);

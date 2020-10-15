@@ -11,6 +11,7 @@ import {
   getTodoListsMessage,
 } from '../reducks/todoLists/selectors';
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
+import { getWeekDay } from '../lib/date';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,8 +34,7 @@ const Todo = () => {
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
   const date: string = ('0' + dt.getDate()).slice(-2);
-  const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-  const weekday = weekdays[dt.getDay()];
+  const weekday: string = getWeekDay(dt);
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {

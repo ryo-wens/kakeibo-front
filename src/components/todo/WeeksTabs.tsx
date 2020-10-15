@@ -1,6 +1,7 @@
 import React, { useMemo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText } from '@material-ui/core';
+import { getStartDate } from '../../lib/date';
 
 const useStyles = makeStyles({
   list: {
@@ -25,19 +26,13 @@ const WeeksTabs = (props: weeksTabsProps) => {
   const classes = useStyles();
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
-  const replicatedSelectedDate = new Date(selectedDate);
-
   const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
-  const selectedWeekDay = selectedDate.getDay();
-  const startDate = new Date(
-    replicatedSelectedDate.setDate(replicatedSelectedDate.getDate() - selectedWeekDay)
-  );
 
   const week = useMemo(() => {
     const _week = [];
     for (let i = 0; i < 7; i++) {
-      const _startDate = new Date(startDate);
-      const date = new Date(_startDate.setDate(_startDate.getDate() + i));
+      const startDate = getStartDate(selectedDate);
+      const date = new Date(startDate.setDate(startDate.getDate() + i));
 
       _week.push(
         <ListItem button className={classes.listItem} key={i}>
