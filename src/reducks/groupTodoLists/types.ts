@@ -54,3 +54,7 @@ export interface fetchGroupMonthTodoListsRes {
   due_todo_list: GroupTodoLists;
   message: string;
 }
+
+export interface deleteGroupTodoListItemRes {
+  message: string;
+}

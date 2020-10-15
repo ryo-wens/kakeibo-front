@@ -5,6 +5,7 @@ import moment from 'moment';
 import {
   createGroupTodoListItemReq,
   createGroupTodoListItemRes,
+  deleteGroupTodoListItemRes,
   editGroupTodoListItemReq,
   editGroupTodoListItemRes,
   fetchGroupDateTodoListsRes,
@@ -14,11 +15,13 @@ import {
 } from './types';
 import {
   createGroupTodoListItemAction,
+  deleteGroupTodoListItemAction,
   editGroupTodoListItemAction,
   fetchGroupDateTodoListsAction,
   fetchGroupMonthTodoListsAction,
 } from './actions';
 import { push } from 'connected-react-router';
+import { openTextModalAction } from '../modal/actions';
 
 export const createGroupTodoListItem = (
   groupId: number,
@@ -242,6 +245,50 @@ export const fetchGroupMonthTodoLists = (groupId: number, year: string, month: s
             fetchGroupMonthTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
           );
         }
+      })
+      .catch((error) => {
+        if (error && error.response) {
+          alert(error.response.data.error.message);
+          if (error.response.status === 401) {
+            dispatch(push('/login'));
+          }
+        } else {
+          alert(error);
+        }
+      });
+  };
+};
+
+export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .delete<deleteGroupTodoListItemRes>(
+        `http://127.0.0.1:8082/groups/${groupId}/todo-list/${todoListItemId}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const prevGroupImplementationTodoLists: GroupTodoLists = getState().groupTodoLists
+          .groupImplementationTodoLists;
+        const prevGroupDueTodoLists: GroupTodoLists = getState().groupTodoLists.groupDueTodoLists;
+        const message = res.data.message;
+
+        const updateGroupTodoLists = (prevGroupTodoLists: GroupTodoLists) => {
+          return prevGroupTodoLists.filter((prevGroupTodoList) => {
+            return prevGroupTodoList.id !== todoListItemId;
+          });
+        };
+
+        const updateGroupImplementationTodoLists: GroupTodoLists = updateGroupTodoLists(
+          prevGroupImplementationTodoLists
+        );
+        const updateGroupDueTodoLists: GroupTodoLists = updateGroupTodoLists(prevGroupDueTodoLists);
+
+        dispatch(
+          deleteGroupTodoListItemAction(updateGroupImplementationTodoLists, updateGroupDueTodoLists)
+        );
+        dispatch(openTextModalAction(message));
       })
       .catch((error) => {
         if (error && error.response) {
