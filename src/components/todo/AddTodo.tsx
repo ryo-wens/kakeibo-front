@@ -78,7 +78,7 @@ const AddTodo = (props: AddTodoProps) => {
   const isBlankTodoContent = todoContent === '';
 
   const switchOperation = () => {
-    if (type === ('todo' || 'schedule-todo')) {
+    if (type === 'todo' || type === 'schedule-todo') {
       return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
     } else if (type === 'group-todo' && typeof props.groupId === 'number') {
       return dispatch(

@@ -9,6 +9,7 @@ import { TodoListItem } from '../../reducks/todoLists/types';
 import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
 import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
+import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,8 +34,7 @@ interface TodoListProps {
 const TodoList = (props: TodoListProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [checked, setChecked] = useState<boolean>(false);
-  const [strikethrough, setStrikethrough] = useState<string>('');
+  const [checked, setChecked] = useState<boolean>(props.todoListItem.complete_flag);
   const [openEditTodoList, setOpenEditTodoList] = useState<boolean>(false);
   const [todoContent, setTodoContent] = useState<string>('');
   const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
@@ -44,6 +44,7 @@ const TodoList = (props: TodoListProps) => {
   const pathName: string = window.location.pathname;
   const paths = pathName.split('/');
   const groupId = Number(paths[paths.length - 1]);
+  const type = paths[1];
 
   const changePrevDateType = (date: string) => {
     const prevDates = date.split(/[/()]/, 3);
@@ -107,27 +108,35 @@ const TodoList = (props: TodoListProps) => {
 
   const handleChangeChecked = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      if (!checked) {
-        setChecked(event.target.checked);
-        setStrikethrough(classes.ListItemText);
-      } else {
-        setChecked(event.target.checked);
-        setStrikethrough('');
+      setChecked(event.target.checked);
+
+      if (type === 'todo' || type === 'schedule-todo') {
+        return dispatch(
+          editTodoListItem(
+            todoListItemId,
+            selectedImplementationDate,
+            selectedDueDate,
+            todoContent,
+            event.target.checked
+          )
+        );
+      } else if (type === 'group-todo') {
+        return dispatch(
+          editGroupTodoListItem(
+            groupId,
+            todoListItemId,
+            selectedImplementationDate,
+            selectedDueDate,
+            todoContent,
+            event.target.checked
+          )
+        );
       }
-      return dispatch(
-        editTodoListItem(
-          todoListItemId,
-          selectedImplementationDate,
-          selectedDueDate,
-          todoContent,
-          event.target.checked
-        )
-      );
     },
     [
       dispatch,
       setChecked,
-      setStrikethrough,
+      groupId,
       todoListItemId,
       selectedImplementationDate,
       selectedDueDate,
@@ -136,6 +145,19 @@ const TodoList = (props: TodoListProps) => {
     ]
   );
 
+  const switchStrikethrough = () => {
+    if (!checked) {
+      return <ListItemText secondary={props.todoListItem.todo_content} />;
+    } else {
+      return (
+        <ListItemText
+          className={classes.ListItemText}
+          secondary={props.todoListItem.todo_content}
+        />
+      );
+    }
+  };
+
   return (
     <>
       <List className={classes.root}>
@@ -143,11 +165,12 @@ const TodoList = (props: TodoListProps) => {
           {!openEditTodoList ? (
             <>
               <ListItem>
-                <Checkbox color="primary" checked={checked} onChange={handleChangeChecked} />
-                <ListItemText
-                  className={strikethrough}
-                  secondary={props.todoListItem.todo_content}
+                <Checkbox
+                  color="primary"
+                  checked={checked}
+                  onChange={(event) => handleChangeChecked(event)}
                 />
+                {switchStrikethrough()}
               </ListItem>
               <TodoListItemMenuButton
                 openInputTodoList={() => openInputTodoList()}
