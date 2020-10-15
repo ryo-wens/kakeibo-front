@@ -145,7 +145,7 @@ const TodoList = (props: TodoListProps) => {
     ]
   );
 
-  const test = () => {
+  const switchStrikethrough = () => {
     if (!checked) {
       return <ListItemText secondary={props.todoListItem.todo_content} />;
     } else {
@@ -170,7 +170,7 @@ const TodoList = (props: TodoListProps) => {
                   checked={checked}
                   onChange={(event) => handleChangeChecked(event)}
                 />
-                {test()}
+                {switchStrikethrough()}
               </ListItem>
               <TodoListItemMenuButton
                 openInputTodoList={() => openInputTodoList()}
