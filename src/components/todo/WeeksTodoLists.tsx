@@ -52,7 +52,7 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
               {date.getMonth() + 1}/{date.getDate()} （{getWeekDay(date)}）
             </p>
             {dateTodoLists}
-            <AddTodo />
+            <AddTodo date={date} />
           </div>
         );
       }

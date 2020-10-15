@@ -70,7 +70,7 @@ const Todo = () => {
           todoListsMessage={todoListsMessage}
         />
         <div>
-          <AddTodo />
+          <AddTodo date={dt} />
         </div>
       </div>
     </>
