@@ -1,7 +1,7 @@
 import React, { useMemo } from 'react';
 import { makeStyles } from '@material-ui/core/styles';
 import { List, ListItem, ListItemText } from '@material-ui/core';
-import { getStartDate } from '../../lib/date';
+import { getWeekStartDate } from '../../lib/date';
 
 const useStyles = makeStyles({
   list: {
@@ -31,7 +31,7 @@ const WeeksTabs = (props: weeksTabsProps) => {
   const week = useMemo(() => {
     const _week = [];
     for (let i = 0; i < 7; i++) {
-      const startDate = getStartDate(selectedDate);
+      const startDate = getWeekStartDate(selectedDate);
       const date = new Date(startDate.setDate(startDate.getDate() + i));
 
       _week.push(

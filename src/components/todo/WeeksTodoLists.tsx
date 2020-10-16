@@ -8,7 +8,7 @@ import {
 import { AddTodo, TodoList } from './index';
 import { State } from '../../reducks/store/types';
 import { TodoLists } from '../../reducks/todoLists/types';
-import { changePrevDateType, getStartDate, getWeekDay } from '../../lib/date';
+import { dateStringToDate, getWeekStartDate, getWeekDay } from '../../lib/date';
 
 interface ExistTodoListsProps {
   selectedDate: Date;
@@ -21,7 +21,7 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
   const todoListsMessage = getTodoListsMessage(selector);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
-  const _startDate = getStartDate(selectedDate);
+  const _startDate = getWeekStartDate(selectedDate);
 
   const week = useCallback(
     (todoLists: TodoLists) => {
@@ -38,8 +38,8 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
         for (const todoList of todoLists) {
           const prevDate: number =
             todoLists === implementationTodoLists
-              ? changePrevDateType(todoList.implementation_date).getTime()
-              : changePrevDateType(todoList.due_date).getTime();
+              ? dateStringToDate(todoList.implementation_date).getTime()
+              : dateStringToDate(todoList.due_date).getTime();
           const weekDate: number = date.getTime();
           if (prevDate === weekDate) {
             dateTodoLists.push(<TodoList todoListItem={todoList} key={todoList.id} />);

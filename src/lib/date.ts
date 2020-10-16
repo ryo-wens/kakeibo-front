@@ -1,4 +1,4 @@
-export const changePrevDateType = (date: string) => {
+export const dateStringToDate = (date: string) => {
   const prevDates = date.split(/[/()]/, 3);
   const prevYear = Number(prevDates[0]);
   const prevMonth = Number(prevDates[1]) - 1;
@@ -6,7 +6,7 @@ export const changePrevDateType = (date: string) => {
   return new Date(prevYear, prevMonth, prevDate);
 };
 
-export const getStartDate = (date: Date) => {
+export const getWeekStartDate = (date: Date) => {
   const weekDay = date.getDay();
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay);
 };
