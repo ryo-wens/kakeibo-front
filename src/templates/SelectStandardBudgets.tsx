@@ -2,7 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchStandardBudgets, addCustomBudgets } from '../reducks/budgets/operations';
 import { State } from '../reducks/store/types';
-import { StandardBudgetsList } from '../reducks/budgets/types';
+import { CustomBudgetsList } from '../reducks/budgets/types';
+import { getCustomBudgets } from '../reducks/budgets/selectors';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
@@ -69,17 +70,17 @@ const SelectStandardBudgets = () => {
   const selectYear = date.slice(0, 4);
   const selectMonth = date.slice(5, 7);
   const selector = useSelector((state: State) => state);
-  const standardBudgetsList = selector.budgets.standard_budgets_list;
-  const [standardBudgets, setStandardBudgets] = useState<StandardBudgetsList>([]);
-  const unEditBudgets = standardBudgets === standardBudgetsList;
+  const customBudgetsList = getCustomBudgets(selector);
+  const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
+  const unInputBudgets = customBudgets === customBudgetsList;
 
   useEffect(() => {
     dispatch(fetchStandardBudgets());
   }, []);
 
   useEffect(() => {
-    setStandardBudgets(standardBudgetsList);
-  }, [standardBudgetsList]);
+    setCustomBudgets(customBudgetsList);
+  }, [customBudgetsList]);
 
   return (
     <div className={classes.root}>
@@ -87,7 +88,7 @@ const SelectStandardBudgets = () => {
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
           標準
         </Button>
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/custom-budgets'))}>
+        <Button className={classes.buttonSize} onClick={() => dispatch(push('/yearly-budgets'))}>
           月ごと
         </Button>
       </ButtonGroup>
@@ -110,16 +111,17 @@ const SelectStandardBudgets = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {standardBudgets.map((standardBudget, index) => {
+            {customBudgets.map((customBudget, index) => {
               const onChangeBudget = (event: { target: { value: string } }) => {
-                const newBudgets = [...standardBudgets];
+                const newBudgets = [...customBudgets];
                 newBudgets[index].budget = Number(event.target.value);
-                setStandardBudgets(newBudgets);
+                setCustomBudgets(newBudgets);
+                console.log(customBudget.budget);
               };
               return (
-                <TableRow key={standardBudget.big_category_id}>
+                <TableRow key={customBudget.big_category_id}>
                   <TableCell className={classes.tableSize} component="th" scope="row">
-                    {standardBudget.big_category_name}
+                    {customBudget.big_category_name}
                   </TableCell>
                   <TableCell className={classes.tableSize}>￥10,000</TableCell>
                   <TableCell className={classes.tableSize} align="center">
@@ -128,7 +130,7 @@ const SelectStandardBudgets = () => {
                       id={'budgets'}
                       variant="outlined"
                       type={'number'}
-                      value={standardBudget.budget}
+                      value={customBudget.budget}
                       onChange={onChangeBudget}
                     />
                   </TableCell>
@@ -141,13 +143,13 @@ const SelectStandardBudgets = () => {
       <div className={classes.updateButton}>
         <GenericButton
           label={'更新する'}
-          disabled={unEditBudgets}
+          disabled={unInputBudgets}
           onClick={() =>
             dispatch(
               addCustomBudgets(
                 selectYear,
                 selectMonth,
-                standardBudgets.map((budget) => {
+                customBudgets.map((budget) => {
                   const { big_category_name, ...rest } = budget; // eslint-disable-line
                   return rest;
                 })

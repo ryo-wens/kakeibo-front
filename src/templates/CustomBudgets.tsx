@@ -73,6 +73,7 @@ const CustomBudgets = () => {
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
   const unInput = customBudgets === customBudgetsList;
 
+  console.log(customBudgets);
   useEffect(() => {
     dispatch(fetchCustomBudgets(selectYear, selectMonth));
   }, []);
@@ -87,7 +88,7 @@ const CustomBudgets = () => {
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
           標準
         </Button>
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/custom-budgets'))}>
+        <Button className={classes.buttonSize} onClick={() => dispatch(push('/yearly-budgets'))}>
           月ごと
         </Button>
       </ButtonGroup>
