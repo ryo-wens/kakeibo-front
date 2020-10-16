@@ -65,3 +65,17 @@ export const fetchGroupMonthTodoListsAction = (
     },
   };
 };
+
+export const DELETE_GROUP_TODO_LIST_ITEM = 'DELETE_GROUP_TODO_LIST_ITEM';
+export const deleteGroupTodoListItemAction = (
+  groupImplementationTodoLists: GroupTodoLists,
+  groupDueTodoLists: GroupTodoLists
+) => {
+  return {
+    type: DELETE_GROUP_TODO_LIST_ITEM,
+    payload: {
+      groupImplementationTodoLists: groupImplementationTodoLists,
+      groupDueTodoLists: groupDueTodoLists,
+    },
+  };
+};

@@ -5,13 +5,18 @@ import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import * as GroupTodoListsActions from '../../src/reducks/groupTodoLists/actions';
 import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
+import editGroupTodoListItemResponse from './editGroupTodoListItemResponse.json';
 import fetchGroupDateTodoListsResponse from './fetchGroupDateTodoListsResponse.json';
 import fetchGroupMonthTodoListsResponse from './fetchGroupMonthTodoListsResponse.json';
+import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
 import {
   createGroupTodoListItem,
+  deleteGroupTodoListItem,
+  editGroupTodoListItem,
   fetchGroupDateTodoLists,
   fetchGroupMonthTodoLists,
 } from '../../src/reducks/groupTodoLists/operations';
+import * as ModalActions from '../../src/reducks/modal/actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -138,6 +143,65 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
+  it('Updated groupTodoListItem will be reflected in groupImplementationTodoLists and groupDueTodoLists if EDIT_GROUP_TODO_LIST_ITEM is successful.', async () => {
+    const groupId = 1;
+    const todoListItemId = 1;
+    const implementationDate = new Date('2020-09-27T21:11:54');
+    const dueDate = new Date('2020-09-28T21:11:54');
+    const todoContent = '買い物へ行く';
+    const completeFlag = false;
+
+    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${todoListItemId}`;
+
+    const mockResponse = JSON.stringify(editGroupTodoListItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTodoListsActions.EDIT_GROUP_TODO_LIST_ITEM,
+        payload: {
+          groupImplementationTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '買い物へ行く',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupDueTodoLists: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '買い物へ行く',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editGroupTodoListItem(
+      groupId,
+      todoListItemId,
+      implementationDate,
+      dueDate,
+      todoContent,
+      completeFlag
+    )(
+      store.dispatch,
+      // @ts-ignore
+      getState
+    );
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
   it('Get groupImplementationTodoLists and groupDueTodoLists when FETCH_GROUP_DATE_TODO_LISTS succeeds.', async () => {
     const groupId = 1;
     const year = '2020';
@@ -253,6 +317,37 @@ describe('async actions groupTodoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     await fetchGroupMonthTodoLists(groupId, year, month)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('When DELETE_GROUP_TODO_LIST_ITEM is successful, send the groupImplementationTodoLists and groupDueTodoLists except the requested todoListItemId to deleteGroupTodoListItemAction and send the response message to openTextModalAction.', async () => {
+    const groupId = 1;
+    const todoListItemId = 1;
+    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${todoListItemId}`;
+
+    const mockResponse = JSON.stringify(deleteGroupTodoListItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTodoListsActions.DELETE_GROUP_TODO_LIST_ITEM,
+        payload: {
+          groupImplementationTodoLists: [],
+          groupDueTodoLists: [],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: 'todoを削除しました。',
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await deleteGroupTodoListItem(groupId, todoListItemId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

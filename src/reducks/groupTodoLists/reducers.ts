@@ -27,6 +27,11 @@ export const groupTodoListsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.DELETE_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
