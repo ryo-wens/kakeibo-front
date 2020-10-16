@@ -46,8 +46,6 @@ const GenericModal = (props: GenericModalProps) => {
   const type = paths[1];
   const groupId = Number(paths[paths.length - 1]);
 
-  console.log(props.nextGroupId);
-
   const switchOperation = () => {
     const todoListItemId = props.todoListItemId as number;
     const nextGroupId = props.nextGroupId as number;
@@ -57,7 +55,6 @@ const GenericModal = (props: GenericModalProps) => {
       case type === 'group-todo' && typeof props.todoListItemId === 'number':
         return dispatch(deleteGroupTodoListItem(groupId, todoListItemId));
       case type === 'group-todo' && typeof props.nextGroupId === 'number':
-        console.log(nextGroupId);
         return dispatch(groupWithdrawal(groupId, nextGroupId));
       default:
         return;

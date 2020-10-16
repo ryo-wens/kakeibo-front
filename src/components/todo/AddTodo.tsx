@@ -31,6 +31,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface AddTodoProps {
   groupId?: number;
+  date: Date;
 }
 
 const AddTodo = (props: AddTodoProps) => {
@@ -39,9 +40,9 @@ const AddTodo = (props: AddTodoProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [todoContent, setTodoContent] = useState<string>('');
   const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
-    new Date()
+    props.date
   );
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(props.date);
   const pathName: string = window.location.pathname;
   const paths = pathName.split('/', 2);
   const type = paths[1];
