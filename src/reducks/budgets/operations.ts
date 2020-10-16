@@ -2,12 +2,12 @@ import {
   fetchYearlyBudgetsActions,
   updateCustomBudgetsActions,
   updateStandardBudgetsActions,
+  copyStandardBudgetsActions,
 } from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
-import { push } from 'connected-react-router';
 import { State } from '../store/types';
-import { isValidBudgetFormat } from '../../lib/validation';
+import { isValidBudgetFormat, errorHandling } from '../../lib/validation';
 import {
   fetchCustomBudgetsRes,
   CustomBudgetsList,
@@ -30,14 +30,7 @@ export const fetchStandardBudgets = () => {
         dispatch(updateStandardBudgetsActions(standardBudgetsList));
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -72,14 +65,7 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
         dispatch(updateStandardBudgetsActions(nextStandardBudgetsList));
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -95,14 +81,7 @@ export const fetchYearlyBudgets = () => {
         dispatch(fetchYearlyBudgetsActions(yearlyBudgetsList));
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -121,14 +100,7 @@ export const fetchCustomBudgets = (selectYear: string, selectMonth: string) => {
         dispatch(updateCustomBudgetsActions(customBudgets));
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -162,14 +134,7 @@ export const addCustomBudgets = (
         dispatch(updateCustomBudgetsActions(nextCustomBudgetsList));
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -199,27 +164,37 @@ export const editCustomBudgets = (
         const editCustomBudgetsList: CustomBudgetsList = res.data.custom_budgets;
         const customBudgetsList: CustomBudgetsList = getState().budgets.custom_budgets_list;
 
-        const nextCustomBudgetsList = customBudgetsList.map((standardBudget) => {
+        const nextCustomBudgetsList = customBudgetsList.map((customBudget) => {
           const editCustomBudget = editCustomBudgetsList.find(
             (item: { big_category_id: number }) =>
-              item.big_category_id === standardBudget.big_category_id
+              item.big_category_id === customBudget.big_category_id
           );
           if (editCustomBudget) {
             return editCustomBudget;
           }
-          return standardBudget;
+          return customBudget;
         });
         dispatch(updateCustomBudgetsActions(nextCustomBudgetsList));
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
+  };
+};
+
+export const copyStandardBudgets = () => {
+  return (dispatch: Dispatch<Action>, getState: () => State) => {
+    const standardBudgets = getState().budgets.standard_budgets_list;
+    const customBudgets = getState().budgets.custom_budgets_list;
+
+    const nextBudgets = standardBudgets.map((standardBudget) => {
+      customBudgets.map((customBudget) => {
+        return (customBudget.budget = standardBudget.budget);
+      });
+      return standardBudget;
+    });
+
+    console.log(nextBudgets);
+    dispatch(copyStandardBudgetsActions(nextBudgets));
   };
 };

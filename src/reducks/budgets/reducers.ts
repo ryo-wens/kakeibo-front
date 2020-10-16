@@ -19,6 +19,11 @@ export const budgetsReducer = (state = initialState.budgets, action: budgetsActi
         ...state,
         custom_budgets_list: [...action.payload],
       };
+    case Actions.COPY_STANDARD_BUDGETS:
+      return {
+        ...state,
+        custom_budgets_list: [...action.payload],
+      };
     default:
       return state;
   }
