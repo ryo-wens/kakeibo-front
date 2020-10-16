@@ -10,6 +10,7 @@ import { State } from '../../reducks/store/types';
 import { deleteTodoListItem } from '../../reducks/todoLists/operations';
 import { groupWithdrawal } from '../../reducks/groups/operations';
 import { deleteGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -41,20 +42,18 @@ const GenericModal = (props: GenericModalProps) => {
   const selector = useSelector((state: State) => state);
   const [open, setOpen] = useState<boolean>(false);
   const modalMessage = getModalMessage(selector);
-  const pathName: string = window.location.pathname;
-  const paths = pathName.split('/');
-  const type = paths[1];
-  const groupId = Number(paths[paths.length - 1]);
+  const templateName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
 
   const switchOperation = () => {
     const todoListItemId = props.todoListItemId as number;
     const nextGroupId = props.nextGroupId as number;
     switch (true) {
-      case type === ('todo' || 'schedule-todo'):
+      case templateName === ('todo' || 'schedule-todo'):
         return dispatch(deleteTodoListItem(todoListItemId));
-      case type === 'group-todo' && typeof props.todoListItemId === 'number':
+      case templateName === 'group-todo' && typeof props.todoListItemId === 'number':
         return dispatch(deleteGroupTodoListItem(groupId, todoListItemId));
-      case type === 'group-todo' && typeof props.nextGroupId === 'number':
+      case templateName === 'group-todo' && typeof props.nextGroupId === 'number':
         return dispatch(groupWithdrawal(groupId, nextGroupId));
       default:
         return;
