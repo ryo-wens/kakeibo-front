@@ -1,7 +1,6 @@
 import { updateIncomeCategoriesAction, updateExpenseCategoriesAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
-import { push } from 'connected-react-router';
 import {
   Category,
   fetchCategoriesRes,
