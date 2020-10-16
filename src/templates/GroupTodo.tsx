@@ -93,7 +93,7 @@ const GroupTodo = () => {
           dueTodoLists={groupDueTodoLists}
           todoListsMessage={groupTodoListsMessage}
         />
-        <AddTodo groupId={groupId} />
+        <AddTodo groupId={groupId} date={dt} />
       </div>
     </>
   );

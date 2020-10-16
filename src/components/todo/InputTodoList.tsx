@@ -55,7 +55,7 @@ const InputTodoList = (props: InputTodoListProps) => {
   const groupId = Number(paths[paths.length - 1]);
 
   const switchOperation = () => {
-    if (type === ('todo' || 'schedule-todo')) {
+    if (type === 'todo' || type === 'schedule-todo') {
       return dispatch(
         editTodoListItem(
           props.todoListItemId,
