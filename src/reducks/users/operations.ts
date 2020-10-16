@@ -3,11 +3,7 @@ import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import axios from 'axios';
 import { SignupReq, SignupRes, LoginReq, LoginRes, LogoutRes } from './types';
-
-export const isValidEmailFormat = (email: string): boolean => {
-  const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
-  return regex.test(email);
-};
+import { isValidEmailFormat, isValidPasswordFormat } from '../../lib/validation';
 
 export const signUp = (
   userId: string,
@@ -110,8 +106,10 @@ export const signUp = (
           }
         }
 
-        if (error.response.status === 500) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
+        } else {
+          alert(error);
         }
       });
   };
@@ -120,9 +118,17 @@ export const signUp = (
 export const logIn = (email: string, password: string) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidEmailFormat(email)) {
-      alert('メールアドレスの形式に誤りがあります。正しく入力し直してください。');
-      return null;
+      const alertMessage: string[] = [];
+      alertMessage.push('メールアドレスの形式に誤りがあります。正しく入力し直してください。');
+      if (!isValidPasswordFormat(password)) {
+        alertMessage.push('パスワードを正しく入力してください。');
+      }
+      if (alertMessage.length > 0) {
+        alert(alertMessage.join('\n'));
+        return null;
+      }
     }
+
     const data: LoginReq = { email: email, password: password };
     await axios
       .post<LoginRes>('http://127.0.0.1:8080/login', JSON.stringify(data), {
@@ -145,14 +151,10 @@ export const logIn = (email: string, password: string) => {
           if (errorMessages) {
             alert(errorMessages.join('\n'));
           }
-        }
-
-        if (error.response.status === 401) {
+        } else if (error && error.response) {
           alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
+        } else {
+          alert(error);
         }
       });
   };
@@ -170,12 +172,10 @@ export const logOut = () => {
         dispatch(push('/login'));
       })
       .catch((error) => {
-        if (error.response.status === 400) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
+        } else {
+          alert(error);
         }
       });
   };
