@@ -12,6 +12,7 @@ import {
   deleteCustomRes,
 } from './types';
 import { State } from '../store/types';
+import { errorHandling } from '../../lib/validation';
 
 export const fetchCategories = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
@@ -26,13 +27,7 @@ export const fetchCategories = () => {
         dispatch(updateExpenseCategoriesAction(expense));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -83,22 +78,7 @@ export const addCustomCategories = (name: string, bigCategoryId: number) => {
         }
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 409) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -163,22 +143,7 @@ export const editCustomCategories = (id: number, name: string, bigCategoryId: nu
         }
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 409) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -222,14 +187,7 @@ export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
         }
       })
       .catch((error) => {
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
