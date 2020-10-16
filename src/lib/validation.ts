@@ -6,6 +6,21 @@ export const isValidBudgetFormat = (budget: number) => {
   return regex.test(String(budget));
 };
 
+export const isValidAmountFormat = (amount: string) => {
+  const regex = /^([1-9]\d*|0)$/;
+  return regex.test(amount);
+};
+
+export const isValidEmailFormat = (email: string): boolean => {
+  const regex = /^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$/;
+  return regex.test(email);
+};
+
+export const isValidPasswordFormat = (password: string) => {
+  const regex = /^([a-zA-Z0-9!-/:-@¥[-`{-~]{8,})$/;
+  return regex.test(password);
+};
+
 export const errorHandling = (
   dispatch: Dispatch<Action>,
   error: {
