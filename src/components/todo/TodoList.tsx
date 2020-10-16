@@ -39,15 +39,16 @@ const TodoList = (props: TodoListProps) => {
   const [checked, setChecked] = useState<boolean>(props.todoListItem.complete_flag);
   const [openEditTodoList, setOpenEditTodoList] = useState<boolean>(false);
   const [todoContent, setTodoContent] = useState<string>('');
-  const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
-    new Date()
-  );
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
   const groupId = getPathGroupId(window.location.pathname);
   const templateName = getPathTemplateName(window.location.pathname);
+
   const prevTodoContent = props.todoListItem.todo_content;
   const prevImplementationDate: Date = dateStringToDate(props.todoListItem.implementation_date);
   const prevDueDate: Date = dateStringToDate(props.todoListItem.due_date);
+  const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
+    prevImplementationDate
+  );
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(prevDueDate);
 
   const todoListItemId = props.todoListItem.id;
 

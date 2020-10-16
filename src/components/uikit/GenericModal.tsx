@@ -49,7 +49,7 @@ const GenericModal = (props: GenericModalProps) => {
     const todoListItemId = props.todoListItemId as number;
     const nextGroupId = props.nextGroupId as number;
     switch (true) {
-      case templateName === ('todo' || 'schedule-todo'):
+      case templateName === 'todo' || templateName === 'schedule-todo':
         return dispatch(deleteTodoListItem(todoListItemId));
       case templateName === 'group-todo' && typeof props.todoListItemId === 'number':
         return dispatch(deleteGroupTodoListItem(groupId, todoListItemId));
