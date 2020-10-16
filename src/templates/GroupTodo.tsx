@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { AddTodo, ExistsTodoLists, GroupName, TodoMenu } from '../components/todo';
+import { AddTodo, GroupName, TodoMenu } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -16,6 +16,7 @@ import {
   fetchGroupMonthTodoLists,
 } from '../reducks/groupTodoLists/operations';
 import { getPathGroupId } from '../lib/path';
+import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -85,9 +86,7 @@ const GroupTodo = () => {
       <TodoMenu />
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
-        <ExistsTodoLists
-          planName={'実施予定'}
-          todoLists={groupImplementationTodoLists}
+        <SwitchTodoLists
           implementationTodoLists={groupImplementationTodoLists}
           dueTodoLists={groupDueTodoLists}
           todoListsMessage={groupTodoListsMessage}

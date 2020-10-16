@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
-import { AddTodo, ExistsTodoLists, TodoMenu } from '../components/todo';
+import { AddTodo, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   getDueTodoLists,
@@ -12,6 +12,7 @@ import {
 } from '../reducks/todoLists/selectors';
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
 import { getWeekDay } from '../lib/date';
+import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -55,16 +56,7 @@ const Todo = () => {
         <span>
           今日 {month}/{date} ({weekday})
         </span>
-        <ExistsTodoLists
-          planName={'実施予定'}
-          todoLists={implementationTodoLists}
-          implementationTodoLists={implementationTodoLists}
-          dueTodoLists={dueTodoLists}
-          todoListsMessage={todoListsMessage}
-        />
-        <ExistsTodoLists
-          planName={'締切予定'}
-          todoLists={dueTodoLists}
+        <SwitchTodoLists
           implementationTodoLists={implementationTodoLists}
           dueTodoLists={dueTodoLists}
           todoListsMessage={todoListsMessage}
