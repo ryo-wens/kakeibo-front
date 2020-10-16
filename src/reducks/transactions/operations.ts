@@ -10,11 +10,7 @@ import {
   deleteTransactionRes,
 } from './types';
 import moment from 'moment';
-
-const isValidAmountFormat = (amount: string) => {
-  const regex = /^([1-9]\d*|0)$/;
-  return regex.test(amount);
-};
+import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
 export const fetchTransactionsList = () => {
   return async (dispatch: Dispatch<Action>) => {
@@ -31,17 +27,7 @@ export const fetchTransactionsList = () => {
         }
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -110,8 +96,10 @@ export const addTransactions = (
           dispatch(push('/login'));
         }
 
-        if (error.response.status === 500) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
+        } else {
+          alert(error);
         }
       });
   };
@@ -178,8 +166,10 @@ export const editTransactions = (
           dispatch(push('/login'));
         }
 
-        if (error.response.status === 500) {
+        if (error && error.response) {
           alert(error.response.data.error.message);
+        } else {
+          alert(error);
         }
       });
   };
@@ -204,14 +194,7 @@ export const deleteTransactions = (id: number) => {
         dispatch(updateTransactionsAction(nextTransactionsList));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
