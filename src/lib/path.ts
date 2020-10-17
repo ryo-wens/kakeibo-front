@@ -7,3 +7,13 @@ export const getPathGroupId = (pathName: string) => {
   const paths = pathName.split('/');
   return Number(paths[paths.length - 1]);
 };
+
+export const getPathYear = (pathname: string) => {
+  const paths = pathname.split('/');
+  return paths[2].slice(0, 4);
+};
+
+export const getPathMonth = (pathname: string) => {
+  const paths = pathname.split('/');
+  return paths[2].slice(5, 7);
+};

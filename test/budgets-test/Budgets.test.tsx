@@ -430,7 +430,7 @@ describe('async actions deleteCustomBudgets', () => {
 
     const mockCustomBudgets = {
       year: '2020-01-01T00:00:00Z',
-      yearly_total_budget: 1024600,
+      yearly_total_budget: 1008200,
       monthly_budgets: [
         {
           month: '2020年01月',
