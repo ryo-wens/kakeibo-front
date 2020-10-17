@@ -39,4 +39,12 @@ export interface CustomBudgetsRes {
   custom_budgets: Budget[];
 }
 
+export interface MonthBudget {
+  monthly_budgets: MonthlyBudget[];
+}
+
+export interface DeleteCustomBudgetsRes {
+  message: string;
+}
+
 export interface BudgetsReq extends Array<BudgetReq> {}

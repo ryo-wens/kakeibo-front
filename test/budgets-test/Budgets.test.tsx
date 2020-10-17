@@ -11,6 +11,7 @@ import {
   fetchCustomBudgets,
   addCustomBudgets,
   editCustomBudgets,
+  deleteCustomBudgets,
 } from '../../src/reducks/budgets/operations';
 import standardBudgets from './fetchBudgetsResponse.json';
 import yearlyBudgets from './fetchYearlyBudgetsResponse.json';
@@ -18,6 +19,7 @@ import customBudgets from './fetchCustomBudgetsResponse.json';
 import editBudgets from './editBudgetsResponse.json';
 import addCustomBudget from './addCustomBudgetsResponse.json';
 import editCustomBudget from './editCustomBudgetsResponse.json';
+import deleteCustomBudget from './deleteCustomBudgetsResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -403,5 +405,109 @@ describe('async actions editCustomBudgets', () => {
       // @ts-ignore
     )(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
+  });
+});
+
+describe('async actions deleteCustomBudgets', () => {
+  beforeEach(() => {
+    store.clearActions();
+  });
+  const selectYear = '2020';
+  const selectMonth = '07';
+  const store = mockStore({ yearlyBudgets });
+  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
+  it('Delete custom_budgets if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        budgets: {
+          standard_budgets_list: editBudgets.standard_budgets,
+          yearly_budgets_list: yearlyBudgets,
+        },
+      };
+    };
+
+    const mockResponse = deleteCustomBudget.message;
+
+    const mockCustomBudgets = {
+      year: '2020-01-01T00:00:00Z',
+      yearly_total_budget: 1024600,
+      monthly_budgets: [
+        {
+          month: '2020年01月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年02月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年03月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年04月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年05月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年06月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年07月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年08月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年09月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年10月',
+          budget_type: 'CustomBudget',
+          monthly_total_budget: 100000,
+        },
+        {
+          month: '2020年11月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+        {
+          month: '2020年12月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 83600,
+        },
+      ],
+    };
+
+    const expectedActions = [
+      {
+        type: actionTypes.DELETE_CUSTOM_BUDGETS,
+        payload: mockCustomBudgets,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+    window.alert = jest.fn(() => mockResponse);
+
+    // @ts-ignore
+    await deleteCustomBudgets(selectYear, selectMonth)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedActions);
+    expect(window.alert).toHaveBeenCalled();
   });
 });

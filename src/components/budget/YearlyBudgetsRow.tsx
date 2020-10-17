@@ -1,6 +1,11 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchYearlyBudgets, copyStandardBudgets } from '../../reducks/budgets/operations';
+import {
+  fetchYearlyBudgets,
+  copyStandardBudgets,
+  deleteCustomBudgets,
+  fetchStandardBudgets,
+} from '../../reducks/budgets/operations';
 import { YearlyBudgetsList } from '../../reducks/budgets/types';
 import { State } from '../../reducks/store/types';
 import TableRow from '@material-ui/core/TableRow';
@@ -10,7 +15,7 @@ import { push } from 'connected-react-router';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { budgetType } from '../../lib/constant';
+import { standardBudgetType } from '../../lib/constant';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -37,6 +42,10 @@ const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
   });
 
   useEffect(() => {
+    dispatch(fetchStandardBudgets());
+  }, []);
+
+  useEffect(() => {
     dispatch(fetchYearlyBudgets());
   }, []);
 
@@ -49,7 +58,7 @@ const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
       const transitingBasePath =
         budget.budget_type === 'CustomBudget' ? `/custom-budgets` : `standard-budgets`;
       const budgetsType = () => {
-        if (budget.budget_type === budgetType) {
+        if (budget.budget_type === standardBudgetType) {
           return '標準';
         }
         return 'カスタム';
@@ -90,7 +99,7 @@ const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
                     size={'small'}
                     onClick={() => {
                       if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
-                        alert('削除');
+                        dispatch(deleteCustomBudgets(selectYear, selectMonth));
                       } else {
                         alert('削除を中止しました');
                       }

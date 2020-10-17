@@ -1,1 +1,1 @@
-export const budgetType = 'StandardBudget';
+export const standardBudgetType = 'StandardBudget';
