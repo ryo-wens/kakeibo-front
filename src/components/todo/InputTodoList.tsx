@@ -9,6 +9,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
 import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -48,14 +49,11 @@ const InputTodoList = (props: InputTodoListProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const isBlankTodoContent = props.todoContent === '';
-
-  const pathName: string = window.location.pathname;
-  const paths = pathName.split('/');
-  const type = paths[1];
-  const groupId = Number(paths[paths.length - 1]);
+  const templateName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
 
   const switchOperation = () => {
-    if (type === 'todo' || type === 'schedule-todo') {
+    if (templateName === 'todo' || templateName === 'schedule-todo') {
       return dispatch(
         editTodoListItem(
           props.todoListItemId,
@@ -65,7 +63,7 @@ const InputTodoList = (props: InputTodoListProps) => {
           props.completeFlag
         )
       );
-    } else if (type === 'group-todo') {
+    } else if (templateName === 'group-todo') {
       return dispatch(
         editGroupTodoListItem(
           groupId,
