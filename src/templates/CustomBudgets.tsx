@@ -72,8 +72,9 @@ const CustomBudgets = () => {
   const customBudgetsList = selector.budgets.custom_budgets_list;
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
   const unInput = customBudgets === customBudgetsList;
-
   console.log(customBudgets);
+  console.log(customBudgetsList);
+
   useEffect(() => {
     dispatch(fetchCustomBudgets(selectYear, selectMonth));
   }, []);

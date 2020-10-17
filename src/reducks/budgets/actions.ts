@@ -4,6 +4,7 @@ export type budgetsActions = ReturnType<
   | typeof fetchYearlyBudgetsActions
   | typeof updateCustomBudgetsActions
   | typeof copyStandardBudgetsActions
+  | typeof deleteCustomBudgetsActions
 >;
 
 export const UPDATE_STANDARD_BUDGETS = 'UPDATE_STANDARD_BUDGETS';
@@ -43,5 +44,15 @@ export const copyStandardBudgetsActions = (
   return {
     type: COPY_STANDARD_BUDGETS,
     payload: custom_budgets_list,
+  };
+};
+
+export const DELETE_CUSTOM_BUDGETS = 'DELETE_CUSTOM_BUDGETS';
+export const deleteCustomBudgetsActions = (
+  yearly_budgets_list: YearlyBudgetsList
+): { type: string; payload: YearlyBudgetsList } => {
+  return {
+    type: DELETE_CUSTOM_BUDGETS,
+    payload: yearly_budgets_list,
   };
 };

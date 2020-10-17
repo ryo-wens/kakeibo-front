@@ -1,22 +1,25 @@
 import {
+  copyStandardBudgetsActions,
+  deleteCustomBudgetsActions,
   fetchYearlyBudgetsActions,
   updateCustomBudgetsActions,
   updateStandardBudgetsActions,
-  copyStandardBudgetsActions,
 } from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import { State } from '../store/types';
-import { isValidBudgetFormat, errorHandling } from '../../lib/validation';
+import { standardBudgetType } from '../../lib/constant';
+import { errorHandling, isValidBudgetFormat } from '../../lib/validation';
 import {
-  fetchCustomBudgetsRes,
-  CustomBudgetsList,
   BudgetsReq,
+  CustomBudgetsList,
   CustomBudgetsRes,
+  DeleteCustomBudgetsRes,
+  fetchCustomBudgetsRes,
   fetchStandardBudgetsRes,
-  YearlyBudgetsList,
   StandardBudgetsList,
   StandardBudgetsListRes,
+  YearlyBudgetsList,
 } from './types';
 
 export const fetchStandardBudgets = () => {
@@ -194,7 +197,46 @@ export const copyStandardBudgets = () => {
       return standardBudget;
     });
 
-    console.log(nextBudgets);
     dispatch(copyStandardBudgetsActions(nextBudgets));
+  };
+};
+
+export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+    await axios
+      .delete<DeleteCustomBudgetsRes>(
+        `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const message = res.data.message;
+        const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
+        const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
+
+        const standardBudget = standardBudgetsList.map((budget) => {
+          return budget.budget;
+        });
+        const totalStandardBudget = () => {
+          let total = 0;
+          for (let i = 0, len = standardBudget.length; i < len; i++) {
+            total += standardBudget[i];
+          }
+          return total;
+        };
+
+        yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
+          month: `${selectYear}年${selectMonth}月`,
+          budget_type: standardBudgetType,
+          monthly_total_budget: totalStandardBudget(),
+        };
+
+        dispatch(deleteCustomBudgetsActions(yearlyBudgetsList));
+        alert(message);
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
   };
 };

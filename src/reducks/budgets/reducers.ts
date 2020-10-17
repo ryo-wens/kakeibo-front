@@ -24,6 +24,12 @@ export const budgetsReducer = (state = initialState.budgets, action: budgetsActi
         ...state,
         custom_budgets_list: [...action.payload],
       };
+    case Actions.DELETE_CUSTOM_BUDGETS:
+      return {
+        ...state,
+        yearly_budgets_list: action.payload,
+      };
+
     default:
       return state;
   }
