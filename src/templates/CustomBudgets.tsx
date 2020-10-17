@@ -16,6 +16,7 @@ import { push } from 'connected-react-router';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
+import { getPathYear, getPathMonth } from '../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,19 +62,14 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 const CustomBudgets = () => {
+  const selectYear = getPathYear(window.location.pathname);
+  const selectMonth = getPathMonth(window.location.pathname);
   const classes = useStyles();
   const dispatch = useDispatch();
-  const pathname = window.location.pathname;
-  const paths = pathname.split('/');
-  const date = paths[2];
-  const selectYear = date.slice(0, 4);
-  const selectMonth = date.slice(5, 7);
   const selector = useSelector((state: State) => state);
   const customBudgetsList = selector.budgets.custom_budgets_list;
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
   const unInput = customBudgets === customBudgetsList;
-  console.log(customBudgets);
-  console.log(customBudgetsList);
 
   useEffect(() => {
     dispatch(fetchCustomBudgets(selectYear, selectMonth));

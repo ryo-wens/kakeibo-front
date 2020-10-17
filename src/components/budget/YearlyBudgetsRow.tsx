@@ -26,11 +26,11 @@ const useStyles = makeStyles(() =>
   })
 );
 
-interface CustomBudgetsRowProps {
+interface YearlyBudgetsRowProps {
   years: number;
 }
 
-const YearlyBudgetsRow = (props: CustomBudgetsRowProps) => {
+const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
