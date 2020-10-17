@@ -22,11 +22,13 @@ import {
 import { push } from 'connected-react-router';
 import moment from 'moment';
 import { openTextModalAction } from '../modal/actions';
+import { dateToDateString } from '../../lib/date';
 
 export const createTodoListItem = (
   implementationDate: Date | null,
   dueDate: Date | null,
-  todoContent: string
+  todoContent: string,
+  isTodayTodo: boolean
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (implementationDate === null) {
@@ -66,11 +68,25 @@ export const createTodoListItem = (
 
         const todoListItem: TodoListItem = res.data;
 
-        const newImplementationTodoLists: TodoLists = [
-          ...prevImplementationTodoLists,
-          todoListItem,
-        ];
-        const newDueTodoLists: TodoLists = [...prevDueTodoLists, todoListItem];
+        let newImplementationTodoLists: TodoLists = [];
+        let newDueTodoLists: TodoLists = [];
+
+        if (isTodayTodo) {
+          const today = new Date();
+          if (dateToDateString(today) === res.data.implementation_date) {
+            newImplementationTodoLists = [...prevImplementationTodoLists, todoListItem];
+          } else {
+            newImplementationTodoLists = [...prevImplementationTodoLists];
+          }
+          if (dateToDateString(today) === res.data.due_date) {
+            newDueTodoLists = [...prevDueTodoLists, todoListItem];
+          } else {
+            newDueTodoLists = [...prevDueTodoLists];
+          }
+        } else {
+          newImplementationTodoLists = [...prevImplementationTodoLists, todoListItem];
+          newDueTodoLists = [...prevDueTodoLists, todoListItem];
+        }
 
         dispatch(createTodoListItemAction(newImplementationTodoLists, newDueTodoLists));
       })

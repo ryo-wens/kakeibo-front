@@ -6,6 +6,14 @@ export const dateStringToDate = (date: string) => {
   return new Date(prevYear, prevMonth, prevDate);
 };
 
+export const dateToDateString = (date: Date) => {
+  const year = String(date.getFullYear());
+  const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
+  const _date: string = ('0' + date.getDate()).slice(-2);
+  const day: string = getWeekDay(date);
+  return `${year}/${month}/${_date}(${day})`;
+};
+
 export const getWeekStartDate = (date: Date) => {
   const weekDay = date.getDay();
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay);
