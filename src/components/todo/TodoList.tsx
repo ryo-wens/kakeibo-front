@@ -11,6 +11,7 @@ import { editTodoListItem } from '../../reducks/todoLists/operations';
 import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
 import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 import { dateStringToDate } from '../../lib/date';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,18 +39,16 @@ const TodoList = (props: TodoListProps) => {
   const [checked, setChecked] = useState<boolean>(props.todoListItem.complete_flag);
   const [openEditTodoList, setOpenEditTodoList] = useState<boolean>(false);
   const [todoContent, setTodoContent] = useState<string>('');
-  const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
-    new Date()
-  );
-  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(new Date());
-  const pathName: string = window.location.pathname;
-  const paths = pathName.split('/');
-  const groupId = Number(paths[paths.length - 1]);
-  const type = paths[1];
+  const groupId = getPathGroupId(window.location.pathname);
+  const templateName = getPathTemplateName(window.location.pathname);
 
   const prevTodoContent = props.todoListItem.todo_content;
   const prevImplementationDate: Date = dateStringToDate(props.todoListItem.implementation_date);
   const prevDueDate: Date = dateStringToDate(props.todoListItem.due_date);
+  const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
+    prevImplementationDate
+  );
+  const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(prevDueDate);
 
   const todoListItemId = props.todoListItem.id;
 
@@ -103,7 +102,7 @@ const TodoList = (props: TodoListProps) => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setChecked(event.target.checked);
 
-      if (type === 'todo' || type === 'schedule-todo') {
+      if (templateName === 'todo' || templateName === 'schedule-todo') {
         return dispatch(
           editTodoListItem(
             todoListItemId,
@@ -113,7 +112,7 @@ const TodoList = (props: TodoListProps) => {
             event.target.checked
           )
         );
-      } else if (type === 'group-todo') {
+      } else if (templateName === 'group-todo') {
         return dispatch(
           editGroupTodoListItem(
             groupId,
