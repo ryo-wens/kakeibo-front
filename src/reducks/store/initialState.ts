@@ -25,6 +25,9 @@ const initialState = {
     unapprovedGroups: [],
     message: '',
   },
+  groupTasks: {
+    group_tasks_list_for_each_user: [],
+  },
   todoLists: {
     implementationTodoLists: [],
     dueTodoLists: [],
