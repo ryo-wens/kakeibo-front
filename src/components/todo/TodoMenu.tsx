@@ -14,7 +14,7 @@ import { State } from '../../reducks/store/types';
 import { CreateGroups } from './index';
 import { push } from 'connected-react-router';
 import { Groups } from '../../reducks/groups/types';
-import { fetchDateTodoLists } from '../../reducks/todoLists/operations';
+import { fetchDateTodoLists, fetchMonthTodoLists } from '../../reducks/todoLists/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -52,7 +52,12 @@ const TodoMenu = () => {
         </ListItemIcon>
         <ListItemText primary={'今日'} />
       </ListItem>
-      <ListItem button={true} onClick={() => dispatch(push('/schedule-todo'))}>
+      <ListItem
+        button={true}
+        onClick={() =>
+          dispatch(fetchMonthTodoLists(year, month)) && dispatch(push('/schedule-todo'))
+        }
+      >
         <ListItemIcon>
           <DateRangeIcon />
         </ListItemIcon>
