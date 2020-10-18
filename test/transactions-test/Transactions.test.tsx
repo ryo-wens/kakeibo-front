@@ -24,7 +24,7 @@ process.on('unhandledRejection', console.dir);
 
 describe('async actions fetchTransactionsList', () => {
   const store = mockStore({ transactionsList: [] });
-  const url = 'http://127.0.0.1:8081/transactions/2020-07';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/2020-07`;
 
   beforeEach(() => {
     store.clearActions();
@@ -49,7 +49,7 @@ describe('async actions fetchTransactionsList', () => {
 
 describe('async actions addTransactions', () => {
   const store = mockStore({ transactionsList });
-  const url = 'http://127.0.0.1:8081/transactions';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`;
 
   beforeEach(() => {
     store.clearActions();
@@ -152,7 +152,7 @@ describe('async actions editTransactions', () => {
     };
 
     const id = 47;
-    const url = `http://127.0.0.1:8081/transactions/${id}`;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`;
 
     const mockResTransaction = editResTransaction;
 
@@ -202,7 +202,7 @@ describe('async actions deleteTransactions', () => {
     };
 
     const id = 47;
-    const url = `http://127.0.0.1:8081/transactions/${id}`;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`;
 
     const mockResTransaction = deleteResTransaction.message;
 

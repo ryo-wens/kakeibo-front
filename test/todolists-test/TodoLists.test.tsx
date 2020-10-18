@@ -73,7 +73,7 @@ describe('async actions todoLists', () => {
   });
 
   it('Created todoListItem is added to implementationTodoLists and dueTodoLists when CREATE_TODO_LIST_ITEM succeeds.', async () => {
-    const url = `http://127.0.0.1:8082/todo-list`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list`;
     const todoContent = '買い物へゆく';
     const implementationDate = new Date('2020-09-27T21:11:54');
     const dueDate = new Date('2020-09-29T21:11:54');
@@ -138,7 +138,7 @@ describe('async actions todoLists', () => {
     const todoContent = '食器用洗剤2つ購入';
     const completeFlag = true;
 
-    const url = `http://127.0.0.1:8082/todo-list/${todoListItemId}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
     const mockResponse = JSON.stringify(editTodoListItemResponse);
 
@@ -190,7 +190,7 @@ describe('async actions todoLists', () => {
     const year = '2020';
     const month = '09';
     const date = '27';
-    const url = `http://127.0.0.1:8082/todo-list/${year}-${month}-${date}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
 
     const mockResponse = JSON.stringify(fetchDateTodoListsResponse);
 
@@ -241,7 +241,7 @@ describe('async actions todoLists', () => {
   it('Get implementationTodoLists and dueTodoLists when FETCH_MONTH_TODO_LISTS succeeds.', async () => {
     const year = '2020';
     const month = '09';
-    const url = `http://127.0.0.1:8082/todo-list/${year}-${month}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`;
 
     const mockResponse = JSON.stringify(fetchMonthTodoListsResponse);
 
@@ -299,7 +299,7 @@ describe('async actions todoLists', () => {
 
   it('When DELETE_TODO_LIST_ITEM is successful, send the ImplementationTodoLists and dueTodoLists except the requested todoListItemId to deleteTodoListItemAction and send the response message to openTextModalAction.', async () => {
     const todoListItemId = 1;
-    const url = `http://127.0.0.1:8082/todo-list/${todoListItemId}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
     const mockResponse = JSON.stringify(deleteTodoListItemResponse);
 

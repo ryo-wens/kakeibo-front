@@ -75,7 +75,7 @@ describe('async actions groupTodoLists', () => {
     const todoContent = 'お掃除';
     const implementationDate = new Date('2020-09-27T21:11:54');
     const dueDate = new Date('2020-09-29T21:11:54');
-    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list`;
 
     const mockResponse = JSON.stringify(createGroupTodoListItemResponse);
 
@@ -151,7 +151,7 @@ describe('async actions groupTodoLists', () => {
     const todoContent = '買い物へ行く';
     const completeFlag = false;
 
-    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${todoListItemId}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${todoListItemId}`;
 
     const mockResponse = JSON.stringify(editGroupTodoListItemResponse);
 
@@ -207,7 +207,7 @@ describe('async actions groupTodoLists', () => {
     const year = '2020';
     const month = '09';
     const date = '27';
-    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${year}-${month}-${date}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${year}-${month}-${date}`;
 
     const mockResponse = JSON.stringify(fetchGroupDateTodoListsResponse);
 
@@ -261,7 +261,7 @@ describe('async actions groupTodoLists', () => {
     const groupId = 1;
     const year = '2020';
     const month = '09';
-    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${year}-${month}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${year}-${month}`;
 
     const mockResponse = JSON.stringify(fetchGroupMonthTodoListsResponse);
 
@@ -323,7 +323,7 @@ describe('async actions groupTodoLists', () => {
   it('When DELETE_GROUP_TODO_LIST_ITEM is successful, send the groupImplementationTodoLists and groupDueTodoLists except the requested todoListItemId to deleteGroupTodoListItemAction and send the response message to openTextModalAction.', async () => {
     const groupId = 1;
     const todoListItemId = 1;
-    const url = `http://127.0.0.1:8082/groups/${groupId}/todo-list/${todoListItemId}`;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${todoListItemId}`;
 
     const mockResponse = JSON.stringify(deleteGroupTodoListItemResponse);
 

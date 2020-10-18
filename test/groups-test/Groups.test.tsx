@@ -97,7 +97,7 @@ describe('async actions groups', () => {
   });
 
   it('Created group is added to approvedGroups when CREATE_GROUP succeeds.', async () => {
-    const url = `http://127.0.0.1:8080/groups`;
+    const url = `${process.env.REACT_APP_USER_API_HOST}/groups`;
     const groupName = '古澤家';
 
     const mockRequest = {
@@ -157,7 +157,7 @@ describe('async actions groups', () => {
   it('When UPDATE_GROUP_NAME is successful, get the changed group name and change the store.', async () => {
     const groupId = 1;
     const groupName = 'エミリア家';
-    const url = `http://127.0.0.1:8080/groups/${groupId}`;
+    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}`;
 
     const mockRequest = {
       group_name: groupName,
@@ -195,7 +195,7 @@ describe('async actions groups', () => {
   });
 
   it('Get approvedGroups and unapprovedGroups when fetch is successful', async () => {
-    const url = `http://127.0.0.1:8080/groups`;
+    const url = `${process.env.REACT_APP_USER_API_HOST}/groups`;
     const mockResponse = JSON.stringify(fetchGroupsResponse);
     const expectedActions = [
       {
@@ -255,7 +255,7 @@ describe('async actions groups', () => {
   it('When INVITE_GROUP_USERS is successful, it will receive the invited users and update the store.', async () => {
     const groupId = 1;
     const userId = `anraku8`;
-    const url = `http://127.0.0.1:8080/groups/${groupId}/users`;
+    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`;
 
     const mockRequest = {
       user_id: userId,
@@ -298,7 +298,7 @@ describe('async actions groups', () => {
   it('When GROUP_WITHDRAWAL is successful, send the approved groups except the requested group_id to groupWithdrawalAction and send the response message to openTextModalAction.', async () => {
     const groupId = 1;
     const nextGroupId = 0;
-    const url = `http://127.0.0.1:8080/groups/${groupId}/users`;
+    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`;
 
     const mockResponse = JSON.stringify(groupWithdrawalResponse);
 
@@ -334,7 +334,7 @@ describe('async actions groups', () => {
 
   it('When INVITE_GROUP_PARTICIPATE is successful, it receives approved user and updates the store.', async () => {
     const groupId = 2;
-    const url = `http://127.0.0.1:8080/groups/${groupId}/users/approved`;
+    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/approved`;
 
     const mockResponse = JSON.stringify(inviteGroupParticipateResponse);
 
@@ -394,7 +394,7 @@ describe('async actions groups', () => {
 
   it('When INVITE_GROUP_REJECT succeeds,sends the approved groups except the requested group_id to inviteGroupRejectAction, and sends the response message to openTextModalAction', async () => {
     const groupId = 2;
-    const url = `http://127.0.0.1:8080/groups/${groupId}/users/unapproved`;
+    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/unapproved`;
 
     const mockResponse = JSON.stringify(inviteGroupRejectResponse);
 

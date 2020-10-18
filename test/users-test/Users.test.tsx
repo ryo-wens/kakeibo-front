@@ -18,7 +18,7 @@ const store = mockStore({ userState, router: [] });
 
 describe('async actions signUp', () => {
   const store = mockStore({ users: [], router: [] });
-  const url = 'http://127.0.0.1:8080/signup';
+  const url = `${process.env.REACT_APP_USER_API_HOST}/signup`;
   beforeEach(() => {
     store.clearActions();
   });
@@ -59,7 +59,7 @@ describe('async actions signUp', () => {
 });
 
 describe('async actions logIn', () => {
-  const url = 'http://127.0.0.1:8080/login';
+  const url = `${process.env.REACT_APP_USER_API_HOST}/login`;
   beforeEach(() => {
     store.clearActions();
   });
@@ -96,7 +96,7 @@ describe('async actions logIn', () => {
 });
 
 describe('async actions logOut', () => {
-  const url = 'http://127.0.0.1:8080/logout';
+  const url = `${process.env.REACT_APP_USER_API_HOST}/logout`;
   beforeEach(() => {
     store.clearActions();
   });

@@ -59,7 +59,7 @@ export const signUp = (
       password: password,
     };
     await axios
-      .post<SignupRes>('http://127.0.0.1:8080/signup', JSON.stringify(data), {
+      .post<SignupRes>(`${process.env.REACT_APP_USER_API_HOST}/signup`, JSON.stringify(data), {
         withCredentials: true,
       })
       .then(() => {
@@ -131,7 +131,7 @@ export const logIn = (email: string, password: string) => {
 
     const data: LoginReq = { email: email, password: password };
     await axios
-      .post<LoginRes>('http://127.0.0.1:8080/login', JSON.stringify(data), {
+      .post<LoginRes>(`${process.env.REACT_APP_USER_API_HOST}/login`, JSON.stringify(data), {
         withCredentials: true,
       })
       .then(() => {
@@ -163,7 +163,7 @@ export const logIn = (email: string, password: string) => {
 export const logOut = () => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
-      .delete<LogoutRes>('http://127.0.0.1:8080/logout', {
+      .delete<LogoutRes>(`${process.env.REACT_APP_USER_API_HOST}/logout`, {
         withCredentials: true,
       })
       .then(() => {
