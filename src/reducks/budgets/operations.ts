@@ -226,6 +226,19 @@ export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => 
           return total;
         };
 
+        const newTotalBudget = () => {
+          const deleteBudget =
+            yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
+
+          if (totalStandardBudget() > deleteBudget) {
+            return yearlyBudgetsList.yearly_total_budget + (totalStandardBudget() - deleteBudget);
+          } else {
+            return yearlyBudgetsList.yearly_total_budget - (deleteBudget - totalStandardBudget());
+          }
+        };
+
+        yearlyBudgetsList.yearly_total_budget = newTotalBudget();
+
         yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
           month: `${selectYear}年${selectMonth}月`,
           budget_type: standardBudgetType,

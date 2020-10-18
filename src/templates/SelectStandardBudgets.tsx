@@ -17,6 +17,7 @@ import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import GenericButton from '../components/uikit/GenericButton';
+import { getPathYear, getPathMonth } from '../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,11 +65,8 @@ const useStyles = makeStyles((theme: Theme) =>
 const SelectStandardBudgets = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const pathname = window.location.pathname;
-  const paths = pathname.split('/');
-  const date = paths[2];
-  const selectYear = date.slice(0, 4);
-  const selectMonth = date.slice(5, 7);
+  const selectYear = getPathYear(window.location.pathname);
+  const selectMonth = getPathMonth(window.location.pathname);
   const selector = useSelector((state: State) => state);
   const customBudgetsList = getCustomBudgets(selector);
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
@@ -116,7 +114,6 @@ const SelectStandardBudgets = () => {
                 const newBudgets = [...customBudgets];
                 newBudgets[index].budget = Number(event.target.value);
                 setCustomBudgets(newBudgets);
-                console.log(customBudget.budget);
               };
               return (
                 <TableRow key={customBudget.big_category_id}>
