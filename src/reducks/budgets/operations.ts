@@ -25,7 +25,7 @@ import {
 export const fetchStandardBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
-      .get<fetchStandardBudgetsRes>('http://127.0.0.1:8081/standard-budgets', {
+      .get<fetchStandardBudgetsRes>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -48,9 +48,13 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
 
     const data = { standard_budgets: budgets };
     await axios
-      .put<StandardBudgetsListRes>('http://127.0.0.1:8081/standard-budgets', JSON.stringify(data), {
-        withCredentials: true,
-      })
+      .put<StandardBudgetsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const editStandardBudgetsList: StandardBudgetsList = res.data.standard_budgets;
         const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
@@ -76,7 +80,7 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
 export const fetchYearlyBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
-      .get<YearlyBudgetsList>('http://127.0.0.1:8081/budgets/2020', {
+      .get<YearlyBudgetsList>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/2020`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -93,7 +97,7 @@ export const fetchCustomBudgets = (selectYear: string, selectMonth: string) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<fetchCustomBudgetsRes>(
-        `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }
@@ -123,7 +127,7 @@ export const addCustomBudgets = (
 
     await axios
       .post<CustomBudgetsRes>(
-        `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         JSON.stringify(data),
         {
           withCredentials: true,
@@ -157,7 +161,7 @@ export const editCustomBudgets = (
 
     await axios
       .put<CustomBudgetsRes>(
-        `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         JSON.stringify(data),
         {
           withCredentials: true,
@@ -205,7 +209,7 @@ export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => 
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     await axios
       .delete<DeleteCustomBudgetsRes>(
-        `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }

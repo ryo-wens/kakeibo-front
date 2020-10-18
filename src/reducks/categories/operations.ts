@@ -16,7 +16,7 @@ import { errorHandling } from '../../lib/validation';
 export const fetchCategories = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
-      .get<fetchCategoriesRes>('http://127.0.0.1:8081/categories', {
+      .get<fetchCategoriesRes>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -39,7 +39,7 @@ export const addCustomCategories = (name: string, bigCategoryId: number) => {
     };
     await axios
       .post<addCustomRes>(
-        'http://127.0.0.1:8081/categories/custom-categories',
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`,
         JSON.stringify(data),
         {
           withCredentials: true,
@@ -90,7 +90,7 @@ export const editCustomCategories = (id: number, name: string, bigCategoryId: nu
     };
     await axios
       .put<editCustomRes>(
-        `http://127.0.0.1:8081/categories/custom-categories/${id}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`,
         JSON.stringify(data),
         {
           withCredentials: true,
@@ -150,9 +150,12 @@ export const editCustomCategories = (id: number, name: string, bigCategoryId: nu
 export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     await axios
-      .delete<deleteCustomRes>(`http://127.0.0.1:8081/categories/custom-categories/${id}`, {
-        withCredentials: true,
-      })
+      .delete<deleteCustomRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const resMessage = res.data.message;
         // bigCategoryId = 1 収入 : bigCategoryId > 1 支出

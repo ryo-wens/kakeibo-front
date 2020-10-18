@@ -72,7 +72,7 @@ export const createGroup = (groupName: string) => {
     };
 
     await axios
-      .post<createGroupRes>(`http://127.0.0.1:8080/groups`, JSON.stringify(data), {
+      .post<createGroupRes>(`${process.env.REACT_APP_USER_API_HOST}/groups`, JSON.stringify(data), {
         withCredentials: true,
       })
       .then((res) => {
@@ -111,9 +111,13 @@ export const updateGroupName = (groupId: number, groupName: string) => {
     };
 
     await axios
-      .put<updateGroupNameRes>(`http://127.0.0.1:8080/groups/${groupId}`, JSON.stringify(data), {
-        withCredentials: true,
-      })
+      .put<updateGroupNameRes>(
+        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
 
       .then((res) => {
         const prevApprovedGroups: Groups = getState().groups.approvedGroups;
@@ -139,7 +143,7 @@ export const updateGroupName = (groupId: number, groupName: string) => {
 export const fetchGroups = () => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
-      .get<fetchGroupsRes>(`http://127.0.0.1:8080/groups`, {
+      .get<fetchGroupsRes>(`${process.env.REACT_APP_USER_API_HOST}/groups`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -170,7 +174,7 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios
       .post<inviteGroupUsersRes>(
-        `http://127.0.0.1:8080/groups/${groupId}/users`,
+        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`,
         JSON.stringify(data),
         { withCredentials: true }
       )
@@ -204,9 +208,12 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
 export const groupWithdrawal = (groupId: number, nextGroupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios
-      .delete<groupWithdrawalRes>(`http://127.0.0.1:8080/groups/${groupId}/users`, {
-        withCredentials: true,
-      })
+      .delete<groupWithdrawalRes>(
+        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const prevApprovedGroups = getState().groups.approvedGroups;
 
@@ -230,7 +237,7 @@ export const inviteGroupParticipate = (groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios
       .post<inviteGroupParticipateRes>(
-        `http://127.0.0.1:8080/groups/${groupId}/users/approved`,
+        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/approved`,
         null,
         {
           withCredentials: true,
@@ -281,9 +288,12 @@ export const inviteGroupParticipate = (groupId: number) => {
 export const inviteGroupReject = (groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios
-      .delete<inviteGroupRejectRes>(`http://127.0.0.1:8080/groups/${groupId}/users/unapproved`, {
-        withCredentials: true,
-      })
+      .delete<inviteGroupRejectRes>(
+        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/unapproved`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const prevUnapprovedGroups = getState().groups.unapprovedGroups;
 

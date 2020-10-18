@@ -31,7 +31,7 @@ describe('async actions fetchBudgets', () => {
     store.clearActions();
   });
   const store = mockStore({ budgets: { standard_budgets_list: [] } });
-  const url = 'http://127.0.0.1:8081/standard-budgets';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`;
 
   it('Get standard_budgets if fetch succeeds', async () => {
     const mockStandardBudgets = standardBudgets;
@@ -55,7 +55,7 @@ describe('async actions editStandardBudgets', () => {
     store.clearActions();
   });
   const store = mockStore({ standardBudgets });
-  const url = 'http://127.0.0.1:8081/standard-budgets';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`;
 
   it('Edit standard_budgets if fetch succeeds', async () => {
     const getState = () => {
@@ -156,7 +156,7 @@ describe('async actions getYearlyBudgets', () => {
     store.clearActions();
   });
   const store = mockStore({ budgets: { yearly_budgets_list: [] } });
-  const url = 'http://127.0.0.1:8081/budgets/2020';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/2020`;
 
   it('Get yearly_budgets if fetch succeeds', async () => {
     const mockYearlyBudgets = yearlyBudgets;
@@ -182,7 +182,7 @@ describe('async actions getCustomBudgets', () => {
   const selectYear = '2020';
   const selectMonth = '07';
   const store = mockStore({ budgets: { custom_budgets_list: [] } });
-  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Get custom_budgets if fetch succeeds', async () => {
     const mockCustomBudgets = customBudgets;
@@ -208,7 +208,7 @@ describe('async actions addCustomBudgets', () => {
   const selectYear = '2020';
   const selectMonth = '07';
   const store = mockStore({ customBudgets });
-  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Add custom_budgets if fetch succeeds', async () => {
     const mockCustomBudgets = addCustomBudget;
@@ -307,7 +307,7 @@ describe('async actions editCustomBudgets', () => {
   const selectYear = '2020';
   const selectMonth = '07';
   const store = mockStore({ addCustomBudget });
-  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Edit custom_budgets if fetch succeeds', async () => {
     const getState = () => {
@@ -415,7 +415,7 @@ describe('async actions deleteCustomBudgets', () => {
   const selectYear = '2020';
   const selectMonth = '07';
   const store = mockStore({ yearlyBudgets });
-  const url = `http://127.0.0.1:8081/custom-budgets/${selectYear}-${selectMonth}`;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`;
   it('Delete custom_budgets if fetch succeeds', async () => {
     const getState = () => {
       return {

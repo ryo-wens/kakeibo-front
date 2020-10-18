@@ -15,7 +15,7 @@ import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 export const fetchTransactionsList = () => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
-      .get<fetchTransactionsRes>('http://127.0.0.1:8081/transactions/2020-07', {
+      .get<fetchTransactionsRes>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/2020-07`, {
         withCredentials: true,
       })
       .then((res) => {
@@ -67,7 +67,7 @@ export const addTransactions = (
     };
     await axios
       .post<transactionsRes>(
-        'http://127.0.0.1:8081/transactions',
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`,
         JSON.stringify(data, function (key, value) {
           if (key === 'transaction_date') {
             return moment(new Date(value)).format();
@@ -142,9 +142,13 @@ export const editTransactions = (
       custom_category_id: custom_category_id,
     };
     await axios
-      .put<transactionsRes>(`http://127.0.0.1:8081/transactions/${id}`, JSON.stringify(data), {
-        withCredentials: true,
-      })
+      .put<transactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const editTransaction = res.data;
 
@@ -179,9 +183,12 @@ export const deleteTransactions = (id: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     const transactionsList = getState().transactions.transactionsList;
     await axios
-      .delete<deleteTransactionRes>(`http://127.0.0.1:8081/transactions/${id}`, {
-        withCredentials: true,
-      })
+      .delete<deleteTransactionRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         const message = res.data;
 

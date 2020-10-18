@@ -24,7 +24,7 @@ process.on('unhandledRejection', console.dir);
 
 describe('async actions getCategories', () => {
   const store = mockStore({ categories: { incomeList: [], expenseList: [] } });
-  const url = 'http://127.0.0.1:8081/categories';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`;
 
   beforeEach(() => {
     store.clearActions();
@@ -53,7 +53,7 @@ describe('async actions getCategories', () => {
 
 describe('async actions addCustomCategories', () => {
   const store = mockStore({ categories });
-  const url = 'http://127.0.0.1:8081/categories/custom-categories';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`;
 
   beforeEach(() => {
     store.clearActions();
@@ -147,7 +147,7 @@ describe('async actions editCustomCategories', () => {
     const mockIncomeResponse = editResponse.categories.incomeResponse;
 
     const id = mockIncomeResponse.id;
-    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
     const mockIncomeList = editCategories.income_categories_list;
 
@@ -182,7 +182,7 @@ describe('async actions editCustomCategories', () => {
     const mockExpenseResponse = editResponse.categories.expenseResponse;
 
     const id = mockExpenseResponse.id;
-    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
     const mockExpenseList = editCategories.expense_categories_list;
 
@@ -222,7 +222,7 @@ describe('async actions deleteCustomCategories', () => {
     };
 
     const id = 16;
-    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
     const mockIncomeList = deleteCategories.income_categories_list;
 
@@ -252,7 +252,7 @@ describe('async actions deleteCustomCategories', () => {
     };
 
     const id = 17;
-    const url = `http://127.0.0.1:8081/categories/custom-categories/${id}`;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
     const mockExpenseList = deleteCategories.expense_categories_list;
     const expectedExpenseActions = [
