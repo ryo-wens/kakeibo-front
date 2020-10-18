@@ -4,7 +4,7 @@ import { TransactionsList } from '../transactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import { TodoLists } from '../todoLists/types';
 import { GroupTodoLists } from '../groupTodoLists/types';
-import { UserTaskList } from '../groupTasks/types';
+import { GroupTaskList, UserTaskList } from '../groupTasks/types';
 
 export interface State {
   categories: {
@@ -30,7 +30,8 @@ export interface State {
     message: string;
   };
   groupTasks: {
-    group_tasks_list_for_each_user: UserTaskList;
+    groupTasksListForEachUser: UserTaskList;
+    groupTasksList: GroupTaskList;
   };
   todoLists: {
     implementationTodoLists: TodoLists;

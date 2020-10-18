@@ -26,7 +26,8 @@ const initialState = {
     message: '',
   },
   groupTasks: {
-    group_tasks_list_for_each_user: [],
+    groupTasksListForEachUser: [],
+    groupTasksList: [],
   },
   todoLists: {
     implementationTodoLists: [],
