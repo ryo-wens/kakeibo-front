@@ -3,6 +3,10 @@ const initialState = {
     incomeList: [],
     expenseList: [],
   },
+  groupCategories: {
+    groupIncomeList: [],
+    groupExpenseList: [],
+  },
   transactions: {
     transactionsList: [],
   },

@@ -1,4 +1,5 @@
 import { Categories } from '../categories/types';
+import { GroupCategories } from '../groupCategories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
@@ -10,6 +11,10 @@ export interface State {
   categories: {
     incomeList: Categories;
     expenseList: Categories;
+  };
+  groupCategories: {
+    groupIncomeList: GroupCategories;
+    groupExpenseList: GroupCategories;
   };
   transactions: {
     transactionsList: TransactionsList;
