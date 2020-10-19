@@ -1,12 +1,12 @@
-import { TaskList, UserTaskList } from './types';
+import { GroupTasksList, GroupTasksListForEachUser } from './types';
 export type groupTasksActions = ReturnType<
   | typeof addGroupTaskUserAction
   | typeof fetchGroupTasksListEachUserAction
-  | typeof fetchGroupTasksList
+  | typeof fetchGroupTasksListAction
 >;
 
 export const ADD_GROUP_TASKS_USER = 'ADD_GROUP_TASKS_USER';
-export const addGroupTaskUserAction = (groupTasksListForEachUser: UserTaskList) => {
+export const addGroupTaskUserAction = (groupTasksListForEachUser: GroupTasksListForEachUser) => {
   return {
     type: ADD_GROUP_TASKS_USER,
     payload: {
@@ -16,7 +16,9 @@ export const addGroupTaskUserAction = (groupTasksListForEachUser: UserTaskList) 
 };
 
 export const FETCH_GROUP_TASKS_LIST_EACH_USER = 'FETCH_GROUP_TASKS_LIST_EACH_USER';
-export const fetchGroupTasksListEachUserAction = (groupTasksListForEachUser: UserTaskList) => {
+export const fetchGroupTasksListEachUserAction = (
+  groupTasksListForEachUser: GroupTasksListForEachUser
+) => {
   return {
     type: FETCH_GROUP_TASKS_LIST_EACH_USER,
     payload: {
@@ -26,7 +28,7 @@ export const fetchGroupTasksListEachUserAction = (groupTasksListForEachUser: Use
 };
 
 export const FETCH_GROUP_TASKS_LIST = 'FETCH_GROUP_TASKS_LIST';
-export const fetchGroupTasksList = (groupTasksList: TaskList) => {
+export const fetchGroupTasksListAction = (groupTasksList: GroupTasksList) => {
   return {
     type: FETCH_GROUP_TASKS_LIST,
     payload: {

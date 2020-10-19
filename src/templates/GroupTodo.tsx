@@ -17,7 +17,7 @@ import {
 } from '../reducks/groupTodoLists/operations';
 import { getPathGroupId } from '../lib/path';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
-import { fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
+import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -94,6 +94,7 @@ const GroupTodo = () => {
         />
         <AddTodo groupId={groupId} date={dt} />
         <button onClick={() => dispatch(fetchGroupTasksListEachUser(groupId))} />
+        <button onClick={() => dispatch(fetchGroupTasksList(groupId))} />
       </div>
     </>
   );

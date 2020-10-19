@@ -1,11 +1,11 @@
-export interface UserTaskListItem {
+export interface UserTasksListItem {
   id: number;
   user_id: string;
   group_id: number;
-  tasks_list: TaskList;
+  tasks_list: TasksListForEachUser;
 }
 
-export interface TaskListItem {
+export interface TasksListItem {
   id: number;
   base_date: Date;
   cycle_type: 'every' | 'consecutive' | 'none' | null;
@@ -15,10 +15,14 @@ export interface TaskListItem {
   group_tasks_users_id: number;
 }
 
-export interface UserTaskList extends Array<UserTaskListItem> {}
-export interface GroupTaskList extends Array<TaskListItem> {}
-export interface TaskList extends Array<TaskListItem> {}
+export interface GroupTasksListForEachUser extends Array<UserTasksListItem> {}
+export interface TasksListForEachUser extends Array<TasksListItem> {}
+export interface GroupTasksList extends Array<TasksListItem> {}
 
-export interface fetchTasksListEachUserRes {
-  group_tasks_list_for_each_user: UserTaskList;
+export interface fetchGroupTasksListEachUserRes {
+  group_tasks_list_for_each_user: GroupTasksListForEachUser;
+}
+
+export interface fetchGroupTasksListRes {
+  group_tasks_list: GroupTasksList;
 }
