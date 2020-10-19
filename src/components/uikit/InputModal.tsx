@@ -1,9 +1,10 @@
 import React, { useState, useCallback } from 'react';
+import { useDispatch } from 'react-redux';
+import { addTransactions } from '../../reducks/transactions/operations';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
-import DeleteIcon from '@material-ui/icons/Delete';
 import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -18,7 +19,7 @@ const useStyles = makeStyles((theme: Theme) =>
       padding: theme.spacing(1, 2, 2),
     },
     buttonPosition: {
-      display: 'flex',
+      textAlign: 'center',
     },
     smallSpaceRight: {
       marginRight: 40,
@@ -37,6 +38,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const InputModal = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
@@ -177,16 +179,24 @@ const InputModal = () => {
       </form>
       <div className={classes.smallSpaceTop} />
       <div className={classes.buttonPosition}>
-        <IconButton
-          className={classes.smallSpaceRight}
-          color={'inherit'}
-          onClick={() => console.log(bigCategoryId, mediumCategoryId, customCategoryId)}
-          size={'small'}
-        >
-          <DeleteIcon />
-          削除する
-        </IconButton>
-        <GenericButton label={'更新する'} onClick={handleClose} disabled={false} />
+        <GenericButton
+          label={'更新する'}
+          onClick={() =>
+            dispatch(
+              addTransactions(
+                transactionsType,
+                transactionDate,
+                shop,
+                memo,
+                amount,
+                bigCategoryId,
+                mediumCategoryId,
+                customCategoryId
+              )
+            ) && handleClose()
+          }
+          disabled={false}
+        />
       </div>
     </div>
   );

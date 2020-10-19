@@ -77,10 +77,10 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
   };
 };
 
-export const fetchYearlyBudgets = () => {
+export const fetchYearlyBudgets = (year: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
-      .get<YearlyBudgetsList>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/2020`, {
+      .get<YearlyBudgetsList>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${year}`, {
         withCredentials: true,
       })
       .then((res) => {

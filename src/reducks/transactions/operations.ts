@@ -12,12 +12,15 @@ import {
 import moment from 'moment';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
-export const fetchTransactionsList = () => {
+export const fetchTransactionsList = (year: string, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
-      .get<fetchTransactionsRes>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/2020-07`, {
-        withCredentials: true,
-      })
+      .get<fetchTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${customMonth}`,
+        {
+          withCredentials: true,
+        }
+      )
       .then((res) => {
         if (res.data.message) {
           alert(res.data.message);
@@ -190,7 +193,7 @@ export const deleteTransactions = (id: number) => {
         }
       )
       .then((res) => {
-        const message = res.data;
+        const message = res.data.message;
 
         const nextTransactionsList = transactionsList.filter((transaction) => {
           if (transaction.id !== id) {
