@@ -4,7 +4,7 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import fetchTasksListEachUserResponse from './fetchTasksListEachUserResponse.json';
-import { fetchTasksListEachUser } from '../../src/reducks/groupTasks/operations';
+import { fetchGroupTasksListEachUser } from '../../src/reducks/groupTasks/operations';
 import * as GroupTasksActions from '../../src/reducks/groupTasks/actions';
 
 const middlewares = [thunk];
@@ -93,7 +93,7 @@ describe('async actions groupTasks', () => {
     store.clearActions();
   });
 
-  it('Get groupTasksListForEachUser when FETCH_TASKS_LIST_EACH_USER succeeds.', async () => {
+  it('Get groupTasksListForEachUser when FETCH_GROUP_TASKS_LIST_EACH_USER succeeds.', async () => {
     const groupId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
 
@@ -101,7 +101,7 @@ describe('async actions groupTasks', () => {
 
     const expectedAction = [
       {
-        type: GroupTasksActions.FETCH_TASKS_LIST_EACH_USER,
+        type: GroupTasksActions.FETCH_GROUP_TASKS_LIST_EACH_USER,
         payload: {
           groupTasksListForEachUser: [
             {
@@ -143,7 +143,7 @@ describe('async actions groupTasks', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchTasksListEachUser(groupId)(store.dispatch);
+    await fetchGroupTasksListEachUser(groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

@@ -1,10 +1,10 @@
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import { fetchTasksListEachUserRes, UserTaskList } from './types';
-import { fetchTasksListEachUserAction } from './actions';
+import { fetchGroupTasksListEachUserAction } from './actions';
 import { errorHandling } from '../../lib/validation';
 
-export const fetchTasksListEachUser = (groupId: number) => {
+export const fetchGroupTasksListEachUser = (groupId: number) => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchTasksListEachUserRes>(
@@ -15,7 +15,7 @@ export const fetchTasksListEachUser = (groupId: number) => {
       )
       .then((res) => {
         const groupTasksListForEachUser: UserTaskList = res.data.group_tasks_list_for_each_user;
-        dispatch(fetchTasksListEachUserAction(groupTasksListForEachUser));
+        dispatch(fetchGroupTasksListEachUserAction(groupTasksListForEachUser));
       })
       .catch((error) => {
         errorHandling(dispatch, error);
