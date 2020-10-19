@@ -9,6 +9,11 @@ export const groupTasksReducers = (state = initialState.groupTasks, action: grou
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_TASKS_LIST_EACH_USER:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
