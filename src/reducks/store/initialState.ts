@@ -25,6 +25,10 @@ const initialState = {
     unapprovedGroups: [],
     message: '',
   },
+  groupTasks: {
+    groupTasksListForEachUser: [],
+    groupTasksList: [],
+  },
   todoLists: {
     implementationTodoLists: [],
     dueTodoLists: [],
