@@ -48,7 +48,7 @@ export const createGroupTodoListItem = (
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios
       .post<createGroupTodoListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list`,
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list`,
         JSON.stringify(data, function (key, value) {
           if (key === 'implementation_date') {
             return moment(value).format();
@@ -123,7 +123,7 @@ export const editGroupTodoListItem = (
 
     await axios
       .put<editGroupTodoListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${todoListItemId}`,
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(data, function (key, value) {
           if (key === 'implementation_date') {
             return moment(value).format();
@@ -183,7 +183,7 @@ export const fetchGroupDateTodoLists = (
   return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchGroupDateTodoListsRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${year}-${month}-${date}`,
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`,
         {
           withCredentials: true,
         }
@@ -223,7 +223,7 @@ export const fetchGroupMonthTodoLists = (groupId: number, year: string, month: s
   return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchGroupMonthTodoListsRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${year}-${month}`,
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`,
         {
           withCredentials: true,
         }
@@ -263,7 +263,7 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios
       .delete<deleteGroupTodoListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/${groupId}/todo-list/${todoListItemId}`,
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         {
           withCredentials: true,
         }

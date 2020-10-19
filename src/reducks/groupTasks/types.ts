@@ -15,6 +15,10 @@ export interface TaskListItem {
   group_tasks_users_id: number;
 }
 
-export interface GroupTaskList extends Array<TaskListItem> {}
 export interface UserTaskList extends Array<UserTaskListItem> {}
+export interface GroupTaskList extends Array<TaskListItem> {}
 export interface TaskList extends Array<TaskListItem> {}
+
+export interface fetchTasksListEachUserRes {
+  group_tasks_list_for_each_user: UserTaskList;
+}
