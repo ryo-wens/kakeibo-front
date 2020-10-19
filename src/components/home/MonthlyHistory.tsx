@@ -1,7 +1,9 @@
-import React, { ReactElement, useMemo } from 'react';
+import React, { ReactElement, useEffect, useMemo } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
+import { fetchTransactionsList } from '../../reducks/transactions/operations';
+import { State } from '../../reducks/store/types';
+import { getTransactions } from '../../reducks/transactions/selectors';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import CreateIcon from '@material-ui/icons/Create';
-import IconButton from '@material-ui/core/IconButton';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -9,6 +11,7 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableHead from '@material-ui/core/TableHead';
 import TableRow from '@material-ui/core/TableRow';
 import Paper from '@material-ui/core/Paper';
+import { InputModal } from '../uikit';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -43,6 +46,10 @@ const useStyles = makeStyles(() =>
 
 const MonthlyHistory = () => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const selector = useSelector((state: State) => state);
+  const transactionsList = getTransactions(selector);
+  console.log(transactionsList);
 
   type Day = { date: string };
   type Week = Array<Day>;
@@ -51,6 +58,11 @@ const MonthlyHistory = () => {
   const date = new Date();
   const year = date.getFullYear();
   const month = date.getMonth() + 1;
+  const customMonth = ('0' + month).slice(-2);
+
+  useEffect(() => {
+    dispatch(fetchTransactionsList(String(year), customMonth));
+  }, []);
 
   const displayWeeks = useMemo(() => {
     const startDate = new Date(year, month - 1, 1);
@@ -77,9 +89,21 @@ const MonthlyHistory = () => {
     return prevWeeks;
   }, [date]);
 
+  const transactionsData = () => {
+    let historyRow: ReactElement[] = [];
+    transactionsList.map((transaction) => {
+      historyRow = [
+        ...historyRow,
+        <TableCell className={classes.tableCell} key={transaction.id}>
+          {transaction.big_category_name} ¥{transaction.amount}
+        </TableCell>,
+      ];
+    });
+    return historyRow;
+  };
+
   const rows = useMemo(() => {
     let headerRow: ReactElement[] = [];
-    let historyRow: ReactElement[] = [];
     let operationRow: ReactElement[] = [];
     let totalAmountRow: ReactElement[] = [];
     let weekNum = 1;
@@ -94,17 +118,10 @@ const MonthlyHistory = () => {
         </TableCell>,
       ];
 
-      historyRow = [
-        ...historyRow,
-        <TableCell className={classes.tableCell} key={index}>家計簿</TableCell>,
-      ];
-
       operationRow = [
         ...operationRow,
         <TableCell className={classes.tableCell} key={index} align={'center'}>
-          <IconButton color="primary" size={'small'} onClick={() => alert('テスト')}>
-            <CreateIcon className={classes.iconPosition} />
-          </IconButton>
+          <InputModal />
         </TableCell>,
       ];
 
@@ -117,7 +134,6 @@ const MonthlyHistory = () => {
     });
     return {
       headerRow: headerRow,
-      historyRow: historyRow,
       operationRow: operationRow,
       totalAmountRow: totalAmountRow,
     };
@@ -132,7 +148,7 @@ const MonthlyHistory = () => {
             <TableRow>{rows.headerRow}</TableRow>
           </TableHead>
           <TableBody className={classes.tableMain}>
-            <TableRow>{rows.historyRow}</TableRow>
+            <TableRow>{transactionsData()}</TableRow>
             <TableRow>{rows.operationRow}</TableRow>
             <TableRow>{rows.totalAmountRow}</TableRow>
           </TableBody>

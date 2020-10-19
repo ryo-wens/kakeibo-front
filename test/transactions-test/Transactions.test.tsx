@@ -24,7 +24,11 @@ process.on('unhandledRejection', console.dir);
 
 describe('async actions fetchTransactionsList', () => {
   const store = mockStore({ transactionsList: [] });
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/2020-07`;
+  const date = new Date();
+  const year = date.getFullYear();
+  const month = date.getMonth() + 1;
+  const customMonth = ('0' + month).slice(-2);
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${customMonth}`;
 
   beforeEach(() => {
     store.clearActions();
@@ -42,7 +46,7 @@ describe('async actions fetchTransactionsList', () => {
 
     axiosMock.onGet(url).reply(200, fetchResTransactions);
 
-    await fetchTransactionsList()(store.dispatch);
+    await fetchTransactionsList(String(year), customMonth)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 });
