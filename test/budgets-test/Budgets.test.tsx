@@ -155,8 +155,10 @@ describe('async actions getYearlyBudgets', () => {
   beforeEach(() => {
     store.clearActions();
   });
+  const date = new Date();
+  const year = date.getFullYear();
   const store = mockStore({ budgets: { yearly_budgets_list: [] } });
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/2020`;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${year}`;
 
   it('Get yearly_budgets if fetch succeeds', async () => {
     const mockYearlyBudgets = yearlyBudgets;
@@ -170,7 +172,7 @@ describe('async actions getYearlyBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockYearlyBudgets);
 
-    await fetchYearlyBudgets()(store.dispatch);
+    await fetchYearlyBudgets(year)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

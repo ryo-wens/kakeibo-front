@@ -16,6 +16,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { standardBudgetType } from '../../lib/constant';
+import { getStandardBudgets, getYearlyBudgets } from '../../reducks/budgets/selectors';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -33,8 +34,10 @@ interface YearlyBudgetsRowProps {
 const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const year = props.years;
   const selector = useSelector((state: State) => state);
-  const yearlyBudgets = selector.budgets.yearly_budgets_list;
+  const standardBudgets = getStandardBudgets(selector);
+  const yearlyBudgets = getYearlyBudgets(selector);
   const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
     year: '',
     yearly_total_budget: 0,
@@ -42,12 +45,12 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   });
 
   useEffect(() => {
-    dispatch(fetchStandardBudgets());
+    if (standardBudgets) dispatch(fetchStandardBudgets());
   }, []);
 
   useEffect(() => {
-    dispatch(fetchYearlyBudgets());
-  }, []);
+    dispatch(fetchYearlyBudgets(year));
+  }, [year]);
 
   useEffect(() => {
     setYearBudget(yearlyBudgets);
@@ -65,7 +68,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
       };
       const selectYear = budget.month.slice(0, 4);
       const selectMonth = budget.month.slice(5, 7);
-      const lastDate = new Date(props.years, Number(selectMonth), 0).getDate();
+      const lastDate = new Date(year, Number(selectMonth), 0).getDate();
       return (
         <TableRow key={index}>
           <TableCell className={classes.tableSize} component="th" scope="row">
