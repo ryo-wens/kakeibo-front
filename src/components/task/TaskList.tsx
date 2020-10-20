@@ -3,7 +3,8 @@ import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TodoButton } from '../todo';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
-import { List, ListItemText } from '@material-ui/core';
+import { List } from '@material-ui/core';
+import { TaskListItemMenuButton } from './index';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -19,6 +20,10 @@ const useStyles = makeStyles((theme: Theme) =>
       border: '2px solid #000',
       boxShadow: theme.shadows[5],
       padding: theme.spacing(2, 4, 3),
+    },
+    listItem: {
+      display: 'flex',
+      justifyContent: 'space-between',
     },
     listText: {
       display: `block`,
@@ -51,9 +56,10 @@ const TaskList = (props: TaskListProps) => {
           props.groupTasksList.map((taskListItem) => {
             return (
               <li key={taskListItem.id}>
-                <p className={classes.listText}>{taskListItem.task_name}</p>
-                <ListItemText secondary={`サイクルタイプ: ${taskListItem.cycle_type}`} />
-                <ListItemText secondary={`サイクル: ${taskListItem.cycle}`} />
+                <div className={classes.listItem}>
+                  <p className={classes.listText}>{taskListItem.task_name}</p>
+                  <TaskListItemMenuButton />
+                </div>
               </li>
             );
           })}
