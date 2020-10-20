@@ -19,6 +19,9 @@ const initialState = {
     },
     custom_budgets_list: [],
   },
+  groupBudgets: {
+    groupStandardBudgetsList: [],
+  },
   users: {
     user_id: '',
     user_name: '',
