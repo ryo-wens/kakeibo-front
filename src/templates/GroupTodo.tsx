@@ -18,8 +18,8 @@ import {
 import { getPathGroupId } from '../lib/path';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { AddTaskUser } from '../components/task';
-import { getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
+import { AddTaskUser, TaskList } from '../components/task';
+import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -45,6 +45,7 @@ const GroupTodo = () => {
   const groupDueTodoLists = getGroupDueTodoLists(selector);
   const groupTodoListsMessage = getGroupTodoListsMessage(selector);
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
+  const groupTasksList = getGroupTasksList(selector);
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -72,6 +73,12 @@ const GroupTodo = () => {
   useEffect(() => {
     if (groupTasksListForEachUser.length === 0) {
       dispatch(fetchGroupTasksListEachUser(groupId));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (groupTasksList.length === 0) {
+      dispatch(fetchGroupTasksList(groupId));
     }
   }, []);
 
@@ -106,6 +113,10 @@ const GroupTodo = () => {
         <AddTaskUser
           approvedGroup={approvedGroup}
           groupTasksListForEachUser={groupTasksListForEachUser}
+        />
+        <TaskList
+          groupTasksListForEachUser={groupTasksListForEachUser}
+          groupTasksList={groupTasksList}
         />
       </div>
     </>

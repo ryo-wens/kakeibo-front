@@ -15,7 +15,10 @@ import { CreateGroups } from './index';
 import { push } from 'connected-react-router';
 import { Groups } from '../../reducks/groups/types';
 import { fetchDateTodoLists, fetchMonthTodoLists } from '../../reducks/todoLists/operations';
-import { fetchGroupTasksListEachUser } from '../../reducks/groupTasks/operations';
+import {
+  fetchGroupTasksList,
+  fetchGroupTasksListEachUser,
+} from '../../reducks/groupTasks/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,6 +76,7 @@ const TodoMenu = () => {
             key={approvedGroup.group_id}
             onClick={() =>
               dispatch(fetchGroupTasksListEachUser(selectedGroupId)) &&
+              dispatch(fetchGroupTasksList(selectedGroupId)) &&
               dispatch(push('/group-todo/' + selectedGroupId))
             }
           >
