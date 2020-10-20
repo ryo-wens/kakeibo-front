@@ -5,3 +5,7 @@ export interface GroupBudget {
 }
 
 export interface GroupStandardBudgetsList extends Array<GroupBudget> {}
+
+export interface GroupStandardBudgetsListRes {
+  groupStandardBudgetsList: GroupBudget[];
+}
