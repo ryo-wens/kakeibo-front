@@ -18,6 +18,8 @@ import {
 import { getPathGroupId } from '../lib/path';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
+import { AddTaskUser } from '../components/task';
+import { getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,6 +44,7 @@ const GroupTodo = () => {
   const groupImplementationTodoLists = getGroupImplementationTodoLists(selector);
   const groupDueTodoLists = getGroupDueTodoLists(selector);
   const groupTodoListsMessage = getGroupTodoListsMessage(selector);
+  const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
 
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -63,6 +66,12 @@ const GroupTodo = () => {
   useEffect(() => {
     if (groupImplementationTodoLists.length === 0 && groupDueTodoLists.length === 0) {
       dispatch(fetchGroupMonthTodoLists(groupId, year, month));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (groupTasksListForEachUser.length === 0) {
+      dispatch(fetchGroupTasksListEachUser(groupId));
     }
   }, []);
 
@@ -93,8 +102,11 @@ const GroupTodo = () => {
           todoListsMessage={groupTodoListsMessage}
         />
         <AddTodo groupId={groupId} date={dt} />
-        <button onClick={() => dispatch(fetchGroupTasksListEachUser(groupId))} />
         <button onClick={() => dispatch(fetchGroupTasksList(groupId))} />
+        <AddTaskUser
+          approvedGroup={approvedGroup}
+          groupTasksListForEachUser={groupTasksListForEachUser}
+        />
       </div>
     </>
   );
