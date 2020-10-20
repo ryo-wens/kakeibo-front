@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchStandardBudgets, addCustomBudgets } from '../reducks/budgets/operations';
+import {
+  fetchStandardBudgets,
+  addCustomBudgets,
+  copyStandardBudgets,
+} from '../reducks/budgets/operations';
 import { State } from '../reducks/store/types';
 import { CustomBudgetsList } from '../reducks/budgets/types';
 import { getCustomBudgets } from '../reducks/budgets/selectors';
@@ -73,7 +77,11 @@ const SelectStandardBudgets = () => {
   const unInputBudgets = customBudgets === customBudgetsList;
 
   useEffect(() => {
-    dispatch(fetchStandardBudgets());
+    async function fetch() {
+      await dispatch(await fetchStandardBudgets());
+      dispatch(copyStandardBudgets());
+    }
+    fetch();
   }, []);
 
   useEffect(() => {
@@ -151,7 +159,7 @@ const SelectStandardBudgets = () => {
                   return rest;
                 })
               )
-            )
+            ) && dispatch(push('/yearly-budgets'))
           }
         />
       </div>

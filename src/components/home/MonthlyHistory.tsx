@@ -49,7 +49,6 @@ const MonthlyHistory = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const transactionsList = getTransactions(selector);
-  console.log(transactionsList);
 
   type Day = { date: string };
   type Week = Array<Day>;

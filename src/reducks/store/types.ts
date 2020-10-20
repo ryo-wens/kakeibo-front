@@ -1,7 +1,9 @@
 import { Categories } from '../categories/types';
+import { GroupCategories } from '../groupCategories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
+import { GroupStandardBudgetsList } from '../groupBudgets/types';
 import { TodoLists } from '../todoLists/types';
 import { GroupTodoLists } from '../groupTodoLists/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
@@ -11,6 +13,10 @@ export interface State {
     incomeList: Categories;
     expenseList: Categories;
   };
+  groupCategories: {
+    groupIncomeList: GroupCategories;
+    groupExpenseList: GroupCategories;
+  };
   transactions: {
     transactionsList: TransactionsList;
   };
@@ -18,6 +24,9 @@ export interface State {
     standard_budgets_list: StandardBudgetsList;
     yearly_budgets_list: YearlyBudgetsList;
     custom_budgets_list: CustomBudgetsList;
+  };
+  groupBudgets: {
+    groupStandardBudgetsList: GroupStandardBudgetsList;
   };
   users: {
     user_id: string;

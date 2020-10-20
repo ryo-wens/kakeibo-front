@@ -81,10 +81,10 @@ const YearlyBudgets = () => {
     <div className={classes.mainPosition}>
       <ButtonGroup className={classes.buttonPosition} size="large" aria-label="budgets-kind">
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
-          標準
+          標準予算
         </Button>
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/yearly-budgets'))}>
-          月ごと
+          月別カスタム予算
         </Button>
       </ButtonGroup>
       <FormControl variant="outlined" className={classes.formControl}>

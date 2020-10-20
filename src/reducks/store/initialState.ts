@@ -3,6 +3,10 @@ const initialState = {
     incomeList: [],
     expenseList: [],
   },
+  groupCategories: {
+    groupIncomeList: [],
+    groupExpenseList: [],
+  },
   transactions: {
     transactionsList: [],
   },
@@ -14,6 +18,9 @@ const initialState = {
       monthly_budgets: [],
     },
     custom_budgets_list: [],
+  },
+  groupBudgets: {
+    groupStandardBudgetsList: [],
   },
   users: {
     user_id: '',

@@ -1,6 +1,7 @@
 import { createStore as reduxCreateStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { usersReducer } from '../users/reducers';
 import { categoriesReducer } from '../categories/reducers';
+import { groupCategoriesReducer } from '../groupCategories/reducers';
 import { groupsReducer } from '../groups/reducers';
 import { transactionsReducer } from '../transactions/reducers';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
@@ -9,6 +10,7 @@ import { History } from 'history';
 import { createLogger } from 'redux-logger';
 import { modalReducer } from '../modal/reducers';
 import { budgetsReducer } from '../budgets/reducers';
+import { groupBudgetsReducer } from '../groupBudgets/reducers';
 import { todoListsReducer } from '../todoLists/reducers';
 import { groupTodoListsReducer } from '../groupTodoLists/reducers';
 import { groupTasksReducers } from '../groupTasks/reducers';
@@ -32,6 +34,7 @@ export default function createStore(history: History) {
       router: connectRouter(history),
       users: usersReducer,
       categories: categoriesReducer,
+      groupCategories: groupCategoriesReducer,
       groups: groupsReducer,
       groupTasks: groupTasksReducers,
       todoLists: todoListsReducer,
@@ -39,6 +42,7 @@ export default function createStore(history: History) {
       transactions: transactionsReducer,
       modal: modalReducer,
       budgets: budgetsReducer,
+      groupBudgets: groupBudgetsReducer,
     }),
     composeEnhancers(applyMiddleware(routerMiddleware(history), thunk, logger))
   );

@@ -49,7 +49,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 auto',
       marginLeft: '7%',
     },
-    updateButton: {
+    centerPosition: {
       textAlign: 'center',
     },
     tableTop: {
@@ -69,6 +69,7 @@ const CustomBudgets = () => {
   const selector = useSelector((state: State) => state);
   const customBudgetsList = selector.budgets.custom_budgets_list;
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
+  const [updateMessage, setUpdateMessage] = useState<boolean>(false);
   const unInput = customBudgets === customBudgetsList;
 
   useEffect(() => {
@@ -83,12 +84,15 @@ const CustomBudgets = () => {
     <div className={classes.root}>
       <ButtonGroup className={classes.buttonGroupPosition} size="large" aria-label="budgets-kind">
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
-          標準
+          標準予算
         </Button>
         <Button className={classes.buttonSize} onClick={() => dispatch(push('/yearly-budgets'))}>
-          月ごと
+          月別カスタム予算
         </Button>
       </ButtonGroup>
+      <h2 className={classes.centerPosition}>
+        {updateMessage ? 'カスタム予算を更新しました' : null}
+      </h2>
       <h2>
         {selectYear}年{selectMonth}月
       </h2>
@@ -136,7 +140,7 @@ const CustomBudgets = () => {
           </TableBody>
         </Table>
       </TableContainer>
-      <div className={classes.updateButton}>
+      <div className={classes.centerPosition}>
         <GenericButton
           label={'更新する'}
           disabled={unInput}
@@ -150,7 +154,7 @@ const CustomBudgets = () => {
                   return rest;
                 })
               )
-            )
+            ) && setUpdateMessage(true)
           }
         />
       </div>

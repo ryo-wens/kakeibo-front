@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchYearlyBudgets,
-  copyStandardBudgets,
   deleteCustomBudgets,
   fetchStandardBudgets,
 } from '../../reducks/budgets/operations';
@@ -88,9 +87,6 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
               size={'small'}
               onClick={() => {
                 dispatch(push(`${transitingBasePath}/${selectYear}-${selectMonth}`));
-                if (budgetsType() === '標準') {
-                  dispatch(copyStandardBudgets());
-                }
               }}
             >
               <CreateIcon color={'primary'} />
