@@ -55,12 +55,12 @@ const AddTaskUser = (props: AddTaskUserProps) => {
   );
 
   const existsAddTasksUser = () => {
-    let user = [];
+    const user = [];
     if (props.approvedGroup.approved_users_list.length > props.groupTasksListForEachUser.length) {
-      for (let approvedUser of props.approvedGroup.approved_users_list) {
+      for (const approvedUser of props.approvedGroup.approved_users_list) {
         let isTasksListUser = false;
 
-        for (let groupTasksList of props.groupTasksListForEachUser) {
+        for (const groupTasksList of props.groupTasksListForEachUser) {
           if (groupTasksList.user_id === approvedUser.user_id) {
             isTasksListUser = true;
             break;
@@ -79,7 +79,7 @@ const AddTaskUser = (props: AddTaskUserProps) => {
           );
       }
     } else if (props.groupTasksListForEachUser.length === 0) {
-      for (let approvedUser of props.approvedGroup.approved_users_list) {
+      for (const approvedUser of props.approvedGroup.approved_users_list) {
         user.push(
           <FormControlLabel
             control={<Checkbox checked={checked} onChange={handleChangeChecked} color="primary" />}
