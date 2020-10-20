@@ -13,5 +13,10 @@ export interface GroupAssociatedCategory {
   big_category_id: number;
 }
 
-export type GroupCategories = Array<GroupCategory>;
-export type GroupAssociatedCategories = Array<GroupAssociatedCategory>;
+export interface GroupCategories extends Array<GroupCategory> {}
+export interface GroupAssociatedCategories extends Array<GroupAssociatedCategory> {}
+
+export interface fetchGroupCategoriesRes {
+  income_categories_list: [];
+  expense_categories_list: [];
+}
