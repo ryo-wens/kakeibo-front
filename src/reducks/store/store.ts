@@ -10,6 +10,7 @@ import { History } from 'history';
 import { createLogger } from 'redux-logger';
 import { modalReducer } from '../modal/reducers';
 import { budgetsReducer } from '../budgets/reducers';
+import { groupBudgetsReducer } from '../groupBudgets/reducers';
 import { todoListsReducer } from '../todoLists/reducers';
 import { groupTodoListsReducer } from '../groupTodoLists/reducers';
 import { groupTasksReducers } from '../groupTasks/reducers';
@@ -41,6 +42,7 @@ export default function createStore(history: History) {
       transactions: transactionsReducer,
       modal: modalReducer,
       budgets: budgetsReducer,
+      groupBudgets: groupBudgetsReducer,
     }),
     composeEnhancers(applyMiddleware(routerMiddleware(history), thunk, logger))
   );
