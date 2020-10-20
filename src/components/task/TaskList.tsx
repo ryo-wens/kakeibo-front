@@ -1,10 +1,11 @@
-import React, { useState } from 'react';
+import React, { useCallback, useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import { TodoButton } from '../todo';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { List } from '@material-ui/core';
-import { TaskListItemMenuButton } from './index';
+import { InputTask, TaskListItemMenuButton } from './index';
+import { AddButton } from '../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,6 +40,8 @@ interface TaskListProps {
 const TaskList = (props: TaskListProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
+  const [openInputTask, setOpenInputTask] = useState<boolean>(false);
+  const [taskContent, setTaskContent] = useState<string>('');
 
   const openModal = () => {
     setOpen(true);
@@ -46,6 +49,33 @@ const TaskList = (props: TaskListProps) => {
 
   const closeModal = () => {
     setOpen(false);
+  };
+
+  const closeInputTask = useCallback(() => {
+    setOpenInputTask(false);
+    setTaskContent('');
+  }, [setOpenInputTask, setTaskContent]);
+
+  const inputTaskContent = useCallback(
+    (event) => {
+      setTaskContent(event.target.value as string);
+    },
+    [setTaskContent]
+  );
+
+  const switchInputTask = () => {
+    if (!openInputTask) {
+      return <AddButton label={'タスクを追加'} onClick={() => setOpenInputTask(true)} />;
+    } else if (openInputTask) {
+      return (
+        <InputTask
+          buttonLabel={'追加'}
+          inputTaskClose={closeInputTask}
+          taskContent={taskContent}
+          inputTaskContent={inputTaskContent}
+        />
+      );
+    }
   };
 
   const body = (
@@ -64,6 +94,7 @@ const TaskList = (props: TaskListProps) => {
             );
           })}
       </List>
+      {switchInputTask()}
     </div>
   );
 
