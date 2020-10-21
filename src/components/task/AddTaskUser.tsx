@@ -38,14 +38,14 @@ const AddTaskUser = (props: AddTaskUserProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setOpen(true);
-  };
+  }, [setOpen]);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setOpen(false);
     setChecked(false);
-  };
+  }, [setOpen, setChecked]);
 
   const handleChangeChecked = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

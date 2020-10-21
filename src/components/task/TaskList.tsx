@@ -43,13 +43,13 @@ const TaskList = (props: TaskListProps) => {
   const [openInputTask, setOpenInputTask] = useState<boolean>(false);
   const [taskContent, setTaskContent] = useState<string>('');
 
-  const openModal = () => {
+  const openModal = useCallback(() => {
     setOpen(true);
-  };
+  }, [setOpen]);
 
-  const closeModal = () => {
+  const closeModal = useCallback(() => {
     setOpen(false);
-  };
+  }, [setOpen]);
 
   const closeInputTask = useCallback(() => {
     setOpenInputTask(false);
