@@ -84,7 +84,7 @@
   border-radius: 5px;
   box-sizing: border-box;
   margin-top: 15px;
-  height: 650px;
+  height: 550px;
   width: 100%;
   padding: 16px;
 }
@@ -120,4 +120,11 @@
   display: flex;
   flex-flow: column;
   justify-content: center;
+}
+
+.pie__chart {
+  height: 200px;
+  width:200px;
+  margin-left: 530px;
+  margin-top: 250px;
 }
