@@ -4,7 +4,11 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { IconButton } from '@material-ui/core';
 
-const TaskListItemMenuButton = () => {
+interface TaskListItemMenuButtonProps {
+  openEditTaskListItem: () => void;
+}
+
+const TaskListItemMenuButton = (props: TaskListItemMenuButtonProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -27,8 +31,8 @@ const TaskListItemMenuButton = () => {
         open={Boolean(anchorEl)}
         onClose={() => handleClose()}
       >
-        <MenuItem onClick={() => handleClose()}>タスクリストを編集</MenuItem>
-        <MenuItem onClick={() => handleClose()}>タスクリストを削除</MenuItem>
+        <MenuItem onClick={props.openEditTaskListItem}>タスクを編集</MenuItem>
+        <MenuItem onClick={() => handleClose()}>タスクを削除</MenuItem>
       </Menu>
     </>
   );

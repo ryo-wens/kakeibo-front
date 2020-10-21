@@ -4,7 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { TodoButton } from '../todo';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { List } from '@material-ui/core';
-import { InputTask, TaskListItemMenuButton } from './index';
+import { EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
 import { AddButton } from '../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -42,6 +42,8 @@ const TaskList = (props: TaskListProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openInputTask, setOpenInputTask] = useState<boolean>(false);
   const [taskContent, setTaskContent] = useState<string>('');
+  const [taskListItem, setTaskListItem] = useState<boolean>(true);
+  const [id, setId] = useState<number>(0);
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -63,39 +65,73 @@ const TaskList = (props: TaskListProps) => {
     [setTaskContent]
   );
 
+  const openEditTask = useCallback(() => {
+    setTaskListItem(false);
+  }, [setTaskListItem]);
+
+  const closeEditTask = useCallback(() => {
+    setTaskListItem(true);
+    setTaskContent(taskContent);
+  }, [setTaskListItem]);
+
   const switchInputTask = () => {
     if (!openInputTask) {
       return <AddButton label={'タスクを追加'} onClick={() => setOpenInputTask(true)} />;
     } else if (openInputTask) {
       return (
-        <InputTask
-          buttonLabel={'追加'}
-          inputTaskClose={closeInputTask}
-          taskContent={taskContent}
-          inputTaskContent={inputTaskContent}
-        />
+        <>
+          <h4>タスクを追加</h4>
+          <InputTask
+            buttonLabel={'追加'}
+            inputTaskClose={closeInputTask}
+            inputTaskContent={inputTaskContent}
+            taskContent={taskContent}
+          />
+        </>
       );
     }
   };
 
+  const selectedTaskId = (idx: number) => {
+    setId(idx);
+  };
+
+  const TaskList = () => {
+    const list = [];
+    if (taskListItem) {
+      for (let i = 0; i < props.groupTasksList.length; i++) {
+        list.push(
+          <div key={props.groupTasksList[i].id}>
+            <li className={classes.listItem} onClick={() => selectedTaskId(i)}>
+              <p className={classes.listText}>{props.groupTasksList[i].task_name}</p>
+              <TaskListItemMenuButton openEditTaskListItem={openEditTask} />
+            </li>
+          </div>
+        );
+      }
+    } else if (!taskListItem) {
+      list.push(
+        <EditTaskListItem closeEditTask={closeEditTask} taskListItem={props.groupTasksList[id]} />
+      );
+    }
+
+    return list;
+  };
+
   const body = (
-    <div className={classes.paper}>
-      <h3>タスクリスト</h3>
-      <List>
-        {props.groupTasksList &&
-          props.groupTasksList.map((taskListItem) => {
-            return (
-              <li key={taskListItem.id}>
-                <div className={classes.listItem}>
-                  <p className={classes.listText}>{taskListItem.task_name}</p>
-                  <TaskListItemMenuButton />
-                </div>
-              </li>
-            );
-          })}
-      </List>
-      {switchInputTask()}
-    </div>
+    <>
+      {taskListItem ? (
+        <div className={classes.paper}>
+          <h3>タスクリスト</h3>
+          <List>{props.groupTasksList && TaskList()}</List>
+          {switchInputTask()}
+        </div>
+      ) : (
+        <div className={classes.paper}>
+          <List>{props.groupTasksList && TaskList()}</List>
+        </div>
+      )}
+    </>
   );
 
   return (

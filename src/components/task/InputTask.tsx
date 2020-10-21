@@ -20,9 +20,9 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface InputTaskProps {
   buttonLabel: string;
-  taskContent: string;
   inputTaskClose: () => void;
   inputTaskContent: (event: React.ChangeEvent<{ value: string }>) => void;
+  taskContent: string;
 }
 
 const InputTask = (props: InputTaskProps) => {
@@ -31,7 +31,6 @@ const InputTask = (props: InputTaskProps) => {
 
   return (
     <>
-      <h3>タスクを編集</h3>
       <TextInput
         id="filled-basic"
         variant="filled"
