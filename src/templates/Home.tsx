@@ -1,5 +1,5 @@
 import React from 'react';
-import { InputForm, RecentInput, MonthlyHistory } from '../components/home';
+import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
 
 const Home = () => {
   return (
@@ -9,8 +9,10 @@ const Home = () => {
         <RecentInput />
       </div>
       <div className="home__center">
-        <div className="box__monthly" />
-        <MonthlyHistory/>
+        <div className="box__monthlyExpense">
+          <HistoryPieChart />
+        </div>
+        <MonthlyHistory />
       </div>
       <div className="home__right">
         <div className="box__input" />
