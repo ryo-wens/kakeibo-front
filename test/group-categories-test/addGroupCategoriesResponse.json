@@ -1,0 +1,16 @@
+{
+  "groupCategories": {
+    "groupIncomeResponse": {
+      "category_type": "CustomCategory",
+      "id": 16,
+      "name": "給付金",
+      "big_category_id": 1
+    },
+    "groupExpenseResponse": {
+      "category_type": "CustomCategory",
+      "id": 17,
+      "name": "宮崎牛",
+      "big_category_id": 2
+    }
+  }
+}

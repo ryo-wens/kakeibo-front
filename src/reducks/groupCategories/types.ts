@@ -20,3 +20,15 @@ export interface fetchGroupCategoriesRes {
   income_categories_list: [];
   expense_categories_list: [];
 }
+
+export interface operationCategoriesReq {
+  name: string;
+  big_category_id: number;
+}
+
+export interface operationCategoriesRes {
+  category_type: string;
+  id: number;
+  name: string;
+  big_category_id: number;
+}
