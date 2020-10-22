@@ -4,7 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { TodoButton } from '../todo';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { List } from '@material-ui/core';
-import { EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
+import { DeleteTaskListItem, EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
 import { AddButton } from '../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -44,15 +44,20 @@ const TaskList = (props: TaskListProps) => {
   const [openInputTask, setOpenInputTask] = useState<boolean>(false);
   const [taskName, setTaskName] = useState<string>('');
   const [taskListItem, setTaskListItem] = useState<boolean>(true);
+  const [editTask, setEditTask] = useState<boolean>(false);
+  const [deleteTask, setDeleteTask] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
 
   const openModal = useCallback(() => {
     setOpen(true);
+    setTaskListItem(true);
   }, [setOpen]);
 
   const closeModal = useCallback(() => {
     setOpen(false);
-  }, [setOpen]);
+    setEditTask(false);
+    setDeleteTask(false);
+  }, [setOpen, setEditTask, setDeleteTask]);
 
   const closeInputTask = useCallback(() => {
     setOpenInputTask(false);
@@ -68,12 +73,24 @@ const TaskList = (props: TaskListProps) => {
 
   const openEditTask = useCallback(() => {
     setTaskListItem(false);
-  }, [setTaskListItem]);
+    setEditTask(true);
+  }, [setTaskListItem, setEditTask]);
 
   const closeEditTask = useCallback(() => {
     setTaskListItem(true);
+    setEditTask(false);
     setTaskName(taskName);
-  }, [setTaskListItem]);
+  }, [setTaskListItem, setEditTask, setTaskName]);
+
+  const openDeleteTask = useCallback(() => {
+    setTaskListItem(false);
+    setDeleteTask(true);
+  }, [setTaskListItem, setDeleteTask]);
+
+  const closeDeleteTask = useCallback(() => {
+    setTaskListItem(true);
+    setDeleteTask(false);
+  }, [setTaskListItem, setDeleteTask]);
 
   const switchInputTask = () => {
     if (!openInputTask) {
@@ -106,12 +123,15 @@ const TaskList = (props: TaskListProps) => {
           <div key={props.groupTasksList[i].id}>
             <li className={classes.listItem} onClick={() => selectedTaskId(i)}>
               <p className={classes.listText}>{props.groupTasksList[i].task_name}</p>
-              <TaskListItemMenuButton openEditTaskListItem={openEditTask} />
+              <TaskListItemMenuButton
+                openEditTaskListItem={openEditTask}
+                openDeleteTask={openDeleteTask}
+              />
             </li>
           </div>
         );
       }
-    } else if (!taskListItem) {
+    } else if (!taskListItem && editTask) {
       list.push(
         <EditTaskListItem
           closeEditTask={closeEditTask}
@@ -119,8 +139,14 @@ const TaskList = (props: TaskListProps) => {
           taskListItem={props.groupTasksList[id]}
         />
       );
+    } else if (!taskListItem && deleteTask) {
+      list.push(
+        <DeleteTaskListItem
+          closeDeleteTask={closeDeleteTask}
+          taskListItem={props.groupTasksList[id]}
+        />
+      );
     }
-
     return list;
   };
 
