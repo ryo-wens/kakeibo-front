@@ -32,3 +32,7 @@ export interface operationCategoriesRes {
   name: string;
   big_category_id: number;
 }
+
+export interface deleteGroupCustomCategoriesRes {
+  message: string;
+}
