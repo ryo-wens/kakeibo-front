@@ -8,12 +8,14 @@ import {
   fetchGroupCategories,
   addGroupCustomCategories,
   editGroupCustomCategories,
+  deleteGroupCustomCategories,
 } from '../../src/reducks/groupCategories/operations';
 import groupCategories from './groupCategories.json';
 import addedGroupCategories from './addedGroupCategories.json';
 import addGroupCategoriesRes from './addGroupCategoriesResponse.json';
 import editedGroupCategories from './editedGroupCategories.json';
 import editGroupCategoriesRes from './editGroupCategoriesResponse.json';
+import deleteGroupCategoriesRes from './deleteGroupCustomCategoriesResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -199,5 +201,78 @@ describe('async actions editGroupCustomCategories', () => {
     // @ts-ignore
     await editGroupCustomCategories(17, 'シュークリーム', 2)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedGroupExpenseActions);
+  });
+});
+
+describe('async actions deleteGroupCustomCategories', () => {
+  const store = mockStore({ editedGroupCategories });
+  const groupId = 1;
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  // @ts-ignore
+  const mockDeleteResponse = deleteGroupCategoriesRes.message;
+
+  const deletedGroupCategories = JSON.parse(JSON.stringify(groupCategories));
+
+  it('Delete groupCustomCategory in income_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        groupCategories: {
+          groupIncomeList: editedGroupCategories.income_categories_list,
+        },
+      };
+    };
+
+    const id = 16;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`;
+
+    const mockGroupIncomeList = deletedGroupCategories.income_categories_list;
+
+    const expectedGroupIncomeActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_INCOME_CATEGORIES,
+        payload: mockGroupIncomeList,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockDeleteResponse);
+    window.alert = jest.fn(() => mockDeleteResponse);
+
+    // @ts-ignore
+    await deleteGroupCustomCategories(16, 1)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedGroupIncomeActions);
+    expect(window.alert).toHaveBeenCalled();
+  });
+
+  it('Delete groupCustomCategory in expense_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        groupCategories: {
+          groupExpenseList: editedGroupCategories.expense_categories_list,
+        },
+      };
+    };
+
+    const id = 17;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`;
+
+    const mockGroupExpenseList = deletedGroupCategories.expense_categories_list;
+    const expectedGroupExpenseActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_EXPENSE_CATEGORIES,
+        payload: mockGroupExpenseList,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockDeleteResponse);
+    window.alert = jest.fn(() => mockDeleteResponse);
+
+    // @ts-ignore
+    await deleteGroupCustomCategories(17, 2)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedGroupExpenseActions);
+    expect(window.alert).toHaveBeenCalled();
   });
 });
