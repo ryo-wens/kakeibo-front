@@ -115,6 +115,7 @@ const GroupTodo = () => {
           groupTasksListForEachUser={groupTasksListForEachUser}
         />
         <TaskList
+          groupId={groupId}
           groupTasksListForEachUser={groupTasksListForEachUser}
           groupTasksList={groupTasksList}
         />

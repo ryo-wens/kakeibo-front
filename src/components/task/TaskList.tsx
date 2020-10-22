@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TaskListProps {
+  groupId: number;
   groupTasksListForEachUser: GroupTasksListForEachUser;
   groupTasksList: GroupTasksList;
 }
@@ -41,7 +42,7 @@ const TaskList = (props: TaskListProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [openInputTask, setOpenInputTask] = useState<boolean>(false);
-  const [taskContent, setTaskContent] = useState<string>('');
+  const [taskName, setTaskName] = useState<string>('');
   const [taskListItem, setTaskListItem] = useState<boolean>(true);
   const [id, setId] = useState<number>(0);
 
@@ -55,14 +56,14 @@ const TaskList = (props: TaskListProps) => {
 
   const closeInputTask = useCallback(() => {
     setOpenInputTask(false);
-    setTaskContent('');
-  }, [setOpenInputTask, setTaskContent]);
+    setTaskName('');
+  }, [setOpenInputTask, setTaskName]);
 
-  const inputTaskContent = useCallback(
+  const inputTaskName = useCallback(
     (event) => {
-      setTaskContent(event.target.value as string);
+      setTaskName(event.target.value as string);
     },
-    [setTaskContent]
+    [setTaskName]
   );
 
   const openEditTask = useCallback(() => {
@@ -71,7 +72,7 @@ const TaskList = (props: TaskListProps) => {
 
   const closeEditTask = useCallback(() => {
     setTaskListItem(true);
-    setTaskContent(taskContent);
+    setTaskName(taskName);
   }, [setTaskListItem]);
 
   const switchInputTask = () => {
@@ -83,9 +84,10 @@ const TaskList = (props: TaskListProps) => {
           <h4>タスクを追加</h4>
           <InputTask
             buttonLabel={'追加'}
+            groupId={props.groupId}
             inputTaskClose={closeInputTask}
-            inputTaskContent={inputTaskContent}
-            taskContent={taskContent}
+            inputTaskName={inputTaskName}
+            taskName={taskName}
           />
         </>
       );
@@ -111,7 +113,11 @@ const TaskList = (props: TaskListProps) => {
       }
     } else if (!taskListItem) {
       list.push(
-        <EditTaskListItem closeEditTask={closeEditTask} taskListItem={props.groupTasksList[id]} />
+        <EditTaskListItem
+          closeEditTask={closeEditTask}
+          groupId={props.groupId}
+          taskListItem={props.groupTasksList[id]}
+        />
       );
     }
 

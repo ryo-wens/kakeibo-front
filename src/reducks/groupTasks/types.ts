@@ -26,3 +26,17 @@ export interface fetchGroupTasksListEachUserRes {
 export interface fetchGroupTasksListRes {
   group_tasks_list: GroupTasksList;
 }
+
+export interface addTaskItemReq {
+  task_name: string;
+}
+
+export interface addTaskItemRes {
+  id: number;
+  base_date: Date;
+  cycle_type: 'every' | 'consecutive' | 'none' | null;
+  cycle: number;
+  task_name: string;
+  group_id: number;
+  group_tasks_users_id: number;
+}
