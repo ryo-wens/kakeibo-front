@@ -6,6 +6,7 @@ import {
   GroupCategory,
   operationCategoriesReq,
   operationCategoriesRes,
+  deleteGroupCustomCategoriesRes,
 } from './types';
 import { errorHandling } from '../../lib/validation';
 import { State } from '../store/types';
@@ -53,15 +54,16 @@ export const addGroupCustomCategories = (name: string, bigCategoryId: number) =>
           const incomeGroupCategories = getState().groupCategories.groupIncomeList;
 
           const nextGroupIncomeCategories = incomeGroupCategories.map(
-            (incomeCategory: GroupCategory) => {
-              if (incomeCategory.id === bigCategoryId) {
-                const prevAssociatedIncomeCategories = incomeCategory.associated_categories_list;
-                incomeCategory.associated_categories_list = [
+            (incomeGroupCategory: GroupCategory) => {
+              if (incomeGroupCategory.id === bigCategoryId) {
+                const prevAssociatedIncomeCategories =
+                  incomeGroupCategory.associated_categories_list;
+                incomeGroupCategory.associated_categories_list = [
                   addedCategory,
                   ...prevAssociatedIncomeCategories,
                 ];
               }
-              return incomeCategory;
+              return incomeGroupCategory;
             }
           );
           dispatch(updateGroupIncomeCategoriesAction(nextGroupIncomeCategories));
@@ -69,15 +71,16 @@ export const addGroupCustomCategories = (name: string, bigCategoryId: number) =>
           const expenseGroupCategories = getState().groupCategories.groupExpenseList;
 
           const nextGroupExpenseCategories = expenseGroupCategories.map(
-            (expenseCategory: GroupCategory) => {
-              if (expenseCategory.id === bigCategoryId) {
-                const prevAssociatedExpenseCategories = expenseCategory.associated_categories_list;
-                expenseCategory.associated_categories_list = [
+            (expenseGroupCategory: GroupCategory) => {
+              if (expenseGroupCategory.id === bigCategoryId) {
+                const prevAssociatedExpenseCategories =
+                  expenseGroupCategory.associated_categories_list;
+                expenseGroupCategory.associated_categories_list = [
                   addedCategory,
                   ...prevAssociatedExpenseCategories,
                 ];
               }
-              return expenseCategory;
+              return expenseGroupCategory;
             }
           );
           dispatch(updateGroupExpenseCategoriesAction(nextGroupExpenseCategories));
@@ -110,45 +113,101 @@ export const editGroupCustomCategories = (id: number, name: string, bigCategoryI
         if (bigCategoryId === 1) {
           const groupIncomeCategories = getState().groupCategories.groupIncomeList;
 
-          const nextCategories = groupIncomeCategories.map((incomeCategory: GroupCategory) => {
-            if (incomeCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = incomeCategory.associated_categories_list;
-              incomeCategory.associated_categories_list = prevAssociatedCategories.map(
-                (associatedCategory) => {
-                  if (
-                    associatedCategory.id === id &&
-                    associatedCategory.category_type === 'CustomCategory'
-                  ) {
-                    return editedCategory;
+          const nextGroupIncomeCategories = groupIncomeCategories.map(
+            (incomeGroupCategory: GroupCategory) => {
+              if (incomeGroupCategory.id === bigCategoryId) {
+                const prevAssociatedCategories = incomeGroupCategory.associated_categories_list;
+                incomeGroupCategory.associated_categories_list = prevAssociatedCategories.map(
+                  (associatedCategory) => {
+                    if (
+                      associatedCategory.id === id &&
+                      associatedCategory.category_type === 'CustomCategory'
+                    ) {
+                      return editedCategory;
+                    }
+                    return associatedCategory;
                   }
-                  return associatedCategory;
-                }
-              );
+                );
+              }
+              return incomeGroupCategory;
             }
-            return incomeCategory;
-          });
-          dispatch(updateGroupIncomeCategoriesAction(nextCategories));
+          );
+          dispatch(updateGroupIncomeCategoriesAction(nextGroupIncomeCategories));
         } else {
           const groupExpenseCategories = getState().groupCategories.groupExpenseList;
 
-          const nextCategories = groupExpenseCategories.map((expenseCategory: GroupCategory) => {
-            if (expenseCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = expenseCategory.associated_categories_list;
-              expenseCategory.associated_categories_list = prevAssociatedCategories.map(
-                (associatedCategory) => {
-                  if (
-                    associatedCategory.id === id &&
-                    associatedCategory.category_type === 'CustomCategory'
-                  ) {
-                    return editedCategory;
+          const nextGroupExpenseCategories = groupExpenseCategories.map(
+            (expenseGroupCategory: GroupCategory) => {
+              if (expenseGroupCategory.id === bigCategoryId) {
+                const prevAssociatedCategories = expenseGroupCategory.associated_categories_list;
+                expenseGroupCategory.associated_categories_list = prevAssociatedCategories.map(
+                  (associatedCategory) => {
+                    if (
+                      associatedCategory.id === id &&
+                      associatedCategory.category_type === 'CustomCategory'
+                    ) {
+                      return editedCategory;
+                    }
+                    return associatedCategory;
                   }
-                  return associatedCategory;
-                }
-              );
+                );
+              }
+              return expenseGroupCategory;
             }
-            return expenseCategory;
-          });
-          dispatch(updateGroupExpenseCategoriesAction(nextCategories));
+          );
+          dispatch(updateGroupExpenseCategoriesAction(nextGroupExpenseCategories));
+        }
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};
+
+export const deleteGroupCustomCategories = (id: number, bigCategoryId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+    await axios
+      .delete<deleteGroupCustomCategoriesRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/categories/custom-categories/${id}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const resMessage = res.data.message;
+
+        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
+        if (bigCategoryId === 1) {
+          const incomeGroupCategories = getState().groupCategories.groupIncomeList;
+          const nextGroupIncomeCategories = incomeGroupCategories.map(
+            (incomeGroupCategory: GroupCategory) => {
+              if (incomeGroupCategory.id === bigCategoryId) {
+                const prevAssociatedCategories = incomeGroupCategory.associated_categories_list;
+                incomeGroupCategory.associated_categories_list = prevAssociatedCategories.filter(
+                  (associatedCategory) => associatedCategory.id !== id
+                );
+              }
+              return incomeGroupCategory;
+            }
+          );
+          alert(resMessage);
+          dispatch(updateGroupIncomeCategoriesAction(nextGroupIncomeCategories));
+        } else {
+          const expenseGroupCategories = getState().groupCategories.groupExpenseList;
+
+          const nextGroupExpenseCategories = expenseGroupCategories.map(
+            (expenseGroupCategory: GroupCategory) => {
+              if (expenseGroupCategory.id === bigCategoryId) {
+                const prevAssociatedCategories = expenseGroupCategory.associated_categories_list;
+                expenseGroupCategory.associated_categories_list = prevAssociatedCategories.filter(
+                  (associatedCategory) => associatedCategory.id !== id
+                );
+              }
+              return expenseGroupCategory;
+            }
+          );
+          alert(resMessage);
+          dispatch(updateGroupExpenseCategoriesAction(nextGroupExpenseCategories));
         }
       })
       .catch((error) => {
