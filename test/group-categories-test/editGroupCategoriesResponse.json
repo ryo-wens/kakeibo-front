@@ -1,0 +1,16 @@
+{
+  "groupCategories": {
+    "groupIncomeResponse": {
+      "category_type": "CustomCategory",
+      "id": 16,
+      "name": "宝くじ",
+      "big_category_id": 1
+    },
+    "groupExpenseResponse": {
+      "category_type": "CustomCategory",
+      "id": 17,
+      "name": "シュークリーム",
+      "big_category_id": 2
+    }
+  }
+}
