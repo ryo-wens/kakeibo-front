@@ -88,3 +88,71 @@ export const addGroupCustomCategories = (name: string, bigCategoryId: number) =>
       });
   };
 };
+
+export const editGroupCustomCategories = (id: number, name: string, bigCategoryId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+    const data: operationCategoriesReq = {
+      name: name,
+      big_category_id: bigCategoryId,
+    };
+    await axios
+      .put<operationCategoriesRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/categories/custom-categories/${id}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const editedCategory = res.data;
+
+        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
+        if (bigCategoryId === 1) {
+          const groupIncomeCategories = getState().groupCategories.groupIncomeList;
+
+          const nextCategories = groupIncomeCategories.map((incomeCategory: GroupCategory) => {
+            if (incomeCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = incomeCategory.associated_categories_list;
+              incomeCategory.associated_categories_list = prevAssociatedCategories.map(
+                (associatedCategory) => {
+                  if (
+                    associatedCategory.id === id &&
+                    associatedCategory.category_type === 'CustomCategory'
+                  ) {
+                    return editedCategory;
+                  }
+                  return associatedCategory;
+                }
+              );
+            }
+            return incomeCategory;
+          });
+          dispatch(updateGroupIncomeCategoriesAction(nextCategories));
+        } else {
+          const groupExpenseCategories = getState().groupCategories.groupExpenseList;
+
+          const nextCategories = groupExpenseCategories.map((expenseCategory: GroupCategory) => {
+            if (expenseCategory.id === bigCategoryId) {
+              const prevAssociatedCategories = expenseCategory.associated_categories_list;
+              expenseCategory.associated_categories_list = prevAssociatedCategories.map(
+                (associatedCategory) => {
+                  if (
+                    associatedCategory.id === id &&
+                    associatedCategory.category_type === 'CustomCategory'
+                  ) {
+                    return editedCategory;
+                  }
+                  return associatedCategory;
+                }
+              );
+            }
+            return expenseCategory;
+          });
+          dispatch(updateGroupExpenseCategoriesAction(nextCategories));
+        }
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};

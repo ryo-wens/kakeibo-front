@@ -7,10 +7,13 @@ import configureStore from 'redux-mock-store';
 import {
   fetchGroupCategories,
   addGroupCustomCategories,
+  editGroupCustomCategories,
 } from '../../src/reducks/groupCategories/operations';
 import groupCategories from './groupCategories.json';
 import addedGroupCategories from './addedGroupCategories.json';
 import addGroupCategoriesRes from './addGroupCategoriesResponse.json';
+import editedGroupCategories from './editedGroupCategories.json';
+import editGroupCategoriesRes from './editGroupCategoriesResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -117,5 +120,84 @@ describe('async actions addGroupCustomCategories', () => {
     // @ts-ignore
     await addGroupCustomCategories('宮崎牛', 2)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedExpenseActions);
+  });
+});
+
+describe('async actions editGroupCustomCategories', () => {
+  const store = mockStore({ addedGroupCategories });
+  const groupId = 1;
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Edit groupCustomGroupCategory in income_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        groupCategories: {
+          groupIncomeList: addedGroupCategories.income_categories_list,
+        },
+      };
+    };
+
+    const reqGroupIncomeCategory = {
+      name: '宝くじ',
+      big_category_id: 1,
+    };
+
+    const mockGroupIncomeResponse = editGroupCategoriesRes.groupCategories.groupIncomeResponse;
+
+    const id = mockGroupIncomeResponse.id;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`;
+
+    const mockGroupIncomeList = editedGroupCategories.income_categories_list;
+
+    const expectedGroupIncomeActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_INCOME_CATEGORIES,
+        payload: mockGroupIncomeList,
+      },
+    ];
+
+    axiosMock.onPut(url, reqGroupIncomeCategory).reply(200, mockGroupIncomeResponse);
+
+    // @ts-ignore
+    await editGroupCustomCategories(16, '宝くじ', 1)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedGroupIncomeActions);
+  });
+
+  it('Edit groupCustomCategory in expense_categories_list if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        groupCategories: {
+          groupExpenseList: addedGroupCategories.expense_categories_list,
+        },
+      };
+    };
+
+    const reqGroupExpenseCategory = {
+      name: 'シュークリーム',
+      big_category_id: 2,
+    };
+
+    const mockGroupExpenseResponse = editGroupCategoriesRes.groupCategories.groupExpenseResponse;
+
+    const id = mockGroupExpenseResponse.id;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`;
+
+    const mockGroupExpenseList = editedGroupCategories.expense_categories_list;
+
+    const expectedGroupExpenseActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_EXPENSE_CATEGORIES,
+        payload: mockGroupExpenseList,
+      },
+    ];
+
+    axiosMock.onPut(url, reqGroupExpenseCategory).reply(200, mockGroupExpenseResponse);
+
+    // @ts-ignore
+    await editGroupCustomCategories(17, 'シュークリーム', 2)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedGroupExpenseActions);
   });
 });
