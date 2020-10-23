@@ -35,3 +35,13 @@ export const updateGroupCustomBudgetsActions = (
     payload: groupCustomBudgetsList,
   };
 };
+
+export const COPY_GROUP_STANDARD_BUDGETS = 'COPY_GROUP_STANDARD_BUDGETS';
+export const copyGroupStandardBudgetsActions = (
+  groupCustomBudgetsList: GroupCustomBudgetsList
+): { type: string; payload: GroupCustomBudgetsList } => {
+  return {
+    type: COPY_GROUP_STANDARD_BUDGETS,
+    payload: groupCustomBudgetsList,
+  };
+};
