@@ -4,7 +4,7 @@ import Modal from '@material-ui/core/Modal';
 import { TodoButton } from '../todo';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { List } from '@material-ui/core';
-import { EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
+import { DeleteTaskListItem, EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
 import { AddButton } from '../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -33,6 +33,7 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface TaskListProps {
+  groupId: number;
   groupTasksListForEachUser: GroupTasksListForEachUser;
   groupTasksList: GroupTasksList;
 }
@@ -41,38 +42,55 @@ const TaskList = (props: TaskListProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
   const [openInputTask, setOpenInputTask] = useState<boolean>(false);
-  const [taskContent, setTaskContent] = useState<string>('');
+  const [taskName, setTaskName] = useState<string>('');
   const [taskListItem, setTaskListItem] = useState<boolean>(true);
+  const [editTask, setEditTask] = useState<boolean>(false);
+  const [deleteTask, setDeleteTask] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
 
   const openModal = useCallback(() => {
     setOpen(true);
+    setTaskListItem(true);
   }, [setOpen]);
 
   const closeModal = useCallback(() => {
     setOpen(false);
-  }, [setOpen]);
+    setEditTask(false);
+    setDeleteTask(false);
+  }, [setOpen, setEditTask, setDeleteTask]);
 
   const closeInputTask = useCallback(() => {
     setOpenInputTask(false);
-    setTaskContent('');
-  }, [setOpenInputTask, setTaskContent]);
+    setTaskName('');
+  }, [setOpenInputTask, setTaskName]);
 
-  const inputTaskContent = useCallback(
+  const inputTaskName = useCallback(
     (event) => {
-      setTaskContent(event.target.value as string);
+      setTaskName(event.target.value as string);
     },
-    [setTaskContent]
+    [setTaskName]
   );
 
   const openEditTask = useCallback(() => {
     setTaskListItem(false);
-  }, [setTaskListItem]);
+    setEditTask(true);
+  }, [setTaskListItem, setEditTask]);
 
   const closeEditTask = useCallback(() => {
     setTaskListItem(true);
-    setTaskContent(taskContent);
-  }, [setTaskListItem]);
+    setEditTask(false);
+    setTaskName(taskName);
+  }, [setTaskListItem, setEditTask, setTaskName]);
+
+  const openDeleteTask = useCallback(() => {
+    setTaskListItem(false);
+    setDeleteTask(true);
+  }, [setTaskListItem, setDeleteTask]);
+
+  const closeDeleteTask = useCallback(() => {
+    setTaskListItem(true);
+    setDeleteTask(false);
+  }, [setTaskListItem, setDeleteTask]);
 
   const switchInputTask = () => {
     if (!openInputTask) {
@@ -83,9 +101,10 @@ const TaskList = (props: TaskListProps) => {
           <h4>タスクを追加</h4>
           <InputTask
             buttonLabel={'追加'}
+            groupId={props.groupId}
             inputTaskClose={closeInputTask}
-            inputTaskContent={inputTaskContent}
-            taskContent={taskContent}
+            inputTaskName={inputTaskName}
+            taskName={taskName}
           />
         </>
       );
@@ -104,17 +123,32 @@ const TaskList = (props: TaskListProps) => {
           <div key={props.groupTasksList[i].id}>
             <li className={classes.listItem} onClick={() => selectedTaskId(i)}>
               <p className={classes.listText}>{props.groupTasksList[i].task_name}</p>
-              <TaskListItemMenuButton openEditTaskListItem={openEditTask} />
+              <TaskListItemMenuButton
+                openEditTaskListItem={openEditTask}
+                openDeleteTask={openDeleteTask}
+              />
             </li>
           </div>
         );
       }
-    } else if (!taskListItem) {
+    } else if (!taskListItem && editTask) {
       list.push(
-        <EditTaskListItem closeEditTask={closeEditTask} taskListItem={props.groupTasksList[id]} />
+        <EditTaskListItem
+          key={props.groupTasksList[id].id}
+          closeEditTask={closeEditTask}
+          groupId={props.groupId}
+          taskListItem={props.groupTasksList[id]}
+        />
+      );
+    } else if (!taskListItem && deleteTask) {
+      list.push(
+        <DeleteTaskListItem
+          key={props.groupTasksList[id].id}
+          closeDeleteTask={closeDeleteTask}
+          taskListItem={props.groupTasksList[id]}
+        />
       );
     }
-
     return list;
   };
 

@@ -8,17 +8,18 @@ import { TasksListItem } from '../../reducks/groupTasks/types';
 
 interface EditTaskListItemProps {
   closeEditTask: () => void;
+  groupId: number;
   taskListItem: TasksListItem;
 }
 
 const EditTaskListItem = (props: EditTaskListItemProps) => {
-  const [taskContent, setTaskContent] = useState<string>(props.taskListItem.task_name);
+  const [taskName, setTaskName] = useState<string>(props.taskListItem.task_name);
 
-  const inputTaskContent = useCallback(
+  const inputTaskName = useCallback(
     (event) => {
-      setTaskContent(event.target.value as string);
+      setTaskName(event.target.value as string);
     },
-    [setTaskContent]
+    [setTaskName]
   );
 
   return (
@@ -32,9 +33,10 @@ const EditTaskListItem = (props: EditTaskListItemProps) => {
       <h4>タスクを編集</h4>
       <InputTask
         buttonLabel={'保存'}
-        taskContent={taskContent}
+        groupId={props.groupId}
+        taskName={taskName}
         inputTaskClose={props.closeEditTask}
-        inputTaskContent={inputTaskContent}
+        inputTaskName={inputTaskName}
       />
     </>
   );

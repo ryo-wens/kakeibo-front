@@ -6,6 +6,7 @@ import { IconButton } from '@material-ui/core';
 
 interface TaskListItemMenuButtonProps {
   openEditTaskListItem: () => void;
+  openDeleteTask: () => void;
 }
 
 const TaskListItemMenuButton = (props: TaskListItemMenuButtonProps) => {
@@ -32,10 +33,29 @@ const TaskListItemMenuButton = (props: TaskListItemMenuButtonProps) => {
         onClose={() => handleClose()}
       >
         <MenuItem onClick={props.openEditTaskListItem}>タスクを編集</MenuItem>
-        <MenuItem onClick={() => handleClose()}>タスクを削除</MenuItem>
+        <MenuItem onClick={props.openDeleteTask}>タスクを削除</MenuItem>
       </Menu>
     </>
   );
 };
 
 export default TaskListItemMenuButton;
+
+//   return (
+//     <>
+//       <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+//         <MoreHorizIcon />
+//       </IconButton>
+//       <Menu
+//         id="simple-menu"
+//         anchorEl={anchorEl}
+//         keepMounted
+//         open={Boolean(anchorEl)}
+//         onClose={() => handleClose()}
+//       >
+//         <MenuItem onClick={props.openEditTaskListItem}>タスクを編集</MenuItem>
+//         <MenuItem onClick={props.openDeleteTask}>タスクを削除</MenuItem>
+//       </Menu>
+//     </>
+//   );
+// };
