@@ -2,6 +2,7 @@ import {
   updateGroupStandardBudgetsActions,
   fetchGroupYearlyBudgetsActions,
   copyGroupStandardBudgetsActions,
+  updateGroupCustomBudgetsActions,
 } from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
@@ -9,6 +10,7 @@ import {
   GroupStandardBudgetsList,
   GroupCustomBudgetsList,
   GroupStandardBudgetsListRes,
+  GroupCustomBudgetsListRes,
   GroupBudgetsReq,
   GroupYearlyBudgetsList,
 } from './types';
@@ -114,5 +116,40 @@ export const copyGroupStandardBudgets = () => {
     });
 
     dispatch(copyGroupStandardBudgetsActions(nextGroupCustomBudgets));
+  };
+};
+
+export const addGroupCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  groupCustomBudgets: GroupBudgetsReq
+) => {
+  const data = { custom_budgets: groupCustomBudgets };
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    const validBudgets = groupCustomBudgets.every((groupCustomBudget) =>
+      isValidBudgetFormat(groupCustomBudget.budget)
+    );
+
+    if (!validBudgets) {
+      alert('予算は0以上の整数で入力してください。');
+      return;
+    }
+
+    await axios
+      .post<GroupCustomBudgetsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const addedGroupCustomBudgetsList: GroupCustomBudgetsList = res.data.custom_budgets;
+
+        dispatch(updateGroupCustomBudgetsActions(addedGroupCustomBudgetsList));
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
   };
 };
