@@ -134,6 +134,7 @@ const TaskList = (props: TaskListProps) => {
     } else if (!taskListItem && editTask) {
       list.push(
         <EditTaskListItem
+          key={props.groupTasksList[id].id}
           closeEditTask={closeEditTask}
           groupId={props.groupId}
           taskListItem={props.groupTasksList[id]}
@@ -142,6 +143,7 @@ const TaskList = (props: TaskListProps) => {
     } else if (!taskListItem && deleteTask) {
       list.push(
         <DeleteTaskListItem
+          key={props.groupTasksList[id].id}
           closeDeleteTask={closeDeleteTask}
           taskListItem={props.groupTasksList[id]}
         />
