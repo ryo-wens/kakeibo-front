@@ -8,7 +8,6 @@ import { TasksListItem } from '../../reducks/groupTasks/types';
 
 interface EditTaskListItemProps {
   closeEditTask: () => void;
-  groupId: number;
   taskListItem: TasksListItem;
 }
 
@@ -33,7 +32,7 @@ const EditTaskListItem = (props: EditTaskListItemProps) => {
       <h4>タスクを編集</h4>
       <InputTask
         buttonLabel={'保存'}
-        groupId={props.groupId}
+        groupId={props.taskListItem.group_id}
         taskName={taskName}
         inputTaskClose={props.closeEditTask}
         inputTaskName={inputTaskName}

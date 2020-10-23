@@ -40,3 +40,7 @@ export interface addTaskItemRes {
   group_id: number;
   group_tasks_users_id: number;
 }
+
+export interface deleteTaskItemRes {
+  message: string;
+}

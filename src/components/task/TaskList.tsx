@@ -136,7 +136,6 @@ const TaskList = (props: TaskListProps) => {
         <EditTaskListItem
           key={props.groupTasksList[id].id}
           closeEditTask={closeEditTask}
-          groupId={props.groupId}
           taskListItem={props.groupTasksList[id]}
         />
       );

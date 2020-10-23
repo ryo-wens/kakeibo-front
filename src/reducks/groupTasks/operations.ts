@@ -3,6 +3,7 @@ import { Action, Dispatch } from 'redux';
 import {
   addTaskItemReq,
   addTaskItemRes,
+  deleteTaskItemRes,
   fetchGroupTasksListEachUserRes,
   fetchGroupTasksListRes,
   GroupTasksList,
@@ -11,11 +12,13 @@ import {
 } from './types';
 import {
   addTaskItemAction,
+  deleteTaskItemAction,
   fetchGroupTasksListAction,
   fetchGroupTasksListEachUserAction,
 } from './actions';
 import { errorHandling } from '../../lib/validation';
 import { State } from '../store/types';
+import { openTextModalAction } from '../modal/actions';
 
 export const fetchGroupTasksListEachUser = (groupId: number) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -39,7 +42,7 @@ export const fetchGroupTasksListEachUser = (groupId: number) => {
 };
 
 export const fetchGroupTasksList = (groupId: number) => {
-  return async (dispatch: Dispatch) => {
+  return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchGroupTasksListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
@@ -79,6 +82,31 @@ export const addTaskItem = (groupId: number, taskName: string) => {
           const updateGroupTasksList = [...prevGroupTasksList, newTaskListItem];
           dispatch(addTaskItemAction(updateGroupTasksList));
         }
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};
+
+export const deleteTaskItem = (groupId: number, taskItemId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .delete<deleteTaskItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`,
+        { withCredentials: true }
+      )
+      .then((res) => {
+        const prevGroupTasksList: GroupTasksList = getState().groupTasks.groupTasksList;
+
+        const updateGroupTasksList: GroupTasksList = prevGroupTasksList.filter(
+          (taskListItem: TasksListItem) => {
+            return taskListItem.id !== taskItemId;
+          }
+        );
+
+        dispatch(deleteTaskItemAction(updateGroupTasksList));
+        dispatch(openTextModalAction(res.data.message));
       })
       .catch((error) => {
         errorHandling(dispatch, error);
