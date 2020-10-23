@@ -9,11 +9,13 @@ import {
   editGroupStandardBudgets,
   fetchGroupYearlyBudgets,
   addGroupCustomBudgets,
+  fetchGroupCustomBudgets,
 } from '../../src/reducks/groupBudgets/operations';
 import groupStandardBudgets from './fetchGroupStandardBudgetsResponse.json';
 import groupEditedStandardBudgets from './editGroupStandardBudgetsResponse.json';
 import groupYearlyBudgets from './fetchGroupYearlyBudgetsResponse.json';
-import groupCustomBudgets from './addGroupCustomBudgetsResponse.json';
+import groupAddCustomBudgets from './addGroupCustomBudgetsResponse.json';
+import groupCustomBudgets from './fetchGroupCustomBudgetsResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -181,6 +183,34 @@ describe('async actions getGroupYearlyBudgets', () => {
   });
 });
 
+describe('async actions getGroupCustomBudgets', () => {
+  beforeEach(() => {
+    store.clearActions();
+  });
+  const selectYear = '2020';
+  const selectMonth = '01';
+  const store = mockStore({ groupBudgets: { groupCustomBudgetsList: [] } });
+
+  const groupId = 1;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+
+  it('Get groupCustomBudgets if fetch succeeds', async () => {
+    const mockResponse = groupCustomBudgets;
+
+    const expectedActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_CUSTOM_BUDGETS,
+        payload: mockResponse.custom_budgets,
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupCustomBudgets(selectYear, selectMonth)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+});
+
 describe('async actions addGroupCustomBudgets', () => {
   beforeEach(() => {
     store.clearActions();
@@ -188,11 +218,11 @@ describe('async actions addGroupCustomBudgets', () => {
   const groupId = 1;
   const selectYear = '2020';
   const selectMonth = '01';
-  const store = mockStore({ groupBudgets: { groupCustomBudgetsList: [] } });
+  const store = mockStore({ groupCustomBudgets });
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Add groupCustomBudgets if fetch succeeds', async () => {
-    const mockResponse = groupCustomBudgets;
+    const mockResponse = groupAddCustomBudgets;
 
     const mockCustomBudgetsReq = {
       custom_budgets: [

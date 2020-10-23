@@ -119,6 +119,26 @@ export const copyGroupStandardBudgets = () => {
   };
 };
 
+export const fetchGroupCustomBudgets = (selectYear: string, selectMonth: string) => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    await axios
+      .get<GroupCustomBudgetsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/custom-budgets/${selectYear}-${selectMonth}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const groupCustomBudgets = res.data.custom_budgets;
+
+        dispatch(updateGroupCustomBudgetsActions(groupCustomBudgets));
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};
+
 export const addGroupCustomBudgets = (
   selectYear: string,
   selectMonth: string,
