@@ -21,6 +21,11 @@ const initialState = {
   },
   groupBudgets: {
     groupStandardBudgetsList: [],
+    groupYearlyBudgetsList: {
+      year: '',
+      yearly_total_budget: 0,
+      monthly_budgets: [],
+    },
   },
   users: {
     user_id: '',

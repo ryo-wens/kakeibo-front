@@ -4,7 +4,20 @@ export interface GroupBudget {
   budget: number;
 }
 
+export interface GroupMonthlyBudgets {
+  month: string;
+  budget_type: string;
+  monthly_total_budget: number;
+}
+
+export interface GroupYearlyBudgetsList {
+  year: string;
+  yearly_total_budget: number;
+  monthly_budgets: GroupMonthlyBudgetsList;
+}
+
 export interface GroupStandardBudgetsList extends Array<GroupBudget> {}
+export interface GroupMonthlyBudgetsList extends Array<GroupMonthlyBudgets> {}
 
 export interface GroupStandardBudgetsListRes {
   standard_budgets: GroupBudget[];
