@@ -24,6 +24,11 @@ export const groupTasksReducers = (state = initialState.groupTasks, action: grou
         ...state,
         ...action.payload,
       };
+    case Actions.DELETE_TASK_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

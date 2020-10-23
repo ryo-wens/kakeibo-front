@@ -1,9 +1,10 @@
 import { GroupTasksList, GroupTasksListForEachUser } from './types';
 export type groupTasksActions = ReturnType<
   | typeof addGroupTaskUserAction
+  | typeof addTaskItemAction
+  | typeof deleteTaskItemAction
   | typeof fetchGroupTasksListEachUserAction
   | typeof fetchGroupTasksListAction
-  | typeof addTaskItemAction
 >;
 
 export const ADD_GROUP_TASKS_USER = 'ADD_GROUP_TASKS_USER';
@@ -42,6 +43,16 @@ export const ADD_TASK_ITEM = 'ADD_TASK_ITEM';
 export const addTaskItemAction = (groupTasksList: GroupTasksList) => {
   return {
     type: ADD_TASK_ITEM,
+    payload: {
+      groupTasksList: groupTasksList,
+    },
+  };
+};
+
+export const DELETE_TASK_ITEM = 'DELETE_TASK_ITEM';
+export const deleteTaskItemAction = (groupTasksList: GroupTasksList) => {
+  return {
+    type: DELETE_TASK_ITEM,
     payload: {
       groupTasksList: groupTasksList,
     },
