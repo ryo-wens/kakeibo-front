@@ -17,6 +17,7 @@ export interface GroupYearlyBudgetsList {
 }
 
 export interface GroupStandardBudgetsList extends Array<GroupBudget> {}
+export interface GroupCustomBudgetsList extends Array<GroupBudget> {}
 export interface GroupMonthlyBudgetsList extends Array<GroupMonthlyBudgets> {}
 
 export interface GroupStandardBudgetsListRes {

@@ -21,6 +21,7 @@ const initialState = {
   },
   groupBudgets: {
     groupStandardBudgetsList: [],
+    groupCustomBudgetsList: [],
     groupYearlyBudgetsList: {
       year: '',
       yearly_total_budget: 0,
