@@ -3,6 +3,7 @@ export type groupTasksActions = ReturnType<
   | typeof addGroupTaskUserAction
   | typeof addTaskItemAction
   | typeof deleteTaskItemAction
+  | typeof editTaskItemAction
   | typeof fetchGroupTasksListEachUserAction
   | typeof fetchGroupTasksListAction
 >;
@@ -43,6 +44,16 @@ export const ADD_TASK_ITEM = 'ADD_TASK_ITEM';
 export const addTaskItemAction = (groupTasksList: GroupTasksList) => {
   return {
     type: ADD_TASK_ITEM,
+    payload: {
+      groupTasksList: groupTasksList,
+    },
+  };
+};
+
+export const EDIT_TASK_ITEM = 'EDIT_TASK_ITEM';
+export const editTaskItemAction = (groupTasksList: GroupTasksList) => {
+  return {
+    type: EDIT_TASK_ITEM,
     payload: {
       groupTasksList: groupTasksList,
     },
