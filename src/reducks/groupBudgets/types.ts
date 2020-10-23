@@ -7,5 +7,12 @@ export interface GroupBudget {
 export interface GroupStandardBudgetsList extends Array<GroupBudget> {}
 
 export interface GroupStandardBudgetsListRes {
-  groupStandardBudgetsList: GroupBudget[];
+  standard_budgets: GroupBudget[];
 }
+
+export interface GroupBudgetReq {
+  big_category_id: number;
+  budget: number;
+}
+
+export interface GroupBudgetsReq extends Array<GroupBudgetReq> {}
