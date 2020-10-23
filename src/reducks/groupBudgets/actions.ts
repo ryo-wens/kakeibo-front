@@ -1,7 +1,9 @@
-import { GroupStandardBudgetsList, GroupYearlyBudgetsList } from './types';
+import { GroupStandardBudgetsList, GroupYearlyBudgetsList, GroupCustomBudgetsList } from './types';
 
 export type groupBudgetsActions = ReturnType<
-  typeof updateGroupStandardBudgetsActions | typeof fetchGroupYearlyBudgetsActions
+  | typeof updateGroupStandardBudgetsActions
+  | typeof fetchGroupYearlyBudgetsActions
+  | typeof updateGroupCustomBudgetsActions
 >;
 
 export const UPDATE_GROUP_STANDARD_BUDGETS = 'UPDATE_GROUP_STANDARD_BUDGETS';
@@ -21,5 +23,15 @@ export const fetchGroupYearlyBudgetsActions = (
   return {
     type: FETCH_GROUP_YEARLY_BUDGETS,
     payload: groupYearlyBudgetsList,
+  };
+};
+
+export const UPDATE_GROUP_CUSTOM_BUDGETS = 'UPDATE_GROUP_CUSTOM_BUDGETS';
+export const updateGroupCustomBudgetsActions = (
+  groupCustomBudgetsList: GroupCustomBudgetsList
+): { type: string; payload: GroupCustomBudgetsList } => {
+  return {
+    type: UPDATE_GROUP_CUSTOM_BUDGETS,
+    payload: groupCustomBudgetsList,
   };
 };
