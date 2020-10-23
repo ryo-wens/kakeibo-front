@@ -3,7 +3,11 @@ import { GroupCategories } from '../groupCategories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
-import { GroupStandardBudgetsList } from '../groupBudgets/types';
+import {
+  GroupStandardBudgetsList,
+  GroupYearlyBudgetsList,
+  GroupCustomBudgetsList,
+} from '../groupBudgets/types';
 import { TodoLists } from '../todoLists/types';
 import { GroupTodoLists } from '../groupTodoLists/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
@@ -27,6 +31,8 @@ export interface State {
   };
   groupBudgets: {
     groupStandardBudgetsList: GroupStandardBudgetsList;
+    groupYearlyBudgetsList: GroupYearlyBudgetsList;
+    groupCustomBudgetsList: GroupCustomBudgetsList;
   };
   users: {
     user_id: string;

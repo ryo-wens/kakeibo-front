@@ -7,3 +7,13 @@ export const getGroupStandardBudgets = createSelector(
   [groupBudgetsSelector],
   (state) => state.groupStandardBudgetsList
 );
+
+export const getGroupCustomBudgets = createSelector(
+  [groupBudgetsSelector],
+  (state) => state.groupCustomBudgetsList
+);
+
+export const getGroupYearlyBudgets = createSelector(
+  [groupBudgetsSelector],
+  (state) => state.groupYearlyBudgetsList
+);

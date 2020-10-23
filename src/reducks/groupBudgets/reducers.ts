@@ -12,6 +12,21 @@ export const groupBudgetsReducer = (
         ...state,
         groupStandardBudgetsList: [...action.payload],
       };
+    case Actions.FETCH_GROUP_YEARLY_BUDGETS:
+      return {
+        ...state,
+        groupYearlyBudgetsList: action.payload,
+      };
+    case Actions.UPDATE_GROUP_CUSTOM_BUDGETS:
+      return {
+        ...state,
+        groupCustomBudgetsList: [...action.payload],
+      };
+    case Actions.COPY_GROUP_STANDARD_BUDGETS:
+      return {
+        ...state,
+        groupCustomBudgetsList: [...action.payload],
+      };
     default:
       return state;
   }
