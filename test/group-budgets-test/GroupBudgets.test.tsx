@@ -7,9 +7,11 @@ import configureStore from 'redux-mock-store';
 import {
   fetchGroupStandardBudgets,
   editGroupStandardBudgets,
+  fetchGroupYearlyBudgets,
 } from '../../src/reducks/groupBudgets/operations';
 import groupStandardBudgets from './fetchGroupStandardBudgetsResponse.json';
 import groupEditedStandardBudgets from './editGroupStandardBudgetsResponse.json';
+import groupYearlyBudgets from './fetchGroupYearlyBudgetsResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -144,6 +146,35 @@ describe('async actions editGroupStandardBudgets', () => {
       // @ts-ignore
       getState
     );
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+});
+
+describe('async actions getGroupYearlyBudgets', () => {
+  beforeEach(() => {
+    store.clearActions();
+  });
+  const store = mockStore({ groupBudgets: { groupYearlyBudgetsList: [] } });
+
+  const date = new Date();
+  const year = date.getFullYear();
+
+  const groupId = 1;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${year}`;
+
+  it('Get groupYearlyBudgets if fetch succeeds', async () => {
+    const mockResponse = groupYearlyBudgets;
+
+    const expectedActions = [
+      {
+        type: actionTypes.FETCH_GROUP_YEARLY_BUDGETS,
+        payload: mockResponse,
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupYearlyBudgets()(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
