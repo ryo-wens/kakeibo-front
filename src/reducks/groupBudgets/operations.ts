@@ -1,8 +1,13 @@
-import { updateGroupStandardBudgetsActions, fetchGroupYearlyBudgetsActions } from './actions';
+import {
+  updateGroupStandardBudgetsActions,
+  fetchGroupYearlyBudgetsActions,
+  copyGroupStandardBudgetsActions,
+} from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import {
   GroupStandardBudgetsList,
+  GroupCustomBudgetsList,
   GroupStandardBudgetsListRes,
   GroupBudgetsReq,
   GroupYearlyBudgetsList,
@@ -89,5 +94,25 @@ export const fetchGroupYearlyBudgets = () => {
       .catch((error) => {
         errorHandling(dispatch, error);
       });
+  };
+};
+
+export const copyGroupStandardBudgets = () => {
+  return (dispatch: Dispatch<Action>, getState: () => State) => {
+    const groupStandardBudgets: GroupStandardBudgetsList = getState().groupBudgets
+      .groupStandardBudgetsList;
+
+    const groupCustomBudgets: GroupCustomBudgetsList = getState().groupBudgets
+      .groupCustomBudgetsList;
+
+    const nextGroupCustomBudgets = groupStandardBudgets.map((groupStandardBudget) => {
+      groupCustomBudgets.map((groupCustomBudget) => {
+        return (groupCustomBudget.budget = groupStandardBudget.budget);
+      });
+
+      return groupStandardBudget;
+    });
+
+    dispatch(copyGroupStandardBudgetsActions(nextGroupCustomBudgets));
   };
 };
