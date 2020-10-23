@@ -173,3 +173,52 @@ export const addGroupCustomBudgets = (
       });
   };
 };
+
+export const editGroupCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  groupCustomBudgets: GroupBudgetsReq
+) => {
+  const data = { custom_budgets: groupCustomBudgets };
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+    const validBudgets = groupCustomBudgets.every((groupCustomBudget) =>
+      isValidBudgetFormat(groupCustomBudget.budget)
+    );
+
+    if (!validBudgets) {
+      alert('予算は0以上の整数で入力してください。');
+      return;
+    }
+
+    await axios
+      .put<GroupCustomBudgetsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const editedGroupCustomBudgetsList: GroupCustomBudgetsList = res.data.custom_budgets;
+
+        const groupCustomBudgetsList: GroupCustomBudgetsList = getState().groupBudgets
+          .groupCustomBudgetsList;
+
+        const nextGroupCustomBudgetsList = groupCustomBudgetsList.map((groupCustomBudget) => {
+          const editGroupCustomBudget = editedGroupCustomBudgetsList.find(
+            (item: { big_category_id: number }) =>
+              item.big_category_id === groupCustomBudget.big_category_id
+          );
+          if (editGroupCustomBudget) {
+            return editGroupCustomBudget;
+          }
+          return groupCustomBudget;
+        });
+
+        dispatch(updateGroupCustomBudgetsActions(nextGroupCustomBudgetsList));
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};
