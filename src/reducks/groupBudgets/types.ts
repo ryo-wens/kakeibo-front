@@ -24,6 +24,10 @@ export interface GroupStandardBudgetsListRes {
   standard_budgets: GroupBudget[];
 }
 
+export interface GroupCustomBudgetsListRes {
+  custom_budgets: GroupBudget[];
+}
+
 export interface GroupBudgetReq {
   big_category_id: number;
   budget: number;
