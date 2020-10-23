@@ -1,7 +1,12 @@
-import { updateGroupStandardBudgetsActions } from './actions';
+import { updateGroupStandardBudgetsActions, fetchGroupYearlyBudgetsActions } from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
-import { GroupStandardBudgetsList, GroupStandardBudgetsListRes, GroupBudgetsReq } from './types';
+import {
+  GroupStandardBudgetsList,
+  GroupStandardBudgetsListRes,
+  GroupBudgetsReq,
+  GroupYearlyBudgetsList,
+} from './types';
 import { errorHandling, isValidBudgetFormat } from '../../lib/validation';
 import { State } from '../store/types';
 
@@ -61,6 +66,25 @@ export const editGroupStandardBudgets = (groupBudgets: GroupBudgetsReq) => {
         });
 
         dispatch(updateGroupStandardBudgetsActions(nextGroupStandardBudgetsList));
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};
+
+export const fetchGroupYearlyBudgets = () => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    await axios
+      .get<GroupYearlyBudgetsList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/budgets/2020`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const groupYearlyBudgetsList = res.data;
+        dispatch(fetchGroupYearlyBudgetsActions(groupYearlyBudgetsList));
       })
       .catch((error) => {
         errorHandling(dispatch, error);
