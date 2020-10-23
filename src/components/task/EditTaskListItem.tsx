@@ -5,6 +5,7 @@ import ListItemIcon from '@material-ui/core/ListItemIcon';
 import ArrowBackIosIcon from '@material-ui/icons/ArrowBackIos';
 import ListItemText from '@material-ui/core/ListItemText';
 import { TasksListItem } from '../../reducks/groupTasks/types';
+import { editTaskItem } from '../../reducks/groupTasks/operations';
 
 interface EditTaskListItemProps {
   closeEditTask: () => void;
@@ -20,6 +21,7 @@ const EditTaskListItem = (props: EditTaskListItemProps) => {
     },
     [setTaskName]
   );
+  const noDifferenceTaskName = taskName === props.taskListItem.task_name;
 
   return (
     <>
@@ -33,9 +35,19 @@ const EditTaskListItem = (props: EditTaskListItemProps) => {
       <InputTask
         buttonLabel={'保存'}
         groupId={props.taskListItem.group_id}
-        taskName={taskName}
         inputTaskClose={props.closeEditTask}
         inputTaskName={inputTaskName}
+        noDifferenceTaskName={noDifferenceTaskName}
+        operation={editTaskItem(
+          props.taskListItem.group_id,
+          props.taskListItem.id,
+          props.taskListItem.base_date,
+          props.taskListItem.cycle_type,
+          props.taskListItem.cycle,
+          taskName,
+          props.taskListItem.group_tasks_users_id
+        )}
+        taskName={taskName}
       />
     </>
   );

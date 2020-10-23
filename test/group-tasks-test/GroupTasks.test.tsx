@@ -5,11 +5,13 @@ import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import addTaskItemResponse from './addTaskItemResponse.json';
 import deleteTaskItemResponse from './deleteTaskItemResponse.json';
+import editTaskItemResponse from './editTaskItemResponse.json';
 import fetchTasksListEachUserResponse from './fetchTasksListEachUserResponse.json';
 import fetchTasksListResponse from './fetchTasksListResponse.json';
 import {
   addTaskItem,
   deleteTaskItem,
+  editTaskItem,
   fetchGroupTasksList,
   fetchGroupTasksListEachUser,
 } from '../../src/reducks/groupTasks/operations';
@@ -246,6 +248,61 @@ describe('async actions groupTasks', () => {
 
     // @ts-ignore
     await addTaskItem(groupId, taskName)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('Updated taskListItem will be reflected in groupTaskList if EDIT_TASK_ITEM is successful.', async () => {
+    const groupId = 1;
+    const taskItemId = 2;
+    const baseDate = new Date('2020-10-14T00:00:00Z');
+    const cycleType = 'consecutive';
+    const cycle = 3;
+    const taskName = '部屋の片付け';
+    const groupTasksUsersId = 2;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`;
+
+    const mockResponse = JSON.stringify(editTaskItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTasksActions.EDIT_TASK_ITEM,
+        payload: {
+          groupTasksList: [
+            {
+              id: 1,
+              base_date: '2020-10-14T00:00:00Z',
+              cycle_type: 'every',
+              cycle: 7,
+              task_name: 'トイレ掃除',
+              group_id: 1,
+              group_tasks_users_id: 1,
+            },
+            {
+              id: 2,
+              base_date: '2020-10-14T00:00:00Z',
+              cycle_type: 'consecutive',
+              cycle: 3,
+              task_name: '部屋の片付け',
+              group_id: 1,
+              group_tasks_users_id: 2,
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editTaskItem(
+      groupId,
+      taskItemId,
+      baseDate,
+      cycleType,
+      cycle,
+      taskName,
+      groupTasksUsersId
+      // @ts-ignore
+    )(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

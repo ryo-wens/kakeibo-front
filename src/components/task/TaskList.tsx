@@ -6,6 +6,7 @@ import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTa
 import { List } from '@material-ui/core';
 import { DeleteTaskListItem, EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
 import { AddButton } from '../uikit';
+import { addTaskItem } from '../../reducks/groupTasks/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -104,6 +105,8 @@ const TaskList = (props: TaskListProps) => {
             groupId={props.groupId}
             inputTaskClose={closeInputTask}
             inputTaskName={inputTaskName}
+            noDifferenceTaskName={false}
+            operation={addTaskItem(props.groupId, taskName)}
             taskName={taskName}
           />
         </>

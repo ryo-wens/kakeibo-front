@@ -7,12 +7,12 @@ export interface UserTasksListItem {
 
 export interface TasksListItem {
   id: number;
-  base_date: Date;
+  base_date: Date | null;
   cycle_type: 'every' | 'consecutive' | 'none' | null;
-  cycle: number;
+  cycle: number | null;
   task_name: string;
   group_id: number;
-  group_tasks_users_id: number;
+  group_tasks_users_id: number | null;
 }
 
 export interface GroupTasksListForEachUser extends Array<UserTasksListItem> {}
@@ -33,12 +33,30 @@ export interface addTaskItemReq {
 
 export interface addTaskItemRes {
   id: number;
-  base_date: Date;
+  base_date: Date | null;
   cycle_type: 'every' | 'consecutive' | 'none' | null;
-  cycle: number;
+  cycle: number | null;
   task_name: string;
   group_id: number;
-  group_tasks_users_id: number;
+  group_tasks_users_id: number | null;
+}
+
+export interface editTaskItemReq {
+  base_date: Date | null;
+  cycle_type: 'every' | 'consecutive' | 'none' | null;
+  cycle: number | null;
+  task_name: string;
+  group_tasks_users_id: number | null;
+}
+
+export interface editTaskItemRes {
+  id: number;
+  base_date: Date | null;
+  cycle_type: 'every' | 'consecutive' | 'none' | null;
+  cycle: number | null;
+  task_name: string;
+  group_id: number;
+  group_tasks_users_id: number | null;
 }
 
 export interface deleteTaskItemRes {
