@@ -4,6 +4,7 @@ export type groupBudgetsActions = ReturnType<
   | typeof updateGroupStandardBudgetsActions
   | typeof fetchGroupYearlyBudgetsActions
   | typeof updateGroupCustomBudgetsActions
+  | typeof deleteGroupCustomBudgetsActions
 >;
 
 export const UPDATE_GROUP_STANDARD_BUDGETS = 'UPDATE_GROUP_STANDARD_BUDGETS';
@@ -43,5 +44,15 @@ export const copyGroupStandardBudgetsActions = (
   return {
     type: COPY_GROUP_STANDARD_BUDGETS,
     payload: groupCustomBudgetsList,
+  };
+};
+
+export const DELETE_GROUP_CUSTOM_BUDGETS = 'DELETE_GROUP_CUSTOM_BUDGETS';
+export const deleteGroupCustomBudgetsActions = (
+  groupYearlyBudgetsList: GroupYearlyBudgetsList
+): { type: string; payload: GroupYearlyBudgetsList } => {
+  return {
+    type: DELETE_GROUP_CUSTOM_BUDGETS,
+    payload: groupYearlyBudgetsList,
   };
 };
