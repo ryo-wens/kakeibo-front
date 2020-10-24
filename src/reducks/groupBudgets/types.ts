@@ -28,6 +28,10 @@ export interface GroupCustomBudgetsListRes {
   custom_budgets: GroupBudget[];
 }
 
+export interface DeleteGroupCustomBudgetsRes {
+  message: string;
+}
+
 export interface GroupBudgetReq {
   big_category_id: number;
   budget: number;

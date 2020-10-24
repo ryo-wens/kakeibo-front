@@ -3,6 +3,7 @@ import {
   fetchGroupYearlyBudgetsActions,
   copyGroupStandardBudgetsActions,
   updateGroupCustomBudgetsActions,
+  deleteGroupCustomBudgetsActions,
 } from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
@@ -13,9 +14,11 @@ import {
   GroupCustomBudgetsListRes,
   GroupBudgetsReq,
   GroupYearlyBudgetsList,
+  DeleteGroupCustomBudgetsRes,
 } from './types';
 import { errorHandling, isValidBudgetFormat } from '../../lib/validation';
 import { State } from '../store/types';
+import { standardBudgetType } from '../../lib/constant';
 
 export const fetchGroupStandardBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
@@ -216,6 +219,71 @@ export const editGroupCustomBudgets = (
         });
 
         dispatch(updateGroupCustomBudgetsActions(nextGroupCustomBudgetsList));
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};
+
+export const deleteGroupCustomBudgets = (selectYear: string, selectMonth: string) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+    await axios
+      .delete<DeleteGroupCustomBudgetsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/custom-budgets/${selectYear}-${selectMonth}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const message = res.data.message;
+
+        const groupStandardBudgetsList: GroupStandardBudgetsList = getState().groupBudgets
+          .groupStandardBudgetsList;
+
+        const groupYearlyBudgetsList: GroupYearlyBudgetsList = getState().groupBudgets
+          .groupYearlyBudgetsList;
+
+        const groupStandardBudgets = groupStandardBudgetsList.map((groupStandardBudget) => {
+          return groupStandardBudget.budget;
+        });
+
+        const totalGroupStandardBudget = () => {
+          let total = 0;
+
+          for (let i = 0, len = groupStandardBudgets.length; i < len; i++) {
+            total += groupStandardBudgets[i];
+          }
+          return total;
+        };
+
+        const newTotalBudget = () => {
+          const deleteBudget =
+            groupYearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
+
+          if (totalGroupStandardBudget() > deleteBudget) {
+            return (
+              groupYearlyBudgetsList.yearly_total_budget +
+              (totalGroupStandardBudget() - deleteBudget)
+            );
+          } else {
+            return (
+              groupYearlyBudgetsList.yearly_total_budget -
+              (deleteBudget - totalGroupStandardBudget())
+            );
+          }
+        };
+
+        groupYearlyBudgetsList.yearly_total_budget = newTotalBudget();
+
+        groupYearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
+          month: `${selectYear}年${selectMonth}月`,
+          budget_type: standardBudgetType,
+          monthly_total_budget: totalGroupStandardBudget(),
+        };
+
+        dispatch(deleteGroupCustomBudgetsActions(groupYearlyBudgetsList));
+        alert(message);
       })
       .catch((error) => {
         errorHandling(dispatch, error);

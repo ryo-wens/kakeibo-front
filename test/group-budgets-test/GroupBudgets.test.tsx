@@ -11,6 +11,7 @@ import {
   addGroupCustomBudgets,
   fetchGroupCustomBudgets,
   editGroupCustomBudgets,
+  deleteGroupCustomBudgets,
 } from '../../src/reducks/groupBudgets/operations';
 import groupStandardBudgets from './fetchGroupStandardBudgetsResponse.json';
 import groupEditedStandardBudgets from './editGroupStandardBudgetsResponse.json';
@@ -18,6 +19,7 @@ import groupYearlyBudgets from './fetchGroupYearlyBudgetsResponse.json';
 import groupAddedCustomBudgets from './addGroupCustomBudgetsResponse.json';
 import groupCustomBudgets from './fetchGroupCustomBudgetsResponse.json';
 import groupEditedCustomBudgets from './editGroupCustomBudgetsResponse.json';
+import groupDeletedCustomBudgets from './deleteGroupCustomBudgetsResponse.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -68,7 +70,7 @@ describe('async actions editGroupStandardBudgets', () => {
       };
     };
 
-    const mockGroupStandardBudgetReq = {
+    const mockRequest = {
       standard_budgets: [
         {
           big_category_id: 2,
@@ -145,9 +147,9 @@ describe('async actions editGroupStandardBudgets', () => {
       },
     ];
 
-    axiosMock.onPut(url, mockGroupStandardBudgetReq).reply(200, mockResponse);
+    axiosMock.onPut(url, mockRequest).reply(200, mockResponse);
 
-    await editGroupStandardBudgets(mockGroupStandardBudgetReq.standard_budgets)(
+    await editGroupStandardBudgets(mockRequest.standard_budgets)(
       store.dispatch,
       // @ts-ignore
       getState
@@ -226,7 +228,7 @@ describe('async actions addGroupCustomBudgets', () => {
   it('Add groupCustomBudgets if fetch succeeds', async () => {
     const mockResponse = groupAddedCustomBudgets;
 
-    const mockCustomBudgetsReq = {
+    const mockRequest = {
       custom_budgets: [
         {
           big_category_id: 2,
@@ -307,7 +309,7 @@ describe('async actions addGroupCustomBudgets', () => {
     await addGroupCustomBudgets(
       selectYear,
       selectMonth,
-      mockCustomBudgetsReq.custom_budgets
+      mockRequest.custom_budgets
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
@@ -333,7 +335,7 @@ describe('async actions editGroupCustomBudgets', () => {
       };
     };
 
-    const nextCustomBudgets = {
+    const mockRequest = {
       custom_budgets: [
         {
           big_category_id: 2,
@@ -416,9 +418,116 @@ describe('async actions editGroupCustomBudgets', () => {
     await editGroupCustomBudgets(
       selectYear,
       selectMonth,
-      nextCustomBudgets.custom_budgets
+      mockRequest.custom_budgets
       // @ts-ignore
     )(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
+  });
+});
+
+describe('async actions deleteGroupCustomBudgets', () => {
+  beforeEach(() => {
+    store.clearActions();
+  });
+  const store = mockStore({ groupYearlyBudgets });
+
+  const selectYear = '2020';
+  const selectMonth = '01';
+  const groupId = 1;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+
+  it('Delete groupCustomBudgets if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        groupBudgets: {
+          groupStandardBudgetsList: groupEditedStandardBudgets.standard_budgets,
+          groupYearlyBudgetsList: groupYearlyBudgets,
+        },
+      };
+    };
+
+    const mockResponse = groupDeletedCustomBudgets.message;
+
+    const mockRequest = {
+      year: '2020-01-01T00:00:00Z',
+      yearly_total_budget: 1775000,
+      monthly_budgets: [
+        {
+          month: '2020年01月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年02月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年03月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年04月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年05月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年06月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年07月',
+          budget_type: 'CustomBudget',
+          monthly_total_budget: 170000,
+        },
+        {
+          month: '2020年08月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年09月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年10月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年11月',
+          budget_type: 'StandardBudget',
+          monthly_total_budget: 143500,
+        },
+        {
+          month: '2020年12月',
+          budget_type: 'CustomBudget',
+          monthly_total_budget: 170000,
+        },
+      ],
+    };
+
+    const expectedActions = [
+      {
+        type: actionTypes.DELETE_GROUP_CUSTOM_BUDGETS,
+        payload: mockRequest,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+    window.alert = jest.fn(() => mockResponse);
+
+    // @ts-ignore
+    await deleteGroupCustomBudgets(selectYear, selectMonth)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedActions);
+    expect(window.alert).toHaveBeenCalled();
   });
 });
