@@ -10,6 +10,9 @@ const initialState = {
   transactions: {
     transactionsList: [],
   },
+  groupTransactions: {
+    groupTransactionsList: [],
+  },
   budgets: {
     standard_budgets_list: [],
     yearly_budgets_list: {
