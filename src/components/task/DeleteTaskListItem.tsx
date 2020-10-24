@@ -6,6 +6,8 @@ import ListItemText from '@material-ui/core/ListItemText';
 import { TasksListItem } from '../../reducks/groupTasks/types';
 import { TodoButton } from '../todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import { useDispatch } from 'react-redux';
+import { deleteTaskItem } from '../../reducks/groupTasks/operations';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -22,6 +24,7 @@ interface DeleteTaskListItemProps {
 
 const DeleteTaskListItem = (props: DeleteTaskListItemProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
 
   return (
     <>
@@ -34,8 +37,15 @@ const DeleteTaskListItem = (props: DeleteTaskListItemProps) => {
       <h4>タスクを削除</h4>
       <p>{props.taskListItem.task_name}を削除しますか？</p>
       <div className={classes.buttons}>
-        <TodoButton label={'削除'} disabled={false} onClick={() => console.log('d')} />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={() => console.log('d')} />
+        <TodoButton
+          label={'削除'}
+          disabled={false}
+          onClick={() =>
+            dispatch(deleteTaskItem(props.taskListItem.group_id, props.taskListItem.id)) &&
+            props.closeDeleteTask()
+          }
+        />
+        <TodoButton label={'キャンセル'} disabled={false} onClick={() => props.closeDeleteTask()} />
       </div>
     </>
   );

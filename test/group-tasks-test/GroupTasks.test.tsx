@@ -4,14 +4,19 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import addTaskItemResponse from './addTaskItemResponse.json';
+import deleteTaskItemResponse from './deleteTaskItemResponse.json';
+import editTaskItemResponse from './editTaskItemResponse.json';
 import fetchTasksListEachUserResponse from './fetchTasksListEachUserResponse.json';
 import fetchTasksListResponse from './fetchTasksListResponse.json';
 import {
   addTaskItem,
+  deleteTaskItem,
+  editTaskItem,
   fetchGroupTasksList,
   fetchGroupTasksListEachUser,
 } from '../../src/reducks/groupTasks/operations';
 import * as GroupTasksActions from '../../src/reducks/groupTasks/actions';
+import * as ModalActions from '../../src/reducks/modal/actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -200,10 +205,6 @@ describe('async actions groupTasks', () => {
     const taskName = '買い物';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
 
-    const mockRequest = {
-      task_name: taskName,
-    };
-
     const mockResponse = JSON.stringify(addTaskItemResponse);
 
     const expectedAction = [
@@ -247,6 +248,101 @@ describe('async actions groupTasks', () => {
 
     // @ts-ignore
     await addTaskItem(groupId, taskName)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('Updated taskListItem will be reflected in groupTaskList if EDIT_TASK_ITEM is successful.', async () => {
+    const groupId = 1;
+    const taskItemId = 2;
+    const baseDate = new Date('2020-10-14T00:00:00Z');
+    const cycleType = 'consecutive';
+    const cycle = 3;
+    const taskName = '部屋の片付け';
+    const groupTasksUsersId = 2;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`;
+
+    const mockResponse = JSON.stringify(editTaskItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTasksActions.EDIT_TASK_ITEM,
+        payload: {
+          groupTasksList: [
+            {
+              id: 1,
+              base_date: '2020-10-14T00:00:00Z',
+              cycle_type: 'every',
+              cycle: 7,
+              task_name: 'トイレ掃除',
+              group_id: 1,
+              group_tasks_users_id: 1,
+            },
+            {
+              id: 2,
+              base_date: '2020-10-14T00:00:00Z',
+              cycle_type: 'consecutive',
+              cycle: 3,
+              task_name: '部屋の片付け',
+              group_id: 1,
+              group_tasks_users_id: 2,
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editTaskItem(
+      groupId,
+      taskItemId,
+      baseDate,
+      cycleType,
+      cycle,
+      taskName,
+      groupTasksUsersId
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('If DELETE_TASK_ITEM is successful, send a groupTasksList excluding the taskItem of the requested taskItemId to deleteTaskItemAction and send a response message to openTextModalAction.', async () => {
+    const groupId = 1;
+    const taskItemId = 2;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`;
+
+    const mockResponse = JSON.stringify(deleteTaskItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTasksActions.DELETE_TASK_ITEM,
+        payload: {
+          groupTasksList: [
+            {
+              id: 1,
+              base_date: '2020-10-14T00:00:00Z',
+              cycle_type: 'every',
+              cycle: 7,
+              task_name: 'トイレ掃除',
+              group_id: 1,
+              group_tasks_users_id: 1,
+            },
+          ],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: 'タスクを削除しました。',
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await deleteTaskItem(groupId, taskItemId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

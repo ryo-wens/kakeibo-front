@@ -2,7 +2,8 @@ import React from 'react';
 import { TextInput, TodoButton } from '../todo';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { useDispatch } from 'react-redux';
-import { addTaskItem } from '../../reducks/groupTasks/operations';
+import { Action, Dispatch } from 'redux';
+import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -25,13 +26,15 @@ interface InputTaskProps {
   groupId: number;
   inputTaskClose: () => void;
   inputTaskName: (event: React.ChangeEvent<{ value: string }>) => void;
+  noDifferenceTaskName: boolean;
+  operation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
   taskName: string;
 }
 
 const InputTask = (props: InputTaskProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const isBlankGroupName = props.taskName === '';
+  const isBlankTaskName = props.taskName === '';
 
   return (
     <>
@@ -47,8 +50,8 @@ const InputTask = (props: InputTaskProps) => {
       <div className={classes.buttons}>
         <TodoButton
           label={props.buttonLabel}
-          disabled={isBlankGroupName}
-          onClick={() => dispatch(addTaskItem(props.groupId, props.taskName))}
+          disabled={isBlankTaskName || props.noDifferenceTaskName}
+          onClick={() => dispatch(props.operation) && props.inputTaskClose()}
         />
         <TodoButton label={'キャンセル'} disabled={false} onClick={() => props.inputTaskClose()} />
       </div>

@@ -1,0 +1,9 @@
+{
+  "id": 2,
+  "base_date": "2020-10-14T00:00:00Z",
+  "cycle_type": "consecutive",
+  "cycle": 3,
+  "task_name": "部屋の片付け",
+  "group_id": 1,
+  "group_tasks_users_id": 2
+}
