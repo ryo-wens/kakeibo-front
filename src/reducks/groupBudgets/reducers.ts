@@ -27,6 +27,11 @@ export const groupBudgetsReducer = (
         ...state,
         groupCustomBudgetsList: [...action.payload],
       };
+    case Actions.DELETE_GROUP_CUSTOM_BUDGETS:
+      return {
+        ...state,
+        groupYearlyBudgetsList: action.payload,
+      };
     default:
       return state;
   }
