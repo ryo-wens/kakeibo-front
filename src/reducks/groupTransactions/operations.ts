@@ -87,21 +87,103 @@ export const addGroupTransactions = (
         dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          if (Array.isArray(error.response.data.error.message)) {
-            alert(error.response.data.error.message.join('\n'));
-          } else if (!Array.isArray(error.response.data.error.message)) {
+        if (error && error.response) {
+          if (error.response.status === 400) {
+            if (Array.isArray(error.response.data.error.message)) {
+              alert(error.response.data.error.message.join('\n'));
+            } else if (!Array.isArray(error.response.data.error.message)) {
+              alert(error.response.data.error.message);
+            }
+          }
+
+          if (error.response.status === 401) {
+            alert(error.response.data.error.message);
+            dispatch(push('/login'));
+          }
+
+          if (error.response.status === 500) {
             alert(error.response.data.error.message);
           }
+        } else {
+          alert(error);
         }
+      });
+  };
+};
 
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
+export const editGroupTransactions = (
+  id: number,
+  transaction_type: string,
+  transaction_date: Date | null,
+  shop: string | null,
+  memo: string | null,
+  amount: string | number,
+  big_category_id: number,
+  medium_category_id: number | null,
+  custom_category_id: number | null
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (shop === '') {
+      shop = null;
+    }
+
+    if (memo === '') {
+      memo = null;
+    }
+
+    if (!isValidAmountFormat(amount as string)) {
+      alert('金額は数字で入力してください。');
+    }
+
+    const data: GroupTransactionsReq = {
+      transaction_type: transaction_type,
+      transaction_date: transaction_date,
+      shop: shop,
+      memo: memo,
+      amount: Number(amount),
+      big_category_id: big_category_id,
+      medium_category_id: medium_category_id,
+      custom_category_id: custom_category_id,
+    };
+    await axios
+      .put<GroupTransactions>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${id}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
         }
+      )
+      .then((res) => {
+        const editedGroupTransaction = res.data;
 
-        if (error && error.response.status === 500) {
-          alert(error.response.data.error.message);
+        const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
+
+        const nextGroupTransactionsList = groupTransactionsList.map((groupTransaction) => {
+          if (groupTransaction.id === editedGroupTransaction.id) {
+            return editedGroupTransaction;
+          }
+          return groupTransaction;
+        });
+        dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
+      })
+      .catch((error) => {
+        if (error && error.response) {
+          if (error.response.status === 400) {
+            if (Array.isArray(error.response.data.error.message)) {
+              alert(error.response.data.error.message.join('\n'));
+            } else if (!Array.isArray(error.response.data.error.message)) {
+              alert(error.response.data.error.message);
+            }
+          }
+
+          if (error.response.status === 401) {
+            alert(error.response.data.error.message);
+            dispatch(push('/login'));
+          }
+
+          if (error.response.status === 500) {
+            alert(error.response.data.error.message);
+          }
         } else {
           alert(error);
         }

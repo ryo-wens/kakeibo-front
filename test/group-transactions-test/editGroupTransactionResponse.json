@@ -1,0 +1,12 @@
+{
+  "id": 16,
+  "transaction_type": "expense",
+  "updated_date": "2020-10-25T17:50:50Z",
+  "transaction_date": "10/24(土)",
+  "shop": "虎視淡々",
+  "memo": "お疲れ会",
+  "amount": 25000,
+  "big_category_name": "交際費",
+  "medium_category_name": "飲み会",
+  "custom_category_name": null
+}
