@@ -19,10 +19,10 @@ import {
   TodoListItem,
   TodoLists,
 } from './types';
-import { push } from 'connected-react-router';
 import moment from 'moment';
 import { openTextModalAction } from '../modal/actions';
 import { dateToDateString } from '../../lib/date';
+import { errorHandling } from '../../lib/validation';
 
 export const createTodoListItem = (
   implementationDate: Date | null,
@@ -74,35 +74,24 @@ export const createTodoListItem = (
         if (isTodayTodo) {
           const today = new Date();
           if (dateToDateString(today) === res.data.implementation_date) {
-            newImplementationTodoLists = [...prevImplementationTodoLists, todoListItem];
+            newImplementationTodoLists = [todoListItem, ...prevImplementationTodoLists];
           } else {
             newImplementationTodoLists = [...prevImplementationTodoLists];
           }
           if (dateToDateString(today) === res.data.due_date) {
-            newDueTodoLists = [...prevDueTodoLists, todoListItem];
+            newDueTodoLists = [todoListItem, ...prevDueTodoLists];
           } else {
             newDueTodoLists = [...prevDueTodoLists];
           }
         } else {
-          newImplementationTodoLists = [...prevImplementationTodoLists, todoListItem];
-          newDueTodoLists = [...prevDueTodoLists, todoListItem];
+          newImplementationTodoLists = [todoListItem, ...prevImplementationTodoLists];
+          newDueTodoLists = [todoListItem, ...prevDueTodoLists];
         }
 
         dispatch(createTodoListItemAction(newImplementationTodoLists, newDueTodoLists));
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          return alert(error.response.data.error.message[0]);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -170,18 +159,7 @@ export const editTodoListItem = (
         dispatch(editTodoListItemAction(updateImplementationTodoLists, updateDueTodoLists));
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          return alert(error.response.data.error.message[0]);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -210,18 +188,7 @@ export const fetchDateTodoLists = (year: string, month: string, date: string) =>
         }
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          return alert(error.response.data.error.message[0]);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -250,18 +217,7 @@ export const fetchMonthTodoLists = (year: string, month: string) => {
         }
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          return alert(error.response.data.error.message[0]);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -293,14 +249,7 @@ export const deleteTodoListItem = (todoListItemId: number) => {
         dispatch(openTextModalAction(message));
       })
       .catch((error) => {
-        if (error.response.status === 401) {
-          alert(error.response.data.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };

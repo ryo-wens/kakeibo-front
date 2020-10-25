@@ -8,6 +8,7 @@ import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker } from '../components/uikit';
 import { TodoButton, TodoMenu, WeeksTabs, WeeksTodoLists } from '../components/todo';
+import { dateToDateString } from '../lib/date';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -78,6 +79,8 @@ const ScheduleTodo = () => {
     setSelectedDate(previousWeek);
   }, [selectedDate, setSelectedDate]);
 
+  const isSelectedDateToday = dateToDateString(selectedDate) === dateToDateString(new Date());
+
   return (
     <>
       <TodoMenu />
@@ -92,7 +95,11 @@ const ScheduleTodo = () => {
               required={false}
             />
           </div>
-          <TodoButton label={'<'} disabled={false} onClick={() => getPreviousWeek()} />
+          <TodoButton
+            label={'<'}
+            disabled={isSelectedDateToday}
+            onClick={() => getPreviousWeek()}
+          />
           <TodoButton label={'>'} disabled={false} onClick={() => getNextWeek()} />
           <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
