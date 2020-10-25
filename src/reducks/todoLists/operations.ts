@@ -63,8 +63,9 @@ export const createTodoListItem = (
         }
       )
       .then((res) => {
-        const prevImplementationTodoLists: TodoLists = getState().todoLists.implementationTodoLists;
-        const prevDueTodoLists: TodoLists = getState().todoLists.dueTodoLists;
+        const prevImplementationTodoLists: TodoLists = getState().todoLists
+          .todayImplementationTodoLists;
+        const prevDueTodoLists: TodoLists = getState().todoLists.todayDueTodoLists;
 
         const todoListItem: TodoListItem = res.data;
 
@@ -137,8 +138,9 @@ export const editTodoListItem = (
         }
       )
       .then((res) => {
-        const prevImplementationTodoLists: TodoLists = getState().todoLists.implementationTodoLists;
-        const prevDueTodoLists: TodoLists = getState().todoLists.dueTodoLists;
+        const prevImplementationTodoLists: TodoLists = getState().todoLists
+          .todayImplementationTodoLists;
+        const prevDueTodoLists: TodoLists = getState().todoLists.todayDueTodoLists;
 
         const updateTodoLists = (prevTodoLists: TodoLists) => {
           return prevTodoLists.map((prevTodoList: TodoListItem) => {
@@ -236,8 +238,8 @@ export const deleteTodoListItem = (todoListItemId: number) => {
         }
       )
       .then((res) => {
-        const prevImplementationTodoLists = getState().todoLists.implementationTodoLists;
-        const prevDueTodoLists = getState().todoLists.dueTodoLists;
+        const prevImplementationTodoLists = getState().todoLists.todayImplementationTodoLists;
+        const prevDueTodoLists = getState().todoLists.todayDueTodoLists;
         const message = res.data.message;
 
         const updateTodoLists = (prevTodoLists: TodoLists) => {

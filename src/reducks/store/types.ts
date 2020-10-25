@@ -53,8 +53,8 @@ export interface State {
     groupTasksList: GroupTasksList;
   };
   todoLists: {
-    implementationTodoLists: TodoLists;
-    dueTodoLists: TodoLists;
+    todayImplementationTodoLists: TodoLists;
+    todayDueTodoLists: TodoLists;
     monthImplementationTodoList: TodoLists;
     monthDueTodoList: TodoLists;
     message: string;

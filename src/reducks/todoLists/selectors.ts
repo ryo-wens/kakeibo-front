@@ -5,9 +5,12 @@ const todoListSelector = (state: State) => state.todoLists;
 
 export const getImplementationTodoLists = createSelector(
   [todoListSelector],
-  (state) => state.implementationTodoLists
+  (state) => state.todayImplementationTodoLists
 );
-export const getDueTodoLists = createSelector([todoListSelector], (state) => state.dueTodoLists);
+export const getDueTodoLists = createSelector(
+  [todoListSelector],
+  (state) => state.todayDueTodoLists
+);
 
 export const getMonthImplementationTodoList = createSelector(
   [todoListSelector],
