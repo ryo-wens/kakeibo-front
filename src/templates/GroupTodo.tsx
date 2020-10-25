@@ -20,6 +20,7 @@ import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
 import { AddTaskUser, TaskList } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
+import Task from '../components/task/Task';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -120,6 +121,7 @@ const GroupTodo = () => {
           groupTasksList={groupTasksList}
         />
       </div>
+      <Task />
     </>
   );
 };
