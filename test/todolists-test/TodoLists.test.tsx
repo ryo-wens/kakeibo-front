@@ -349,6 +349,8 @@ describe('async actions todoLists', () => {
         payload: {
           todayImplementationTodoList: [],
           todayDueTodoList: [],
+          monthImplementationTodoList: [],
+          monthDueTodoList: [],
         },
       },
       {

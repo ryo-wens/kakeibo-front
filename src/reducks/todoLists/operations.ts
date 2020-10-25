@@ -250,6 +250,9 @@ export const deleteTodoListItem = (todoListItemId: number) => {
       .then((res) => {
         const prevTodayImplementationTodoList = getState().todoList.todayImplementationTodoList;
         const prevTodayDueTodoList = getState().todoList.todayDueTodoList;
+        const prevMonthImplementationTodoList: TodoLists = getState().todoList
+          .monthImplementationTodoList;
+        const prevMonthDueTodoList: TodoLists = getState().todoList.monthDueTodoList;
         const message = res.data.message;
 
         const updateTodoLists = (prevTodoLists: TodoLists) => {
@@ -258,10 +261,19 @@ export const deleteTodoListItem = (todoListItemId: number) => {
           });
         };
 
-        const updateImplementationTodoLists = updateTodoLists(prevTodayImplementationTodoList);
-        const updateDueTodoLists = updateTodoLists(prevTodayDueTodoList);
+        const updateTodayImplementationTodoLists = updateTodoLists(prevTodayImplementationTodoList);
+        const updateTodayDueTodoLists = updateTodoLists(prevTodayDueTodoList);
+        const updateMonthImplementationTodoLists = updateTodoLists(prevMonthImplementationTodoList);
+        const updateMonthDueTodoLists = updateTodoLists(prevMonthDueTodoList);
 
-        dispatch(deleteTodoListItemAction(updateImplementationTodoLists, updateDueTodoLists));
+        dispatch(
+          deleteTodoListItemAction(
+            updateTodayImplementationTodoLists,
+            updateTodayDueTodoLists,
+            updateMonthImplementationTodoLists,
+            updateMonthDueTodoLists
+          )
+        );
         dispatch(openTextModalAction(message));
       })
       .catch((error) => {
