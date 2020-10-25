@@ -1,7 +1,12 @@
 import { updateGroupTransactionsAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
-import { GroupTransactions, GroupTransactionsReq, FetchGroupTransactionsRes } from './types';
+import {
+  GroupTransactions,
+  GroupTransactionsReq,
+  FetchGroupTransactionsRes,
+  deleteGroupTransactionRes,
+} from './types';
 import { State } from '../store/types';
 import { push } from 'connected-react-router';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
@@ -187,6 +192,34 @@ export const editGroupTransactions = (
         } else {
           alert(error);
         }
+      });
+  };
+};
+
+export const deleteGroupTransactions = (id: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    await axios
+      .delete<deleteGroupTransactionRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${id}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        const message = res.data.message;
+
+        const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
+
+        const nextGroupTransactionsList = groupTransactionsList.filter((groupTransaction) => {
+          if (groupTransaction.id !== id) {
+            return groupTransaction;
+          }
+        });
+        dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
+        alert(message);
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
       });
   };
 };
