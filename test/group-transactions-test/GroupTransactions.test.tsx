@@ -8,12 +8,14 @@ import {
   addGroupTransactions,
   fetchGroupTransactionsList,
   editGroupTransactions,
+  deleteGroupTransactions,
 } from '../../src/reducks/groupTransactions/operations';
 import groupTransactions from './groupTransactions.json';
 import addGroupTransaction from './addGroupTransactions.json';
 import addedGroupTransactions from './addedGroupTransactions.json';
 import editGroupTransaction from './editGroupTransactionResponse.json';
 import editedGroupTransaction from './editedGroupTransactions.json';
+import deletedGroupTransaction from './deleteGroupTransaction.json';
 import { year, customMonth } from '../../src/lib/constant';
 
 const axiosMock = new axiosMockAdapter(axios);
@@ -187,5 +189,45 @@ describe('async actions editGroupTransactions', () => {
       getState
     );
     expect(store.getActions()).toEqual(expectedActions);
+  });
+});
+
+describe('async actions deleteGroupTransactions', () => {
+  const store = mockStore({ editedGroupTransaction });
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Delete groupTransactionsData in transactionsList if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        groupTransactions: {
+          groupTransactionsList: editedGroupTransaction.transactions_list,
+        },
+      };
+    };
+
+    const id = 16;
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
+
+    const mockResponse = deletedGroupTransaction.message;
+
+    const mockDeletedGroupTransactionsList = groupTransactions.transactions_list;
+
+    const expectedActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_TRANSACTIONS,
+        payload: mockDeletedGroupTransactionsList,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+    window.alert = jest.fn(() => mockResponse);
+
+    // @ts-ignore
+    await deleteGroupTransactions(16)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedActions);
+    expect(window.alert).toHaveBeenCalled();
   });
 });

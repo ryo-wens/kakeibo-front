@@ -28,3 +28,7 @@ export interface FetchGroupTransactionsRes {
   message: string;
   transactions_list: [];
 }
+
+export interface deleteGroupTransactionRes {
+  message: string;
+}
