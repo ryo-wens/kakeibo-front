@@ -1,21 +1,21 @@
 import { State } from '../store/types';
 import { createSelector } from 'reselect';
 
-const todoListsSelector = (state: State) => state.todoLists;
+const todoListSelector = (state: State) => state.todoLists;
 
 export const getImplementationTodoLists = createSelector(
-  [todoListsSelector],
+  [todoListSelector],
   (state) => state.implementationTodoLists
 );
-export const getDueTodoLists = createSelector([todoListsSelector], (state) => state.dueTodoLists);
+export const getDueTodoLists = createSelector([todoListSelector], (state) => state.dueTodoLists);
 
-export const getMonthImplementationTodoLists = createSelector(
-  [todoListsSelector],
-  (state) => state.monthImplementationTodoLists
+export const getMonthImplementationTodoList = createSelector(
+  [todoListSelector],
+  (state) => state.monthImplementationTodoList
 );
-export const getMonthDueTodoLists = createSelector(
-  [todoListsSelector],
-  (state) => state.monthDueTodoLists
+export const getMonthDueTodoList = createSelector(
+  [todoListSelector],
+  (state) => state.monthDueTodoList
 );
 
-export const getTodoListsMessage = createSelector([todoListsSelector], (state) => state.message);
+export const getTodoListsMessage = createSelector([todoListSelector], (state) => state.message);

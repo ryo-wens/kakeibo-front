@@ -6,7 +6,7 @@ import {
   deleteTodoListItemAction,
   editTodoListItemAction,
   fetchDateTodoListsAction,
-  fetchMonthTodoListsAction,
+  fetchMonthTodoListAction,
 } from './actions';
 import {
   createTodoListItemReq,
@@ -193,7 +193,7 @@ export const fetchDateTodoLists = (year: string, month: string, date: string) =>
   };
 };
 
-export const fetchMonthTodoLists = (year: string, month: string) => {
+export const fetchMonthTodoList = (year: string, month: string) => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchMonthTodoListsRes>(
@@ -203,17 +203,21 @@ export const fetchMonthTodoLists = (year: string, month: string) => {
         }
       )
       .then((res) => {
-        const implementationTodoLists = res.data.implementation_todo_list;
-        const dueTodoLists = res.data.due_todo_list;
+        const monthImplementationTodoLists = res.data.implementation_todo_list;
+        const monthDueTodoLists = res.data.due_todo_list;
         const message = res.data.message;
 
-        if (implementationTodoLists !== undefined && dueTodoLists !== undefined) {
+        if (monthImplementationTodoLists !== undefined && monthDueTodoLists !== undefined) {
           const message = '';
-          dispatch(fetchMonthTodoListsAction(implementationTodoLists, dueTodoLists, message));
+          dispatch(
+            fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
+          );
         } else {
-          const implementationTodoLists: TodoLists = [];
-          const dueTodoLists: TodoLists = [];
-          dispatch(fetchMonthTodoListsAction(implementationTodoLists, dueTodoLists, message));
+          const monthImplementationTodoLists: TodoLists = [];
+          const monthDueTodoLists: TodoLists = [];
+          dispatch(
+            fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
+          );
         }
       })
       .catch((error) => {

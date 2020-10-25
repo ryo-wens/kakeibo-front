@@ -14,7 +14,7 @@ import { State } from '../../reducks/store/types';
 import { CreateGroups } from './index';
 import { push } from 'connected-react-router';
 import { Groups } from '../../reducks/groups/types';
-import { fetchDateTodoLists, fetchMonthTodoLists } from '../../reducks/todoLists/operations';
+import { fetchDateTodoLists, fetchMonthTodoList } from '../../reducks/todoLists/operations';
 import {
   fetchGroupTasksList,
   fetchGroupTasksListEachUser,
@@ -59,7 +59,7 @@ const TodoMenu = () => {
       <ListItem
         button={true}
         onClick={() =>
-          dispatch(fetchMonthTodoLists(year, month)) && dispatch(push('/schedule-todo'))
+          dispatch(fetchMonthTodoList(year, month)) && dispatch(push('/schedule-todo'))
         }
       >
         <ListItemIcon>

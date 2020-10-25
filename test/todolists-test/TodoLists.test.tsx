@@ -10,7 +10,7 @@ import {
   deleteTodoListItem,
   editTodoListItem,
   fetchDateTodoLists,
-  fetchMonthTodoLists,
+  fetchMonthTodoList,
 } from '../../src/reducks/todoLists/operations';
 import createTodoListItemResponse from './createTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
@@ -48,6 +48,8 @@ const getState = () => {
           complete_flag: false,
         },
       ],
+      monthImplementationTodoList: [],
+      monthDueTodoList: [],
       message: '',
     },
     modal: {
@@ -247,9 +249,9 @@ describe('async actions todoLists', () => {
 
     const expectedAction = [
       {
-        type: TodoListsActions.FETCH_MONTH_TODO_LISTS,
+        type: TodoListsActions.FETCH_MONTH_TODO_LIST,
         payload: {
-          implementationTodoLists: [
+          monthImplementationTodoList: [
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
@@ -267,7 +269,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
           ],
-          dueTodoLists: [
+          monthDueTodoList: [
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
@@ -293,7 +295,7 @@ describe('async actions todoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await fetchMonthTodoLists(year, month)(store.dispatch);
+    await fetchMonthTodoList(year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

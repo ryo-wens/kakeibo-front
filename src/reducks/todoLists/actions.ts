@@ -3,7 +3,7 @@ export type todoListsActions = ReturnType<
   | typeof createTodoListItemAction
   | typeof editTodoListItemAction
   | typeof fetchDateTodoListsAction
-  | typeof fetchMonthTodoListsAction
+  | typeof fetchMonthTodoListAction
   | typeof deleteTodoListItemAction
 >;
 
@@ -51,17 +51,17 @@ export const fetchDateTodoListsAction = (
   };
 };
 
-export const FETCH_MONTH_TODO_LISTS = 'FETCH_MONTH_TODO_LISTS';
-export const fetchMonthTodoListsAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists,
+export const FETCH_MONTH_TODO_LIST = 'FETCH_MONTH_TODO_LIST';
+export const fetchMonthTodoListAction = (
+  monthImplementationTodoList: TodoLists,
+  monthDueTodoList: TodoLists,
   message: string
 ) => {
   return {
-    type: FETCH_MONTH_TODO_LISTS,
+    type: FETCH_MONTH_TODO_LIST,
     payload: {
-      implementationTodoLists: implementationTodoLists,
-      dueTodoLists: dueTodoLists,
+      monthImplementationTodoList: monthImplementationTodoList,
+      monthDueTodoList: monthDueTodoList,
       message: message,
     },
   };
