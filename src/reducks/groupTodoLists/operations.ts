@@ -20,8 +20,8 @@ import {
   fetchGroupDateTodoListsAction,
   fetchGroupMonthTodoListsAction,
 } from './actions';
-import { push } from 'connected-react-router';
 import { openTextModalAction } from '../modal/actions';
+import { errorHandling } from '../../lib/validation';
 
 export const createGroupTodoListItem = (
   groupId: number,
@@ -69,28 +69,17 @@ export const createGroupTodoListItem = (
         const groupTodoListItem: GroupTodoListItem = res.data;
 
         const nextGroupImplementationTodoLists: GroupTodoLists = [
-          ...prevGroupImplementationTodoLists,
           groupTodoListItem,
+          ...prevGroupImplementationTodoLists,
         ];
-        const nextGroupDueTodoLists: GroupTodoLists = [...prevGroupDueTodoLists, groupTodoListItem];
+        const nextGroupDueTodoLists: GroupTodoLists = [groupTodoListItem, ...prevGroupDueTodoLists];
 
         dispatch(
           createGroupTodoListItemAction(nextGroupImplementationTodoLists, nextGroupDueTodoLists)
         );
       })
       .catch((error) => {
-        if (error.response.status === 400) {
-          return alert(error.response.data.error.message[0]);
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -162,14 +151,7 @@ export const editGroupTodoListItem = (
         );
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -207,14 +189,7 @@ export const fetchGroupDateTodoLists = (
         }
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -247,14 +222,7 @@ export const fetchGroupMonthTodoLists = (groupId: number, year: string, month: s
         }
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
@@ -291,14 +259,7 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
         dispatch(openTextModalAction(message));
       })
       .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-          if (error.response.status === 401) {
-            dispatch(push('/login'));
-          }
-        } else {
-          alert(error);
-        }
+        errorHandling(dispatch, error);
       });
   };
 };
