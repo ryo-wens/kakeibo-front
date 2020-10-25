@@ -1,15 +1,15 @@
 import { State } from '../store/types';
 import { createSelector } from 'reselect';
 
-const todoListSelector = (state: State) => state.todoLists;
+const todoListSelector = (state: State) => state.todoList;
 
 export const getTodayImplementationTodoList = createSelector(
   [todoListSelector],
-  (state) => state.todayImplementationTodoLists
+  (state) => state.todayImplementationTodoList
 );
 export const getTodayDueTodoList = createSelector(
   [todoListSelector],
-  (state) => state.todayDueTodoLists
+  (state) => state.todayDueTodoList
 );
 
 export const getMonthImplementationTodoList = createSelector(

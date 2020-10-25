@@ -12,7 +12,7 @@ import { createLogger } from 'redux-logger';
 import { modalReducer } from '../modal/reducers';
 import { budgetsReducer } from '../budgets/reducers';
 import { groupBudgetsReducer } from '../groupBudgets/reducers';
-import { todoListsReducer } from '../todoLists/reducers';
+import { todoListReducer } from '../todoLists/reducers';
 import { groupTodoListsReducer } from '../groupTodoLists/reducers';
 import { groupTasksReducers } from '../groupTasks/reducers';
 
@@ -38,7 +38,7 @@ export default function createStore(history: History) {
       groupCategories: groupCategoriesReducer,
       groups: groupsReducer,
       groupTasks: groupTasksReducers,
-      todoLists: todoListsReducer,
+      todoList: todoListReducer,
       groupTodoLists: groupTodoListsReducer,
       transactions: transactionsReducer,
       groupTransactions: groupTransactionsReducer,

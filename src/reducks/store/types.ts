@@ -52,9 +52,9 @@ export interface State {
     groupTasksListForEachUser: GroupTasksListForEachUser;
     groupTasksList: GroupTasksList;
   };
-  todoLists: {
-    todayImplementationTodoLists: TodoLists;
-    todayDueTodoLists: TodoLists;
+  todoList: {
+    todayImplementationTodoList: TodoLists;
+    todayDueTodoList: TodoLists;
     monthImplementationTodoList: TodoLists;
     monthDueTodoList: TodoLists;
     message: string;

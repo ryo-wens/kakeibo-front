@@ -27,8 +27,8 @@ const store = mockStore({ todoLists: [], modal: [], router: [] });
 
 const getState = () => {
   return {
-    todoLists: {
-      todayImplementationTodoLists: [
+    todoList: {
+      todayImplementationTodoList: [
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
@@ -38,7 +38,7 @@ const getState = () => {
           complete_flag: false,
         },
       ],
-      todayDueTodoLists: [
+      todayDueTodoList: [
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
@@ -48,8 +48,26 @@ const getState = () => {
           complete_flag: false,
         },
       ],
-      monthImplementationTodoList: [],
-      monthDueTodoList: [],
+      monthImplementationTodoList: [
+        {
+          id: 1,
+          posted_date: '2020-09-27T19:54:46Z',
+          implementation_date: '09/27(日)',
+          due_date: '09/28(月)',
+          todo_content: '食器用洗剤2つ購入',
+          complete_flag: false,
+        },
+      ],
+      monthDueTodoList: [
+        {
+          id: 1,
+          posted_date: '2020-09-27T19:54:46Z',
+          implementation_date: '09/27(日)',
+          due_date: '09/28(月)',
+          todo_content: '食器用洗剤2つ購入',
+          complete_flag: false,
+        },
+      ],
       message: '',
     },
     modal: {
@@ -77,8 +95,8 @@ describe('async actions todoLists', () => {
   it('Created todoListItem is added to implementationTodoLists and dueTodoLists when CREATE_TODO_LIST_ITEM succeeds.', async () => {
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list`;
     const todoContent = '買い物へゆく';
-    const implementationDate = new Date('2020-09-27T21:11:54');
-    const dueDate = new Date('2020-09-29T21:11:54');
+    const implementationDate = new Date('2020-09-28T19:55:46Z');
+    const dueDate = new Date('2020-09-29T19:55:46Z');
 
     const mockResponse = JSON.stringify(createTodoListItemResponse);
 
@@ -86,11 +104,31 @@ describe('async actions todoLists', () => {
       {
         type: TodoListsActions.CREATE_TODO_LIST_ITEM,
         payload: {
-          todayImplementationTodoLists: [
+          todayImplementationTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+            },
+          ],
+          todayDueTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+            },
+          ],
+          monthImplementationTodoList: [
             {
               id: 2,
-              posted_date: '2020-09-27T19:55:46Z',
-              implementation_date: '09/27(日)',
+              posted_date: '2020-09-28T19:55:46Z',
+              implementation_date: '09/28(月)',
               due_date: '09/29(火)',
               todo_content: '買い物へゆく',
               complete_flag: false,
@@ -104,11 +142,11 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
           ],
-          todayDueTodoLists: [
+          monthDueTodoList: [
             {
               id: 2,
-              posted_date: '2020-09-27T19:55:46Z',
-              implementation_date: '09/27(日)',
+              posted_date: '2020-09-28T19:55:46Z',
+              implementation_date: '09/28(月)',
               due_date: '09/29(火)',
               todo_content: '買い物へゆく',
               complete_flag: false,
@@ -133,7 +171,7 @@ describe('async actions todoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Updated todoListItem will be reflected in todayImplementationTodoLists and todayDueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
+  it('Updated todoListItem will be reflected in todayImplementationTodoList and todayDueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
     const todoListItemId = 1;
     const implementationDate = new Date('2020-09-27T21:11:54');
     const dueDate = new Date('2020-09-28T21:11:54');
@@ -148,7 +186,7 @@ describe('async actions todoLists', () => {
       {
         type: TodoListsActions.EDIT_TODO_LIST_ITEM,
         payload: {
-          todayImplementationTodoLists: [
+          todayImplementationTodoList: [
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
@@ -158,7 +196,7 @@ describe('async actions todoLists', () => {
               complete_flag: true,
             },
           ],
-          todayDueTodoLists: [
+          todayDueTodoList: [
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
@@ -188,7 +226,7 @@ describe('async actions todoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Get todayImplementationTodoLists and todayDueTodoLists when FETCH_DATE_TODO_LISTS succeeds.', async () => {
+  it('Get todayImplementationTodoList and todayDueTodoLists when FETCH_DATE_TODO_LISTS succeeds.', async () => {
     const year = '2020';
     const month = '09';
     const date = '27';
@@ -200,7 +238,7 @@ describe('async actions todoLists', () => {
       {
         type: TodoListsActions.FETCH_DATE_TODO_LISTS,
         payload: {
-          todayImplementationTodoLists: [
+          todayImplementationTodoList: [
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
@@ -218,7 +256,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
           ],
-          todayDueTodoLists: [
+          todayDueTodoList: [
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
@@ -299,7 +337,7 @@ describe('async actions todoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('When DELETE_TODO_LIST_ITEM is successful, send the todayImplementationTodoLists and todayDueTodoLists except the requested todoListItemId to deleteTodoListItemAction and send the response message to openTextModalAction.', async () => {
+  it('When DELETE_TODO_LIST_ITEM is successful, send the todayImplementationTodoList and todayDueTodoList except the requested todoListItemId to deleteTodoListItemAction and send the response message to openTextModalAction.', async () => {
     const todoListItemId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
@@ -309,8 +347,8 @@ describe('async actions todoLists', () => {
       {
         type: TodoListsActions.DELETE_TODO_LIST_ITEM,
         payload: {
-          todayImplementationTodoLists: [],
-          todayDueTodoLists: [],
+          todayImplementationTodoList: [],
+          todayDueTodoList: [],
         },
       },
       {

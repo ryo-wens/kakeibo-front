@@ -34,6 +34,7 @@ const ExistsTodoLists = (props: ExistTodoListsProps) => {
     }
   };
 
+  console.log(props.implementationTodoList.length);
   return props.implementationTodoList.length === 0 && props.dueTodoList.length === 0 ? (
     <p>{props.todoListsMessage}</p>
   ) : (

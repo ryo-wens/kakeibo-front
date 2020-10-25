@@ -49,6 +49,7 @@ const Todo = () => {
     }
   }, []);
 
+  console.log(todayImplementationTodoList);
   return (
     <>
       <TodoMenu />
