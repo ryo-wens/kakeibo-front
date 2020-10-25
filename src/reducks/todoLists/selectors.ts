@@ -8,4 +8,14 @@ export const getImplementationTodoLists = createSelector(
   (state) => state.implementationTodoLists
 );
 export const getDueTodoLists = createSelector([todoListsSelector], (state) => state.dueTodoLists);
+
+export const getMonthImplementationTodoLists = createSelector(
+  [todoListsSelector],
+  (state) => state.monthImplementationTodoLists
+);
+export const getMonthDueTodoLists = createSelector(
+  [todoListsSelector],
+  (state) => state.monthDueTodoLists
+);
+
 export const getTodoListsMessage = createSelector([todoListsSelector], (state) => state.message);

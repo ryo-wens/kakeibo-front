@@ -48,6 +48,8 @@ const initialState = {
   todoLists: {
     implementationTodoLists: [],
     dueTodoLists: [],
+    monthImplementationTodoLists: [],
+    monthDueTodoLists: [],
     message: '',
   },
   groupTodoLists: {
