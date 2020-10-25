@@ -1,11 +1,35 @@
 import { updateGroupTransactionsAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
-import { GroupTransactions, GroupTransactionsReq } from './types';
+import { GroupTransactions, GroupTransactionsReq, FetchGroupTransactionsRes } from './types';
 import { State } from '../store/types';
 import { push } from 'connected-react-router';
-import { isValidAmountFormat } from '../../lib/validation';
+import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 import moment from 'moment';
+
+export const fetchGroupTransactionsList = (year: number, customMonth: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    await axios
+      .get<FetchGroupTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${year}-${customMonth}`,
+        {
+          withCredentials: true,
+        }
+      )
+      .then((res) => {
+        if (res.data.message) {
+          alert(res.data.message);
+        } else {
+          const groupTransactionsList = res.data.transactions_list;
+
+          dispatch(updateGroupTransactionsAction(groupTransactionsList));
+        }
+      })
+      .catch((error) => {
+        errorHandling(dispatch, error);
+      });
+  };
+};
 
 export const addGroupTransactions = (
   transaction_type: string,

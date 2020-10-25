@@ -23,3 +23,8 @@ export interface GroupTransactionsReq {
   medium_category_id: number | null;
   custom_category_id: number | null;
 }
+
+export interface FetchGroupTransactionsRes {
+  message: string;
+  transactions_list: [];
+}
