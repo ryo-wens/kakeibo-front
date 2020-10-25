@@ -4,15 +4,46 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { addGroupTransactions } from '../../src/reducks/groupTransactions/operations';
+import {
+  addGroupTransactions,
+  fetchGroupTransactionsList,
+} from '../../src/reducks/groupTransactions/operations';
 import groupTransactions from './groupTransactions.json';
 import addGroupTransaction from './addGroupTransactions.json';
 import addedGroupTransactions from './addedGroupTransactions.json';
+import { year, customMonth } from '../../src/lib/constant';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 process.on('unhandledRejection', console.dir);
+
+describe('async actions fetchGroupTransactionsList', () => {
+  const store = mockStore({ groupTransactions: { groupTransactionsList: [] } });
+
+  const groupId = 1;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}`;
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Get groupTransactionsList if fetch succeeds', async () => {
+    const mockResponse = groupTransactions;
+
+    const expectedAddActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_TRANSACTIONS,
+        payload: mockResponse.transactions_list,
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupTransactionsList(year, customMonth)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAddActions);
+  });
+});
 
 describe('async actions addGroupTransactions', () => {
   const store = mockStore({ groupTransactions });
