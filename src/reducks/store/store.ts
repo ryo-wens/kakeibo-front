@@ -4,6 +4,7 @@ import { categoriesReducer } from '../categories/reducers';
 import { groupCategoriesReducer } from '../groupCategories/reducers';
 import { groupsReducer } from '../groups/reducers';
 import { transactionsReducer } from '../transactions/reducers';
+import { groupTransactionsReducer } from '../groupTransactions/reducers';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { History } from 'history';
@@ -40,6 +41,7 @@ export default function createStore(history: History) {
       todoLists: todoListsReducer,
       groupTodoLists: groupTodoListsReducer,
       transactions: transactionsReducer,
+      groupTransactions: groupTransactionsReducer,
       modal: modalReducer,
       budgets: budgetsReducer,
       groupBudgets: groupBudgetsReducer,
