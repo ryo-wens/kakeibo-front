@@ -44,7 +44,7 @@ const Todo = () => {
   }, []);
 
   useEffect(() => {
-    if (todayImplementationTodoList.length === 0 && todayDueTodoList.length === 0) {
+    if (!todayImplementationTodoList.length && !todayDueTodoList.length && !todayTodoListMessage) {
       dispatch(fetchDateTodoLists(year, month, date));
     }
   }, []);
@@ -59,7 +59,6 @@ const Todo = () => {
         <SwitchTodoLists
           implementationTodoList={todayImplementationTodoList}
           dueTodoList={todayDueTodoList}
-          todoListsMessage={todayTodoListMessage}
         />
         <div>
           <AddTodo date={dt} />

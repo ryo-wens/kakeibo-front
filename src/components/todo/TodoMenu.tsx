@@ -19,6 +19,14 @@ import {
   fetchGroupTasksList,
   fetchGroupTasksListEachUser,
 } from '../../reducks/groupTasks/operations';
+import {
+  getMonthDueTodoList,
+  getMonthImplementationTodoList,
+  getMonthTodoListMessage,
+  getTodayDueTodoList,
+  getTodayImplementationTodoList,
+  getTodayTodoListMessage,
+} from '../../reducks/todoLists/selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -40,28 +48,42 @@ const TodoMenu = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const approvedGroups: Groups = getApprovedGroups(selector);
+  const todayImplementationTodoList = getTodayImplementationTodoList(selector);
+  const todayDueTodoList = getTodayDueTodoList(selector);
+  const monthImplementationTodoList = getMonthImplementationTodoList(selector);
+  const monthDueTodoList = getMonthDueTodoList(selector);
+  const todayTodoListMessage = getTodayTodoListMessage(selector);
+  const monthTodoListMessage = getMonthTodoListMessage(selector);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
   const date: string = ('0' + dt.getDate()).slice(-2);
 
+  const isTodayTodoList = () => {
+    if (!todayImplementationTodoList.length && !todayDueTodoList.length && !todayTodoListMessage) {
+      return dispatch(fetchDateTodoLists(year, month, date)) && dispatch(push(`/todo`));
+    } else if (todayImplementationTodoList || todayDueTodoList || todayTodoListMessage) {
+      return dispatch(push(`/todo`));
+    }
+  };
+
+  const isMonthTodoList = () => {
+    if (!monthImplementationTodoList.length && !monthDueTodoList.length && !monthTodoListMessage) {
+      return dispatch(fetchMonthTodoList(year, month)) && dispatch(push('/schedule-todo'));
+    } else if (monthImplementationTodoList || monthDueTodoList || monthTodoListMessage) {
+      return dispatch(push('/schedule-todo'));
+    }
+  };
+
   return (
     <List className={classes.list} component="nav">
-      <ListItem
-        button={true}
-        onClick={() => dispatch(fetchDateTodoLists(year, month, date)) && dispatch(push('/todo'))}
-      >
+      <ListItem button={true} onClick={() => isTodayTodoList()}>
         <ListItemIcon>
           <TodayIcon />
         </ListItemIcon>
         <ListItemText primary={'今日'} />
       </ListItem>
-      <ListItem
-        button={true}
-        onClick={() =>
-          dispatch(fetchMonthTodoList(year, month)) && dispatch(push('/schedule-todo'))
-        }
-      >
+      <ListItem button={true} onClick={() => isMonthTodoList()}>
         <ListItemIcon>
           <DateRangeIcon />
         </ListItemIcon>
