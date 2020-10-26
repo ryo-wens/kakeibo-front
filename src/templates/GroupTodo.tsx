@@ -110,7 +110,6 @@ const GroupTodo = () => {
           todoListsMessage={groupTodoListsMessage}
         />
         <AddTodo groupId={groupId} date={dt} />
-        <button onClick={() => dispatch(fetchGroupTasksList(groupId))} />
         <AddTaskUser
           approvedGroup={approvedGroup}
           groupTasksListForEachUser={groupTasksListForEachUser}
