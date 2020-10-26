@@ -105,8 +105,8 @@ const GroupTodo = () => {
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
         <SwitchTodoLists
-          implementationTodoLists={groupImplementationTodoLists}
-          dueTodoLists={groupDueTodoLists}
+          implementationTodoList={groupImplementationTodoLists}
+          dueTodoList={groupDueTodoLists}
           todoListsMessage={groupTodoListsMessage}
         />
         <AddTodo groupId={groupId} date={dt} />

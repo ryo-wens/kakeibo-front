@@ -6,8 +6,8 @@ import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/select
 import { AddTodo, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
-  getDueTodoLists,
-  getImplementationTodoLists,
+  getTodayDueTodoList,
+  getTodayImplementationTodoList,
   getTodoListsMessage,
 } from '../reducks/todoLists/selectors';
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
@@ -28,8 +28,8 @@ const Todo = () => {
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
-  const implementationTodoLists = getImplementationTodoLists(selector);
-  const dueTodoLists = getDueTodoLists(selector);
+  const todayImplementationTodoList = getTodayImplementationTodoList(selector);
+  const todayDueTodoList = getTodayDueTodoList(selector);
   const todoListsMessage = getTodoListsMessage(selector);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
@@ -44,11 +44,12 @@ const Todo = () => {
   }, []);
 
   useEffect(() => {
-    if (implementationTodoLists.length === 0 && dueTodoLists.length === 0) {
+    if (todayImplementationTodoList.length === 0 && todayDueTodoList.length === 0) {
       dispatch(fetchDateTodoLists(year, month, date));
     }
   }, []);
 
+  console.log(todayImplementationTodoList);
   return (
     <>
       <TodoMenu />
@@ -57,8 +58,8 @@ const Todo = () => {
           今日 {month}/{date} ({weekday})
         </span>
         <SwitchTodoLists
-          implementationTodoLists={implementationTodoLists}
-          dueTodoLists={dueTodoLists}
+          implementationTodoList={todayImplementationTodoList}
+          dueTodoList={todayDueTodoList}
           todoListsMessage={todoListsMessage}
         />
         <div>

@@ -36,7 +36,7 @@ interface AddTaskUserProps {
 const AddTaskUser = (props: AddTaskUserProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState<boolean>(false);
-  const [checked, setChecked] = useState<boolean>(false);
+  const [checkedUserIds, setCheckedUserIds] = useState<Array<string>>([]);
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -44,14 +44,21 @@ const AddTaskUser = (props: AddTaskUserProps) => {
 
   const closeModal = useCallback(() => {
     setOpen(false);
-    setChecked(false);
-  }, [setOpen, setChecked]);
+    setCheckedUserIds([]);
+  }, [setOpen, setCheckedUserIds]);
 
-  const handleChangeChecked = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setChecked(event.target.checked);
+  const assignUser = useCallback(
+    (userId: string) => {
+      setCheckedUserIds((prevState) => {
+        if (prevState.includes(userId)) {
+          const nextState = prevState.filter((prevUserId) => prevUserId !== userId);
+          return [...nextState];
+        } else {
+          return [...prevState, userId];
+        }
+      });
     },
-    [setChecked]
+    [setCheckedUserIds]
   );
 
   const existsAddTasksUser = () => {
@@ -71,7 +78,11 @@ const AddTaskUser = (props: AddTaskUserProps) => {
           user.push(
             <FormControlLabel
               control={
-                <Checkbox checked={checked} onChange={handleChangeChecked} color="primary" />
+                <Checkbox
+                  checked={checkedUserIds.includes(approvedUser.user_id)}
+                  onClick={() => assignUser(approvedUser.user_id)}
+                  color="primary"
+                />
               }
               label={approvedUser.user_name}
               key={approvedUser.user_id}
@@ -82,7 +93,13 @@ const AddTaskUser = (props: AddTaskUserProps) => {
       for (const approvedUser of props.approvedGroup.approved_users_list) {
         user.push(
           <FormControlLabel
-            control={<Checkbox checked={checked} onChange={handleChangeChecked} color="primary" />}
+            control={
+              <Checkbox
+                checked={checkedUserIds.includes(approvedUser.user_id)}
+                onClick={() => assignUser(approvedUser.user_id)}
+                color="primary"
+              />
+            }
             label={approvedUser.user_name}
             key={approvedUser.user_id}
           />
@@ -99,7 +116,11 @@ const AddTaskUser = (props: AddTaskUserProps) => {
       <h3 id="simple-modal-title">タスクユーザーを追加</h3>
       <FormGroup>{existsAddTasksUser()}</FormGroup>
       <div className={classes.buttons}>
-        <TodoButton label={'追加'} disabled={!checked} onClick={() => closeModal()} />
+        <TodoButton
+          label={'追加'}
+          disabled={checkedUserIds.length === 0}
+          onClick={() => closeModal()}
+        />
         <TodoButton label={'キャンセル'} disabled={false} onClick={() => closeModal()} />
       </div>
     </div>

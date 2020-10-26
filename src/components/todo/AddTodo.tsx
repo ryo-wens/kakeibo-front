@@ -80,13 +80,9 @@ const AddTodo = (props: AddTodoProps) => {
 
   const switchOperation = () => {
     if (type === 'todo') {
-      return dispatch(
-        createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent, true)
-      );
+      return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
     } else if (type === 'schedule-todo') {
-      return dispatch(
-        createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent, false)
-      );
+      return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
     } else if (type === 'group-todo' && typeof props.groupId === 'number') {
       return dispatch(
         createGroupTodoListItem(
