@@ -49,7 +49,7 @@ const TodoMenu = () => {
     <List className={classes.list} component="nav">
       <ListItem
         button={true}
-        onClick={() => dispatch(fetchDateTodoLists(year, month, date)) && dispatch(push(`/todo`))}
+        onClick={() => dispatch(fetchDateTodoLists(year, month, date)) && dispatch(push('/todo'))}
       >
         <ListItemIcon>
           <TodayIcon />

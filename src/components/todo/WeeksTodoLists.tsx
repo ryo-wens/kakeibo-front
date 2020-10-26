@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getTodoListsMessage } from '../../reducks/todoLists/selectors';
+import { getMonthTodoListMessage } from '../../reducks/todoLists/selectors';
 import { AddTodo, TodoList } from './index';
 import { State } from '../../reducks/store/types';
 import { TodoLists } from '../../reducks/todoLists/types';
@@ -18,7 +18,7 @@ interface ExistTodoListsProps {
 const WeeksTodoLists = (props: ExistTodoListsProps) => {
   const selector = useSelector((state: State) => state);
   const [value, setValue] = useState<number>(0);
-  const todoListsMessage = getTodoListsMessage(selector);
+  const monthTodoListMessage = getMonthTodoListMessage(selector);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
   const _startDate = getWeekStartDate(selectedDate);
@@ -74,7 +74,7 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
         </Tabs>
       </AppBar>
       {props.monthImplementationTodoList.length === 0 && props.monthDueTodoList.length === 0 && (
-        <p>{todoListsMessage}</p>
+        <p>{monthTodoListMessage}</p>
       )}
       {value === 0 ? week(props.monthImplementationTodoList) : week(props.monthDueTodoList)}
     </>
