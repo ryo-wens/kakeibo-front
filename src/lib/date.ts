@@ -14,11 +14,11 @@ export const dateToDateString = (date: Date) => {
   return `${year}/${month}/${_date}(${day})`;
 };
 
-export const getEarlyOfMonthDate = (date: Date) => {
+export const getFirstDayOfMonth = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth());
 };
 
-export const getEndOfMonthDate = (date: Date) => {
+export const getLastDayOfMonth = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0);
 };
 

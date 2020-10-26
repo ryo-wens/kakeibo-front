@@ -3,7 +3,7 @@ import { MonthTables } from './index';
 import { DatePicker } from '../uikit';
 import { TodoButton } from '../todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { getEarlyOfMonthDate, getEndOfMonthDate } from '../../lib/date';
+import { getFirstDayOfMonth, getLastDayOfMonth } from '../../lib/date';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -35,7 +35,7 @@ const Task = () => {
   }, [selectedDate]);
 
   const getPrevMonth = useCallback(() => {
-    const earlyOfMonthDate = getEarlyOfMonthDate(selectedDate);
+    const earlyOfMonthDate = getFirstDayOfMonth(selectedDate);
     const remainingDatesUntilPrevMonth = selectedDate.getDate() - earlyOfMonthDate.getDate();
     const prevMonth = new Date(
       selectedDate.getFullYear(),
@@ -46,7 +46,7 @@ const Task = () => {
   }, [selectedDate, setSelectedDate]);
 
   const getNextMonth = useCallback(() => {
-    const endOfMonthDate = getEndOfMonthDate(selectedDate);
+    const endOfMonthDate = getLastDayOfMonth(selectedDate);
     const remainingDatesUntilNextMonth = endOfMonthDate.getDate() - selectedDate.getDate();
     const nextMonth = new Date(
       selectedDate.getFullYear(),
