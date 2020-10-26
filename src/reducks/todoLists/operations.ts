@@ -6,7 +6,7 @@ import {
   deleteTodoListItemAction,
   editTodoListItemAction,
   fetchDateTodoListsAction,
-  fetchMonthTodoListsAction,
+  fetchMonthTodoListAction,
 } from './actions';
 import {
   createTodoListItemReq,
@@ -27,8 +27,7 @@ import { errorHandling } from '../../lib/validation';
 export const createTodoListItem = (
   implementationDate: Date | null,
   dueDate: Date | null,
-  todoContent: string,
-  isTodayTodo: boolean
+  todoContent: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (implementationDate === null) {
@@ -63,32 +62,44 @@ export const createTodoListItem = (
         }
       )
       .then((res) => {
-        const prevImplementationTodoLists: TodoLists = getState().todoLists.implementationTodoLists;
-        const prevDueTodoLists: TodoLists = getState().todoLists.dueTodoLists;
+        const prevTodayImplementationTodoList: TodoLists = getState().todoList
+          .todayImplementationTodoList;
+        const prevTodayDueTodoList: TodoLists = getState().todoList.todayDueTodoList;
+        const prevMonthImplementationTodoList: TodoLists = getState().todoList
+          .monthImplementationTodoList;
+        const prevMonthDueTodoList: TodoLists = getState().todoList.monthDueTodoList;
 
         const todoListItem: TodoListItem = res.data;
 
-        let newImplementationTodoLists: TodoLists = [];
-        let newDueTodoLists: TodoLists = [];
+        let newTodayImplementationTodoList: TodoLists = [];
+        let newTodayDueTodoList: TodoLists = [];
+        let newMonthImplementationTodoList: TodoLists = [];
+        let newMonthDueTodoList: TodoLists = [];
 
-        if (isTodayTodo) {
-          const today = new Date();
-          if (dateToDateString(today) === res.data.implementation_date) {
-            newImplementationTodoLists = [todoListItem, ...prevImplementationTodoLists];
-          } else {
-            newImplementationTodoLists = [...prevImplementationTodoLists];
-          }
-          if (dateToDateString(today) === res.data.due_date) {
-            newDueTodoLists = [todoListItem, ...prevDueTodoLists];
-          } else {
-            newDueTodoLists = [...prevDueTodoLists];
-          }
+        const today = new Date();
+        if (dateToDateString(today) === res.data.implementation_date) {
+          newTodayImplementationTodoList = [todoListItem, ...prevTodayImplementationTodoList];
+          newMonthImplementationTodoList = [todoListItem, ...prevMonthImplementationTodoList];
         } else {
-          newImplementationTodoLists = [todoListItem, ...prevImplementationTodoLists];
-          newDueTodoLists = [todoListItem, ...prevDueTodoLists];
+          newTodayImplementationTodoList = [...prevTodayImplementationTodoList];
+          newMonthImplementationTodoList = [todoListItem, ...prevMonthImplementationTodoList];
+        }
+        if (dateToDateString(today) === res.data.due_date) {
+          newTodayDueTodoList = [todoListItem, ...prevTodayDueTodoList];
+          newMonthDueTodoList = [todoListItem, ...prevMonthDueTodoList];
+        } else {
+          newTodayDueTodoList = [...prevTodayDueTodoList];
+          newMonthDueTodoList = [todoListItem, ...prevMonthDueTodoList];
         }
 
-        dispatch(createTodoListItemAction(newImplementationTodoLists, newDueTodoLists));
+        dispatch(
+          createTodoListItemAction(
+            newTodayImplementationTodoList,
+            newTodayDueTodoList,
+            newMonthImplementationTodoList,
+            newMonthDueTodoList
+          )
+        );
       })
       .catch((error) => {
         errorHandling(dispatch, error);
@@ -137,8 +148,9 @@ export const editTodoListItem = (
         }
       )
       .then((res) => {
-        const prevImplementationTodoLists: TodoLists = getState().todoLists.implementationTodoLists;
-        const prevDueTodoLists: TodoLists = getState().todoLists.dueTodoLists;
+        const prevTodayImplementationTodoList: TodoLists = getState().todoList
+          .todayImplementationTodoList;
+        const prevTodayDueTodoList: TodoLists = getState().todoList.todayDueTodoList;
 
         const updateTodoLists = (prevTodoLists: TodoLists) => {
           return prevTodoLists.map((prevTodoList: TodoListItem) => {
@@ -152,9 +164,9 @@ export const editTodoListItem = (
         };
 
         const updateImplementationTodoLists: TodoLists = updateTodoLists(
-          prevImplementationTodoLists
+          prevTodayImplementationTodoList
         );
-        const updateDueTodoLists: TodoLists = updateTodoLists(prevDueTodoLists);
+        const updateDueTodoLists: TodoLists = updateTodoLists(prevTodayDueTodoList);
 
         dispatch(editTodoListItemAction(updateImplementationTodoLists, updateDueTodoLists));
       })
@@ -174,17 +186,17 @@ export const fetchDateTodoLists = (year: string, month: string, date: string) =>
         }
       )
       .then((res) => {
-        const implementationTodoLists = res.data.implementation_todo_list;
-        const dueTodoLists = res.data.due_todo_list;
+        const implementationTodoList = res.data.implementation_todo_list;
+        const dueTodoList = res.data.due_todo_list;
         const message = res.data.message;
 
-        if (implementationTodoLists !== undefined && dueTodoLists !== undefined) {
+        if (implementationTodoList !== undefined && dueTodoList !== undefined) {
           const message = '';
-          dispatch(fetchDateTodoListsAction(implementationTodoLists, dueTodoLists, message));
+          dispatch(fetchDateTodoListsAction(implementationTodoList, dueTodoList, message));
         } else {
-          const implementationTodoLists: TodoLists = [];
-          const dueTodoLists: TodoLists = [];
-          dispatch(fetchDateTodoListsAction(implementationTodoLists, dueTodoLists, message));
+          const implementationTodoList: TodoLists = [];
+          const dueTodoList: TodoLists = [];
+          dispatch(fetchDateTodoListsAction(implementationTodoList, dueTodoList, message));
         }
       })
       .catch((error) => {
@@ -193,7 +205,7 @@ export const fetchDateTodoLists = (year: string, month: string, date: string) =>
   };
 };
 
-export const fetchMonthTodoLists = (year: string, month: string) => {
+export const fetchMonthTodoList = (year: string, month: string) => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchMonthTodoListsRes>(
@@ -203,17 +215,21 @@ export const fetchMonthTodoLists = (year: string, month: string) => {
         }
       )
       .then((res) => {
-        const implementationTodoLists = res.data.implementation_todo_list;
-        const dueTodoLists = res.data.due_todo_list;
+        const monthImplementationTodoLists = res.data.implementation_todo_list;
+        const monthDueTodoLists = res.data.due_todo_list;
         const message = res.data.message;
 
-        if (implementationTodoLists !== undefined && dueTodoLists !== undefined) {
+        if (monthImplementationTodoLists !== undefined && monthDueTodoLists !== undefined) {
           const message = '';
-          dispatch(fetchMonthTodoListsAction(implementationTodoLists, dueTodoLists, message));
+          dispatch(
+            fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
+          );
         } else {
-          const implementationTodoLists: TodoLists = [];
-          const dueTodoLists: TodoLists = [];
-          dispatch(fetchMonthTodoListsAction(implementationTodoLists, dueTodoLists, message));
+          const monthImplementationTodoLists: TodoLists = [];
+          const monthDueTodoLists: TodoLists = [];
+          dispatch(
+            fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
+          );
         }
       })
       .catch((error) => {
@@ -232,8 +248,11 @@ export const deleteTodoListItem = (todoListItemId: number) => {
         }
       )
       .then((res) => {
-        const prevImplementationTodoLists = getState().todoLists.implementationTodoLists;
-        const prevDueTodoLists = getState().todoLists.dueTodoLists;
+        const prevTodayImplementationTodoList = getState().todoList.todayImplementationTodoList;
+        const prevTodayDueTodoList = getState().todoList.todayDueTodoList;
+        const prevMonthImplementationTodoList: TodoLists = getState().todoList
+          .monthImplementationTodoList;
+        const prevMonthDueTodoList: TodoLists = getState().todoList.monthDueTodoList;
         const message = res.data.message;
 
         const updateTodoLists = (prevTodoLists: TodoLists) => {
@@ -242,10 +261,19 @@ export const deleteTodoListItem = (todoListItemId: number) => {
           });
         };
 
-        const updateImplementationTodoLists = updateTodoLists(prevImplementationTodoLists);
-        const updateDueTodoLists = updateTodoLists(prevDueTodoLists);
+        const updateTodayImplementationTodoLists = updateTodoLists(prevTodayImplementationTodoList);
+        const updateTodayDueTodoLists = updateTodoLists(prevTodayDueTodoList);
+        const updateMonthImplementationTodoLists = updateTodoLists(prevMonthImplementationTodoList);
+        const updateMonthDueTodoLists = updateTodoLists(prevMonthDueTodoList);
 
-        dispatch(deleteTodoListItemAction(updateImplementationTodoLists, updateDueTodoLists));
+        dispatch(
+          deleteTodoListItemAction(
+            updateTodayImplementationTodoLists,
+            updateTodayDueTodoLists,
+            updateMonthImplementationTodoLists,
+            updateMonthDueTodoLists
+          )
+        );
         dispatch(openTextModalAction(message));
       })
       .catch((error) => {

@@ -5,9 +5,9 @@ import { GroupTodoListItem, GroupTodoLists } from '../../reducks/groupTodoLists/
 
 interface ExistTodoListsProps {
   planName: string;
-  todoLists: TodoLists | GroupTodoLists;
-  implementationTodoLists: TodoLists | GroupTodoLists;
-  dueTodoLists: TodoLists | GroupTodoLists;
+  todoList: TodoLists | GroupTodoLists;
+  implementationTodoList: TodoLists | GroupTodoLists;
+  dueTodoList: TodoLists | GroupTodoLists;
   todoListsMessage: string;
 }
 
@@ -34,10 +34,11 @@ const ExistsTodoLists = (props: ExistTodoListsProps) => {
     }
   };
 
-  return props.implementationTodoLists.length === 0 && props.dueTodoLists.length === 0 ? (
+  console.log(props.implementationTodoList.length);
+  return props.implementationTodoList.length === 0 && props.dueTodoList.length === 0 ? (
     <p>{props.todoListsMessage}</p>
   ) : (
-    <>{existsPlanTodoLists(props.todoLists, props.planName)}</>
+    <>{existsPlanTodoLists(props.todoList, props.planName)}</>
   );
 };
 

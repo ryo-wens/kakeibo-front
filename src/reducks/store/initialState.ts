@@ -45,9 +45,11 @@ const initialState = {
     groupTasksListForEachUser: [],
     groupTasksList: [],
   },
-  todoLists: {
-    implementationTodoLists: [],
-    dueTodoLists: [],
+  todoList: {
+    todayImplementationTodoList: [],
+    todayDueTodoList: [],
+    monthImplementationTodoList: [],
+    monthDueTodoList: [],
     message: '',
   },
   groupTodoLists: {
