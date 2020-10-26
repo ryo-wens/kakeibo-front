@@ -2,7 +2,7 @@ import { TodoLists } from './types';
 export type todoListsActions = ReturnType<
   | typeof createTodoListItemAction
   | typeof editTodoListItemAction
-  | typeof fetchDateTodoListsAction
+  | typeof fetchDateTodoListAction
   | typeof fetchMonthTodoListAction
   | typeof deleteTodoListItemAction
 >;
@@ -27,26 +27,30 @@ export const createTodoListItemAction = (
 
 export const EDIT_TODO_LIST_ITEM = 'EDIT_TODO_LIST_ITEM';
 export const editTodoListItemAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists
+  todayImplementationTodoList: TodoLists,
+  todayDueTodoList: TodoLists,
+  monthImplementationTodoList: TodoLists,
+  monthDueTodoList: TodoLists
 ) => {
   return {
     type: EDIT_TODO_LIST_ITEM,
     payload: {
-      todayImplementationTodoList: implementationTodoLists,
-      todayDueTodoList: dueTodoLists,
+      todayImplementationTodoList: todayImplementationTodoList,
+      todayDueTodoList: todayDueTodoList,
+      monthImplementationTodoList: monthImplementationTodoList,
+      monthDueTodoList: monthDueTodoList,
     },
   };
 };
 
-export const FETCH_DATE_TODO_LISTS = 'FETCH_DATE_TODO_LISTS';
-export const fetchDateTodoListsAction = (
+export const FETCH_DATE_TODO_LIST = 'FETCH_DATE_TODO_LIST';
+export const fetchDateTodoListAction = (
   implementationTodoList: TodoLists,
   dueTodoList: TodoLists,
   message: string
 ) => {
   return {
-    type: FETCH_DATE_TODO_LISTS,
+    type: FETCH_DATE_TODO_LIST,
     payload: {
       todayImplementationTodoList: implementationTodoList,
       todayDueTodoList: dueTodoList,
