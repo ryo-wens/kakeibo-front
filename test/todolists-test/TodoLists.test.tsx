@@ -48,6 +48,7 @@ const getState = () => {
           complete_flag: false,
         },
       ],
+      todayTodoListMessage: '',
       monthImplementationTodoList: [
         {
           id: 1,
@@ -68,7 +69,7 @@ const getState = () => {
           complete_flag: false,
         },
       ],
-      message: '',
+      monthTodoListMessage: '',
     },
     modal: {
       message: '',
@@ -286,7 +287,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
           ],
-          message: '',
+          todayTodoListMessage: '',
         },
       },
     ];
@@ -345,7 +346,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
           ],
-          message: '',
+          monthTodoListMessage: '',
         },
       },
     ];

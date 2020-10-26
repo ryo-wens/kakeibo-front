@@ -54,7 +54,7 @@ export const fetchDateTodoListAction = (
     payload: {
       todayImplementationTodoList: implementationTodoList,
       todayDueTodoList: dueTodoList,
-      message: message,
+      todayTodoListMessage: message,
     },
   };
 };
@@ -70,7 +70,7 @@ export const fetchMonthTodoListAction = (
     payload: {
       monthImplementationTodoList: monthImplementationTodoList,
       monthDueTodoList: monthDueTodoList,
-      message: message,
+      monthTodoListMessage: message,
     },
   };
 };
