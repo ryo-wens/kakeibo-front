@@ -82,7 +82,7 @@ const SwitchEntity = () => {
                 onClick={() =>
                   dispatch(fetchGroupTasksListEachUser(selectedGroupId)) &&
                   dispatch(fetchGroupTasksList(selectedGroupId)) &&
-                  dispatch(push('/group-todo/' + selectedGroupId))
+                  dispatch(push(`/group/${selectedGroupId}`))
                 }
               >
                 {approvedGroup.group_name}
