@@ -1,14 +1,10 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { CreateGroups } from '../todo';
 import { Divider } from '@material-ui/core';
-import {
-  fetchGroupTasksList,
-  fetchGroupTasksListEachUser,
-} from '../../reducks/groupTasks/operations';
 import { push } from 'connected-react-router';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
@@ -39,16 +35,16 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SwitchEntity = () => {
+interface SwitchEntityProps {
+  entity: string;
+  switchEntity: (event: React.ChangeEvent<{ value: unknown }>) => void;
+}
+
+const SwitchEntity = (props: SwitchEntityProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const approvedGroups: Groups = getApprovedGroups(selector);
-  const [entity, setEntity] = useState<string>('');
-
-  const handleChange = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setEntity(event.target.value as string);
-  };
 
   const openMenu = () => {
     if (!approvedGroups.length) {
@@ -61,11 +57,9 @@ const SwitchEntity = () => {
       <FormControl variant="filled" className={classes.formControl}>
         <Select
           className={classes.select}
-          labelId="demo-simple-select-filled-label"
-          id="demo-simple-select-filled"
-          value={entity}
+          value={props.entity}
           onOpen={() => openMenu()}
-          onChange={handleChange}
+          onChange={props.switchEntity}
         >
           <MenuItem value={'UserName'} onClick={() => dispatch(push('/'))}>
             UserName
@@ -79,11 +73,7 @@ const SwitchEntity = () => {
                 button={true}
                 key={approvedGroup.group_id}
                 value={approvedGroup.group_name}
-                onClick={() =>
-                  dispatch(fetchGroupTasksListEachUser(selectedGroupId)) &&
-                  dispatch(fetchGroupTasksList(selectedGroupId)) &&
-                  dispatch(push(`/group/${selectedGroupId}`))
-                }
+                onClick={() => dispatch(push(`/group/${selectedGroupId}`))}
               >
                 {approvedGroup.group_name}
               </MenuItem>

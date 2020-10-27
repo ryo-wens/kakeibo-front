@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -16,6 +16,7 @@ import { logOut } from '../../reducks/users/operations';
 import { MobileDrawer } from './index';
 import { InvitationNotifications } from '../todo';
 import SwitchEntity from './SwitchEntity';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,6 +62,34 @@ const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
 
+  const switchEntity = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setEntity(event.target.value as string);
+  };
+
+  const entityType: string = getPathTemplateName(window.location.pathname);
+  const groupId: number = getPathGroupId(window.location.pathname);
+
+  const [entity, setEntity] = useState<string>('');
+
+  const existsGroupWhenRouting = useCallback(
+    (groupId: number, templateName?: string) => {
+      if (entityType !== 'group') {
+        if (templateName) {
+          return dispatch(push(`/${templateName}`));
+        } else if (!templateName) {
+          return dispatch(push(`/`));
+        }
+      } else if (entityType === 'group') {
+        if (templateName) {
+          return dispatch(push(`/group/${groupId}/${templateName}`));
+        } else if (!templateName) {
+          return dispatch(push(`/group/${groupId}`));
+        }
+      }
+    },
+    [entityType]
+  );
+
   const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {
       dispatch(logOut());
@@ -79,7 +108,11 @@ const Header = () => {
             <MobileDrawer />
           </div>
           <Typography variant="h6" noWrap>
-            <Button color="inherit" className={classes.title} onClick={() => dispatch(push('/'))}>
+            <Button
+              color="inherit"
+              className={classes.title}
+              onClick={() => existsGroupWhenRouting(groupId)}
+            >
               家計簿App
             </Button>
           </Typography>
@@ -107,13 +140,13 @@ const Header = () => {
               size="large"
               className={classes.button}
               startIcon={<PlaylistAddCheckIcon />}
-              onClick={() => dispatch(push('/todo'))}
+              onClick={() => existsGroupWhenRouting(groupId, 'todo')}
             >
               Todo
             </Button>
           </div>
           <div className={classes.grow} />
-          <SwitchEntity />
+          <SwitchEntity entity={entity} switchEntity={switchEntity} />
           <InvitationNotifications />
           <div className={classes.sectionDesktop}>
             <Button
