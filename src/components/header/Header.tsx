@@ -7,7 +7,6 @@ import Button from '@material-ui/core/Button';
 import MoneyIcon from '@material-ui/icons/Money';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import GroupIcon from '@material-ui/icons/Group';
 import HistoryIcon from '@material-ui/icons/History';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
@@ -16,6 +15,7 @@ import Typography from '@material-ui/core/Typography';
 import { logOut } from '../../reducks/users/operations';
 import { MobileDrawer } from './index';
 import { InvitationNotifications } from '../todo';
+import SwitchEntity from './SwitchEntity';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,9 +103,6 @@ const Header = () => {
             <Button size="large" className={classes.button} startIcon={<CreditCardIcon />}>
               集計
             </Button>
-            <Button size="large" className={classes.button} startIcon={<GroupIcon />}>
-              グループ
-            </Button>
             <Button
               size="large"
               className={classes.button}
@@ -116,6 +113,7 @@ const Header = () => {
             </Button>
           </div>
           <div className={classes.grow} />
+          <SwitchEntity />
           <InvitationNotifications />
           <div className={classes.sectionDesktop}>
             <Button
