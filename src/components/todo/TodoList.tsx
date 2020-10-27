@@ -38,7 +38,7 @@ const TodoList = (props: TodoListProps) => {
   const dispatch = useDispatch();
   const [checked, setChecked] = useState<boolean>(props.todoListItem.complete_flag);
   const [openEditTodoList, setOpenEditTodoList] = useState<boolean>(false);
-  const [todoContent, setTodoContent] = useState<string>('');
+  const [todoContent, setTodoContent] = useState<string>(props.todoListItem.todo_content);
   const groupId = getPathGroupId(window.location.pathname);
   const templateName = getPathTemplateName(window.location.pathname);
 

@@ -6,6 +6,7 @@ import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/select
 import {
   getMonthDueTodoList,
   getMonthImplementationTodoList,
+  getMonthTodoListMessage,
 } from '../reducks/todoLists/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -36,6 +37,7 @@ const ScheduleTodo = () => {
   const unapprovedGroups = getUnapprovedGroups(selector);
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
+  const monthTodoListMessage = getMonthTodoListMessage(selector);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
@@ -48,7 +50,7 @@ const ScheduleTodo = () => {
   }, []);
 
   useEffect(() => {
-    if (monthImplementationTodoList.length === 0 && monthDueTodoList.length === 0) {
+    if (!monthImplementationTodoList.length && !monthDueTodoList.length && !monthTodoListMessage) {
       dispatch(fetchMonthTodoList(year, month));
     }
   }, []);

@@ -48,6 +48,7 @@ const getState = () => {
           complete_flag: false,
         },
       ],
+      todayTodoListMessage: '',
       monthImplementationTodoList: [
         {
           id: 1,
@@ -68,7 +69,7 @@ const getState = () => {
           complete_flag: false,
         },
       ],
-      message: '',
+      monthTodoListMessage: '',
     },
     modal: {
       message: '',
@@ -206,6 +207,26 @@ describe('async actions todoLists', () => {
               complete_flag: true,
             },
           ],
+          monthImplementationTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: true,
+            },
+          ],
+          monthDueTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T19:54:46Z',
+              implementation_date: '09/27(日)',
+              due_date: '09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: true,
+            },
+          ],
         },
       },
     ];
@@ -236,7 +257,7 @@ describe('async actions todoLists', () => {
 
     const expectedAction = [
       {
-        type: TodoListsActions.FETCH_DATE_TODO_LISTS,
+        type: TodoListsActions.FETCH_DATE_TODO_LIST,
         payload: {
           todayImplementationTodoList: [
             {
@@ -266,7 +287,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
           ],
-          message: '',
+          todayTodoListMessage: '',
         },
       },
     ];
@@ -325,7 +346,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
           ],
-          message: '',
+          monthTodoListMessage: '',
         },
       },
     ];

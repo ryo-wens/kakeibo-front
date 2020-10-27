@@ -8,7 +8,6 @@ interface ExistTodoListsProps {
   todoList: TodoLists | GroupTodoLists;
   implementationTodoList: TodoLists | GroupTodoLists;
   dueTodoList: TodoLists | GroupTodoLists;
-  todoListsMessage: string;
 }
 
 const ExistsTodoLists = (props: ExistTodoListsProps) => {
@@ -35,7 +34,7 @@ const ExistsTodoLists = (props: ExistTodoListsProps) => {
   };
 
   return props.implementationTodoList.length === 0 && props.dueTodoList.length === 0 ? (
-    <p>{props.todoListsMessage}</p>
+    <p>今日実施予定todo、締切予定todoは登録されていません。</p>
   ) : (
     <>{existsPlanTodoLists(props.todoList, props.planName)}</>
   );

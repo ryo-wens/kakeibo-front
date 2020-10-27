@@ -14,7 +14,7 @@ export const todoListReducer = (state = initialState.todoList, action: todoLists
         ...state,
         ...action.payload,
       };
-    case Actions.FETCH_DATE_TODO_LISTS:
+    case Actions.FETCH_DATE_TODO_LIST:
       return {
         ...state,
         ...action.payload,

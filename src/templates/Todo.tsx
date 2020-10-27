@@ -8,7 +8,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   getTodayDueTodoList,
   getTodayImplementationTodoList,
-  getTodoListsMessage,
+  getTodayTodoListMessage,
 } from '../reducks/todoLists/selectors';
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
 import { getWeekDay } from '../lib/date';
@@ -30,7 +30,7 @@ const Todo = () => {
   const unapprovedGroups = getUnapprovedGroups(selector);
   const todayImplementationTodoList = getTodayImplementationTodoList(selector);
   const todayDueTodoList = getTodayDueTodoList(selector);
-  const todoListsMessage = getTodoListsMessage(selector);
+  const todayTodoListMessage = getTodayTodoListMessage(selector);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
@@ -44,12 +44,11 @@ const Todo = () => {
   }, []);
 
   useEffect(() => {
-    if (todayImplementationTodoList.length === 0 && todayDueTodoList.length === 0) {
+    if (!todayImplementationTodoList.length && !todayDueTodoList.length && !todayTodoListMessage) {
       dispatch(fetchDateTodoLists(year, month, date));
     }
   }, []);
 
-  console.log(todayImplementationTodoList);
   return (
     <>
       <TodoMenu />
@@ -60,7 +59,6 @@ const Todo = () => {
         <SwitchTodoLists
           implementationTodoList={todayImplementationTodoList}
           dueTodoList={todayDueTodoList}
-          todoListsMessage={todoListsMessage}
         />
         <div>
           <AddTodo date={dt} />

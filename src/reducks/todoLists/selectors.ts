@@ -7,9 +7,15 @@ export const getTodayImplementationTodoList = createSelector(
   [todoListSelector],
   (state) => state.todayImplementationTodoList
 );
+
 export const getTodayDueTodoList = createSelector(
   [todoListSelector],
   (state) => state.todayDueTodoList
+);
+
+export const getTodayTodoListMessage = createSelector(
+  [todoListSelector],
+  (state) => state.todayTodoListMessage
 );
 
 export const getMonthImplementationTodoList = createSelector(
@@ -21,4 +27,7 @@ export const getMonthDueTodoList = createSelector(
   (state) => state.monthDueTodoList
 );
 
-export const getTodoListsMessage = createSelector([todoListSelector], (state) => state.message);
+export const getMonthTodoListMessage = createSelector(
+  [todoListSelector],
+  (state) => state.monthTodoListMessage
+);
