@@ -83,7 +83,7 @@ const getState = () => {
       location: {
         hash: '',
         key: 'hogeho',
-        pathname: '/groups-todo/1',
+        pathname: '/groups/1',
         search: '',
         state: undefined,
       },
@@ -141,7 +141,7 @@ describe('async actions groups', () => {
       {
         type: '@@router/CALL_HISTORY_METHOD',
         payload: {
-          args: ['/group-todo/3'],
+          args: ['/group/3'],
           method: 'push',
         },
       },
@@ -316,13 +316,6 @@ describe('async actions groups', () => {
           open: true,
         },
       },
-      {
-        type: '@@router/CALL_HISTORY_METHOD',
-        payload: {
-          args: ['/todo'],
-          method: 'push',
-        },
-      },
     ];
 
     axiosMock.onDelete(url).reply(200, mockResponse);
@@ -379,7 +372,7 @@ describe('async actions groups', () => {
       {
         type: '@@router/CALL_HISTORY_METHOD',
         payload: {
-          args: ['/group-todo/2'],
+          args: ['/group/2'],
           method: 'push',
         },
       },

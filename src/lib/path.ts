@@ -4,7 +4,7 @@ export const getPathTemplateName = (pathName: string) => {
 };
 
 export const getPathGroupId = (pathName: string) => {
-  const paths = pathName.split('/');
+  const paths = pathName.split('/', 3);
   return Number(paths[paths.length - 1]);
 };
 

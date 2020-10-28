@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface CreateGroupsProps {
   modalTitleLabel: string;
   modalTextFieldLabel: string;
+  closeMenu: () => void;
 }
 
 const CreateGroups = (props: CreateGroupsProps) => {
@@ -49,6 +50,12 @@ const CreateGroups = (props: CreateGroupsProps) => {
     [setGroupName]
   );
 
+  const onClickCreateButton = () => {
+    props.closeMenu();
+    handleClose();
+    dispatch(createGroup(groupName));
+  };
+
   const isBlankGroupName = groupName === '';
 
   const body = (
@@ -68,7 +75,7 @@ const CreateGroups = (props: CreateGroupsProps) => {
         <TodoButton
           label={'作成'}
           disabled={isBlankGroupName}
-          onClick={() => dispatch(createGroup(groupName)) && handleClose()}
+          onClick={() => onClickCreateButton()}
         />
         <TodoButton label={'キャンセル'} disabled={false} onClick={handleClose} />
       </div>
