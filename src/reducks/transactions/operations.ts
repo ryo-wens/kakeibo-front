@@ -23,7 +23,6 @@ export const fetchTransactionsList = (year: string, customMonth: string) => {
         }
       )
       .then((res) => {
-        console.log(res.data);
         const resMessage = res.data.message;
         const transactionsList = res.data.transactions_list;
 
