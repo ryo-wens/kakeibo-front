@@ -14,6 +14,7 @@ import {
   CustomBudgets,
   WeeklyHistory,
   SelectStandardBudgets,
+  Task,
 } from './templates';
 
 const Router = (): JSX.Element => {
@@ -33,6 +34,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/history-week'} component={WeeklyHistory} />
       <Route exact path={'/group/:id'} component={Home} />
       <Route exact path={'/group/:id/todo'} component={GroupTodo} />
+      <Route exact path={'/group/:id/task'} component={Task} />
     </Switch>
   );
 };

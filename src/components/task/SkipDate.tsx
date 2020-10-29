@@ -18,7 +18,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const Task = () => {
+const SkipDate = () => {
   const classes = useStyles();
   const dt: Date = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -85,4 +85,4 @@ const Task = () => {
   );
 };
 
-export default Task;
+export default SkipDate;
