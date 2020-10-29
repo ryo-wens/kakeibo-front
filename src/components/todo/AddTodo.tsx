@@ -10,6 +10,7 @@ import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { createTodoListItem } from '../../reducks/todoLists/operations';
 import { createGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
+import { getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,8 +31,8 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface AddTodoProps {
-  groupId?: number;
   date: Date;
+  groupId?: number;
 }
 
 const AddTodo = (props: AddTodoProps) => {
@@ -43,9 +44,7 @@ const AddTodo = (props: AddTodoProps) => {
     props.date
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(props.date);
-  const pathName: string = window.location.pathname;
-  const paths = pathName.split('/', 2);
-  const type = paths[1];
+  const entityType = getPathTemplateName(window.location.pathname);
 
   const handleOpen = () => {
     setOpen(true);
@@ -79,11 +78,9 @@ const AddTodo = (props: AddTodoProps) => {
   const isBlankTodoContent = todoContent === '';
 
   const switchOperation = () => {
-    if (type === 'todo') {
+    if (entityType === 'todo') {
       return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
-    } else if (type === 'schedule-todo') {
-      return dispatch(createTodoListItem(selectedImplementationDate, selectedDueDate, todoContent));
-    } else if (type === 'group-todo' && typeof props.groupId === 'number') {
+    } else if (entityType === 'group' && typeof props.groupId === 'number') {
       return dispatch(
         createGroupTodoListItem(
           props.groupId,

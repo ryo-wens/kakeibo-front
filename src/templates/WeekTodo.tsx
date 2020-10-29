@@ -29,7 +29,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const ScheduleTodo = () => {
+const WeekTodo = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
@@ -119,4 +119,4 @@ const ScheduleTodo = () => {
   );
 };
 
-export default ScheduleTodo;
+export default WeekTodo;

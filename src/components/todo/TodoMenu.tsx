@@ -18,6 +18,13 @@ import {
   getTodayImplementationTodoList,
   getTodayTodoListMessage,
 } from '../../reducks/todoLists/selectors';
+import {
+  fetchGroupDateTodoLists,
+  fetchGroupMonthTodoLists,
+} from '../../reducks/groupTodoLists/operations';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { TodoLists } from '../../reducks/todoLists/types';
+import { Action, Dispatch } from 'redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,40 +51,69 @@ const TodoMenu = () => {
   const monthDueTodoList = getMonthDueTodoList(selector);
   const todayTodoListMessage = getTodayTodoListMessage(selector);
   const monthTodoListMessage = getMonthTodoListMessage(selector);
+  const groupId = getPathGroupId(window.location.pathname);
+  const entityType: string = getPathTemplateName(window.location.pathname);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
   const date: string = ('0' + dt.getDate()).slice(-2);
 
-  const isTodayTodoList = () => {
-    if (!todayImplementationTodoList.length && !todayDueTodoList.length && !todayTodoListMessage) {
-      return dispatch(fetchDateTodoLists(year, month, date)) && dispatch(push(`/todo`));
-    } else if (todayImplementationTodoList || todayDueTodoList || todayTodoListMessage) {
-      return dispatch(push(`/todo`));
-    }
-  };
-
-  const isMonthTodoList = () => {
-    if (!monthImplementationTodoList.length && !monthDueTodoList.length && !monthTodoListMessage) {
-      return dispatch(fetchMonthTodoList(year, month)) && dispatch(push('/schedule-todo'));
-    } else if (monthImplementationTodoList || monthDueTodoList || monthTodoListMessage) {
-      return dispatch(push('/schedule-todo'));
+  const switchDateTodoList = (
+    implementationTodoList: TodoLists,
+    dueTodoList: TodoLists,
+    todoListMessage: string,
+    path: string,
+    fetchTodoList: (dispatch: Dispatch<Action>) => Promise<void>,
+    fetchGroupTodoList: (dispatch: Dispatch<Action>) => Promise<void>
+  ) => {
+    if (entityType !== 'group') {
+      if (!implementationTodoList.length && !dueTodoList.length && !todoListMessage) {
+        dispatch(fetchTodoList) && dispatch(push(path));
+      } else if (implementationTodoList || dueTodoList || todoListMessage) {
+        dispatch(push(path));
+      }
+    } else if (entityType === 'group') {
+      dispatch(fetchGroupTodoList) && dispatch(push(`/group/${groupId}${path}`));
     }
   };
 
   return (
     <List className={classes.list} component="nav">
-      <ListItem button={true} onClick={() => isTodayTodoList()}>
+      <ListItem
+        button={true}
+        onClick={() =>
+          switchDateTodoList(
+            todayImplementationTodoList,
+            todayDueTodoList,
+            todayTodoListMessage,
+            `/todo`,
+            fetchDateTodoLists(year, month, date),
+            fetchGroupDateTodoLists(groupId, year, month, date)
+          )
+        }
+      >
         <ListItemIcon>
           <TodayIcon />
         </ListItemIcon>
         <ListItemText primary={'今日'} />
       </ListItem>
-      <ListItem button={true} onClick={() => isMonthTodoList()}>
+      <ListItem
+        button={true}
+        onClick={() =>
+          switchDateTodoList(
+            monthImplementationTodoList,
+            monthDueTodoList,
+            monthTodoListMessage,
+            `/todo/week`,
+            fetchMonthTodoList(year, month),
+            fetchGroupMonthTodoLists(groupId, year, month)
+          )
+        }
+      >
         <ListItemIcon>
           <DateRangeIcon />
         </ListItemIcon>
-        <ListItemText primary={'近日予定'} />
+        <ListItemText primary={'週間予定'} />
       </ListItem>
     </List>
   );
