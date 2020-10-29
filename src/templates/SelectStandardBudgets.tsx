@@ -78,7 +78,7 @@ const SelectStandardBudgets = () => {
 
   useEffect(() => {
     async function fetch() {
-      await dispatch(await fetchStandardBudgets());
+      await dispatch(fetchStandardBudgets());
       dispatch(copyStandardBudgets());
     }
     fetch();

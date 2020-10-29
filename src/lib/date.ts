@@ -1,3 +1,5 @@
+import { month, year } from './constant';
+
 export const dateStringToDate = (date: string) => {
   const prevDates = date.split(/[/()]/, 3);
   const prevYear = Number(prevDates[0]);
@@ -22,4 +24,49 @@ export const getWeekStartDate = (date: Date) => {
 export const getWeekDay = (date: Date) => {
   const weekdays = ['日', '月', '火', '水', '木', '金', '土'];
   return weekdays[date.getDay()];
+};
+
+export interface WeeklyInfo {
+  startDate: number;
+  endDate: number;
+}
+export type Weeks = Array<WeeklyInfo>;
+
+export const displayWeeks = () => {
+  const startDate = new Date(year, month - 1, 1);
+  const endDate = new Date(year, month, 0);
+  const endDayCount = endDate.getDate();
+  let currentDayOfWeek = startDate.getDay();
+  const prevWeeks: Weeks = [];
+
+  for (let i = 1; i <= endDayCount; ) {
+    const weeklyInfo: WeeklyInfo = {
+      startDate: 0,
+      endDate: 0,
+    };
+
+    if (i === 1) {
+      weeklyInfo.startDate = 1;
+      weeklyInfo.endDate = 7 - currentDayOfWeek;
+      prevWeeks.push(weeklyInfo);
+
+      i += weeklyInfo.endDate;
+      currentDayOfWeek = 0;
+
+      continue;
+    } else if (i + 6 >= endDayCount) {
+      weeklyInfo.startDate = i;
+      weeklyInfo.endDate = endDayCount;
+      prevWeeks.push(weeklyInfo);
+
+      break;
+    }
+
+    weeklyInfo.startDate = i;
+    weeklyInfo.endDate = i + 6;
+    prevWeeks.push(weeklyInfo);
+    i += 7;
+  }
+
+  return prevWeeks;
 };

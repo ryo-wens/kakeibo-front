@@ -1,0 +1,73 @@
+$border_color: #e1e3e3;
+$main_color: #4db5fa;
+$large-font_size:16px;
+$large-font_weight:700;
+
+
+
+.monthlyhistory-table {
+  border-collapse: collapse;
+  display: table;
+  height: auto;
+  width: 100%;
+
+  &__text {
+    border: solid 1px $border_color;
+  }
+
+  &__dl {
+    cursor: pointer;
+  }
+
+  &__trow {
+    display: table-row;
+    width: 100%;
+  }
+
+  &__thead {
+    border: solid 1px $border_color;
+    background-color: $main_color;
+    display: table-row;
+    font-weight: 400;
+    height:60px;
+  }
+
+  &__tbody {
+    border-collapse: collapse;
+    border-spacing: 0;
+    display: table-row-group;
+    empty-cells: show;
+    vertical-align: middle;
+  }
+
+  &__record-second{
+    border: solid 1px $border_color;
+    padding: 6px;
+    height: auto;
+    min-height: 250px;
+    vertical-align: top;
+    width: 130px;
+  }
+
+  &__record-third {
+    border: solid 1px $border_color;
+    height: 60px;
+    width: 130px;
+  }
+
+  &__record-fourth{
+    border: solid 1px $border_color;
+    font-size: $large-font_size;
+    font-weight: $large-font_weight;
+    height: 45px;
+    width: 130px;
+  }
+
+  &__box-total{
+    font-size: $large-font_size;
+    font-weight: $large-font_weight;
+    margin: 15px 0 30px 0;
+    text-align: right;
+  }
+}
+
