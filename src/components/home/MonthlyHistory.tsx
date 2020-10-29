@@ -1,159 +1,129 @@
-import React, { ReactElement, useEffect, useMemo } from 'react';
+import React, { ReactElement, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTransactionsList } from '../../reducks/transactions/operations';
 import { State } from '../../reducks/store/types';
 import { getTransactions } from '../../reducks/transactions/selectors';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import Table from '@material-ui/core/Table';
-import TableBody from '@material-ui/core/TableBody';
-import TableCell from '@material-ui/core/TableCell';
-import TableContainer from '@material-ui/core/TableContainer';
-import TableHead from '@material-ui/core/TableHead';
-import TableRow from '@material-ui/core/TableRow';
-import Paper from '@material-ui/core/Paper';
-import { InputModal } from '../uikit';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    title: {
-      paddingLeft: 10,
-    },
-    tableTop: {
-      backgroundColor: '#4db5fa',
-    },
-    tableCell: {
-      border: 'solid 1px #e1e3e3',
-    },
-    tableMain: {
-      minHeight: 300,
-      border: 'solid 1px #e1e3e3',
-    },
-    text: {
-      fontSize: 16,
-      fontWeight: 700,
-      border: 'solid 1px #e1e3e3',
-    },
-    totalDisplay: {
-      textAlign: 'right',
-      fontSize: 16,
-      fontWeight: 700,
-    },
-    iconPosition: {
-      textAlign: 'center',
-    },
-  })
-);
+import { year, month, customMonth } from '../../lib/constant';
+import '../../assets/home/monthly-history.scss';
+import '../../assets/modules/button.scss';
+import { fetchCategories } from '../../reducks/categories/operations';
+import { displayWeeks, WeeklyInfo } from '../../lib/date';
 
 const MonthlyHistory = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const transactionsList = getTransactions(selector);
 
-  type Day = { date: string };
-  type Week = Array<Day>;
-  type Weeks = Array<Week>;
-
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const customMonth = ('0' + month).slice(-2);
+  useEffect(() => {
+    dispatch(fetchCategories());
+  }, []);
 
   useEffect(() => {
     dispatch(fetchTransactionsList(String(year), customMonth));
   }, []);
 
-  const displayWeeks = useMemo(() => {
-    const startDate = new Date(year, month - 1, 1);
-    const endDate = new Date(year, month, 0);
-    const endDayCount = endDate.getDate();
-    let currentDayOfWeek = startDate.getDay();
-    let week: Week = [];
-    const prevWeeks: Weeks = [];
-
-    for (let i = 1; i <= endDayCount; i++) {
-      week.push({
-        date: i + '日',
-      });
-      if (currentDayOfWeek === 6) {
-        prevWeeks.push(week);
-        week = [];
-        currentDayOfWeek = 0;
-      } else if (i === endDayCount) {
-        prevWeeks.push(week);
-      } else {
-        currentDayOfWeek++;
-      }
-    }
-    return prevWeeks;
-  }, [date]);
-
-  const transactionsData = () => {
-    let historyRow: ReactElement[] = [];
-    transactionsList.map((transaction) => {
-      historyRow = [
-        ...historyRow,
-        <TableCell className={classes.tableCell} key={transaction.id}>
-          {transaction.big_category_name} ¥{transaction.amount}
-        </TableCell>,
-      ];
-    });
-    return historyRow;
-  };
-
-  const rows = useMemo(() => {
+  const rows = () => {
     let headerRow: ReactElement[] = [];
+    let historyRow: ReactElement[] = [];
     let operationRow: ReactElement[] = [];
-    let totalAmountRow: ReactElement[] = [];
+    let subTotalAmountRow: ReactElement[] = [];
     let weekNum = 1;
 
-    displayWeeks.map((displayWeek, index) => {
+    displayWeeks().map((displayWeek: WeeklyInfo, index: number) => {
       headerRow = [
         ...headerRow,
-        <TableCell key={index} className={classes.tableCell} align="center">
+        <th key={index} align="center">
           {weekNum++}週目
           <br />
-          {month + '月' + displayWeek[0].date}~{displayWeek[displayWeek.length - 1].date}
-        </TableCell>,
+          {month + '月' + displayWeek.startDate + '日'}~{displayWeek.endDate + '日'}
+        </th>,
+      ];
+
+      historyRow = [
+        ...historyRow,
+        <td className="monthlyhistory-table__record-second" key={index}>
+          {(() => {
+            let items: ReactElement[] = [];
+            let prevTransactionDate = '';
+
+            transactionsList.map((transaction) => {
+              const transactionDay = Number(transaction.transaction_date.slice(8, 10));
+
+              if (
+                displayWeek.startDate <= transactionDay &&
+                transactionDay <= displayWeek.endDate
+              ) {
+                items = [
+                  ...items,
+                  <dl className="monthlyhistory-table__dl" key={transaction.id}>
+                    <dt>
+                      <span>
+                        {(() => {
+                          if (prevTransactionDate != transaction.transaction_date) {
+                            prevTransactionDate = transaction.transaction_date;
+                            return (
+                              <span>
+                                {transaction.transaction_date}
+                                <br />
+                              </span>
+                            );
+                          } else {
+                            return;
+                          }
+                        })()}
+                        {(() => {
+                          if (transaction.medium_category_name != null) {
+                            return transaction.medium_category_name;
+                          }
+
+                          return transaction.custom_category_name;
+                        })()}
+                        ¥{transaction.amount}
+                      </span>
+                    </dt>
+                  </dl>,
+                ];
+              }
+            });
+            return items;
+          })()}
+        </td>,
       ];
 
       operationRow = [
         ...operationRow,
-        <TableCell className={classes.tableCell} key={index} align={'center'}>
-          <InputModal />
-        </TableCell>,
+        <td className="monthlyhistory-table__record-third" key={index} align={'center'}>
+          <button className="btn btn--orange">入力する</button>
+        </td>,
       ];
 
-      totalAmountRow = [
-        ...totalAmountRow,
-        <TableCell key={index} className={classes.text}>
+      subTotalAmountRow = [
+        ...subTotalAmountRow,
+        <td key={index} className="monthlyhistory-table__record-fourth">
           小計
-        </TableCell>,
+        </td>,
       ];
     });
     return {
       headerRow: headerRow,
+      historyRow: historyRow,
       operationRow: operationRow,
-      totalAmountRow: totalAmountRow,
+      totalAmountRow: subTotalAmountRow,
     };
-  }, [displayWeeks]);
+  };
 
   return (
     <div className="box__monthlyExpense">
-      <h2 className={classes.title}>{month}月の支出</h2>
-      <TableContainer component={Paper}>
-        <Table aria-label="simple table">
-          <TableHead className={classes.tableTop}>
-            <TableRow>{rows.headerRow}</TableRow>
-          </TableHead>
-          <TableBody className={classes.tableMain}>
-            <TableRow>{transactionsData()}</TableRow>
-            <TableRow>{rows.operationRow}</TableRow>
-            <TableRow>{rows.totalAmountRow}</TableRow>
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div className={classes.totalDisplay}>合計：</div>
+      <h2>{month}月の支出</h2>
+      <table className="monthlyhistory-table">
+        <tbody className="monthlyhistory-table__tbody">
+          <tr className="monthlyhistory-table__thead">{rows().headerRow}</tr>
+          <tr className="monthlyhistory-table__trow">{rows().historyRow}</tr>
+          <tr className="monthlyhistory-table__trow">{rows().operationRow}</tr>
+          <tr className="monthlyhistory-table__trow">{rows().totalAmountRow}</tr>
+        </tbody>
+      </table>
+      <div className="monthlyhistory-table__box-total">合計：</div>
     </div>
   );
 };

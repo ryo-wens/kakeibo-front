@@ -38,7 +38,7 @@ const MenuProps = {
 
 interface CategoryProps {
   kind: string;
-  value: string;
+  value: string | null | undefined;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   onClick: (
     bigCategoryId: number,

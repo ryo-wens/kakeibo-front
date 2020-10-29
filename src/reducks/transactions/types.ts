@@ -24,7 +24,7 @@ export interface AddTransactions {
 
 export interface fetchTransactionsRes {
   message: string;
-  transactions_list: [];
+  transactions_list: FetchTransactions[];
 }
 
 export interface transactionsReq {
