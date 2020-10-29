@@ -1,20 +1,20 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { addTransactions } from '../../reducks/transactions/operations';
+import { editTransactions } from '../../reducks/transactions/operations';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import IconButton from '@material-ui/core/IconButton';
-import CreateIcon from '@material-ui/icons/Create';
 import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
+      backgroundColor: '#fff',
+      boxShadow: 'none',
+      overflow: 'hidden',
       margin: '0 auto',
       marginTop: '10%',
       maxWidth: 550,
       height: 'auto',
-      backgroundColor: theme.palette.background.paper,
       border: '1px solid #000',
       padding: theme.spacing(1, 2, 2),
     },
@@ -36,27 +36,33 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const InputModal = () => {
+interface InputModalProps {
+  open: boolean;
+  onClose: () => void;
+  id: number;
+  transactionDate: Date;
+  amount: number;
+  memo?: string | null;
+  shop?: string | null;
+  transactionsType: string;
+  bigCategoryId: string;
+  mediumCategoryId?: string | null;
+  customCategoryId?: string | null;
+}
+
+const InputModal = (props: InputModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [open, setOpen] = useState<boolean>(false);
-  const [amount, setAmount] = useState<string>('');
+  const [amount, setAmount] = useState<string>(String(props.amount));
   const [memo, setMemo] = useState<string>('');
   const [shop, setShop] = useState<string>('');
   const [category, setCategory] = useState<string>('');
-  const [transactionDate, setTransactionDate] = useState<Date | null>(new Date());
-  const [transactionsType, setTransactionType] = useState<string>('');
+  const [transactionDate, setTransactionDate] = useState<Date | null>(props.transactionDate);
+  const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-
-  const handleOpen = useCallback(() => {
-    setOpen(true);
-  }, [setOpen]);
-
-  const handleClose = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
+  const id = props.id;
 
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -183,7 +189,8 @@ const InputModal = () => {
           label={'更新する'}
           onClick={() =>
             dispatch(
-              addTransactions(
+              editTransactions(
+                id,
                 transactionsType,
                 transactionDate,
                 shop,
@@ -193,7 +200,7 @@ const InputModal = () => {
                 mediumCategoryId,
                 customCategoryId
               )
-            ) && handleClose()
+            ) && props.onClose()
           }
           disabled={false}
         />
@@ -203,12 +210,11 @@ const InputModal = () => {
 
   return (
     <div>
-      <IconButton type="button" color="primary" size="small" onClick={handleOpen}>
-        <CreateIcon />
-      </IconButton>
       <Modal
-        open={open}
-        onClose={handleClose}
+        open={props.open}
+        onClose={props.onClose}
+        onBackdropClick={props.onClose}
+        disableBackdropClick={false}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

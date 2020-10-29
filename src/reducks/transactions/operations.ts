@@ -26,7 +26,11 @@ export const fetchTransactionsList = (year: string, customMonth: string) => {
           alert(res.data.message);
         } else {
           const transactionsList = res.data.transactions_list;
-          dispatch(fetchTransactions(transactionsList));
+          const aligningTransactionsList = transactionsList.sort(
+            (a, b) =>
+              Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
+          );
+          dispatch(fetchTransactions(aligningTransactionsList));
         }
       })
       .catch((error) => {
@@ -99,10 +103,8 @@ export const addTransactions = (
           dispatch(push('/login'));
         }
 
-        if (error && error.response) {
+        if (error.reponse.status === 500) {
           alert(error.response.data.error.message);
-        } else {
-          alert(error);
         }
       });
   };
@@ -173,10 +175,8 @@ export const editTransactions = (
           dispatch(push('/login'));
         }
 
-        if (error && error.response) {
+        if (error.response.status === 500) {
           alert(error.response.data.error.message);
-        } else {
-          alert(error);
         }
       });
   };
