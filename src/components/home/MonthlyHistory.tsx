@@ -2,7 +2,7 @@ import React, { ReactElement, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTransactionsList } from '../../reducks/transactions/operations';
 import { State } from '../../reducks/store/types';
-import { getTransactions } from '../../reducks/transactions/selectors';
+import { getTransactions, getTransactionsMessage } from '../../reducks/transactions/selectors';
 import { year, month, customMonth } from '../../lib/constant';
 import '../../assets/home/monthly-history.scss';
 import '../../assets/modules/button.scss';
@@ -13,6 +13,8 @@ const MonthlyHistory = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const transactionsList = getTransactions(selector);
+  const message = getTransactionsMessage(selector);
+  console.log(message);
 
   useEffect(() => {
     dispatch(fetchCategories());
@@ -115,6 +117,7 @@ const MonthlyHistory = () => {
   return (
     <div className="box__monthlyExpense">
       <h2>{month}月の支出</h2>
+      {message !== '' && <h3>{message}</h3>}
       <table className="monthlyhistory-table">
         <tbody className="monthlyhistory-table__tbody">
           <tr className="monthlyhistory-table__thead">{rows().headerRow}</tr>
