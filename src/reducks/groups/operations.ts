@@ -96,7 +96,7 @@ export const createGroup = (groupName: string) => {
         const nextApprovedGroups = [...prevApprovedGroups, newGroup];
 
         dispatch(createGroupAction(nextApprovedGroups));
-        dispatch(push('/group-todo/' + res.data.group_id));
+        dispatch(push(`/group/${res.data.group_id}`));
       });
   };
 };
@@ -205,7 +205,7 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
   };
 };
 
-export const groupWithdrawal = (groupId: number, nextGroupId: number) => {
+export const groupWithdrawal = (groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     await axios
       .delete<groupWithdrawalRes>(
@@ -223,12 +223,6 @@ export const groupWithdrawal = (groupId: number, nextGroupId: number) => {
 
         dispatch(groupWithdrawalAction(updateApprovedGroups));
         dispatch(openTextModalAction(res.data.message));
-
-        if (updateApprovedGroups.length > 0) {
-          dispatch(push(`/group-todo/` + nextGroupId));
-        } else {
-          dispatch(push(`/todo`));
-        }
       });
   };
 };
@@ -280,7 +274,7 @@ export const inviteGroupParticipate = (groupId: number) => {
           }
         );
         dispatch(inviteGroupParticipateAction(updateApprovedGroups, updateUnapprovedGroups));
-        dispatch(push(`/group-todo/` + res.data.group_id));
+        dispatch(push(`/group/${res.data.group_id}`));
       });
   };
 };

@@ -1,28 +1,19 @@
 import React, { useCallback, useState } from 'react';
-import { useSelector } from 'react-redux';
-import {
-  getDueTodoLists,
-  getImplementationTodoLists,
-  getTodoListsMessage,
-} from '../../reducks/todoLists/selectors';
 import { AddTodo, TodoList } from './index';
-import { State } from '../../reducks/store/types';
 import { TodoLists } from '../../reducks/todoLists/types';
 import { dateStringToDate, getWeekStartDate, getWeekDay } from '../../lib/date';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 
-interface ExistTodoListsProps {
+interface WeeksTodoListsProps {
   selectedDate: Date;
+  monthImplementationTodoList: TodoLists;
+  monthDueTodoList: TodoLists;
 }
 
-const WeeksTodoLists = (props: ExistTodoListsProps) => {
-  const selector = useSelector((state: State) => state);
+const WeeksTodoLists = (props: WeeksTodoListsProps) => {
   const [value, setValue] = useState<number>(0);
-  const implementationTodoLists = getImplementationTodoLists(selector);
-  const dueTodoLists = getDueTodoLists(selector);
-  const todoListsMessage = getTodoListsMessage(selector);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
   const _startDate = getWeekStartDate(selectedDate);
@@ -45,7 +36,7 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
         const dateTodoLists = [];
         for (const todoList of todoLists) {
           const prevDate: number =
-            todoLists === implementationTodoLists
+            todoLists === props.monthImplementationTodoList
               ? dateStringToDate(todoList.implementation_date).getTime()
               : dateStringToDate(todoList.due_date).getTime();
           const weekDate: number = date.getTime();
@@ -77,10 +68,10 @@ const WeeksTodoLists = (props: ExistTodoListsProps) => {
           <Tab label="締切予定のTodo" value={1} />
         </Tabs>
       </AppBar>
-      {implementationTodoLists.length === 0 && dueTodoLists.length === 0 && (
-        <p>{todoListsMessage}</p>
+      {props.monthImplementationTodoList.length === 0 && props.monthDueTodoList.length === 0 && (
+        <p>当月実施予定todo、締切予定todoは登録されていません。</p>
       )}
-      {value === 0 ? week(implementationTodoLists) : week(dueTodoLists)}
+      {value === 0 ? week(props.monthImplementationTodoList) : week(props.monthDueTodoList)}
     </>
   );
 };

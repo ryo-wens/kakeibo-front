@@ -6,9 +6,9 @@ import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/select
 import { AddTodo, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
-  getDueTodoLists,
-  getImplementationTodoLists,
-  getTodoListsMessage,
+  getTodayDueTodoList,
+  getTodayImplementationTodoList,
+  getTodayTodoListMessage,
 } from '../reducks/todoLists/selectors';
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
 import { getWeekDay } from '../lib/date';
@@ -28,9 +28,9 @@ const Todo = () => {
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
-  const implementationTodoLists = getImplementationTodoLists(selector);
-  const dueTodoLists = getDueTodoLists(selector);
-  const todoListsMessage = getTodoListsMessage(selector);
+  const todayImplementationTodoList = getTodayImplementationTodoList(selector);
+  const todayDueTodoList = getTodayDueTodoList(selector);
+  const todayTodoListMessage = getTodayTodoListMessage(selector);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
@@ -44,7 +44,7 @@ const Todo = () => {
   }, []);
 
   useEffect(() => {
-    if (implementationTodoLists.length === 0 && dueTodoLists.length === 0) {
+    if (!todayImplementationTodoList.length && !todayDueTodoList.length && !todayTodoListMessage) {
       dispatch(fetchDateTodoLists(year, month, date));
     }
   }, []);
@@ -57,9 +57,8 @@ const Todo = () => {
           今日 {month}/{date} ({weekday})
         </span>
         <SwitchTodoLists
-          implementationTodoLists={implementationTodoLists}
-          dueTodoLists={dueTodoLists}
-          todoListsMessage={todoListsMessage}
+          implementationTodoList={todayImplementationTodoList}
+          dueTodoList={todayDueTodoList}
         />
         <div>
           <AddTodo date={dt} />

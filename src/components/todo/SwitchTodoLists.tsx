@@ -7,9 +7,8 @@ import { TodoLists } from '../../reducks/todoLists/types';
 import { GroupTodoLists } from '../../reducks/groupTodoLists/types';
 
 interface SwitchTodoListsProps {
-  implementationTodoLists: TodoLists | GroupTodoLists;
-  dueTodoLists: TodoLists | GroupTodoLists;
-  todoListsMessage: string;
+  implementationTodoList: TodoLists | GroupTodoLists;
+  dueTodoList: TodoLists | GroupTodoLists;
 }
 
 const SwitchTodoLists = (props: SwitchTodoListsProps) => {
@@ -30,18 +29,16 @@ const SwitchTodoLists = (props: SwitchTodoListsProps) => {
       {value === 0 ? (
         <ExistsTodoLists
           planName={'実施予定'}
-          todoLists={props.implementationTodoLists}
-          implementationTodoLists={props.implementationTodoLists}
-          dueTodoLists={props.dueTodoLists}
-          todoListsMessage={props.todoListsMessage}
+          todoList={props.implementationTodoList}
+          implementationTodoList={props.implementationTodoList}
+          dueTodoList={props.dueTodoList}
         />
       ) : (
         <ExistsTodoLists
           planName={'締切予定'}
-          todoLists={props.dueTodoLists}
-          implementationTodoLists={props.implementationTodoLists}
-          dueTodoLists={props.dueTodoLists}
-          todoListsMessage={props.todoListsMessage}
+          todoList={props.dueTodoList}
+          implementationTodoList={props.implementationTodoList}
+          dueTodoList={props.dueTodoList}
         />
       )}
     </>

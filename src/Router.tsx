@@ -19,7 +19,6 @@ import {
 const Router = (): JSX.Element => {
   return (
     <Switch>
-      <Route exact path={'/group-todo/:id'} component={GroupTodo} />
       <Route exact path={'/todo'} component={Todo} />
       <Route exact path={'/signup'} component={SignUp} />
       <Route exact path={'/schedule-todo'} component={ScheduleTodo} />
@@ -32,6 +31,8 @@ const Router = (): JSX.Element => {
       <Route exact path={'/custom-budgets/:year:month'} component={CustomBudgets} />
       <Route exact path={'/standard-budgets/:year:month'} component={SelectStandardBudgets} />
       <Route exact path={'/history-week'} component={WeeklyHistory} />
+      <Route exact path={'/group/:id'} component={Home} />
+      <Route exact path={'/group/:id/todo'} component={GroupTodo} />
     </Switch>
   );
 };

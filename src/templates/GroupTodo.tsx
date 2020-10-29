@@ -9,7 +9,6 @@ import { Group } from '../reducks/groups/types';
 import {
   getGroupDueTodoLists,
   getGroupImplementationTodoLists,
-  getGroupTodoListsMessage,
 } from '../reducks/groupTodoLists/selectors';
 import {
   fetchGroupDateTodoLists,
@@ -20,6 +19,7 @@ import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
 import { AddTaskUser, TaskList } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
+import Task from '../components/task/Task';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -43,7 +43,6 @@ const GroupTodo = () => {
   const unapprovedGroups = getUnapprovedGroups(selector);
   const groupImplementationTodoLists = getGroupImplementationTodoLists(selector);
   const groupDueTodoLists = getGroupDueTodoLists(selector);
-  const groupTodoListsMessage = getGroupTodoListsMessage(selector);
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
   const groupTasksList = getGroupTasksList(selector);
 
@@ -104,12 +103,10 @@ const GroupTodo = () => {
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
         <SwitchTodoLists
-          implementationTodoLists={groupImplementationTodoLists}
-          dueTodoLists={groupDueTodoLists}
-          todoListsMessage={groupTodoListsMessage}
+          implementationTodoList={groupImplementationTodoLists}
+          dueTodoList={groupDueTodoLists}
         />
         <AddTodo groupId={groupId} date={dt} />
-        <button onClick={() => dispatch(fetchGroupTasksList(groupId))} />
         <AddTaskUser
           approvedGroup={approvedGroup}
           groupTasksListForEachUser={groupTasksListForEachUser}
@@ -120,6 +117,7 @@ const GroupTodo = () => {
           groupTasksList={groupTasksList}
         />
       </div>
+      <Task />
     </>
   );
 };

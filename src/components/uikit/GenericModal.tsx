@@ -11,6 +11,7 @@ import { deleteTodoListItem } from '../../reducks/todoLists/operations';
 import { groupWithdrawal } from '../../reducks/groups/operations';
 import { deleteGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { push } from 'connected-react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +34,6 @@ interface GenericModalProps {
   modalText: string;
   buttonLabel: string;
   todoListItemId?: number;
-  nextGroupId?: number;
 }
 
 const GenericModal = (props: GenericModalProps) => {
@@ -47,14 +47,13 @@ const GenericModal = (props: GenericModalProps) => {
 
   const switchOperation = () => {
     const todoListItemId = props.todoListItemId as number;
-    const nextGroupId = props.nextGroupId as number;
     switch (true) {
       case templateName === 'todo' || templateName === 'schedule-todo':
         return dispatch(deleteTodoListItem(todoListItemId));
       case templateName === 'group-todo' && typeof props.todoListItemId === 'number':
         return dispatch(deleteGroupTodoListItem(groupId, todoListItemId));
-      case templateName === 'group-todo' && typeof props.nextGroupId === 'number':
-        return dispatch(groupWithdrawal(groupId, nextGroupId));
+      case templateName === `group`:
+        return dispatch(groupWithdrawal(groupId)) && dispatch(push('/'));
       default:
         return;
     }

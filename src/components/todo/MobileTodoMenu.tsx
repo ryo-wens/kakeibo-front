@@ -18,7 +18,6 @@ import ListItem from '@material-ui/core/ListItem';
 import TodayIcon from '@material-ui/icons/Today';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
-import { CreateGroups } from './index';
 import { push } from 'connected-react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -95,8 +94,6 @@ const MobileTodoMenu = (props: MobileTodoMenuProps) => {
             </ListItem>
           );
         })}
-
-        <CreateGroups modalTitleLabel={'グループ作成'} modalTextFieldLabel={'グループ名'} />
       </List>
     </ThemeProvider>
   );

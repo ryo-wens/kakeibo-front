@@ -16,6 +16,14 @@ export const dateToDateString = (date: Date) => {
   return `${year}/${month}/${_date}(${day})`;
 };
 
+export const getFirstDayOfMonth = (date: Date) => {
+  return new Date(date.getFullYear(), date.getMonth());
+};
+
+export const getLastDayOfMonth = (date: Date) => {
+  return new Date(date.getFullYear(), date.getMonth() + 1, 0);
+};
+
 export const getWeekStartDate = (date: Date) => {
   const weekDay = date.getDay();
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay);

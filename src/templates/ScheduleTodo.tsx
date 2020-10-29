@@ -1,9 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
-import { fetchMonthTodoLists } from '../reducks/todoLists/operations';
+import { fetchMonthTodoList } from '../reducks/todoLists/operations';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
-import { getDueTodoLists, getImplementationTodoLists } from '../reducks/todoLists/selectors';
+import {
+  getMonthDueTodoList,
+  getMonthImplementationTodoList,
+  getMonthTodoListMessage,
+} from '../reducks/todoLists/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker } from '../components/uikit';
@@ -31,8 +35,9 @@ const ScheduleTodo = () => {
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
-  const implementationTodoLists = getImplementationTodoLists(selector);
-  const dueTodoLists = getDueTodoLists(selector);
+  const monthImplementationTodoList = getMonthImplementationTodoList(selector);
+  const monthDueTodoList = getMonthDueTodoList(selector);
+  const monthTodoListMessage = getMonthTodoListMessage(selector);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
@@ -45,8 +50,8 @@ const ScheduleTodo = () => {
   }, []);
 
   useEffect(() => {
-    if (implementationTodoLists.length === 0 && dueTodoLists.length === 0) {
-      dispatch(fetchMonthTodoLists(year, month));
+    if (!monthImplementationTodoList.length && !monthDueTodoList.length && !monthTodoListMessage) {
+      dispatch(fetchMonthTodoList(year, month));
     }
   }, []);
 
@@ -104,7 +109,11 @@ const ScheduleTodo = () => {
           <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
         <WeeksTabs selectedDate={selectedDate} />
-        <WeeksTodoLists selectedDate={selectedDate} />
+        <WeeksTodoLists
+          selectedDate={selectedDate}
+          monthImplementationTodoList={monthImplementationTodoList}
+          monthDueTodoList={monthDueTodoList}
+        />
       </div>
     </>
   );

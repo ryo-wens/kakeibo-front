@@ -2,81 +2,93 @@ import { TodoLists } from './types';
 export type todoListsActions = ReturnType<
   | typeof createTodoListItemAction
   | typeof editTodoListItemAction
-  | typeof fetchDateTodoListsAction
-  | typeof fetchMonthTodoListsAction
+  | typeof fetchDateTodoListAction
+  | typeof fetchMonthTodoListAction
   | typeof deleteTodoListItemAction
 >;
 
 export const CREATE_TODO_LIST_ITEM = 'CREATE_TODO_LIST_ITEM';
 export const createTodoListItemAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists
+  todayImplementationTodoList: TodoLists,
+  todayDueTodoList: TodoLists,
+  monthImplementationTodoList: TodoLists,
+  monthDueTodoList: TodoLists
 ) => {
   return {
     type: CREATE_TODO_LIST_ITEM,
     payload: {
-      implementationTodoLists: implementationTodoLists,
-      dueTodoLists: dueTodoLists,
+      todayImplementationTodoList: todayImplementationTodoList,
+      todayDueTodoList: todayDueTodoList,
+      monthImplementationTodoList: monthImplementationTodoList,
+      monthDueTodoList: monthDueTodoList,
     },
   };
 };
 
 export const EDIT_TODO_LIST_ITEM = 'EDIT_TODO_LIST_ITEM';
 export const editTodoListItemAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists
+  todayImplementationTodoList: TodoLists,
+  todayDueTodoList: TodoLists,
+  monthImplementationTodoList: TodoLists,
+  monthDueTodoList: TodoLists
 ) => {
   return {
     type: EDIT_TODO_LIST_ITEM,
     payload: {
-      implementationTodoLists: implementationTodoLists,
-      dueTodoLists: dueTodoLists,
+      todayImplementationTodoList: todayImplementationTodoList,
+      todayDueTodoList: todayDueTodoList,
+      monthImplementationTodoList: monthImplementationTodoList,
+      monthDueTodoList: monthDueTodoList,
     },
   };
 };
 
-export const FETCH_DATE_TODO_LISTS = 'FETCH_DATE_TODO_LISTS';
-export const fetchDateTodoListsAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists,
+export const FETCH_DATE_TODO_LIST = 'FETCH_DATE_TODO_LIST';
+export const fetchDateTodoListAction = (
+  implementationTodoList: TodoLists,
+  dueTodoList: TodoLists,
   message: string
 ) => {
   return {
-    type: FETCH_DATE_TODO_LISTS,
+    type: FETCH_DATE_TODO_LIST,
     payload: {
-      implementationTodoLists: implementationTodoLists,
-      dueTodoLists: dueTodoLists,
-      message: message,
+      todayImplementationTodoList: implementationTodoList,
+      todayDueTodoList: dueTodoList,
+      todayTodoListMessage: message,
     },
   };
 };
 
-export const FETCH_MONTH_TODO_LISTS = 'FETCH_MONTH_TODO_LISTS';
-export const fetchMonthTodoListsAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists,
+export const FETCH_MONTH_TODO_LIST = 'FETCH_MONTH_TODO_LIST';
+export const fetchMonthTodoListAction = (
+  monthImplementationTodoList: TodoLists,
+  monthDueTodoList: TodoLists,
   message: string
 ) => {
   return {
-    type: FETCH_MONTH_TODO_LISTS,
+    type: FETCH_MONTH_TODO_LIST,
     payload: {
-      implementationTodoLists: implementationTodoLists,
-      dueTodoLists: dueTodoLists,
-      message: message,
+      monthImplementationTodoList: monthImplementationTodoList,
+      monthDueTodoList: monthDueTodoList,
+      monthTodoListMessage: message,
     },
   };
 };
 
 export const DELETE_TODO_LIST_ITEM = 'DELETE_TODO_LIST_ITEM';
 export const deleteTodoListItemAction = (
-  implementationTodoLists: TodoLists,
-  dueTodoLists: TodoLists
+  todayImplementationTodoList: TodoLists,
+  todayDueTodoList: TodoLists,
+  monthImplementationTodoList: TodoLists,
+  monthDueTodoList: TodoLists
 ) => {
   return {
     type: DELETE_TODO_LIST_ITEM,
     payload: {
-      implementationTodoLists: implementationTodoLists,
-      dueTodoLists: dueTodoLists,
+      todayImplementationTodoList: todayImplementationTodoList,
+      todayDueTodoList: todayDueTodoList,
+      monthImplementationTodoList: monthImplementationTodoList,
+      monthDueTodoList: monthDueTodoList,
     },
   };
 };
