@@ -24,6 +24,7 @@ export interface State {
   };
   transactions: {
     transactionsList: TransactionsList;
+    noTransactionsMessage: string;
   };
   groupTransactions: {
     groupTransactionsList: GroupTransactionsList;
