@@ -4,10 +4,11 @@ import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import { State } from '../store/types';
 import {
-  fetchTransactionsRes,
-  transactionsReq,
-  transactionsRes,
-  deleteTransactionRes,
+  TransactionsList,
+  FetchTransactionsRes,
+  TransactionsReq,
+  TransactionsRes,
+  DeleteTransactionRes,
 } from './types';
 import moment from 'moment';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
@@ -15,22 +16,28 @@ import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 export const fetchTransactionsList = (year: string, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
-      .get<fetchTransactionsRes>(
+      .get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${customMonth}`,
         {
           withCredentials: true,
         }
       )
       .then((res) => {
-        if (res.data.message) {
-          alert(res.data.message);
-        } else {
-          const transactionsList = res.data.transactions_list;
+        const resMessage = res.data.message;
+        const transactionsList = res.data.transactions_list;
+
+        if (transactionsList !== undefined) {
+          const resMessage = '';
           const aligningTransactionsList = transactionsList.sort(
             (a, b) =>
               Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
           );
-          dispatch(fetchTransactions(aligningTransactionsList));
+
+          dispatch(fetchTransactions(aligningTransactionsList, resMessage));
+        } else {
+          const emptyTransactionsList: TransactionsList = [];
+
+          dispatch(fetchTransactions(emptyTransactionsList, resMessage));
         }
       })
       .catch((error) => {
@@ -62,7 +69,7 @@ export const addTransactions = (
       alert('金額は数字で入力してください。');
     }
 
-    const data: transactionsReq = {
+    const data: TransactionsReq = {
       transaction_type: transaction_type,
       transaction_date: transaction_date,
       shop: shop,
@@ -73,7 +80,7 @@ export const addTransactions = (
       custom_category_id: custom_category_id,
     };
     await axios
-      .post<transactionsRes>(
+      .post<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`,
         JSON.stringify(data, function (key, value) {
           if (key === 'transaction_date') {
@@ -103,7 +110,7 @@ export const addTransactions = (
           dispatch(push('/login'));
         }
 
-        if (error.reponse.status === 500) {
+        if (error.response.status === 500) {
           alert(error.response.data.error.message);
         }
       });
@@ -136,7 +143,7 @@ export const editTransactions = (
 
     const transactionsList = getState().transactions.transactionsList;
 
-    const data: transactionsReq = {
+    const data: TransactionsReq = {
       transaction_type: transaction_type,
       transaction_date: transaction_date,
       shop: shop,
@@ -147,7 +154,7 @@ export const editTransactions = (
       custom_category_id: custom_category_id,
     };
     await axios
-      .put<transactionsRes>(
+      .put<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
         JSON.stringify(data),
         {
@@ -186,7 +193,7 @@ export const deleteTransactions = (id: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     const transactionsList = getState().transactions.transactionsList;
     await axios
-      .delete<deleteTransactionRes>(
+      .delete<DeleteTransactionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
         {
           withCredentials: true,

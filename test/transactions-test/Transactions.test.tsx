@@ -26,27 +26,29 @@ describe('async actions fetchTransactionsList', () => {
   const store = mockStore({ transactionsList: [] });
   const date = new Date();
   const year = date.getFullYear();
-  const month = date.getMonth() + 1;
-  const customMonth = ('0' + month).slice(-2);
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${customMonth}`;
+  const month = '08';
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
 
   beforeEach(() => {
     store.clearActions();
   });
 
   it('Get transactionsList if fetch succeeds', async () => {
-    const fetchResTransactions = transactionsList;
+    const mockResponse = transactionsList.transactions_list;
 
     const expectedAddActions = [
       {
         type: actionTypes.FETCH_TRANSACTIONS,
-        payload: fetchResTransactions.transactions_list,
+        payload: {
+          transactionsList: [],
+          noTransactionsMessage: undefined,
+        },
       },
     ];
 
-    axiosMock.onGet(url).reply(200, fetchResTransactions);
+    axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchTransactionsList(String(year), customMonth)(store.dispatch);
+    await fetchTransactionsList(String(year), month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 });

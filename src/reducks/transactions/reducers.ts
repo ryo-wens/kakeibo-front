@@ -10,7 +10,7 @@ export const transactionsReducer = (
     case Actions.FETCH_TRANSACTIONS:
       return {
         ...state,
-        transactionsList: [...action.payload],
+        ...action.payload,
       };
     case Actions.UPDATE_TRANSACTIONS:
       return {

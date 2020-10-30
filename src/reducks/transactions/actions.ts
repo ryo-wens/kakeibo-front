@@ -5,18 +5,20 @@ export type transactionActions = ReturnType<
 
 export const FETCH_TRANSACTIONS = 'FETCH_TRANSACTIONS';
 export const fetchTransactions = (
-  transactionsList: TransactionsList
-): { type: string; payload: TransactionsList } => {
+  transactionsList: TransactionsList,
+  noTransactionsMessage: string
+) => {
   return {
     type: FETCH_TRANSACTIONS,
-    payload: transactionsList,
+    payload: {
+      transactionsList,
+      noTransactionsMessage,
+    },
   };
 };
 
 export const UPDATE_TRANSACTIONS = 'UPDATE_TRANSACTIONS';
-export const updateTransactionsAction = (
-  transactionsList: TransactionsList
-): { type: string; payload: TransactionsList } => {
+export const updateTransactionsAction = (transactionsList: TransactionsList) => {
   return {
     type: UPDATE_TRANSACTIONS,
     payload: transactionsList,
