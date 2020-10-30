@@ -1,12 +1,14 @@
-.btn--orange,
-a.btn--orange {
+@import "src/assets/variable.scss";
+
+.btn--primary,
+a.btn--primary {
   background-color:  #4db5fa;
   color: #fff;
   width: 100px;
   height: 40px;
 }
-.btn--orange:hover,
-a.btn--orange:hover {
+.btn--primary:hover,
+a.btn--secondary:hover {
   background: #68c1fc;
   color: #fff;
 

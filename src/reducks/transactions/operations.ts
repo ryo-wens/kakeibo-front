@@ -15,34 +15,32 @@ import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
 export const fetchTransactionsList = (year: string, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<FetchTransactionsRes>(
+    try {
+      const result = await axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${customMonth}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const resMessage = res.data.message;
-        const transactionsList = res.data.transactions_list;
+      );
+      const resMessage = result.data.message;
+      const transactionsList = result.data.transactions_list;
 
-        if (transactionsList !== undefined) {
-          const resMessage = '';
-          const aligningTransactionsList = transactionsList.sort(
-            (a, b) =>
-              Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
-          );
+      if (transactionsList !== undefined) {
+        const resMessage = '';
+        const aligningTransactionsList = transactionsList.sort(
+          (a, b) =>
+            Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
+        );
 
-          dispatch(fetchTransactions(aligningTransactionsList, resMessage));
-        } else {
-          const emptyTransactionsList: TransactionsList = [];
+        dispatch(fetchTransactions(aligningTransactionsList, resMessage));
+      } else {
+        const emptyTransactionsList: TransactionsList = [];
 
-          dispatch(fetchTransactions(emptyTransactionsList, resMessage));
-        }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+        dispatch(fetchTransactions(emptyTransactionsList, resMessage));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
@@ -79,8 +77,8 @@ export const addTransactions = (
       medium_category_id: medium_category_id,
       custom_category_id: custom_category_id,
     };
-    await axios
-      .post<TransactionsRes>(
+    try {
+      const result = await axios.post<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`,
         JSON.stringify(data, function (key, value) {
           if (key === 'transaction_date') {
@@ -91,29 +89,33 @@ export const addTransactions = (
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const newTransaction = res.data;
+      );
+      const newTransaction = result.data;
 
-        const prevTransactions = getState().transactions.transactionsList;
+      const prevTransactions = getState().transactions.transactionsList;
 
-        const transactionList = [newTransaction, ...prevTransactions];
-        dispatch(updateTransactionsAction(transactionList));
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          alert(error.response.data.error.message.join('\n'));
-        }
+      const transactionList = [newTransaction, ...prevTransactions];
+      dispatch(updateTransactionsAction(transactionList));
+    } catch (error) {
+      if (error.response.status === 400) {
+        alert(error.response.data.error.message.join('\n'));
+        return;
+      }
 
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-        }
+      if (error.response.status === 401) {
+        alert(error.response.data.error.message);
+        dispatch(push('/login'));
+        return;
+      }
 
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
-      });
+      if (error.response.status === 500) {
+        alert(error.response.data.error.message);
+        return;
+      }
+      if (error) {
+        alert(error);
+      }
+    }
   };
 };
 
@@ -141,8 +143,6 @@ export const editTransactions = (
       alert('金額は数字で入力してください。');
     }
 
-    const transactionsList = getState().transactions.transactionsList;
-
     const data: TransactionsReq = {
       transaction_type: transaction_type,
       transaction_date: transaction_date,
@@ -153,65 +153,70 @@ export const editTransactions = (
       medium_category_id: medium_category_id,
       custom_category_id: custom_category_id,
     };
-    await axios
-      .put<TransactionsRes>(
+
+    try {
+      const result = await axios.put<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const editTransaction = res.data;
+      );
+      const editTransaction = result.data;
 
-        const nextTransactionsList = transactionsList.map((transaction) => {
-          if (transaction.id === editTransaction.id) {
-            return editTransaction;
-          }
-          return transaction;
-        });
-        dispatch(updateTransactionsAction(nextTransactionsList));
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          alert(error.response.data.error.message.join('\n'));
-        }
+      const transactionsList = getState().transactions.transactionsList;
 
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
+      const nextTransactionsList = transactionsList.map((transaction) => {
+        if (transaction.id === editTransaction.id) {
+          return editTransaction;
         }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-        }
+        return transaction;
       });
+
+      dispatch(updateTransactionsAction(nextTransactionsList));
+    } catch (error) {
+      if (error.response.status === 400) {
+        alert(error.response.data.error.message.join('\n'));
+        return;
+      }
+
+      if (error.response.status === 401) {
+        alert(error.response.data.error.message);
+        dispatch(push('/login'));
+        return;
+      }
+
+      if (error.response.status === 500) {
+        alert(error.response.data.error.message);
+        return;
+      }
+
+      if (error) {
+        alert(error);
+      }
+    }
   };
 };
 
 export const deleteTransactions = (id: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    const transactionsList = getState().transactions.transactionsList;
-    await axios
-      .delete<DeleteTransactionRes>(
+    try {
+      const result = await axios.delete<DeleteTransactionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const message = res.data.message;
+      );
+      const message = result.data.message;
 
-        const nextTransactionsList = transactionsList.filter((transaction) => {
-          if (transaction.id !== id) {
-            return transaction;
-          }
-        });
-        alert(message);
-        dispatch(updateTransactionsAction(nextTransactionsList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      const transactionsList = getState().transactions.transactionsList;
+
+      const nextTransactionsList = transactionsList.filter((transaction) => transaction.id !== id);
+
+      dispatch(updateTransactionsAction(nextTransactionsList));
+      alert(message);
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
