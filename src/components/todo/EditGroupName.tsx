@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface EditGroupNameProps {
   approvedGroup: Group;
+  closeGroupMenu: () => void;
   modalTitleLabel: string;
   modalTextFieldLabel: string;
 }
@@ -41,12 +42,12 @@ const EditGroupName = (props: EditGroupNameProps) => {
 
   const isBlankGroupName = groupName === '';
 
-  const handleOpen = (initialGroupName: string) => {
+  const openModal = (initialGroupName: string) => {
     setOpen(true);
     setGroupName(initialGroupName);
   };
 
-  const handleClose = () => {
+  const closeModal = () => {
     setOpen(false);
     setGroupName('');
   };
@@ -57,6 +58,12 @@ const EditGroupName = (props: EditGroupNameProps) => {
     },
     [setGroupName]
   );
+
+  const onClickSaveButton = () => {
+    dispatch(updateGroupName(groupId, groupName));
+    closeModal();
+    props.closeGroupMenu();
+  };
 
   const body = (
     <div className={classes.paper}>
@@ -75,19 +82,19 @@ const EditGroupName = (props: EditGroupNameProps) => {
         <TodoButton
           label={'保存'}
           disabled={isBlankGroupName}
-          onClick={() => dispatch(updateGroupName(groupId, groupName)) && handleClose()}
+          onClick={() => onClickSaveButton()}
         />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
+        <TodoButton label={'キャンセル'} disabled={false} onClick={() => closeModal()} />
       </div>
     </div>
   );
 
   return (
     <>
-      <MenuItem onClick={() => handleOpen(initialGroupName)}>グループ名の編集</MenuItem>
+      <MenuItem onClick={() => openModal(initialGroupName)}>グループ名の編集</MenuItem>
       <Modal
         open={open}
-        onClose={handleClose}
+        onClose={closeModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

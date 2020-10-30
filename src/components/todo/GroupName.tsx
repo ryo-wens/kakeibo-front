@@ -3,7 +3,6 @@ import { createStyles, Theme, makeStyles } from '@material-ui/core/styles';
 import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import ListItemText from '@material-ui/core/ListItemText';
-import { GroupMenuButton } from './index';
 import { Group } from '../../reducks/groups/types';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -34,7 +33,6 @@ const GroupName = (props: GroupNameProps) => {
         <ListItem>
           <ListItemText primary={props.approvedGroup.group_name} />
         </ListItem>
-        <GroupMenuButton approvedGroup={props.approvedGroup} />
       </div>
     </List>
   );
