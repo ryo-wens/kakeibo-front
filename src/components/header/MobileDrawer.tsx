@@ -13,11 +13,12 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import HistoryIcon from '@material-ui/icons/History';
 import ComputerIcon from '@material-ui/icons/Computer';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
-import GroupIcon from '@material-ui/icons/Group';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
 import { logOut } from '../../reducks/users/operations';
 import { MobileTodoMenu } from '../todo';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles({
   drawer: {
@@ -28,6 +29,8 @@ const useStyles = makeStyles({
 const MobileDrawer = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const entityType: string = getPathTemplateName(window.location.pathname);
+  const groupId: number = getPathGroupId(window.location.pathname);
   const [sideBarOpen, setSideBarOpen] = useState<boolean>(false);
   const [mainMenu, setMainMenu] = useState<boolean>(true);
   const [showTodoMenu, setShowTodoMenu] = useState<boolean>(false);
@@ -57,9 +60,15 @@ const MobileDrawer = () => {
     },
     [setSideBarOpen, sideBarOpen]
   );
+
   const selectMenu = (event: React.KeyboardEvent | React.MouseEvent, path: string) => {
-    dispatch(push(path));
-    handleDrawerToggle(event);
+    if (entityType !== 'group') {
+      dispatch(push(path));
+      handleDrawerToggle(event);
+    } else if (entityType === 'group') {
+      dispatch(push(`/group/${groupId}${path}`));
+      handleDrawerToggle(event);
+    }
   };
 
   const menus = [
@@ -85,11 +94,11 @@ const MobileDrawer = () => {
       value: '/',
     },
     {
-      func: selectMenu,
-      label: 'グループ',
-      icon: <GroupIcon />,
-      id: 'group',
-      value: '/',
+      func: switchMenu,
+      label: 'todo',
+      icon: <PlaylistAddCheckIcon />,
+      id: 'todo',
+      value: '',
     },
     {
       func: selectMenu,
@@ -108,18 +117,22 @@ const MobileDrawer = () => {
       <Drawer keepMounted={true} anchor={'left'} open={sideBarOpen} onClose={handleDrawerToggle}>
         {mainMenu && (
           <List className={classes.drawer}>
-            {menus.map((menu) => (
-              <ListItem button key={menu.id} onClick={(e) => menu.func(e, menu.value)}>
-                <ListItemIcon>{menu.icon}</ListItemIcon>
-                <ListItemText primary={menu.label} />
+            {menus.map((menu) => {
+              return (
+                <ListItem button key={menu.id} onClick={(e) => menu.func(e, menu.value)}>
+                  <ListItemIcon>{menu.icon}</ListItemIcon>
+                  <ListItemText primary={menu.label} />
+                </ListItem>
+              );
+            })}
+            {entityType === 'group' && (
+              <ListItem button onClick={(e) => selectMenu(e, '/task')}>
+                <ListItemIcon>
+                  <EventAvailableIcon />
+                </ListItemIcon>
+                <ListItemText primary="タスク" />
               </ListItem>
-            ))}
-            <ListItem button key="todo" onClick={() => switchMenu()}>
-              <ListItemIcon>
-                <PlaylistAddCheckIcon />
-              </ListItemIcon>
-              <ListItemText primary="TODO" />
-            </ListItem>
+            )}
             <ListItem button key="logout" onClick={() => logOutCheck()}>
               <ListItemIcon>
                 <ExitToAppIcon />

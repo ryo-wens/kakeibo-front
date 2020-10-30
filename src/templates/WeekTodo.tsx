@@ -13,6 +13,14 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker } from '../components/uikit';
 import { TodoButton, TodoMenu, WeeksTabs, WeeksTodoLists } from '../components/todo';
 import { dateToDateString } from '../lib/date';
+import { getPathGroupId, getPathTemplateName } from '../lib/path';
+import {
+  getGroupDueTodoLists,
+  getGroupImplementationTodoLists,
+  getGroupTodoListsMessage,
+} from '../reducks/groupTodoLists/selectors';
+import { fetchGroupMonthTodoLists } from '../reducks/groupTodoLists/operations';
+import { date } from '../lib/constant';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -29,7 +37,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const ScheduleTodo = () => {
+const WeekTodo = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
@@ -38,22 +46,42 @@ const ScheduleTodo = () => {
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
   const monthTodoListMessage = getMonthTodoListMessage(selector);
-  const dt: Date = new Date();
-  const year = String(dt.getFullYear());
-  const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
+  const groupImplementationTodoList = getGroupImplementationTodoLists(selector);
+  const groupDueTodoList = getGroupDueTodoLists(selector);
+  const groupTodoListMessage = getGroupTodoListsMessage(selector);
+  const entityType = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
+  const year = String(date.getFullYear());
+  const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
-    if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
+    if (entityType === 'group' && approvedGroups.length === 0 && unapprovedGroups.length === 0) {
       dispatch(fetchGroups());
     }
   }, []);
 
   useEffect(() => {
-    if (!monthImplementationTodoList.length && !monthDueTodoList.length && !monthTodoListMessage) {
+    if (
+      entityType !== 'group' &&
+      !monthImplementationTodoList.length &&
+      !monthDueTodoList.length &&
+      !monthTodoListMessage
+    ) {
       dispatch(fetchMonthTodoList(year, month));
     }
   }, []);
+
+  useEffect(() => {
+    if (
+      entityType === 'group' &&
+      !groupImplementationTodoList.length &&
+      !groupDueTodoList.length &&
+      !groupTodoListMessage
+    ) {
+      dispatch(fetchGroupMonthTodoLists(groupId, year, month));
+    }
+  }, [groupId]);
 
   const handleDateChange = useCallback(
     (selectedDate) => {
@@ -63,7 +91,7 @@ const ScheduleTodo = () => {
   );
 
   const getTodayDate = useCallback(() => {
-    setSelectedDate(dt);
+    setSelectedDate(date);
   }, [selectedDate]);
 
   const getNextWeek = useCallback(() => {
@@ -113,10 +141,12 @@ const ScheduleTodo = () => {
           selectedDate={selectedDate}
           monthImplementationTodoList={monthImplementationTodoList}
           monthDueTodoList={monthDueTodoList}
+          groupMonthImplementationTodoList={groupImplementationTodoList}
+          groupMonthDueTodoList={groupDueTodoList}
         />
       </div>
     </>
   );
 };
 
-export default ScheduleTodo;
+export default WeekTodo;

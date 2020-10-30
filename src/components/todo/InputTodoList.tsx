@@ -49,11 +49,11 @@ const InputTodoList = (props: InputTodoListProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const isBlankTodoContent = props.todoContent === '';
-  const templateName = getPathTemplateName(window.location.pathname);
+  const entityType = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
 
   const switchOperation = () => {
-    if (templateName === 'todo' || templateName === 'schedule-todo') {
+    if (entityType === 'todo') {
       return dispatch(
         editTodoListItem(
           props.todoListItemId,
@@ -63,7 +63,7 @@ const InputTodoList = (props: InputTodoListProps) => {
           props.completeFlag
         )
       );
-    } else if (templateName === 'group-todo') {
+    } else if (entityType === 'group') {
       return dispatch(
         editGroupTodoListItem(
           groupId,

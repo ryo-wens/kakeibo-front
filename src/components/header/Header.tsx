@@ -12,6 +12,7 @@ import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import SettingsIcon from '@material-ui/icons/Settings';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
+import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import { logOut } from '../../reducks/users/operations';
 import { MobileDrawer } from './index';
 import { InvitationNotifications } from '../todo';
@@ -120,19 +121,11 @@ const Header = () => {
   };
 
   const existsGroupWhenRouting = useCallback(
-    (templateName?: string) => {
+    (path: string) => {
       if (entityType !== 'group') {
-        if (templateName) {
-          return dispatch(push(`/${templateName}`));
-        } else if (!templateName) {
-          return dispatch(push(`/`));
-        }
+        return dispatch(push(`${path}`));
       } else if (entityType === 'group') {
-        if (templateName) {
-          return dispatch(push(`/group/${groupId}/${templateName}`));
-        } else if (!templateName) {
-          return dispatch(push(`/group/${groupId}`));
-        }
+        return dispatch(push(`/group/${groupId}${path}`));
       }
     },
     [entityType, groupId]
@@ -159,7 +152,7 @@ const Header = () => {
             <Button
               color="inherit"
               className={classes.title}
-              onClick={() => existsGroupWhenRouting()}
+              onClick={() => existsGroupWhenRouting(`/`)}
             >
               家計簿App
             </Button>
@@ -188,10 +181,20 @@ const Header = () => {
               size="large"
               className={classes.button}
               startIcon={<PlaylistAddCheckIcon />}
-              onClick={() => existsGroupWhenRouting('todo')}
+              onClick={() => existsGroupWhenRouting('/todo')}
             >
               Todo
             </Button>
+            {entityType === 'group' && (
+              <Button
+                size="large"
+                className={classes.button}
+                startIcon={<EventAvailableIcon />}
+                onClick={() => existsGroupWhenRouting('/task')}
+              >
+                タスク
+              </Button>
+            )}
           </div>
           <div className={classes.grow} />
           <SwitchEntity

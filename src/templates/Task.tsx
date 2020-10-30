@@ -1,48 +1,33 @@
 import React, { useEffect, useMemo } from 'react';
-import { AddTodo, GroupName, TodoMenu } from '../components/todo';
+import { GroupName } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import { fetchGroups } from '../reducks/groups/operations';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Group } from '../reducks/groups/types';
-import {
-  getGroupDueTodoLists,
-  getGroupImplementationTodoLists,
-} from '../reducks/groupTodoLists/selectors';
-import {
-  fetchGroupDateTodoLists,
-  fetchGroupMonthTodoLists,
-} from '../reducks/groupTodoLists/operations';
 import { getPathGroupId } from '../lib/path';
-import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { AddTaskUser, TaskList } from '../components/task';
+import { AddTaskUser, SkipDate, TaskList } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
-import Task from '../components/task/Task';
 
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      margin: '40px 0px 0px 200px',
+      width: '1600px',
+      margin: '30px 0px 0px 30px',
     },
   })
 );
 
-const GroupTodo = () => {
+const Task = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const dt: Date = new Date();
-  const year = String(dt.getFullYear());
-  const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
-  const date: string = ('0' + dt.getDate()).slice(-2);
   const groupId = getPathGroupId(window.location.pathname);
 
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
-  const groupImplementationTodoLists = getGroupImplementationTodoLists(selector);
-  const groupDueTodoLists = getGroupDueTodoLists(selector);
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
   const groupTasksList = getGroupTasksList(selector);
 
@@ -54,20 +39,7 @@ const GroupTodo = () => {
 
   useEffect(() => {
     dispatch(fetchGroups());
-    dispatch(fetchGroupMonthTodoLists(groupId, year, month));
   }, [groupId]);
-
-  useEffect(() => {
-    if (groupImplementationTodoLists.length === 0 && groupDueTodoLists.length === 0) {
-      dispatch(fetchGroupDateTodoLists(groupId, year, month, date));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (groupImplementationTodoLists.length === 0 && groupDueTodoLists.length === 0) {
-      dispatch(fetchGroupMonthTodoLists(groupId, year, month));
-    }
-  }, []);
 
   useEffect(() => {
     if (groupTasksListForEachUser.length === 0) {
@@ -99,14 +71,8 @@ const GroupTodo = () => {
 
   return (
     <>
-      <TodoMenu />
       <div className={classes.root}>
         <GroupName approvedGroup={approvedGroup} />
-        <SwitchTodoLists
-          implementationTodoList={groupImplementationTodoLists}
-          dueTodoList={groupDueTodoLists}
-        />
-        <AddTodo groupId={groupId} date={dt} />
         <AddTaskUser
           approvedGroup={approvedGroup}
           groupTasksListForEachUser={groupTasksListForEachUser}
@@ -116,10 +82,10 @@ const GroupTodo = () => {
           groupTasksListForEachUser={groupTasksListForEachUser}
           groupTasksList={groupTasksList}
         />
+        <SkipDate />
       </div>
-      <Task />
     </>
   );
 };
 
-export default GroupTodo;
+export default Task;

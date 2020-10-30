@@ -5,15 +5,19 @@ import { dateStringToDate, getWeekStartDate, getWeekDay } from '../../lib/date';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
+import { getPathTemplateName } from '../../lib/path';
 
 interface WeeksTodoListsProps {
   selectedDate: Date;
   monthImplementationTodoList: TodoLists;
   monthDueTodoList: TodoLists;
+  groupMonthImplementationTodoList: TodoLists;
+  groupMonthDueTodoList: TodoLists;
 }
 
 const WeeksTodoLists = (props: WeeksTodoListsProps) => {
   const [value, setValue] = useState<number>(0);
+  const entityType = getPathTemplateName(window.location.pathname);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
   const _startDate = getWeekStartDate(selectedDate);
@@ -60,6 +64,19 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
     [selectedDate]
   );
 
+  const existsWeekTodoList = (implementationTodoList: TodoLists, dueTodoList: TodoLists) => {
+    if (!implementationTodoList.length && !dueTodoList.length) {
+      return (
+        <>
+          <p>当月実施予定todo、締切予定todoは登録されていません。</p>
+          {value === 0 ? week(implementationTodoList) : week(dueTodoList)}
+        </>
+      );
+    } else if (implementationTodoList && dueTodoList) {
+      return value === 0 ? week(implementationTodoList) : week(dueTodoList);
+    }
+  };
+
   return (
     <>
       <AppBar position="static">
@@ -68,10 +85,9 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
           <Tab label="締切予定のTodo" value={1} />
         </Tabs>
       </AppBar>
-      {props.monthImplementationTodoList.length === 0 && props.monthDueTodoList.length === 0 && (
-        <p>当月実施予定todo、締切予定todoは登録されていません。</p>
-      )}
-      {value === 0 ? week(props.monthImplementationTodoList) : week(props.monthDueTodoList)}
+      {entityType !== 'group'
+        ? existsWeekTodoList(props.monthImplementationTodoList, props.monthDueTodoList)
+        : existsWeekTodoList(props.groupMonthImplementationTodoList, props.groupMonthDueTodoList)}
     </>
   );
 };
