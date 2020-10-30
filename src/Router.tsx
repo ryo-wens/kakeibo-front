@@ -1,7 +1,6 @@
 import React from 'react';
 import { Route, Switch } from 'react-router';
 import {
-  GroupTodo,
   Todo,
   SignUp,
   LogIn,
@@ -34,7 +33,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/yearly-budgets'} component={YearlyBudgets} />
       <Route exact path={'/group/:id'} component={Home} />
       <Route exact path={'/group/:id/task'} component={Task} />
-      <Route exact path={'/group/:id/todo'} component={GroupTodo} />
+      <Route exact path={'/group/:id/todo'} component={Todo} />
       <Route exact path={'/group/:id/todo/week'} component={WeekTodo} />
     </Switch>
   );

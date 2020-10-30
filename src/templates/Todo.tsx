@@ -13,6 +13,12 @@ import {
 import { fetchDateTodoLists } from '../reducks/todoLists/operations';
 import { getWeekDay } from '../lib/date';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
+import { fetchGroupDateTodoLists } from '../reducks/groupTodoLists/operations';
+import {
+  getGroupDueTodoLists,
+  getGroupImplementationTodoLists,
+} from '../reducks/groupTodoLists/selectors';
+import { getPathGroupId, getPathTemplateName } from '../lib/path';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -31,6 +37,10 @@ const Todo = () => {
   const todayImplementationTodoList = getTodayImplementationTodoList(selector);
   const todayDueTodoList = getTodayDueTodoList(selector);
   const todayTodoListMessage = getTodayTodoListMessage(selector);
+  const groupImplementationTodoList = getGroupImplementationTodoLists(selector);
+  const groupDueTodoList = getGroupDueTodoLists(selector);
+  const entityType = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
   const dt: Date = new Date();
   const year = String(dt.getFullYear());
   const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
@@ -38,14 +48,25 @@ const Todo = () => {
   const weekday: string = getWeekDay(dt);
 
   useEffect(() => {
-    if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
+    if (
+      entityType !== 'group' &&
+      !todayImplementationTodoList.length &&
+      !todayDueTodoList.length &&
+      !todayTodoListMessage
+    ) {
+      dispatch(fetchDateTodoLists(year, month, date));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (entityType === 'group' && !approvedGroups.length && !unapprovedGroups.length) {
       dispatch(fetchGroups());
     }
   }, []);
 
   useEffect(() => {
-    if (!todayImplementationTodoList.length && !todayDueTodoList.length && !todayTodoListMessage) {
-      dispatch(fetchDateTodoLists(year, month, date));
+    if (entityType === 'group' && !groupImplementationTodoList.length && !groupDueTodoList.length) {
+      dispatch(fetchGroupDateTodoLists(groupId, year, month, date));
     }
   }, []);
 
@@ -56,12 +77,19 @@ const Todo = () => {
         <span>
           今日 {month}/{date} ({weekday})
         </span>
-        <SwitchTodoLists
-          implementationTodoList={todayImplementationTodoList}
-          dueTodoList={todayDueTodoList}
-        />
+        {entityType !== 'group' ? (
+          <SwitchTodoLists
+            implementationTodoList={todayImplementationTodoList}
+            dueTodoList={todayDueTodoList}
+          />
+        ) : (
+          <SwitchTodoLists
+            implementationTodoList={groupImplementationTodoList}
+            dueTodoList={groupDueTodoList}
+          />
+        )}
         <div>
-          <AddTodo date={dt} />
+          <AddTodo date={dt} groupId={groupId} />
         </div>
       </div>
     </>

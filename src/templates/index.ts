@@ -1,5 +1,4 @@
 export { default as CustomBudgets } from './CustomBudgets';
-export { default as GroupTodo } from './GroupTodo';
 export { default as Home } from './Home';
 export { default as InputCustomCategory } from './InputCustomCategory';
 export { default as LogIn } from './LogIn';
