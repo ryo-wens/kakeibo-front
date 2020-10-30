@@ -1,9 +1,5 @@
-$border_color: #e1e3e3;
-$main_color: #4db5fa;
-$large-font_size:16px;
-$large-font_weight:700;
-
-
+@import "modules/button.scss";
+@import "variable.scss";
 
 .monthlyhistory-table {
   border-collapse: collapse;
