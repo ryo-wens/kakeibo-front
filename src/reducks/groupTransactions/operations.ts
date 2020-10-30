@@ -14,25 +14,23 @@ import moment from 'moment';
 
 export const fetchGroupTransactionsList = (year: number, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<FetchGroupTransactionsRes>(
+    try {
+      const result = await axios.get<FetchGroupTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${year}-${customMonth}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        if (res.data.message) {
-          alert(res.data.message);
-        } else {
-          const groupTransactionsList = res.data.transactions_list;
+      );
+      if (result.data.message) {
+        alert(result.data.message);
+      } else {
+        const groupTransactionsList = result.data.transactions_list;
 
-          dispatch(updateGroupTransactionsAction(groupTransactionsList));
-        }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+        dispatch(updateGroupTransactionsAction(groupTransactionsList));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
@@ -69,8 +67,8 @@ export const addGroupTransactions = (
       medium_category_id: medium_category_id,
       custom_category_id: custom_category_id,
     };
-    await axios
-      .post<GroupTransactions>(
+    try {
+      const result = await axios.post<GroupTransactions>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions`,
         JSON.stringify(data, function (key, value) {
           if (key === 'transaction_date') {
@@ -81,38 +79,40 @@ export const addGroupTransactions = (
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const newGroupTransaction = res.data;
+      );
+      const newGroupTransaction = result.data;
 
-        const prevGroupTransactions = getState().groupTransactions.groupTransactionsList;
+      const prevGroupTransactions = getState().groupTransactions.groupTransactionsList;
 
-        const nextGroupTransactionsList = [newGroupTransaction, ...prevGroupTransactions];
+      const nextGroupTransactionsList = [newGroupTransaction, ...prevGroupTransactions];
 
-        dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
-      })
-      .catch((error) => {
-        if (error && error.response) {
-          if (error.response.status === 400) {
-            if (Array.isArray(error.response.data.error.message)) {
-              alert(error.response.data.error.message.join('\n'));
-            } else if (!Array.isArray(error.response.data.error.message)) {
-              alert(error.response.data.error.message);
-            }
-          }
-
-          if (error.response.status === 401) {
+      dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
+    } catch (error) {
+      if (error && error.response) {
+        if (error.response.status === 400) {
+          if (Array.isArray(error.response.data.error.message)) {
+            alert(error.response.data.error.message.join('\n'));
+            return;
+          } else if (!Array.isArray(error.response.data.error.message)) {
             alert(error.response.data.error.message);
-            dispatch(push('/login'));
+            return;
           }
-
-          if (error.response.status === 500) {
-            alert(error.response.data.error.message);
-          }
-        } else {
-          alert(error);
         }
-      });
+
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
+          return;
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+          return;
+        }
+      } else {
+        alert(error);
+      }
+    }
   };
 };
 
@@ -150,76 +150,75 @@ export const editGroupTransactions = (
       medium_category_id: medium_category_id,
       custom_category_id: custom_category_id,
     };
-    await axios
-      .put<GroupTransactions>(
+    try {
+      const result = await axios.put<GroupTransactions>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${id}`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const editedGroupTransaction = res.data;
+      );
+      const editedGroupTransaction = result.data;
 
-        const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
+      const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
 
-        const nextGroupTransactionsList = groupTransactionsList.map((groupTransaction) => {
-          if (groupTransaction.id === editedGroupTransaction.id) {
-            return editedGroupTransaction;
-          }
-          return groupTransaction;
-        });
-        dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
-      })
-      .catch((error) => {
-        if (error && error.response) {
-          if (error.response.status === 400) {
-            if (Array.isArray(error.response.data.error.message)) {
-              alert(error.response.data.error.message.join('\n'));
-            } else if (!Array.isArray(error.response.data.error.message)) {
-              alert(error.response.data.error.message);
-            }
-          }
-
-          if (error.response.status === 401) {
-            alert(error.response.data.error.message);
-            dispatch(push('/login'));
-          }
-
-          if (error.response.status === 500) {
-            alert(error.response.data.error.message);
-          }
-        } else {
-          alert(error);
+      const nextGroupTransactionsList = groupTransactionsList.map((groupTransaction) => {
+        if (groupTransaction.id === editedGroupTransaction.id) {
+          return editedGroupTransaction;
         }
+        return groupTransaction;
       });
+      dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
+    } catch (error) {
+      if (error && error.response) {
+        if (error.response.status === 400) {
+          if (Array.isArray(error.response.data.error.message)) {
+            alert(error.response.data.error.message.join('\n'));
+            return;
+          } else if (!Array.isArray(error.response.data.error.message)) {
+            alert(error.response.data.error.message);
+            return;
+          }
+        }
+
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message);
+          dispatch(push('/login'));
+          return;
+        }
+
+        if (error.response.status === 500) {
+          alert(error.response.data.error.message);
+          return;
+        }
+      } else {
+        alert(error);
+      }
+    }
   };
 };
 
 export const deleteGroupTransactions = (id: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    await axios
-      .delete<deleteGroupTransactionRes>(
+    try {
+      const result = await axios.delete<deleteGroupTransactionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${id}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const message = res.data.message;
+      );
+      const message = result.data.message;
 
-        const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
+      const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
 
-        const nextGroupTransactionsList = groupTransactionsList.filter((groupTransaction) => {
-          if (groupTransaction.id !== id) {
-            return groupTransaction;
-          }
-        });
-        dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
-        alert(message);
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      const nextGroupTransactionsList = groupTransactionsList.filter(
+        (groupTransaction) => groupTransaction.id !== id
+      );
+
+      dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
+      alert(message);
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };

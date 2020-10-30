@@ -4,8 +4,7 @@ import { fetchTransactionsList } from '../../reducks/transactions/operations';
 import { State } from '../../reducks/store/types';
 import { getTransactions, getTransactionsMessage } from '../../reducks/transactions/selectors';
 import { year, month, customMonth } from '../../lib/constant';
-import '../../assets/home/monthly-history.scss';
-import '../../assets/modules/button.scss';
+import '../../assets/monthly-history.scss';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 
@@ -95,7 +94,7 @@ const MonthlyHistory = () => {
       operationRow = [
         ...operationRow,
         <td className="monthlyhistory-table__record-third" key={index} align={'center'}>
-          <button className="btn btn--orange">入力する</button>
+          <button className="btn--primary">入力する</button>
         </td>,
       ];
 

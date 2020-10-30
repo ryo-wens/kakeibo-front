@@ -33,7 +33,6 @@
     "redux-actions": "^2.6.5",
     "redux-thunk": "^2.3.0",
     "reselect": "^4.0.0",
-    "styled-components": "^5.2.0",
     "typescript": "^3.8.0"
   },
   "scripts": {
