@@ -3,7 +3,7 @@ import { MonthTables } from './index';
 import { DatePicker } from '../uikit';
 import { TodoButton } from '../todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { getFirstDayOfMonth, getLastDayOfMonth } from '../../lib/date';
+import { dateToMonthString, getFirstDayOfMonth, getLastDayOfMonth } from '../../lib/date';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -56,8 +56,8 @@ const SkipDate = () => {
     setSelectedDate(nextMonth);
   }, [selectedDate, setSelectedDate]);
 
-  const getThisMonth = `${dt.getFullYear()}/${dt.getMonth() + 1}`;
-  const getSelectedMonth = `${selectedDate.getFullYear()}/${selectedDate.getMonth() + 1}`;
+  const getThisMonth = dateToMonthString(dt);
+  const getSelectedMonth = dateToMonthString(selectedDate);
   const equalsSelectedMonthAndThisMonth = getThisMonth === getSelectedMonth;
 
   return (

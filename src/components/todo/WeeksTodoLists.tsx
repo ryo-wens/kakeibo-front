@@ -9,10 +9,11 @@ import { getPathTemplateName } from '../../lib/path';
 
 interface WeeksTodoListsProps {
   selectedDate: Date;
-  monthImplementationTodoList: TodoLists;
-  monthDueTodoList: TodoLists;
+  groupId: number;
   groupMonthImplementationTodoList: TodoLists;
   groupMonthDueTodoList: TodoLists;
+  monthImplementationTodoList: TodoLists;
+  monthDueTodoList: TodoLists;
 }
 
 const WeeksTodoLists = (props: WeeksTodoListsProps) => {
@@ -20,7 +21,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
   const entityType = getPathTemplateName(window.location.pathname);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
-  const _startDate = getWeekStartDate(selectedDate);
+  const startDate = getWeekStartDate(selectedDate);
 
   const switchTab = (event: React.ChangeEvent<unknown>, value: number) => {
     setValue(value);
@@ -34,7 +35,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
         const date = new Date(
           selectedDate.getFullYear(),
           selectedDate.getMonth(),
-          _startDate.getDate() + i
+          startDate.getDate() + i
         );
 
         const dateTodoLists = [];
@@ -55,7 +56,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
               {date.getMonth() + 1}/{date.getDate()} （{getWeekDay(date)}）
             </p>
             {dateTodoLists}
-            <AddTodo date={date} />
+            <AddTodo date={date} groupId={props.groupId} />
           </div>
         );
       }

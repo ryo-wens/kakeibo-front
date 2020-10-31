@@ -12,6 +12,7 @@ import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
 import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 import { dateStringToDate } from '../../lib/date';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { date } from '../../lib/constant';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -102,17 +103,18 @@ const TodoList = (props: TodoListProps) => {
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setChecked(event.target.checked);
 
-      if (templateName === 'todo' || templateName === 'schedule-todo') {
+      if (templateName === 'todo') {
         return dispatch(
           editTodoListItem(
             todoListItemId,
+            date,
             selectedImplementationDate,
             selectedDueDate,
             todoContent,
             event.target.checked
           )
         );
-      } else if (templateName === 'group-todo') {
+      } else if (templateName === 'group') {
         return dispatch(
           editGroupTodoListItem(
             groupId,

@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
 import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { date } from '../../lib/constant';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -57,6 +58,7 @@ const InputTodoList = (props: InputTodoListProps) => {
       return dispatch(
         editTodoListItem(
           props.todoListItemId,
+          date,
           props.selectedImplementationDate,
           props.selectedDueDate,
           props.todoContent,
