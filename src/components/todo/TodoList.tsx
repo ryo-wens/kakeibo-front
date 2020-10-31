@@ -12,6 +12,7 @@ import { GroupTodoListItem } from '../../reducks/groupTodoLists/types';
 import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 import { dateStringToDate } from '../../lib/date';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { date } from '../../lib/constant';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -38,13 +39,13 @@ const TodoList = (props: TodoListProps) => {
   const dispatch = useDispatch();
   const [checked, setChecked] = useState<boolean>(props.todoListItem.complete_flag);
   const [openEditTodoList, setOpenEditTodoList] = useState<boolean>(false);
-  const [todoContent, setTodoContent] = useState<string>(props.todoListItem.todo_content);
   const groupId = getPathGroupId(window.location.pathname);
   const templateName = getPathTemplateName(window.location.pathname);
 
   const prevTodoContent = props.todoListItem.todo_content;
   const prevImplementationDate: Date = dateStringToDate(props.todoListItem.implementation_date);
   const prevDueDate: Date = dateStringToDate(props.todoListItem.due_date);
+  const [todoContent, setTodoContent] = useState<string>('');
   const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
     prevImplementationDate
   );
@@ -58,7 +59,7 @@ const TodoList = (props: TodoListProps) => {
 
   const inputTodoContent = useCallback(
     (event) => {
-      setTodoContent(event.target.value as string);
+      setTodoContent(event.target.value);
     },
     [setTodoContent]
   );
@@ -75,7 +76,7 @@ const TodoList = (props: TodoListProps) => {
     (date: Date | null) => {
       setSelectedDueDate(date);
     },
-    [setSelectedDueDate]
+    [setSelectedDueDate, todoContent]
   );
 
   const openInputTodoList = useCallback(() => {
@@ -96,23 +97,27 @@ const TodoList = (props: TodoListProps) => {
   const closeInputTodoList = useCallback(() => {
     setOpenEditTodoList(false);
     setTodoContent(prevTodoContent);
-  }, [setOpenEditTodoList, setTodoContent, prevTodoContent]);
+  }, [setOpenEditTodoList, prevTodoContent, todoContent, setTodoContent]);
+
+  const closeWhenSave = useCallback(() => {
+    setOpenEditTodoList(false);
+  }, [setOpenEditTodoList]);
 
   const handleChangeChecked = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setChecked(event.target.checked);
-
-      if (templateName === 'todo' || templateName === 'schedule-todo') {
-        return dispatch(
+      if (templateName === 'todo') {
+        dispatch(
           editTodoListItem(
             todoListItemId,
+            date,
             selectedImplementationDate,
             selectedDueDate,
             todoContent,
             event.target.checked
           )
         );
-      } else if (templateName === 'group-todo') {
+      } else if (templateName === 'group') {
         return dispatch(
           editGroupTodoListItem(
             groupId,
@@ -181,6 +186,7 @@ const TodoList = (props: TodoListProps) => {
               selectedDueDate={selectedDueDate}
               todoContent={todoContent}
               completeFlag={checked}
+              closeWhenSave={closeWhenSave}
             />
           )}
         </div>

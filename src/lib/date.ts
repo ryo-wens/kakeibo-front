@@ -16,6 +16,11 @@ export const dateToDateString = (date: Date) => {
   return `${year}/${month}/${_date}(${day})`;
 };
 
+export const dateToMonthString = (date: Date) => {
+  const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
+  return `${date.getFullYear()}/${month}`;
+};
+
 export const getFirstDayOfMonth = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth());
 };

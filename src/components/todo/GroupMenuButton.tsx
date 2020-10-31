@@ -9,22 +9,23 @@ import { Group } from '../../reducks/groups/types';
 
 interface MenuButtonProps {
   approvedGroup: Group;
+  closeMenu: () => void;
 }
 
 const GroupMenuButton = (props: MenuButtonProps) => {
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+  const openGroupMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
 
-  const handleClose = () => {
+  const closeGroupMenu = () => {
     setAnchorEl(null);
   };
 
   return (
     <>
-      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={handleClick}>
+      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={openGroupMenu}>
         <MoreHorizIcon />
       </IconButton>
       <Menu
@@ -32,20 +33,22 @@ const GroupMenuButton = (props: MenuButtonProps) => {
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
-        onClose={handleClose}
+        onClose={closeGroupMenu}
       >
         <EditGroupName
+          approvedGroup={props.approvedGroup}
+          closeGroupMenu={closeGroupMenu}
           modalTitleLabel={'グループ名を編集'}
           modalTextFieldLabel={'グループ名'}
-          approvedGroup={props.approvedGroup}
         />
         <EditGroupMembers modalTitleLabel={'メンバーの編集'} approvedGroup={props.approvedGroup} />
         <GenericModal
+          buttonLabel={'退会'}
+          closeMenu={props.closeMenu}
           menuLabel={'グループを退会'}
           modalText={`${props.approvedGroup.group_name}を退会しますか？`}
-          buttonLabel={'退会'}
         />
-        <MenuItem onClick={handleClose}>グループを削除</MenuItem>
+        <MenuItem onClick={closeGroupMenu}>グループを削除</MenuItem>
       </Menu>
     </>
   );

@@ -30,9 +30,10 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface GenericModalProps {
+  buttonLabel: string;
   menuLabel: string;
   modalText: string;
-  buttonLabel: string;
+  closeMenu?: () => void;
   todoListItemId?: number;
 }
 
@@ -45,20 +46,6 @@ const GenericModal = (props: GenericModalProps) => {
   const templateName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
 
-  const switchOperation = () => {
-    const todoListItemId = props.todoListItemId as number;
-    switch (true) {
-      case templateName === 'todo' || templateName === 'schedule-todo':
-        return dispatch(deleteTodoListItem(todoListItemId));
-      case templateName === 'group-todo' && typeof props.todoListItemId === 'number':
-        return dispatch(deleteGroupTodoListItem(groupId, todoListItemId));
-      case templateName === `group`:
-        return dispatch(groupWithdrawal(groupId)) && dispatch(push('/'));
-      default:
-        return;
-    }
-  };
-
   const openModal = () => {
     setOpen(true);
   };
@@ -67,15 +54,32 @@ const GenericModal = (props: GenericModalProps) => {
     setOpen(false);
   };
 
+  const onClickGroupWithdrawal = () => {
+    const closeMenu = props.closeMenu as () => void;
+    closeMenu();
+    dispatch(groupWithdrawal(groupId));
+    dispatch(push('/'));
+  };
+
+  const switchOperation = () => {
+    const todoListItemId = props.todoListItemId as number;
+    switch (true) {
+      case templateName === 'todo':
+        return dispatch(deleteTodoListItem(todoListItemId)) && closeModal();
+      case templateName === 'group' && typeof props.todoListItemId === 'number':
+        return dispatch(deleteGroupTodoListItem(groupId, todoListItemId)) && closeModal();
+      case templateName === `group`:
+        return onClickGroupWithdrawal();
+      default:
+        return;
+    }
+  };
+
   const body = (
     <div className={classes.paper}>
       <p>{props.modalText}</p>
       <div className={classes.buttons}>
-        <TodoButton
-          label={props.buttonLabel}
-          disabled={false}
-          onClick={() => switchOperation() && closeModal()}
-        />
+        <TodoButton label={props.buttonLabel} disabled={false} onClick={() => switchOperation()} />
         <TodoButton label={'キャンセル'} disabled={false} onClick={() => closeModal()} />
       </div>
     </div>
