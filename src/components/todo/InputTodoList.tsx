@@ -44,6 +44,7 @@ interface InputTodoListProps {
   selectedDueDate: Date | null;
   todoContent: string;
   completeFlag: boolean;
+  closeWhenSave: () => void;
 }
 
 const InputTodoList = (props: InputTodoListProps) => {
@@ -127,7 +128,7 @@ const InputTodoList = (props: InputTodoListProps) => {
             <TodoButton
               label={props.buttonLabel}
               disabled={isBlankTodoContent}
-              onClick={() => switchOperation() && props.closeInputTodoList()}
+              onClick={() => switchOperation() && props.closeWhenSave()}
             />
             <TodoButton
               label={'キャンセル'}
