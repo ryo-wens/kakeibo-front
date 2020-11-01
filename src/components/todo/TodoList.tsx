@@ -19,7 +19,6 @@ const useStyles = makeStyles(() =>
     root: {
       width: '700px',
       height: 'auto',
-      zIndex: 1100,
     },
     groupMenu: {
       display: 'flex',

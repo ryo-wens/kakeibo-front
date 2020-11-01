@@ -6,6 +6,15 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { getPathTemplateName } from '../../lib/path';
+import { makeStyles } from '@material-ui/core/styles';
+import { date, month } from '../../lib/constant';
+
+const useStyles = makeStyles({
+  disabled: {
+    pointerEvents: 'none',
+    opacity: 0.6,
+  },
+});
 
 interface WeeksTodoListsProps {
   selectedDate: Date;
@@ -17,11 +26,13 @@ interface WeeksTodoListsProps {
 }
 
 const WeeksTodoLists = (props: WeeksTodoListsProps) => {
+  const classes = useStyles();
   const [value, setValue] = useState<number>(0);
   const entityType = getPathTemplateName(window.location.pathname);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
   const startDate = getWeekStartDate(selectedDate);
+  const today = date;
 
   const switchTab = (event: React.ChangeEvent<unknown>, value: number) => {
     setValue(value);
@@ -51,7 +62,14 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
         }
 
         week.push(
-          <div key={date.getDate()}>
+          <div
+            key={date.getDate()}
+            className={
+              `${date.getMonth() + 1}/${date.getDate()}` < `${month}/${today.getDate()}`
+                ? classes.disabled
+                : ''
+            }
+          >
             <p>
               {date.getMonth() + 1}/{date.getDate()} （{getWeekDay(date)}）
             </p>
