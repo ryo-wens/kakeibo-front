@@ -23,7 +23,7 @@ import {
   fetchGroupMonthTodoLists,
 } from '../../reducks/groupTodoLists/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
-import { TodoLists } from '../../reducks/todoLists/types';
+import { TodoList } from '../../reducks/todoLists/types';
 import { Action, Dispatch } from 'redux';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -59,8 +59,8 @@ const TodoMenu = () => {
   const date: string = ('0' + dt.getDate()).slice(-2);
 
   const switchDateTodoList = (
-    implementationTodoList: TodoLists,
-    dueTodoList: TodoLists,
+    implementationTodoList: TodoList,
+    dueTodoList: TodoList,
     todoListMessage: string,
     path: string,
     fetchTodoList: (dispatch: Dispatch<Action>) => Promise<void>,

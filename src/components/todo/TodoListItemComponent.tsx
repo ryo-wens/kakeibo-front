@@ -29,11 +29,11 @@ const useStyles = makeStyles(() =>
   })
 );
 
-interface TodoListProps {
+interface TodoListItemComponentProps {
   todoListItem: TodoListItem | GroupTodoListItem;
 }
 
-const TodoList = (props: TodoListProps) => {
+const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [checked, setChecked] = useState<boolean>(props.todoListItem.complete_flag);
@@ -194,4 +194,4 @@ const TodoList = (props: TodoListProps) => {
   );
 };
 
-export default TodoList;
+export default TodoListItemComponent;

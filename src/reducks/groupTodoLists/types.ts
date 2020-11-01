@@ -1,6 +1,7 @@
 export interface GroupTodoListItem {
   id: number;
-  posted_date: string;
+  posted_date: Date | null;
+  updated_date: Date | null;
   implementation_date: string;
   due_date: string;
   todo_content: string;
@@ -18,7 +19,8 @@ export interface createGroupTodoListItemReq {
 
 export interface createGroupTodoListItemRes {
   id: number;
-  posted_date: string;
+  posted_date: Date | null;
+  updated_date: Date | null;
   implementation_date: string;
   due_date: string;
   todo_content: string;
@@ -35,7 +37,8 @@ export interface editGroupTodoListItemReq {
 
 export interface editGroupTodoListItemRes {
   id: number;
-  posted_date: string;
+  posted_date: Date | null;
+  updated_date: Date | null;
   implementation_date: string;
   due_date: string;
   todo_content: string;

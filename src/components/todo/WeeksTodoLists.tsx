@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
-import { AddTodo, TodoList } from './index';
-import { TodoLists } from '../../reducks/todoLists/types';
+import { AddTodo, TodoListItemComponent } from './index';
+import { TodoList } from '../../reducks/todoLists/types';
 import { dateStringToDate, getWeekStartDate, getWeekDay } from '../../lib/date';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
@@ -19,10 +19,10 @@ const useStyles = makeStyles({
 interface WeeksTodoListsProps {
   selectedDate: Date;
   groupId: number;
-  groupMonthImplementationTodoList: TodoLists;
-  groupMonthDueTodoList: TodoLists;
-  monthImplementationTodoList: TodoLists;
-  monthDueTodoList: TodoLists;
+  groupMonthImplementationTodoList: TodoList;
+  groupMonthDueTodoList: TodoList;
+  monthImplementationTodoList: TodoList;
+  monthDueTodoList: TodoList;
 }
 
 const WeeksTodoLists = (props: WeeksTodoListsProps) => {
@@ -39,7 +39,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
   };
 
   const week = useCallback(
-    (todoLists: TodoLists) => {
+    (todoLists: TodoList) => {
       const week = [];
 
       for (let i = 0; i < 7; i++) {
@@ -57,7 +57,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
               : dateStringToDate(todoList.due_date).getTime();
           const weekDate: number = date.getTime();
           if (prevDate === weekDate) {
-            dateTodoLists.push(<TodoList todoListItem={todoList} key={todoList.id} />);
+            dateTodoLists.push(<TodoListItemComponent todoListItem={todoList} key={todoList.id} />);
           }
         }
 
@@ -83,7 +83,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
     [selectedDate]
   );
 
-  const existsWeekTodoList = (implementationTodoList: TodoLists, dueTodoList: TodoLists) => {
+  const existsWeekTodoList = (implementationTodoList: TodoList, dueTodoList: TodoList) => {
     if (!implementationTodoList.length && !dueTodoList.length) {
       return (
         <>

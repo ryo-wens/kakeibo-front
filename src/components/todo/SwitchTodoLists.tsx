@@ -3,12 +3,12 @@ import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { ExistsTodoLists } from './index';
-import { TodoLists } from '../../reducks/todoLists/types';
+import { TodoList } from '../../reducks/todoLists/types';
 import { GroupTodoLists } from '../../reducks/groupTodoLists/types';
 
 interface SwitchTodoListsProps {
-  implementationTodoList: TodoLists | GroupTodoLists;
-  dueTodoList: TodoLists | GroupTodoLists;
+  implementationTodoList: TodoList | GroupTodoLists;
+  dueTodoList: TodoList | GroupTodoLists;
 }
 
 const SwitchTodoLists = (props: SwitchTodoListsProps) => {
