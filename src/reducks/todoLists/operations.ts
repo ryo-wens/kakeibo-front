@@ -187,6 +187,15 @@ export const editTodoListItem = (
               }
             }
           }
+          updateList.sort((a, b) => {
+            const prevUpdateDate = a.updated_date as Date;
+            const nextUpdateDate = b.updated_date as Date;
+            if (new Date(prevUpdateDate).getTime() > new Date(nextUpdateDate).getTime()) {
+              return -1;
+            } else {
+              return 1;
+            }
+          });
           return updateList;
         };
 
