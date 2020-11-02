@@ -1,14 +1,15 @@
 export interface FetchTransactions {
   id: number;
   transaction_type: string;
+  posted_date: Date;
   updated_date: Date;
   transaction_date: string;
-  shop?: string | null;
-  memo?: string | null;
+  shop: string | null;
+  memo: string | null;
   amount: number;
   big_category_name: string;
-  medium_category_name?: string | null;
-  custom_category_name?: string | null;
+  medium_category_name: string | null;
+  custom_category_name: string | null;
 }
 
 export interface FetchTransactionsRes {
@@ -30,6 +31,7 @@ export interface TransactionsReq {
 export interface TransactionsRes {
   id: number;
   transaction_type: string;
+  posted_date: Date;
   updated_date: Date;
   transaction_date: string;
   shop: string | null;
