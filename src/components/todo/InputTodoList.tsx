@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
 import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { date } from '../../lib/constant';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -43,6 +44,7 @@ interface InputTodoListProps {
   selectedDueDate: Date | null;
   todoContent: string;
   completeFlag: boolean;
+  closeWhenSave: () => void;
 }
 
 const InputTodoList = (props: InputTodoListProps) => {
@@ -57,6 +59,7 @@ const InputTodoList = (props: InputTodoListProps) => {
       return dispatch(
         editTodoListItem(
           props.todoListItemId,
+          date,
           props.selectedImplementationDate,
           props.selectedDueDate,
           props.todoContent,
@@ -125,7 +128,7 @@ const InputTodoList = (props: InputTodoListProps) => {
             <TodoButton
               label={props.buttonLabel}
               disabled={isBlankTodoContent}
-              onClick={() => switchOperation() && props.closeInputTodoList()}
+              onClick={() => switchOperation() && props.closeWhenSave()}
             />
             <TodoButton
               label={'キャンセル'}

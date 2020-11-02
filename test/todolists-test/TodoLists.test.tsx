@@ -32,8 +32,8 @@ const getState = () => {
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
+          implementation_date: '2020/09/27(日)',
+          due_date: '2020/09/28(月)',
           todo_content: '食器用洗剤2つ購入',
           complete_flag: false,
         },
@@ -42,8 +42,8 @@ const getState = () => {
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
+          implementation_date: '2020/09/27(日)',
+          due_date: '2020/09/28(月)',
           todo_content: '食器用洗剤2つ購入',
           complete_flag: false,
         },
@@ -53,8 +53,8 @@ const getState = () => {
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
+          implementation_date: '2020/09/27(日)',
+          due_date: '2020/09/28(月)',
           todo_content: '食器用洗剤2つ購入',
           complete_flag: false,
         },
@@ -63,8 +63,8 @@ const getState = () => {
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
+          implementation_date: '2020/09/27(日)',
+          due_date: '2020/09/28(月)',
           todo_content: '食器用洗剤2つ購入',
           complete_flag: false,
         },
@@ -93,11 +93,31 @@ describe('async actions todoLists', () => {
     store.clearActions();
   });
 
+  let now: Date;
+  let spiedDate: Date;
+
+  const originalDate = Date;
+  now = new originalDate('2020-09-27T21:11:54');
+  Date.now = jest.fn().mockReturnValue(now.valueOf());
+
+  // @ts-ignore
+  spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+    if (arg === 0 || arg) {
+      return new originalDate(arg);
+    }
+    return now;
+  });
+
+  afterAll(() => {
+    // @ts-ignore
+    spiedDate.mockRestore();
+  });
+
   it('Created todoListItem is added to implementationTodoLists and dueTodoLists when CREATE_TODO_LIST_ITEM succeeds.', async () => {
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list`;
     const todoContent = '買い物へゆく';
-    const implementationDate = new Date('2020-09-28T19:55:46Z');
-    const dueDate = new Date('2020-09-29T19:55:46Z');
+    const implementationDate = new Date('2020-09-28T00:00:00Z');
+    const dueDate = new Date('2020-09-29T00:00:00Z');
 
     const mockResponse = JSON.stringify(createTodoListItemResponse);
 
@@ -109,8 +129,8 @@ describe('async actions todoLists', () => {
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
             },
@@ -119,8 +139,8 @@ describe('async actions todoLists', () => {
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
             },
@@ -129,16 +149,16 @@ describe('async actions todoLists', () => {
             {
               id: 2,
               posted_date: '2020-09-28T19:55:46Z',
-              implementation_date: '09/28(月)',
-              due_date: '09/29(火)',
+              implementation_date: '2020/09/28(月)',
+              due_date: '2020/09/29(火)',
               todo_content: '買い物へゆく',
               complete_flag: false,
             },
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
             },
@@ -147,16 +167,16 @@ describe('async actions todoLists', () => {
             {
               id: 2,
               posted_date: '2020-09-28T19:55:46Z',
-              implementation_date: '09/28(月)',
-              due_date: '09/29(火)',
+              implementation_date: '2020/09/28(月)',
+              due_date: '2020/09/29(火)',
               todo_content: '買い物へゆく',
               complete_flag: false,
             },
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
             },
@@ -174,10 +194,11 @@ describe('async actions todoLists', () => {
 
   it('Updated todoListItem will be reflected in todayImplementationTodoList and todayDueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
     const todoListItemId = 1;
-    const implementationDate = new Date('2020-09-27T21:11:54');
-    const dueDate = new Date('2020-09-28T21:11:54');
+    const implementationDate = new Date('2020-09-27T00:00:00');
+    const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = '食器用洗剤2つ購入';
     const completeFlag = true;
+    const today = new Date();
 
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
@@ -191,28 +212,19 @@ describe('async actions todoLists', () => {
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: true,
             },
           ],
-          todayDueTodoList: [
-            {
-              id: 1,
-              posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
-              todo_content: '食器用洗剤2つ購入',
-              complete_flag: true,
-            },
-          ],
+          todayDueTodoList: [],
           monthImplementationTodoList: [
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: true,
             },
@@ -221,8 +233,8 @@ describe('async actions todoLists', () => {
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: true,
             },
@@ -235,6 +247,7 @@ describe('async actions todoLists', () => {
 
     await editTodoListItem(
       todoListItemId,
+      today,
       implementationDate,
       dueDate,
       todoContent,
@@ -263,16 +276,16 @@ describe('async actions todoLists', () => {
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '買い物へ行く',
               complete_flag: false,
             },
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
             },
@@ -281,8 +294,8 @@ describe('async actions todoLists', () => {
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '買い物へ行く',
               complete_flag: false,
             },
@@ -314,16 +327,16 @@ describe('async actions todoLists', () => {
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '買い物へ行く',
               complete_flag: false,
             },
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
             },
@@ -332,16 +345,16 @@ describe('async actions todoLists', () => {
             {
               id: 2,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '買い物へ行く',
               complete_flag: false,
             },
             {
               id: 1,
               posted_date: '2020-09-27T19:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
             },

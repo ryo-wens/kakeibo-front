@@ -1,8 +1,7 @@
 import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import MenuItem from '@material-ui/core/MenuItem';
-import { CreateGroups } from '../todo';
-import { Button, Divider, Menu } from '@material-ui/core';
+import { CreateGroups, GroupMenuButton } from '../todo';
+import { Button, Divider, ListItem, Menu } from '@material-ui/core';
 import { useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
 import { Groups } from '../../reducks/groups/types';
@@ -35,6 +34,10 @@ const useStyles = makeStyles((theme: Theme) =>
       color: '#666',
       fontSize: '12px',
     },
+    groupListItem: {
+      display: 'flex',
+      justifyContent: 'space-between',
+    },
   })
 );
 
@@ -66,21 +69,25 @@ const SwitchEntity = (props: SwitchEntityProps) => {
         open={Boolean(props.anchorEl)}
         onClose={props.closeMenu}
       >
-        <MenuItem value={'UserName'} onClick={props.switchToIndividual}>
+        <ListItem value={'UserName'} onClick={props.switchToIndividual}>
           UserName
-        </MenuItem>
+        </ListItem>
         <Divider />
         <span className={classes.group}>グループ</span>
         {approvedGroups.map((approvedGroup) => {
           return (
-            <MenuItem
-              button={true}
-              key={approvedGroup.group_id}
-              value={approvedGroup.group_name}
-              onClick={() => props.switchToGroup(approvedGroup.group_id, approvedGroup.group_name)}
-            >
-              {approvedGroup.group_name}
-            </MenuItem>
+            <div key={approvedGroup.group_id} className={classes.groupListItem}>
+              <ListItem
+                button={true}
+                key={approvedGroup.group_id}
+                onClick={() =>
+                  props.switchToGroup(approvedGroup.group_id, approvedGroup.group_name)
+                }
+              >
+                {approvedGroup.group_name}
+              </ListItem>
+              <GroupMenuButton approvedGroup={approvedGroup} closeMenu={props.closeMenu} />
+            </div>
           );
         })}
 

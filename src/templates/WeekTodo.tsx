@@ -139,10 +139,11 @@ const WeekTodo = () => {
         <WeeksTabs selectedDate={selectedDate} />
         <WeeksTodoLists
           selectedDate={selectedDate}
-          monthImplementationTodoList={monthImplementationTodoList}
-          monthDueTodoList={monthDueTodoList}
+          groupId={groupId}
           groupMonthImplementationTodoList={groupImplementationTodoList}
           groupMonthDueTodoList={groupDueTodoList}
+          monthImplementationTodoList={monthImplementationTodoList}
+          monthDueTodoList={monthDueTodoList}
         />
       </div>
     </>

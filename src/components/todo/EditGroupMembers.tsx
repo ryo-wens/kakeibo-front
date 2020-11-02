@@ -8,7 +8,6 @@ import IconButton from '@material-ui/core/IconButton';
 import { List, ListItem } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
-import SearchIcon from '@material-ui/icons/Search';
 import { Group } from '../../reducks/groups/types';
 import ListItemText from '@material-ui/core/ListItemText';
 import { TodoButton } from './index';
@@ -121,8 +120,6 @@ const EditGroupMembers = (props: EditGroupMembersProps) => {
       )}
       <p>メンバーを招待する</p>
       <Paper component="form" className={classes.root}>
-        <SearchIcon className={classes.icon} />
-        <Divider className={classes.divider} orientation="vertical" />
         <InputBase
           className={classes.input}
           value={userId}
