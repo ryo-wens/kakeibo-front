@@ -1,13 +1,14 @@
 export interface TodoListItem {
   id: number;
-  posted_date: string;
+  posted_date: Date | null;
+  updated_date: Date | null;
   implementation_date: string;
   due_date: string;
   todo_content: string;
   complete_flag: boolean;
 }
 
-export interface TodoLists extends Array<TodoListItem> {}
+export interface TodoList extends Array<TodoListItem> {}
 
 export interface createTodoListItemReq {
   implementation_date: Date | null;
@@ -17,7 +18,8 @@ export interface createTodoListItemReq {
 
 export interface createTodoListItemRes {
   id: number;
-  posted_date: string;
+  posted_date: Date | null;
+  updated_date: Date | null;
   implementation_date: string;
   due_date: string;
   todo_content: string;
@@ -33,7 +35,8 @@ export interface editTodoListItemReq {
 
 export interface editTodoListItemRes {
   id: number;
-  posted_date: string;
+  posted_date: Date | null;
+  updated_date: Date | null;
   implementation_date: string;
   due_date: string;
   todo_content: string;
@@ -41,14 +44,14 @@ export interface editTodoListItemRes {
 }
 
 export interface fetchTodayTodoListsRes {
-  implementation_todo_list: TodoLists;
-  due_todo_list: TodoLists;
+  implementation_todo_list: TodoList;
+  due_todo_list: TodoList;
   message: string;
 }
 
 export interface fetchMonthTodoListsRes {
-  implementation_todo_list: TodoLists;
-  due_todo_list: TodoLists;
+  implementation_todo_list: TodoList;
+  due_todo_list: TodoList;
   message: string;
 }
 

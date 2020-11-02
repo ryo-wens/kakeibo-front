@@ -10,7 +10,7 @@ export { default as InvitationNotifications } from './InvitationNotifications';
 export { default as MobileTodoMenu } from './MobileTodoMenu';
 export { default as TextInput } from './TextInput';
 export { default as TodoButton } from './TodoButton';
-export { default as TodoList } from './TodoList';
+export { default as TodoListItemComponent } from './TodoListItemComponent';
 export { default as TodoListItemMenuButton } from './TodoListItemMenuButton';
 export { default as TodoMenu } from './TodoMenu';
 export { default as WeeksTabs } from './WeeksTabs';

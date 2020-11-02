@@ -1,34 +1,45 @@
 import React, { useCallback, useState } from 'react';
-import { AddTodo, TodoList } from './index';
-import { TodoLists } from '../../reducks/todoLists/types';
+import { AddTodo, TodoListItemComponent } from './index';
+import { TodoList } from '../../reducks/todoLists/types';
 import { dateStringToDate, getWeekStartDate, getWeekDay } from '../../lib/date';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { getPathTemplateName } from '../../lib/path';
+import { makeStyles } from '@material-ui/core/styles';
+import { date } from '../../lib/constant';
+
+const useStyles = makeStyles({
+  disabled: {
+    pointerEvents: 'none',
+    opacity: 0.6,
+  },
+});
 
 interface WeeksTodoListsProps {
   selectedDate: Date;
   groupId: number;
-  groupMonthImplementationTodoList: TodoLists;
-  groupMonthDueTodoList: TodoLists;
-  monthImplementationTodoList: TodoLists;
-  monthDueTodoList: TodoLists;
+  groupMonthImplementationTodoList: TodoList;
+  groupMonthDueTodoList: TodoList;
+  monthImplementationTodoList: TodoList;
+  monthDueTodoList: TodoList;
 }
 
 const WeeksTodoLists = (props: WeeksTodoListsProps) => {
+  const classes = useStyles();
   const [value, setValue] = useState<number>(0);
   const entityType = getPathTemplateName(window.location.pathname);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
   const startDate = getWeekStartDate(selectedDate);
+  const today = date;
 
   const switchTab = (event: React.ChangeEvent<unknown>, value: number) => {
     setValue(value);
   };
 
   const week = useCallback(
-    (todoLists: TodoLists) => {
+    (todoLists: TodoList) => {
       const week = [];
 
       for (let i = 0; i < 7; i++) {
@@ -38,6 +49,9 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
           startDate.getDate() + i
         );
 
+        const getTimeDate =
+          new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - 1000;
+
         const dateTodoLists = [];
         for (const todoList of todoLists) {
           const prevDate: number =
@@ -46,12 +60,15 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
               : dateStringToDate(todoList.due_date).getTime();
           const weekDate: number = date.getTime();
           if (prevDate === weekDate) {
-            dateTodoLists.push(<TodoList todoListItem={todoList} key={todoList.id} />);
+            dateTodoLists.push(<TodoListItemComponent todoListItem={todoList} key={todoList.id} />);
           }
         }
 
         week.push(
-          <div key={date.getDate()}>
+          <div
+            key={date.getDate()}
+            className={today.getTime() > getTimeDate ? classes.disabled : ''}
+          >
             <p>
               {date.getMonth() + 1}/{date.getDate()} （{getWeekDay(date)}）
             </p>
@@ -65,7 +82,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
     [selectedDate]
   );
 
-  const existsWeekTodoList = (implementationTodoList: TodoLists, dueTodoList: TodoLists) => {
+  const existsWeekTodoList = (implementationTodoList: TodoList, dueTodoList: TodoList) => {
     if (!implementationTodoList.length && !dueTodoList.length) {
       return (
         <>
