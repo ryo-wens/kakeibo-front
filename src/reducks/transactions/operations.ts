@@ -157,7 +157,12 @@ export const editTransactions = (
     try {
       const result = await axios.put<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
-        JSON.stringify(data),
+        JSON.stringify(data, function (key, value) {
+          if (key === 'transaction_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
         {
           withCredentials: true,
         }
@@ -173,7 +178,11 @@ export const editTransactions = (
         return transaction;
       });
 
-      dispatch(updateTransactionsAction(nextTransactionsList));
+      const aligningTransactionsList = nextTransactionsList.sort(
+        (a, b) => Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
+      );
+
+      dispatch(updateTransactionsAction(aligningTransactionsList));
     } catch (error) {
       if (error.response.status === 400) {
         alert(error.response.data.error.message.join('\n'));

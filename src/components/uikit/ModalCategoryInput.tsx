@@ -1,5 +1,5 @@
-import React, { useEffect, useMemo, ReactElement } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useMemo, ReactElement } from 'react';
+import { useSelector } from 'react-redux';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -7,8 +7,8 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { State } from '../../reducks/store/types';
 import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
-import { fetchCategories } from '../../reducks/categories/operations';
 import { Categories } from '../../reducks/categories/types';
+import { CategoryName } from '../../reducks/categories/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,7 +38,7 @@ const MenuProps = {
 
 interface CategoryProps {
   kind: string;
-  value: string | null;
+  value: CategoryName;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   onClick: (
     bigCategoryId: number,
@@ -48,18 +48,11 @@ interface CategoryProps {
   required: boolean;
 }
 
-const CategoryInput = (props: CategoryProps): JSX.Element => {
+const ModalCategoryInput = (props: CategoryProps): JSX.Element => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
-
-  useEffect(() => {
-    if (incomeCategories.length === 0 || expenseCategories.length === 0) {
-      dispatch(fetchCategories());
-    }
-  }, []);
 
   const categories = useMemo(() => {
     let tmpCategories: ReactElement<Categories>[] = [];
@@ -132,10 +125,14 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
       <InputLabel id="category" required={props.required}>
         カテゴリー(必須)
       </InputLabel>
-      <Select MenuProps={MenuProps} value={props.value} onChange={props.onChange}>
+      <Select
+        MenuProps={MenuProps}
+        value={props.value.mediumCategory || props.value.customCategory}
+        onChange={props.onChange}
+      >
         {categories}
       </Select>
     </FormControl>
   );
 };
-export default CategoryInput;
+export default ModalCategoryInput;

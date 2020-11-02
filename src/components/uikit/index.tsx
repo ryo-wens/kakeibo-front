@@ -7,3 +7,5 @@ export { default as InputModal } from './InputModal';
 export { default as KindSelectBox } from './KindSelectBox';
 export { default as ModalInform } from './ModalInform';
 export { default as TextInput } from './TextInput';
+export { default as SelectMenu } from './selectMenu';
+export { default as ModalCategoryInput } from './ModalCategoryInput';
