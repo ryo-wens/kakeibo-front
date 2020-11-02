@@ -1,27 +1,54 @@
-import React, { ReactElement, useEffect } from 'react';
+import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTransactionsList } from '../../reducks/transactions/operations';
 import { State } from '../../reducks/store/types';
-import { getTransactions, getTransactionsMessage } from '../../reducks/transactions/selectors';
+import { getTransactions } from '../../reducks/transactions/selectors';
 import { year, month, customMonth } from '../../lib/constant';
 import '../../assets/monthly-history.scss';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
+import { InputModal, SelectMenu } from '../uikit';
+import { incomeTransactionType } from '../../lib/constant';
 
 const MonthlyHistory = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const transactionsList = getTransactions(selector);
-  const message = getTransactionsMessage(selector);
-  console.log(message);
+  const [modalOpen, setModalOpen] = useState<boolean>(false);
+  const [open, setOpen] = useState<number | undefined>(undefined);
+
+  useEffect(() => {
+    dispatch(fetchTransactionsList(String(year), customMonth));
+  }, []);
 
   useEffect(() => {
     dispatch(fetchCategories());
   }, []);
 
-  useEffect(() => {
-    dispatch(fetchTransactionsList(String(year), customMonth));
-  }, []);
+  const handleOpen = (transactionId: number) => {
+    setOpen(transactionId);
+    setModalOpen(true);
+  };
+
+  const handleClose = () => {
+    setOpen(undefined);
+    setModalOpen(false);
+  };
+
+  const subTotalAmounts = (startDate: number, endDate: number) => {
+    let oneWeekSubTotal = 0;
+
+    for (const transaction of transactionsList) {
+      if (transaction.transaction_type !== incomeTransactionType) {
+        const transactionDay = Number(transaction.transaction_date.slice(8, 10));
+        if (startDate <= transactionDay && transactionDay <= endDate) {
+          oneWeekSubTotal += transaction.amount;
+        }
+      }
+    }
+
+    return oneWeekSubTotal;
+  };
 
   const rows = () => {
     let headerRow: ReactElement[] = [];
@@ -42,13 +69,28 @@ const MonthlyHistory = () => {
 
       historyRow = [
         ...historyRow,
-        <td className="monthlyhistory-table__record-second" key={index}>
+        <td className="monthly-history-table__record-second" key={index}>
           {(() => {
             let items: ReactElement[] = [];
             let prevTransactionDate = '';
 
-            transactionsList.map((transaction) => {
+            transactionsList.map((transaction, index) => {
               const transactionDay = Number(transaction.transaction_date.slice(8, 10));
+              const customTransactionDate = transaction.transaction_date
+                .replace('/', '-')
+                .slice(0, 10);
+              const transactionDate = new Date(customTransactionDate);
+
+              const categoryName = {
+                mediumCategory:
+                  transaction.medium_category_name !== null ? transaction.medium_category_name : '',
+                customCategory:
+                  transaction.custom_category_name !== null ? transaction.custom_category_name : '',
+              };
+
+              if (transaction.transaction_type === incomeTransactionType) {
+                return null;
+              }
 
               if (
                 displayWeek.startDate <= transactionDay &&
@@ -56,7 +98,11 @@ const MonthlyHistory = () => {
               ) {
                 items = [
                   ...items,
-                  <dl className="monthlyhistory-table__dl" key={transaction.id}>
+                  <dl
+                    className="monthly-history-table__dl"
+                    key={transaction.id}
+                    onClick={() => handleOpen(transaction.id)}
+                  >
                     <dt>
                       <span>
                         {(() => {
@@ -83,6 +129,18 @@ const MonthlyHistory = () => {
                       </span>
                     </dt>
                   </dl>,
+                  <InputModal
+                    key={index}
+                    open={open === transaction.id && modalOpen}
+                    onClose={handleClose}
+                    id={transaction.id}
+                    shop={transaction.shop === null ? '' : transaction.shop}
+                    memo={transaction.memo === null ? '' : transaction.memo}
+                    amount={transaction.amount}
+                    categoryName={categoryName}
+                    transactionDate={transactionDate}
+                    transactionsType={transaction.transaction_type}
+                  />,
                 ];
               }
             });
@@ -93,15 +151,15 @@ const MonthlyHistory = () => {
 
       operationRow = [
         ...operationRow,
-        <td className="monthlyhistory-table__record-third" key={index} align={'center'}>
-          <button className="btn--primary">入力する</button>
+        <td className="monthly-history-table__record-third" key={index} align={'center'}>
+          <SelectMenu startDate={displayWeek.startDate} endDate={displayWeek.endDate} />
         </td>,
       ];
 
       subTotalAmountRow = [
         ...subTotalAmountRow,
-        <td key={index} className="monthlyhistory-table__record-fourth">
-          小計
+        <td key={index} className="monthly-history-table__record-fourth">
+          小計 ¥ {subTotalAmounts(displayWeek.startDate, displayWeek.endDate).toLocaleString()}
         </td>,
       ];
     });
@@ -113,19 +171,31 @@ const MonthlyHistory = () => {
     };
   };
 
+  const totalAmount = () => {
+    let amount = 0;
+
+    for (const transaction of transactionsList) {
+      if (transaction.transaction_type !== incomeTransactionType) {
+        amount += transaction.amount;
+      }
+    }
+    return amount;
+  };
+
   return (
     <div className="box__monthlyExpense">
       <h2>{month}月の支出</h2>
-      {message !== '' && <h3>{message}</h3>}
-      <table className="monthlyhistory-table">
-        <tbody className="monthlyhistory-table__tbody">
-          <tr className="monthlyhistory-table__thead">{rows().headerRow}</tr>
-          <tr className="monthlyhistory-table__trow">{rows().historyRow}</tr>
-          <tr className="monthlyhistory-table__trow">{rows().operationRow}</tr>
-          <tr className="monthlyhistory-table__trow">{rows().totalAmountRow}</tr>
+      <table className="monthly-history-table">
+        <tbody className="monthly-history-table__tbody">
+          <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
+          <tr className="monthly-history-table__trow">{rows().historyRow}</tr>
+          <tr className="monthly-history-table__trow">{rows().operationRow}</tr>
+          <tr className="monthly-history-table__trow">{rows().totalAmountRow}</tr>
         </tbody>
       </table>
-      <div className="monthlyhistory-table__box-total">合計：</div>
+      <div className="monthly-history-table__box-total">
+        合計： ¥ {totalAmount().toLocaleString()}
+      </div>
     </div>
   );
 };

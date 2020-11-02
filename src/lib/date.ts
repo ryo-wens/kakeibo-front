@@ -1,4 +1,4 @@
-import { month, year } from './constant';
+import { year, month, customMonth } from './constant';
 
 export const dateStringToDate = (date: string) => {
   const prevDates = date.split(/[/()]/, 3);
@@ -46,7 +46,6 @@ export const displayWeeks = () => {
   const endDayCount = endDate.getDate();
   let currentDayOfWeek = startDate.getDay();
   const prevWeeks: Weeks = [];
-
   for (let i = 1; i <= endDayCount; ) {
     const weeklyInfo: WeeklyInfo = {
       startDate: 0,
@@ -77,4 +76,14 @@ export const displayWeeks = () => {
   }
 
   return prevWeeks;
+};
+
+export const weekDays = (startDay: number, endDay: number) => {
+  const oneWeekDays: string[] = [];
+
+  for (let i = startDay; i <= endDay; i++) {
+    oneWeekDays.push(customMonth + '月' + i + '日');
+  }
+
+  return oneWeekDays;
 };

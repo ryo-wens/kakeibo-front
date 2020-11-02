@@ -48,3 +48,14 @@ export interface editCustomRes {
 export interface deleteCustomRes {
   message: string;
 }
+
+export interface CategoryName {
+  mediumCategory: string | null;
+  customCategory: string | null;
+}
+
+export interface CategoryId {
+  bigCategoryId: number;
+  mediumCategoryId: number | null;
+  customCategoryId: number | null;
+}

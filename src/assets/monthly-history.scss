@@ -1,7 +1,7 @@
 @import "modules/button.scss";
 @import "variable.scss";
 
-.monthlyhistory-table {
+.monthly-history-table {
   border-collapse: collapse;
   display: table;
   height: auto;
@@ -52,7 +52,7 @@
 
   &__record-fourth{
     border: solid 1px $border_color;
-    font-size: $large-font_size;
+    font-size: $medium-font_size;
     font-weight: $large-font_weight;
     height: 45px;
     width: 130px;
