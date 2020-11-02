@@ -40,6 +40,7 @@ export const addGroupTransactions = (
   shop: string | null,
   memo: string | null,
   amount: string | number,
+  payment_user_id: string,
   big_category_id: number,
   medium_category_id: number | null,
   custom_category_id: number | null
@@ -63,6 +64,7 @@ export const addGroupTransactions = (
       shop: shop,
       memo: memo,
       amount: Number(amount),
+      payment_user_id: payment_user_id,
       big_category_id: big_category_id,
       medium_category_id: medium_category_id,
       custom_category_id: custom_category_id,
@@ -80,6 +82,7 @@ export const addGroupTransactions = (
           withCredentials: true,
         }
       );
+      console.log(result.data);
       const newGroupTransaction = result.data;
 
       const prevGroupTransactions = getState().groupTransactions.groupTransactionsList;
@@ -123,6 +126,7 @@ export const editGroupTransactions = (
   shop: string | null,
   memo: string | null,
   amount: string | number,
+  payment_user_id: string,
   big_category_id: number,
   medium_category_id: number | null,
   custom_category_id: number | null
@@ -146,6 +150,7 @@ export const editGroupTransactions = (
       shop: shop,
       memo: memo,
       amount: Number(amount),
+      payment_user_id: payment_user_id,
       big_category_id: big_category_id,
       medium_category_id: medium_category_id,
       custom_category_id: custom_category_id,
@@ -158,6 +163,7 @@ export const editGroupTransactions = (
           withCredentials: true,
         }
       );
+      console.log(result.data);
       const editedGroupTransaction = result.data;
 
       const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
