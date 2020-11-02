@@ -89,6 +89,8 @@ describe('async actions addGroupTransactions', () => {
       };
     };
 
+    const payment_user_id = 'suzuki';
+
     const mockResponse = addGroupTransaction;
 
     const mockGroupTransactionsList = addedGroupTransactions.transactions_list;
@@ -108,6 +110,7 @@ describe('async actions addGroupTransactions', () => {
       'ビックカメラ',
       'コーヒーメーカー',
       17000,
+      payment_user_id,
       3,
       17,
       null
@@ -160,6 +163,8 @@ describe('async actions editGroupTransactions', () => {
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
 
+    const payment_user_id = 'suzuki';
+
     const mockResponse = editGroupTransaction;
 
     const mockGroupTransactionsList = editedGroupTransaction.transactions_list;
@@ -180,6 +185,7 @@ describe('async actions editGroupTransactions', () => {
       '虎視淡々',
       'お疲れ会',
       25000,
+      payment_user_id,
       5,
       29,
       null

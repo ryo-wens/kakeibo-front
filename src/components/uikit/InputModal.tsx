@@ -131,7 +131,6 @@ const InputModal = (props: InputModalProps) => {
     categoryId().customCategoryId
   );
 
-  console.log(category);
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setAmount(event.target.value);

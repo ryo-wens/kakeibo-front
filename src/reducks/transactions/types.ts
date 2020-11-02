@@ -1,6 +1,7 @@
 export interface FetchTransactions {
   id: number;
   transaction_type: string;
+  posted_date: Date;
   updated_date: Date;
   transaction_date: string;
   shop: string | null;
@@ -30,6 +31,7 @@ export interface TransactionsReq {
 export interface TransactionsRes {
   id: number;
   transaction_type: string;
+  posted_date: Date;
   updated_date: Date;
   transaction_date: string;
   shop: string | null;
