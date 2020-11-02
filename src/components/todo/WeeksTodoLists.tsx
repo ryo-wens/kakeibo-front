@@ -7,7 +7,7 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { getPathTemplateName } from '../../lib/path';
 import { makeStyles } from '@material-ui/core/styles';
-import { date, month } from '../../lib/constant';
+import { date } from '../../lib/constant';
 
 const useStyles = makeStyles({
   disabled: {
@@ -49,6 +49,9 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
           startDate.getDate() + i
         );
 
+        const getTimeDate =
+          new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - 1000;
+
         const dateTodoLists = [];
         for (const todoList of todoLists) {
           const prevDate: number =
@@ -64,11 +67,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
         week.push(
           <div
             key={date.getDate()}
-            className={
-              `${date.getMonth() + 1}/${date.getDate()}` < `${month}/${today.getDate()}`
-                ? classes.disabled
-                : ''
-            }
+            className={today.getTime() > getTimeDate ? classes.disabled : ''}
           >
             <p>
               {date.getMonth() + 1}/{date.getDate()} （{getWeekDay(date)}）

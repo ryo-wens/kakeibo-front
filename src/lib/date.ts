@@ -16,6 +16,11 @@ export const dateToDateString = (date: Date) => {
   return `${year}/${month}/${_date}(${day})`;
 };
 
+export const dateStringToMonthString = (date: string) => {
+  const prevDates = date.split(/[/()]/, 2);
+  return `${prevDates[0]}/${prevDates[1]}`;
+};
+
 export const dateToMonthString = (date: Date) => {
   const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
   return `${date.getFullYear()}/${month}`;
