@@ -6,11 +6,13 @@ import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import {
   fetchTransactionsList,
+  fetchLatestTransactionsList,
   addTransactions,
   editTransactions,
   deleteTransactions,
 } from '../../src/reducks/transactions/operations';
 import transactionsList from './transactions.json';
+import latestTransactionsList from './latestTransactions.json';
 import addResTransaction from './addResponse.json';
 import addTransactionsList from './addTransactions.json';
 import editResTransaction from './editResponse.json';
@@ -34,14 +36,14 @@ describe('async actions fetchTransactionsList', () => {
   });
 
   it('Get transactionsList if fetch succeeds', async () => {
-    const mockResponse = transactionsList.transactions_list;
+    const mockResponse = transactionsList;
 
     const expectedAddActions = [
       {
         type: actionTypes.FETCH_TRANSACTIONS,
         payload: {
-          transactionsList: [],
-          noTransactionsMessage: undefined,
+          transactionsList: mockResponse.transactions_list,
+          noTransactionsMessage: '',
         },
       },
     ];
@@ -50,6 +52,32 @@ describe('async actions fetchTransactionsList', () => {
 
     await fetchTransactionsList(String(year), month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
+  });
+});
+
+describe('async actions fetchLatestTransactionsList', () => {
+  const store = mockStore({ latestTransactionsList: [] });
+
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
+
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  it('Get latestTransactionsList if fetch succeeds', async () => {
+    const mockResponse = latestTransactionsList;
+
+    const expectedActions = [
+      {
+        type: actionTypes.FETCH_LATEST_TRANSACTIONS,
+        payload: mockResponse.transactions_list,
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchLatestTransactionsList()(store.dispatch);
+    expect(store.getActions()).toEqual(expectedActions);
   });
 });
 
