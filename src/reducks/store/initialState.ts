@@ -8,6 +8,7 @@ const initialState = {
     groupExpenseList: [],
   },
   transactions: {
+    latestTransactionsList: [],
     transactionsList: [],
     noTransactionsMessage: '',
   },
