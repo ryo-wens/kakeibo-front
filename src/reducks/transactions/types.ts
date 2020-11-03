@@ -17,6 +17,10 @@ export interface FetchTransactionsRes {
   message: string;
 }
 
+export interface FetchLatestTransactionsRes {
+  transactions_list: TransactionsList;
+}
+
 export interface TransactionsReq {
   transaction_type: string;
   transaction_date: Date | null;
