@@ -34,6 +34,26 @@ export const getLastDayOfMonth = (date: Date) => {
   return new Date(date.getFullYear(), date.getMonth() + 1, 0);
 };
 
+export const getFirstDayOfNextMonth = (date: Date) => {
+  const endOfMonthDate = getLastDayOfMonth(date);
+  const remainingDatesUntilNextMonth = endOfMonthDate.getDate() - date.getDate();
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() + remainingDatesUntilNextMonth + 1
+  );
+};
+
+export const getLastDayOfPrevMonth = (date: Date) => {
+  const earlyOfMonthDate = getFirstDayOfMonth(date);
+  const remainingDatesUntilPrevMonth = date.getDate() - earlyOfMonthDate.getDate();
+  return new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate() - remainingDatesUntilPrevMonth - 1
+  );
+};
+
 export const getWeekStartDate = (date: Date) => {
   const weekDay = date.getDay();
   return new Date(date.getFullYear(), date.getMonth(), date.getDate() - weekDay);

@@ -104,7 +104,7 @@ const TodoMenu = () => {
             monthImplementationTodoList,
             monthDueTodoList,
             monthTodoListMessage,
-            `/todo/week`,
+            `/todo/monthly`,
             fetchMonthTodoList(year, month),
             fetchGroupMonthTodoLists(groupId, year, month)
           )
@@ -113,7 +113,7 @@ const TodoMenu = () => {
         <ListItemIcon>
           <DateRangeIcon />
         </ListItemIcon>
-        <ListItemText primary={'週間予定'} />
+        <ListItemText primary={'月間予定'} />
       </ListItem>
     </List>
   );

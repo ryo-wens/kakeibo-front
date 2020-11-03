@@ -50,6 +50,8 @@ const AddTodo = (props: AddTodoProps) => {
 
   const handleOpen = () => {
     setOpen(true);
+    setSelectedImplementationDate(props.date);
+    setSelectedDueDate(props.date);
   };
 
   const handleClose = () => {
@@ -123,7 +125,7 @@ const AddTodo = (props: AddTodoProps) => {
                   format="yyyy年 MM月dd日"
                   value={selectedImplementationDate}
                   onChange={handleImplementationDateChange}
-                  minDate={new Date()}
+                  minDate={props.date}
                   required={true}
                 />
                 <KeyboardDatePicker
