@@ -1,4 +1,8 @@
-import { fetchTransactions, updateTransactionsAction } from './actions';
+import {
+  fetchTransactionsActions,
+  updateTransactionsAction,
+  fetchLatestTransactionsActions,
+} from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
@@ -6,6 +10,7 @@ import { State } from '../store/types';
 import {
   TransactionsList,
   FetchTransactionsRes,
+  FetchLatestTransactionsRes,
   TransactionsReq,
   TransactionsRes,
   DeleteTransactionRes,
@@ -32,12 +37,30 @@ export const fetchTransactionsList = (year: string, customMonth: string) => {
             Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
         );
 
-        dispatch(fetchTransactions(aligningTransactionsList, resMessage));
+        dispatch(fetchTransactionsActions(aligningTransactionsList, resMessage));
       } else {
         const emptyTransactionsList: TransactionsList = [];
 
-        dispatch(fetchTransactions(emptyTransactionsList, resMessage));
+        dispatch(fetchTransactionsActions(emptyTransactionsList, resMessage));
       }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const fetchLatestTransactionsList = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<FetchLatestTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
+        {
+          withCredentials: true,
+        }
+      );
+      const latestTransactionsList = result.data.transactions_list;
+
+      dispatch(fetchLatestTransactionsActions(latestTransactionsList));
     } catch (error) {
       errorHandling(dispatch, error);
     }

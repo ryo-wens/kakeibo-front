@@ -1,10 +1,12 @@
 import { TransactionsList } from './types';
 export type transactionActions = ReturnType<
-  typeof updateTransactionsAction | typeof fetchTransactions
+  | typeof updateTransactionsAction
+  | typeof fetchTransactionsActions
+  | typeof fetchLatestTransactionsActions
 >;
 
 export const FETCH_TRANSACTIONS = 'FETCH_TRANSACTIONS';
-export const fetchTransactions = (
+export const fetchTransactionsActions = (
   transactionsList: TransactionsList,
   noTransactionsMessage: string
 ) => {
@@ -14,6 +16,14 @@ export const fetchTransactions = (
       transactionsList,
       noTransactionsMessage,
     },
+  };
+};
+
+export const FETCH_LATEST_TRANSACTIONS = 'FETCH_LATEST_TRANSACTIONS';
+export const fetchLatestTransactionsActions = (latestTransactionsList: TransactionsList) => {
+  return {
+    type: FETCH_LATEST_TRANSACTIONS,
+    payload: latestTransactionsList,
   };
 };
 

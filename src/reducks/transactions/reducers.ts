@@ -12,6 +12,11 @@ export const transactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_LATEST_TRANSACTIONS:
+      return {
+        ...state,
+        latestTransactionsList: [...action.payload],
+      };
     case Actions.UPDATE_TRANSACTIONS:
       return {
         ...state,

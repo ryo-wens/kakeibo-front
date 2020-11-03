@@ -8,6 +8,11 @@ export const getTransactions = createSelector(
   (state) => state.transactionsList
 );
 
+export const getLatestTransactions = createSelector(
+  [transactionsSelector],
+  (state) => state.latestTransactionsList
+);
+
 export const getTransactionsMessage = createSelector(
   [transactionsSelector],
   (state) => state.noTransactionsMessage
