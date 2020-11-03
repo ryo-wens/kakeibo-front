@@ -1,4 +1,4 @@
-import { fetchTransactions, updateTransactionsAction } from './actions';
+import { fetchTransactionsActions, updateTransactionsAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
@@ -32,11 +32,11 @@ export const fetchTransactionsList = (year: string, customMonth: string) => {
             Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
         );
 
-        dispatch(fetchTransactions(aligningTransactionsList, resMessage));
+        dispatch(fetchTransactionsActions(aligningTransactionsList, resMessage));
       } else {
         const emptyTransactionsList: TransactionsList = [];
 
-        dispatch(fetchTransactions(emptyTransactionsList, resMessage));
+        dispatch(fetchTransactionsActions(emptyTransactionsList, resMessage));
       }
     } catch (error) {
       errorHandling(dispatch, error);

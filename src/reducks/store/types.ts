@@ -23,6 +23,7 @@ export interface State {
     groupExpenseList: GroupCategories;
   };
   transactions: {
+    latestTransactionsList: TransactionsList;
     transactionsList: TransactionsList;
     noTransactionsMessage: string;
   };
