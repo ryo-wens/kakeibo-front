@@ -11,8 +11,8 @@ import {
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker } from '../components/uikit';
-import { TodoButton, TodoMenu, WeeksTabs, WeeksTodoLists } from '../components/todo';
-import { dateToDateString } from '../lib/date';
+import { MonthlyTodoList, TodoButton, TodoMenu } from '../components/todo';
+import { dateToMonthString, getFirstDayOfNextMonth, getLastDayOfPrevMonth } from '../lib/date';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
   getGroupDueTodoLists,
@@ -25,6 +25,7 @@ import { date } from '../lib/constant';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
+      width: '700px',
       margin: '40px 0px 0px 200px',
     },
     date: {
@@ -37,7 +38,7 @@ const useStyles = makeStyles(() =>
   })
 );
 
-const WeekTodo = () => {
+const MonthlyTodo = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
@@ -94,25 +95,24 @@ const WeekTodo = () => {
     setSelectedDate(date);
   }, [selectedDate]);
 
-  const getNextWeek = useCallback(() => {
-    const nextWeek = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate() + 7
-    );
-    setSelectedDate(nextWeek);
+  const getPrevMonth = useCallback(() => {
+    const lastDayOfPrevMonth = getLastDayOfPrevMonth(selectedDate);
+    setSelectedDate(lastDayOfPrevMonth);
+    const year = String(lastDayOfPrevMonth.getFullYear());
+    const month: string = ('0' + (lastDayOfPrevMonth.getMonth() + 1)).slice(-2);
+    dispatch(fetchMonthTodoList(year, month));
   }, [selectedDate, setSelectedDate]);
 
-  const getPreviousWeek = useCallback(() => {
-    const previousWeek = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate() - 7
-    );
-    setSelectedDate(previousWeek);
+  const getNextMonth = useCallback(() => {
+    const firstDayOfNextMonth = getFirstDayOfNextMonth(selectedDate);
+    setSelectedDate(firstDayOfNextMonth);
+    const year = String(firstDayOfNextMonth.getFullYear());
+    const month: string = ('0' + (firstDayOfNextMonth.getMonth() + 1)).slice(-2);
+    dispatch(fetchMonthTodoList(year, month));
   }, [selectedDate, setSelectedDate]);
 
-  const isSelectedDateToday = dateToDateString(selectedDate) === dateToDateString(new Date());
+  const equalsSelectedMonthAndCurrentMonth =
+    dateToMonthString(selectedDate) === dateToMonthString(new Date());
 
   return (
     <>
@@ -130,14 +130,13 @@ const WeekTodo = () => {
           </div>
           <TodoButton
             label={'<'}
-            disabled={isSelectedDateToday}
-            onClick={() => getPreviousWeek()}
+            disabled={equalsSelectedMonthAndCurrentMonth}
+            onClick={() => getPrevMonth()}
           />
-          <TodoButton label={'>'} disabled={false} onClick={() => getNextWeek()} />
+          <TodoButton label={'>'} disabled={false} onClick={() => getNextMonth()} />
           <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
-        <WeeksTabs selectedDate={selectedDate} />
-        <WeeksTodoLists
+        <MonthlyTodoList
           selectedDate={selectedDate}
           groupId={groupId}
           groupMonthImplementationTodoList={groupImplementationTodoList}
@@ -150,4 +149,4 @@ const WeekTodo = () => {
   );
 };
 
-export default WeekTodo;
+export default MonthlyTodo;

@@ -6,11 +6,14 @@ import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/select
 import { AddTodo, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
+  getMonthDueTodoList,
+  getMonthImplementationTodoList,
+  getMonthTodoListMessage,
   getTodayDueTodoList,
   getTodayImplementationTodoList,
   getTodayTodoListMessage,
 } from '../reducks/todoLists/selectors';
-import { fetchDateTodoLists } from '../reducks/todoLists/operations';
+import { fetchDateTodoList, fetchMonthTodoList } from '../reducks/todoLists/operations';
 import { getWeekDay } from '../lib/date';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupDateTodoLists } from '../reducks/groupTodoLists/operations';
@@ -37,6 +40,9 @@ const Todo = () => {
   const todayImplementationTodoList = getTodayImplementationTodoList(selector);
   const todayDueTodoList = getTodayDueTodoList(selector);
   const todayTodoListMessage = getTodayTodoListMessage(selector);
+  const monthImplementationTodoList = getMonthImplementationTodoList(selector);
+  const monthDueTodoList = getMonthDueTodoList(selector);
+  const monthTodoListMessage = getMonthTodoListMessage(selector);
   const groupImplementationTodoList = getGroupImplementationTodoLists(selector);
   const groupDueTodoList = getGroupDueTodoLists(selector);
   const entityType = getPathTemplateName(window.location.pathname);
@@ -54,7 +60,18 @@ const Todo = () => {
       !todayDueTodoList.length &&
       !todayTodoListMessage
     ) {
-      dispatch(fetchDateTodoLists(year, month, date));
+      dispatch(fetchDateTodoList(year, month, date));
+    }
+  }, []);
+
+  useEffect(() => {
+    if (
+      entityType !== 'group' &&
+      !monthImplementationTodoList.length &&
+      !monthDueTodoList.length &&
+      !monthTodoListMessage
+    ) {
+      dispatch(fetchMonthTodoList(year, month));
     }
   }, []);
 
