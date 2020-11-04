@@ -12,7 +12,7 @@ import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker } from '../components/uikit';
 import { MonthlyTodoList, TodoButton, TodoMenu } from '../components/todo';
-import { dateToDateString, getFirstDayOfNextMonth, getLastDayOfPrevMonth } from '../lib/date';
+import { dateToMonthString, getFirstDayOfNextMonth, getLastDayOfPrevMonth } from '../lib/date';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
   getGroupDueTodoLists,
@@ -25,6 +25,7 @@ import { date } from '../lib/constant';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
+      width: '700px',
       margin: '40px 0px 0px 200px',
     },
     date: {
@@ -110,7 +111,8 @@ const MonthlyTodo = () => {
     dispatch(fetchMonthTodoList(year, month));
   }, [selectedDate, setSelectedDate]);
 
-  const isSelectedDateToday = dateToDateString(selectedDate) === dateToDateString(new Date());
+  const equalsSelectedMonthAndCurrentMonth =
+    dateToMonthString(selectedDate) === dateToMonthString(new Date());
 
   return (
     <>
@@ -126,7 +128,11 @@ const MonthlyTodo = () => {
               required={false}
             />
           </div>
-          <TodoButton label={'<'} disabled={isSelectedDateToday} onClick={() => getPrevMonth()} />
+          <TodoButton
+            label={'<'}
+            disabled={equalsSelectedMonthAndCurrentMonth}
+            onClick={() => getPrevMonth()}
+          />
           <TodoButton label={'>'} disabled={false} onClick={() => getNextMonth()} />
           <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
         </div>
