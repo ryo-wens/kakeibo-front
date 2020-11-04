@@ -3,7 +3,7 @@ import { groupTodoListsActions } from './actions';
 import initialState from '../store/initialState';
 
 export const groupTodoListsReducer = (
-  state = initialState.groupTodoLists,
+  state = initialState.groupTodoList,
   action: groupTodoListsActions
 ) => {
   switch (action.type) {

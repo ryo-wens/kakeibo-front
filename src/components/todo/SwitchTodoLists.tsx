@@ -4,11 +4,11 @@ import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
 import { ExistsTodoLists } from './index';
 import { TodoList } from '../../reducks/todoLists/types';
-import { GroupTodoLists } from '../../reducks/groupTodoLists/types';
+import { GroupTodoList } from '../../reducks/groupTodoList/types';
 
 interface SwitchTodoListsProps {
-  implementationTodoList: TodoList | GroupTodoLists;
-  dueTodoList: TodoList | GroupTodoLists;
+  implementationTodoList: TodoList | GroupTodoList;
+  dueTodoList: TodoList | GroupTodoList;
 }
 
 const SwitchTodoLists = (props: SwitchTodoListsProps) => {

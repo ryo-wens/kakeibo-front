@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import * as GroupTodoListsActions from '../../src/reducks/groupTodoLists/actions';
+import * as GroupTodoListsActions from '../../src/reducks/groupTodoList/actions';
 import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
 import editGroupTodoListItemResponse from './editGroupTodoListItemResponse.json';
 import fetchGroupDateTodoListsResponse from './fetchGroupDateTodoListsResponse.json';
@@ -15,7 +15,7 @@ import {
   editGroupTodoListItem,
   fetchGroupDateTodoLists,
   fetchGroupMonthTodoLists,
-} from '../../src/reducks/groupTodoLists/operations';
+} from '../../src/reducks/groupTodoList/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
 const middlewares = [thunk];
@@ -26,8 +26,8 @@ const axiosMock = new MockAdapter(axios);
 
 const getState = () => {
   return {
-    groupTodoLists: {
-      groupImplementationTodoLists: [
+    groupTodoList: {
+      groupTodayImplementationTodoList: [
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
@@ -38,7 +38,7 @@ const getState = () => {
           user_id: 'furusawa',
         },
       ],
-      groupDueTodoLists: [
+      groupTodayDueTodoList: [
         {
           id: 1,
           posted_date: '2020-09-27T19:54:46Z',
@@ -49,7 +49,30 @@ const getState = () => {
           user_id: 'furusawa',
         },
       ],
-      message: '',
+      groupTodayTodoListMessage: '',
+      groupMonthImplementationTodoList: [
+        {
+          id: 1,
+          posted_date: '2020-09-27T19:54:46Z',
+          implementation_date: '09/27(日)',
+          due_date: '09/28(月)',
+          todo_content: '食器用洗剤2つ購入',
+          complete_flag: false,
+          user_id: 'furusawa',
+        },
+      ],
+      groupMonthDueTodoList: [
+        {
+          id: 1,
+          posted_date: '2020-09-27T19:54:46Z',
+          implementation_date: '09/27(日)',
+          due_date: '09/28(月)',
+          todo_content: '食器用洗剤2つ購入',
+          complete_flag: false,
+          user_id: 'furusawa',
+        },
+      ],
+      groupMonthTodoListMessage: '',
     },
     modal: { message: '', open: false },
     router: {

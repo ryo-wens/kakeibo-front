@@ -16,11 +16,11 @@ import {
 import { fetchDateTodoList, fetchMonthTodoList } from '../reducks/todoLists/operations';
 import { getWeekDay } from '../lib/date';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
-import { fetchGroupDateTodoLists } from '../reducks/groupTodoLists/operations';
+import { fetchGroupDateTodoLists } from '../reducks/groupTodoList/operations';
 import {
-  getGroupDueTodoLists,
-  getGroupImplementationTodoLists,
-} from '../reducks/groupTodoLists/selectors';
+  getGroupTodayImplementationTodoList,
+  getGroupTodayDueTodoList,
+} from '../reducks/groupTodoList/selectors';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 
 const useStyles = makeStyles(() =>
@@ -43,8 +43,8 @@ const Todo = () => {
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
   const monthTodoListMessage = getMonthTodoListMessage(selector);
-  const groupImplementationTodoList = getGroupImplementationTodoLists(selector);
-  const groupDueTodoList = getGroupDueTodoLists(selector);
+  const groupTodayImplementationTodoList = getGroupTodayImplementationTodoList(selector);
+  const groupTodayDueTodoList = getGroupTodayDueTodoList(selector);
   const entityType = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const dt: Date = new Date();
@@ -82,7 +82,11 @@ const Todo = () => {
   }, []);
 
   useEffect(() => {
-    if (entityType === 'group' && !groupImplementationTodoList.length && !groupDueTodoList.length) {
+    if (
+      entityType === 'group' &&
+      !groupTodayImplementationTodoList.length &&
+      !groupTodayDueTodoList.length
+    ) {
       dispatch(fetchGroupDateTodoLists(groupId, year, month, date));
     }
   }, []);
@@ -101,8 +105,8 @@ const Todo = () => {
           />
         ) : (
           <SwitchTodoLists
-            implementationTodoList={groupImplementationTodoList}
-            dueTodoList={groupDueTodoList}
+            implementationTodoList={groupTodayImplementationTodoList}
+            dueTodoList={groupTodayDueTodoList}
           />
         )}
         <div>

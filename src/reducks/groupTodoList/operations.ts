@@ -11,7 +11,7 @@ import {
   fetchGroupDateTodoListsRes,
   fetchGroupMonthTodoListsRes,
   GroupTodoListItem,
-  GroupTodoLists,
+  GroupTodoList,
 } from './types';
 import {
   createGroupTodoListItemAction,
@@ -62,17 +62,20 @@ export const createGroupTodoListItem = (
         }
       )
       .then((res) => {
-        const prevGroupImplementationTodoLists = getState().groupTodoLists
-          .groupImplementationTodoLists;
-        const prevGroupDueTodoLists = getState().groupTodoLists.groupDueTodoLists;
+        const prevGroupTodayImplementationTodoList = getState().groupTodoList
+          .groupTodayImplementationTodoList;
+        const prevGroupTodayDueTodoList = getState().groupTodoList.groupTodayDueTodoList;
 
         const groupTodoListItem: GroupTodoListItem = res.data;
 
-        const nextGroupImplementationTodoLists: GroupTodoLists = [
+        const nextGroupImplementationTodoLists: GroupTodoList = [
           groupTodoListItem,
-          ...prevGroupImplementationTodoLists,
+          ...prevGroupTodayImplementationTodoList,
         ];
-        const nextGroupDueTodoLists: GroupTodoLists = [groupTodoListItem, ...prevGroupDueTodoLists];
+        const nextGroupDueTodoLists: GroupTodoList = [
+          groupTodoListItem,
+          ...prevGroupTodayDueTodoList,
+        ];
 
         dispatch(
           createGroupTodoListItemAction(nextGroupImplementationTodoLists, nextGroupDueTodoLists)
@@ -126,12 +129,13 @@ export const editGroupTodoListItem = (
         }
       )
       .then((res) => {
-        const prevGroupImplementationTodoLists: GroupTodoLists = getState().groupTodoLists
-          .groupImplementationTodoLists;
-        const prevGroupDueTodoLists: GroupTodoLists = getState().groupTodoLists.groupDueTodoLists;
+        const prevGroupTodayImplementationTodoList: GroupTodoList = getState().groupTodoList
+          .groupTodayImplementationTodoList;
+        const prevGroupTodayDueTodoList: GroupTodoList = getState().groupTodoList
+          .groupTodayDueTodoList;
 
-        const updateGroupTodoLists = (prevGroupTodoLists: GroupTodoLists) => {
-          return prevGroupTodoLists.map((prevGroupTodoList: GroupTodoListItem) => {
+        const updateGroupTodoList = (prevGroupTodoList: GroupTodoList) => {
+          return prevGroupTodoList.map((prevGroupTodoList: GroupTodoListItem) => {
             if (prevGroupTodoList.id === todoListItemId) {
               const updateGroupTodoListItem: GroupTodoListItem = res.data;
               return updateGroupTodoListItem;
@@ -141,10 +145,12 @@ export const editGroupTodoListItem = (
           });
         };
 
-        const updateGroupImplementationTodoLists: GroupTodoLists = updateGroupTodoLists(
-          prevGroupImplementationTodoLists
+        const updateGroupImplementationTodoLists: GroupTodoList = updateGroupTodoList(
+          prevGroupTodayImplementationTodoList
         );
-        const updateGroupDueTodoLists: GroupTodoLists = updateGroupTodoLists(prevGroupDueTodoLists);
+        const updateGroupDueTodoLists: GroupTodoList = updateGroupTodoList(
+          prevGroupTodayDueTodoList
+        );
 
         dispatch(
           editGroupTodoListItemAction(updateGroupImplementationTodoLists, updateGroupDueTodoLists)
@@ -181,8 +187,8 @@ export const fetchGroupDateTodoLists = (
             fetchGroupDateTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
           );
         } else {
-          const groupImplementationTodoLists: GroupTodoLists = [];
-          const groupDueTodoLists: GroupTodoLists = [];
+          const groupImplementationTodoLists: GroupTodoList = [];
+          const groupDueTodoLists: GroupTodoList = [];
           dispatch(
             fetchGroupDateTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
           );
@@ -214,8 +220,8 @@ export const fetchGroupMonthTodoLists = (groupId: number, year: string, month: s
             fetchGroupMonthTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
           );
         } else {
-          const groupImplementationTodoLists: GroupTodoLists = [];
-          const groupDueTodoLists: GroupTodoLists = [];
+          const groupImplementationTodoLists: GroupTodoList = [];
+          const groupDueTodoLists: GroupTodoList = [];
           dispatch(
             fetchGroupMonthTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
           );
@@ -237,21 +243,24 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
         }
       )
       .then((res) => {
-        const prevGroupImplementationTodoLists: GroupTodoLists = getState().groupTodoLists
-          .groupImplementationTodoLists;
-        const prevGroupDueTodoLists: GroupTodoLists = getState().groupTodoLists.groupDueTodoLists;
+        const prevGroupTodayImplementationTodoLists: GroupTodoList = getState().groupTodoList
+          .groupTodayImplementationTodoList;
+        const prevGroupTodayDueTodoLists: GroupTodoList = getState().groupTodoList
+          .groupTodayDueTodoList;
         const message = res.data.message;
 
-        const updateGroupTodoLists = (prevGroupTodoLists: GroupTodoLists) => {
-          return prevGroupTodoLists.filter((prevGroupTodoList) => {
+        const updateGroupTodoList = (prevGroupTodoList: GroupTodoList) => {
+          return prevGroupTodoList.filter((prevGroupTodoList) => {
             return prevGroupTodoList.id !== todoListItemId;
           });
         };
 
-        const updateGroupImplementationTodoLists: GroupTodoLists = updateGroupTodoLists(
-          prevGroupImplementationTodoLists
+        const updateGroupImplementationTodoLists: GroupTodoList = updateGroupTodoList(
+          prevGroupTodayImplementationTodoLists
         );
-        const updateGroupDueTodoLists: GroupTodoLists = updateGroupTodoLists(prevGroupDueTodoLists);
+        const updateGroupDueTodoLists: GroupTodoList = updateGroupTodoList(
+          prevGroupTodayDueTodoLists
+        );
 
         dispatch(
           deleteGroupTodoListItemAction(updateGroupImplementationTodoLists, updateGroupDueTodoLists)

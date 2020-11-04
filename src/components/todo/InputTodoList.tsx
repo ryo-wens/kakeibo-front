@@ -8,7 +8,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { editTodoListItem } from '../../reducks/todoLists/operations';
-import { editGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
+import { editGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { date } from '../../lib/constant';
 

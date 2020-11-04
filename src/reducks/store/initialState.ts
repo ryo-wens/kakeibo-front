@@ -55,10 +55,13 @@ const initialState = {
     monthDueTodoList: [],
     monthTodoListMessage: '',
   },
-  groupTodoLists: {
-    groupImplementationTodoLists: [],
-    groupDueTodoLists: [],
-    message: '',
+  groupTodoList: {
+    groupTodayImplementationTodoList: [],
+    groupTodayDueTodoList: [],
+    groupTodayTodoListMessage: '',
+    groupMonthImplementationTodoList: [],
+    groupMonthDueTodoList: [],
+    groupMonthTodoListMessage: '',
   },
   modal: {
     message: '',

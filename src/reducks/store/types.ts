@@ -10,7 +10,7 @@ import {
   GroupCustomBudgetsList,
 } from '../groupBudgets/types';
 import { TodoList } from '../todoLists/types';
-import { GroupTodoLists } from '../groupTodoLists/types';
+import { GroupTodoList } from '../groupTodoList/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
 
 export interface State {
@@ -62,10 +62,13 @@ export interface State {
     monthDueTodoList: TodoList;
     monthTodoListMessage: string;
   };
-  groupTodoLists: {
-    groupImplementationTodoLists: GroupTodoLists;
-    groupDueTodoLists: GroupTodoLists;
-    message: string;
+  groupTodoList: {
+    groupTodayImplementationTodoList: GroupTodoList;
+    groupTodayDueTodoList: GroupTodoList;
+    groupTodayTodoListMessage: string;
+    groupMonthImplementationTodoList: GroupTodoList;
+    groupMonthDueTodoList: GroupTodoList;
+    groupMonthTodoListMessage: string;
   };
   modal: {
     message: string;

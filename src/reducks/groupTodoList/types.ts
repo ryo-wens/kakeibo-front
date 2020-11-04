@@ -9,7 +9,7 @@ export interface GroupTodoListItem {
   user_id: string;
 }
 
-export interface GroupTodoLists extends Array<GroupTodoListItem> {}
+export interface GroupTodoList extends Array<GroupTodoListItem> {}
 
 export interface createGroupTodoListItemReq {
   implementation_date: Date | null;
@@ -47,14 +47,14 @@ export interface editGroupTodoListItemRes {
 }
 
 export interface fetchGroupDateTodoListsRes {
-  implementation_todo_list: GroupTodoLists;
-  due_todo_list: GroupTodoLists;
+  implementation_todo_list: GroupTodoList;
+  due_todo_list: GroupTodoList;
   message: string;
 }
 
 export interface fetchGroupMonthTodoListsRes {
-  implementation_todo_list: GroupTodoLists;
-  due_todo_list: GroupTodoLists;
+  implementation_todo_list: GroupTodoList;
+  due_todo_list: GroupTodoList;
   message: string;
 }
 

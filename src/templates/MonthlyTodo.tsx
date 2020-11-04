@@ -15,11 +15,11 @@ import { MonthlyTodoList, TodoButton, TodoMenu } from '../components/todo';
 import { dateToMonthString, getFirstDayOfNextMonth, getLastDayOfPrevMonth } from '../lib/date';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
-  getGroupDueTodoLists,
-  getGroupImplementationTodoLists,
-  getGroupTodoListsMessage,
-} from '../reducks/groupTodoLists/selectors';
-import { fetchGroupMonthTodoLists } from '../reducks/groupTodoLists/operations';
+  getGroupMonthDueTodoList,
+  getGroupMonthImplementationTodoList,
+  getGroupMonthTodoListMessage,
+} from '../reducks/groupTodoList/selectors';
+import { fetchGroupMonthTodoLists } from '../reducks/groupTodoList/operations';
 import { date } from '../lib/constant';
 
 const useStyles = makeStyles(() =>
@@ -47,9 +47,9 @@ const MonthlyTodo = () => {
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
   const monthTodoListMessage = getMonthTodoListMessage(selector);
-  const groupImplementationTodoList = getGroupImplementationTodoLists(selector);
-  const groupDueTodoList = getGroupDueTodoLists(selector);
-  const groupTodoListMessage = getGroupTodoListsMessage(selector);
+  const groupMonthImplementationTodoList = getGroupMonthImplementationTodoList(selector);
+  const groupMonthDueTodoList = getGroupMonthDueTodoList(selector);
+  const groupMonthTodoListMessage = getGroupMonthTodoListMessage(selector);
   const entityType = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const year = String(date.getFullYear());
@@ -76,9 +76,9 @@ const MonthlyTodo = () => {
   useEffect(() => {
     if (
       entityType === 'group' &&
-      !groupImplementationTodoList.length &&
-      !groupDueTodoList.length &&
-      !groupTodoListMessage
+      !groupMonthImplementationTodoList.length &&
+      !groupMonthDueTodoList.length &&
+      !groupMonthTodoListMessage
     ) {
       dispatch(fetchGroupMonthTodoLists(groupId, year, month));
     }
@@ -145,8 +145,8 @@ const MonthlyTodo = () => {
         <MonthlyTodoList
           selectedDate={selectedDate}
           groupId={groupId}
-          groupMonthImplementationTodoList={groupImplementationTodoList}
-          groupMonthDueTodoList={groupDueTodoList}
+          groupMonthImplementationTodoList={groupMonthImplementationTodoList}
+          groupMonthDueTodoList={groupMonthDueTodoList}
           monthImplementationTodoList={monthImplementationTodoList}
           monthDueTodoList={monthDueTodoList}
         />

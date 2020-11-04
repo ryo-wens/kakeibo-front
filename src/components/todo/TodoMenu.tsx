@@ -21,7 +21,7 @@ import {
 import {
   fetchGroupDateTodoLists,
   fetchGroupMonthTodoLists,
-} from '../../reducks/groupTodoLists/operations';
+} from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { TodoList } from '../../reducks/todoLists/types';
 import { Action, Dispatch } from 'redux';

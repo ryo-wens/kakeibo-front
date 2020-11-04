@@ -1,4 +1,4 @@
-import { GroupTodoLists } from './types';
+import { GroupTodoList } from './types';
 export type groupTodoListsActions = ReturnType<
   | typeof createGroupTodoListItemAction
   | typeof editGroupTodoListItemAction
@@ -8,8 +8,8 @@ export type groupTodoListsActions = ReturnType<
 
 export const CREATE_GROUP_TODO_LIST_ITEM = 'CREATE_GROUP_TODO_LIST_ITEM';
 export const createGroupTodoListItemAction = (
-  groupImplementationTodoLists: GroupTodoLists,
-  groupDueTodoLists: GroupTodoLists
+  groupImplementationTodoLists: GroupTodoList,
+  groupDueTodoLists: GroupTodoList
 ) => {
   return {
     type: CREATE_GROUP_TODO_LIST_ITEM,
@@ -22,8 +22,8 @@ export const createGroupTodoListItemAction = (
 
 export const EDIT_GROUP_TODO_LIST_ITEM = 'EDIT_GROUP_TODO_LIST_ITEM';
 export const editGroupTodoListItemAction = (
-  groupImplementationTodoLists: GroupTodoLists,
-  groupDueTodoLists: GroupTodoLists
+  groupImplementationTodoLists: GroupTodoList,
+  groupDueTodoLists: GroupTodoList
 ) => {
   return {
     type: EDIT_GROUP_TODO_LIST_ITEM,
@@ -36,8 +36,8 @@ export const editGroupTodoListItemAction = (
 
 export const FETCH_GROUP_DATE_TODO_LISTS = 'FETCH_GROUP_DATE_TODO_LISTS';
 export const fetchGroupDateTodoListsAction = (
-  groupImplementationTodoLists: GroupTodoLists,
-  groupDueTodoLists: GroupTodoLists,
+  groupImplementationTodoLists: GroupTodoList,
+  groupDueTodoLists: GroupTodoList,
   message: string
 ) => {
   return {
@@ -52,8 +52,8 @@ export const fetchGroupDateTodoListsAction = (
 
 export const FETCH_GROUP_MONTH_TODO_LISTS = 'FETCH_GROUP_MONTH_TODO_LISTS';
 export const fetchGroupMonthTodoListsAction = (
-  groupImplementationTodoLists: GroupTodoLists,
-  groupDueTodoLists: GroupTodoLists,
+  groupImplementationTodoLists: GroupTodoList,
+  groupDueTodoLists: GroupTodoList,
   message: string
 ) => {
   return {
@@ -68,8 +68,8 @@ export const fetchGroupMonthTodoListsAction = (
 
 export const DELETE_GROUP_TODO_LIST_ITEM = 'DELETE_GROUP_TODO_LIST_ITEM';
 export const deleteGroupTodoListItemAction = (
-  groupImplementationTodoLists: GroupTodoLists,
-  groupDueTodoLists: GroupTodoLists
+  groupImplementationTodoLists: GroupTodoList,
+  groupDueTodoLists: GroupTodoList
 ) => {
   return {
     type: DELETE_GROUP_TODO_LIST_ITEM,

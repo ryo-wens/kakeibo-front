@@ -13,7 +13,7 @@ import { modalReducer } from '../modal/reducers';
 import { budgetsReducer } from '../budgets/reducers';
 import { groupBudgetsReducer } from '../groupBudgets/reducers';
 import { todoListReducer } from '../todoLists/reducers';
-import { groupTodoListsReducer } from '../groupTodoLists/reducers';
+import { groupTodoListsReducer } from '../groupTodoList/reducers';
 import { groupTasksReducers } from '../groupTasks/reducers';
 
 interface ExtendedWindow extends Window {
@@ -39,7 +39,7 @@ export default function createStore(history: History) {
       groups: groupsReducer,
       groupTasks: groupTasksReducers,
       todoList: todoListReducer,
-      groupTodoLists: groupTodoListsReducer,
+      groupTodoList: groupTodoListsReducer,
       transactions: transactionsReducer,
       groupTransactions: groupTransactionsReducer,
       modal: modalReducer,
