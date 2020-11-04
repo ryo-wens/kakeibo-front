@@ -95,20 +95,26 @@ const MonthlyTodo = () => {
     setSelectedDate(date);
   }, [selectedDate]);
 
+  const switchFetchMonthTodoList = (date: Date) => {
+    const year = String(date.getFullYear());
+    const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
+    if (entityType !== 'group') {
+      dispatch(fetchMonthTodoList(year, month));
+    } else if (entityType === 'group') {
+      dispatch(fetchGroupMonthTodoLists(groupId, year, month));
+    }
+  };
+
   const getPrevMonth = useCallback(() => {
     const lastDayOfPrevMonth = getLastDayOfPrevMonth(selectedDate);
     setSelectedDate(lastDayOfPrevMonth);
-    const year = String(lastDayOfPrevMonth.getFullYear());
-    const month: string = ('0' + (lastDayOfPrevMonth.getMonth() + 1)).slice(-2);
-    dispatch(fetchMonthTodoList(year, month));
+    switchFetchMonthTodoList(lastDayOfPrevMonth);
   }, [selectedDate, setSelectedDate]);
 
   const getNextMonth = useCallback(() => {
     const firstDayOfNextMonth = getFirstDayOfNextMonth(selectedDate);
     setSelectedDate(firstDayOfNextMonth);
-    const year = String(firstDayOfNextMonth.getFullYear());
-    const month: string = ('0' + (firstDayOfNextMonth.getMonth() + 1)).slice(-2);
-    dispatch(fetchMonthTodoList(year, month));
+    switchFetchMonthTodoList(firstDayOfNextMonth);
   }, [selectedDate, setSelectedDate]);
 
   const equalsSelectedMonthAndCurrentMonth =
