@@ -1,7 +1,12 @@
 import React, { useCallback, useState } from 'react';
 import { AddTodo, TodoListItemComponent } from './index';
 import { TodoList } from '../../reducks/todoLists/types';
-import { dateStringToDate, getWeekStartDate, getWeekDay } from '../../lib/date';
+import {
+  dateStringToDate,
+  getWeekDay,
+  getLastDayOfMonth,
+  getFirstDayOfMonth,
+} from '../../lib/date';
 import AppBar from '@material-ui/core/AppBar';
 import Tabs from '@material-ui/core/Tabs';
 import Tab from '@material-ui/core/Tab';
@@ -25,29 +30,26 @@ interface WeeksTodoListsProps {
   monthDueTodoList: TodoList;
 }
 
-const WeeksTodoLists = (props: WeeksTodoListsProps) => {
+const MonthlyTodoList = (props: WeeksTodoListsProps) => {
   const classes = useStyles();
   const [value, setValue] = useState<number>(0);
   const entityType = getPathTemplateName(window.location.pathname);
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
-  const startDate = getWeekStartDate(selectedDate);
   const today = date;
+  const lastDayOfMonth = getLastDayOfMonth(selectedDate);
 
   const switchTab = (event: React.ChangeEvent<unknown>, value: number) => {
     setValue(value);
   };
 
-  const week = useCallback(
+  const month = useCallback(
     (todoLists: TodoList) => {
-      const week = [];
+      const month = [];
 
-      for (let i = 0; i < 7; i++) {
-        const date = new Date(
-          selectedDate.getFullYear(),
-          selectedDate.getMonth(),
-          startDate.getDate() + i
-        );
+      for (let i = 0; i < lastDayOfMonth.getDate(); i++) {
+        const firstDayOfMonth = getFirstDayOfMonth(selectedDate);
+        const date = new Date(firstDayOfMonth.setDate(firstDayOfMonth.getDate() + i));
 
         const getTimeDate =
           new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - 1000;
@@ -60,11 +62,17 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
               : dateStringToDate(todoList.due_date).getTime();
           const weekDate: number = date.getTime();
           if (prevDate === weekDate) {
-            dateTodoLists.push(<TodoListItemComponent todoListItem={todoList} key={todoList.id} />);
+            dateTodoLists.push(
+              <TodoListItemComponent
+                todoListItem={todoList}
+                key={todoList.id}
+                selectedDate={selectedDate}
+              />
+            );
           }
         }
 
-        week.push(
+        month.push(
           <div
             key={date.getDate()}
             className={today.getTime() > getTimeDate ? classes.disabled : ''}
@@ -77,7 +85,7 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
           </div>
         );
       }
-      return week;
+      return month;
     },
     [selectedDate]
   );
@@ -87,11 +95,11 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
       return (
         <>
           <p>当月実施予定todo、締切予定todoは登録されていません。</p>
-          {value === 0 ? week(implementationTodoList) : week(dueTodoList)}
+          {value === 0 ? month(implementationTodoList) : month(dueTodoList)}
         </>
       );
     } else if (implementationTodoList && dueTodoList) {
-      return value === 0 ? week(implementationTodoList) : week(dueTodoList);
+      return value === 0 ? month(implementationTodoList) : month(dueTodoList);
     }
   };
 
@@ -110,4 +118,4 @@ const WeeksTodoLists = (props: WeeksTodoListsProps) => {
   );
 };
 
-export default WeeksTodoLists;
+export default MonthlyTodoList;

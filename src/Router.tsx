@@ -6,7 +6,6 @@ import {
   LogIn,
   Home,
   SelectBigCategory,
-  WeekTodo,
   InputCustomCategory,
   StandardBudgets,
   YearlyBudgets,
@@ -14,6 +13,7 @@ import {
   WeeklyHistory,
   SelectStandardBudgets,
   Task,
+  MonthlyTodo,
 } from './templates';
 
 const Router = (): JSX.Element => {
@@ -29,12 +29,12 @@ const Router = (): JSX.Element => {
       <Route exact path={'/standard-budgets'} component={StandardBudgets} />
       <Route exact path={'/standard-budgets/:year:month'} component={SelectStandardBudgets} />
       <Route exact path={'/todo'} component={Todo} />
-      <Route exact path={'/todo/week'} component={WeekTodo} />
+      <Route exact path={'/todo/monthly'} component={MonthlyTodo} />
       <Route exact path={'/yearly-budgets'} component={YearlyBudgets} />
       <Route exact path={'/group/:id'} component={Home} />
       <Route exact path={'/group/:id/task'} component={Task} />
       <Route exact path={'/group/:id/todo'} component={Todo} />
-      <Route exact path={'/group/:id/todo/week'} component={WeekTodo} />
+      <Route exact path={'/group/:id/todo/monthly'} component={MonthlyTodo} />
     </Switch>
   );
 };

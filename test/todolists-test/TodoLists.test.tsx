@@ -9,13 +9,13 @@ import {
   createTodoListItem,
   deleteTodoListItem,
   editTodoListItem,
-  fetchDateTodoLists,
+  fetchDateTodoList,
   fetchMonthTodoList,
 } from '../../src/reducks/todoLists/operations';
 import createTodoListItemResponse from './createTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
-import fetchDateTodoListsResponse from './fetchDateTodoListsResponse.json';
-import fetchMonthTodoListsResponse from './fetchMonthTodoListsResponse.json';
+import fetchDateTodoListResponse from './fetchDateTodoListResponse.json';
+import fetchMonthTodoListResponse from './fetchMonthTodoListResponse.json';
 import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
 
 const middlewares = [thunk];
@@ -109,10 +109,11 @@ describe('async actions todoLists', () => {
 
   it('Created todoListItem is added to implementationTodoLists and dueTodoLists when CREATE_TODO_LIST_ITEM succeeds.', async () => {
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list`;
-    const todoContent = '買い物へゆく';
+    const today = new Date();
+    const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-28T00:00:00Z');
     const dueDate = new Date('2020-09-29T00:00:00Z');
-    const today = new Date();
+    const todoContent = '買い物へゆく';
 
     const mockResponse = JSON.stringify(createTodoListItemResponse);
 
@@ -134,41 +135,41 @@ describe('async actions todoLists', () => {
           todayDueTodoList: [],
           monthImplementationTodoList: [
             {
-              id: 2,
-              posted_date: '2020-09-27T10:54:46Z',
-              updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '2020/09/28(月)',
-              due_date: '2020/09/29(火)',
-              todo_content: '買い物へゆく',
-              complete_flag: false,
-            },
-            {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:54:46Z',
+              implementation_date: '2020/09/28(月)',
+              due_date: '2020/09/29(火)',
+              todo_content: '買い物へゆく',
               complete_flag: false,
             },
           ],
           monthDueTodoList: [
             {
-              id: 2,
-              posted_date: '2020-09-27T10:54:46Z',
-              updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '2020/09/28(月)',
-              due_date: '2020/09/29(火)',
-              todo_content: '買い物へゆく',
-              complete_flag: false,
-            },
-            {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:54:46Z',
+              implementation_date: '2020/09/28(月)',
+              due_date: '2020/09/29(火)',
+              todo_content: '買い物へゆく',
               complete_flag: false,
             },
           ],
@@ -180,6 +181,7 @@ describe('async actions todoLists', () => {
 
     await createTodoListItem(
       today,
+      selectedDate,
       implementationDate,
       dueDate,
       todoContent
@@ -190,11 +192,12 @@ describe('async actions todoLists', () => {
 
   it('Updated todoListItem will be reflected in todayImplementationTodoList and todayDueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
     const todoListItemId = 1;
+    const completeFlag = true;
+    const today = new Date();
+    const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = '食器用洗剤2つ購入';
-    const completeFlag = true;
-    const today = new Date();
 
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
@@ -247,6 +250,7 @@ describe('async actions todoLists', () => {
     await editTodoListItem(
       todoListItemId,
       today,
+      selectedDate,
       implementationDate,
       dueDate,
       todoContent,
@@ -265,7 +269,7 @@ describe('async actions todoLists', () => {
     const date = '27';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
 
-    const mockResponse = JSON.stringify(fetchDateTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchDateTodoListResponse);
 
     const expectedAction = [
       {
@@ -310,7 +314,7 @@ describe('async actions todoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await fetchDateTodoLists(year, month, date)(store.dispatch);
+    await fetchDateTodoList(year, month, date)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -319,7 +323,7 @@ describe('async actions todoLists', () => {
     const month = '09';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`;
 
-    const mockResponse = JSON.stringify(fetchMonthTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchMonthTodoListResponse);
 
     const expectedAction = [
       {

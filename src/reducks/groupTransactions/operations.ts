@@ -82,7 +82,7 @@ export const addGroupTransactions = (
           withCredentials: true,
         }
       );
-      console.log(result.data);
+
       const newGroupTransaction = result.data;
 
       const prevGroupTransactions = getState().groupTransactions.groupTransactionsList;
@@ -163,7 +163,7 @@ export const editGroupTransactions = (
           withCredentials: true,
         }
       );
-      console.log(result.data);
+
       const editedGroupTransaction = result.data;
 
       const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
