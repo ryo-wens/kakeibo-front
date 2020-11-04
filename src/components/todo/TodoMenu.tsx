@@ -19,7 +19,7 @@ import {
   getTodayTodoListMessage,
 } from '../../reducks/todoLists/selectors';
 import {
-  fetchGroupDateTodoLists,
+  fetchGroupTodayTodoList,
   fetchGroupMonthTodoLists,
 } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
@@ -88,7 +88,7 @@ const TodoMenu = () => {
             todayTodoListMessage,
             `/todo`,
             fetchDateTodoList(year, month, date),
-            fetchGroupDateTodoLists(groupId, year, month, date)
+            fetchGroupTodayTodoList(groupId, year, month, date)
           )
         }
       >

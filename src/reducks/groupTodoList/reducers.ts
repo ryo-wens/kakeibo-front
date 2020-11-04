@@ -17,7 +17,7 @@ export const groupTodoListsReducer = (
         ...state,
         ...action.payload,
       };
-    case Actions.FETCH_GROUP_DATE_TODO_LISTS:
+    case Actions.FETCH_GROUP_TODAY_TODO_LIST:
       return {
         ...state,
         ...action.payload,

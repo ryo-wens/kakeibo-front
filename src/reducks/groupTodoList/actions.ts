@@ -2,7 +2,7 @@ import { GroupTodoList } from './types';
 export type groupTodoListsActions = ReturnType<
   | typeof createGroupTodoListItemAction
   | typeof editGroupTodoListItemAction
-  | typeof fetchGroupDateTodoListsAction
+  | typeof fetchGroupTodayTodoListAction
   | typeof fetchGroupMonthTodoListsAction
 >;
 
@@ -34,18 +34,18 @@ export const editGroupTodoListItemAction = (
   };
 };
 
-export const FETCH_GROUP_DATE_TODO_LISTS = 'FETCH_GROUP_DATE_TODO_LISTS';
-export const fetchGroupDateTodoListsAction = (
-  groupImplementationTodoLists: GroupTodoList,
-  groupDueTodoLists: GroupTodoList,
+export const FETCH_GROUP_TODAY_TODO_LIST = 'FETCH_GROUP_TODAY_TODO_LIST';
+export const fetchGroupTodayTodoListAction = (
+  groupTodayImplementationTodoList: GroupTodoList,
+  groupTodayDueTodoList: GroupTodoList,
   message: string
 ) => {
   return {
-    type: FETCH_GROUP_DATE_TODO_LISTS,
+    type: FETCH_GROUP_TODAY_TODO_LIST,
     payload: {
-      groupImplementationTodoLists: groupImplementationTodoLists,
-      groupDueTodoLists: groupDueTodoLists,
-      message: message,
+      groupTodayImplementationTodoList: groupTodayImplementationTodoList,
+      groupTodayDueTodoList: groupTodayDueTodoList,
+      groupTodayTodoListMessage: message,
     },
   };
 };

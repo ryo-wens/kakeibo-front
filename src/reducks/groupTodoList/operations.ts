@@ -17,7 +17,7 @@ import {
   createGroupTodoListItemAction,
   deleteGroupTodoListItemAction,
   editGroupTodoListItemAction,
-  fetchGroupDateTodoListsAction,
+  fetchGroupTodayTodoListAction,
   fetchGroupMonthTodoListsAction,
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
@@ -162,41 +162,40 @@ export const editGroupTodoListItem = (
   };
 };
 
-export const fetchGroupDateTodoLists = (
+export const fetchGroupTodayTodoList = (
   groupId: number,
   year: string,
   month: string,
   date: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<fetchGroupDateTodoListsRes>(
+    try {
+      const result = await axios.get<fetchGroupDateTodoListsRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const groupImplementationTodoLists = res.data.implementation_todo_list;
-        const groupDueTodoLists = res.data.due_todo_list;
-        const message = res.data.message;
+      );
 
-        if (groupImplementationTodoLists !== undefined && groupDueTodoLists !== undefined) {
-          const message = '';
-          dispatch(
-            fetchGroupDateTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
-          );
-        } else {
-          const groupImplementationTodoLists: GroupTodoList = [];
-          const groupDueTodoLists: GroupTodoList = [];
-          dispatch(
-            fetchGroupDateTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
-          );
-        }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      const groupImplementationTodoLists = result.data.implementation_todo_list;
+      const groupDueTodoLists = result.data.due_todo_list;
+      const message = result.data.message;
+
+      if (groupImplementationTodoLists !== undefined && groupDueTodoLists !== undefined) {
+        const message = '';
+        dispatch(
+          fetchGroupTodayTodoListAction(groupImplementationTodoLists, groupDueTodoLists, message)
+        );
+      } else {
+        const groupImplementationTodoLists: GroupTodoList = [];
+        const groupDueTodoLists: GroupTodoList = [];
+        dispatch(
+          fetchGroupTodayTodoListAction(groupImplementationTodoLists, groupDueTodoLists, message)
+        );
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 

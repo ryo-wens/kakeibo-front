@@ -16,7 +16,7 @@ import {
 import { fetchDateTodoList, fetchMonthTodoList } from '../reducks/todoLists/operations';
 import { getWeekDay } from '../lib/date';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
-import { fetchGroupDateTodoLists } from '../reducks/groupTodoList/operations';
+import { fetchGroupTodayTodoList } from '../reducks/groupTodoList/operations';
 import {
   getGroupTodayImplementationTodoList,
   getGroupTodayDueTodoList,
@@ -87,7 +87,7 @@ const Todo = () => {
       !groupTodayImplementationTodoList.length &&
       !groupTodayDueTodoList.length
     ) {
-      dispatch(fetchGroupDateTodoLists(groupId, year, month, date));
+      dispatch(fetchGroupTodayTodoList(groupId, year, month, date));
     }
   }, []);
 

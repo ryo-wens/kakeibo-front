@@ -6,14 +6,14 @@ import axios from 'axios';
 import * as GroupTodoListsActions from '../../src/reducks/groupTodoList/actions';
 import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
 import editGroupTodoListItemResponse from './editGroupTodoListItemResponse.json';
-import fetchGroupDateTodoListsResponse from './fetchGroupDateTodoListsResponse.json';
+import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse.json';
 import fetchGroupMonthTodoListsResponse from './fetchGroupMonthTodoListsResponse.json';
 import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
 import {
   createGroupTodoListItem,
   deleteGroupTodoListItem,
   editGroupTodoListItem,
-  fetchGroupDateTodoLists,
+  fetchGroupTodayTodoList,
   fetchGroupMonthTodoLists,
 } from '../../src/reducks/groupTodoList/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
@@ -232,13 +232,13 @@ describe('async actions groupTodoLists', () => {
     const date = '27';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`;
 
-    const mockResponse = JSON.stringify(fetchGroupDateTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchGroupTodayTodoListResponse);
 
     const expectedAction = [
       {
-        type: GroupTodoListsActions.FETCH_GROUP_DATE_TODO_LISTS,
+        type: GroupTodoListsActions.FETCH_GROUP_TODAY_TODO_LIST,
         payload: {
-          groupImplementationTodoLists: [
+          groupTodayImplementationTodoList: [
             {
               id: 2,
               posted_date: '2020-09-27T14:50:00Z',
@@ -258,7 +258,7 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
           ],
-          groupDueTodoLists: [
+          groupTodayDueTodoList: [
             {
               id: 1,
               posted_date: '2020-09-27T14:40:00Z',
@@ -269,14 +269,14 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
           ],
-          message: '',
+          groupTodayTodoListMessage: '',
         },
       },
     ];
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupDateTodoLists(groupId, year, month, date)(store.dispatch);
+    await fetchGroupTodayTodoList(groupId, year, month, date)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
