@@ -9,7 +9,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import TodayIcon from '@material-ui/icons/Today';
 import { push } from 'connected-react-router';
-import { fetchDateTodoLists, fetchMonthTodoList } from '../../reducks/todoLists/operations';
+import { fetchDateTodoList, fetchMonthTodoList } from '../../reducks/todoLists/operations';
 import {
   getMonthDueTodoList,
   getMonthImplementationTodoList,
@@ -87,7 +87,7 @@ const TodoMenu = () => {
             todayDueTodoList,
             todayTodoListMessage,
             `/todo`,
-            fetchDateTodoLists(year, month, date),
+            fetchDateTodoList(year, month, date),
             fetchGroupDateTodoLists(groupId, year, month, date)
           )
         }

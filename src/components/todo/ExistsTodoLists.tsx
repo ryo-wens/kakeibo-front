@@ -2,6 +2,7 @@ import React from 'react';
 import { TodoListItem, TodoList } from '../../reducks/todoLists/types';
 import { TodoListItemComponent } from './index';
 import { GroupTodoListItem, GroupTodoLists } from '../../reducks/groupTodoLists/types';
+import { date } from '../../lib/constant';
 
 interface ExistTodoListsProps {
   planName: string;
@@ -22,7 +23,7 @@ const ExistsTodoLists = (props: ExistTodoListsProps) => {
           {todoLists.map((todoList: TodoListItem | GroupTodoListItem) => {
             return (
               <div key={todoList.id}>
-                <TodoListItemComponent todoListItem={todoList} />
+                <TodoListItemComponent todoListItem={todoList} selectedDate={date} />
               </div>
             );
           })}

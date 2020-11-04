@@ -31,6 +31,7 @@ const useStyles = makeStyles(() =>
 
 interface TodoListItemComponentProps {
   todoListItem: TodoListItem | GroupTodoListItem;
+  selectedDate: Date | null;
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
@@ -110,6 +111,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           editTodoListItem(
             todoListItemId,
             date,
+            props.selectedDate,
             selectedImplementationDate,
             selectedDueDate,
             todoContent,
@@ -181,6 +183,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
               inputDueDate={inputDueDate}
               closeInputTodoList={closeInputTodoList}
               todoListItemId={todoListItemId}
+              selectedDate={props.selectedDate}
               selectedImplementationDate={selectedImplementationDate}
               selectedDueDate={selectedDueDate}
               todoContent={todoContent}

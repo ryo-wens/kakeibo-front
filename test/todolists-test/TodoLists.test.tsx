@@ -9,13 +9,13 @@ import {
   createTodoListItem,
   deleteTodoListItem,
   editTodoListItem,
-  fetchDateTodoLists,
+  fetchDateTodoList,
   fetchMonthTodoList,
 } from '../../src/reducks/todoLists/operations';
 import createTodoListItemResponse from './createTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
-import fetchDateTodoListsResponse from './fetchDateTodoListsResponse.json';
-import fetchMonthTodoListsResponse from './fetchMonthTodoListsResponse.json';
+import fetchDateTodoListResponse from './fetchDateTodoListResponse.json';
+import fetchMonthTodoListResponse from './fetchMonthTodoListResponse.json';
 import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
 
 const middlewares = [thunk];
@@ -192,11 +192,12 @@ describe('async actions todoLists', () => {
 
   it('Updated todoListItem will be reflected in todayImplementationTodoList and todayDueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
     const todoListItemId = 1;
+    const completeFlag = true;
+    const today = new Date();
+    const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = '食器用洗剤2つ購入';
-    const completeFlag = true;
-    const today = new Date();
 
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
@@ -249,6 +250,7 @@ describe('async actions todoLists', () => {
     await editTodoListItem(
       todoListItemId,
       today,
+      selectedDate,
       implementationDate,
       dueDate,
       todoContent,
@@ -267,7 +269,7 @@ describe('async actions todoLists', () => {
     const date = '27';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
 
-    const mockResponse = JSON.stringify(fetchDateTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchDateTodoListResponse);
 
     const expectedAction = [
       {
@@ -312,7 +314,7 @@ describe('async actions todoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await fetchDateTodoLists(year, month, date)(store.dispatch);
+    await fetchDateTodoList(year, month, date)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -321,7 +323,7 @@ describe('async actions todoLists', () => {
     const month = '09';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`;
 
-    const mockResponse = JSON.stringify(fetchMonthTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchMonthTodoListResponse);
 
     const expectedAction = [
       {

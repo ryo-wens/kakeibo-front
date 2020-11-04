@@ -40,6 +40,7 @@ interface InputTodoListProps {
   inputDueDate: (date: Date | null) => void;
   closeInputTodoList: () => void;
   todoListItemId: number;
+  selectedDate: Date | null;
   selectedImplementationDate: Date | null;
   selectedDueDate: Date | null;
   todoContent: string;
@@ -60,6 +61,7 @@ const InputTodoList = (props: InputTodoListProps) => {
         editTodoListItem(
           props.todoListItemId,
           date,
+          props.selectedDate,
           props.selectedImplementationDate,
           props.selectedDueDate,
           props.todoContent,

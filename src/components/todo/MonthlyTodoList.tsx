@@ -62,7 +62,13 @@ const MonthlyTodoList = (props: WeeksTodoListsProps) => {
               : dateStringToDate(todoList.due_date).getTime();
           const weekDate: number = date.getTime();
           if (prevDate === weekDate) {
-            dateTodoLists.push(<TodoListItemComponent todoListItem={todoList} key={todoList.id} />);
+            dateTodoLists.push(
+              <TodoListItemComponent
+                todoListItem={todoList}
+                key={todoList.id}
+                selectedDate={selectedDate}
+              />
+            );
           }
         }
 

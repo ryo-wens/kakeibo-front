@@ -158,13 +158,20 @@ export const createTodoListItem = (
 
 export const editTodoListItem = (
   todoListItemId: number,
-  today: Date,
+  today: Date | null,
+  selectedDate: Date | null,
   implementationDate: Date | null,
   dueDate: Date | null,
   todoContent: string,
   completeFlag: boolean
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (today === null) {
+      return;
+    }
+    if (selectedDate === null) {
+      return;
+    }
     if (implementationDate === null) {
       return;
     }
@@ -241,7 +248,7 @@ export const editTodoListItem = (
             prevTodoListItemDate = prevTodoList[prevItemIdx].due_date;
           }
 
-          if (dateToMonthString(today) === responseMonth) {
+          if (dateToMonthString(selectedDate) === responseMonth) {
             if (prevTodoListItemDate === responseDate) {
               prevTodoList[prevItemIdx] = res.data;
               nextTodoList = [...prevTodoList];
@@ -264,7 +271,7 @@ export const editTodoListItem = (
 
               nextTodoList = [...prevTodoList];
             }
-          } else if (dateToMonthString(today) !== responseMonth) {
+          } else if (dateToMonthString(selectedDate) !== responseMonth) {
             prevTodoList.splice(prevItemIdx, 1);
             nextTodoList = [...prevTodoList];
           }
@@ -305,7 +312,7 @@ export const editTodoListItem = (
   };
 };
 
-export const fetchDateTodoLists = (year: string, month: string, date: string) => {
+export const fetchDateTodoList = (year: string, month: string, date: string) => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchTodayTodoListsRes>(
