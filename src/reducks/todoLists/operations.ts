@@ -25,12 +25,19 @@ import { dateStringToMonthString, dateToDateString, dateToMonthString } from '..
 import { errorHandling } from '../../lib/validation';
 
 export const createTodoListItem = (
-  today: Date,
+  today: Date | null,
+  selectedDate: Date | null,
   implementationDate: Date | null,
   dueDate: Date | null,
   todoContent: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (today === null) {
+      return;
+    }
+    if (selectedDate === null) {
+      return;
+    }
     if (implementationDate === null) {
       return;
     }
@@ -91,7 +98,7 @@ export const createTodoListItem = (
           responseDate: string
         ) => {
           let nextTodoList: TodoList = [];
-          if (dateToMonthString(today) === responseMonth) {
+          if (dateToMonthString(selectedDate) === responseMonth) {
             let idx = 0;
             if (responseDate === res.data.implementation_date) {
               idx = prevTodoList.findIndex(
@@ -108,7 +115,7 @@ export const createTodoListItem = (
             }
 
             nextTodoList = [...prevTodoList];
-          } else if (dateToMonthString(today) !== responseMonth) {
+          } else if (dateToMonthString(selectedDate) !== responseMonth) {
             nextTodoList = [...prevTodoList];
           }
           return nextTodoList;

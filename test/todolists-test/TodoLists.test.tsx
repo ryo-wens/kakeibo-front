@@ -109,10 +109,11 @@ describe('async actions todoLists', () => {
 
   it('Created todoListItem is added to implementationTodoLists and dueTodoLists when CREATE_TODO_LIST_ITEM succeeds.', async () => {
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list`;
-    const todoContent = '買い物へゆく';
+    const today = new Date();
+    const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-28T00:00:00Z');
     const dueDate = new Date('2020-09-29T00:00:00Z');
-    const today = new Date();
+    const todoContent = '買い物へゆく';
 
     const mockResponse = JSON.stringify(createTodoListItemResponse);
 
@@ -180,6 +181,7 @@ describe('async actions todoLists', () => {
 
     await createTodoListItem(
       today,
+      selectedDate,
       implementationDate,
       dueDate,
       todoContent

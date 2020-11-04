@@ -84,7 +84,13 @@ const AddTodo = (props: AddTodoProps) => {
   const switchOperation = () => {
     if (entityType === 'todo') {
       return dispatch(
-        createTodoListItem(today, selectedImplementationDate, selectedDueDate, todoContent)
+        createTodoListItem(
+          today,
+          props.date,
+          selectedImplementationDate,
+          selectedDueDate,
+          todoContent
+        )
       );
     } else if (entityType === 'group' && typeof props.groupId === 'number') {
       return dispatch(
