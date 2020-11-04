@@ -18,6 +18,9 @@ import addTransactionsList from './addTransactions.json';
 import editResTransaction from './editResponse.json';
 import editTransactionsList from './editTransactions.json';
 import deleteResTransaction from './deleteReponse.json';
+import addLatestTransaction from './addLatestTransactions.json';
+import editLatestTransaction from './editLatestTransactions.json';
+import deleteTransaction from './deleteLatestTransactions.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -69,7 +72,7 @@ describe('async actions fetchLatestTransactionsList', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.FETCH_LATEST_TRANSACTIONS,
+        type: actionTypes.UPDATE_LATEST_TRANSACTIONS,
         payload: mockResponse.transactions_list,
       },
     ];
@@ -82,7 +85,10 @@ describe('async actions fetchLatestTransactionsList', () => {
 });
 
 describe('async actions addTransactions', () => {
-  const store = mockStore({ transactionsList });
+  const store = mockStore({
+    transactionsList: transactionsList,
+    latestTransactionsList: latestTransactionsList,
+  });
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`;
 
   beforeEach(() => {
@@ -114,18 +120,24 @@ describe('async actions addTransactions', () => {
       return {
         transactions: {
           transactionsList: transactionsList.transactions_list,
+          latestTransactionsList: latestTransactionsList.transactions_list,
         },
       };
     };
 
     const mockResTransactions = addResTransaction;
 
-    const mockTransactionsList = addTransactionsList.transactions_list;
+    const addedTransactionsList = addTransactionsList;
+    const addedLatestTransactionsList = addLatestTransaction;
 
     const expectedAddActions = [
       {
         type: actionTypes.UPDATE_TRANSACTIONS,
-        payload: mockTransactionsList,
+        payload: addedTransactionsList.transactions_list,
+      },
+      {
+        type: actionTypes.UPDATE_LATEST_TRANSACTIONS,
+        payload: addedLatestTransactionsList.transactions_list,
       },
     ];
 
@@ -150,7 +162,10 @@ describe('async actions addTransactions', () => {
 });
 
 describe('async actions editTransactions', () => {
-  const store = mockStore({ addTransactionsList });
+  const store = mockStore({
+    transactionsList: addTransactionsList,
+    latestTransactionsList: addLatestTransaction,
+  });
 
   let now: Date;
   let spiedDate: Date;
@@ -181,6 +196,7 @@ describe('async actions editTransactions', () => {
       return {
         transactions: {
           transactionsList: addTransactionsList.transactions_list,
+          latestTransactionsList: addLatestTransaction.transactions_list,
         },
       };
     };
@@ -190,12 +206,17 @@ describe('async actions editTransactions', () => {
 
     const mockResTransaction = editResTransaction;
 
-    const mockTransactionsList = editTransactionsList.transactions_list;
+    const editedTransactionsList = editTransactionsList;
+    const editedLatestTransactions = editLatestTransaction;
 
     const expectedEditActions = [
       {
         type: actionTypes.UPDATE_TRANSACTIONS,
-        payload: mockTransactionsList,
+        payload: editedTransactionsList.transactions_list,
+      },
+      {
+        type: actionTypes.UPDATE_LATEST_TRANSACTIONS,
+        payload: editedLatestTransactions.transactions_list,
       },
     ];
 
@@ -221,7 +242,10 @@ describe('async actions editTransactions', () => {
 });
 
 describe('async actions deleteTransactions', () => {
-  const store = mockStore({ editTransactionsList });
+  const store = mockStore({
+    transactionsList: editTransactionsList,
+    latestTransactionsList: editLatestTransaction,
+  });
   beforeEach(() => {
     store.clearActions();
   });
@@ -231,6 +255,7 @@ describe('async actions deleteTransactions', () => {
       return {
         transactions: {
           transactionsList: editTransactionsList.transactions_list,
+          latestTransactionsList: editLatestTransaction.transactions_list,
         },
       };
     };
@@ -238,19 +263,24 @@ describe('async actions deleteTransactions', () => {
     const id = 47;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`;
 
-    const mockResTransaction = deleteResTransaction.message;
+    const mockResponseMessage = deleteResTransaction.message;
 
-    const mockTransactionsList = transactionsList.transactions_list;
+    const deletedTransactionsList = transactionsList.transactions_list;
+    const deletedLatestTransactionsList = deleteTransaction.transactions_list;
 
     const expectedDeleteActions = [
       {
         type: actionTypes.UPDATE_TRANSACTIONS,
-        payload: mockTransactionsList,
+        payload: deletedTransactionsList,
+      },
+      {
+        type: actionTypes.UPDATE_LATEST_TRANSACTIONS,
+        payload: deletedLatestTransactionsList,
       },
     ];
 
-    axiosMock.onDelete(url).reply(200, mockResTransaction);
-    window.alert = jest.fn(() => mockResTransaction);
+    axiosMock.onDelete(url).reply(200, mockResponseMessage);
+    window.alert = jest.fn(() => mockResponseMessage);
 
     // @ts-ignore
     await deleteTransactions(47)(store.dispatch, getState);

@@ -1,8 +1,9 @@
 {
   "id": 47,
   "transaction_type": "expense",
+  "posted_date": "2020-08-08T18:11:15Z",
   "updated_date": "2020-08-08T18:11:15Z",
-  "transaction_date": "07/25(土)",
+  "transaction_date": "2020/07/25(土)",
   "shop": "コストコ",
   "memo": null,
   "amount": 2000,

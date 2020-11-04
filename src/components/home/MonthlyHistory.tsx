@@ -5,7 +5,6 @@ import { State } from '../../reducks/store/types';
 import { getTransactions } from '../../reducks/transactions/selectors';
 import { year, month, customMonth } from '../../lib/constant';
 import '../../assets/monthly-history.scss';
-import { fetchCategories } from '../../reducks/categories/operations';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { InputModal, SelectMenu } from '../uikit';
 import { incomeTransactionType } from '../../lib/constant';
@@ -19,10 +18,6 @@ const MonthlyHistory = () => {
 
   useEffect(() => {
     dispatch(fetchTransactionsList(String(year), customMonth));
-  }, []);
-
-  useEffect(() => {
-    dispatch(fetchCategories());
   }, []);
 
   const handleOpen = (transactionId: number) => {
@@ -76,10 +71,6 @@ const MonthlyHistory = () => {
 
             transactionsList.map((transaction, index) => {
               const transactionDay = Number(transaction.transaction_date.slice(8, 10));
-              const customTransactionDate = transaction.transaction_date
-                .replace('/', '-')
-                .slice(0, 10);
-              const transactionDate = new Date(customTransactionDate);
 
               const categoryName = {
                 mediumCategory:
@@ -138,7 +129,7 @@ const MonthlyHistory = () => {
                     memo={transaction.memo === null ? '' : transaction.memo}
                     amount={transaction.amount}
                     categoryName={categoryName}
-                    transactionDate={transactionDate}
+                    transactionDate={transaction.transaction_date}
                     transactionsType={transaction.transaction_type}
                   />,
                 ];

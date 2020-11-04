@@ -2,7 +2,7 @@ import { TransactionsList } from './types';
 export type transactionActions = ReturnType<
   | typeof updateTransactionsAction
   | typeof fetchTransactionsActions
-  | typeof fetchLatestTransactionsActions
+  | typeof updateLatestTransactionsActions
 >;
 
 export const FETCH_TRANSACTIONS = 'FETCH_TRANSACTIONS';
@@ -19,10 +19,10 @@ export const fetchTransactionsActions = (
   };
 };
 
-export const FETCH_LATEST_TRANSACTIONS = 'FETCH_LATEST_TRANSACTIONS';
-export const fetchLatestTransactionsActions = (latestTransactionsList: TransactionsList) => {
+export const UPDATE_LATEST_TRANSACTIONS = 'UPDATE_LATEST_TRANSACTIONS';
+export const updateLatestTransactionsActions = (latestTransactionsList: TransactionsList) => {
   return {
-    type: FETCH_LATEST_TRANSACTIONS,
+    type: UPDATE_LATEST_TRANSACTIONS,
     payload: latestTransactionsList,
   };
 };

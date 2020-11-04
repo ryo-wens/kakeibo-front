@@ -1,7 +1,7 @@
 import {
   fetchTransactionsActions,
   updateTransactionsAction,
-  fetchLatestTransactionsActions,
+  updateLatestTransactionsActions,
 } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -16,6 +16,7 @@ import {
   DeleteTransactionRes,
 } from './types';
 import moment from 'moment';
+import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
 export const fetchTransactionsList = (year: string, customMonth: string) => {
@@ -60,7 +61,7 @@ export const fetchLatestTransactionsList = () => {
       );
       const latestTransactionsList = result.data.transactions_list;
 
-      dispatch(fetchLatestTransactionsActions(latestTransactionsList));
+      dispatch(updateLatestTransactionsActions(latestTransactionsList));
     } catch (error) {
       errorHandling(dispatch, error);
     }
@@ -113,12 +114,30 @@ export const addTransactions = (
           withCredentials: true,
         }
       );
-      const newTransaction = result.data;
+      const addedTransaction = result.data;
 
-      const prevTransactions = getState().transactions.transactionsList;
+      const prevTransactionsList = getState().transactions.transactionsList;
+      const prevLatestTransactionsList = getState().transactions.latestTransactionsList;
 
-      const transactionList = [newTransaction, ...prevTransactions];
-      dispatch(updateTransactionsAction(transactionList));
+      const nextTransactionsList = (): TransactionsList => {
+        let transactionsList: TransactionsList = [];
+
+        if (addedTransaction.transaction_date.slice(5, 7) === String(customMonth)) {
+          transactionsList = [addedTransaction, ...prevTransactionsList];
+
+          return transactionsList;
+        } else {
+          return prevTransactionsList;
+        }
+      };
+
+      const nextLatestTransactionsList: TransactionsList = [
+        addedTransaction,
+        ...prevLatestTransactionsList,
+      ];
+
+      dispatch(updateTransactionsAction(nextTransactionsList()));
+      dispatch(updateLatestTransactionsActions(nextLatestTransactionsList));
     } catch (error) {
       if (error.response.status === 400) {
         alert(error.response.data.error.message.join('\n'));
@@ -190,22 +209,37 @@ export const editTransactions = (
           withCredentials: true,
         }
       );
-      const editTransaction = result.data;
+      const editedTransaction = result.data;
 
-      const transactionsList = getState().transactions.transactionsList;
+      const transactionsList: TransactionsList = getState().transactions.transactionsList;
+      const latestTransactionsList: TransactionsList = getState().transactions
+        .latestTransactionsList;
 
-      const nextTransactionsList = transactionsList.map((transaction) => {
-        if (transaction.id === editTransaction.id) {
-          return editTransaction;
+      const editedLatestTransactionsList = latestTransactionsList.map((transaction) => {
+        if (transaction.id === editedTransaction.id) {
+          return editedTransaction;
+        }
+
+        return transaction;
+      });
+
+      const aligningLatestTransactionsList = editedLatestTransactionsList.sort((a, b) =>
+        a.updated_date < b.updated_date ? 1 : -1
+      );
+
+      const editedTransactionsList = transactionsList.map((transaction) => {
+        if (transaction.id === editedTransaction.id) {
+          return editedTransaction;
         }
         return transaction;
       });
 
-      const aligningTransactionsList = nextTransactionsList.sort(
+      const aligningTransactionsList = editedTransactionsList.sort(
         (a, b) => Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
       );
 
       dispatch(updateTransactionsAction(aligningTransactionsList));
+      dispatch(updateLatestTransactionsActions(aligningLatestTransactionsList));
     } catch (error) {
       if (error.response.status === 400) {
         alert(error.response.data.error.message.join('\n'));
@@ -241,11 +275,17 @@ export const deleteTransactions = (id: number) => {
       );
       const message = result.data.message;
 
-      const transactionsList = getState().transactions.transactionsList;
+      const transactionsList: TransactionsList = getState().transactions.transactionsList;
+      const latestTransactionsList: TransactionsList = getState().transactions
+        .latestTransactionsList;
 
       const nextTransactionsList = transactionsList.filter((transaction) => transaction.id !== id);
+      const nextLatestTransactionsList = latestTransactionsList.filter(
+        (transaction) => transaction.id !== id
+      );
 
       dispatch(updateTransactionsAction(nextTransactionsList));
+      dispatch(updateLatestTransactionsActions(nextLatestTransactionsList));
       alert(message);
     } catch (error) {
       errorHandling(dispatch, error);

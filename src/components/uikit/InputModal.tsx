@@ -52,7 +52,7 @@ interface InputModalProps {
   open: boolean;
   onClose: () => void;
   id: number;
-  transactionDate: Date;
+  transactionDate: string;
   amount: number;
   memo: string | null;
   shop: string | null;
@@ -72,7 +72,6 @@ const InputModal = (props: InputModalProps) => {
   const [amount, setAmount] = useState<string>(String(props.amount));
   const [memo, setMemo] = useState<string | null>(props.memo);
   const [shop, setShop] = useState<string | null>(props.shop);
-  const [transactionDate, setTransactionDate] = useState<Date | null>(props.transactionDate);
   const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
   const id = props.id;
 
@@ -117,6 +116,12 @@ const InputModal = (props: InputModalProps) => {
 
     return categoriesId;
   };
+
+  const customTransactionDate = props.transactionDate.replace('/', '-').slice(0, 10);
+
+  const changeTransactionDate = new Date(customTransactionDate);
+
+  const [transactionDate, setTransactionDate] = useState<Date | null>(changeTransactionDate);
 
   const [category, setCategory] = useState<CategoryName>({
     mediumCategory: props.categoryName.mediumCategory,
