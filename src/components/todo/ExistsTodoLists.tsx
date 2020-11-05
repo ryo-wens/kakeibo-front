@@ -1,14 +1,14 @@
 import React from 'react';
 import { TodoListItem, TodoList } from '../../reducks/todoLists/types';
 import { TodoListItemComponent } from './index';
-import { GroupTodoListItem, GroupTodoLists } from '../../reducks/groupTodoLists/types';
+import { GroupTodoListItem, GroupTodoList } from '../../reducks/groupTodoList/types';
 import { date } from '../../lib/constant';
 
 interface ExistTodoListsProps {
   planName: string;
-  todoList: TodoList | GroupTodoLists;
-  implementationTodoList: TodoList | GroupTodoLists;
-  dueTodoList: TodoList | GroupTodoLists;
+  todoList: TodoList | GroupTodoList;
+  implementationTodoList: TodoList | GroupTodoList;
+  dueTodoList: TodoList | GroupTodoList;
 }
 
 const ExistsTodoLists = (props: ExistTodoListsProps) => {

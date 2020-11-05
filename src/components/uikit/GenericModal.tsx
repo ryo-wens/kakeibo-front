@@ -9,7 +9,7 @@ import { getModalMessage } from '../../reducks/modal/selectors';
 import { State } from '../../reducks/store/types';
 import { deleteTodoListItem } from '../../reducks/todoLists/operations';
 import { groupWithdrawal } from '../../reducks/groups/operations';
-import { deleteGroupTodoListItem } from '../../reducks/groupTodoLists/operations';
+import { deleteGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { push } from 'connected-react-router';
 

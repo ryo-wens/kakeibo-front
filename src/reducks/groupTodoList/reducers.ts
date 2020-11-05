@@ -3,7 +3,7 @@ import { groupTodoListsActions } from './actions';
 import initialState from '../store/initialState';
 
 export const groupTodoListsReducer = (
-  state = initialState.groupTodoLists,
+  state = initialState.groupTodoList,
   action: groupTodoListsActions
 ) => {
   switch (action.type) {
@@ -17,12 +17,12 @@ export const groupTodoListsReducer = (
         ...state,
         ...action.payload,
       };
-    case Actions.FETCH_GROUP_DATE_TODO_LISTS:
+    case Actions.FETCH_GROUP_TODAY_TODO_LIST:
       return {
         ...state,
         ...action.payload,
       };
-    case Actions.FETCH_GROUP_MONTH_TODO_LISTS:
+    case Actions.FETCH_GROUP_MONTH_TODO_LIST:
       return {
         ...state,
         ...action.payload,
