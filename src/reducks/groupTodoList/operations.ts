@@ -22,68 +22,136 @@ import {
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
 import { errorHandling } from '../../lib/validation';
+import { dateStringToMonthString, dateToDateString, dateToMonthString } from '../../lib/date';
 
 export const createGroupTodoListItem = (
   groupId: number,
+  today: Date | null,
+  selectedDate: Date | null,
   implementationDate: Date | null,
   dueDate: Date | null,
   todoContent: string
 ) => {
-  if (implementationDate === null) {
-    return;
-  }
-  if (dueDate === null) {
-    return;
-  }
-  if (todoContent === '') {
-    return;
-  }
-
-  const data: createGroupTodoListItemReq = {
-    implementation_date: implementationDate,
-    due_date: dueDate,
-    todo_content: todoContent,
-  };
-
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    await axios
-      .post<createGroupTodoListItemRes>(
+    if (today === null) {
+      return;
+    }
+    if (selectedDate === null) {
+      return;
+    }
+    if (implementationDate === null) {
+      return;
+    }
+    if (dueDate === null) {
+      return;
+    }
+    if (todoContent === '') {
+      return;
+    }
+
+    const data: createGroupTodoListItemReq = {
+      implementation_date: implementationDate,
+      due_date: dueDate,
+      todo_content: todoContent,
+    };
+    try {
+      const result = await axios.post<createGroupTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list`,
         JSON.stringify(data, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(value).format();
+            return moment(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(value).format();
+            return moment(new Date(value)).format();
           }
           return value;
         }),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const prevGroupTodayImplementationTodoList = getState().groupTodoList
-          .groupTodayImplementationTodoList;
-        const prevGroupTodayDueTodoList = getState().groupTodoList.groupTodayDueTodoList;
+      );
+      const prevGroupTodayImplementationTodoList: GroupTodoList = getState().groupTodoList
+        .groupTodayImplementationTodoList;
+      const prevGroupTodayDueTodoList: GroupTodoList = getState().groupTodoList
+        .groupTodayDueTodoList;
+      const prevGroupMonthImplementationTodoList: GroupTodoList = getState().groupTodoList
+        .groupMonthImplementationTodoList;
+      const prevGroupMonthDueTodoList: GroupTodoList = getState().groupTodoList
+        .groupMonthDueTodoList;
 
-        const groupTodoListItem: GroupTodoListItem = res.data;
+      const newTodoListItem: GroupTodoListItem = result.data;
+      const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
+      const responseDueMonth = dateStringToMonthString(result.data.due_date);
 
-        const nextGroupImplementationTodoLists: GroupTodoList = [
-          groupTodoListItem,
-          ...prevGroupTodayImplementationTodoList,
-        ];
-        const nextGroupDueTodoLists: GroupTodoList = [
-          groupTodoListItem,
-          ...prevGroupTodayDueTodoList,
-        ];
+      const groupTodayTodoList = (prevTodoList: GroupTodoList, responseDate: string) => {
+        let nextTodoList: GroupTodoList = [];
+        if (dateToDateString(today) === responseDate) {
+          nextTodoList = [newTodoListItem, ...prevTodoList];
+        } else if (dateToDateString(today) !== responseDate) {
+          return prevTodoList;
+        }
+        return nextTodoList;
+      };
 
-        dispatch(
-          createGroupTodoListItemAction(nextGroupImplementationTodoLists, nextGroupDueTodoLists)
-        );
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      const groupMonthTodoList = (
+        prevTodoList: GroupTodoList,
+        responseMonth: string,
+        responseDate: string
+      ) => {
+        let nextTodoList: GroupTodoList = [];
+        if (dateToMonthString(selectedDate) === responseMonth) {
+          let idx = 0;
+          if (responseDate === result.data.implementation_date) {
+            idx = prevTodoList.findIndex(
+              (listItem) => listItem.implementation_date >= responseDate
+            );
+          } else if (responseDate === result.data.due_date) {
+            idx = prevTodoList.findIndex((listItem) => listItem.due_date >= responseDate);
+          }
+
+          if (idx !== -1) {
+            prevTodoList.splice(idx, 0, result.data);
+          } else if (idx === -1) {
+            prevTodoList.push(result.data);
+          }
+
+          nextTodoList = [...prevTodoList];
+        } else if (dateToMonthString(selectedDate) !== responseMonth) {
+          nextTodoList = [...prevTodoList];
+        }
+        return nextTodoList;
+      };
+
+      const nextGroupTodayImplementationTodoList: GroupTodoList = groupTodayTodoList(
+        prevGroupTodayImplementationTodoList,
+        result.data.implementation_date
+      );
+      const nextGroupTodayDueTodoList: GroupTodoList = groupTodayTodoList(
+        prevGroupTodayDueTodoList,
+        result.data.due_date
+      );
+
+      const nextGroupMonthImplementationTodoList: GroupTodoList = groupMonthTodoList(
+        prevGroupMonthImplementationTodoList,
+        responseImplementationMonth,
+        result.data.implementation_date
+      );
+      const nextGroupMonthDueTodoList: GroupTodoList = groupMonthTodoList(
+        prevGroupMonthDueTodoList,
+        responseDueMonth,
+        result.data.due_date
+      );
+
+      dispatch(
+        createGroupTodoListItemAction(
+          nextGroupTodayImplementationTodoList,
+          nextGroupTodayDueTodoList,
+          nextGroupMonthImplementationTodoList,
+          nextGroupMonthDueTodoList
+        )
+      );
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
@@ -118,9 +186,9 @@ export const editGroupTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(data, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(value).format();
+            return moment(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(value).format();
+            return moment(new Date(value)).format();
           }
           return value;
         }),

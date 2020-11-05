@@ -32,33 +32,22 @@ const getState = () => {
           id: 1,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
+          implementation_date: '2020/09/27(日)',
+          due_date: '2020/09/28(月)',
           todo_content: '食器用洗剤2つ購入',
           complete_flag: false,
           user_id: 'furusawa',
         },
       ],
-      groupTodayDueTodoList: [
-        {
-          id: 1,
-          posted_date: '2020-09-27T10:54:46Z',
-          updated_date: '2020-09-27T10:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
-          todo_content: '食器用洗剤2つ購入',
-          complete_flag: false,
-          user_id: 'furusawa',
-        },
-      ],
+      groupTodayDueTodoList: [],
       groupTodayTodoListMessage: '',
       groupMonthImplementationTodoList: [
         {
           id: 1,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
+          implementation_date: '2020/09/27(日)',
+          due_date: '2020/09/28(月)',
           todo_content: '食器用洗剤2つ購入',
           complete_flag: false,
           user_id: 'furusawa',
@@ -69,8 +58,8 @@ const getState = () => {
           id: 1,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
-          implementation_date: '09/27(日)',
-          due_date: '09/28(月)',
+          implementation_date: '2020/09/27(日)',
+          due_date: '2020/09/28(月)',
           todo_content: '食器用洗剤2つ購入',
           complete_flag: false,
           user_id: 'furusawa',
@@ -97,11 +86,33 @@ describe('async actions groupTodoLists', () => {
     store.clearActions();
   });
 
+  let now: Date;
+  let spiedDate: Date;
+
+  const originalDate = Date;
+  now = new originalDate('2020-09-27T10:54:46Z');
+  Date.now = jest.fn().mockReturnValue(now.valueOf());
+
+  // @ts-ignore
+  spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+    if (arg === 0 || arg) {
+      return new originalDate(arg);
+    }
+    return now;
+  });
+
+  afterAll(() => {
+    // @ts-ignore
+    spiedDate.mockRestore();
+  });
+
   it('Created groupTodoListItem is added to groupImplementationTodoLists and groupDueTodoLists when CREATE_GROUP_TODO_LIST_ITEM succeeds.', async () => {
     const groupId = 1;
+    const today = new Date();
+    const selectedDate = new Date('2020-09-27T00:00:00');
+    const implementationDate = new Date('2020-09-27T00:00:00');
+    const dueDate = new Date('2020-09-29T00:00:00');
     const todoContent = 'お掃除';
-    const implementationDate = new Date('2020-09-27T21:11:54');
-    const dueDate = new Date('2020-09-29T21:11:54');
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list`;
 
     const mockResponse = JSON.stringify(createGroupTodoListItemResponse);
@@ -110,13 +121,13 @@ describe('async actions groupTodoLists', () => {
       {
         type: GroupTodoListsActions.CREATE_GROUP_TODO_LIST_ITEM,
         payload: {
-          groupImplementationTodoLists: [
+          groupTodayImplementationTodoList: [
             {
               id: 2,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/29(火)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
               todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
@@ -125,20 +136,21 @@ describe('async actions groupTodoLists', () => {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
               user_id: 'furusawa',
             },
           ],
-          groupDueTodoLists: [
+          groupTodayDueTodoList: [],
+          groupMonthImplementationTodoList: [
             {
               id: 2,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/29(火)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
               todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
@@ -147,9 +159,31 @@ describe('async actions groupTodoLists', () => {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupMonthDueTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:54:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 2,
+              posted_date: '2020-09-27T10:57:46Z',
+              updated_date: '2020-09-27T10:57:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
+              todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
             },
@@ -163,6 +197,8 @@ describe('async actions groupTodoLists', () => {
     // @ts-ignore
     await createGroupTodoListItem(
       groupId,
+      today,
+      selectedDate,
       implementationDate,
       dueDate,
       todoContent
@@ -177,8 +213,8 @@ describe('async actions groupTodoLists', () => {
   it('Updated groupTodoListItem will be reflected in groupImplementationTodoLists and groupDueTodoLists if EDIT_GROUP_TODO_LIST_ITEM is successful.', async () => {
     const groupId = 1;
     const todoListItemId = 1;
-    const implementationDate = new Date('2020-09-27T21:11:54');
-    const dueDate = new Date('2020-09-28T21:11:54');
+    const implementationDate = new Date('2020-09-27T00:00:00');
+    const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = '買い物へ行く';
     const completeFlag = false;
 
@@ -190,30 +226,19 @@ describe('async actions groupTodoLists', () => {
       {
         type: GroupTodoListsActions.EDIT_GROUP_TODO_LIST_ITEM,
         payload: {
-          groupImplementationTodoLists: [
+          groupTodayImplementationTodoList: [
             {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
               todo_content: '買い物へ行く',
               complete_flag: false,
               user_id: 'furusawa',
             },
           ],
-          groupDueTodoLists: [
-            {
-              id: 1,
-              posted_date: '2020-09-27T10:54:46Z',
-              updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/28(月)',
-              todo_content: '買い物へ行く',
-              complete_flag: false,
-              user_id: 'furusawa',
-            },
-          ],
+          groupTodayDueTodoList: [],
         },
       },
     ];
@@ -253,8 +278,8 @@ describe('async actions groupTodoLists', () => {
               id: 2,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/29(火)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
               todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
@@ -263,8 +288,8 @@ describe('async actions groupTodoLists', () => {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
               user_id: 'furusawa',
@@ -275,8 +300,8 @@ describe('async actions groupTodoLists', () => {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
               user_id: 'furusawa',
@@ -310,8 +335,8 @@ describe('async actions groupTodoLists', () => {
               id: 2,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/29(火)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
               todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
@@ -320,8 +345,8 @@ describe('async actions groupTodoLists', () => {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
               user_id: 'furusawa',
@@ -332,8 +357,8 @@ describe('async actions groupTodoLists', () => {
               id: 2,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/29(火)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
               todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
@@ -342,8 +367,8 @@ describe('async actions groupTodoLists', () => {
               id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '09/27(日)',
-              due_date: '09/27(日)',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/27(日)',
               todo_content: '食器用洗剤2つ購入',
               complete_flag: false,
               user_id: 'furusawa',

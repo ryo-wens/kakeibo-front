@@ -8,28 +8,32 @@ export type groupTodoListsActions = ReturnType<
 
 export const CREATE_GROUP_TODO_LIST_ITEM = 'CREATE_GROUP_TODO_LIST_ITEM';
 export const createGroupTodoListItemAction = (
-  groupImplementationTodoLists: GroupTodoList,
-  groupDueTodoLists: GroupTodoList
+  groupTodayImplementationTodoList: GroupTodoList,
+  groupTodayDueTodoList: GroupTodoList,
+  groupMonthImplementationTodoList: GroupTodoList,
+  groupMonthDueTodoList: GroupTodoList
 ) => {
   return {
     type: CREATE_GROUP_TODO_LIST_ITEM,
     payload: {
-      groupImplementationTodoLists: groupImplementationTodoLists,
-      groupDueTodoLists: groupDueTodoLists,
+      groupTodayImplementationTodoList: groupTodayImplementationTodoList,
+      groupTodayDueTodoList: groupTodayDueTodoList,
+      groupMonthImplementationTodoList: groupMonthImplementationTodoList,
+      groupMonthDueTodoList: groupMonthDueTodoList,
     },
   };
 };
 
 export const EDIT_GROUP_TODO_LIST_ITEM = 'EDIT_GROUP_TODO_LIST_ITEM';
 export const editGroupTodoListItemAction = (
-  groupImplementationTodoLists: GroupTodoList,
-  groupDueTodoLists: GroupTodoList
+  groupTodayImplementationTodoList: GroupTodoList,
+  groupTodayDueTodoList: GroupTodoList
 ) => {
   return {
     type: EDIT_GROUP_TODO_LIST_ITEM,
     payload: {
-      groupImplementationTodoLists: groupImplementationTodoLists,
-      groupDueTodoLists: groupDueTodoLists,
+      groupTodayImplementationTodoList: groupTodayImplementationTodoList,
+      groupTodayDueTodoList: groupTodayDueTodoList,
     },
   };
 };
