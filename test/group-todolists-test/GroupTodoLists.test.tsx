@@ -371,8 +371,10 @@ describe('async actions groupTodoLists', () => {
       {
         type: GroupTodoListsActions.DELETE_GROUP_TODO_LIST_ITEM,
         payload: {
-          groupImplementationTodoLists: [],
-          groupDueTodoLists: [],
+          groupTodayImplementationTodoList: [],
+          groupTodayDueTodoList: [],
+          groupMonthImplementationTodoList: [],
+          groupMonthDueTodoList: [],
         },
       },
       {

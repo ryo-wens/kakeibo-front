@@ -68,14 +68,18 @@ export const fetchGroupMonthTodoListAction = (
 
 export const DELETE_GROUP_TODO_LIST_ITEM = 'DELETE_GROUP_TODO_LIST_ITEM';
 export const deleteGroupTodoListItemAction = (
-  groupImplementationTodoLists: GroupTodoList,
-  groupDueTodoLists: GroupTodoList
+  groupTodayImplementationTodoList: GroupTodoList,
+  groupTodayDueTodoList: GroupTodoList,
+  groupMonthImplementationTodoList: GroupTodoList,
+  groupMonthDueTodoList: GroupTodoList
 ) => {
   return {
     type: DELETE_GROUP_TODO_LIST_ITEM,
     payload: {
-      groupImplementationTodoLists: groupImplementationTodoLists,
-      groupDueTodoLists: groupDueTodoLists,
+      groupTodayImplementationTodoList: groupTodayImplementationTodoList,
+      groupTodayDueTodoList: groupTodayDueTodoList,
+      groupMonthImplementationTodoList: groupMonthImplementationTodoList,
+      groupMonthDueTodoList: groupMonthDueTodoList,
     },
   };
 };

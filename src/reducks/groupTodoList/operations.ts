@@ -249,40 +249,49 @@ export const fetchGroupMonthTodoList = (groupId: number, year: string, month: st
 
 export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    await axios
-      .delete<deleteGroupTodoListItemRes>(
+    try {
+      const result = await axios.delete<deleteGroupTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const prevGroupTodayImplementationTodoLists: GroupTodoList = getState().groupTodoList
-          .groupTodayImplementationTodoList;
-        const prevGroupTodayDueTodoLists: GroupTodoList = getState().groupTodoList
-          .groupTodayDueTodoList;
-        const message = res.data.message;
+      );
+      const prevGroupTodayImplementationTodoList: GroupTodoList = getState().groupTodoList
+        .groupTodayImplementationTodoList;
+      const prevGroupTodayDueTodoList: GroupTodoList = getState().groupTodoList
+        .groupTodayDueTodoList;
+      const prevGroupMonthImplementationTodoList: GroupTodoList = getState().groupTodoList
+        .groupMonthImplementationTodoList;
+      const prevGroupMonthDueTodoList: GroupTodoList = getState().groupTodoList
+        .groupMonthDueTodoList;
+      const message = result.data.message;
 
-        const updateGroupTodoList = (prevGroupTodoList: GroupTodoList) => {
-          return prevGroupTodoList.filter((prevGroupTodoList) => {
-            return prevGroupTodoList.id !== todoListItemId;
-          });
-        };
+      const updateTodoList = (prevTodoList: GroupTodoList) => {
+        return prevTodoList.filter((prevTodoListItem) => {
+          return prevTodoListItem.id !== todoListItemId;
+        });
+      };
 
-        const updateGroupImplementationTodoLists: GroupTodoList = updateGroupTodoList(
-          prevGroupTodayImplementationTodoLists
-        );
-        const updateGroupDueTodoLists: GroupTodoList = updateGroupTodoList(
-          prevGroupTodayDueTodoLists
-        );
+      const updateGroupTodayImplementationTodoList = updateTodoList(
+        prevGroupTodayImplementationTodoList
+      );
+      const updateGroupTodayDueTodoList = updateTodoList(prevGroupTodayDueTodoList);
+      const updateGroupMonthImplementationTodoList = updateTodoList(
+        prevGroupMonthImplementationTodoList
+      );
+      const updateGroupMonthDueTodoList = updateTodoList(prevGroupMonthDueTodoList);
 
-        dispatch(
-          deleteGroupTodoListItemAction(updateGroupImplementationTodoLists, updateGroupDueTodoLists)
-        );
-        dispatch(openTextModalAction(message));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      dispatch(
+        deleteGroupTodoListItemAction(
+          updateGroupTodayImplementationTodoList,
+          updateGroupTodayDueTodoList,
+          updateGroupMonthImplementationTodoList,
+          updateGroupMonthDueTodoList
+        )
+      );
+      dispatch(openTextModalAction(message));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
