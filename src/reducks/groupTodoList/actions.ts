@@ -3,7 +3,7 @@ export type groupTodoListsActions = ReturnType<
   | typeof createGroupTodoListItemAction
   | typeof editGroupTodoListItemAction
   | typeof fetchGroupTodayTodoListAction
-  | typeof fetchGroupMonthTodoListsAction
+  | typeof fetchGroupMonthTodoListAction
 >;
 
 export const CREATE_GROUP_TODO_LIST_ITEM = 'CREATE_GROUP_TODO_LIST_ITEM';
@@ -50,18 +50,18 @@ export const fetchGroupTodayTodoListAction = (
   };
 };
 
-export const FETCH_GROUP_MONTH_TODO_LISTS = 'FETCH_GROUP_MONTH_TODO_LISTS';
-export const fetchGroupMonthTodoListsAction = (
-  groupImplementationTodoLists: GroupTodoList,
-  groupDueTodoLists: GroupTodoList,
+export const FETCH_GROUP_MONTH_TODO_LIST = 'FETCH_GROUP_MONTH_TODO_LIST';
+export const fetchGroupMonthTodoListAction = (
+  groupMonthImplementationTodoList: GroupTodoList,
+  groupMonthDueTodoList: GroupTodoList,
   message: string
 ) => {
   return {
-    type: FETCH_GROUP_MONTH_TODO_LISTS,
+    type: FETCH_GROUP_MONTH_TODO_LIST,
     payload: {
-      groupImplementationTodoLists: groupImplementationTodoLists,
-      groupDueTodoLists: groupDueTodoLists,
-      message: message,
+      groupMonthImplementationTodoList: groupMonthImplementationTodoList,
+      groupMonthDueTodoList: groupMonthDueTodoList,
+      groupMonthTodoListMessage: message,
     },
   };
 };

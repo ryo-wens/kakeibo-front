@@ -19,7 +19,7 @@ import {
   getGroupMonthImplementationTodoList,
   getGroupMonthTodoListMessage,
 } from '../reducks/groupTodoList/selectors';
-import { fetchGroupMonthTodoLists } from '../reducks/groupTodoList/operations';
+import { fetchGroupMonthTodoList } from '../reducks/groupTodoList/operations';
 import { date } from '../lib/constant';
 
 const useStyles = makeStyles(() =>
@@ -80,7 +80,7 @@ const MonthlyTodo = () => {
       !groupMonthDueTodoList.length &&
       !groupMonthTodoListMessage
     ) {
-      dispatch(fetchGroupMonthTodoLists(groupId, year, month));
+      dispatch(fetchGroupMonthTodoList(groupId, year, month));
     }
   }, [groupId]);
 
@@ -101,7 +101,7 @@ const MonthlyTodo = () => {
     if (entityType !== 'group') {
       dispatch(fetchMonthTodoList(year, month));
     } else if (entityType === 'group') {
-      dispatch(fetchGroupMonthTodoLists(groupId, year, month));
+      dispatch(fetchGroupMonthTodoList(groupId, year, month));
     }
   };
 

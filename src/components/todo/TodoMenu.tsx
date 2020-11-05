@@ -20,7 +20,7 @@ import {
 } from '../../reducks/todoLists/selectors';
 import {
   fetchGroupTodayTodoList,
-  fetchGroupMonthTodoLists,
+  fetchGroupMonthTodoList,
 } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { TodoList } from '../../reducks/todoLists/types';
@@ -106,7 +106,7 @@ const TodoMenu = () => {
             monthTodoListMessage,
             `/todo/monthly`,
             fetchMonthTodoList(year, month),
-            fetchGroupMonthTodoLists(groupId, year, month)
+            fetchGroupMonthTodoList(groupId, year, month)
           )
         }
       >

@@ -18,7 +18,7 @@ import {
   deleteGroupTodoListItemAction,
   editGroupTodoListItemAction,
   fetchGroupTodayTodoListAction,
-  fetchGroupMonthTodoListsAction,
+  fetchGroupMonthTodoListAction,
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
 import { errorHandling } from '../../lib/validation';
@@ -177,20 +177,28 @@ export const fetchGroupTodayTodoList = (
         }
       );
 
-      const groupImplementationTodoLists = result.data.implementation_todo_list;
-      const groupDueTodoLists = result.data.due_todo_list;
+      const groupTodayImplementationTodoList = result.data.implementation_todo_list;
+      const groupTodayDueTodoList = result.data.due_todo_list;
       const message = result.data.message;
 
-      if (groupImplementationTodoLists !== undefined && groupDueTodoLists !== undefined) {
+      if (groupTodayImplementationTodoList !== undefined && groupTodayDueTodoList !== undefined) {
         const message = '';
         dispatch(
-          fetchGroupTodayTodoListAction(groupImplementationTodoLists, groupDueTodoLists, message)
+          fetchGroupTodayTodoListAction(
+            groupTodayImplementationTodoList,
+            groupTodayDueTodoList,
+            message
+          )
         );
       } else {
-        const groupImplementationTodoLists: GroupTodoList = [];
-        const groupDueTodoLists: GroupTodoList = [];
+        const groupTodayImplementationTodoList: GroupTodoList = [];
+        const groupTodayDueTodoList: GroupTodoList = [];
         dispatch(
-          fetchGroupTodayTodoListAction(groupImplementationTodoLists, groupDueTodoLists, message)
+          fetchGroupTodayTodoListAction(
+            groupTodayImplementationTodoList,
+            groupTodayDueTodoList,
+            message
+          )
         );
       }
     } catch (error) {
@@ -199,36 +207,43 @@ export const fetchGroupTodayTodoList = (
   };
 };
 
-export const fetchGroupMonthTodoLists = (groupId: number, year: string, month: string) => {
+export const fetchGroupMonthTodoList = (groupId: number, year: string, month: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<fetchGroupMonthTodoListsRes>(
+    try {
+      const result = await axios.get<fetchGroupMonthTodoListsRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const groupImplementationTodoLists = res.data.implementation_todo_list;
-        const groupDueTodoLists = res.data.due_todo_list;
-        const message = res.data.message;
+      );
 
-        if (groupImplementationTodoLists !== undefined && groupDueTodoLists !== undefined) {
-          const message = '';
-          dispatch(
-            fetchGroupMonthTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
-          );
-        } else {
-          const groupImplementationTodoLists: GroupTodoList = [];
-          const groupDueTodoLists: GroupTodoList = [];
-          dispatch(
-            fetchGroupMonthTodoListsAction(groupImplementationTodoLists, groupDueTodoLists, message)
-          );
-        }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      const groupMonthImplementationTodoList = result.data.implementation_todo_list;
+      const groupMonthDueTodoList = result.data.due_todo_list;
+      const message = result.data.message;
+
+      if (groupMonthImplementationTodoList !== undefined && groupMonthDueTodoList !== undefined) {
+        const message = '';
+        dispatch(
+          fetchGroupMonthTodoListAction(
+            groupMonthImplementationTodoList,
+            groupMonthDueTodoList,
+            message
+          )
+        );
+      } else {
+        const groupMonthImplementationTodoList: GroupTodoList = [];
+        const groupMonthDueTodoList: GroupTodoList = [];
+        dispatch(
+          fetchGroupMonthTodoListAction(
+            groupMonthImplementationTodoList,
+            groupMonthDueTodoList,
+            message
+          )
+        );
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
