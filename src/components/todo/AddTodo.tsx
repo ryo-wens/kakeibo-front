@@ -96,6 +96,8 @@ const AddTodo = (props: AddTodoProps) => {
       return dispatch(
         createGroupTodoListItem(
           props.groupId,
+          today,
+          props.date,
           selectedImplementationDate,
           selectedDueDate,
           todoContent
