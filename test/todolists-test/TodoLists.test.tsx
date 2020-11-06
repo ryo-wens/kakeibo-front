@@ -3,7 +3,7 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import * as TodoListsActions from '../../src/reducks/todoLists/actions';
+import * as TodoListsActions from '../../src/reducks/todoList/actions';
 import * as ModalActions from '../../src/reducks/modal/actions';
 import {
   createTodoListItem,
@@ -11,7 +11,7 @@ import {
   editTodoListItem,
   fetchDateTodoList,
   fetchMonthTodoList,
-} from '../../src/reducks/todoLists/operations';
+} from '../../src/reducks/todoList/operations';
 import createTodoListItemResponse from './createTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
 import fetchDateTodoListResponse from './fetchDateTodoListResponse.json';

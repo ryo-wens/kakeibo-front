@@ -1,13 +1,13 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
-import { fetchMonthTodoList } from '../reducks/todoLists/operations';
+import { fetchMonthTodoList } from '../reducks/todoList/operations';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import {
   getMonthDueTodoList,
   getMonthImplementationTodoList,
   getMonthTodoListMessage,
-} from '../reducks/todoLists/selectors';
+} from '../reducks/todoList/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker } from '../components/uikit';

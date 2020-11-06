@@ -7,7 +7,7 @@ import TextField from '@material-ui/core/TextField';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
-import { editTodoListItem } from '../../reducks/todoLists/operations';
+import { editTodoListItem } from '../../reducks/todoList/operations';
 import { editGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { date } from '../../lib/constant';

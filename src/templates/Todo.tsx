@@ -12,8 +12,8 @@ import {
   getTodayDueTodoList,
   getTodayImplementationTodoList,
   getTodayTodoListMessage,
-} from '../reducks/todoLists/selectors';
-import { fetchDateTodoList, fetchMonthTodoList } from '../reducks/todoLists/operations';
+} from '../reducks/todoList/selectors';
+import { fetchDateTodoList, fetchMonthTodoList } from '../reducks/todoList/operations';
 import { getWeekDay } from '../lib/date';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupTodayTodoList } from '../reducks/groupTodoList/operations';

@@ -12,7 +12,7 @@ import { createLogger } from 'redux-logger';
 import { modalReducer } from '../modal/reducers';
 import { budgetsReducer } from '../budgets/reducers';
 import { groupBudgetsReducer } from '../groupBudgets/reducers';
-import { todoListReducer } from '../todoLists/reducers';
+import { todoListReducer } from '../todoList/reducers';
 import { groupTodoListsReducer } from '../groupTodoList/reducers';
 import { groupTasksReducers } from '../groupTasks/reducers';
 

@@ -48,6 +48,7 @@ const initialState = {
     groupTasksList: [],
   },
   todoList: {
+    expiredTodoList: [],
     todayImplementationTodoList: [],
     todayDueTodoList: [],
     todayTodoListMessage: '',

@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { AddTodo, TodoListItemComponent } from './index';
-import { TodoList } from '../../reducks/todoLists/types';
+import { TodoList } from '../../reducks/todoList/types';
 import {
   dateStringToDate,
   getWeekDay,

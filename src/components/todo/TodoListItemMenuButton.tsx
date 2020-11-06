@@ -4,7 +4,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { IconButton } from '@material-ui/core';
 import { GenericModal } from '../uikit';
-import { TodoListItem } from '../../reducks/todoLists/types';
+import { TodoListItem } from '../../reducks/todoList/types';
 
 interface TodoListItemMenuButtonProps {
   openInputTodoList: () => void;
