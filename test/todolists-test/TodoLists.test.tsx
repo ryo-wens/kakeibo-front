@@ -10,12 +10,14 @@ import {
   deleteTodoListItem,
   editTodoListItem,
   fetchDateTodoList,
+  fetchExpiredTodoList,
   fetchMonthTodoList,
 } from '../../src/reducks/todoList/operations';
 import createTodoListItemResponse from './createTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
 import fetchDateTodoListResponse from './fetchDateTodoListResponse.json';
 import fetchMonthTodoListResponse from './fetchMonthTodoListResponse.json';
+import fetchExpiredTodoListResponse from './fetchExpiredTodoListResponse.json';
 import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
 
 const middlewares = [thunk];
@@ -28,6 +30,7 @@ const store = mockStore({ todoLists: [], modal: [], router: [] });
 const getState = () => {
   return {
     todoList: {
+      expiredTodoList: [],
       todayImplementationTodoList: [
         {
           id: 1,
@@ -318,7 +321,7 @@ describe('async actions todoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Get monthImplementationTodoLists and monthDueTodoLists when FETCH_MONTH_TODO_LISTS succeeds.', async () => {
+  it('Get monthImplementationTodoList and monthDueTodoList when FETCH_MONTH_TODO_LIST succeeds.', async () => {
     const year = '2020';
     const month = '09';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`;
@@ -378,6 +381,36 @@ describe('async actions todoLists', () => {
 
     // @ts-ignore
     await fetchMonthTodoList(year, month)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('Get expiredTodoList when FETCH_EXPIRED_TODO_LIST succeeds.', async () => {
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`;
+
+    const mockResponse = JSON.stringify(fetchExpiredTodoListResponse);
+
+    const expectedAction = [
+      {
+        type: TodoListsActions.FETCH_EXPIRED_TODO_LIST,
+        payload: {
+          expiredTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:54:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
+              todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchExpiredTodoList()(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

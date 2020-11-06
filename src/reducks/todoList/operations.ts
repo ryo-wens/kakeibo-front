@@ -6,6 +6,7 @@ import {
   deleteTodoListItemAction,
   editTodoListItemAction,
   fetchDateTodoListAction,
+  fetchExpiredTodoListAction,
   fetchMonthTodoListAction,
 } from './actions';
 import {
@@ -14,6 +15,7 @@ import {
   deleteTodoListItemRes,
   editTodoListItemReq,
   editTodoListItemRes,
+  fetchExpiredTodoListRes,
   fetchMonthTodoListsRes,
   fetchTodayTodoListsRes,
   TodoListItem,
@@ -371,6 +373,24 @@ export const fetchMonthTodoList = (year: string, month: string) => {
       .catch((error) => {
         errorHandling(dispatch, error);
       });
+  };
+};
+
+export const fetchExpiredTodoList = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<fetchExpiredTodoListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`,
+        {
+          withCredentials: true,
+        }
+      );
+      const expiredTodoList: TodoList = result.data.expired_todo_list;
+
+      dispatch(fetchExpiredTodoListAction(expiredTodoList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
