@@ -1,81 +1,29 @@
 {
   "transactions_list": [
     {
-      "id": 5,
-      "transaction_type": "expense",
+      "id": 13,
+      "transaction_type": "income",
       "posted_date": "2020-08-08T00:08:23Z",
       "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/03(金)",
+      "transaction_date": "2020/07/20(月)",
       "shop": null,
-      "memo": null,
-      "amount": 65000,
-      "big_category_name": "住宅",
-      "medium_category_name": "家賃",
-      "custom_category_name": null
+      "memo": "株配当金",
+      "amount": 200000,
+      "big_category_name": "収入",
+      "medium_category_name": null,
+      "custom_category_name": "株配当金"
     },
     {
-      "id": 8,
-      "transaction_type": "expense",
-      "posted_date":"2020-08-08T00:08:23Z",
-      "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/05(日)",
-      "shop": null,
-      "memo": "みんなのGo言語",
-      "amount": 2500,
-      "big_category_name": "教養・教育",
-      "medium_category_name": "参考書",
-      "custom_category_name": null
-    },
-    {
-      "id": 6,
+      "id": 3,
       "transaction_type": "expense",
       "posted_date": "2020-08-08T00:08:23Z",
       "updated_date": "2020-08-08T00:08:23Z",
       "transaction_date": "2020/07/04(土)",
       "shop": null,
-      "memo": null,
-      "amount": 500,
-      "big_category_name": "食費",
-      "medium_category_name": "カフェ",
-      "custom_category_name": null
-    },
-    {
-      "id": 9,
-      "transaction_type": "expense",
-      "posted_date": "2020-08-08T00:08:23Z",
-      "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/06(月)",
-      "shop": "コンビニ",
-      "memo": null,
-      "amount": 120,
-      "big_category_name": "食費",
-      "medium_category_name": null,
-      "custom_category_name": "パン"
-    },
-    {
-      "id": 7,
-      "transaction_type": "expense",
-      "posted_date": "2020-08-08T00:08:23Z",
-      "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/05(日)",
-      "shop": null,
-      "memo": null,
-      "amount": 4800,
-      "big_category_name": "健康・医療",
-      "medium_category_name": "フィットネス",
-      "custom_category_name": null
-    },
-    {
-      "id": 4,
-      "transaction_type": "expense",
-      "posted_date": "2020-08-08T00:08:23Z",
-      "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/01(水)",
-      "shop": null,
-      "memo": "電車定期代",
-      "amount": 12000,
-      "big_category_name": "交通費",
-      "medium_category_name": "電車",
+      "memo": "CSS完全設計",
+      "amount": 2500,
+      "big_category_name": "教養・教育",
+      "medium_category_name": "参考書",
       "custom_category_name": null
     },
     {
@@ -92,32 +40,6 @@
       "custom_category_name": null
     },
     {
-      "id": 3,
-      "transaction_type": "expense",
-      "posted_date": "2020-08-08T00:08:23Z",
-      "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/04(土)",
-      "shop": null,
-      "memo": "CSS完全設計",
-      "amount": 2500,
-      "big_category_name": "教養・教育",
-      "medium_category_name": "参考書",
-      "custom_category_name": null
-    },
-    {
-      "id": 13,
-      "transaction_type": "income",
-      "posted_date": "2020-08-08T00:08:23Z",
-      "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/20(月)",
-      "shop": null,
-      "memo": "株配当金",
-      "amount": 200000,
-      "big_category_name": "収入",
-      "medium_category_name": null,
-      "custom_category_name": "株配当金"
-    },
-    {
       "id": 12,
       "transaction_type": "income",
       "posted_date": "2020-08-08T00:08:23Z",
@@ -129,7 +51,84 @@
       "big_category_name": "収入",
       "medium_category_name": "賞与",
       "custom_category_name": null
+    },
+    {
+      "id": 7,
+      "transaction_type": "expense",
+      "posted_date": "2020-08-08T00:08:23Z",
+      "updated_date": "2020-08-08T00:08:23Z",
+      "transaction_date": "2020/07/05(日)",
+      "shop": null,
+      "memo": null,
+      "amount": 4800,
+      "big_category_name": "健康・医療",
+      "medium_category_name": "フィットネス",
+      "custom_category_name": null
+    },
+    {
+      "id": 9,
+      "transaction_type": "expense",
+      "posted_date": "2020-08-08T00:08:23Z",
+      "updated_date": "2020-08-08T00:08:23Z",
+      "transaction_date": "2020/07/06(月)",
+      "shop": "コンビニ",
+      "memo": null,
+      "amount": 120,
+      "big_category_name": "食費",
+      "medium_category_name": null,
+      "custom_category_name": "パン"
+    },
+    {
+      "id": 6,
+      "transaction_type": "expense",
+      "posted_date": "2020-08-08T00:08:23Z",
+      "updated_date": "2020-08-08T00:08:23Z",
+      "transaction_date": "2020/07/04(土)",
+      "shop": null,
+      "memo": null,
+      "amount": 500,
+      "big_category_name": "食費",
+      "medium_category_name": "カフェ",
+      "custom_category_name": null
+    },
+    {
+      "id": 8,
+      "transaction_type": "expense",
+      "posted_date": "2020-08-08T00:08:23Z",
+      "updated_date": "2020-08-08T00:08:23Z",
+      "transaction_date": "2020/07/05(日)",
+      "shop": null,
+      "memo": "みんなのGo言語",
+      "amount": 2500,
+      "big_category_name": "教養・教育",
+      "medium_category_name": "参考書",
+      "custom_category_name": null
+    },
+    {
+      "id": 5,
+      "transaction_type": "expense",
+      "posted_date": "2020-08-08T00:08:23Z",
+      "updated_date": "2020-08-08T00:08:23Z",
+      "transaction_date": "2020/07/03(金)",
+      "shop": null,
+      "memo": null,
+      "amount": 65000,
+      "big_category_name": "住宅",
+      "medium_category_name": "家賃",
+      "custom_category_name": null
+    },
+    {
+      "id": 4,
+      "transaction_type": "expense",
+      "posted_date": "2020-08-08T00:08:23Z",
+      "updated_date": "2020-08-08T00:08:23Z",
+      "transaction_date": "2020/07/01(水)",
+      "shop": null,
+      "memo": "電車定期代",
+      "amount": 12000,
+      "big_category_name": "交通費",
+      "medium_category_name": "電車",
+      "custom_category_name": null
     }
   ]
 }
-

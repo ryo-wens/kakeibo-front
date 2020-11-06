@@ -14,6 +14,19 @@
       "custom_category_name": null
     },
     {
+      "id": 4,
+      "transaction_type": "expense",
+      "posted_date": "2020-08-08T00:08:23Z",
+      "updated_date": "2020-08-08T00:08:23Z",
+      "transaction_date": "2020/07/01(水)",
+      "shop": null,
+      "memo": "電車定期代",
+      "amount": 12000,
+      "big_category_name": "交通費",
+      "medium_category_name": "電車",
+      "custom_category_name": null
+    },
+    {
       "id": 5,
       "transaction_type": "expense",
       "posted_date": "2020-08-08T00:08:23Z",
@@ -79,16 +92,16 @@
       "custom_category_name": null
     },
     {
-      "id": 4,
-      "transaction_type": "expense",
+      "id": 12,
+      "transaction_type": "income",
       "posted_date": "2020-08-08T00:08:23Z",
       "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/01(水)",
+      "transaction_date": "2020/07/20(月)",
       "shop": null,
-      "memo": "電車定期代",
-      "amount": 12000,
-      "big_category_name": "交通費",
-      "medium_category_name": "電車",
+      "memo": "賞与",
+      "amount": 1000000,
+      "big_category_name": "収入",
+      "medium_category_name": "賞与",
       "custom_category_name": null
     },
     {
@@ -129,19 +142,6 @@
       "big_category_name": "収入",
       "medium_category_name": null,
       "custom_category_name": "株配当金"
-    },
-    {
-      "id": 12,
-      "transaction_type": "income",
-      "posted_date": "2020-08-08T00:08:23Z",
-      "updated_date": "2020-08-08T00:08:23Z",
-      "transaction_date": "2020/07/20(月)",
-      "shop": null,
-      "memo": "賞与",
-      "amount": 1000000,
-      "big_category_name": "収入",
-      "medium_category_name": "賞与",
-      "custom_category_name": null
     }
   ]
 }

@@ -170,7 +170,7 @@ describe('async actions editTransactions', () => {
   let now: Date;
   let spiedDate: Date;
   const originalDate = Date;
-  now = new originalDate('2020-08-09T17:00:15Z');
+  now = new originalDate('2020-07-26T17:00:15Z');
   Date.now = jest.fn().mockReturnValue(now.valueOf());
   const actual = new Date();
 
