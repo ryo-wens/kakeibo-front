@@ -75,6 +75,16 @@ export const fetchMonthTodoListAction = (
   };
 };
 
+export const FETCH_EXPIRED_TODO_LIST = 'FETCH_EXPIRED_TODO_LIST';
+export const fetchExpiredTodoListAction = (expiredTodoList: TodoList) => {
+  return {
+    type: FETCH_EXPIRED_TODO_LIST,
+    payload: {
+      expiredTodoList: expiredTodoList,
+    },
+  };
+};
+
 export const DELETE_TODO_LIST_ITEM = 'DELETE_TODO_LIST_ITEM';
 export const deleteTodoListItemAction = (
   todayImplementationTodoList: TodoList,
