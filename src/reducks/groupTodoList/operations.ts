@@ -158,12 +158,20 @@ export const createGroupTodoListItem = (
 export const editGroupTodoListItem = (
   groupId: number,
   todoListItemId: number,
+  today: Date | null,
+  selectedDate: Date | null,
   implementationDate: Date | null,
   dueDate: Date | null,
   todoContent: string,
   completeFlag: boolean
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (today === null) {
+      return;
+    }
+    if (selectedDate === null) {
+      return;
+    }
     if (implementationDate === null) {
       return;
     }
@@ -181,8 +189,8 @@ export const editGroupTodoListItem = (
       complete_flag: completeFlag,
     };
 
-    await axios
-      .put<editGroupTodoListItemRes>(
+    try {
+      const result = await axios.put<editGroupTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(data, function (key, value) {
           if (key === 'implementation_date') {
@@ -195,38 +203,112 @@ export const editGroupTodoListItem = (
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const prevGroupTodayImplementationTodoList: GroupTodoList = getState().groupTodoList
-          .groupTodayImplementationTodoList;
-        const prevGroupTodayDueTodoList: GroupTodoList = getState().groupTodoList
-          .groupTodayDueTodoList;
+      );
+      const prevGroupTodayImplementationTodoList: GroupTodoList = getState().groupTodoList
+        .groupTodayImplementationTodoList;
+      const prevGroupTodayDueTodoList: GroupTodoList = getState().groupTodoList
+        .groupTodayDueTodoList;
+      const prevGroupMonthImplementationTodoList: GroupTodoList = getState().groupTodoList
+        .groupMonthImplementationTodoList;
+      const prevGroupMonthDueTodoList: GroupTodoList = getState().groupTodoList
+        .groupMonthDueTodoList;
 
-        const updateGroupTodoList = (prevGroupTodoList: GroupTodoList) => {
-          return prevGroupTodoList.map((prevGroupTodoList: GroupTodoListItem) => {
-            if (prevGroupTodoList.id === todoListItemId) {
-              const updateGroupTodoListItem: GroupTodoListItem = res.data;
-              return updateGroupTodoListItem;
-            } else {
-              return prevGroupTodoList;
+      const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
+      const responseDueMonth = dateStringToMonthString(result.data.due_date);
+
+      const updateGroupTodayTodoList = (prevTodoList: GroupTodoList, responseDate: string) => {
+        let nextTodoList: GroupTodoList = [];
+        const prevItemIdx = prevTodoList.findIndex(
+          (listItem: GroupTodoListItem) => listItem.id === result.data.id
+        );
+
+        if (dateToDateString(today) === responseDate) {
+          prevTodoList[prevItemIdx] = result.data;
+          nextTodoList = [...prevTodoList];
+        } else if (dateToDateString(today) !== responseDate) {
+          nextTodoList = [...prevTodoList];
+        }
+        return nextTodoList;
+      };
+
+      const updateGroupMonthTodoList = (
+        prevTodoList: GroupTodoList,
+        responseMonth: string,
+        responseDate: string
+      ) => {
+        let nextTodoList: GroupTodoList = [];
+        let idx = 0;
+        const prevItemIdx = prevTodoList.findIndex(
+          (listItem: GroupTodoListItem) => listItem.id === result.data.id
+        );
+
+        let prevTodoListItemDate = '';
+        if (prevTodoList === prevGroupMonthImplementationTodoList) {
+          prevTodoListItemDate = prevTodoList[prevItemIdx].implementation_date;
+        } else if (prevTodoList === prevGroupMonthDueTodoList) {
+          prevTodoListItemDate = prevTodoList[prevItemIdx].due_date;
+        }
+
+        if (dateToMonthString(selectedDate) === responseMonth) {
+          if (prevTodoListItemDate === responseDate) {
+            prevTodoList[prevItemIdx] = result.data;
+            nextTodoList = [...prevTodoList];
+          } else if (prevTodoListItemDate !== responseDate) {
+            prevTodoList.splice(prevItemIdx, 1);
+
+            idx = prevTodoList.findIndex((listItem) => {
+              if (responseDate === listItem.implementation_date) {
+                return listItem.implementation_date >= responseDate;
+              } else if (responseDate === listItem.due_date) {
+                return listItem.due_date >= responseDate;
+              }
+            });
+
+            if (idx !== -1) {
+              prevTodoList.splice(idx, 0, result.data);
+            } else if (idx === -1) {
+              prevTodoList.push(result.data);
             }
-          });
-        };
 
-        const updateGroupImplementationTodoLists: GroupTodoList = updateGroupTodoList(
-          prevGroupTodayImplementationTodoList
-        );
-        const updateGroupDueTodoLists: GroupTodoList = updateGroupTodoList(
-          prevGroupTodayDueTodoList
-        );
+            nextTodoList = [...prevTodoList];
+          }
+        } else if (dateToMonthString(selectedDate) !== responseMonth) {
+          prevTodoList.splice(prevItemIdx, 1);
+          nextTodoList = [...prevTodoList];
+        }
+        return nextTodoList;
+      };
 
-        dispatch(
-          editGroupTodoListItemAction(updateGroupImplementationTodoLists, updateGroupDueTodoLists)
-        );
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      const updateTodayImplementationTodoLists: GroupTodoList = updateGroupTodayTodoList(
+        prevGroupTodayImplementationTodoList,
+        result.data.implementation_date
+      );
+      const updateTodayDueTodoLists: GroupTodoList = updateGroupTodayTodoList(
+        prevGroupTodayDueTodoList,
+        result.data.due_date
+      );
+      const updateMonthImplementationTodoList: GroupTodoList = updateGroupMonthTodoList(
+        prevGroupMonthImplementationTodoList,
+        responseImplementationMonth,
+        result.data.implementation_date
+      );
+      const updateMonthDueTodoLists: GroupTodoList = updateGroupMonthTodoList(
+        prevGroupMonthDueTodoList,
+        responseDueMonth,
+        result.data.due_date
+      );
+
+      dispatch(
+        editGroupTodoListItemAction(
+          updateTodayImplementationTodoLists,
+          updateTodayDueTodoLists,
+          updateMonthImplementationTodoList,
+          updateMonthDueTodoLists
+        )
+      );
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 

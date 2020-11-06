@@ -73,6 +73,8 @@ const InputTodoList = (props: InputTodoListProps) => {
         editGroupTodoListItem(
           groupId,
           props.todoListItemId,
+          date,
+          props.selectedDate,
           props.selectedImplementationDate,
           props.selectedDueDate,
           props.todoContent,

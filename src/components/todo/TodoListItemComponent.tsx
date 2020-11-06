@@ -123,6 +123,8 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           editGroupTodoListItem(
             groupId,
             todoListItemId,
+            date,
+            props.selectedDate,
             selectedImplementationDate,
             selectedDueDate,
             todoContent,

@@ -210,9 +210,11 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Updated groupTodoListItem will be reflected in groupImplementationTodoLists and groupDueTodoLists if EDIT_GROUP_TODO_LIST_ITEM is successful.', async () => {
+  it('Updated groupTodoListItem will be reflected in groupTodayImplementationTodoList and groupMonthDueTodoList and groupMonthImplementationTodoList and groupTodayDueTodoList if EDIT_GROUP_TODO_LIST_ITEM is successful.', async () => {
     const groupId = 1;
     const todoListItemId = 1;
+    const today = new Date();
+    const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = '買い物へ行く';
@@ -239,6 +241,30 @@ describe('async actions groupTodoLists', () => {
             },
           ],
           groupTodayDueTodoList: [],
+          groupMonthImplementationTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:54:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
+              todo_content: '買い物へ行く',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupMonthDueTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:54:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/28(月)',
+              todo_content: '買い物へ行く',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
         },
       },
     ];
@@ -248,6 +274,8 @@ describe('async actions groupTodoLists', () => {
     await editGroupTodoListItem(
       groupId,
       todoListItemId,
+      today,
+      selectedDate,
       implementationDate,
       dueDate,
       todoContent,
