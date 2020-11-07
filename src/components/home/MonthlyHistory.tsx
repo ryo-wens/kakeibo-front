@@ -6,7 +6,7 @@ import { getTransactions } from '../../reducks/transactions/selectors';
 import { year, month, customMonth } from '../../lib/constant';
 import '../../assets/monthly-history.scss';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
-import { InputModal, SelectMenu } from '../uikit';
+import { EditTransactionModal, SelectMenu } from '../uikit';
 import { incomeTransactionType } from '../../lib/constant';
 
 const MonthlyHistory = () => {
@@ -120,7 +120,7 @@ const MonthlyHistory = () => {
                       </span>
                     </dt>
                   </dl>,
-                  <InputModal
+                  <EditTransactionModal
                     key={index}
                     open={open === transaction.id && modalOpen}
                     onClose={handleClose}
