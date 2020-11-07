@@ -340,63 +340,59 @@ export const editTodoListItem = (
 
 export const fetchDateTodoList = (year: string, month: string, date: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<fetchTodayTodoListsRes>(
+    try {
+      const result = await axios.get<fetchTodayTodoListsRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const implementationTodoList = res.data.implementation_todo_list;
-        const dueTodoList = res.data.due_todo_list;
-        const message = res.data.message;
+      );
+      const implementationTodoList = result.data.implementation_todo_list;
+      const dueTodoList = result.data.due_todo_list;
+      const message = result.data.message;
 
-        if (implementationTodoList !== undefined && dueTodoList !== undefined) {
-          const message = '';
-          dispatch(fetchDateTodoListAction(implementationTodoList, dueTodoList, message));
-        } else {
-          const implementationTodoList: TodoList = [];
-          const dueTodoList: TodoList = [];
-          dispatch(fetchDateTodoListAction(implementationTodoList, dueTodoList, message));
-        }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      if (implementationTodoList !== undefined && dueTodoList !== undefined) {
+        const message = '';
+        dispatch(fetchDateTodoListAction(implementationTodoList, dueTodoList, message));
+      } else {
+        const implementationTodoList: TodoList = [];
+        const dueTodoList: TodoList = [];
+        dispatch(fetchDateTodoListAction(implementationTodoList, dueTodoList, message));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
 export const fetchMonthTodoList = (year: string, month: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<fetchMonthTodoListsRes>(
+    try {
+      const result = await axios.get<fetchMonthTodoListsRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const monthImplementationTodoLists = res.data.implementation_todo_list;
-        const monthDueTodoLists = res.data.due_todo_list;
-        const message = res.data.message;
+      );
+      const monthImplementationTodoLists = result.data.implementation_todo_list;
+      const monthDueTodoLists = result.data.due_todo_list;
+      const message = result.data.message;
 
-        if (monthImplementationTodoLists !== undefined && monthDueTodoLists !== undefined) {
-          const message = '';
-          dispatch(
-            fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
-          );
-        } else {
-          const monthImplementationTodoLists: TodoList = [];
-          const monthDueTodoLists: TodoList = [];
-          dispatch(
-            fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
-          );
-        }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      if (monthImplementationTodoLists !== undefined && monthDueTodoLists !== undefined) {
+        const message = '';
+        dispatch(
+          fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
+        );
+      } else {
+        const monthImplementationTodoLists: TodoList = [];
+        const monthDueTodoLists: TodoList = [];
+        dispatch(
+          fetchMonthTodoListAction(monthImplementationTodoLists, monthDueTodoLists, message)
+        );
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
