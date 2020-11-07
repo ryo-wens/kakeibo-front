@@ -117,3 +117,13 @@ export const weekDays = (startDay: number, endDay: number) => {
 
   return oneWeekDays;
 };
+
+export const selectedDate = (startDay: number, endDay: number): Date[] => {
+  const selectedDays: Date[] = [];
+
+  for (let i = startDay; i <= endDay; i++) {
+    selectedDays.push(new Date(year + '/' + customMonth + '/' + i));
+  }
+
+  return selectedDays;
+};

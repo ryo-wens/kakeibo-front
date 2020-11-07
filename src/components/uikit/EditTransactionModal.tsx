@@ -69,7 +69,7 @@ interface InputModalProps {
   transactionsType: string;
 }
 
-const InputModal = (props: InputModalProps) => {
+const EditTransactionModal = (props: InputModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
@@ -371,4 +371,4 @@ const InputModal = (props: InputModalProps) => {
     </div>
   );
 };
-export default InputModal;
+export default EditTransactionModal;
