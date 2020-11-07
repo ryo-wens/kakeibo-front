@@ -87,6 +87,7 @@ export const fetchExpiredTodoListAction = (expiredTodoList: TodoList) => {
 
 export const DELETE_TODO_LIST_ITEM = 'DELETE_TODO_LIST_ITEM';
 export const deleteTodoListItemAction = (
+  expiredTodoList: TodoList,
   todayImplementationTodoList: TodoList,
   todayDueTodoList: TodoList,
   monthImplementationTodoList: TodoList,
@@ -95,6 +96,7 @@ export const deleteTodoListItemAction = (
   return {
     type: DELETE_TODO_LIST_ITEM,
     payload: {
+      expiredTodoList: expiredTodoList,
       todayImplementationTodoList: todayImplementationTodoList,
       todayDueTodoList: todayDueTodoList,
       monthImplementationTodoList: monthImplementationTodoList,

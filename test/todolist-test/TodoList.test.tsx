@@ -30,10 +30,20 @@ const store = mockStore({ todoLists: [], modal: [], router: [] });
 const getState = () => {
   return {
     todoList: {
-      expiredTodoList: [],
-      todayImplementationTodoList: [
+      expiredTodoList: [
         {
           id: 1,
+          posted_date: '2020-09-25T10:54:46Z',
+          updated_date: '2020-09-25T10:54:46Z',
+          implementation_date: '2020/09/25(金)',
+          due_date: '2020/09/25(金)',
+          todo_content: '携帯支払い',
+          complete_flag: false,
+        },
+      ],
+      todayImplementationTodoList: [
+        {
+          id: 2,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
           implementation_date: '2020/09/27(日)',
@@ -47,6 +57,15 @@ const getState = () => {
       monthImplementationTodoList: [
         {
           id: 1,
+          posted_date: '2020-09-25T10:54:46Z',
+          updated_date: '2020-09-25T10:54:46Z',
+          implementation_date: '2020/09/25(金)',
+          due_date: '2020/09/25(金)',
+          todo_content: '携帯支払い',
+          complete_flag: false,
+        },
+        {
+          id: 2,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
           implementation_date: '2020/09/27(日)',
@@ -58,6 +77,15 @@ const getState = () => {
       monthDueTodoList: [
         {
           id: 1,
+          posted_date: '2020-09-25T10:54:46Z',
+          updated_date: '2020-09-25T10:54:46Z',
+          implementation_date: '2020/09/25(金)',
+          due_date: '2020/09/25(金)',
+          todo_content: '携帯支払い',
+          complete_flag: false,
+        },
+        {
+          id: 2,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
           implementation_date: '2020/09/27(日)',
@@ -126,7 +154,7 @@ describe('async actions todoLists', () => {
         payload: {
           todayImplementationTodoList: [
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -139,6 +167,15 @@ describe('async actions todoLists', () => {
           monthImplementationTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -147,7 +184,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/28(月)',
@@ -159,6 +196,15 @@ describe('async actions todoLists', () => {
           monthDueTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -167,7 +213,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/28(月)',
@@ -194,13 +240,13 @@ describe('async actions todoLists', () => {
   });
 
   it('Updated todoListItem will be reflected in todayImplementationTodoList and todayDueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
-    const todoListItemId = 1;
+    const todoListItemId = 2;
     const completeFlag = true;
     const today = new Date();
     const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
-    const todoContent = '食器用洗剤2つ購入';
+    const todoContent = 'お掃除';
 
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
@@ -212,12 +258,12 @@ describe('async actions todoLists', () => {
         payload: {
           todayImplementationTodoList: [
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
-              updated_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:56:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
-              todo_content: '食器用洗剤2つ購入',
+              todo_content: 'お掃除',
               complete_flag: true,
             },
           ],
@@ -225,22 +271,40 @@ describe('async actions todoLists', () => {
           monthImplementationTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
-              updated_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:56:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
-              todo_content: '食器用洗剤2つ購入',
+              todo_content: 'お掃除',
               complete_flag: true,
             },
           ],
           monthDueTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
-              updated_date: '2020-09-27T10:54:46Z',
+              updated_date: '2020-09-27T10:56:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
-              todo_content: '食器用洗剤2つ購入',
+              todo_content: 'お掃除',
               complete_flag: true,
             },
           ],
@@ -280,7 +344,7 @@ describe('async actions todoLists', () => {
         payload: {
           todayImplementationTodoList: [
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -289,7 +353,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -300,7 +364,7 @@ describe('async actions todoLists', () => {
           ],
           todayDueTodoList: [
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -334,7 +398,7 @@ describe('async actions todoLists', () => {
         payload: {
           monthImplementationTodoList: [
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -343,7 +407,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -354,7 +418,7 @@ describe('async actions todoLists', () => {
           ],
           monthDueTodoList: [
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -363,7 +427,7 @@ describe('async actions todoLists', () => {
               complete_flag: false,
             },
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -396,11 +460,11 @@ describe('async actions todoLists', () => {
           expiredTodoList: [
             {
               id: 1,
-              posted_date: '2020-09-27T10:54:46Z',
-              updated_date: '2020-09-27T10:54:46Z',
-              implementation_date: '2020/09/27(日)',
-              due_date: '2020/09/28(月)',
-              todo_content: '食器用洗剤2つ購入',
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
               complete_flag: false,
             },
           ],
@@ -414,8 +478,8 @@ describe('async actions todoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('When DELETE_TODO_LIST_ITEM is successful, send the todayImplementationTodoList and todayDueTodoList except the requested todoListItemId to deleteTodoListItemAction and send the response message to openTextModalAction.', async () => {
-    const todoListItemId = 1;
+  it('When DELETE_TODO_LIST_ITEM is successful, remove the todoListItem of the selected todoListItemId from the todoList managed by the store, send it to deleteTodoListItemAction, and send the response message to openTextModalAction.', async () => {
+    const todoListItemId = 2;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
 
     const mockResponse = JSON.stringify(deleteTodoListItemResponse);
@@ -424,10 +488,41 @@ describe('async actions todoLists', () => {
       {
         type: TodoListsActions.DELETE_TODO_LIST_ITEM,
         payload: {
+          expiredTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+          ],
           todayImplementationTodoList: [],
           todayDueTodoList: [],
-          monthImplementationTodoList: [],
-          monthDueTodoList: [],
+          monthImplementationTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+          ],
+          monthDueTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+          ],
         },
       },
       {

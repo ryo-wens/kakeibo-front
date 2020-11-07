@@ -396,44 +396,45 @@ export const fetchExpiredTodoList = () => {
 
 export const deleteTodoListItem = (todoListItemId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    await axios
-      .delete<deleteTodoListItemRes>(
+    try {
+      const result = await axios.delete<deleteTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const prevTodayImplementationTodoList = getState().todoList.todayImplementationTodoList;
-        const prevTodayDueTodoList = getState().todoList.todayDueTodoList;
-        const prevMonthImplementationTodoList: TodoList = getState().todoList
-          .monthImplementationTodoList;
-        const prevMonthDueTodoList: TodoList = getState().todoList.monthDueTodoList;
-        const message = res.data.message;
+      );
+      const prevExpiredTodoList = getState().todoList.expiredTodoList;
+      const prevTodayImplementationTodoList = getState().todoList.todayImplementationTodoList;
+      const prevTodayDueTodoList = getState().todoList.todayDueTodoList;
+      const prevMonthImplementationTodoList: TodoList = getState().todoList
+        .monthImplementationTodoList;
+      const prevMonthDueTodoList: TodoList = getState().todoList.monthDueTodoList;
+      const message = result.data.message;
 
-        const updateTodoLists = (prevTodoLists: TodoList) => {
-          return prevTodoLists.filter((prevTodoList) => {
-            return prevTodoList.id !== todoListItemId;
-          });
-        };
+      const updateTodoList = (prevTodoList: TodoList) => {
+        return prevTodoList.filter((prevTodoListItem) => {
+          return prevTodoListItem.id !== todoListItemId;
+        });
+      };
 
-        const updateTodayImplementationTodoLists = updateTodoLists(prevTodayImplementationTodoList);
-        const updateTodayDueTodoLists = updateTodoLists(prevTodayDueTodoList);
-        const updateMonthImplementationTodoLists = updateTodoLists(prevMonthImplementationTodoList);
-        const updateMonthDueTodoLists = updateTodoLists(prevMonthDueTodoList);
+      const updateExpiredTodoList = updateTodoList(prevExpiredTodoList);
+      const updateTodayImplementationTodoList = updateTodoList(prevTodayImplementationTodoList);
+      const updateTodayDueTodoList = updateTodoList(prevTodayDueTodoList);
+      const updateMonthImplementationTodoList = updateTodoList(prevMonthImplementationTodoList);
+      const updateMonthDueTodoList = updateTodoList(prevMonthDueTodoList);
 
-        dispatch(
-          deleteTodoListItemAction(
-            updateTodayImplementationTodoLists,
-            updateTodayDueTodoLists,
-            updateMonthImplementationTodoLists,
-            updateMonthDueTodoLists
-          )
-        );
-        dispatch(openTextModalAction(message));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      dispatch(
+        deleteTodoListItemAction(
+          updateExpiredTodoList,
+          updateTodayImplementationTodoList,
+          updateTodayDueTodoList,
+          updateMonthImplementationTodoList,
+          updateMonthDueTodoList
+        )
+      );
+      dispatch(openTextModalAction(message));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
