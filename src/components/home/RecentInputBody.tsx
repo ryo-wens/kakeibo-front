@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
-import { State } from '../../reducks/store/types';
-import { getLatestTransactions } from '../../reducks/transactions/selectors';
+import { TransactionsList } from '../../reducks/transactions/types';
 import { InputModal } from '../uikit';
 import '../../assets/recent-input.scss';
 
-const RecentInputBody = () => {
-  const selector = useSelector((state: State) => state);
-  const latestTransactionsList = getLatestTransactions(selector);
+interface RecentInputBodyProps {
+  latestTransactionsList: TransactionsList;
+}
+
+const RecentInputBody = (props: RecentInputBodyProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [id, setId] = useState<number | undefined>(undefined);
 
@@ -22,7 +22,7 @@ const RecentInputBody = () => {
   };
 
   const latestTransaction = () => {
-    return latestTransactionsList.map((transaction, index) => {
+    return props.latestTransactionsList.map((transaction, index) => {
       const categoryName = {
         mediumCategory:
           transaction.medium_category_name !== null ? transaction.medium_category_name : '',
@@ -39,9 +39,9 @@ const RecentInputBody = () => {
             <dt className="recent-input__recent-text">{transaction.transaction_date}</dt>
             <dt className="recent-input__recent-text">￥ {transaction.amount.toLocaleString()}</dt>
             <dt className="recent-input__recent-text">
-              {transaction.medium_category_name === null
-                ? transaction.custom_category_name
-                : transaction.medium_category_name}
+              {transaction.medium_category_name !== null
+                ? transaction.medium_category_name
+                : transaction.custom_category_name}
             </dt>
             <dt>{transaction.shop}</dt>
             <dt>{transaction.memo}</dt>
@@ -51,8 +51,8 @@ const RecentInputBody = () => {
             amount={transaction.amount}
             categoryName={categoryName}
             id={transaction.id}
-            memo={transaction.memo === null ? '' : transaction.memo}
-            shop={transaction.shop === null ? '' : transaction.shop}
+            memo={transaction.memo !== null ? transaction.memo : ''}
+            shop={transaction.shop !== null ? transaction.shop : ''}
             open={id === transaction.id && open}
             onClose={handleClose}
             transactionDate={transaction.transaction_date}

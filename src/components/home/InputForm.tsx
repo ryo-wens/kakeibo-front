@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
 import { useDispatch } from 'react-redux';
-import { addTransactions } from '../../reducks/transactions/operations';
+import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
@@ -103,6 +103,26 @@ const InputForm = (): JSX.Element => {
 
   const unInput = amount === '' || category === '' || transactionsType === '';
 
+  const addTransaction = () => {
+    async function addedTransaction() {
+      await dispatch(
+        addLatestTransactions(
+          transactionsType,
+          transactionDate,
+          shop,
+          memo,
+          amount,
+          bigCategoryId,
+          mediumCategoryId,
+          customCategoryId
+        )
+      );
+      dispatch(addTransactions());
+      resetInputForm();
+    }
+    addedTransaction();
+  };
+
   return (
     <form className="grid__column box__input" autoComplete="on">
       <h3>入力フォーム</h3>
@@ -150,20 +170,7 @@ const InputForm = (): JSX.Element => {
       />
       <GenericButton
         startIcon={<AddCircleOutlineIcon />}
-        onClick={() =>
-          dispatch(
-            addTransactions(
-              transactionsType,
-              transactionDate,
-              shop,
-              memo,
-              amount,
-              bigCategoryId,
-              mediumCategoryId,
-              customCategoryId
-            )
-          ) && resetInputForm()
-        }
+        onClick={() => addTransaction()}
         label={'入力する'}
         disabled={unInput}
       />

@@ -24,7 +24,7 @@ const RecentInput = () => {
         if (latestTransactionsList.length === 0) {
           return <dt>{guidanceMessage}</dt>;
         } else {
-          return <RecentInputBody />;
+          return <RecentInputBody latestTransactionsList={latestTransactionsList} />;
         }
       })()}
     </div>
