@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import { AddTodo, TodoListItemComponent } from './index';
-import { TodoList } from '../../reducks/todoLists/types';
+import { TodoList } from '../../reducks/todoList/types';
 import {
   dateStringToDate,
   getWeekDay,
@@ -44,28 +44,25 @@ const MonthlyTodoList = (props: WeeksTodoListsProps) => {
   };
 
   const month = useCallback(
-    (todoLists: TodoList) => {
+    (todoList: TodoList, selectedDate: Date) => {
       const month = [];
 
       for (let i = 0; i < lastDayOfMonth.getDate(); i++) {
         const firstDayOfMonth = getFirstDayOfMonth(selectedDate);
         const date = new Date(firstDayOfMonth.setDate(firstDayOfMonth.getDate() + i));
 
-        const getTimeDate =
-          new Date(date.getFullYear(), date.getMonth(), date.getDate() + 1).getTime() - 1000;
-
         const dateTodoLists = [];
-        for (const todoList of todoLists) {
+        for (const listItem of todoList) {
           const prevDate: number =
-            todoLists === props.monthImplementationTodoList
-              ? dateStringToDate(todoList.implementation_date).getTime()
-              : dateStringToDate(todoList.due_date).getTime();
+            todoList === props.monthImplementationTodoList
+              ? dateStringToDate(listItem.implementation_date).getTime()
+              : dateStringToDate(listItem.due_date).getTime();
           const weekDate: number = date.getTime();
           if (prevDate === weekDate) {
             dateTodoLists.push(
               <TodoListItemComponent
-                todoListItem={todoList}
-                key={todoList.id}
+                todoListItem={listItem}
+                key={listItem.id}
                 selectedDate={selectedDate}
               />
             );
@@ -73,10 +70,7 @@ const MonthlyTodoList = (props: WeeksTodoListsProps) => {
         }
 
         month.push(
-          <div
-            key={date.getDate()}
-            className={today.getTime() > getTimeDate ? classes.disabled : ''}
-          >
+          <div key={date.getDate()}>
             <p>
               {date.getMonth() + 1}/{date.getDate()} （{getWeekDay(date)}）
             </p>
@@ -87,7 +81,7 @@ const MonthlyTodoList = (props: WeeksTodoListsProps) => {
       }
       return month;
     },
-    [selectedDate]
+    [today, lastDayOfMonth, props.groupId, props.monthImplementationTodoList, classes.disabled]
   );
 
   const existsWeekTodoList = (implementationTodoList: TodoList, dueTodoList: TodoList) => {
@@ -95,11 +89,15 @@ const MonthlyTodoList = (props: WeeksTodoListsProps) => {
       return (
         <>
           <p>当月実施予定todo、締切予定todoは登録されていません。</p>
-          {value === 0 ? month(implementationTodoList) : month(dueTodoList)}
+          {value === 0
+            ? month(implementationTodoList, selectedDate)
+            : month(dueTodoList, selectedDate)}
         </>
       );
     } else if (implementationTodoList && dueTodoList) {
-      return value === 0 ? month(implementationTodoList) : month(dueTodoList);
+      return value === 0
+        ? month(implementationTodoList, selectedDate)
+        : month(dueTodoList, selectedDate);
     }
   };
 

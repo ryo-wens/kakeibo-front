@@ -7,7 +7,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { ModalInform } from './index';
 import { getModalMessage } from '../../reducks/modal/selectors';
 import { State } from '../../reducks/store/types';
-import { deleteTodoListItem } from '../../reducks/todoLists/operations';
+import { deleteTodoListItem } from '../../reducks/todoList/operations';
 import { groupWithdrawal } from '../../reducks/groups/operations';
 import { deleteGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';

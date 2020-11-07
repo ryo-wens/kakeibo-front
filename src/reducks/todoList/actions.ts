@@ -9,6 +9,7 @@ export type todoListsActions = ReturnType<
 
 export const CREATE_TODO_LIST_ITEM = 'CREATE_TODO_LIST_ITEM';
 export const createTodoListItemAction = (
+  expiredTodoList: TodoList,
   todayImplementationTodoList: TodoList,
   todayDueTodoList: TodoList,
   monthImplementationTodoList: TodoList,
@@ -17,6 +18,7 @@ export const createTodoListItemAction = (
   return {
     type: CREATE_TODO_LIST_ITEM,
     payload: {
+      expiredTodoList: expiredTodoList,
       todayImplementationTodoList: todayImplementationTodoList,
       todayDueTodoList: todayDueTodoList,
       monthImplementationTodoList: monthImplementationTodoList,
@@ -75,8 +77,19 @@ export const fetchMonthTodoListAction = (
   };
 };
 
+export const FETCH_EXPIRED_TODO_LIST = 'FETCH_EXPIRED_TODO_LIST';
+export const fetchExpiredTodoListAction = (expiredTodoList: TodoList) => {
+  return {
+    type: FETCH_EXPIRED_TODO_LIST,
+    payload: {
+      expiredTodoList: expiredTodoList,
+    },
+  };
+};
+
 export const DELETE_TODO_LIST_ITEM = 'DELETE_TODO_LIST_ITEM';
 export const deleteTodoListItemAction = (
+  expiredTodoList: TodoList,
   todayImplementationTodoList: TodoList,
   todayDueTodoList: TodoList,
   monthImplementationTodoList: TodoList,
@@ -85,6 +98,7 @@ export const deleteTodoListItemAction = (
   return {
     type: DELETE_TODO_LIST_ITEM,
     payload: {
+      expiredTodoList: expiredTodoList,
       todayImplementationTodoList: todayImplementationTodoList,
       todayDueTodoList: todayDueTodoList,
       monthImplementationTodoList: monthImplementationTodoList,

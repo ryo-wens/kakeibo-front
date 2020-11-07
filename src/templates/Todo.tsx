@@ -3,17 +3,22 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
-import { AddTodo, TodoMenu } from '../components/todo';
+import { AddTodo, ExpiredTodoList, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
+  getExpiredTodoList,
   getMonthDueTodoList,
   getMonthImplementationTodoList,
   getMonthTodoListMessage,
   getTodayDueTodoList,
   getTodayImplementationTodoList,
   getTodayTodoListMessage,
-} from '../reducks/todoLists/selectors';
-import { fetchDateTodoList, fetchMonthTodoList } from '../reducks/todoLists/operations';
+} from '../reducks/todoList/selectors';
+import {
+  fetchDateTodoList,
+  fetchExpiredTodoList,
+  fetchMonthTodoList,
+} from '../reducks/todoList/operations';
 import { getWeekDay } from '../lib/date';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
 import { fetchGroupTodayTodoList } from '../reducks/groupTodoList/operations';
@@ -37,6 +42,7 @@ const Todo = () => {
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
+  const expiredTodoList = getExpiredTodoList(selector);
   const todayImplementationTodoList = getTodayImplementationTodoList(selector);
   const todayDueTodoList = getTodayDueTodoList(selector);
   const todayTodoListMessage = getTodayTodoListMessage(selector);
@@ -47,11 +53,16 @@ const Todo = () => {
   const groupTodayDueTodoList = getGroupTodayDueTodoList(selector);
   const entityType = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
-  const dt: Date = new Date();
-  const year = String(dt.getFullYear());
-  const month: string = ('0' + (dt.getMonth() + 1)).slice(-2);
-  const date: string = ('0' + dt.getDate()).slice(-2);
-  const weekday: string = getWeekDay(dt);
+  const today: Date = new Date();
+  const year = String(today.getFullYear());
+  const month: string = ('0' + (today.getMonth() + 1)).slice(-2);
+  const date: string = ('0' + today.getDate()).slice(-2);
+
+  useEffect(() => {
+    if (entityType !== 'group' && !expiredTodoList.length) {
+      dispatch(fetchExpiredTodoList());
+    }
+  }, []);
 
   useEffect(() => {
     if (
@@ -95,8 +106,9 @@ const Todo = () => {
     <>
       <TodoMenu />
       <div className={classes.root}>
+        {expiredTodoList.length !== 0 && <ExpiredTodoList expiredTodoList={expiredTodoList} />}
         <span>
-          今日 {month}/{date} ({weekday})
+          今日 {today.getMonth() + 1}/{today.getDate()} ({getWeekDay(today)})
         </span>
         {entityType !== 'group' ? (
           <SwitchTodoLists
@@ -110,7 +122,7 @@ const Todo = () => {
           />
         )}
         <div>
-          <AddTodo date={dt} groupId={groupId} />
+          <AddTodo date={today} groupId={groupId} />
         </div>
       </div>
     </>

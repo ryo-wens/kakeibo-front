@@ -1,5 +1,5 @@
 import React from 'react';
-import { TodoListItem, TodoList } from '../../reducks/todoLists/types';
+import { TodoListItem, TodoList } from '../../reducks/todoList/types';
 import { TodoListItemComponent } from './index';
 import { GroupTodoListItem, GroupTodoList } from '../../reducks/groupTodoList/types';
 import { date } from '../../lib/constant';
