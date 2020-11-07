@@ -3,6 +3,7 @@ export { default as CreateGroups } from './CreateGroups';
 export { default as EditGroupMembers } from './EditGroupMembers';
 export { default as EditGroupName } from './EditGroupName';
 export { default as ExistsTodoLists } from './ExistsTodoLists';
+export { default as ExpiredTodoList } from './ExpiredTodoList';
 export { default as GroupMenuButton } from './GroupMenuButton';
 export { default as GroupName } from './GroupName';
 export { default as InputTodoList } from './InputTodoList';
