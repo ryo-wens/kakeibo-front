@@ -1,6 +1,19 @@
 {
   "transactions_list": [
     {
+      "id": 130,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-07T17:07:31Z",
+      "updated_date": "2020-11-07T17:07:31Z",
+      "transaction_date": "2020/11/07(土)",
+      "shop": "ニトリ",
+      "memo": "椅子",
+      "amount": 9000,
+      "big_category_name": "日用品",
+      "medium_category_name": "家具",
+      "custom_category_name": null
+    },
+    {
       "id": 128,
       "transaction_type": "expense",
       "posted_date": "2020-11-07T16:34:29Z",
@@ -115,19 +128,6 @@
       "amount": 1300,
       "big_category_name": "趣味・娯楽",
       "medium_category_name": "映画・動画",
-      "custom_category_name": null
-    },
-    {
-      "id": 38,
-      "transaction_type": "expense",
-      "posted_date": "2020-11-04T03:18:14Z",
-      "updated_date": "2020-11-04T03:18:14Z",
-      "transaction_date": "2020/10/21(水)",
-      "shop": "MIDWEST",
-      "memo": "Rafニット",
-      "amount": 100000,
-      "big_category_name": "衣服・美容",
-      "medium_category_name": "衣服",
       "custom_category_name": null
     }
   ]

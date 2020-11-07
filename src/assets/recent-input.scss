@@ -1,0 +1,21 @@
+@import "variable";
+
+.recent-input {
+  display: flex;
+  flex-flow: column;
+  justify-content: center;
+  align-items: center;
+
+  &__recent_delimiterLine {
+    border-bottom: 1px solid;
+    cursor: pointer;
+  }
+
+  &__recent-text {
+    font-size: $medium-font_size;
+    width: 190px;
+    max-width: 250px;
+    //font-weight: $large-font_weight;
+  }
+
+}

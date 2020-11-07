@@ -1,12 +1,13 @@
 {
-  "id": 47,
+  "id": 130,
   "transaction_type": "expense",
-  "updated_date": "2020-08-09T17:00:15Z",
-  "transaction_date": "07/26(日)",
-  "shop": "MIDWEST",
-  "memo": "RickOwens",
-  "amount": 12000,
-  "big_category_name": "衣服・美容",
-  "medium_category_name": "衣服",
+  "posted_date": "2020-11-07T17:07:31Z",
+  "updated_date": "2020-11-07T17:24:02Z",
+  "transaction_date": "2020/11/07(土)",
+  "shop": "ビッグカメラ",
+  "memo": "コーヒーメーカー",
+  "amount": 25000,
+  "big_category_name": "日用品",
+  "medium_category_name": "家電",
   "custom_category_name": null
 }

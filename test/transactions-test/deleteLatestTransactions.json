@@ -116,19 +116,6 @@
       "big_category_name": "趣味・娯楽",
       "medium_category_name": "映画・動画",
       "custom_category_name": null
-    },
-    {
-      "id": 38,
-      "transaction_type": "expense",
-      "posted_date": "2020-11-04T03:18:14Z",
-      "updated_date": "2020-11-04T03:18:14Z",
-      "transaction_date": "2020/10/21(水)",
-      "shop": "MIDWEST",
-      "memo": "Rafニット",
-      "amount": 100000,
-      "big_category_name": "衣服・美容",
-      "medium_category_name": "衣服",
-      "custom_category_name": null
     }
   ]
 }

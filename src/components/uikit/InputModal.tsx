@@ -1,6 +1,12 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { editTransactions, deleteTransactions } from '../../reducks/transactions/operations';
+import {
+  editTransactions,
+  editLatestTransactions,
+  deleteTransactions,
+  deleteLatestTransactions,
+  fetchLatestTransactionsList,
+} from '../../reducks/transactions/operations';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import {
@@ -52,7 +58,7 @@ interface InputModalProps {
   open: boolean;
   onClose: () => void;
   id: number;
-  transactionDate: Date;
+  transactionDate: string;
   amount: number;
   memo: string | null;
   shop: string | null;
@@ -72,7 +78,6 @@ const InputModal = (props: InputModalProps) => {
   const [amount, setAmount] = useState<string>(String(props.amount));
   const [memo, setMemo] = useState<string | null>(props.memo);
   const [shop, setShop] = useState<string | null>(props.shop);
-  const [transactionDate, setTransactionDate] = useState<Date | null>(props.transactionDate);
   const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
   const id = props.id;
 
@@ -118,6 +123,12 @@ const InputModal = (props: InputModalProps) => {
     return categoriesId;
   };
 
+  const customTransactionDate = props.transactionDate.replace('/', '-').slice(0, 10);
+
+  const changeTransactionDate = new Date(customTransactionDate);
+
+  const [transactionDate, setTransactionDate] = useState<Date | null>(changeTransactionDate);
+
   const [category, setCategory] = useState<CategoryName>({
     mediumCategory: props.categoryName.mediumCategory,
     customCategory: props.categoryName.customCategory,
@@ -130,6 +141,41 @@ const InputModal = (props: InputModalProps) => {
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(
     categoryId().customCategoryId
   );
+
+  useEffect(() => {
+    setMemo(props.memo);
+  }, [props.memo]);
+
+  useEffect(() => {
+    setShop(props.shop);
+  }, [props.shop]);
+
+  useEffect(() => {
+    setAmount(String(props.amount));
+  }, [props.amount]);
+
+  useEffect(() => {
+    setCategory({
+      customCategory: props.categoryName.customCategory,
+      mediumCategory: props.categoryName.mediumCategory,
+    });
+  }, [props.categoryName.customCategory, props.categoryName.mediumCategory]);
+
+  useEffect(() => {
+    setBigCategoryId(categoryId().bigCategoryId);
+  }, [categoryId().bigCategoryId]);
+
+  useEffect(() => {
+    setMediumCategoryId(categoryId().mediumCategoryId);
+  }, [categoryId().mediumCategoryId]);
+
+  useEffect(() => {
+    setCustomCategoryId(categoryId().customCategoryId);
+  }, [categoryId().customCategoryId]);
+
+  useEffect(() => {
+    setTransactionDate(changeTransactionDate);
+  }, [props.transactionDate]);
 
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -195,6 +241,15 @@ const InputModal = (props: InputModalProps) => {
     },
     [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
   );
+
+  const deleteTransaction = (): void => {
+    async function deletedTransaction() {
+      await dispatch(deleteLatestTransactions(id));
+      dispatch(deleteTransactions(id));
+      dispatch(fetchLatestTransactionsList());
+    }
+    deletedTransaction();
+  };
 
   const body = (
     <div className={classes.paper}>
@@ -264,7 +319,21 @@ const InputModal = (props: InputModalProps) => {
                 mediumCategoryId,
                 customCategoryId
               )
-            ) && props.onClose()
+            ) &&
+            dispatch(
+              editLatestTransactions(
+                id,
+                transactionsType,
+                transactionDate,
+                shop,
+                memo,
+                amount,
+                bigCategoryId,
+                mediumCategoryId,
+                customCategoryId
+              )
+            ) &&
+            props.onClose()
           }
           disabled={false}
         />
@@ -273,7 +342,7 @@ const InputModal = (props: InputModalProps) => {
           color={'inherit'}
           onClick={() => {
             if (window.confirm('この記録を削除してもよろしいですか？')) {
-              dispatch(deleteTransactions(props.id));
+              deleteTransaction();
             } else {
               return;
             }
