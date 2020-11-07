@@ -9,7 +9,7 @@ import List from '@material-ui/core/List';
 import ListItem from '@material-ui/core/ListItem';
 import TodayIcon from '@material-ui/icons/Today';
 import { push } from 'connected-react-router';
-import { fetchDateTodoList, fetchMonthTodoList } from '../../reducks/todoLists/operations';
+import { fetchDateTodoList, fetchMonthTodoList } from '../../reducks/todoList/operations';
 import {
   getMonthDueTodoList,
   getMonthImplementationTodoList,
@@ -17,13 +17,13 @@ import {
   getTodayDueTodoList,
   getTodayImplementationTodoList,
   getTodayTodoListMessage,
-} from '../../reducks/todoLists/selectors';
+} from '../../reducks/todoList/selectors';
 import {
   fetchGroupTodayTodoList,
   fetchGroupMonthTodoList,
 } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
-import { TodoList } from '../../reducks/todoLists/types';
+import { TodoList } from '../../reducks/todoList/types';
 import { Action, Dispatch } from 'redux';
 
 const useStyles = makeStyles((theme: Theme) =>

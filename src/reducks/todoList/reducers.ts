@@ -24,6 +24,11 @@ export const todoListReducer = (state = initialState.todoList, action: todoLists
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_EXPIRED_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.DELETE_TODO_LIST_ITEM:
       return {
         ...state,

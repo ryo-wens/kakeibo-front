@@ -9,7 +9,7 @@ import {
   GroupYearlyBudgetsList,
   GroupCustomBudgetsList,
 } from '../groupBudgets/types';
-import { TodoList } from '../todoLists/types';
+import { TodoList } from '../todoList/types';
 import { GroupTodoList } from '../groupTodoList/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
 
@@ -55,6 +55,7 @@ export interface State {
     groupTasksList: GroupTasksList;
   };
   todoList: {
+    expiredTodoList: TodoList;
     todayImplementationTodoList: TodoList;
     todayDueTodoList: TodoList;
     todayTodoListMessage: string;

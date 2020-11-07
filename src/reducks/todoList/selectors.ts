@@ -3,6 +3,11 @@ import { createSelector } from 'reselect';
 
 const todoListSelector = (state: State) => state.todoList;
 
+export const getExpiredTodoList = createSelector(
+  [todoListSelector],
+  (state) => state.expiredTodoList
+);
+
 export const getTodayImplementationTodoList = createSelector(
   [todoListSelector],
   (state) => state.todayImplementationTodoList

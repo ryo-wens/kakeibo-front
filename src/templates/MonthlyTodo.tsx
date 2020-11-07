@@ -1,17 +1,18 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
-import { fetchMonthTodoList } from '../reducks/todoLists/operations';
+import { fetchExpiredTodoList, fetchMonthTodoList } from '../reducks/todoList/operations';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import {
+  getExpiredTodoList,
   getMonthDueTodoList,
   getMonthImplementationTodoList,
   getMonthTodoListMessage,
-} from '../reducks/todoLists/selectors';
+} from '../reducks/todoList/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { DatePicker } from '../components/uikit';
-import { MonthlyTodoList, TodoButton, TodoMenu } from '../components/todo';
+import { ExpiredTodoList, MonthlyTodoList, TodoButton, TodoMenu } from '../components/todo';
 import { dateToMonthString, getFirstDayOfNextMonth, getLastDayOfPrevMonth } from '../lib/date';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
@@ -44,6 +45,7 @@ const MonthlyTodo = () => {
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
+  const expiredTodoList = getExpiredTodoList(selector);
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
   const monthTodoListMessage = getMonthTodoListMessage(selector);
@@ -55,6 +57,12 @@ const MonthlyTodo = () => {
   const year = String(date.getFullYear());
   const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+
+  useEffect(() => {
+    if (entityType !== 'group' && !expiredTodoList.length) {
+      dispatch(fetchExpiredTodoList());
+    }
+  }, []);
 
   useEffect(() => {
     if (entityType === 'group' && approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -124,6 +132,7 @@ const MonthlyTodo = () => {
     <>
       <TodoMenu />
       <div className={classes.root}>
+        {expiredTodoList.length !== 0 && <ExpiredTodoList expiredTodoList={expiredTodoList} />}
         <div className={classes.date}>
           <div className={classes.datePicker}>
             <DatePicker

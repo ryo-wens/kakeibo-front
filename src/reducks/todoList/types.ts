@@ -55,6 +55,10 @@ export interface fetchMonthTodoListsRes {
   message: string;
 }
 
+export interface fetchExpiredTodoListRes {
+  expired_todo_list: TodoList;
+}
+
 export interface deleteTodoListItemRes {
   message: string;
 }
