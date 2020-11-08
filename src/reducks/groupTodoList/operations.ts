@@ -426,6 +426,7 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
           withCredentials: true,
         }
       );
+      const prevGroupExpiredTodoList: GroupTodoList = getState().groupTodoList.groupExpiredTodoList;
       const prevGroupTodayImplementationTodoList: GroupTodoList = getState().groupTodoList
         .groupTodayImplementationTodoList;
       const prevGroupTodayDueTodoList: GroupTodoList = getState().groupTodoList
@@ -442,6 +443,7 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
         });
       };
 
+      const updateGroupExpiredTodoList = updateTodoList(prevGroupExpiredTodoList);
       const updateGroupTodayImplementationTodoList = updateTodoList(
         prevGroupTodayImplementationTodoList
       );
@@ -453,6 +455,7 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
 
       dispatch(
         deleteGroupTodoListItemAction(
+          updateGroupExpiredTodoList,
           updateGroupTodayImplementationTodoList,
           updateGroupTodayDueTodoList,
           updateGroupMonthImplementationTodoList,

@@ -86,6 +86,7 @@ export const fetchGroupExpiredTodoListAction = (groupExpiredTodoList: GroupTodoL
 
 export const DELETE_GROUP_TODO_LIST_ITEM = 'DELETE_GROUP_TODO_LIST_ITEM';
 export const deleteGroupTodoListItemAction = (
+  groupExpiredTodoList: GroupTodoList,
   groupTodayImplementationTodoList: GroupTodoList,
   groupTodayDueTodoList: GroupTodoList,
   groupMonthImplementationTodoList: GroupTodoList,
@@ -94,6 +95,7 @@ export const deleteGroupTodoListItemAction = (
   return {
     type: DELETE_GROUP_TODO_LIST_ITEM,
     payload: {
+      groupExpiredTodoList: groupExpiredTodoList,
       groupTodayImplementationTodoList: groupTodayImplementationTodoList,
       groupTodayDueTodoList: groupTodayDueTodoList,
       groupMonthImplementationTodoList: groupMonthImplementationTodoList,
