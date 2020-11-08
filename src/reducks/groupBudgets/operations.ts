@@ -20,11 +20,11 @@ import { errorHandling, isValidBudgetFormat } from '../../lib/validation';
 import { State } from '../store/types';
 import { standardBudgetType } from '../../lib/constant';
 
-export const fetchGroupStandardBudgets = () => {
+export const fetchGroupStandardBudgets = (groupId: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<GroupStandardBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/standard-budgets`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`,
         {
           withCredentials: true,
         }
@@ -83,11 +83,11 @@ export const editGroupStandardBudgets = (groupBudgets: GroupBudgetsReq) => {
   };
 };
 
-export const fetchGroupYearlyBudgets = () => {
+export const fetchGroupYearlyBudgets = (groupId: number, year: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<GroupYearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/budgets/2020`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${year}`,
         {
           withCredentials: true,
         }
@@ -226,11 +226,15 @@ export const editGroupCustomBudgets = (
   };
 };
 
-export const deleteGroupCustomBudgets = (selectYear: string, selectMonth: string) => {
+export const deleteGroupCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  groupId: number
+) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     await axios
       .delete<DeleteGroupCustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/custom-budgets/${selectYear}-${selectMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }

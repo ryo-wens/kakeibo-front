@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
+import { getStandardBudgets } from '../reducks/budgets/selectors';
 import { fetchStandardBudgets, editStandardBudgets } from '../reducks/budgets/operations';
 import { StandardBudgetsList } from '../reducks/budgets/types';
 import { State } from '../reducks/store/types';
@@ -16,6 +17,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
 import GenericButton from '../components/uikit/GenericButton';
+import { getPathTemplateName, getPathGroupId } from '../lib/path';
+import GroupStandardBudgets from './GroupStandardBudgets';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,13 +67,17 @@ const StandardBudgets = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const standardBudgets = selector.budgets.standard_budgets_list;
+  const standardBudgets = getStandardBudgets(selector);
   const [budgets, setBudgets] = useState<StandardBudgetsList>([]);
   const [updateMessage, setUpdateMessage] = useState<boolean>(false);
+  const pathName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
   const unEditBudgets = budgets === standardBudgets;
 
   useEffect(() => {
-    dispatch(fetchStandardBudgets());
+    if (!standardBudgets.length && pathName !== 'group') {
+      dispatch(fetchStandardBudgets());
+    }
   }, []);
 
   useEffect(() => {
@@ -80,74 +87,100 @@ const StandardBudgets = () => {
   return (
     <div className={classes.root}>
       <ButtonGroup className={classes.buttonGroupPosition} size="large" aria-label="budgets-kind">
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
+        <Button
+          className={classes.buttonSize}
+          onClick={() => {
+            {
+              pathName !== 'group'
+                ? dispatch(push('/standard/budgets'))
+                : dispatch(push(`/group/${groupId}/standard/budgets`));
+            }
+          }}
+        >
           標準予算
         </Button>
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/yearly-budgets'))}>
+        <Button
+          className={classes.buttonSize}
+          onClick={() => {
+            pathName !== 'group'
+              ? dispatch(push('/yearly/budgets'))
+              : dispatch(push(`/group/${groupId}/yearly/budgets`));
+          }}
+        >
           月別カスタム予算
         </Button>
       </ButtonGroup>
       <h2 className={classes.centerPosition}>{updateMessage ? '標準予算を更新しました' : null}</h2>
-      <TableContainer className={classes.tablePosition} component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableTop} align="center">
-                カテゴリー
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                先月の支出
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                予算
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {budgets.map((budget, index) => {
-              const onChangeBudget = (event: { target: { value: string } }) => {
-                const newBudgets = [...budgets];
-                newBudgets[index].budget = Number(event.target.value);
-                setBudgets(newBudgets);
-              };
-              return (
-                <TableRow key={budget.big_category_id}>
-                  <TableCell className={classes.tableSize} component="th" scope="row">
-                    {budget.big_category_name}
-                  </TableCell>
-                  <TableCell className={classes.tableSize}>￥10,000</TableCell>
-                  <TableCell className={classes.tableSize} align="center">
-                    <TextField
-                      size={'small'}
-                      id={'budgets'}
-                      variant="outlined"
-                      type={'number'}
-                      value={budget.budget}
-                      onChange={onChangeBudget}
-                    />
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div className={classes.centerPosition}>
-        <GenericButton
-          label={'更新する'}
-          disabled={unEditBudgets}
-          onClick={() =>
-            dispatch(
-              editStandardBudgets(
-                budgets.map((budget) => {
-                  const { big_category_name, ...rest } = budget; // eslint-disable-line
-                  return rest;
-                })
-              )
-            ) && setUpdateMessage(true)
-          }
-        />
-      </div>
+      {(() => {
+        if (pathName !== 'group') {
+          return (
+            <>
+              <TableContainer className={classes.tablePosition} component={Paper}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell className={classes.tableTop} align="center">
+                        カテゴリー
+                      </TableCell>
+                      <TableCell className={classes.tableTop} align="center">
+                        先月の支出
+                      </TableCell>
+                      <TableCell className={classes.tableTop} align="center">
+                        予算
+                      </TableCell>
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {budgets.map((budget, index) => {
+                      const onChangeBudget = (event: { target: { value: string } }) => {
+                        const newBudgets = [...budgets];
+                        newBudgets[index].budget = Number(event.target.value);
+                        setBudgets(newBudgets);
+                      };
+                      return (
+                        <TableRow key={budget.big_category_id}>
+                          <TableCell className={classes.tableSize} component="th" scope="row">
+                            {budget.big_category_name}
+                          </TableCell>
+                          <TableCell className={classes.tableSize}>￥10,000</TableCell>
+                          <TableCell className={classes.tableSize} align="center">
+                            <TextField
+                              size={'small'}
+                              id={'budgets'}
+                              variant="outlined"
+                              type={'number'}
+                              value={budget.budget}
+                              onChange={onChangeBudget}
+                            />
+                          </TableCell>
+                        </TableRow>
+                      );
+                    })}
+                  </TableBody>
+                </Table>
+              </TableContainer>
+              <div className={classes.centerPosition}>
+                <GenericButton
+                  label={'更新する'}
+                  disabled={unEditBudgets}
+                  onClick={() => {
+                    dispatch(
+                      editStandardBudgets(
+                        budgets.map((budget) => {
+                          const { big_category_name, ...rest } = budget; // eslint-disable-line
+                          return rest;
+                        })
+                      )
+                    ) && setUpdateMessage(true);
+                  }}
+                />
+              </div>
+            </>
+          );
+        } else {
+          return <GroupStandardBudgets />;
+        }
+      })()}
     </div>
   );
 };
