@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TransactionsList } from '../../reducks/transactions/types';
-import { InputModal } from '../uikit';
+import { EditTransactionModal } from '../uikit';
 import '../../assets/recent-input.scss';
 
 interface RecentInputBodyProps {
@@ -46,7 +46,7 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
             <dt>{transaction.shop}</dt>
             <dt>{transaction.memo}</dt>
           </dl>
-          <InputModal
+          <EditTransactionModal
             key={index}
             amount={transaction.amount}
             categoryName={categoryName}
