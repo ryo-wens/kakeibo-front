@@ -28,6 +28,7 @@ export const createGroupTodoListItemAction = (
 
 export const EDIT_GROUP_TODO_LIST_ITEM = 'EDIT_GROUP_TODO_LIST_ITEM';
 export const editGroupTodoListItemAction = (
+  groupExpiredTodoList: GroupTodoList,
   groupTodayImplementationTodoList: GroupTodoList,
   groupTodayDueTodoList: GroupTodoList,
   groupMonthImplementationTodoList: GroupTodoList,
@@ -36,6 +37,7 @@ export const editGroupTodoListItemAction = (
   return {
     type: EDIT_GROUP_TODO_LIST_ITEM,
     payload: {
+      groupExpiredTodoList: groupExpiredTodoList,
       groupTodayImplementationTodoList: groupTodayImplementationTodoList,
       groupTodayDueTodoList: groupTodayDueTodoList,
       groupMonthImplementationTodoList: groupMonthImplementationTodoList,

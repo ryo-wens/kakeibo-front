@@ -276,7 +276,7 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Updated groupTodoListItem will be reflected in groupTodayImplementationTodoList and groupMonthDueTodoList and groupMonthImplementationTodoList and groupTodayDueTodoList if EDIT_GROUP_TODO_LIST_ITEM is successful.', async () => {
+  it('If EDIT_GROUP_TODO_LIST_ITEM is successful, the updated todoListItem will be reflected in the groupTodoList managed by the store.', async () => {
     const groupId = 1;
     const todoListItemId = 1;
     const today = new Date();
@@ -294,6 +294,18 @@ describe('async actions groupTodoLists', () => {
       {
         type: GroupTodoListActions.EDIT_GROUP_TODO_LIST_ITEM,
         payload: {
+          groupExpiredTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
           groupTodayImplementationTodoList: [
             {
               id: 2,
@@ -374,7 +386,7 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Get groupImplementationTodoList and groupDueTodoList when FETCH_GROUP_TODAY_TODO_LISTS succeeds.', async () => {
+  it('Get groupImplementationTodoList and groupDueTodoList when FETCH_GROUP_TODAY_TODO_LIST succeeds.', async () => {
     const groupId = 1;
     const year = '2020';
     const month = '09';
@@ -551,7 +563,7 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('When DELETE_GROUP_TODO_LIST_ITEM is successful, send the groupImplementationTodoLists and groupDueTodoLists except the requested todoListItemId to deleteGroupTodoListItemAction and send the response message to openTextModalAction.', async () => {
+  it('If DELETE_GROUP_TODO_LIST_ITEM is successful, the selected todoListItem is excluded　from the groupTodoList managed by the store and send the response message to openTextModalAction.', async () => {
     const groupId = 1;
     const todoListItemId = 2;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`;
