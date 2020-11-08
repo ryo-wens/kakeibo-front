@@ -71,6 +71,7 @@ export const createGroupTodoListItem = (
           withCredentials: true,
         }
       );
+      const prevGroupExpiredTodoList: GroupTodoList = getState().groupTodoList.groupExpiredTodoList;
       const prevGroupTodayImplementationTodoList: GroupTodoList = getState().groupTodoList
         .groupTodayImplementationTodoList;
       const prevGroupTodayDueTodoList: GroupTodoList = getState().groupTodoList
@@ -83,6 +84,32 @@ export const createGroupTodoListItem = (
       const newTodoListItem: GroupTodoListItem = result.data;
       const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
       const responseDueMonth = dateStringToMonthString(result.data.due_date);
+
+      const pushResponseTodoListItem = (
+        idx: number,
+        prevTodoList: GroupTodoList,
+        nextTodoListItem: GroupTodoListItem
+      ) => {
+        if (idx !== -1) {
+          prevTodoList.splice(idx, 0, nextTodoListItem);
+        } else if (idx === -1) {
+          prevTodoList.push(nextTodoListItem);
+        }
+        return prevTodoList;
+      };
+
+      const groupExpiredTodoList = (prevTodoList: GroupTodoList, responseDate: string) => {
+        let nextTodoList: GroupTodoList = [];
+        let idx = 0;
+        if (dateToDateString(today) > responseDate) {
+          idx = prevTodoList.findIndex((listItem) => listItem.due_date >= responseDate);
+
+          nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
+        } else if (dateToDateString(today) <= responseDate) {
+          nextTodoList = [...prevTodoList];
+        }
+        return nextTodoList;
+      };
 
       const groupTodayTodoList = (prevTodoList: GroupTodoList, responseDate: string) => {
         let nextTodoList: GroupTodoList = [];
@@ -110,18 +137,17 @@ export const createGroupTodoListItem = (
             idx = prevTodoList.findIndex((listItem) => listItem.due_date >= responseDate);
           }
 
-          if (idx !== -1) {
-            prevTodoList.splice(idx, 0, result.data);
-          } else if (idx === -1) {
-            prevTodoList.push(result.data);
-          }
-
-          nextTodoList = [...prevTodoList];
+          nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
         } else if (dateToMonthString(selectedDate) !== responseMonth) {
           nextTodoList = [...prevTodoList];
         }
         return nextTodoList;
       };
+
+      const nextGroupExpiredTodoList: GroupTodoList = groupExpiredTodoList(
+        prevGroupExpiredTodoList,
+        result.data.due_date
+      );
 
       const nextGroupTodayImplementationTodoList: GroupTodoList = groupTodayTodoList(
         prevGroupTodayImplementationTodoList,
@@ -145,6 +171,7 @@ export const createGroupTodoListItem = (
 
       dispatch(
         createGroupTodoListItemAction(
+          nextGroupExpiredTodoList,
           nextGroupTodayImplementationTodoList,
           nextGroupTodayDueTodoList,
           nextGroupMonthImplementationTodoList,

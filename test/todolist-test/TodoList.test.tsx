@@ -138,7 +138,7 @@ describe('async actions todoLists', () => {
     spiedDate.mockRestore();
   });
 
-  it('Created todoListItem is added to implementationTodoLists and dueTodoLists when CREATE_TODO_LIST_ITEM succeeds.', async () => {
+  it('If CREATE_TODO_LIST_ITEM is successful, the created todoListItem will be added to the groupTodoList managed by the store.', async () => {
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list`;
     const today = new Date();
     const selectedDate = new Date('2020-09-27T00:00:00');
