@@ -3,11 +3,12 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
-import * as GroupTodoListsActions from '../../src/reducks/groupTodoList/actions';
+import * as GroupTodoListActions from '../../src/reducks/groupTodoList/actions';
 import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
 import editGroupTodoListItemResponse from './editGroupTodoListItemResponse.json';
 import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse.json';
-import fetchGroupMonthTodoListsResponse from './fetchGroupMonthTodoListsResponse.json';
+import fetchGroupMonthTodoListResponse from './fetchGroupMonthTodoListResponse.json';
+import fetchGroupExpiredTodoListResponse from './fetchGroupExpiredTodoListResponse.json';
 import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
 import {
   createGroupTodoListItem,
@@ -15,6 +16,7 @@ import {
   editGroupTodoListItem,
   fetchGroupTodayTodoList,
   fetchGroupMonthTodoList,
+  fetchGroupExpiredTodoList,
 } from '../../src/reducks/groupTodoList/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
@@ -27,9 +29,21 @@ const axiosMock = new MockAdapter(axios);
 const getState = () => {
   return {
     groupTodoList: {
-      groupTodayImplementationTodoList: [
+      groupExpiredTodoList: [
         {
           id: 1,
+          posted_date: '2020-09-25T10:54:46Z',
+          updated_date: '2020-09-25T10:54:46Z',
+          implementation_date: '2020/09/25(金)',
+          due_date: '2020/09/25(金)',
+          todo_content: '携帯支払い',
+          complete_flag: false,
+          user_id: 'furusawa',
+        },
+      ],
+      groupTodayImplementationTodoList: [
+        {
+          id: 2,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
           implementation_date: '2020/09/27(日)',
@@ -44,6 +58,16 @@ const getState = () => {
       groupMonthImplementationTodoList: [
         {
           id: 1,
+          posted_date: '2020-09-25T10:54:46Z',
+          updated_date: '2020-09-25T10:54:46Z',
+          implementation_date: '2020/09/25(金)',
+          due_date: '2020/09/25(金)',
+          todo_content: '携帯支払い',
+          complete_flag: false,
+          user_id: 'furusawa',
+        },
+        {
+          id: 2,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
           implementation_date: '2020/09/27(日)',
@@ -56,6 +80,16 @@ const getState = () => {
       groupMonthDueTodoList: [
         {
           id: 1,
+          posted_date: '2020-09-25T10:54:46Z',
+          updated_date: '2020-09-25T10:54:46Z',
+          implementation_date: '2020/09/25(金)',
+          due_date: '2020/09/25(金)',
+          todo_content: '携帯支払い',
+          complete_flag: false,
+          user_id: 'furusawa',
+        },
+        {
+          id: 2,
           posted_date: '2020-09-27T10:54:46Z',
           updated_date: '2020-09-27T10:54:46Z',
           implementation_date: '2020/09/27(日)',
@@ -106,7 +140,7 @@ describe('async actions groupTodoLists', () => {
     spiedDate.mockRestore();
   });
 
-  it('Created groupTodoListItem is added to groupImplementationTodoLists and groupDueTodoLists when CREATE_GROUP_TODO_LIST_ITEM succeeds.', async () => {
+  it('If CREATE_GROUP_TODO_LIST_ITEM is successful, the created todoListItem will be added to the groupTodoList managed by the store.', async () => {
     const groupId = 1;
     const today = new Date();
     const selectedDate = new Date('2020-09-27T00:00:00');
@@ -119,11 +153,23 @@ describe('async actions groupTodoLists', () => {
 
     const expectedAction = [
       {
-        type: GroupTodoListsActions.CREATE_GROUP_TODO_LIST_ITEM,
+        type: GroupTodoListActions.CREATE_GROUP_TODO_LIST_ITEM,
         payload: {
+          groupExpiredTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
           groupTodayImplementationTodoList: [
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
               implementation_date: '2020/09/27(日)',
@@ -133,7 +179,7 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -146,7 +192,17 @@ describe('async actions groupTodoLists', () => {
           groupTodayDueTodoList: [],
           groupMonthImplementationTodoList: [
             {
-              id: 2,
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 3,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
               implementation_date: '2020/09/27(日)',
@@ -156,7 +212,7 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -169,6 +225,16 @@ describe('async actions groupTodoLists', () => {
           groupMonthDueTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -178,7 +244,7 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
             {
-              id: 2,
+              id: 3,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
               implementation_date: '2020/09/27(日)',
@@ -210,7 +276,7 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Updated groupTodoListItem will be reflected in groupTodayImplementationTodoList and groupMonthDueTodoList and groupMonthImplementationTodoList and groupTodayDueTodoList if EDIT_GROUP_TODO_LIST_ITEM is successful.', async () => {
+  it('If EDIT_GROUP_TODO_LIST_ITEM is successful, the updated todoListItem will be reflected in the groupTodoList managed by the store.', async () => {
     const groupId = 1;
     const todoListItemId = 1;
     const today = new Date();
@@ -226,11 +292,23 @@ describe('async actions groupTodoLists', () => {
 
     const expectedAction = [
       {
-        type: GroupTodoListsActions.EDIT_GROUP_TODO_LIST_ITEM,
+        type: GroupTodoListActions.EDIT_GROUP_TODO_LIST_ITEM,
         payload: {
-          groupTodayImplementationTodoList: [
+          groupExpiredTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupTodayImplementationTodoList: [
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -244,6 +322,16 @@ describe('async actions groupTodoLists', () => {
           groupMonthImplementationTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -256,6 +344,16 @@ describe('async actions groupTodoLists', () => {
           groupMonthDueTodoList: [
             {
               id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -288,7 +386,7 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Get groupImplementationTodoLists and groupDueTodoLists when FETCH_GROUP_DATE_TODO_LISTS succeeds.', async () => {
+  it('Get groupImplementationTodoList and groupDueTodoList when FETCH_GROUP_TODAY_TODO_LIST succeeds.', async () => {
     const groupId = 1;
     const year = '2020';
     const month = '09';
@@ -299,21 +397,11 @@ describe('async actions groupTodoLists', () => {
 
     const expectedAction = [
       {
-        type: GroupTodoListsActions.FETCH_GROUP_TODAY_TODO_LIST,
+        type: GroupTodoListActions.FETCH_GROUP_TODAY_TODO_LIST,
         payload: {
           groupTodayImplementationTodoList: [
             {
               id: 2,
-              posted_date: '2020-09-27T10:57:46Z',
-              updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '2020/09/27(日)',
-              due_date: '2020/09/29(火)',
-              todo_content: 'お掃除',
-              complete_flag: false,
-              user_id: 'furusawa',
-            },
-            {
-              id: 1,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -322,10 +410,20 @@ describe('async actions groupTodoLists', () => {
               complete_flag: false,
               user_id: 'furusawa',
             },
+            {
+              id: 3,
+              posted_date: '2020-09-27T10:57:46Z',
+              updated_date: '2020-09-27T10:57:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
+              todo_content: 'お掃除',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
           ],
           groupTodayDueTodoList: [
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -352,15 +450,25 @@ describe('async actions groupTodoLists', () => {
     const month = '09';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`;
 
-    const mockResponse = JSON.stringify(fetchGroupMonthTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchGroupMonthTodoListResponse);
 
     const expectedAction = [
       {
-        type: GroupTodoListsActions.FETCH_GROUP_MONTH_TODO_LIST,
+        type: GroupTodoListActions.FETCH_GROUP_MONTH_TODO_LIST,
         payload: {
           groupMonthImplementationTodoList: [
             {
-              id: 2,
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 3,
               posted_date: '2020-09-27T10:57:46Z',
               updated_date: '2020-09-27T10:57:46Z',
               implementation_date: '2020/09/27(日)',
@@ -370,7 +478,7 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
@@ -382,22 +490,32 @@ describe('async actions groupTodoLists', () => {
           ],
           groupMonthDueTodoList: [
             {
-              id: 2,
-              posted_date: '2020-09-27T10:57:46Z',
-              updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '2020/09/27(日)',
-              due_date: '2020/09/29(火)',
-              todo_content: 'お掃除',
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
               complete_flag: false,
               user_id: 'furusawa',
             },
             {
-              id: 1,
+              id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/27(日)',
               todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 3,
+              posted_date: '2020-09-27T10:57:46Z',
+              updated_date: '2020-09-27T10:57:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
+              todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
             },
@@ -413,21 +531,87 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('When DELETE_GROUP_TODO_LIST_ITEM is successful, send the groupImplementationTodoLists and groupDueTodoLists except the requested todoListItemId to deleteGroupTodoListItemAction and send the response message to openTextModalAction.', async () => {
+  it('Get groupExpiredTodoList when FETCH_GROUP_EXPIRED_TODO_LIST succeeds.', async () => {
     const groupId = 1;
-    const todoListItemId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`;
+
+    const mockResponse = JSON.stringify(fetchGroupExpiredTodoListResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTodoListActions.FETCH_GROUP_EXPIRED_TODO_LIST,
+        payload: {
+          groupExpiredTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupExpiredTodoList(groupId)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('If DELETE_GROUP_TODO_LIST_ITEM is successful, the selected todoListItem is excluded　from the groupTodoList managed by the store and send the response message to openTextModalAction.', async () => {
+    const groupId = 1;
+    const todoListItemId = 2;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`;
 
     const mockResponse = JSON.stringify(deleteGroupTodoListItemResponse);
 
     const expectedAction = [
       {
-        type: GroupTodoListsActions.DELETE_GROUP_TODO_LIST_ITEM,
+        type: GroupTodoListActions.DELETE_GROUP_TODO_LIST_ITEM,
         payload: {
+          groupExpiredTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
           groupTodayImplementationTodoList: [],
           groupTodayDueTodoList: [],
-          groupMonthImplementationTodoList: [],
-          groupMonthDueTodoList: [],
+          groupMonthImplementationTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupMonthDueTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
         },
       },
       {

@@ -27,6 +27,11 @@ export const groupTodoListsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_GROUP_EXPIRED_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.DELETE_GROUP_TODO_LIST_ITEM:
       return {
         ...state,

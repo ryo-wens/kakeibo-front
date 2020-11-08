@@ -16,12 +16,18 @@ import { ExpiredTodoList, MonthlyTodoList, TodoButton, TodoMenu } from '../compo
 import { dateToMonthString, getFirstDayOfNextMonth, getLastDayOfPrevMonth } from '../lib/date';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
+  getGroupExpiredTodoList,
   getGroupMonthDueTodoList,
   getGroupMonthImplementationTodoList,
   getGroupMonthTodoListMessage,
 } from '../reducks/groupTodoList/selectors';
-import { fetchGroupMonthTodoList } from '../reducks/groupTodoList/operations';
+import {
+  fetchGroupExpiredTodoList,
+  fetchGroupMonthTodoList,
+} from '../reducks/groupTodoList/operations';
 import { date } from '../lib/constant';
+import { TodoList } from '../reducks/todoList/types';
+import { GroupTodoList } from '../reducks/groupTodoList/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -46,6 +52,7 @@ const MonthlyTodo = () => {
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
   const expiredTodoList = getExpiredTodoList(selector);
+  const groupExpiredTodoList = getGroupExpiredTodoList(selector);
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
   const monthTodoListMessage = getMonthTodoListMessage(selector);
@@ -61,8 +68,10 @@ const MonthlyTodo = () => {
   useEffect(() => {
     if (entityType !== 'group' && !expiredTodoList.length) {
       dispatch(fetchExpiredTodoList());
+    } else if (entityType === 'group' && !groupExpiredTodoList.length) {
+      dispatch(fetchGroupExpiredTodoList(groupId));
     }
-  }, []);
+  }, [entityType]);
 
   useEffect(() => {
     if (entityType === 'group' && approvedGroups.length === 0 && unapprovedGroups.length === 0) {
@@ -125,6 +134,12 @@ const MonthlyTodo = () => {
     switchFetchMonthTodoList(firstDayOfNextMonth);
   }, [selectedDate, setSelectedDate]);
 
+  const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
+    if (todoList.length !== 0) {
+      return <ExpiredTodoList expiredTodoList={todoList} />;
+    }
+  };
+
   const equalsSelectedMonthAndCurrentMonth =
     dateToMonthString(selectedDate) === dateToMonthString(new Date());
 
@@ -132,7 +147,9 @@ const MonthlyTodo = () => {
     <>
       <TodoMenu />
       <div className={classes.root}>
-        {expiredTodoList.length !== 0 && <ExpiredTodoList expiredTodoList={expiredTodoList} />}
+        {entityType !== 'group'
+          ? existsExpiredTodoList(expiredTodoList)
+          : existsExpiredTodoList(groupExpiredTodoList)}
         <div className={classes.date}>
           <div className={classes.datePicker}>
             <DatePicker

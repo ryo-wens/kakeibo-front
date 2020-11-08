@@ -46,16 +46,20 @@ export interface editGroupTodoListItemRes {
   user_id: string;
 }
 
-export interface fetchGroupDateTodoListsRes {
+export interface fetchGroupDateTodoListRes {
   implementation_todo_list: GroupTodoList;
   due_todo_list: GroupTodoList;
   message: string;
 }
 
-export interface fetchGroupMonthTodoListsRes {
+export interface fetchGroupMonthTodoListRes {
   implementation_todo_list: GroupTodoList;
   due_todo_list: GroupTodoList;
   message: string;
+}
+
+export interface fetchGroupExpiredTodoListRes {
+  expired_group_todo_list: GroupTodoList;
 }
 
 export interface deleteGroupTodoListItemRes {

@@ -64,6 +64,7 @@ export interface State {
     monthTodoListMessage: string;
   };
   groupTodoList: {
+    groupExpiredTodoList: GroupTodoList;
     groupTodayImplementationTodoList: GroupTodoList;
     groupTodayDueTodoList: GroupTodoList;
     groupTodayTodoListMessage: string;
