@@ -45,7 +45,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   const prevTodoContent = props.todoListItem.todo_content;
   const prevImplementationDate: Date = dateStringToDate(props.todoListItem.implementation_date);
   const prevDueDate: Date = dateStringToDate(props.todoListItem.due_date);
-  const [todoContent, setTodoContent] = useState<string>('');
+  const [todoContent, setTodoContent] = useState<string>(props.todoListItem.todo_content);
   const [selectedImplementationDate, setSelectedImplementationDate] = useState<Date | null>(
     prevImplementationDate
   );
@@ -54,8 +54,8 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   const todoListItemId = props.todoListItem.id;
 
   useEffect(() => {
-    closeInputTodoList();
-  }, [groupId]);
+    setChecked(props.todoListItem.complete_flag);
+  }, [props.todoListItem.complete_flag]);
 
   const inputTodoContent = useCallback(
     (event) => {

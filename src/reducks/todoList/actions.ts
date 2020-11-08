@@ -29,6 +29,7 @@ export const createTodoListItemAction = (
 
 export const EDIT_TODO_LIST_ITEM = 'EDIT_TODO_LIST_ITEM';
 export const editTodoListItemAction = (
+  expiredTodoList: TodoList,
   todayImplementationTodoList: TodoList,
   todayDueTodoList: TodoList,
   monthImplementationTodoList: TodoList,
@@ -37,6 +38,7 @@ export const editTodoListItemAction = (
   return {
     type: EDIT_TODO_LIST_ITEM,
     payload: {
+      expiredTodoList: expiredTodoList,
       todayImplementationTodoList: todayImplementationTodoList,
       todayDueTodoList: todayDueTodoList,
       monthImplementationTodoList: monthImplementationTodoList,
