@@ -216,8 +216,8 @@ export const editTodoListItem = (
       complete_flag: completeFlag,
     };
 
-    await axios
-      .put<editTodoListItemRes>(
+    try {
+      const result = await axios.put<editTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         JSON.stringify(data, function (key, value) {
           if (key === 'implementation_date') {
@@ -230,148 +230,147 @@ export const editTodoListItem = (
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const prevExpiredTodoList: TodoList = getState().todoList.expiredTodoList;
-        const prevTodayImplementationTodoList: TodoList = getState().todoList
-          .todayImplementationTodoList;
-        const prevTodayDueTodoList: TodoList = getState().todoList.todayDueTodoList;
-        const prevMonthImplementationTodoList: TodoList = getState().todoList
-          .monthImplementationTodoList;
-        const prevMonthDueTodoList: TodoList = getState().todoList.monthDueTodoList;
+      );
 
-        const responseImplementationMonth = dateStringToMonthString(res.data.implementation_date);
-        const responseDueMonth = dateStringToMonthString(res.data.due_date);
+      const prevExpiredTodoList: TodoList = getState().todoList.expiredTodoList;
+      const prevTodayImplementationTodoList: TodoList = getState().todoList
+        .todayImplementationTodoList;
+      const prevTodayDueTodoList: TodoList = getState().todoList.todayDueTodoList;
+      const prevMonthImplementationTodoList: TodoList = getState().todoList
+        .monthImplementationTodoList;
+      const prevMonthDueTodoList: TodoList = getState().todoList.monthDueTodoList;
 
-        const pushResponseTodoListItem = (
-          idx: number,
-          prevTodoList: TodoList,
-          nextTodoListItem: TodoListItem
-        ) => {
-          if (idx !== -1) {
-            prevTodoList.splice(idx, 0, nextTodoListItem);
-          } else if (idx === -1) {
-            prevTodoList.push(nextTodoListItem);
-          }
-          return prevTodoList;
-        };
+      const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
+      const responseDueMonth = dateStringToMonthString(result.data.due_date);
 
-        const updateExpiredTodoList = (prevTodoList: TodoList, responseDate: string) => {
-          let nextTodoList: TodoList = [];
-          let idx = 0;
-          const prevItemIdx = prevTodoList.findIndex(
-            (listItem: TodoListItem) => listItem.id === res.data.id
-          );
+      const pushResponseTodoListItem = (
+        idx: number,
+        prevTodoList: TodoList,
+        nextTodoListItem: TodoListItem
+      ) => {
+        if (idx !== -1) {
+          prevTodoList.splice(idx, 0, nextTodoListItem);
+        } else if (idx === -1) {
+          prevTodoList.push(nextTodoListItem);
+        }
+        return prevTodoList;
+      };
 
-          if (dateToDateString(today) > responseDate) {
-            if (res.data.complete_flag === true) {
-              prevTodoList.splice(prevItemIdx, 1);
-              nextTodoList = [...prevTodoList];
-            } else if (res.data.complete_flag === false) {
-              if (prevItemIdx !== -1) {
-                prevTodoList.splice(prevItemIdx, 1);
-              }
+      const updateExpiredTodoList = (prevTodoList: TodoList, responseDate: string) => {
+        let nextTodoList: TodoList = [];
+        let idx = 0;
+        const prevItemIdx = prevTodoList.findIndex(
+          (listItem: TodoListItem) => listItem.id === result.data.id
+        );
 
-              idx = prevTodoList.findIndex((listItem) => {
-                return listItem.due_date > responseDate;
-              });
-
-              nextTodoList = pushResponseTodoListItem(idx, prevTodoList, res.data);
-            }
-          } else if (dateToDateString(today) <= responseDate) {
-            nextTodoList = [...prevTodoList];
-          }
-          return nextTodoList;
-        };
-
-        const updateTodayTodoList = (prevTodoList: TodoList, responseDate: string) => {
-          let nextTodoList: TodoList = [];
-          const prevItemIdx = prevTodoList.findIndex(
-            (listItem: TodoListItem) => listItem.id === res.data.id
-          );
-
-          if (dateToDateString(today) === responseDate) {
-            prevTodoList[prevItemIdx] = res.data;
-            nextTodoList = [...prevTodoList];
-          } else if (dateToDateString(today) !== responseDate) {
-            nextTodoList = [...prevTodoList];
-          }
-          return nextTodoList;
-        };
-
-        const updateMonthTodoList = (
-          prevTodoList: TodoList,
-          responseMonth: string,
-          responseDate: string
-        ) => {
-          let nextTodoList: TodoList = [];
-          let idx = 0;
-          const prevItemIdx = prevTodoList.findIndex(
-            (listItem: TodoListItem) => listItem.id === res.data.id
-          );
-
-          if (dateToMonthString(selectedDate) === responseMonth) {
-            const prevCompleteFlag = prevTodoList[prevItemIdx].complete_flag;
-            if (prevCompleteFlag !== res.data.complete_flag) {
-              prevTodoList[prevItemIdx] = res.data;
-              nextTodoList = [...prevTodoList];
-            } else if (prevCompleteFlag === res.data.complete_flag) {
-              prevTodoList.splice(prevItemIdx, 1);
-
-              idx = prevTodoList.findIndex((listItem) => {
-                if (responseDate === listItem.implementation_date) {
-                  return listItem.implementation_date >= responseDate;
-                } else if (responseDate === listItem.due_date) {
-                  return listItem.due_date >= responseDate;
-                }
-              });
-
-              nextTodoList = pushResponseTodoListItem(idx, prevTodoList, res.data);
-            }
-          } else if (dateToMonthString(selectedDate) !== responseMonth) {
+        if (dateToDateString(today) > responseDate) {
+          if (result.data.complete_flag === true) {
             prevTodoList.splice(prevItemIdx, 1);
             nextTodoList = [...prevTodoList];
+          } else if (result.data.complete_flag === false) {
+            if (prevItemIdx !== -1) {
+              prevTodoList.splice(prevItemIdx, 1);
+            }
+
+            idx = prevTodoList.findIndex((listItem) => {
+              return listItem.due_date > responseDate;
+            });
+
+            nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
           }
-          return nextTodoList;
-        };
+        } else if (dateToDateString(today) <= responseDate) {
+          nextTodoList = [...prevTodoList];
+        }
+        return nextTodoList;
+      };
 
-        const nextExpiredTodoList: TodoList = updateExpiredTodoList(
-          prevExpiredTodoList,
-          res.data.due_date
-        );
-
-        const nextTodayImplementationTodoLists: TodoList = updateTodayTodoList(
-          prevTodayImplementationTodoList,
-          res.data.implementation_date
-        );
-        const nextTodayDueTodoLists: TodoList = updateTodayTodoList(
-          prevTodayDueTodoList,
-          res.data.due_date
-        );
-        const nextMonthImplementationTodoList: TodoList = updateMonthTodoList(
-          prevMonthImplementationTodoList,
-          responseImplementationMonth,
-          res.data.implementation_date
-        );
-        const nextMonthDueTodoLists: TodoList = updateMonthTodoList(
-          prevMonthDueTodoList,
-          responseDueMonth,
-          res.data.due_date
+      const updateTodayTodoList = (prevTodoList: TodoList, responseDate: string) => {
+        let nextTodoList: TodoList = [];
+        const prevItemIdx = prevTodoList.findIndex(
+          (listItem: TodoListItem) => listItem.id === result.data.id
         );
 
-        dispatch(
-          editTodoListItemAction(
-            nextExpiredTodoList,
-            nextTodayImplementationTodoLists,
-            nextTodayDueTodoLists,
-            nextMonthImplementationTodoList,
-            nextMonthDueTodoLists
-          )
+        if (dateToDateString(today) === responseDate) {
+          prevTodoList[prevItemIdx] = result.data;
+          nextTodoList = [...prevTodoList];
+        } else if (dateToDateString(today) !== responseDate) {
+          nextTodoList = [...prevTodoList];
+        }
+        return nextTodoList;
+      };
+
+      const updateMonthTodoList = (
+        prevTodoList: TodoList,
+        responseMonth: string,
+        responseDate: string
+      ) => {
+        let nextTodoList: TodoList = [];
+        let idx = 0;
+        const prevItemIdx = prevTodoList.findIndex(
+          (listItem: TodoListItem) => listItem.id === result.data.id
         );
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+
+        if (dateToMonthString(selectedDate) === responseMonth) {
+          const prevCompleteFlag = prevTodoList[prevItemIdx].complete_flag;
+          if (prevCompleteFlag !== result.data.complete_flag) {
+            prevTodoList[prevItemIdx] = result.data;
+            nextTodoList = [...prevTodoList];
+          } else if (prevCompleteFlag === result.data.complete_flag) {
+            prevTodoList.splice(prevItemIdx, 1);
+
+            idx = prevTodoList.findIndex((listItem) => {
+              if (responseDate === listItem.implementation_date) {
+                return listItem.implementation_date >= responseDate;
+              } else if (responseDate === listItem.due_date) {
+                return listItem.due_date >= responseDate;
+              }
+            });
+
+            nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
+          }
+        } else if (dateToMonthString(selectedDate) !== responseMonth) {
+          prevTodoList.splice(prevItemIdx, 1);
+          nextTodoList = [...prevTodoList];
+        }
+        return nextTodoList;
+      };
+
+      const nextExpiredTodoList: TodoList = updateExpiredTodoList(
+        prevExpiredTodoList,
+        result.data.due_date
+      );
+
+      const nextTodayImplementationTodoLists: TodoList = updateTodayTodoList(
+        prevTodayImplementationTodoList,
+        result.data.implementation_date
+      );
+      const nextTodayDueTodoLists: TodoList = updateTodayTodoList(
+        prevTodayDueTodoList,
+        result.data.due_date
+      );
+      const nextMonthImplementationTodoList: TodoList = updateMonthTodoList(
+        prevMonthImplementationTodoList,
+        responseImplementationMonth,
+        result.data.implementation_date
+      );
+      const nextMonthDueTodoLists: TodoList = updateMonthTodoList(
+        prevMonthDueTodoList,
+        responseDueMonth,
+        result.data.due_date
+      );
+
+      dispatch(
+        editTodoListItemAction(
+          nextExpiredTodoList,
+          nextTodayImplementationTodoLists,
+          nextTodayDueTodoLists,
+          nextMonthImplementationTodoList,
+          nextMonthDueTodoLists
+        )
+      );
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
