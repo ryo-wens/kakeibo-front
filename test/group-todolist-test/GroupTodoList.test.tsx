@@ -7,7 +7,7 @@ import * as GroupTodoListsActions from '../../src/reducks/groupTodoList/actions'
 import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
 import editGroupTodoListItemResponse from './editGroupTodoListItemResponse.json';
 import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse.json';
-import fetchGroupMonthTodoListsResponse from './fetchGroupMonthTodoListsResponse.json';
+import fetchGroupMonthTodoListResponse from './fetchGroupMonthTodoListResponse.json';
 import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
 import {
   createGroupTodoListItem,
@@ -352,7 +352,7 @@ describe('async actions groupTodoLists', () => {
     const month = '09';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`;
 
-    const mockResponse = JSON.stringify(fetchGroupMonthTodoListsResponse);
+    const mockResponse = JSON.stringify(fetchGroupMonthTodoListResponse);
 
     const expectedAction = [
       {

@@ -74,6 +74,16 @@ export const fetchGroupMonthTodoListAction = (
   };
 };
 
+export const FETCH_GROUP_EXPIRED_TODO_LIST = 'FETCH_GROUP_EXPIRED_TODO_LIST';
+export const fetchExpiredTodoListAction = (groupExpiredTodoList: GroupTodoList) => {
+  return {
+    type: FETCH_GROUP_EXPIRED_TODO_LIST,
+    payload: {
+      groupExpiredTodoList: groupExpiredTodoList,
+    },
+  };
+};
+
 export const DELETE_GROUP_TODO_LIST_ITEM = 'DELETE_GROUP_TODO_LIST_ITEM';
 export const deleteGroupTodoListItemAction = (
   groupTodayImplementationTodoList: GroupTodoList,
