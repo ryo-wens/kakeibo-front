@@ -1,30 +1,35 @@
 import { State } from '../store/types';
 import { createSelector } from 'reselect';
 
-const groupTodoListsSelector = (state: State) => state.groupTodoList;
+const groupTodoListSelector = (state: State) => state.groupTodoList;
+
+export const getGroupExpiredTodoList = createSelector(
+  [groupTodoListSelector],
+  (state) => state.groupExpiredTodoList
+);
 
 export const getGroupTodayImplementationTodoList = createSelector(
-  [groupTodoListsSelector],
+  [groupTodoListSelector],
   (state) => state.groupTodayImplementationTodoList
 );
 export const getGroupTodayDueTodoList = createSelector(
-  [groupTodoListsSelector],
+  [groupTodoListSelector],
   (state) => state.groupTodayDueTodoList
 );
 export const getGroupTodayTodoListMessage = createSelector(
-  [groupTodoListsSelector],
+  [groupTodoListSelector],
   (state) => state.groupTodayTodoListMessage
 );
 
 export const getGroupMonthImplementationTodoList = createSelector(
-  [groupTodoListsSelector],
+  [groupTodoListSelector],
   (state) => state.groupMonthImplementationTodoList
 );
 export const getGroupMonthDueTodoList = createSelector(
-  [groupTodoListsSelector],
+  [groupTodoListSelector],
   (state) => state.groupMonthDueTodoList
 );
 export const getGroupMonthTodoListMessage = createSelector(
-  [groupTodoListsSelector],
+  [groupTodoListSelector],
   (state) => state.groupMonthTodoListMessage
 );

@@ -57,6 +57,7 @@ const initialState = {
     monthTodoListMessage: '',
   },
   groupTodoList: {
+    groupExpiredTodoList: [],
     groupTodayImplementationTodoList: [],
     groupTodayDueTodoList: [],
     groupTodayTodoListMessage: '',
