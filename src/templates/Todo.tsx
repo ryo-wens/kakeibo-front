@@ -21,12 +21,18 @@ import {
 } from '../reducks/todoList/operations';
 import { getWeekDay } from '../lib/date';
 import SwitchTodoLists from '../components/todo/SwitchTodoLists';
-import { fetchGroupTodayTodoList } from '../reducks/groupTodoList/operations';
+import {
+  fetchGroupExpiredTodoList,
+  fetchGroupTodayTodoList,
+} from '../reducks/groupTodoList/operations';
 import {
   getGroupTodayImplementationTodoList,
   getGroupTodayDueTodoList,
+  getGroupExpiredTodoList,
 } from '../reducks/groupTodoList/selectors';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
+import { GroupTodoList } from '../reducks/groupTodoList/types';
+import { TodoList } from '../reducks/todoList/types';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -43,6 +49,7 @@ const Todo = () => {
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
   const expiredTodoList = getExpiredTodoList(selector);
+  const groupExpiredTodoList = getGroupExpiredTodoList(selector);
   const todayImplementationTodoList = getTodayImplementationTodoList(selector);
   const todayDueTodoList = getTodayDueTodoList(selector);
   const todayTodoListMessage = getTodayTodoListMessage(selector);
@@ -61,8 +68,10 @@ const Todo = () => {
   useEffect(() => {
     if (entityType !== 'group' && !expiredTodoList.length) {
       dispatch(fetchExpiredTodoList());
+    } else if (entityType === 'group' && !groupExpiredTodoList.length) {
+      dispatch(fetchGroupExpiredTodoList(groupId));
     }
-  }, []);
+  }, [entityType]);
 
   useEffect(() => {
     if (
@@ -102,11 +111,19 @@ const Todo = () => {
     }
   }, []);
 
+  const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
+    if (todoList.length !== 0) {
+      return <ExpiredTodoList expiredTodoList={todoList} />;
+    }
+  };
+
   return (
     <>
       <TodoMenu />
       <div className={classes.root}>
-        {expiredTodoList.length !== 0 && <ExpiredTodoList expiredTodoList={expiredTodoList} />}
+        {entityType !== 'group'
+          ? existsExpiredTodoList(expiredTodoList)
+          : existsExpiredTodoList(groupExpiredTodoList)}
         <span>
           今日 {today.getMonth() + 1}/{today.getDate()} ({getWeekDay(today)})
         </span>

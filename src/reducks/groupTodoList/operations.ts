@@ -8,8 +8,9 @@ import {
   deleteGroupTodoListItemRes,
   editGroupTodoListItemReq,
   editGroupTodoListItemRes,
-  fetchGroupDateTodoListsRes,
-  fetchGroupMonthTodoListsRes,
+  fetchGroupDateTodoListRes,
+  fetchGroupExpiredTodoListRes,
+  fetchGroupMonthTodoListRes,
   GroupTodoListItem,
   GroupTodoList,
 } from './types';
@@ -19,6 +20,7 @@ import {
   editGroupTodoListItemAction,
   fetchGroupTodayTodoListAction,
   fetchGroupMonthTodoListAction,
+  fetchGroupExpiredTodoListAction,
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
 import { errorHandling } from '../../lib/validation';
@@ -320,7 +322,7 @@ export const fetchGroupTodayTodoList = (
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
-      const result = await axios.get<fetchGroupDateTodoListsRes>(
+      const result = await axios.get<fetchGroupDateTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`,
         {
           withCredentials: true,
@@ -360,7 +362,7 @@ export const fetchGroupTodayTodoList = (
 export const fetchGroupMonthTodoList = (groupId: number, year: string, month: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
-      const result = await axios.get<fetchGroupMonthTodoListsRes>(
+      const result = await axios.get<fetchGroupMonthTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`,
         {
           withCredentials: true,
@@ -391,6 +393,24 @@ export const fetchGroupMonthTodoList = (groupId: number, year: string, month: st
           )
         );
       }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const fetchGroupExpiredTodoList = (groupId: number) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<fetchGroupExpiredTodoListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`,
+        {
+          withCredentials: true,
+        }
+      );
+      const groupExpiredTodoList: GroupTodoList = result.data.expired_group_todo_list;
+
+      dispatch(fetchGroupExpiredTodoListAction(groupExpiredTodoList));
     } catch (error) {
       errorHandling(dispatch, error);
     }

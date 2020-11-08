@@ -75,7 +75,7 @@ export const fetchGroupMonthTodoListAction = (
 };
 
 export const FETCH_GROUP_EXPIRED_TODO_LIST = 'FETCH_GROUP_EXPIRED_TODO_LIST';
-export const fetchExpiredTodoListAction = (groupExpiredTodoList: GroupTodoList) => {
+export const fetchGroupExpiredTodoListAction = (groupExpiredTodoList: GroupTodoList) => {
   return {
     type: FETCH_GROUP_EXPIRED_TODO_LIST,
     payload: {
