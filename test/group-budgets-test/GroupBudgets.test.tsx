@@ -47,7 +47,7 @@ describe('async actions fetchGroupStandardBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupStandardBudgets()(store.dispatch);
+    await fetchGroupStandardBudgets(groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -182,7 +182,7 @@ describe('async actions getGroupYearlyBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupYearlyBudgets()(store.dispatch);
+    await fetchGroupYearlyBudgets(groupId, year)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -526,7 +526,7 @@ describe('async actions deleteGroupCustomBudgets', () => {
     window.alert = jest.fn(() => mockResponse);
 
     // @ts-ignore
-    await deleteGroupCustomBudgets(selectYear, selectMonth)(store.dispatch, getState);
+    await deleteGroupCustomBudgets(selectYear, selectMonth, groupId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
     expect(window.alert).toHaveBeenCalled();
   });
