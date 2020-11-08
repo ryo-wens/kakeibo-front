@@ -84,19 +84,26 @@ export const createTodoListItem = (
       const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
       const responseDueMonth = dateStringToMonthString(result.data.due_date);
 
+      const pushResponseTodoListItem = (
+        idx: number,
+        prevTodoList: TodoList,
+        nextTodoListItem: TodoListItem
+      ) => {
+        if (idx !== -1) {
+          prevTodoList.splice(idx, 0, nextTodoListItem);
+        } else if (idx === -1) {
+          prevTodoList.push(nextTodoListItem);
+        }
+        return prevTodoList;
+      };
+
       const expiredTodoList = (prevTodoList: TodoList, responseDate: string) => {
         let nextTodoList: TodoList = [];
         let idx = 0;
         if (dateToDateString(today) > responseDate) {
           idx = prevTodoList.findIndex((listItem) => listItem.due_date >= responseDate);
 
-          if (idx !== -1) {
-            prevTodoList.splice(idx, 0, result.data);
-          } else if (idx === -1) {
-            prevTodoList.push(result.data);
-          }
-
-          nextTodoList = [...prevTodoList];
+          nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
         } else if (dateToDateString(today) <= responseDate) {
           nextTodoList = [...prevTodoList];
         }
@@ -129,13 +136,7 @@ export const createTodoListItem = (
             idx = prevTodoList.findIndex((listItem) => listItem.due_date >= responseDate);
           }
 
-          if (idx !== -1) {
-            prevTodoList.splice(idx, 0, result.data);
-          } else if (idx === -1) {
-            prevTodoList.push(result.data);
-          }
-
-          nextTodoList = [...prevTodoList];
+          nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
         } else if (dateToMonthString(selectedDate) !== responseMonth) {
           nextTodoList = [...prevTodoList];
         }
