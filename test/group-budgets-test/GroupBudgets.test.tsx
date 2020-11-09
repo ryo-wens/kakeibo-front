@@ -210,7 +210,7 @@ describe('async actions getGroupCustomBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupCustomBudgets(selectYear, selectMonth)(store.dispatch);
+    await fetchGroupCustomBudgets(selectYear, selectMonth, groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -309,6 +309,7 @@ describe('async actions addGroupCustomBudgets', () => {
     await addGroupCustomBudgets(
       selectYear,
       selectMonth,
+      groupId,
       mockRequest.custom_budgets
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
@@ -418,6 +419,7 @@ describe('async actions editGroupCustomBudgets', () => {
     await editGroupCustomBudgets(
       selectYear,
       selectMonth,
+      groupId,
       mockRequest.custom_budgets
       // @ts-ignore
     )(store.dispatch, getState);
