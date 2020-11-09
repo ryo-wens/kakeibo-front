@@ -1,19 +1,17 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
-  fetchStandardBudgets,
-  addCustomBudgets,
-  copyStandardBudgets,
-} from '../reducks/budgets/operations';
+  fetchGroupStandardBudgets,
+  addGroupCustomBudgets,
+  copyGroupStandardBudgets,
+} from '../reducks/groupBudgets/operations';
 import { State } from '../reducks/store/types';
-import { CustomBudgetsList } from '../reducks/budgets/types';
-import { getCustomBudgets } from '../reducks/budgets/selectors';
+import { GroupCustomBudgetsList } from '../reducks/groupBudgets/types';
+import { getGroupCustomBudgets } from '../reducks/groupBudgets/selectors';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
 import { push } from 'connected-react-router';
 import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
@@ -21,7 +19,7 @@ import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import GenericButton from '../components/uikit/GenericButton';
-import { getPathYear, getPathMonth } from '../lib/path';
+import { getPathGroupId, getGroupPathYear, getGroupPathMonth } from '../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -66,41 +64,31 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const SelectStandardBudgets = () => {
+const EditGroupStandardBudgets = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const selectYear = getPathYear(window.location.pathname);
-  const selectMonth = getPathMonth(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
+  const groupInYear = getGroupPathYear(window.location.pathname);
+  const groupInMonth = getGroupPathMonth(window.location.pathname);
   const selector = useSelector((state: State) => state);
-  const customBudgetsList = getCustomBudgets(selector);
-  const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
-  const unInputBudgets = customBudgets === customBudgetsList;
+  const groupCustomBudgetsList = getGroupCustomBudgets(selector);
+  const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
+  const unInputBudgets = groupCustomBudgets === groupCustomBudgetsList;
 
   useEffect(() => {
-    async function fetch() {
-      await dispatch(fetchStandardBudgets());
-      dispatch(copyStandardBudgets());
+    async function fetchGroupBudgets() {
+      await dispatch(fetchGroupStandardBudgets(groupId));
+      dispatch(copyGroupStandardBudgets());
     }
-    fetch();
+    fetchGroupBudgets();
   }, []);
 
   useEffect(() => {
-    setCustomBudgets(customBudgetsList);
-  }, [customBudgetsList]);
+    setGroupCustomBudgets(groupCustomBudgetsList);
+  }, [groupCustomBudgetsList]);
 
   return (
-    <div className={classes.root}>
-      <ButtonGroup className={classes.buttonGroupPosition} size="large" aria-label="budgets-kind">
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
-          標準
-        </Button>
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/yearly-budgets'))}>
-          月ごと
-        </Button>
-      </ButtonGroup>
-      <h1>
-        {selectYear}年{selectMonth}月
-      </h1>
+    <>
       <TableContainer className={classes.tablePosition} component={Paper}>
         <Table>
           <TableHead>
@@ -117,25 +105,25 @@ const SelectStandardBudgets = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            {customBudgets.map((customBudget, index) => {
+            {groupCustomBudgets.map((groupCustomBudget, index) => {
               const onChangeBudget = (event: { target: { value: string } }) => {
-                const newBudgets = [...customBudgets];
+                const newBudgets = [...groupCustomBudgets];
                 newBudgets[index].budget = Number(event.target.value);
-                setCustomBudgets(newBudgets);
+                setGroupCustomBudgets(newBudgets);
               };
               return (
-                <TableRow key={customBudget.big_category_id}>
+                <TableRow key={groupCustomBudget.big_category_id}>
                   <TableCell className={classes.tableSize} component="th" scope="row">
-                    {customBudget.big_category_name}
+                    {groupCustomBudget.big_category_name}
                   </TableCell>
                   <TableCell className={classes.tableSize}>￥10,000</TableCell>
                   <TableCell className={classes.tableSize} align="center">
                     <TextField
                       size={'small'}
-                      id={'budgets'}
+                      id={'groupBudgets'}
                       variant="outlined"
                       type={'number'}
-                      value={customBudget.budget}
+                      value={groupCustomBudget.budget}
                       onChange={onChangeBudget}
                     />
                   </TableCell>
@@ -151,20 +139,21 @@ const SelectStandardBudgets = () => {
           disabled={unInputBudgets}
           onClick={() =>
             dispatch(
-              addCustomBudgets(
-                selectYear,
-                selectMonth,
-                customBudgets.map((budget) => {
-                  const { big_category_name, ...rest } = budget; // eslint-disable-line
+              addGroupCustomBudgets(
+                groupInYear,
+                groupInMonth,
+                groupId,
+                groupCustomBudgets.map((groupCustomBudget) => {
+                  const { big_category_name, ...rest } = groupCustomBudget; // eslint-disable-line
                   return rest;
                 })
               )
-            ) && dispatch(push('/yearly-budgets'))
+            ) && dispatch(push(`/group/${groupId}/yearly/budgets`))
           }
         />
       </div>
-    </div>
+    </>
   );
 };
 
-export default SelectStandardBudgets;
+export default EditGroupStandardBudgets;

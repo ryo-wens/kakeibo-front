@@ -64,7 +64,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   const customBudgetsTable = (): JSX.Element[] => {
     return yearBudget.monthly_budgets.map((budget, index) => {
       const transitingBasePath =
-        budget.budget_type === 'CustomBudget' ? `/custom-budgets` : `standard-budgets`;
+        budget.budget_type === 'CustomBudget' ? `/custom/budgets` : `/standard/budgets`;
       const budgetsType = () => {
         if (budget.budget_type === standardBudgetType) {
           return '標準';
@@ -91,9 +91,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
           <TableCell className={classes.tableSize} align="center">
             <IconButton
               size={'small'}
-              onClick={() => {
-                dispatch(push(`${transitingBasePath}/${selectYear}-${selectMonth}`));
-              }}
+              onClick={() => dispatch(push(`${transitingBasePath}/${selectYear}/${selectMonth}`))}
             >
               <CreateIcon color={'primary'} />
             </IconButton>

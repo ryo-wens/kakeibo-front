@@ -1,31 +1,35 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchCustomBudgets, editCustomBudgets } from '../reducks/budgets/operations';
-import { getCustomBudgets } from '../reducks/budgets/selectors';
-import { CustomBudgetsList } from '../reducks/budgets/types';
+import {
+  fetchStandardBudgets,
+  addCustomBudgets,
+  copyStandardBudgets,
+} from '../reducks/budgets/operations';
 import { State } from '../reducks/store/types';
+import { CustomBudgetsList } from '../reducks/budgets/types';
+import { getCustomBudgets } from '../reducks/budgets/selectors';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import TableRow from '@material-ui/core/TableRow';
-import TableBody from '@material-ui/core/TableBody';
-import TableContainer from '@material-ui/core/TableContainer';
 import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
-import GenericButton from '../components/uikit/GenericButton';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import { push } from 'connected-react-router';
+import TableContainer from '@material-ui/core/TableContainer';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
+import TableBody from '@material-ui/core/TableBody';
+import GenericButton from '../components/uikit/GenericButton';
 import {
-  getPathYear,
-  getPathMonth,
-  getPathGroupId,
   getPathTemplateName,
+  getPathGroupId,
   getGroupPathYear,
   getGroupPathMonth,
+  getPathYear,
+  getPathMonth,
 } from '../lib/path';
-import GroupCustomBudgets from './GroupCustomBudgets';
+import EditGroupStandardBudgets from './EditGroupStandardBudgets';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -58,7 +62,7 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '0 auto',
       marginLeft: '7%',
     },
-    centerPosition: {
+    updateButton: {
       textAlign: 'center',
     },
     tableTop: {
@@ -70,26 +74,30 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const CustomBudgets = () => {
+const EditStandardBudgets = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selectYear = getPathYear(window.location.pathname);
   const selectMonth = getPathMonth(window.location.pathname);
-  const yearInGroup = getGroupPathYear(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
-  const monthInGroup = getGroupPathMonth(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
-  const yearsInPersonal = `${selectYear}年${selectMonth}月`;
-  const yearsInGroup = `${yearInGroup}年${monthInGroup}月`;
+  const groupId = getPathGroupId(window.location.pathname);
+  const yearInGroup = getGroupPathYear(window.location.pathname);
+  const monthInGroup = getGroupPathMonth(window.location.pathname);
   const selector = useSelector((state: State) => state);
   const customBudgetsList = getCustomBudgets(selector);
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
-  const unInput = customBudgets === customBudgetsList;
+  const yearsInPersonal = `${selectYear}年${selectMonth}月`;
+  const yearsInGroup = `${yearInGroup}年${monthInGroup}月`;
+  const unInputBudgets = customBudgets === customBudgetsList;
 
   useEffect(() => {
-    if (pathName !== 'group' && !customBudgetsList) {
-      dispatch(fetchCustomBudgets(selectYear, selectMonth));
+    async function fetch() {
+      if (pathName !== 'group') {
+        await dispatch(fetchStandardBudgets());
+        dispatch(copyStandardBudgets());
+      }
     }
+    fetch();
   }, []);
 
   useEffect(() => {
@@ -109,7 +117,7 @@ const CustomBudgets = () => {
             }
           }}
         >
-          標準予算
+          標準
         </Button>
         <Button
           className={classes.buttonSize}
@@ -121,10 +129,10 @@ const CustomBudgets = () => {
             }
           }}
         >
-          月別カスタム予算
+          月ごと
         </Button>
       </ButtonGroup>
-      <h2>{pathName !== 'group' ? yearsInPersonal : yearsInGroup}</h2>
+      <h1>{pathName !== 'group' ? yearsInPersonal : yearsInGroup}</h1>
       {(() => {
         if (pathName !== 'group') {
           return (
@@ -173,13 +181,13 @@ const CustomBudgets = () => {
                   </TableBody>
                 </Table>
               </TableContainer>
-              <div className={classes.centerPosition}>
+              <div className={classes.updateButton}>
                 <GenericButton
                   label={'更新する'}
-                  disabled={unInput}
+                  disabled={unInputBudgets}
                   onClick={() =>
                     dispatch(
-                      editCustomBudgets(
+                      addCustomBudgets(
                         selectYear,
                         selectMonth,
                         customBudgets.map((budget) => {
@@ -194,10 +202,11 @@ const CustomBudgets = () => {
             </>
           );
         } else {
-          return <GroupCustomBudgets />;
+          return <EditGroupStandardBudgets />;
         }
       })()}
     </div>
   );
 };
-export default CustomBudgets;
+
+export default EditStandardBudgets;

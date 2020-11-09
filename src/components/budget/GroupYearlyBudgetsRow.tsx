@@ -68,7 +68,7 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
   const groupCustomBudgetsTable = (): JSX.Element[] => {
     return groupYearlyBudgets.monthly_budgets.map((groupYearlyBudget, index) => {
       const transitingBasePath =
-        groupYearlyBudget.budget_type === 'CustomBudget' ? `/custom/budgets` : `standard/budgets`;
+        groupYearlyBudget.budget_type === 'CustomBudget' ? `/custom/budgets` : `/standard/budgets`;
       const budgetsType = () => {
         if (groupYearlyBudget.budget_type === standardBudgetType) {
           return '標準';
@@ -96,7 +96,9 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
             <IconButton
               size={'small'}
               onClick={() => {
-                dispatch(push(`${transitingBasePath}/${selectYear}-${selectMonth}`));
+                dispatch(
+                  push(`/group/${groupId}${transitingBasePath}/${selectYear}/${selectMonth}`)
+                );
               }}
             >
               <CreateIcon color={'primary'} />
