@@ -1,5 +1,4 @@
 import React, { useEffect, useMemo } from 'react';
-import { GroupName } from '../components/todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -8,7 +7,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { AddTaskUser, SkipDate, TaskList } from '../components/task';
+import { AddTaskUser, EditTaskUser, SkipDate, TaskList } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 
 const useStyles = makeStyles(() =>
@@ -72,7 +71,7 @@ const Task = () => {
   return (
     <>
       <div className={classes.root}>
-        <GroupName approvedGroup={approvedGroup} />
+        <EditTaskUser groupTasksListForEachUser={groupTasksListForEachUser} />
         <AddTaskUser
           approvedGroup={approvedGroup}
           groupTasksListForEachUser={groupTasksListForEachUser}

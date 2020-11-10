@@ -1,6 +1,7 @@
 export { default as AddTaskUser } from './AddTaskUser';
 export { default as DeleteTaskListItem } from './DeleteTaskListItem';
 export { default as EditTaskListItem } from './EditTaskListItem';
+export { default as EditTaskUser } from './EditTaskUser';
 export { default as InputTask } from './InputTask';
 export { default as MonthTables } from './MonthTables';
 export { default as SkipDate } from './SkipDate';

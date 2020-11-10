@@ -1,0 +1,9 @@
+@import "../variable.scss";
+
+.edit-task-user-modal {
+
+  &__title {
+    color: $task-main_color;
+    font-size: $task-title-font_size;
+  }
+}

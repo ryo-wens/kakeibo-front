@@ -1,3 +1,5 @@
+@import "variable";
+
 /******* Module Spacer *******/
 .module-spacer--bit-small {
   height: 12px;
@@ -56,7 +58,7 @@
 }
 
 .box__input {
-  background: #fff;
+  background: $white;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   box-sizing: border-box;
@@ -67,7 +69,7 @@
 }
 
 .box__monthly {
-  background-color: #fff;
+  background-color: $white;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   box-sizing: border-box;
@@ -79,7 +81,7 @@
 
 .box__monthlyExpense {
   align-self: center;
-  background-color: #fff;
+  background-color: $white;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   box-sizing: border-box;
@@ -105,7 +107,7 @@
 }
 
 .box__recent {
-  background: #fff;
+  background: $white;
   border: 1px solid rgba(0, 0, 0, 0.3);
   border-radius: 5px;
   box-sizing: border-box;
