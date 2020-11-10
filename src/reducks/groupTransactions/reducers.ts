@@ -12,6 +12,11 @@ export const groupTransactionsReducer = (
         ...state,
         groupTransactionsList: [...action.payload],
       };
+    case Actions.UPDATE_GROUP_LATEST_TRANSACTIONS:
+      return {
+        ...state,
+        groupLatestTransactionsList: [...action.payload],
+      };
     default:
       return state;
   }

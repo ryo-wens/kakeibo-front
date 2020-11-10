@@ -5,12 +5,12 @@ import { getLatestTransactions } from '../../reducks/transactions/selectors';
 import RecentInputBody from './RecentInputBody';
 import '../../assets/recent-input.scss';
 import { fetchLatestTransactionsList } from '../../reducks/transactions/operations';
+import { guidanceMessage } from '../../lib/constant';
 
 const RecentInput = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const latestTransactionsList = getLatestTransactions(selector);
-  const guidanceMessage = '「入力フォーム」から家計簿の追加を行ってください';
 
   useEffect(() => {
     dispatch(fetchLatestTransactionsList());
