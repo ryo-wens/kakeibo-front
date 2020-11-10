@@ -1,10 +1,9 @@
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from './types';
 export type budgetsActions = ReturnType<
   | typeof updateStandardBudgetsActions
-  | typeof fetchYearlyBudgetsActions
   | typeof updateCustomBudgetsActions
   | typeof copyStandardBudgetsActions
-  | typeof deleteCustomBudgetsActions
+  | typeof updateYearlyBudgetsActions
 >;
 
 export const UPDATE_STANDARD_BUDGETS = 'UPDATE_STANDARD_BUDGETS';
@@ -14,16 +13,6 @@ export const updateStandardBudgetsActions = (
   return {
     type: UPDATE_STANDARD_BUDGETS,
     payload: standard_budgets_list,
-  };
-};
-
-export const FETCH_YEARLY_BUDGETS = 'FETCH_YEARLY_BUDGETS';
-export const fetchYearlyBudgetsActions = (
-  yearly_budgets_list: YearlyBudgetsList
-): { type: string; payload: YearlyBudgetsList } => {
-  return {
-    type: FETCH_YEARLY_BUDGETS,
-    payload: yearly_budgets_list,
   };
 };
 
@@ -47,12 +36,12 @@ export const copyStandardBudgetsActions = (
   };
 };
 
-export const DELETE_CUSTOM_BUDGETS = 'DELETE_CUSTOM_BUDGETS';
-export const deleteCustomBudgetsActions = (
+export const UPDATE_YEARLY_BUDGETS = 'UPDATE_YEARLY_BUDGETS';
+export const updateYearlyBudgetsActions = (
   yearly_budgets_list: YearlyBudgetsList
 ): { type: string; payload: YearlyBudgetsList } => {
   return {
-    type: DELETE_CUSTOM_BUDGETS,
+    type: UPDATE_YEARLY_BUDGETS,
     payload: yearly_budgets_list,
   };
 };

@@ -1,6 +1,6 @@
 {
   "year": "2020-01-01T00:00:00Z",
-  "yearly_total_budget": 1036000,
+  "yearly_total_budget": 1038000,
   "monthly_budgets": [
     {
       "month": "2020年01月",
@@ -29,8 +29,8 @@
     },
     {
       "month": "2020年06月",
-      "budget_type": "StandardBudget",
-      "monthly_total_budget": 83600
+      "budget_type": "CustomBudget",
+      "monthly_total_budget": 85600
     },
     {
       "month": "2020年07月",

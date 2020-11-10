@@ -18,7 +18,7 @@ import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
 import GenericButton from '../components/uikit/GenericButton';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
-import GroupStandardBudgets from './GroupStandardBudgets';
+import GroupStandardBudgets from '../components/budget/GroupStandardBudgets';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

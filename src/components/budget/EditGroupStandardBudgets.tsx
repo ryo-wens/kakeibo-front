@@ -4,10 +4,10 @@ import {
   fetchGroupStandardBudgets,
   addGroupCustomBudgets,
   copyGroupStandardBudgets,
-} from '../reducks/groupBudgets/operations';
-import { State } from '../reducks/store/types';
-import { GroupCustomBudgetsList } from '../reducks/groupBudgets/types';
-import { getGroupCustomBudgets } from '../reducks/groupBudgets/selectors';
+} from '../../reducks/groupBudgets/operations';
+import { State } from '../../reducks/store/types';
+import { GroupCustomBudgetsList } from '../../reducks/groupBudgets/types';
+import { getGroupCustomBudgets } from '../../reducks/groupBudgets/selectors';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import TableRow from '@material-ui/core/TableRow';
 import TableCell from '@material-ui/core/TableCell';
@@ -18,8 +18,8 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
-import GenericButton from '../components/uikit/GenericButton';
-import { getPathGroupId, getGroupPathYear, getGroupPathMonth } from '../lib/path';
+import GenericButton from '../uikit/GenericButton';
+import { getPathGroupId, getGroupPathYear, getGroupPathMonth } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

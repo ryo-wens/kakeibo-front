@@ -1,4 +1,5 @@
 export const standardBudgetType = 'StandardBudget';
+export const customBudgetType = 'CustomBudget';
 export const expenseTransactionType = 'expense';
 export const incomeTransactionType = 'income';
 export const date = new Date();

@@ -20,7 +20,8 @@ import editBudgets from './editBudgetsResponse.json';
 import addCustomBudget from './addCustomBudgetsResponse.json';
 import editCustomBudget from './editCustomBudgetsResponse.json';
 import deleteCustomBudget from './deleteCustomBudgetsResponse.json';
-
+import addCustomBudgetsPayload from './addCustomBudgetsPayload.json';
+import editCustomBudgetsPayload from './editCustomBudgetsPayload.json';
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
@@ -165,7 +166,7 @@ describe('async actions getYearlyBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.FETCH_YEARLY_BUDGETS,
+        type: actionTypes.UPDATE_YEARLY_BUDGETS,
         payload: mockYearlyBudgets,
       },
     ];
@@ -208,11 +209,25 @@ describe('async actions addCustomBudgets', () => {
     store.clearActions();
   });
   const selectYear = '2020';
-  const selectMonth = '07';
-  const store = mockStore({ customBudgets });
+  const selectMonth = '06';
+  const store = mockStore({
+    budgets: {
+      yearly_budgets_list: yearlyBudgets,
+      standard_budgets_list: editBudgets.standard_budgets,
+    },
+  });
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Add custom_budgets if fetch succeeds', async () => {
+    const getState = () => {
+      return {
+        budgets: {
+          yearly_budgets_list: yearlyBudgets,
+          standard_budgets_list: editBudgets.standard_budgets,
+        },
+      };
+    };
+
     const mockCustomBudgets = addCustomBudget;
 
     const nextCustomBudgets = {
@@ -239,7 +254,7 @@ describe('async actions addCustomBudgets', () => {
         },
         {
           big_category_id: 7,
-          budget: 0,
+          budget: 2000,
         },
         {
           big_category_id: 8,
@@ -286,8 +301,8 @@ describe('async actions addCustomBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_CUSTOM_BUDGETS,
-        payload: mockCustomBudgets.custom_budgets,
+        type: actionTypes.UPDATE_YEARLY_BUDGETS,
+        payload: addCustomBudgetsPayload,
       },
     ];
 
@@ -297,7 +312,8 @@ describe('async actions addCustomBudgets', () => {
       selectYear,
       selectMonth,
       nextCustomBudgets.custom_budgets
-    )(store.dispatch);
+      // @ts-ignore
+    )(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -307,15 +323,19 @@ describe('async actions editCustomBudgets', () => {
     store.clearActions();
   });
   const selectYear = '2020';
-  const selectMonth = '07';
-  const store = mockStore({ addCustomBudget });
+  const selectMonth = '06';
+  const store = mockStore({
+    budgets: {
+      yearly_budgets_list: addCustomBudgetsPayload,
+    },
+  });
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`;
 
   it('Edit custom_budgets if fetch succeeds', async () => {
     const getState = () => {
       return {
         budgets: {
-          custom_budgets_list: customBudgets.custom_budgets,
+          yearly_budgets_list: addCustomBudgetsPayload,
         },
       };
     };
@@ -393,8 +413,8 @@ describe('async actions editCustomBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_CUSTOM_BUDGETS,
-        payload: mockCustomBudgets.custom_budgets,
+        type: actionTypes.UPDATE_YEARLY_BUDGETS,
+        payload: editCustomBudgetsPayload,
       },
     ];
 
@@ -416,14 +436,14 @@ describe('async actions deleteCustomBudgets', () => {
   });
   const selectYear = '2020';
   const selectMonth = '07';
-  const store = mockStore({ yearlyBudgets });
+  const store = mockStore({ budgets: { yearly_budgets_list: editCustomBudgetsPayload } });
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`;
   it('Delete custom_budgets if fetch succeeds', async () => {
     const getState = () => {
       return {
         budgets: {
           standard_budgets_list: editBudgets.standard_budgets,
-          yearly_budgets_list: yearlyBudgets,
+          yearly_budgets_list: editCustomBudgetsPayload,
         },
       };
     };
@@ -432,7 +452,7 @@ describe('async actions deleteCustomBudgets', () => {
 
     const mockCustomBudgets = {
       year: '2020-01-01T00:00:00Z',
-      yearly_total_budget: 1008200,
+      yearly_total_budget: 1028600,
       monthly_budgets: [
         {
           month: '2020年01月',
@@ -461,8 +481,8 @@ describe('async actions deleteCustomBudgets', () => {
         },
         {
           month: '2020年06月',
-          budget_type: 'StandardBudget',
-          monthly_total_budget: 83600,
+          budget_type: 'CustomBudget',
+          monthly_total_budget: 92600,
         },
         {
           month: '2020年07月',
@@ -499,7 +519,7 @@ describe('async actions deleteCustomBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.DELETE_CUSTOM_BUDGETS,
+        type: actionTypes.UPDATE_YEARLY_BUDGETS,
         payload: mockCustomBudgets,
       },
     ];
