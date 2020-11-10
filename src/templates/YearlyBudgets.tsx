@@ -1,6 +1,7 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
+import { fetchStandardBudgets } from '../reducks/budgets/operations';
 import { getYearlyBudgets } from '../reducks/budgets/selectors';
 import { getGroupYearlyBudgets } from '../reducks/groupBudgets/selectors';
 import YearlyBudgetsRow from '../components/budget/YearlyBudgetsRow';
@@ -76,6 +77,10 @@ const YearlyBudgets = () => {
   const [years, setYears] = useState<number>(date.getFullYear());
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
+
+  useEffect(() => {
+    dispatch(fetchStandardBudgets());
+  }, []);
 
   const handleDateChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {

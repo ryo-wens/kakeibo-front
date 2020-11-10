@@ -4,21 +4,21 @@ import { push } from 'connected-react-router';
 import {
   fetchGroupCustomBudgets,
   editGroupCustomBudgets,
-} from '../reducks/groupBudgets/operations';
-import { getGroupCustomBudgets } from '../reducks/groupBudgets/selectors';
-import { GroupCustomBudgetsList } from '../reducks/groupBudgets/types';
-import { State } from '../reducks/store/types';
+} from '../../reducks/groupBudgets/operations';
+import { getGroupCustomBudgets } from '../../reducks/groupBudgets/selectors';
+import { GroupCustomBudgetsList } from '../../reducks/groupBudgets/types';
+import { State } from '../../reducks/store/types';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import TableRow from '@material-ui/core/TableRow';
 import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
-import GenericButton from '../components/uikit/GenericButton';
+import GenericButton from '../uikit/GenericButton';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
-import { getGroupPathYear, getGroupPathMonth, getPathGroupId } from '../lib/path';
+import { getGroupPathYear, getGroupPathMonth, getPathGroupId } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

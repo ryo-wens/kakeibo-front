@@ -36,3 +36,22 @@ export const errorHandling = (
     alert(error);
   }
 };
+
+export const totalStandardBudget = (standardBudget: number[]): number => {
+  let total = 0;
+  for (let i = 0; i < standardBudget.length; i++) {
+    total += standardBudget[i];
+  }
+
+  return total;
+};
+
+export const totalCustomBudgets = (budgetList: number[]): number => {
+  let total = 0;
+
+  for (let i = 0; i < budgetList.length; i++) {
+    total += budgetList[i];
+  }
+
+  return total;
+};

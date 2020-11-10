@@ -29,7 +29,7 @@ import {
   getPathYear,
   getPathMonth,
 } from '../lib/path';
-import EditGroupStandardBudgets from './EditGroupStandardBudgets';
+import EditGroupStandardBudgets from '../components/budget/EditGroupStandardBudgets';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

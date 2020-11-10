@@ -1,12 +1,12 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroupStandardBudgets } from '../reducks/groupBudgets/selectors';
+import { getGroupStandardBudgets } from '../../reducks/groupBudgets/selectors';
 import {
   editGroupStandardBudgets,
   fetchGroupStandardBudgets,
-} from '../reducks/groupBudgets/operations';
-import { GroupStandardBudgetsList } from '../reducks/groupBudgets/types';
-import { State } from '../reducks/store/types';
+} from '../../reducks/groupBudgets/operations';
+import { GroupStandardBudgetsList } from '../../reducks/groupBudgets/types';
+import { State } from '../../reducks/store/types';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
@@ -16,8 +16,8 @@ import TableBody from '@material-ui/core/TableBody';
 import TableContainer from '@material-ui/core/TableContainer';
 import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
-import GenericButton from '../components/uikit/GenericButton';
-import { getPathGroupId, getPathTemplateName } from '../lib/path';
+import GenericButton from '../uikit/GenericButton';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

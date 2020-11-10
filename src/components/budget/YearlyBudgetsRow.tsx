@@ -1,10 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import {
-  fetchYearlyBudgets,
-  fetchStandardBudgets,
-  deleteCustomBudgets,
-} from '../../reducks/budgets/operations';
+import { fetchYearlyBudgets, deleteCustomBudgets } from '../../reducks/budgets/operations';
 import { YearlyBudgetsList } from '../../reducks/budgets/types';
 import { State } from '../../reducks/store/types';
 import TableRow from '@material-ui/core/TableRow';
@@ -15,7 +11,7 @@ import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { standardBudgetType } from '../../lib/constant';
-import { getStandardBudgets, getYearlyBudgets } from '../../reducks/budgets/selectors';
+import { getYearlyBudgets } from '../../reducks/budgets/selectors';
 import { getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles(() =>
@@ -38,7 +34,6 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   const pathName = getPathTemplateName(window.location.pathname);
   const selector = useSelector((state: State) => state);
   const yearlyBudgets = getYearlyBudgets(selector);
-  const standardBudgets = getStandardBudgets(selector);
   const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
     year: '',
     yearly_total_budget: 0,
@@ -46,16 +41,10 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   });
 
   useEffect(() => {
-    if (pathName !== 'group' && !yearlyBudgets.monthly_budgets.length) {
+    if (pathName !== 'group') {
       dispatch(fetchYearlyBudgets(year));
     }
   }, [year]);
-
-  useEffect(() => {
-    if (pathName !== 'group' && !standardBudgets.length) {
-      dispatch(fetchStandardBudgets());
-    }
-  }, []);
 
   useEffect(() => {
     setYearBudget(yearlyBudgets);

@@ -25,7 +25,7 @@ import {
   getGroupPathYear,
   getGroupPathMonth,
 } from '../lib/path';
-import GroupCustomBudgets from './GroupCustomBudgets';
+import GroupCustomBudgets from '../components/budget/GroupCustomBudgets';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -87,7 +87,7 @@ const CustomBudgets = () => {
   const unInput = customBudgets === customBudgetsList;
 
   useEffect(() => {
-    if (pathName !== 'group' && !customBudgetsList) {
+    if (pathName !== 'group') {
       dispatch(fetchCustomBudgets(selectYear, selectMonth));
     }
   }, []);
