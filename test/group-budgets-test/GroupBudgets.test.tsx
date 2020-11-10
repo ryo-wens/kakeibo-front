@@ -47,7 +47,7 @@ describe('async actions fetchGroupStandardBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupStandardBudgets()(store.dispatch);
+    await fetchGroupStandardBudgets(groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -182,7 +182,7 @@ describe('async actions getGroupYearlyBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupYearlyBudgets()(store.dispatch);
+    await fetchGroupYearlyBudgets(groupId, year)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -210,7 +210,7 @@ describe('async actions getGroupCustomBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupCustomBudgets(selectYear, selectMonth)(store.dispatch);
+    await fetchGroupCustomBudgets(selectYear, selectMonth, groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -309,6 +309,7 @@ describe('async actions addGroupCustomBudgets', () => {
     await addGroupCustomBudgets(
       selectYear,
       selectMonth,
+      groupId,
       mockRequest.custom_budgets
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
@@ -418,6 +419,7 @@ describe('async actions editGroupCustomBudgets', () => {
     await editGroupCustomBudgets(
       selectYear,
       selectMonth,
+      groupId,
       mockRequest.custom_budgets
       // @ts-ignore
     )(store.dispatch, getState);
@@ -526,7 +528,7 @@ describe('async actions deleteGroupCustomBudgets', () => {
     window.alert = jest.fn(() => mockResponse);
 
     // @ts-ignore
-    await deleteGroupCustomBudgets(selectYear, selectMonth)(store.dispatch, getState);
+    await deleteGroupCustomBudgets(selectYear, selectMonth, groupId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
     expect(window.alert).toHaveBeenCalled();
   });

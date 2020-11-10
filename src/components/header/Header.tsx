@@ -170,7 +170,7 @@ const Header = () => {
               size="large"
               className={classes.button}
               startIcon={<MoneyIcon />}
-              onClick={() => dispatch(push('/standard-budgets'))}
+              onClick={() => existsGroupWhenRouting('/standard/budgets')}
             >
               予算
             </Button>

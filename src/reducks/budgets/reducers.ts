@@ -9,11 +9,6 @@ export const budgetsReducer = (state = initialState.budgets, action: budgetsActi
         ...state,
         standard_budgets_list: [...action.payload],
       };
-    case Actions.FETCH_YEARLY_BUDGETS:
-      return {
-        ...state,
-        yearly_budgets_list: action.payload,
-      };
     case Actions.UPDATE_CUSTOM_BUDGETS:
       return {
         ...state,
@@ -24,7 +19,7 @@ export const budgetsReducer = (state = initialState.budgets, action: budgetsActi
         ...state,
         custom_budgets_list: [...action.payload],
       };
-    case Actions.DELETE_CUSTOM_BUDGETS:
+    case Actions.UPDATE_YEARLY_BUDGETS:
       return {
         ...state,
         yearly_budgets_list: action.payload,

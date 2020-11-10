@@ -1,7 +1,11 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
+import { fetchStandardBudgets } from '../reducks/budgets/operations';
+import { getYearlyBudgets } from '../reducks/budgets/selectors';
+import { getGroupYearlyBudgets } from '../reducks/groupBudgets/selectors';
 import YearlyBudgetsRow from '../components/budget/YearlyBudgetsRow';
+import GroupYearlyBudgetsRow from '../components/budget/GroupYearlyBudgetsRow';
 import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
@@ -17,6 +21,7 @@ import MenuItem from '@material-ui/core/MenuItem';
 import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { State } from '../reducks/store/types';
+import { getPathTemplateName, getPathGroupId } from '../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -67,8 +72,15 @@ const YearlyBudgets = () => {
   const dispatch = useDispatch();
   const date = new Date();
   const selector = useSelector((state: State) => state);
-  const totalBudge = selector.budgets.yearly_budgets_list.yearly_total_budget;
+  const totalBudget = getYearlyBudgets(selector).yearly_total_budget;
+  const totalGroupBudget = getGroupYearlyBudgets(selector).yearly_total_budget;
   const [years, setYears] = useState<number>(date.getFullYear());
+  const pathName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
+
+  useEffect(() => {
+    dispatch(fetchStandardBudgets());
+  }, []);
 
   const handleDateChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -80,10 +92,26 @@ const YearlyBudgets = () => {
   return (
     <div className={classes.mainPosition}>
       <ButtonGroup className={classes.buttonPosition} size="large" aria-label="budgets-kind">
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/standard-budgets'))}>
+        <Button
+          className={classes.buttonSize}
+          onClick={() => {
+            {
+              pathName !== 'group'
+                ? dispatch(push('/standard/budgets'))
+                : dispatch(push(`/group/${groupId}/standard/budgets`));
+            }
+          }}
+        >
           標準予算
         </Button>
-        <Button className={classes.buttonSize} onClick={() => dispatch(push('/yearly-budgets'))}>
+        <Button
+          className={classes.buttonSize}
+          onClick={() => {
+            pathName !== 'group'
+              ? dispatch(push('/yearly/budgets'))
+              : dispatch(push(`/group/${groupId}/yearly/budgets`));
+          }}
+        >
           月別カスタム予算
         </Button>
       </ButtonGroup>
@@ -95,7 +123,7 @@ const YearlyBudgets = () => {
           <MenuItem value={years - 1}>{years - 1}</MenuItem>
         </Select>
       </FormControl>
-      <h1>総額 ¥ {totalBudge}</h1>
+      <h1>総額 ¥ {pathName !== 'group' ? totalBudget : totalGroupBudget}</h1>
       <TableContainer className={classes.tablePosition} component={Paper}>
         <Table>
           <TableHead>
@@ -118,7 +146,11 @@ const YearlyBudgets = () => {
             </TableRow>
           </TableHead>
           <TableBody>
-            <YearlyBudgetsRow years={years} />
+            {pathName !== 'group' ? (
+              <YearlyBudgetsRow years={years} />
+            ) : (
+              <GroupYearlyBudgetsRow years={years} />
+            )}
           </TableBody>
         </Table>
       </TableContainer>

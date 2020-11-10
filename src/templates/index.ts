@@ -4,7 +4,7 @@ export { default as InputCustomCategory } from './InputCustomCategory';
 export { default as LogIn } from './LogIn';
 export { default as MonthlyTodo } from './MonthlyTodo';
 export { default as SelectBigCategory } from './SelectBigCategory';
-export { default as SelectStandardBudgets } from './SelectStandardBudgets';
+export { default as EditStandardBudgets } from './EditStandardBudgets';
 export { default as SignUp } from './SignUp';
 export { default as StandardBudgets } from './StandardBudgets';
 export { default as Task } from './Task';

@@ -1,15 +1,19 @@
 import {
   copyStandardBudgetsActions,
-  deleteCustomBudgetsActions,
-  fetchYearlyBudgetsActions,
   updateCustomBudgetsActions,
   updateStandardBudgetsActions,
+  updateYearlyBudgetsActions,
 } from './actions';
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import { State } from '../store/types';
-import { standardBudgetType } from '../../lib/constant';
-import { errorHandling, isValidBudgetFormat } from '../../lib/validation';
+import { standardBudgetType, customBudgetType } from '../../lib/constant';
+import {
+  errorHandling,
+  isValidBudgetFormat,
+  totalStandardBudget,
+  totalCustomBudgets,
+} from '../../lib/validation';
 import {
   BudgetsReq,
   CustomBudgetsList,
@@ -24,17 +28,19 @@ import {
 
 export const fetchStandardBudgets = () => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
-    await axios
-      .get<fetchStandardBudgetsRes>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        const standardBudgetsList = res.data.standard_budgets;
-        dispatch(updateStandardBudgetsActions(standardBudgetsList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+    try {
+      const result = await axios.get<fetchStandardBudgetsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
+        {
+          withCredentials: true,
+        }
+      );
+      const standardBudgetsList = result.data.standard_budgets;
+
+      dispatch(updateStandardBudgetsActions(standardBudgetsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
@@ -47,68 +53,69 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
     }
 
     const data = { standard_budgets: budgets };
-    await axios
-      .put<StandardBudgetsListRes>(
+    try {
+      const result = await axios.put<StandardBudgetsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const editStandardBudgetsList: StandardBudgetsList = res.data.standard_budgets;
-        const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
+      );
+      const editStandardBudgetsList: StandardBudgetsList = result.data.standard_budgets;
+      const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
 
-        const nextStandardBudgetsList = standardBudgetsList.map((standardBudget) => {
-          const editStandardBudget = editStandardBudgetsList.find(
-            (item: { big_category_id: number }) =>
-              item.big_category_id === standardBudget.big_category_id
-          );
-          if (editStandardBudget) {
-            return editStandardBudget;
-          }
-          return standardBudget;
-        });
-        dispatch(updateStandardBudgetsActions(nextStandardBudgetsList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
+      const nextStandardBudgetsList = standardBudgetsList.map((standardBudget) => {
+        const editStandardBudget = editStandardBudgetsList.find(
+          (item: { big_category_id: number }) =>
+            item.big_category_id === standardBudget.big_category_id
+        );
+        if (editStandardBudget) {
+          return editStandardBudget;
+        }
+
+        return standardBudget;
       });
+
+      dispatch(updateStandardBudgetsActions(nextStandardBudgetsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
 export const fetchYearlyBudgets = (year: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
-    await axios
-      .get<YearlyBudgetsList>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${year}`, {
-        withCredentials: true,
-      })
-      .then((res) => {
-        const yearlyBudgetsList = res.data;
-        dispatch(fetchYearlyBudgetsActions(yearlyBudgetsList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+    try {
+      const result = await axios.get<YearlyBudgetsList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${year}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const yearlyBudgetsList = result.data;
+
+      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
 export const fetchCustomBudgets = (selectYear: string, selectMonth: string) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
-    await axios
-      .get<fetchCustomBudgetsRes>(
+    try {
+      const result = await axios.get<fetchCustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const customBudgets = res.data.custom_budgets;
-        dispatch(updateCustomBudgetsActions(customBudgets));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      );
+      const customBudgets = result.data.custom_budgets;
+
+      dispatch(updateCustomBudgetsActions(customBudgets));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
@@ -118,31 +125,56 @@ export const addCustomBudgets = (
   customBudgets: BudgetsReq
 ) => {
   const data = { custom_budgets: customBudgets };
-  return async (dispatch: Dispatch<Action>): Promise<void> => {
+  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const validBudgets = customBudgets.every((budget) => isValidBudgetFormat(budget.budget));
     if (!validBudgets) {
       alert('予算は0以上の整数で入力してください。');
       return;
     }
 
-    await axios
-      .post<CustomBudgetsRes>(
+    try {
+      const result = await axios.post<CustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const addedCustomBudgetsList: CustomBudgetsList = res.data.custom_budgets;
+      );
+      const addedCustomBudgetsList: CustomBudgetsList = result.data.custom_budgets;
+      const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
+      const prevCustomBudgetTotal =
+        yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
 
-        const nextCustomBudgetsList = [...addedCustomBudgetsList];
-
-        dispatch(updateCustomBudgetsActions(nextCustomBudgetsList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
+      const customBudgets: number[] = addedCustomBudgetsList.map((budget) => {
+        return budget.budget;
       });
+
+      const newTotalBudget = (): number => {
+        if (totalCustomBudgets(customBudgets) < prevCustomBudgetTotal) {
+          return (
+            yearlyBudgetsList.yearly_total_budget -
+            (prevCustomBudgetTotal - totalCustomBudgets(customBudgets))
+          );
+        } else {
+          return (
+            yearlyBudgetsList.yearly_total_budget +
+            (totalCustomBudgets(customBudgets) - prevCustomBudgetTotal)
+          );
+        }
+      };
+
+      yearlyBudgetsList.yearly_total_budget = newTotalBudget();
+
+      yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
+        month: `${selectYear}年${selectMonth}月`,
+        budget_type: customBudgetType,
+        monthly_total_budget: totalCustomBudgets(customBudgets),
+      };
+
+      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
@@ -159,33 +191,49 @@ export const editCustomBudgets = (
       return;
     }
 
-    await axios
-      .put<CustomBudgetsRes>(
+    try {
+      const result = await axios.put<CustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const editCustomBudgetsList: CustomBudgetsList = res.data.custom_budgets;
-        const customBudgetsList: CustomBudgetsList = getState().budgets.custom_budgets_list;
+      );
+      const editedCustomBudgetsList: CustomBudgetsList = result.data.custom_budgets;
+      const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
+      const prevCustomBudgetTotal =
+        yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
 
-        const nextCustomBudgetsList = customBudgetsList.map((customBudget) => {
-          const editCustomBudget = editCustomBudgetsList.find(
-            (item: { big_category_id: number }) =>
-              item.big_category_id === customBudget.big_category_id
-          );
-          if (editCustomBudget) {
-            return editCustomBudget;
-          }
-          return customBudget;
-        });
-        dispatch(updateCustomBudgetsActions(nextCustomBudgetsList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
+      const budgets: number[] = editedCustomBudgetsList.map((editedBudget) => {
+        return editedBudget.budget;
       });
+
+      const newTotalBudget = (): number => {
+        if (totalCustomBudgets(budgets) < prevCustomBudgetTotal) {
+          return (
+            yearlyBudgetsList.yearly_total_budget -
+            (prevCustomBudgetTotal - totalCustomBudgets(budgets))
+          );
+        } else {
+          return (
+            yearlyBudgetsList.yearly_total_budget +
+            (totalCustomBudgets(budgets) - prevCustomBudgetTotal)
+          );
+        }
+      };
+
+      yearlyBudgetsList.yearly_total_budget = newTotalBudget();
+
+      yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
+        month: `${selectYear}年${selectMonth}月`,
+        budget_type: customBudgetType,
+        monthly_total_budget: totalCustomBudgets(budgets),
+      };
+
+      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
@@ -207,53 +255,50 @@ export const copyStandardBudgets = () => {
 
 export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    await axios
-      .delete<DeleteCustomBudgetsRes>(
+    try {
+      const result = await axios.delete<DeleteCustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const message = res.data.message;
-        const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
-        const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
+      );
+      const message = result.data.message;
+      const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
+      const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
 
-        const standardBudget = standardBudgetsList.map((budget) => {
-          return budget.budget;
-        });
-        const totalStandardBudget = () => {
-          let total = 0;
-          for (let i = 0, len = standardBudget.length; i < len; i++) {
-            total += standardBudget[i];
-          }
-          return total;
-        };
-
-        const newTotalBudget = () => {
-          const deleteBudget =
-            yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
-
-          if (totalStandardBudget() > deleteBudget) {
-            return yearlyBudgetsList.yearly_total_budget + (totalStandardBudget() - deleteBudget);
-          } else {
-            return yearlyBudgetsList.yearly_total_budget - (deleteBudget - totalStandardBudget());
-          }
-        };
-
-        yearlyBudgetsList.yearly_total_budget = newTotalBudget();
-
-        yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
-          month: `${selectYear}年${selectMonth}月`,
-          budget_type: standardBudgetType,
-          monthly_total_budget: totalStandardBudget(),
-        };
-
-        dispatch(deleteCustomBudgetsActions(yearlyBudgetsList));
-        alert(message);
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
+      const standardBudget = standardBudgetsList.map((budget) => {
+        return budget.budget;
       });
+
+      const newTotalBudget = (): number => {
+        const deleteBudget =
+          yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
+
+        if (totalStandardBudget(standardBudget) > deleteBudget) {
+          return (
+            yearlyBudgetsList.yearly_total_budget +
+            (totalStandardBudget(standardBudget) - deleteBudget)
+          );
+        } else {
+          return (
+            yearlyBudgetsList.yearly_total_budget -
+            (deleteBudget - totalStandardBudget(standardBudget))
+          );
+        }
+      };
+
+      yearlyBudgetsList.yearly_total_budget = newTotalBudget();
+
+      yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
+        month: `${selectYear}年${selectMonth}月`,
+        budget_type: standardBudgetType,
+        monthly_total_budget: totalStandardBudget(standardBudget),
+      };
+
+      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
+      alert(message);
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
