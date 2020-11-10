@@ -12,11 +12,11 @@ import { push } from 'connected-react-router';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 import moment from 'moment';
 
-export const fetchGroupTransactionsList = (year: number, customMonth: string) => {
+export const fetchGroupTransactionsList = (year: number, customMonth: string, groupId: number) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchGroupTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${year}-${customMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}`,
         {
           withCredentials: true,
         }

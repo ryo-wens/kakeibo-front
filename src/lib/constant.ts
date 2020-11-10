@@ -6,3 +6,4 @@ export const date = new Date();
 export const year = date.getFullYear();
 export const month = date.getMonth() + 1;
 export const customMonth = ('0' + month).slice(-2);
+export const guidanceMessage = '「入力フォーム」から家計簿の追加を行ってください';

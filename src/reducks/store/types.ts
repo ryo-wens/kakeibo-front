@@ -28,6 +28,7 @@ export interface State {
     noTransactionsMessage: string;
   };
   groupTransactions: {
+    groupLatestTransactionsList: GroupTransactionsList;
     groupTransactionsList: GroupTransactionsList;
   };
   budgets: {

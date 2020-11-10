@@ -7,3 +7,8 @@ export const getGroupTransactions = createSelector(
   [groupTransactionsSelector],
   (state) => state.groupTransactionsList
 );
+
+export const getGroupLatestTransactions = createSelector(
+  [groupTransactionsSelector],
+  (state) => state.groupLatestTransactionsList
+);

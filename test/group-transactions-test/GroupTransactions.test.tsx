@@ -45,7 +45,7 @@ describe('async actions fetchGroupTransactionsList', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupTransactionsList(year, customMonth)(store.dispatch);
+    await fetchGroupTransactionsList(year, customMonth, groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 });
