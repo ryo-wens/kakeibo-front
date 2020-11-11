@@ -4,6 +4,7 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
+import { TransactionsReq } from '../../src/reducks/transactions/types';
 import {
   fetchTransactionsList,
   fetchLatestTransactionsList,
@@ -127,6 +128,17 @@ describe('async actions addTransactions', () => {
       };
     };
 
+    const requestData: TransactionsReq = {
+      transaction_type: 'expense',
+      transaction_date: actual,
+      shop: 'ニトリ',
+      memo: '椅子',
+      amount: 9000,
+      big_category_id: 3,
+      medium_category_id: 16,
+      custom_category_id: null,
+    };
+
     const mockResponse = addResTransaction;
 
     const addedLatestTransactionsList = addLatestTransaction;
@@ -140,16 +152,7 @@ describe('async actions addTransactions', () => {
 
     axiosMock.onPost(url).reply(201, mockResponse);
 
-    await addLatestTransactions(
-      'expense',
-      actual,
-      'ニトリ',
-      '椅子',
-      9000,
-      3,
-      16,
-      null
-    )(
+    await addLatestTransactions(requestData)(
       store.dispatch,
       // @ts-ignore
       getState
@@ -241,6 +244,17 @@ describe('async actions editTransactions', () => {
 
     const editedTransactionsList = editTransactionsList;
 
+    const requestData: TransactionsReq = {
+      transaction_type: 'expense',
+      transaction_date: actual,
+      shop: 'ビッグカメラ',
+      memo: 'コーヒーメーカー',
+      amount: 25000,
+      big_category_id: 3,
+      medium_category_id: 17,
+      custom_category_id: null,
+    };
+
     const expectedEditActions = [
       {
         type: actionTypes.UPDATE_TRANSACTIONS,
@@ -250,17 +264,7 @@ describe('async actions editTransactions', () => {
 
     axiosMock.onPut(url).reply(200, mockResTransaction);
 
-    await editTransactions(
-      130,
-      'expense',
-      actual,
-      'ビッグカメラ',
-      'コーヒーメーカー',
-      25000,
-      3,
-      17,
-      null
-    )(
+    await editTransactions(130, requestData)(
       store.dispatch,
       // @ts-ignore
       getState
@@ -314,6 +318,17 @@ describe('async actions editLatestTransactions', () => {
 
     const editedLatestTransactions = editLatestTransaction;
 
+    const requestData: TransactionsReq = {
+      transaction_type: 'expense',
+      transaction_date: actual,
+      shop: 'ビッグカメラ',
+      memo: 'コーヒーメーカー',
+      amount: 25000,
+      big_category_id: 3,
+      medium_category_id: 17,
+      custom_category_id: null,
+    };
+
     const expectedEditActions = [
       {
         type: actionTypes.UPDATE_LATEST_TRANSACTIONS,
@@ -323,17 +338,7 @@ describe('async actions editLatestTransactions', () => {
 
     axiosMock.onPut(url).reply(200, mockResponse);
 
-    await editLatestTransactions(
-      130,
-      'expense',
-      actual,
-      'ビッグカメラ',
-      'コーヒーメーカー',
-      25000,
-      3,
-      17,
-      null
-    )(
+    await editLatestTransactions(130, requestData)(
       store.dispatch,
       // @ts-ignore
       getState
@@ -416,11 +421,9 @@ describe('async actions deleteLatestTransactions', () => {
     ];
 
     axiosMock.onDelete(url).reply(200, mockResponseMessage);
-    // window.alert = jest.fn(() => mockResponseMessage);
 
     // @ts-ignore
     await deleteLatestTransactions(130)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedDeleteActions);
-    // expect(window.alert).toHaveBeenCalled();
   });
 });

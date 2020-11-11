@@ -20,7 +20,7 @@ const MonthlyHistory = () => {
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (pathName !== 'group') {
+    if (pathName !== 'group' && !transactionsList.length) {
       dispatch(fetchTransactionsList(String(year), customMonth));
     }
   }, []);
@@ -183,12 +183,12 @@ const MonthlyHistory = () => {
   };
 
   return (
-    <div className="box__monthlyExpense">
-      <h2>{month}月の支出</h2>
+    <>
       {(() => {
         if (pathName !== 'group') {
           return (
-            <>
+            <div className="box__monthlyExpense">
+              <h2>{month}月の支出</h2>
               <table className="monthly-history-table">
                 <tbody className="monthly-history-table__tbody">
                   <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
@@ -200,13 +200,13 @@ const MonthlyHistory = () => {
               <div className="monthly-history-table__box-total">
                 合計： ¥ {totalAmount().toLocaleString()}
               </div>
-            </>
+            </div>
           );
         } else {
           return <GroupMonthlyHistory />;
         }
       })()}
-    </div>
+    </>
   );
 };
 
