@@ -1,11 +1,12 @@
 import React, { useCallback, useState } from 'react';
-import { AddButton } from '../uikit';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
 import { TodoButton } from '../todo';
 import { Group } from '../../reducks/groups/types';
 import { GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import CloseIcon from '@material-ui/icons/Close';
+import '../../assets/task/add-task-user.scss';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -31,21 +32,13 @@ const useStyles = makeStyles((theme: Theme) =>
 interface AddTaskUserProps {
   approvedGroup: Group;
   groupTasksListForEachUser: GroupTasksListForEachUser;
+  closeAddTaskUser: () => void;
+  closeModal: () => void;
 }
 
 const AddTaskUser = (props: AddTaskUserProps) => {
   const classes = useStyles();
-  const [open, setOpen] = useState<boolean>(false);
   const [checkedUserIds, setCheckedUserIds] = useState<Array<string>>([]);
-
-  const openModal = useCallback(() => {
-    setOpen(true);
-  }, [setOpen]);
-
-  const closeModal = useCallback(() => {
-    setOpen(false);
-    setCheckedUserIds([]);
-  }, [setOpen, setCheckedUserIds]);
 
   const assignUser = useCallback(
     (userId: string) => {
@@ -111,33 +104,31 @@ const AddTaskUser = (props: AddTaskUserProps) => {
     return user;
   };
 
-  const body = (
-    <div className={classes.paper}>
-      <h3 id="simple-modal-title">タスクユーザーを追加</h3>
+  return (
+    <>
+      <div className="add-task-user-modal__position">
+        <button className={'icon--btn'} onClick={() => props.closeAddTaskUser()}>
+          <ChevronLeftIcon />
+        </button>
+        <h3 className="add-task-user-modal__title">タスクユーザーを追加</h3>
+        <button className={'icon--btn'} onClick={() => props.closeModal()}>
+          <CloseIcon />
+        </button>
+      </div>
       <FormGroup>{existsAddTasksUser()}</FormGroup>
       <div className={classes.buttons}>
         <TodoButton
           label={'追加'}
           disabled={checkedUserIds.length === 0}
-          onClick={() => closeModal()}
+          onClick={() => console.log('クリック')}
         />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={() => closeModal()} />
+        <TodoButton
+          label={'キャンセル'}
+          disabled={false}
+          onClick={() => props.closeAddTaskUser()}
+        />
       </div>
-    </div>
-  );
-
-  return (
-    <div>
-      <AddButton label={'タスクユーザーを追加'} onClick={() => openModal()} />
-      <Modal
-        open={open}
-        onClose={closeModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
-      </Modal>
-    </div>
+    </>
   );
 };
 

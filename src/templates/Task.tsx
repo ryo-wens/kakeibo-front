@@ -7,7 +7,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { AddTaskUser, EditTaskUser, SkipDate, TaskList } from '../components/task';
+import { EditTaskUser, SkipDate, TaskList } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 
 const useStyles = makeStyles(() =>
@@ -71,8 +71,7 @@ const Task = () => {
   return (
     <>
       <div className={classes.root}>
-        <EditTaskUser groupTasksListForEachUser={groupTasksListForEachUser} />
-        <AddTaskUser
+        <EditTaskUser
           approvedGroup={approvedGroup}
           groupTasksListForEachUser={groupTasksListForEachUser}
         />

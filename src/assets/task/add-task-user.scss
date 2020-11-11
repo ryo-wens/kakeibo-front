@@ -1,0 +1,19 @@
+@import "../variable.scss";
+@import "../modules/icon";
+
+.add-task-user-modal {
+
+  &__position {
+    display: flex;
+    padding: 0 0 10px 0;
+    margin: 0 0 30px 0;
+    border-bottom: $task-border_color solid 1px;
+    justify-content: space-between;
+  }
+
+  &__title {
+    margin: 0;
+    color: $task-main_color;
+    font-size: $task-title-font_size;
+  }
+}
