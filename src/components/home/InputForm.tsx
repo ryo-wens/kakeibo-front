@@ -5,6 +5,7 @@ import { addTransactions, addLatestTransactions } from '../../reducks/transactio
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { TransactionsReq } from '../../reducks/transactions/types';
 
 const useStyles = makeStyles({
   link: {
@@ -18,7 +19,9 @@ const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
+  const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string>('');
+  const emptyShop = shop === '' ? null : shop;
   const [category, setCategory] = useState<string>('');
   const [transactionDate, setTransactionDate] = useState<Date | null>(new Date());
   const [transactionsType, setTransactionType] = useState<string>('');
@@ -103,20 +106,20 @@ const InputForm = (): JSX.Element => {
 
   const unInput = amount === '' || category === '' || transactionsType === '';
 
+  const requestData: TransactionsReq = {
+    transaction_type: transactionsType,
+    transaction_date: transactionDate,
+    shop: emptyShop,
+    memo: emptyMemo,
+    amount: Number(amount),
+    big_category_id: bigCategoryId,
+    medium_category_id: mediumCategoryId,
+    custom_category_id: customCategoryId,
+  };
+
   const addTransaction = () => {
     async function addedTransaction() {
-      await dispatch(
-        addLatestTransactions(
-          transactionsType,
-          transactionDate,
-          shop,
-          memo,
-          amount,
-          bigCategoryId,
-          mediumCategoryId,
-          customCategoryId
-        )
-      );
+      await dispatch(addLatestTransactions(requestData));
       dispatch(addTransactions());
       resetInputForm();
     }
@@ -170,7 +173,7 @@ const InputForm = (): JSX.Element => {
       />
       <GenericButton
         startIcon={<AddCircleOutlineIcon />}
-        onClick={() => addTransaction()}
+        onClick={addTransaction}
         label={'入力する'}
         disabled={unInput}
       />

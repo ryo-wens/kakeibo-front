@@ -22,6 +22,7 @@ import { CategoryId, CategoryName } from '../../reducks/categories/types';
 import { expenseTransactionType, incomeTransactionType } from '../../lib/constant';
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
+import { TransactionsReq } from '../../reducks/transactions/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,7 +78,9 @@ const EditTransactionModal = (props: InputModalProps) => {
   const expenseCategories = getExpenseCategories(selector);
   const [amount, setAmount] = useState<string>(String(props.amount));
   const [memo, setMemo] = useState<string | null>(props.memo);
+  const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string | null>(props.shop);
+  const emptyShop = shop === '' ? null : shop;
   const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
   const id = props.id;
 
@@ -242,6 +245,16 @@ const EditTransactionModal = (props: InputModalProps) => {
     [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
   );
 
+  const editRequestData: TransactionsReq = {
+    transaction_date: transactionDate,
+    transaction_type: transactionsType,
+    big_category_id: bigCategoryId,
+    medium_category_id: mediumCategoryId,
+    custom_category_id: customCategoryId,
+    amount: Number(amount),
+    memo: emptyMemo,
+    shop: emptyShop,
+  };
   const deleteTransaction = (): void => {
     async function deletedTransaction() {
       await dispatch(deleteLatestTransactions(id));
@@ -307,32 +320,8 @@ const EditTransactionModal = (props: InputModalProps) => {
         <GenericButton
           label={'更新する'}
           onClick={() =>
-            dispatch(
-              editTransactions(
-                id,
-                transactionsType,
-                transactionDate,
-                shop,
-                memo,
-                amount,
-                bigCategoryId,
-                mediumCategoryId,
-                customCategoryId
-              )
-            ) &&
-            dispatch(
-              editLatestTransactions(
-                id,
-                transactionsType,
-                transactionDate,
-                shop,
-                memo,
-                amount,
-                bigCategoryId,
-                mediumCategoryId,
-                customCategoryId
-              )
-            ) &&
+            dispatch(editTransactions(id, editRequestData)) &&
+            dispatch(editLatestTransactions(id, editRequestData)) &&
             props.onClose()
           }
           disabled={false}

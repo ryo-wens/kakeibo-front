@@ -5,6 +5,8 @@ import Button from '@material-ui/core/Button';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import MonthlyHistory from '../components/home/MonthlyHistory';
+import GroupMonthlyHistory from '../components/home/GroupMothlyHistory';
+import { getPathTemplateName, getPathGroupId } from '../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -32,6 +34,9 @@ const useStyles = makeStyles((theme: Theme) =>
 const WeeklyHistory = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const pathName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
+  console.log(pathName);
 
   return (
     <>
@@ -42,14 +47,23 @@ const WeeklyHistory = () => {
           aria-label="small outlined button group"
         >
           <Button className={classes.topButton}>日ごと</Button>
-          <Button className={classes.topButton} onClick={() => dispatch(push('/history-week'))}>
+          <Button
+            className={classes.topButton}
+            onClick={() => {
+              if (pathName !== 'group') {
+                dispatch(push('/history-week'));
+              } else {
+                dispatch(push(`/group/${groupId}/history-week`));
+              }
+            }}
+          >
             週ごと
           </Button>
           <Button className={classes.topButton}>月ごと</Button>
         </ButtonGroup>
       </div>
       <div className={classes.tableSize}>
-        <MonthlyHistory />
+        {pathName !== 'group' ? <MonthlyHistory /> : <GroupMonthlyHistory />}
       </div>
     </>
   );
