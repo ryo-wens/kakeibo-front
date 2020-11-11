@@ -1,6 +1,6 @@
 import { GroupTasksList, GroupTasksListForEachUser } from './types';
 export type groupTasksActions = ReturnType<
-  | typeof addGroupTaskUserAction
+  | typeof addGroupTasksUsersAction
   | typeof addTaskItemAction
   | typeof deleteTaskItemAction
   | typeof editTaskItemAction
@@ -8,22 +8,22 @@ export type groupTasksActions = ReturnType<
   | typeof fetchGroupTasksListAction
 >;
 
-export const ADD_GROUP_TASKS_USER = 'ADD_GROUP_TASKS_USER';
-export const addGroupTaskUserAction = (groupTasksListForEachUser: GroupTasksListForEachUser) => {
-  return {
-    type: ADD_GROUP_TASKS_USER,
-    payload: {
-      groupTasksListForEachUser: groupTasksListForEachUser,
-    },
-  };
-};
-
 export const FETCH_GROUP_TASKS_LIST_EACH_USER = 'FETCH_GROUP_TASKS_LIST_EACH_USER';
 export const fetchGroupTasksListEachUserAction = (
   groupTasksListForEachUser: GroupTasksListForEachUser
 ) => {
   return {
     type: FETCH_GROUP_TASKS_LIST_EACH_USER,
+    payload: {
+      groupTasksListForEachUser: groupTasksListForEachUser,
+    },
+  };
+};
+
+export const ADD_GROUP_TASKS_USERS = 'ADD_GROUP_TASKS_USERS';
+export const addGroupTasksUsersAction = (groupTasksListForEachUser: GroupTasksListForEachUser) => {
+  return {
+    type: ADD_GROUP_TASKS_USERS,
     payload: {
       groupTasksListForEachUser: groupTasksListForEachUser,
     },

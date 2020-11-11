@@ -1,0 +1,16 @@
+{
+  "group_tasks_list_for_each_user": [
+    {
+      "id": 3,
+      "user_id": "Taira",
+      "group_id": 1,
+      "tasks_list": []
+    },
+    {
+      "id": 4,
+      "user_id": "Ito",
+      "group_id": 1,
+      "tasks_list": []
+    }
+  ]
+}

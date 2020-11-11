@@ -7,6 +7,8 @@ import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/add-task-user.scss';
+import { useDispatch } from 'react-redux';
+import { addGroupTasksUsers } from '../../reducks/groupTasks/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -38,6 +40,7 @@ interface AddTaskUserProps {
 
 const AddTaskUser = (props: AddTaskUserProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [checkedUserIds, setCheckedUserIds] = useState<Array<string>>([]);
 
   const assignUser = useCallback(
@@ -120,7 +123,7 @@ const AddTaskUser = (props: AddTaskUserProps) => {
         <TodoButton
           label={'追加'}
           disabled={checkedUserIds.length === 0}
-          onClick={() => console.log('クリック')}
+          onClick={() => dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds))}
         />
         <TodoButton
           label={'キャンセル'}

@@ -4,12 +4,12 @@ import initialState from '../store/initialState';
 
 export const groupTasksReducers = (state = initialState.groupTasks, action: groupTasksActions) => {
   switch (action.type) {
-    case Actions.ADD_GROUP_TASKS_USER:
+    case Actions.FETCH_GROUP_TASKS_LIST_EACH_USER:
       return {
         ...state,
         ...action.payload,
       };
-    case Actions.FETCH_GROUP_TASKS_LIST_EACH_USER:
+    case Actions.ADD_GROUP_TASKS_USERS:
       return {
         ...state,
         ...action.payload,

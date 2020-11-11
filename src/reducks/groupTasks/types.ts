@@ -23,6 +23,14 @@ export interface fetchGroupTasksListEachUserRes {
   group_tasks_list_for_each_user: GroupTasksListForEachUser;
 }
 
+export interface addGroupTasksUsersReq {
+  users_list: Array<string>;
+}
+
+export interface addGroupTasksUsersRes {
+  group_tasks_list_for_each_user: GroupTasksListForEachUser;
+}
+
 export interface fetchGroupTasksListRes {
   group_tasks_list: GroupTasksList;
 }

@@ -1,6 +1,8 @@
 import axios from 'axios';
 import { Action, Dispatch } from 'redux';
 import {
+  addGroupTasksUsersReq,
+  addGroupTasksUsersRes,
   addTaskItemReq,
   addTaskItemRes,
   deleteTaskItemRes,
@@ -13,6 +15,7 @@ import {
   TasksListItem,
 } from './types';
 import {
+  addGroupTasksUsersAction,
   addTaskItemAction,
   deleteTaskItemAction,
   editTaskItemAction,
@@ -41,6 +44,34 @@ export const fetchGroupTasksListEachUser = (groupId: number) => {
       .catch((error) => {
         errorHandling(dispatch, error);
       });
+  };
+};
+
+export const addGroupTasksUsers = (groupId: number, users: Array<string>) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    const data: addGroupTasksUsersReq = {
+      users_list: users,
+    };
+
+    try {
+      const result = await axios.post<addGroupTasksUsersRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
+        JSON.stringify(data),
+        { withCredentials: true }
+      );
+
+      const prevGroupTasksListForEachUser: GroupTasksListForEachUser = getState().groupTasks
+        .groupTasksListForEachUser;
+
+      const nextGroupTasksListForEachUser: GroupTasksListForEachUser = [
+        ...prevGroupTasksListForEachUser,
+        ...result.data.group_tasks_list_for_each_user,
+      ];
+
+      dispatch(addGroupTasksUsersAction(nextGroupTasksListForEachUser));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
