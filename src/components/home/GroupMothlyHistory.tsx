@@ -1,48 +1,44 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { fetchTransactionsList } from '../../reducks/transactions/operations';
+import { fetchGroupTransactionsList } from '../../reducks/groupTransactions/operations';
 import { State } from '../../reducks/store/types';
-import { getTransactions } from '../../reducks/transactions/selectors';
+import { getGroupTransactions } from '../../reducks/groupTransactions/selectors';
+import { incomeTransactionType } from '../../lib/constant';
+import { getPathGroupId } from '../../lib/path';
 import { year, month, customMonth } from '../../lib/constant';
-import '../../assets/monthly-history.scss';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
-import { incomeTransactionType } from '../../lib/constant';
-import { getPathTemplateName } from '../../lib/path';
-import GroupMonthlyHistory from './GroupMothlyHistory';
 
-const MonthlyHistory = () => {
+const GroupMonthlyHistory = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const transactionsList = getTransactions(selector);
+  const groupId = getPathGroupId(window.location.pathname);
+  const groupTransactionsList = getGroupTransactions(selector);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (pathName !== 'group') {
-      dispatch(fetchTransactionsList(String(year), customMonth));
-    }
+    dispatch(fetchGroupTransactionsList(year, customMonth, groupId));
   }, []);
 
   const handleOpen = (transactionId: number) => {
-    setOpenId(transactionId);
     setOpen(true);
+    setOpenId(transactionId);
   };
 
   const handleClose = () => {
-    setOpenId(undefined);
     setOpen(false);
+    setOpenId(undefined);
   };
 
   const subTotalAmounts = (startDate: number, endDate: number) => {
     let oneWeekSubTotal = 0;
 
-    for (const transaction of transactionsList) {
-      if (transaction.transaction_type !== incomeTransactionType) {
-        const transactionDay = Number(transaction.transaction_date.slice(8, 10));
+    for (const groupTransaction of groupTransactionsList) {
+      if (groupTransaction.transaction_type !== incomeTransactionType) {
+        const transactionDay = Number(groupTransaction.transaction_date.slice(8, 10));
         if (startDate <= transactionDay && transactionDay <= endDate) {
-          oneWeekSubTotal += transaction.amount;
+          oneWeekSubTotal += groupTransaction.amount;
         }
       }
     }
@@ -74,7 +70,7 @@ const MonthlyHistory = () => {
             let items: ReactElement[] = [];
             let prevTransactionDate = '';
 
-            transactionsList.map((transaction, index) => {
+            groupTransactionsList.map((groupTransaction, index) => {
               const {
                 id,
                 transaction_date,
@@ -82,10 +78,10 @@ const MonthlyHistory = () => {
                 medium_category_name,
                 custom_category_name,
                 shop,
-                amount,
                 memo,
-              } = transaction;
-              const transactionDay = Number(transaction.transaction_date.slice(8, 10));
+                amount,
+              } = groupTransaction;
+              const transactionDay = Number(transaction_date.slice(8, 10));
 
               const categoryName = {
                 mediumCategory: medium_category_name !== null ? medium_category_name : '',
@@ -119,7 +115,7 @@ const MonthlyHistory = () => {
                           }
                         })()}
                         {(() => {
-                          if (medium_category_name != null) {
+                          if (groupTransaction.medium_category_name != null) {
                             return medium_category_name;
                           }
 
@@ -174,40 +170,28 @@ const MonthlyHistory = () => {
   const totalAmount = () => {
     let amount = 0;
 
-    for (const transaction of transactionsList) {
-      if (transaction.transaction_type !== incomeTransactionType) {
-        amount += transaction.amount;
+    for (const groupTransaction of groupTransactionsList) {
+      if (groupTransaction.transaction_type !== incomeTransactionType) {
+        amount += groupTransaction.amount;
       }
     }
     return amount;
   };
 
   return (
-    <div className="box__monthlyExpense">
-      <h2>{month}月の支出</h2>
-      {(() => {
-        if (pathName !== 'group') {
-          return (
-            <>
-              <table className="monthly-history-table">
-                <tbody className="monthly-history-table__tbody">
-                  <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
-                  <tr className="monthly-history-table__trow">{rows().historyRow}</tr>
-                  <tr className="monthly-history-table__trow">{rows().operationRow}</tr>
-                  <tr className="monthly-history-table__trow">{rows().totalAmountRow}</tr>
-                </tbody>
-              </table>
-              <div className="monthly-history-table__box-total">
-                合計： ¥ {totalAmount().toLocaleString()}
-              </div>
-            </>
-          );
-        } else {
-          return <GroupMonthlyHistory />;
-        }
-      })()}
-    </div>
+    <>
+      <table className="monthly-history-table">
+        <tbody className="monthly-history-table__tbody">
+          <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
+          <tr className="monthly-history-table__trow">{rows().historyRow}</tr>
+          <tr className="monthly-history-table__trow">{rows().operationRow}</tr>
+          <tr className="monthly-history-table__trow">{rows().totalAmountRow}</tr>
+        </tbody>
+      </table>
+      <div className="monthly-history-table__box-total">
+        合計： ¥ {totalAmount().toLocaleString()}
+      </div>
+    </>
   );
 };
-
-export default MonthlyHistory;
+export default GroupMonthlyHistory;

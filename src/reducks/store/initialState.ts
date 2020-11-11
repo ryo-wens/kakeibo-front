@@ -13,6 +13,7 @@ const initialState = {
     noTransactionsMessage: '',
   },
   groupTransactions: {
+    groupLatestTransactionsList: [],
     groupTransactionsList: [],
   },
   budgets: {
