@@ -74,15 +74,21 @@ const EditTaskUser = (props: EditTaskUserProps) => {
               <CloseIcon />
             </button>
           </div>
-          <ul className="edit-task-user-modal__user-list">
-            {props.groupTasksListForEachUser.map((userTasksListItem: UserTasksListItem) => {
-              return (
-                <li className="edit-task-user-modal__user-list-item" key={userTasksListItem.id}>
-                  {userTasksListItem.user_id}
-                </li>
-              );
-            })}
-          </ul>
+          {!props.groupTasksListForEachUser.length ? (
+            <span className="edit-task-user-modal__text">
+              現在、タスクに参加しているメンバーはいません。
+            </span>
+          ) : (
+            <ul className="edit-task-user-modal__user-list">
+              {props.groupTasksListForEachUser.map((userTasksListItem: UserTasksListItem) => {
+                return (
+                  <li className="edit-task-user-modal__user-list-item" key={userTasksListItem.id}>
+                    {userTasksListItem.user_id}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
           <div className="edit-task-user-modal__choice-position">
             <span className="edit-task-user-modal__choice">タスクユーザーを追加</span>
             <button className={'icon--btn'} onClick={() => openAddTaskUser()}>

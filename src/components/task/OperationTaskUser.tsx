@@ -7,7 +7,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/add-task-user.scss';
 import { useDispatch } from 'react-redux';
-import { addGroupTasksUsers } from '../../reducks/groupTasks/operations';
+import { addGroupTasksUsers, deleteGroupTasksUsers } from '../../reducks/groupTasks/operations';
 
 interface OperationTaskUserProps {
   approvedGroup: Group;
@@ -34,6 +34,20 @@ const OperationTaskUser = (props: OperationTaskUserProps) => {
     },
     [setCheckedUserIds]
   );
+
+  const switchOperation = () => {
+    if (props.label === '追加') {
+      return (
+        dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
+        props.closeTaskUserOperation()
+      );
+    } else if (props.label === '削除') {
+      return (
+        dispatch(deleteGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
+        props.closeTaskUserOperation()
+      );
+    }
+  };
 
   const existsAddTasksUser = () => {
     const user = [];
@@ -122,7 +136,7 @@ const OperationTaskUser = (props: OperationTaskUserProps) => {
       <TodoButton
         label={props.label}
         disabled={checkedUserIds.length === 0}
-        onClick={() => dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds))}
+        onClick={() => switchOperation()}
       />
     </>
   );

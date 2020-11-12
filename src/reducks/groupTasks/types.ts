@@ -31,6 +31,14 @@ export interface addGroupTasksUsersRes {
   group_tasks_list_for_each_user: GroupTasksListForEachUser;
 }
 
+export interface deleteGroupTasksUsersReq {
+  users_list: Array<string>;
+}
+
+export interface deleteGroupTasksUsersRes {
+  message: string;
+}
+
 export interface fetchGroupTasksListRes {
   group_tasks_list: GroupTasksList;
 }
