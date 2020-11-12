@@ -98,7 +98,7 @@ describe('async actions groupTransactions', () => {
     let now: Date;
     let spiedDate: Date;
     const originalDate = Date;
-    now = new originalDate('2020-11-12T15:30:06Z');
+    now = new originalDate('2020-11-12T23:54:59Z');
     Date.now = jest.fn().mockReturnValue(now.valueOf());
     const actual = new Date();
 
@@ -130,12 +130,12 @@ describe('async actions groupTransactions', () => {
     const requestData: GroupTransactionsReq = {
       transaction_type: 'expense',
       transaction_date: actual,
-      shop: 'コストコ',
-      memo: '鶏肉',
-      amount: 2000,
+      shop: 'ビッグカメラ',
+      memo: 'コーヒーメーカー',
+      amount: 20000,
       payment_user_id: 'taira',
-      big_category_id: 2,
-      medium_category_id: 6,
+      big_category_id: 3,
+      medium_category_id: 17,
       custom_category_id: null,
     };
 
@@ -165,26 +165,6 @@ describe('async actions groupTransactions', () => {
 
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`;
-
-    let now: Date;
-    let spiedDate: Date;
-    const originalDate = Date;
-    now = new originalDate('2020-11-12T15:30:06Z');
-    Date.now = jest.fn().mockReturnValue(now.valueOf());
-    const actual = new Date();
-
-    // @ts-ignore
-    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
-      if (arg === 0 || arg) {
-        return new originalDate();
-      }
-      return now;
-    });
-
-    afterAll(() => {
-      // @ts-ignore
-      spiedDate.mockRestore();
-    });
 
     const getState = () => {
       return {
@@ -228,7 +208,7 @@ describe('async actions groupTransactions', () => {
     let now: Date;
     let spiedDate: Date;
     const originalDate = Date;
-    now = new originalDate('2020-11-12T15:30:06Z');
+    now = new originalDate('2020-11-12T23:54:59Z');
     Date.now = jest.fn().mockReturnValue(now.valueOf());
     const actual = new Date();
 
@@ -253,7 +233,7 @@ describe('async actions groupTransactions', () => {
       };
     };
 
-    const id = 74;
+    const id = 101;
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
 
@@ -306,7 +286,7 @@ describe('async actions groupTransactions', () => {
     let now: Date;
     let spiedDate: Date;
     const originalDate = Date;
-    now = new originalDate('2020-11-12T15:32:21Z');
+    now = new originalDate('2020-11-12T23:54:59Z');
     Date.now = jest.fn().mockReturnValue(now.valueOf());
     const actual = new Date();
 
@@ -331,7 +311,7 @@ describe('async actions groupTransactions', () => {
       };
     };
 
-    const id = 74;
+    const id = 101;
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
 
@@ -388,7 +368,7 @@ describe('async actions groupTransactions', () => {
       };
     };
 
-    const id = 74;
+    const id = 101;
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
 
@@ -428,7 +408,7 @@ describe('async actions groupTransactions', () => {
       };
     };
 
-    const id = 74;
+    const id = 101;
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
 
