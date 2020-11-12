@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import { TodoButton } from '../todo';
 import { Group } from '../../reducks/groups/types';
 import { GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
@@ -10,36 +9,15 @@ import '../../assets/task/add-task-user.scss';
 import { useDispatch } from 'react-redux';
 import { addGroupTasksUsers } from '../../reducks/groupTasks/operations';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    paper: {
-      width: 400,
-      margin: '20px auto auto auto',
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-    buttons: {
-      display: 'flex',
-    },
-  })
-);
-
-interface AddTaskUserProps {
+interface OperationTaskUserProps {
   approvedGroup: Group;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
-  closeAddTaskUser: () => void;
+  closeTaskUserOperation: () => void;
   closeModal: () => void;
+  groupTasksListForEachUser: GroupTasksListForEachUser;
+  label: string;
 }
 
-const AddTaskUser = (props: AddTaskUserProps) => {
-  const classes = useStyles();
+const OperationTaskUser = (props: OperationTaskUserProps) => {
   const dispatch = useDispatch();
   const [checkedUserIds, setCheckedUserIds] = useState<Array<string>>([]);
 
@@ -107,32 +85,47 @@ const AddTaskUser = (props: AddTaskUserProps) => {
     return user;
   };
 
+  const existsTaskUsers = () => {
+    if (props.groupTasksListForEachUser.length) {
+      return props.groupTasksListForEachUser.map((groupTasksListItem) => {
+        return (
+          <FormControlLabel
+            control={
+              <Checkbox
+                checked={checkedUserIds.includes(groupTasksListItem.user_id)}
+                onClick={() => assignUser(groupTasksListItem.user_id)}
+                color="primary"
+              />
+            }
+            label={groupTasksListItem.user_id}
+            key={groupTasksListItem.id}
+          />
+        );
+      });
+    } else {
+      return <span>現在、タスクに参加しているメンバーはいません。</span>;
+    }
+  };
+
   return (
     <>
       <div className="add-task-user-modal__position">
-        <button className={'icon--btn'} onClick={() => props.closeAddTaskUser()}>
+        <button className={'icon--btn'} onClick={() => props.closeTaskUserOperation()}>
           <ChevronLeftIcon />
         </button>
-        <h3 className="add-task-user-modal__title">タスクユーザーを追加</h3>
+        <h3 className="add-task-user-modal__title">タスクユーザーを{props.label}</h3>
         <button className={'icon--btn'} onClick={() => props.closeModal()}>
           <CloseIcon />
         </button>
       </div>
-      <FormGroup>{existsAddTasksUser()}</FormGroup>
-      <div className={classes.buttons}>
-        <TodoButton
-          label={'追加'}
-          disabled={checkedUserIds.length === 0}
-          onClick={() => dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds))}
-        />
-        <TodoButton
-          label={'キャンセル'}
-          disabled={false}
-          onClick={() => props.closeAddTaskUser()}
-        />
-      </div>
+      <FormGroup>{props.label === '追加' ? existsAddTasksUser() : existsTaskUsers()}</FormGroup>
+      <TodoButton
+        label={props.label}
+        disabled={checkedUserIds.length === 0}
+        onClick={() => dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds))}
+      />
     </>
   );
 };
 
-export default AddTaskUser;
+export default OperationTaskUser;

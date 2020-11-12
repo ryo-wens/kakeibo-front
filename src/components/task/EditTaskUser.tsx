@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import '../../assets/task/edit-task-user.scss';
 import '../../assets/modules/task-button.scss';
 import { GroupTasksListForEachUser, UserTasksListItem } from '../../reducks/groupTasks/types';
-import { AddTaskUser } from './index';
+import { OperationTaskUser } from './index';
 import { Group } from '../../reducks/groups/types';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
@@ -32,6 +32,7 @@ const EditTaskUser = (props: EditTaskUserProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openEditUser, setOpenEditUser] = useState<boolean>(true);
   const [openAddUser, setOpenAddUser] = useState<boolean>(false);
+  const [openDeleteUser, setOpenDeleteUser] = useState<boolean>(false);
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -53,6 +54,16 @@ const EditTaskUser = (props: EditTaskUserProps) => {
     setOpenAddUser(false);
   }, [setOpenAddUser, setOpenEditUser]);
 
+  const openDeleteTaskUser = useCallback(() => {
+    setOpenEditUser(false);
+    setOpenDeleteUser(true);
+  }, [setOpenDeleteUser, setOpenEditUser]);
+
+  const closeDeleteTaskUser = useCallback(() => {
+    setOpenEditUser(true);
+    setOpenDeleteUser(false);
+  }, [setOpenDeleteUser, setOpenEditUser]);
+
   const switchOperationTaskUser = () => {
     if (openEditUser && !openAddUser) {
       return (
@@ -63,9 +74,13 @@ const EditTaskUser = (props: EditTaskUserProps) => {
               <CloseIcon />
             </button>
           </div>
-          <ul>
+          <ul className="edit-task-user-modal__user-list">
             {props.groupTasksListForEachUser.map((userTasksListItem: UserTasksListItem) => {
-              return <li key={userTasksListItem.id}>{userTasksListItem.user_id}</li>;
+              return (
+                <li className="edit-task-user-modal__user-list-item" key={userTasksListItem.id}>
+                  {userTasksListItem.user_id}
+                </li>
+              );
             })}
           </ul>
           <div className="edit-task-user-modal__choice-position">
@@ -74,15 +89,32 @@ const EditTaskUser = (props: EditTaskUserProps) => {
               <ChevronRightIcon />
             </button>
           </div>
+          <div className="edit-task-user-modal__choice-position">
+            <span className="edit-task-user-modal__choice">タスクユーザーを削除</span>
+            <button className={'icon--btn'} onClick={() => openDeleteTaskUser()}>
+              <ChevronRightIcon />
+            </button>
+          </div>
         </>
       );
     } else if (!openEditUser && openAddUser) {
       return (
-        <AddTaskUser
+        <OperationTaskUser
           approvedGroup={props.approvedGroup}
-          groupTasksListForEachUser={props.groupTasksListForEachUser}
-          closeAddTaskUser={closeAddTaskUser}
+          closeTaskUserOperation={closeAddTaskUser}
           closeModal={closeModal}
+          groupTasksListForEachUser={props.groupTasksListForEachUser}
+          label={'追加'}
+        />
+      );
+    } else if (!openEditUser && openDeleteUser) {
+      return (
+        <OperationTaskUser
+          approvedGroup={props.approvedGroup}
+          closeTaskUserOperation={closeDeleteTaskUser}
+          closeModal={closeModal}
+          groupTasksListForEachUser={props.groupTasksListForEachUser}
+          label={'削除'}
         />
       );
     }

@@ -6,7 +6,7 @@
   &__position {
     display: flex;
     padding: 0 0 10px 0;
-    margin: 0 0 30px 0;
+    margin: 0 0 40px 0;
     border-bottom: $task-border_color solid 1px;
     justify-content: center;
     position: relative;
@@ -24,9 +24,27 @@
     font-size: $task-title-font_size;
   }
 
+  &__user-list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  &__user-list-item {
+    margin: 0 0 30px 20px;
+    color: $task-sub_color;
+    font-size: 1.0rem;
+    font-weight: bolder;
+    letter-spacing: 0.05rem;
+  }
+
   &__choice-position {
     display: flex;
     justify-content: space-between;
+    margin: 0 0 10px 0;
+    &:last-child {
+      margin: 0;
+    }
   }
 
   &__choice {
