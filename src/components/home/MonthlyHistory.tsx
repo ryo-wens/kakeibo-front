@@ -23,7 +23,7 @@ const MonthlyHistory = () => {
     if (pathName !== 'group' && !transactionsList.length) {
       dispatch(fetchTransactionsList(String(year), customMonth));
     }
-  }, []);
+  }, [pathName]);
 
   const handleOpen = (transactionId: number) => {
     setOpenId(transactionId);

@@ -14,10 +14,10 @@ export const updateGroupTransactionsAction = (groupTransactionsList: GroupTransa
 
 export const UPDATE_GROUP_LATEST_TRANSACTIONS = 'UPDATE_GROUP_LATEST_TRANSACTIONS';
 export const updateGroupLatestTransactionsAction = (
-  groupTransactionsList: GroupTransactionsList
+  groupLatestTransactionsList: GroupTransactionsList
 ) => {
   return {
     type: UPDATE_GROUP_LATEST_TRANSACTIONS,
-    payload: groupTransactionsList,
+    payload: groupLatestTransactionsList,
   };
 };

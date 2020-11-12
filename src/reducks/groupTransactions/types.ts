@@ -35,7 +35,7 @@ export interface GroupTransactionsReq {
 
 export interface FetchGroupTransactionsRes {
   message: string;
-  transactions_list: [];
+  transactions_list: GroupTransactionsList;
 }
 
 export interface deleteGroupTransactionRes {

@@ -4,18 +4,27 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
+import { GroupTransactionsReq } from '../../src/reducks/groupTransactions/types';
 import {
   addGroupTransactions,
   fetchGroupTransactionsList,
   editGroupTransactions,
   deleteGroupTransactions,
+  fetchLatestGroupTransactionsList,
+  addGroupLatestTransactions,
+  editGroupLatestTransactionsList,
+  deleteGroupLatestTransactions,
 } from '../../src/reducks/groupTransactions/operations';
 import groupTransactions from './groupTransactions.json';
-import addGroupTransaction from './addGroupTransactions.json';
+import groupLatestTransactions from './groupLatestTransactions.json';
+import addResponse from './addResponse.json';
 import addedGroupTransactions from './addedGroupTransactions.json';
-import editGroupTransaction from './editGroupTransactionResponse.json';
+import addedGroupLatestTransactions from './addedGroupLatestTransactions.json';
+import editResponse from './editResponse.json';
 import editedGroupTransaction from './editedGroupTransactions.json';
-import deletedGroupTransaction from './deleteGroupTransaction.json';
+import editedGroupLatestTransactions from './editedGroupLatestTransactions.json';
+import deleteResponse from './deleteResponse.json';
+import deletedGroupLatestTransaction from './deletedGroupLatestTransactions.json';
 import { year, customMonth } from '../../src/lib/constant';
 
 const axiosMock = new axiosMockAdapter(axios);
@@ -23,18 +32,18 @@ const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 process.on('unhandledRejection', console.dir);
 
-describe('async actions fetchGroupTransactionsList', () => {
-  const store = mockStore({ groupTransactions: { groupTransactionsList: [] } });
-
-  const groupId = 1;
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}`;
-
-  beforeEach(() => {
-    store.clearActions();
-  });
-
+describe('async actions groupTransactions', () => {
   it('Get groupTransactionsList if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
     const mockResponse = groupTransactions;
+
+    const store = mockStore({ groupTransactions: { groupTransactionsList: [] } });
+
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}`;
 
     const expectedAddActions = [
       {
@@ -48,50 +57,145 @@ describe('async actions fetchGroupTransactionsList', () => {
     await fetchGroupTransactionsList(year, customMonth, groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
-});
 
-describe('async actions addGroupTransactions', () => {
-  const store = mockStore({ groupTransactions });
+  it('Get groupLatestTransactionsList if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
 
-  const groupId = 1;
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`;
+    const mockResponse = groupLatestTransactions;
 
-  beforeEach(() => {
-    store.clearActions();
+    const store = mockStore({ groupTransactions: { groupLatestTransactionsList: [] } });
+
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`;
+
+    const expectedAddActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
+        payload: mockResponse.transactions_list,
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchLatestGroupTransactionsList(groupId)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAddActions);
   });
 
-  let now: Date;
-  let spiedDate: Date;
-  const originalDate = Date;
-  now = new originalDate('2020-10-25T15:55:50.7772');
-  Date.now = jest.fn().mockReturnValue(now.valueOf());
-  const actual = new Date();
+  it('Add groupLatestTransactionsData in groupLatestTransactionsList if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
 
-  // @ts-ignore
-  spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
-    if (arg === 0 || arg) {
-      return new originalDate();
-    }
-    return now;
-  });
+    const store = mockStore({
+      groupTransactions: { groupLatestTransactionsList: groupLatestTransactions },
+    });
 
-  afterAll(() => {
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`;
+
+    let now: Date;
+    let spiedDate: Date;
+    const originalDate = Date;
+    now = new originalDate('2020-11-12T15:30:06Z');
+    Date.now = jest.fn().mockReturnValue(now.valueOf());
+    const actual = new Date();
+
     // @ts-ignore
-    spiedDate.mockRestore();
-  });
+    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+      if (arg === 0 || arg) {
+        return new originalDate();
+      }
+      return now;
+    });
 
-  it('Add GroupTransactionsData in groupTransactionsList if fetch succeeds', async () => {
+    afterAll(() => {
+      // @ts-ignore
+      spiedDate.mockRestore();
+    });
+
     const getState = () => {
       return {
         groupTransactions: {
-          groupTransactionsList: groupTransactions.transactions_list,
+          groupLatestTransactionsList: groupLatestTransactions.transactions_list,
         },
       };
     };
 
-    const payment_user_id = 'suzuki';
+    const mockResponse = addResponse;
 
-    const mockResponse = addGroupTransaction;
+    const mockGroupTransactionsList = addedGroupLatestTransactions.transactions_list;
+
+    const requestData: GroupTransactionsReq = {
+      transaction_type: 'expense',
+      transaction_date: actual,
+      shop: 'コストコ',
+      memo: '鶏肉',
+      amount: 2000,
+      payment_user_id: 'taira',
+      big_category_id: 2,
+      medium_category_id: 6,
+      custom_category_id: null,
+    };
+
+    const expectedActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
+        payload: mockGroupTransactionsList,
+      },
+    ];
+
+    axiosMock.onPost(url).reply(201, mockResponse);
+
+    await addGroupLatestTransactions(groupId, requestData)(
+      store.dispatch,
+      // @ts-ignore
+      getState
+    );
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('Add groupTransactionsData in groupTransactionsList if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const store = mockStore({ groupTransactions: { groupTransactionsList: groupTransactions } });
+
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`;
+
+    let now: Date;
+    let spiedDate: Date;
+    const originalDate = Date;
+    now = new originalDate('2020-11-12T15:30:06Z');
+    Date.now = jest.fn().mockReturnValue(now.valueOf());
+    const actual = new Date();
+
+    // @ts-ignore
+    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+      if (arg === 0 || arg) {
+        return new originalDate();
+      }
+      return now;
+    });
+
+    afterAll(() => {
+      // @ts-ignore
+      spiedDate.mockRestore();
+    });
+
+    const getState = () => {
+      return {
+        groupTransactions: {
+          groupTransactionsList: groupTransactions.transactions_list,
+          groupLatestTransactionsList: addedGroupLatestTransactions.transactions_list,
+        },
+      };
+    };
+
+    const mockResponse = addResponse;
 
     const mockGroupTransactionsList = addedGroupTransactions.transactions_list;
 
@@ -104,53 +208,43 @@ describe('async actions addGroupTransactions', () => {
 
     axiosMock.onPost(url).reply(201, mockResponse);
 
-    await addGroupTransactions(
-      'expense',
-      actual,
-      'ビックカメラ',
-      'コーヒーメーカー',
-      17000,
-      payment_user_id,
-      3,
-      17,
-      null
-    )(
+    await addGroupTransactions()(
       store.dispatch,
       // @ts-ignore
       getState
     );
     expect(store.getActions()).toEqual(expectedActions);
   });
-});
-
-describe('async actions editGroupTransactions', () => {
-  const store = mockStore({ addedGroupTransactions });
-
-  let now: Date;
-  let spiedDate: Date;
-  const originalDate = Date;
-  now = new originalDate('2020-10-25T17:50:50Z');
-  Date.now = jest.fn().mockReturnValue(now.valueOf());
-  const actual = new Date();
-
-  // @ts-ignore
-  spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
-    if (arg === 0 || arg) {
-      return new originalDate();
-    }
-    return now;
-  });
-
-  afterAll(() => {
-    // @ts-ignore
-    spiedDate.mockRestore();
-  });
-
-  beforeEach(() => {
-    store.clearActions();
-  });
 
   it('Edit groupTransactionsData in groupTransactionsList if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const store = mockStore({
+      groupTransactions: { groupTransactionsList: addedGroupTransactions },
+    });
+
+    let now: Date;
+    let spiedDate: Date;
+    const originalDate = Date;
+    now = new originalDate('2020-11-12T15:30:06Z');
+    Date.now = jest.fn().mockReturnValue(now.valueOf());
+    const actual = new Date();
+
+    // @ts-ignore
+    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+      if (arg === 0 || arg) {
+        return new originalDate();
+      }
+      return now;
+    });
+
+    afterAll(() => {
+      // @ts-ignore
+      spiedDate.mockRestore();
+    });
+
     const getState = () => {
       return {
         groupTransactions: {
@@ -159,13 +253,23 @@ describe('async actions editGroupTransactions', () => {
       };
     };
 
-    const id = 16;
+    const id = 74;
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
 
-    const payment_user_id = 'suzuki';
+    const requestData: GroupTransactionsReq = {
+      transaction_type: 'expense',
+      transaction_date: actual,
+      shop: 'ニトリ',
+      memo: 'テーブル',
+      amount: 8000,
+      payment_user_id: 'taira',
+      big_category_id: 3,
+      medium_category_id: 16,
+      custom_category_id: null,
+    };
 
-    const mockResponse = editGroupTransaction;
+    const mockResponse = editResponse;
 
     const mockGroupTransactionsList = editedGroupTransaction.transactions_list;
 
@@ -179,16 +283,9 @@ describe('async actions editGroupTransactions', () => {
     axiosMock.onPut(url).reply(200, mockResponse);
 
     await editGroupTransactions(
-      16,
-      'expense',
-      actual,
-      '虎視淡々',
-      'お疲れ会',
-      25000,
-      payment_user_id,
-      5,
-      29,
-      null
+      id,
+      groupId,
+      requestData
     )(
       store.dispatch,
       // @ts-ignore
@@ -196,15 +293,93 @@ describe('async actions editGroupTransactions', () => {
     );
     expect(store.getActions()).toEqual(expectedActions);
   });
-});
 
-describe('async actions deleteGroupTransactions', () => {
-  const store = mockStore({ editedGroupTransaction });
-  beforeEach(() => {
-    store.clearActions();
+  it('Edit groupLatestTransactionsData in groupLatestTransactionsList if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const store = mockStore({
+      groupTransactions: { groupLatestTransactionsList: addedGroupLatestTransactions },
+    });
+
+    let now: Date;
+    let spiedDate: Date;
+    const originalDate = Date;
+    now = new originalDate('2020-11-12T15:32:21Z');
+    Date.now = jest.fn().mockReturnValue(now.valueOf());
+    const actual = new Date();
+
+    // @ts-ignore
+    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+      if (arg === 0 || arg) {
+        return new originalDate();
+      }
+      return now;
+    });
+
+    afterAll(() => {
+      // @ts-ignore
+      spiedDate.mockRestore();
+    });
+
+    const getState = () => {
+      return {
+        groupTransactions: {
+          groupLatestTransactionsList: addedGroupLatestTransactions.transactions_list,
+        },
+      };
+    };
+
+    const id = 74;
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
+
+    const requestData: GroupTransactionsReq = {
+      transaction_type: 'expense',
+      transaction_date: actual,
+      shop: 'ニトリ',
+      memo: 'テーブル',
+      amount: 8000,
+      payment_user_id: 'taira',
+      big_category_id: 3,
+      medium_category_id: 16,
+      custom_category_id: null,
+    };
+
+    const mockResponse = editResponse;
+
+    const mockGroupTransactionsList = editedGroupLatestTransactions.transactions_list;
+
+    const expectedActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
+        payload: mockGroupTransactionsList,
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editGroupLatestTransactionsList(
+      id,
+      groupId,
+      requestData
+    )(
+      store.dispatch,
+      // @ts-ignore
+      getState
+    );
+    expect(store.getActions()).toEqual(expectedActions);
   });
 
   it('Delete groupTransactionsData in transactionsList if fetch succeeds', async () => {
+    const store = mockStore({
+      groupTransactions: { groupTransactionsList: editedGroupTransaction },
+    });
+    beforeEach(() => {
+      store.clearActions();
+    });
+
     const getState = () => {
       return {
         groupTransactions: {
@@ -213,11 +388,11 @@ describe('async actions deleteGroupTransactions', () => {
       };
     };
 
-    const id = 16;
+    const id = 74;
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
 
-    const mockResponse = deletedGroupTransaction.message;
+    const mockResponse = deleteResponse.message;
 
     const mockDeletedGroupTransactionsList = groupTransactions.transactions_list;
 
@@ -232,8 +407,46 @@ describe('async actions deleteGroupTransactions', () => {
     window.alert = jest.fn(() => mockResponse);
 
     // @ts-ignore
-    await deleteGroupTransactions(16)(store.dispatch, getState);
+    await deleteGroupTransactions(id, groupId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
     expect(window.alert).toHaveBeenCalled();
+  });
+
+  it('Delete groupLatestTransactionsData in groupLatestTransactionsList if fetch succeeds', async () => {
+    const store = mockStore({
+      groupTransactions: { groupLatestTransactionsList: editedGroupLatestTransactions },
+    });
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const getState = () => {
+      return {
+        groupTransactions: {
+          groupLatestTransactionsList: editedGroupLatestTransactions.transactions_list,
+        },
+      };
+    };
+
+    const id = 74;
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
+
+    const mockResponse = deleteResponse.message;
+
+    const mockDeletedGroupTransactionsList = deletedGroupLatestTransaction.transactions_list;
+
+    const expectedActions = [
+      {
+        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
+        payload: mockDeletedGroupTransactionsList,
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await deleteGroupLatestTransactions(id, groupId)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedActions);
   });
 });

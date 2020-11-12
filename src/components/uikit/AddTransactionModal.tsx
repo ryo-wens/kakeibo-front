@@ -5,7 +5,13 @@ import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
+import {
+  addGroupLatestTransactions,
+  addGroupTransactions,
+} from '../../reducks/groupTransactions/operations';
 import { TransactionsReq } from '../../reducks/transactions/types';
+import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
+import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -44,6 +50,8 @@ interface AddTransactionModalProps {
 const AddTransactionModal = (props: AddTransactionModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const pathName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const emptyMemo = memo === '' ? null : memo;
@@ -55,6 +63,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
+  const paymentUserId = 'taira';
 
   useEffect(() => {
     setTransactionDate(props.selectDate);
@@ -103,16 +112,6 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const selectCategory = useCallback(
     (bigCategoryId: number, associatedCategoryId: number | null, category_type: string) => {
       switch (category_type) {
-        case 'IncomeBigCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(null);
-          setCustomCategoryId(null);
-          break;
-        case 'ExpenseBigCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(null);
-          setCustomCategoryId(null);
-          break;
         case 'MediumCategory':
           setBigCategoryId(bigCategoryId);
           setMediumCategoryId(associatedCategoryId);
@@ -130,7 +129,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
 
   const unInput = amount === '' || category === '' || transactionsType === '';
 
-  const requestData: TransactionsReq = {
+  const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,
     transaction_date: transactionDate,
     shop: emptyShop,
@@ -141,13 +140,34 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     custom_category_id: customCategoryId,
   };
 
-  const clicked = () => {
-    async function addTransaction() {
-      await dispatch(addLatestTransactions(requestData));
+  const groupAddRequestData: GroupTransactionsReq = {
+    transaction_type: transactionsType,
+    transaction_date: transactionDate,
+    shop: emptyShop,
+    memo: emptyMemo,
+    amount: Number(amount),
+    payment_user_id: paymentUserId,
+    big_category_id: bigCategoryId,
+    medium_category_id: mediumCategoryId,
+    custom_category_id: customCategoryId,
+  };
+
+  const personalAddTransaction = () => {
+    async function personalTransaction() {
+      await dispatch(addLatestTransactions(personalAddRequestData));
       dispatch(addTransactions());
       props.onClose();
     }
-    addTransaction();
+    personalTransaction();
+  };
+
+  const groupAddTransaction = () => {
+    async function groupTransaction() {
+      await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
+      dispatch(addGroupTransactions());
+      props.onClose();
+    }
+    groupTransaction();
   };
 
   const body = (
@@ -203,7 +223,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       <div className={classes.buttonPosition}>
         <GenericButton
           startIcon={<AddCircleOutlineIcon />}
-          onClick={() => clicked()}
+          onClick={pathName !== 'group' ? personalAddTransaction : groupAddTransaction}
           label={'追加する'}
           disabled={unInput}
         />

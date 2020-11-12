@@ -1,0 +1,16 @@
+{
+  "id": 74,
+  "transaction_type": "expense",
+  "posted_date": "2020-11-12T15:30:06Z",
+  "updated_date": "2020-11-12T15:32:21Z",
+  "transaction_date": "2020/11/11(水)",
+  "shop": "ニトリ",
+  "memo": "テーブル",
+  "amount": 8000,
+  "posted_user_id": "taira",
+  "updated_user_id": "taira",
+  "payment_user_id": "taira",
+  "big_category_name": "日用品",
+  "medium_category_name": "家具",
+  "custom_category_name": null
+}

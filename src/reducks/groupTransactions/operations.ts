@@ -1,16 +1,18 @@
-import { updateGroupTransactionsAction } from './actions';
+import { updateGroupTransactionsAction, updateGroupLatestTransactionsAction } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import {
   GroupTransactions,
-  GroupTransactionsReq,
+  GroupTransactionsList,
   FetchGroupTransactionsRes,
+  GroupLatestTransactionsListRes,
   deleteGroupTransactionRes,
 } from './types';
 import { State } from '../store/types';
 import { push } from 'connected-react-router';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 import moment from 'moment';
+import { customMonth } from '../../lib/constant';
 
 export const fetchGroupTransactionsList = (year: number, customMonth: string, groupId: number) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -21,12 +23,19 @@ export const fetchGroupTransactionsList = (year: number, customMonth: string, gr
           withCredentials: true,
         }
       );
-      if (result.data.message) {
-        alert(result.data.message);
-      } else {
-        const groupTransactionsList = result.data.transactions_list;
+      const groupTransactionsList = result.data.transactions_list;
 
-        dispatch(updateGroupTransactionsAction(groupTransactionsList));
+      if (groupTransactionsList !== undefined) {
+        const aligningGroupTransactionsList = groupTransactionsList.sort(
+          (a, b) =>
+            Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
+        );
+
+        dispatch(updateGroupTransactionsAction(aligningGroupTransactionsList));
+      } else {
+        const emptyGroupTransactionsList: GroupTransactionsList = [];
+
+        dispatch(updateGroupTransactionsAction(emptyGroupTransactionsList));
       }
     } catch (error) {
       errorHandling(dispatch, error);
@@ -34,45 +43,46 @@ export const fetchGroupTransactionsList = (year: number, customMonth: string, gr
   };
 };
 
-export const addGroupTransactions = (
-  transaction_type: string,
-  transaction_date: Date | null,
-  shop: string | null,
-  memo: string | null,
-  amount: string | number,
-  payment_user_id: string,
-  big_category_id: number,
-  medium_category_id: number | null,
-  custom_category_id: number | null
+export const fetchLatestGroupTransactionsList = (groupId: number) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<GroupLatestTransactionsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
+        {
+          withCredentials: true,
+        }
+      );
+      const latestGroupTransactionsList = result.data.transactions_list;
+
+      dispatch(updateGroupLatestTransactionsAction(latestGroupTransactionsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const addGroupLatestTransactions = (
+  groupId: number,
+  requestData: {
+    transaction_type: string;
+    transaction_date: Date | null;
+    shop: string | null;
+    memo: string | null;
+    amount: string | number;
+    payment_user_id: string;
+    big_category_id: number;
+    medium_category_id: number | null;
+    custom_category_id: number | null;
+  }
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (shop === '') {
-      shop = null;
-    }
-
-    if (memo === '') {
-      memo = null;
-    }
-
-    if (!isValidAmountFormat(amount as string)) {
+    if (!isValidAmountFormat(requestData.amount as string)) {
       alert('金額は数字で入力してください。');
     }
-
-    const data: GroupTransactionsReq = {
-      transaction_type: transaction_type,
-      transaction_date: transaction_date,
-      shop: shop,
-      memo: memo,
-      amount: Number(amount),
-      payment_user_id: payment_user_id,
-      big_category_id: big_category_id,
-      medium_category_id: medium_category_id,
-      custom_category_id: custom_category_id,
-    };
     try {
       const result = await axios.post<GroupTransactions>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions`,
-        JSON.stringify(data, function (key, value) {
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`,
+        JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
             return moment(new Date(value)).format();
           }
@@ -82,83 +92,91 @@ export const addGroupTransactions = (
           withCredentials: true,
         }
       );
+      const addedTransaction = result.data;
 
-      const newGroupTransaction = result.data;
+      const prevGroupLatestTransactionsList = getState().groupTransactions
+        .groupLatestTransactionsList;
 
-      const prevGroupTransactions = getState().groupTransactions.groupTransactionsList;
+      const addedLatestTransactionsList = prevGroupLatestTransactionsList.filter(
+        (transaction, index) => index !== 9
+      );
 
-      const nextGroupTransactionsList = [newGroupTransaction, ...prevGroupTransactions];
+      const nextGroupLatestTransactionsList = [addedTransaction, ...addedLatestTransactionsList];
 
-      dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
+      dispatch(updateGroupLatestTransactionsAction(nextGroupLatestTransactionsList));
     } catch (error) {
-      if (error && error.response) {
-        if (error.response.status === 400) {
-          if (Array.isArray(error.response.data.error.message)) {
-            alert(error.response.data.error.message.join('\n'));
-            return;
-          } else if (!Array.isArray(error.response.data.error.message)) {
-            alert(error.response.data.error.message);
-            return;
-          }
-        }
+      if (error.response.status === 400) {
+        alert(error.response.data.error.message.join('\n'));
+        return;
+      }
 
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-          return;
-        }
+      if (error.response.status === 401) {
+        alert(error.response.data.error.message);
+        dispatch(push('/login'));
+        return;
+      }
 
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-          return;
-        }
-      } else {
+      if (error.response.status === 500) {
+        alert(error.response.data.error.message);
+        return;
+      }
+      if (error) {
         alert(error);
       }
     }
   };
 };
 
+export const addGroupTransactions = () => {
+  return (dispatch: Dispatch<Action>, getState: () => State) => {
+    const prevGroupTransactionsList = getState().groupTransactions.groupTransactionsList;
+    const groupLatestTransactionsList = getState().groupTransactions.groupLatestTransactionsList;
+
+    const addedTransaction = groupLatestTransactionsList[0];
+
+    const nextGroupTransactionsList = () => {
+      let addedTransactionsList: GroupTransactionsList = [];
+
+      if (addedTransaction.transaction_date.slice(5, 7) === String(customMonth)) {
+        addedTransactionsList = [addedTransaction, ...prevGroupTransactionsList].sort(
+          (a, b) =>
+            Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
+        );
+      } else {
+        return prevGroupTransactionsList;
+      }
+
+      return addedTransactionsList;
+    };
+
+    dispatch(updateGroupTransactionsAction(nextGroupTransactionsList()));
+  };
+};
+
 export const editGroupTransactions = (
   id: number,
-  transaction_type: string,
-  transaction_date: Date | null,
-  shop: string | null,
-  memo: string | null,
-  amount: string | number,
-  payment_user_id: string,
-  big_category_id: number,
-  medium_category_id: number | null,
-  custom_category_id: number | null
+  groupId: number,
+  requestData: {
+    transaction_type: string;
+    transaction_date: Date | null;
+    shop: string | null;
+    memo: string | null;
+    amount: string | number;
+    payment_user_id: string;
+    big_category_id: number;
+    medium_category_id: number | null;
+    custom_category_id: number | null;
+  }
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (shop === '') {
-      shop = null;
-    }
-
-    if (memo === '') {
-      memo = null;
-    }
-
-    if (!isValidAmountFormat(amount as string)) {
+    if (!isValidAmountFormat(requestData.amount as string)) {
       alert('金額は数字で入力してください。');
     }
 
-    const data: GroupTransactionsReq = {
-      transaction_type: transaction_type,
-      transaction_date: transaction_date,
-      shop: shop,
-      memo: memo,
-      amount: Number(amount),
-      payment_user_id: payment_user_id,
-      big_category_id: big_category_id,
-      medium_category_id: medium_category_id,
-      custom_category_id: custom_category_id,
-    };
     try {
       const result = await axios.put<GroupTransactions>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${id}`,
-        JSON.stringify(data),
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
+        JSON.stringify(requestData),
         {
           withCredentials: true,
         }
@@ -174,7 +192,12 @@ export const editGroupTransactions = (
         }
         return groupTransaction;
       });
-      dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
+
+      const aligningGroupTransactionsList = nextGroupTransactionsList.sort(
+        (a, b) => Number(a.transaction_date) - Number(b.transaction_date)
+      );
+
+      dispatch(updateGroupTransactionsAction(aligningGroupTransactionsList));
     } catch (error) {
       if (error && error.response) {
         if (error.response.status === 400) {
@@ -204,18 +227,90 @@ export const editGroupTransactions = (
   };
 };
 
-export const deleteGroupTransactions = (id: number) => {
+export const editGroupLatestTransactionsList = (
+  id: number,
+  groupId: number,
+  requestData: {
+    transaction_type: string;
+    transaction_date: Date | null;
+    shop: string | null;
+    memo: string | null;
+    amount: string | number;
+    payment_user_id: string;
+    big_category_id: number;
+    medium_category_id: number | null;
+    custom_category_id: number | null;
+  }
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (!isValidAmountFormat(requestData.amount as string)) {
+      alert('金額は数字で入力してください。');
+    }
+
+    try {
+      const result = await axios.put<GroupTransactions>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
+        JSON.stringify(requestData),
+        {
+          withCredentials: true,
+        }
+      );
+      const editedTransaction = result.data;
+
+      const groupLatestTransactionsList = getState().groupTransactions.groupLatestTransactionsList;
+
+      const editedGroupLatestTransactionsList = groupLatestTransactionsList.map(
+        (groupTransaction) => {
+          if (groupTransaction.id === editedTransaction.id) {
+            return editedTransaction;
+          }
+
+          return groupTransaction;
+        }
+      );
+
+      const aligningGroupLatestTransactionsList = editedGroupLatestTransactionsList.sort((a, b) =>
+        a.updated_date < b.updated_date ? 1 : -1
+      );
+
+      dispatch(updateGroupLatestTransactionsAction(aligningGroupLatestTransactionsList));
+    } catch (error) {
+      if (error.response.status === 400) {
+        alert(error.response.data.error.message.join('\n'));
+        return;
+      }
+
+      if (error.response.status === 401) {
+        alert(error.response.data.error.message);
+        dispatch(push('/login'));
+        return;
+      }
+
+      if (error.response.status === 500) {
+        alert(error.response.data.error.message);
+        return;
+      }
+
+      if (error) {
+        alert(error);
+      }
+    }
+  };
+};
+
+export const deleteGroupTransactions = (id: number, groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
       const result = await axios.delete<deleteGroupTransactionRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/transactions/${id}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
         {
           withCredentials: true,
         }
       );
       const message = result.data.message;
 
-      const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
+      const groupTransactionsList: GroupTransactionsList = getState().groupTransactions
+        .groupTransactionsList;
 
       const nextGroupTransactionsList = groupTransactionsList.filter(
         (groupTransaction) => groupTransaction.id !== id
@@ -223,6 +318,29 @@ export const deleteGroupTransactions = (id: number) => {
 
       dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
       alert(message);
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    try {
+      await axios.delete<deleteGroupTransactionRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
+        {
+          withCredentials: true,
+        }
+      );
+      const groupLatestTransactionsList: GroupTransactionsList = getState().groupTransactions
+        .groupLatestTransactionsList;
+
+      const nextGroupLatestTransactionsList = groupLatestTransactionsList.filter(
+        (groupLatestTransaction) => groupLatestTransaction.id !== id
+      );
+
+      dispatch(updateGroupLatestTransactionsAction(nextGroupLatestTransactionsList));
     } catch (error) {
       errorHandling(dispatch, error);
     }

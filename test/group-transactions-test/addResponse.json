@@ -1,0 +1,16 @@
+{
+  "id": 74,
+  "transaction_type": "expense",
+  "posted_date": "2020-11-12T15:30:06Z",
+  "updated_date": "2020-11-12T15:30:06Z",
+  "transaction_date": "2020/11/12(木)",
+  "shop": "コストコ",
+  "memo": "鶏肉",
+  "amount": 2000,
+  "posted_user_id": "taira",
+  "updated_user_id": null,
+  "payment_user_id": "taira",
+  "big_category_name": "食費",
+  "medium_category_name": "食料品",
+  "custom_category_name": null
+}

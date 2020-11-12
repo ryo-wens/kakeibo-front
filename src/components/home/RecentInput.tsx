@@ -4,10 +4,12 @@ import { State } from '../../reducks/store/types';
 import { getLatestTransactions } from '../../reducks/transactions/selectors';
 import { getGroupLatestTransactions } from '../../reducks/groupTransactions/selectors';
 import RecentInputBody from './RecentInputBody';
+import GroupRecentInputBody from './GroupRecentInputBody';
 import '../../assets/recent-input.scss';
 import { fetchLatestTransactionsList } from '../../reducks/transactions/operations';
+import { fetchLatestGroupTransactionsList } from '../../reducks/groupTransactions/operations';
 import { guidanceMessage } from '../../lib/constant';
-import { getPathTemplateName } from '../../lib/path';
+import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 
 const RecentInput = () => {
   const dispatch = useDispatch();
@@ -15,12 +17,15 @@ const RecentInput = () => {
   const latestTransactionsList = getLatestTransactions(selector);
   const groupLatestTransactionList = getGroupLatestTransactions(selector);
   const pathName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
 
   useEffect(() => {
     if (pathName !== 'group' && !latestTransactionsList.length) {
       dispatch(fetchLatestTransactionsList());
+    } else if (pathName === 'group' && !groupLatestTransactionList.length) {
+      dispatch(fetchLatestGroupTransactionsList(groupId));
     }
-  }, []);
+  }, [pathName]);
 
   return (
     <div className="recent-input box__recent ">
@@ -36,6 +41,10 @@ const RecentInput = () => {
         } else {
           if (!groupLatestTransactionList.length) {
             return <dt>{guidanceMessage}</dt>;
+          } else {
+            return (
+              <GroupRecentInputBody groupLatestTransactionsList={groupLatestTransactionList} />
+            );
           }
         }
       })()}
