@@ -30,6 +30,18 @@ export const addGroupTasksUsersAction = (groupTasksListForEachUser: GroupTasksLi
   };
 };
 
+export const DELETE_GROUP_TASKS_USERS = 'DELETE_GROUP_TASKS_USERS';
+export const deleteGroupTasksUsersAction = (
+  groupTasksListForEachUser: GroupTasksListForEachUser
+) => {
+  return {
+    type: DELETE_GROUP_TASKS_USERS,
+    payload: {
+      groupTasksListForEachUser: groupTasksListForEachUser,
+    },
+  };
+};
+
 export const FETCH_GROUP_TASKS_LIST = 'FETCH_GROUP_TASKS_LIST';
 export const fetchGroupTasksListAction = (groupTasksList: GroupTasksList) => {
   return {
