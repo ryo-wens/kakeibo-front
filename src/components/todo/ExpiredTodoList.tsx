@@ -14,8 +14,9 @@ const useStyles = makeStyles(() =>
     button: {
       backgroundColor: '#3DAEB2',
       border: 'none',
-      borderRadius: '16px',
+      borderRadius: '8px',
       color: '#fff',
+      cursor: 'pointer',
       height: '20px',
       margin: '0px 0px 20px 20px',
       outline: 'none',

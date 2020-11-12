@@ -3,12 +3,14 @@ import axios from 'axios';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
+import addGroupTasksUsersResponse from './addGroupTasksUsersResponse.json';
 import addTaskItemResponse from './addTaskItemResponse.json';
 import deleteTaskItemResponse from './deleteTaskItemResponse.json';
 import editTaskItemResponse from './editTaskItemResponse.json';
 import fetchTasksListEachUserResponse from './fetchTasksListEachUserResponse.json';
 import fetchTasksListResponse from './fetchTasksListResponse.json';
 import {
+  addGroupTasksUsers,
   addTaskItem,
   deleteTaskItem,
   editTaskItem,
@@ -157,6 +159,74 @@ describe('async actions groupTasks', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     await fetchGroupTasksListEachUser(groupId)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('If ADD_GROUP_TASKS_USERS is successful, the newly added task users will be added to the groupTasksListForEachUser.', async () => {
+    const groupId = 1;
+    const users = ['Taira', 'Ito'];
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+
+    const mockResponse = JSON.stringify(addGroupTasksUsersResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTasksActions.ADD_GROUP_TASKS_USERS,
+        payload: {
+          groupTasksListForEachUser: [
+            {
+              id: 1,
+              user_id: 'furusawa',
+              group_id: 1,
+              tasks_list: [
+                {
+                  id: 1,
+                  base_date: '2020-10-14T00:00:00Z',
+                  cycle_type: 'every',
+                  cycle: 7,
+                  task_name: 'トイレ掃除',
+                  group_id: 1,
+                  group_tasks_users_id: 1,
+                },
+              ],
+            },
+            {
+              id: 2,
+              user_id: 'anraku',
+              group_id: 1,
+              tasks_list: [
+                {
+                  id: 2,
+                  base_date: '2020-10-14T00:00:00Z',
+                  cycle_type: 'consecutive',
+                  cycle: 3,
+                  task_name: '料理',
+                  group_id: 1,
+                  group_tasks_users_id: 2,
+                },
+              ],
+            },
+            {
+              id: 3,
+              user_id: 'Taira',
+              group_id: 1,
+              tasks_list: [],
+            },
+            {
+              id: 4,
+              user_id: 'Ito',
+              group_id: 1,
+              tasks_list: [],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPost(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await addGroupTasksUsers(groupId, users)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
