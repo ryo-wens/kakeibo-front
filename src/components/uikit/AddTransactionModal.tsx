@@ -5,6 +5,7 @@ import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
+import { TransactionsReq } from '../../reducks/transactions/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,7 +46,9 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const dispatch = useDispatch();
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
+  const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string>('');
+  const emptyShop = shop === '' ? null : shop;
   const [category, setCategory] = useState<string>('');
   const [transactionDate, setTransactionDate] = useState<Date | null>(props.selectDate);
   const [transactionsType, setTransactionType] = useState<string>('');
@@ -127,20 +130,20 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
 
   const unInput = amount === '' || category === '' || transactionsType === '';
 
+  const requestData: TransactionsReq = {
+    transaction_type: transactionsType,
+    transaction_date: transactionDate,
+    shop: emptyShop,
+    memo: emptyMemo,
+    amount: Number(amount),
+    big_category_id: bigCategoryId,
+    medium_category_id: mediumCategoryId,
+    custom_category_id: customCategoryId,
+  };
+
   const clicked = () => {
     async function addTransaction() {
-      await dispatch(
-        addLatestTransactions(
-          transactionsType,
-          transactionDate,
-          shop,
-          memo,
-          amount,
-          bigCategoryId,
-          mediumCategoryId,
-          customCategoryId
-        )
-      );
+      await dispatch(addLatestTransactions(requestData));
       dispatch(addTransactions());
       props.onClose();
     }

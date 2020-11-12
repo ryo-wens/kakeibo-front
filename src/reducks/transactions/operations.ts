@@ -11,7 +11,6 @@ import {
   TransactionsList,
   FetchTransactionsRes,
   FetchLatestTransactionsRes,
-  TransactionsReq,
   TransactionsRes,
   DeleteTransactionRes,
 } from './types';
@@ -68,43 +67,24 @@ export const fetchLatestTransactionsList = () => {
   };
 };
 
-export const addLatestTransactions = (
-  transaction_type: string,
-  transaction_date: Date | null,
-  shop: string | null,
-  memo: string | null,
-  amount: string | number,
-  big_category_id: number,
-  medium_category_id: number | null,
-  custom_category_id: number | null
-) => {
+export const addLatestTransactions = (requestData: {
+  transaction_type: string;
+  transaction_date: Date | null;
+  shop: string | null;
+  memo: string | null;
+  amount: string | number;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+}) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (shop === '') {
-      shop = null;
-    }
-
-    if (memo === '') {
-      memo = null;
-    }
-
-    if (!isValidAmountFormat(amount as string)) {
+    if (!isValidAmountFormat(requestData.amount as string)) {
       alert('金額は数字で入力してください。');
     }
-
-    const data: TransactionsReq = {
-      transaction_type: transaction_type,
-      transaction_date: transaction_date,
-      shop: shop,
-      memo: memo,
-      amount: Number(amount),
-      big_category_id: big_category_id,
-      medium_category_id: medium_category_id,
-      custom_category_id: custom_category_id,
-    };
     try {
       const result = await axios.post<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`,
-        JSON.stringify(data, function (key, value) {
+        JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
             return moment(new Date(value)).format();
           }
@@ -176,43 +156,26 @@ export const addTransactions = () => {
 
 export const editTransactions = (
   id: number,
-  transaction_type: string,
-  transaction_date: Date | null,
-  shop: string | null,
-  memo: string | null,
-  amount: string | number,
-  big_category_id: number,
-  medium_category_id: number | null,
-  custom_category_id: number | null
+  editRequestData: {
+    transaction_type: string;
+    transaction_date: Date | null;
+    shop: string | null;
+    memo: string | null;
+    amount: string | number;
+    big_category_id: number;
+    medium_category_id: number | null;
+    custom_category_id: number | null;
+  }
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (shop === '') {
-      shop = null;
-    }
-
-    if (memo === '') {
-      memo = null;
-    }
-
-    if (!isValidAmountFormat(amount as string)) {
+    if (!isValidAmountFormat(editRequestData.amount as string)) {
       alert('金額は数字で入力してください。');
     }
-
-    const data: TransactionsReq = {
-      transaction_type: transaction_type,
-      transaction_date: transaction_date,
-      shop: shop,
-      memo: memo,
-      amount: Number(amount),
-      big_category_id: big_category_id,
-      medium_category_id: medium_category_id,
-      custom_category_id: custom_category_id,
-    };
 
     try {
       const result = await axios.put<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
-        JSON.stringify(data, function (key, value) {
+        JSON.stringify(editRequestData, function (key, value) {
           if (key === 'transaction_date') {
             return moment(new Date(value)).format();
           }
@@ -264,43 +227,26 @@ export const editTransactions = (
 
 export const editLatestTransactions = (
   id: number,
-  transaction_type: string,
-  transaction_date: Date | null,
-  shop: string | null,
-  memo: string | null,
-  amount: string | number,
-  big_category_id: number,
-  medium_category_id: number | null,
-  custom_category_id: number | null
+  editRequestData: {
+    transaction_type: string;
+    transaction_date: Date | null;
+    shop: string | null;
+    memo: string | null;
+    amount: string | number;
+    big_category_id: number;
+    medium_category_id: number | null;
+    custom_category_id: number | null;
+  }
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (shop === '') {
-      shop = null;
-    }
-
-    if (memo === '') {
-      memo = null;
-    }
-
-    if (!isValidAmountFormat(amount as string)) {
+    if (!isValidAmountFormat(editRequestData.amount as string)) {
       alert('金額は数字で入力してください。');
     }
-
-    const data: TransactionsReq = {
-      transaction_type: transaction_type,
-      transaction_date: transaction_date,
-      shop: shop,
-      memo: memo,
-      amount: Number(amount),
-      big_category_id: big_category_id,
-      medium_category_id: medium_category_id,
-      custom_category_id: custom_category_id,
-    };
 
     try {
       const result = await axios.put<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
-        JSON.stringify(data, function (key, value) {
+        JSON.stringify(editRequestData, function (key, value) {
           if (key === 'transaction_date') {
             return moment(new Date(value)).format();
           }

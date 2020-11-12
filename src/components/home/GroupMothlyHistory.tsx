@@ -179,8 +179,9 @@ const GroupMonthlyHistory = () => {
   };
 
   return (
-    <>
+    <div className="box__monthlyExpense">
       <table className="monthly-history-table">
+        <h2>{month}月の支出</h2>
         <tbody className="monthly-history-table__tbody">
           <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
           <tr className="monthly-history-table__trow">{rows().historyRow}</tr>
@@ -191,7 +192,7 @@ const GroupMonthlyHistory = () => {
       <div className="monthly-history-table__box-total">
         合計： ¥ {totalAmount().toLocaleString()}
       </div>
-    </>
+    </div>
   );
 };
 export default GroupMonthlyHistory;
