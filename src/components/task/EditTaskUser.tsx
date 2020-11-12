@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import '../../assets/task/edit-task-user.scss';
-import '../../assets/modules/task-button.scss';
+import '../../assets/modules/task-btn.scss';
 import { GroupTasksListForEachUser, UserTasksListItem } from '../../reducks/groupTasks/types';
 import { OperationTaskUser } from './index';
 import { Group } from '../../reducks/groups/types';

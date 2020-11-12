@@ -1,0 +1,32 @@
+@import "../mixin/operation-btn";
+@import "../variable";
+
+.input-task-user {
+  background-color: $white;
+  border-radius: $task-border_radius;
+  border: $task-border_color solid 1px;
+  width: 400px;
+  padding: 10px 0;
+
+  &__title {
+    border-bottom: $task-border_color solid 1px;
+    color: $task-main_color;
+    font-size: $task-title-font_size;
+    font-weight: bold;
+    margin: 0 0 10px 0;
+    padding: 0 0 5px 20px;
+  }
+
+  &__btn {
+
+    &--add {
+      @include operation-btn($task-add-color, $white, $task-add-color);
+      margin: 0 0 0 20px;
+    }
+
+    &--cancel {
+      @include operation-btn($white, $task-main_color,$task-border_color);
+      margin: 0 0 0 10px;
+    }
+  }
+}

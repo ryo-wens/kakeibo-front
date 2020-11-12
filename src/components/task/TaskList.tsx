@@ -1,28 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import Modal from '@material-ui/core/Modal';
-import { TodoButton } from '../todo';
+import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { List } from '@material-ui/core';
 import { DeleteTaskListItem, EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
 import { AddButton } from '../uikit';
 import { addTaskItem } from '../../reducks/groupTasks/operations';
 
-const useStyles = makeStyles((theme: Theme) =>
+const useStyles = makeStyles(() =>
   createStyles({
-    modal: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-    },
-    paper: {
-      width: 400,
-      margin: '20px auto auto auto',
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
     listItem: {
       display: 'flex',
       justifyContent: 'space-between',
@@ -41,24 +26,12 @@ interface TaskListProps {
 
 const TaskList = (props: TaskListProps) => {
   const classes = useStyles();
-  const [open, setOpen] = useState<boolean>(false);
   const [openInputTask, setOpenInputTask] = useState<boolean>(false);
   const [taskName, setTaskName] = useState<string>('');
   const [taskListItem, setTaskListItem] = useState<boolean>(true);
   const [editTask, setEditTask] = useState<boolean>(false);
   const [deleteTask, setDeleteTask] = useState<boolean>(false);
   const [id, setId] = useState<number>(0);
-
-  const openModal = useCallback(() => {
-    setOpen(true);
-    setTaskListItem(true);
-  }, [setOpen]);
-
-  const closeModal = useCallback(() => {
-    setOpen(false);
-    setEditTask(false);
-    setDeleteTask(false);
-  }, [setOpen, setEditTask, setDeleteTask]);
 
   const closeInputTask = useCallback(() => {
     setOpenInputTask(false);
@@ -99,7 +72,6 @@ const TaskList = (props: TaskListProps) => {
     } else if (openInputTask) {
       return (
         <>
-          <h4>タスクを追加</h4>
           <InputTask
             buttonLabel={'追加'}
             groupId={props.groupId}
@@ -154,34 +126,20 @@ const TaskList = (props: TaskListProps) => {
     return list;
   };
 
-  const body = (
+  return (
     <>
       {taskListItem ? (
-        <div className={classes.paper}>
+        <>
           <h3>タスクリスト</h3>
           <List>{props.groupTasksList && TaskList()}</List>
           {switchInputTask()}
-        </div>
+        </>
       ) : (
-        <div className={classes.paper}>
+        <div>
           <List>{props.groupTasksList && TaskList()}</List>
         </div>
       )}
     </>
-  );
-
-  return (
-    <div>
-      <TodoButton label={'タスクリスト'} disabled={false} onClick={() => openModal()} />
-      <Modal
-        open={open}
-        onClose={closeModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
-      </Modal>
-    </div>
   );
 };
 
