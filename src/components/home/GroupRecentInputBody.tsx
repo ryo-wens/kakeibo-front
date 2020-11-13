@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import { EditTransactionModal } from '../uikit';
-import '../../assets/recent-input.scss';
+import '../../assets/home/recent-input.scss';
 
 interface RecentInputBodyProps {
   groupLatestTransactionsList: GroupTransactionsList;

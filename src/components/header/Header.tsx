@@ -162,7 +162,7 @@ const Header = () => {
               size="large"
               className={classes.button}
               startIcon={<HistoryIcon />}
-              onClick={() => existsGroupWhenRouting('/history/week')}
+              onClick={() => existsGroupWhenRouting('/weekly/history')}
             >
               履歴
             </Button>

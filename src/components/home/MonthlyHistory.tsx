@@ -4,7 +4,7 @@ import { fetchTransactionsList } from '../../reducks/transactions/operations';
 import { State } from '../../reducks/store/types';
 import { getTransactions } from '../../reducks/transactions/selectors';
 import { year, month, customMonth } from '../../lib/constant';
-import '../../assets/monthly-history.scss';
+import '../../assets/history/monthly-history.scss';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
 import { incomeTransactionType } from '../../lib/constant';
