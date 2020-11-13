@@ -187,20 +187,23 @@ const MonthlyHistory = () => {
       {(() => {
         if (pathName !== 'group') {
           return (
-            <div className="box__monthlyExpense">
-              <h2>{month}月の支出</h2>
-              <table className="monthly-history-table">
-                <tbody className="monthly-history-table__tbody">
-                  <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
-                  <tr className="monthly-history-table__trow">{rows().historyRow}</tr>
-                  <tr className="monthly-history-table__trow">{rows().operationRow}</tr>
-                  <tr className="monthly-history-table__trow">{rows().totalAmountRow}</tr>
-                </tbody>
-              </table>
-              <div className="monthly-history-table__box-total">
-                合計： ¥ {totalAmount().toLocaleString()}
+            <>
+              <div className="monthly-history-table__spacer" />
+              <div className="box__monthlyExpense">
+                <h2>{month}月の支出</h2>
+                <table className="monthly-history-table">
+                  <tbody className="monthly-history-table__tbody">
+                    <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
+                    <tr className="monthly-history-table__trow">{rows().historyRow}</tr>
+                    <tr className="monthly-history-table__trow">{rows().operationRow}</tr>
+                    <tr className="monthly-history-table__trow">{rows().totalAmountRow}</tr>
+                  </tbody>
+                </table>
+                <div className="monthly-history-table__box-total">
+                  合計： ¥ {totalAmount().toLocaleString()}
+                </div>
               </div>
-            </div>
+            </>
           );
         } else {
           return <GroupMonthlyHistory />;

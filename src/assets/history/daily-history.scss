@@ -1,0 +1,30 @@
+@import "src/assets/variable";
+
+.daily-history {
+  display: table;
+  margin: 0 auto;
+  height: auto;
+  width: 100%;
+
+  &__th {
+    background-color: $main_color;
+  }
+
+  &__background {
+    background-color: $white;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: auto;
+    width: 90%;
+    padding: 16px;
+  }
+
+  &__td {
+    border: solid 1px $border_color;
+    border-collapse: collapse;
+    empty-cells: show;
+    text-align: center;
+    margin: 0 auto;
+  }
+}
