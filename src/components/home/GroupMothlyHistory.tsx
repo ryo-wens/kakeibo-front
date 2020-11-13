@@ -180,8 +180,8 @@ const GroupMonthlyHistory = () => {
 
   return (
     <div className="box__monthlyExpense">
+      <h2>{month}月の支出</h2>
       <table className="monthly-history-table">
-        <h2>{month}月の支出</h2>
         <tbody className="monthly-history-table__tbody">
           <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
           <tr className="monthly-history-table__trow">{rows().historyRow}</tr>
