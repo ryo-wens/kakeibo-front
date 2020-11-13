@@ -3,8 +3,9 @@ import { makeStyles, createStyles } from '@material-ui/core/styles';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { List } from '@material-ui/core';
 import { DeleteTaskListItem, EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
-import { AddButton } from '../uikit';
+import AddIcon from '@material-ui/icons/Add';
 import { addTaskItem } from '../../reducks/groupTasks/operations';
+import '../../assets/task/task-list.scss';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -68,7 +69,12 @@ const TaskList = (props: TaskListProps) => {
 
   const switchInputTask = () => {
     if (!openInputTask) {
-      return <AddButton label={'タスクを追加'} onClick={() => setOpenInputTask(true)} />;
+      return (
+        <button className="task-list__add-task-btn" onClick={() => setOpenInputTask(true)}>
+          <AddIcon className="task-list__add-task-btn--icon" />
+          タスクを追加
+        </button>
+      );
     } else if (openInputTask) {
       return (
         <>
@@ -128,17 +134,11 @@ const TaskList = (props: TaskListProps) => {
 
   return (
     <>
-      {taskListItem ? (
-        <>
-          <h3>タスクリスト</h3>
-          <List>{props.groupTasksList && TaskList()}</List>
-          {switchInputTask()}
-        </>
-      ) : (
-        <div>
-          <List>{props.groupTasksList && TaskList()}</List>
-        </div>
-      )}
+      <div className="task-list">
+        <h3 className="task-list__title">タスクリスト</h3>
+        <List>{props.groupTasksList && TaskList()}</List>
+        {switchInputTask()}
+      </div>
     </>
   );
 };

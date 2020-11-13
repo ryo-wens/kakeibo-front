@@ -113,19 +113,22 @@ export const deleteGroupTasksUsers = (groupId: number, users: Array<string>) => 
 
 export const fetchGroupTasksList = (groupId: number) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<fetchGroupTasksListRes>(
+    try {
+      const result = await axios.get<fetchGroupTasksListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
         { withCredentials: true }
-      )
-      .then((res) => {
-        const groupTasksList: GroupTasksList = res.data.group_tasks_list;
+      );
 
+      if (result.data.group_tasks_list === null) {
+        const groupTasksList: GroupTasksList = [];
         dispatch(fetchGroupTasksListAction(groupTasksList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      } else if (result.data.group_tasks_list) {
+        const groupTasksList: GroupTasksList = result.data.group_tasks_list;
+        dispatch(fetchGroupTasksListAction(groupTasksList));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 

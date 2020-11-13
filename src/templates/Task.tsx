@@ -14,7 +14,6 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       width: '1600px',
-      margin: '30px 0px 0px 30px',
     },
   })
 );
