@@ -2,10 +2,16 @@ import React, { useState, useCallback } from 'react';
 import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
 import { useDispatch } from 'react-redux';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
+import {
+  addGroupLatestTransactions,
+  addGroupTransactions,
+} from '../../reducks/groupTransactions/operations';
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TransactionsReq } from '../../reducks/transactions/types';
+import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles({
   link: {
@@ -17,6 +23,8 @@ const useStyles = makeStyles({
 const InputForm = (): JSX.Element => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const groupId = getPathGroupId(window.location.pathname);
+  const pathName = getPathTemplateName(window.location.pathname);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const emptyMemo = memo === '' ? null : memo;
@@ -28,6 +36,7 @@ const InputForm = (): JSX.Element => {
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
+  const paymentUserId = 'taira';
 
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,7 +115,7 @@ const InputForm = (): JSX.Element => {
 
   const unInput = amount === '' || category === '' || transactionsType === '';
 
-  const requestData: TransactionsReq = {
+  const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,
     transaction_date: transactionDate,
     shop: emptyShop,
@@ -116,14 +125,34 @@ const InputForm = (): JSX.Element => {
     medium_category_id: mediumCategoryId,
     custom_category_id: customCategoryId,
   };
+  const groupAddRequestData: GroupTransactionsReq = {
+    transaction_type: transactionsType,
+    transaction_date: transactionDate,
+    shop: emptyShop,
+    memo: emptyMemo,
+    amount: Number(amount),
+    payment_user_id: paymentUserId,
+    big_category_id: bigCategoryId,
+    medium_category_id: mediumCategoryId,
+    custom_category_id: customCategoryId,
+  };
 
   const addTransaction = () => {
     async function addedTransaction() {
-      await dispatch(addLatestTransactions(requestData));
+      await dispatch(addLatestTransactions(personalAddRequestData));
       dispatch(addTransactions());
       resetInputForm();
     }
     addedTransaction();
+  };
+
+  const addGroupTransaction = () => {
+    async function addedGroupTransaction() {
+      await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
+      dispatch(addGroupTransactions());
+      resetInputForm();
+    }
+    addedGroupTransaction();
   };
 
   return (
@@ -173,7 +202,7 @@ const InputForm = (): JSX.Element => {
       />
       <GenericButton
         startIcon={<AddCircleOutlineIcon />}
-        onClick={addTransaction}
+        onClick={pathName !== 'group' ? addTransaction : addGroupTransaction}
         label={'入力する'}
         disabled={unInput}
       />

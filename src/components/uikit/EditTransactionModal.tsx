@@ -7,6 +7,13 @@ import {
   deleteLatestTransactions,
   fetchLatestTransactionsList,
 } from '../../reducks/transactions/operations';
+import {
+  editGroupTransactions,
+  editGroupLatestTransactionsList,
+  deleteGroupTransactions,
+  deleteGroupLatestTransactions,
+  fetchLatestGroupTransactionsList,
+} from '../../reducks/groupTransactions/operations';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import {
@@ -23,6 +30,8 @@ import { expenseTransactionType, incomeTransactionType } from '../../lib/constan
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { TransactionsReq } from '../../reducks/transactions/types';
+import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,13 +85,16 @@ const EditTransactionModal = (props: InputModalProps) => {
   const selector = useSelector((state: State) => state);
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
+  const id = props.id;
   const [amount, setAmount] = useState<string>(String(props.amount));
   const [memo, setMemo] = useState<string | null>(props.memo);
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string | null>(props.shop);
   const emptyShop = shop === '' ? null : shop;
   const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
-  const id = props.id;
+  const groupId = getPathGroupId(window.location.pathname);
+  const pathName = getPathTemplateName(window.location.pathname);
+  const paymentUserId = 'taira';
 
   const categoryId = (): CategoryId => {
     const categoriesId: CategoryId = {
@@ -245,7 +257,7 @@ const EditTransactionModal = (props: InputModalProps) => {
     [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
   );
 
-  const editRequestData: TransactionsReq = {
+  const personalEditRequestData: TransactionsReq = {
     transaction_date: transactionDate,
     transaction_type: transactionsType,
     big_category_id: bigCategoryId,
@@ -255,13 +267,44 @@ const EditTransactionModal = (props: InputModalProps) => {
     memo: emptyMemo,
     shop: emptyShop,
   };
-  const deleteTransaction = (): void => {
-    async function deletedTransaction() {
+  const groupEditRequestData: GroupTransactionsReq = {
+    transaction_date: transactionDate,
+    transaction_type: transactionsType,
+    big_category_id: bigCategoryId,
+    medium_category_id: mediumCategoryId,
+    custom_category_id: customCategoryId,
+    amount: Number(amount),
+    payment_user_id: paymentUserId,
+    memo: emptyMemo,
+    shop: emptyShop,
+  };
+
+  const personalDeleteTransaction = (): void => {
+    async function personalTransaction() {
       await dispatch(deleteLatestTransactions(id));
-      dispatch(deleteTransactions(id));
       dispatch(fetchLatestTransactionsList());
+      dispatch(deleteTransactions(id));
     }
-    deletedTransaction();
+    personalTransaction();
+  };
+  const personalEditTransaction = (): void => {
+    dispatch(editTransactions(id, personalEditRequestData));
+    dispatch(editLatestTransactions(id, personalEditRequestData));
+    props.onClose();
+  };
+
+  const groupDeleteTransaction = (): void => {
+    async function groupTransaction() {
+      dispatch(deleteGroupLatestTransactions(id, groupId));
+      dispatch(fetchLatestGroupTransactionsList(groupId));
+      dispatch(deleteGroupTransactions(id, groupId));
+    }
+    groupTransaction();
+  };
+  const groupEditTransaction = (): void => {
+    dispatch(editGroupLatestTransactionsList(id, groupId, groupEditRequestData));
+    dispatch(editGroupTransactions(id, groupId, groupEditRequestData));
+    props.onClose();
   };
 
   const body = (
@@ -319,11 +362,7 @@ const EditTransactionModal = (props: InputModalProps) => {
       <div className={classes.buttonPosition}>
         <GenericButton
           label={'更新する'}
-          onClick={() =>
-            dispatch(editTransactions(id, editRequestData)) &&
-            dispatch(editLatestTransactions(id, editRequestData)) &&
-            props.onClose()
-          }
+          onClick={pathName !== 'group' ? personalEditTransaction : groupEditTransaction}
           disabled={false}
         />
         <IconButton
@@ -331,7 +370,11 @@ const EditTransactionModal = (props: InputModalProps) => {
           color={'inherit'}
           onClick={() => {
             if (window.confirm('この記録を削除してもよろしいですか？')) {
-              deleteTransaction();
+              if (pathName !== 'group') {
+                personalDeleteTransaction();
+              } else {
+                groupDeleteTransaction();
+              }
             } else {
               return;
             }

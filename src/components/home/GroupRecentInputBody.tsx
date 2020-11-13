@@ -1,13 +1,13 @@
 import React, { useState } from 'react';
-import { TransactionsList } from '../../reducks/transactions/types';
+import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import { EditTransactionModal } from '../uikit';
 import '../../assets/home/recent-input.scss';
 
 interface RecentInputBodyProps {
-  latestTransactionsList: TransactionsList;
+  groupLatestTransactionsList: GroupTransactionsList;
 }
 
-const RecentInputBody = (props: RecentInputBodyProps) => {
+const GroupRecentInputBody = (props: RecentInputBodyProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
@@ -21,19 +21,18 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
     setOpenId(undefined);
   };
 
-  const latestTransaction = () => {
-    return props.latestTransactionsList.map((transaction, index) => {
+  const latestGroupTransaction = () => {
+    return props.groupLatestTransactionsList.map((groupTransaction, index) => {
       const {
         id,
         transaction_type,
         transaction_date,
         medium_category_name,
         custom_category_name,
-        amount,
         memo,
         shop,
-      } = transaction;
-
+        amount,
+      } = groupTransaction;
       const categoryName = {
         mediumCategory: medium_category_name !== null ? medium_category_name : '',
         customCategory: custom_category_name !== null ? custom_category_name : '',
@@ -45,7 +44,7 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
             <dt className="recent-input__recent-text">{transaction_date}</dt>
             <dt className="recent-input__recent-text">￥ {amount.toLocaleString()}</dt>
             <dt className="recent-input__recent-text">
-              {medium_category_name || custom_category_name}
+              {medium_category_name !== null ? medium_category_name : custom_category_name}
             </dt>
             <dt>{shop}</dt>
             <dt>{memo}</dt>
@@ -55,9 +54,9 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
             amount={amount}
             categoryName={categoryName}
             id={id}
-            memo={transaction.memo !== null ? memo : ''}
-            shop={transaction.shop !== null ? shop : ''}
-            open={openId === transaction.id && open}
+            memo={memo !== null ? memo : ''}
+            shop={shop !== null ? shop : ''}
+            open={openId === id && open}
             onClose={handleClose}
             transactionDate={transaction_date}
             transactionsType={transaction_type}
@@ -66,7 +65,7 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
       );
     });
   };
-  return <>{latestTransaction()}</>;
+  return <>{latestGroupTransaction()}</>;
 };
 
-export default RecentInputBody;
+export default GroupRecentInputBody;
