@@ -1,5 +1,5 @@
 @import "../variable.scss";
-@import "../modules/icon.scss";
+@import "../mixin/icon-btn";
 
 .edit-task-user-modal {
 
@@ -12,8 +12,8 @@
     position: relative;
   }
 
-  &__button-position{
-    @extend .icon--btn;
+  &__btn-position{
+    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
     position: absolute;
     right: 0;
   }
@@ -55,5 +55,9 @@
   &__choice {
     color: $task-main_color;
     font-size: 0.9rem;
+  }
+
+  &__choice-btn {
+    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
   }
 }

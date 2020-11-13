@@ -1,23 +1,13 @@
 import React, { useCallback, useState } from 'react';
-import { makeStyles, createStyles } from '@material-ui/core/styles';
-import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
-import { List } from '@material-ui/core';
-import { DeleteTaskListItem, EditTaskListItem, InputTask, TaskListItemMenuButton } from './index';
+import {
+  GroupTasksList,
+  GroupTasksListForEachUser,
+  TasksListItem,
+} from '../../reducks/groupTasks/types';
+import { InputTask, TaskListItem } from './index';
 import AddIcon from '@material-ui/icons/Add';
 import { addTaskItem } from '../../reducks/groupTasks/operations';
 import '../../assets/task/task-list.scss';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    listItem: {
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    listText: {
-      display: `block`,
-    },
-  })
-);
 
 interface TaskListProps {
   groupId: number;
@@ -26,13 +16,8 @@ interface TaskListProps {
 }
 
 const TaskList = (props: TaskListProps) => {
-  const classes = useStyles();
   const [openInputTask, setOpenInputTask] = useState<boolean>(false);
   const [taskName, setTaskName] = useState<string>('');
-  const [taskListItem, setTaskListItem] = useState<boolean>(true);
-  const [editTask, setEditTask] = useState<boolean>(false);
-  const [deleteTask, setDeleteTask] = useState<boolean>(false);
-  const [id, setId] = useState<number>(0);
 
   const closeInputTask = useCallback(() => {
     setOpenInputTask(false);
@@ -46,32 +31,11 @@ const TaskList = (props: TaskListProps) => {
     [setTaskName]
   );
 
-  const openEditTask = useCallback(() => {
-    setTaskListItem(false);
-    setEditTask(true);
-  }, [setTaskListItem, setEditTask]);
-
-  const closeEditTask = useCallback(() => {
-    setTaskListItem(true);
-    setEditTask(false);
-    setTaskName(taskName);
-  }, [setTaskListItem, setEditTask, setTaskName]);
-
-  const openDeleteTask = useCallback(() => {
-    setTaskListItem(false);
-    setDeleteTask(true);
-  }, [setTaskListItem, setDeleteTask]);
-
-  const closeDeleteTask = useCallback(() => {
-    setTaskListItem(true);
-    setDeleteTask(false);
-  }, [setTaskListItem, setDeleteTask]);
-
   const switchInputTask = () => {
     if (!openInputTask) {
       return (
         <button className="task-list__add-task-btn" onClick={() => setOpenInputTask(true)}>
-          <AddIcon className="task-list__add-task-btn--icon" />
+          <AddIcon />
           タスクを追加
         </button>
       );
@@ -92,51 +56,20 @@ const TaskList = (props: TaskListProps) => {
     }
   };
 
-  const selectedTaskId = (idx: number) => {
-    setId(idx);
-  };
-
-  const TaskList = () => {
-    const list = [];
-    if (taskListItem) {
-      for (let i = 0; i < props.groupTasksList.length; i++) {
-        list.push(
-          <div key={props.groupTasksList[i].id}>
-            <li className={classes.listItem} onClick={() => selectedTaskId(i)}>
-              <p className={classes.listText}>{props.groupTasksList[i].task_name}</p>
-              <TaskListItemMenuButton
-                openEditTaskListItem={openEditTask}
-                openDeleteTask={openDeleteTask}
-              />
-            </li>
-          </div>
-        );
-      }
-    } else if (!taskListItem && editTask) {
-      list.push(
-        <EditTaskListItem
-          key={props.groupTasksList[id].id}
-          closeEditTask={closeEditTask}
-          taskListItem={props.groupTasksList[id]}
-        />
-      );
-    } else if (!taskListItem && deleteTask) {
-      list.push(
-        <DeleteTaskListItem
-          key={props.groupTasksList[id].id}
-          closeDeleteTask={closeDeleteTask}
-          taskListItem={props.groupTasksList[id]}
-        />
-      );
-    }
-    return list;
-  };
-
   return (
     <>
       <div className="task-list">
         <h3 className="task-list__title">タスクリスト</h3>
-        <List>{props.groupTasksList && TaskList()}</List>
+        <ul>
+          {props.groupTasksList &&
+            props.groupTasksList.map((groupTaskListItem: TasksListItem) => {
+              return (
+                <div key={groupTaskListItem.id}>
+                  <TaskListItem taskName={groupTaskListItem.task_name} />
+                </div>
+              );
+            })}
+        </ul>
         {switchInputTask()}
       </div>
     </>

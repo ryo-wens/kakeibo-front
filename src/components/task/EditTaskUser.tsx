@@ -70,7 +70,7 @@ const EditTaskUser = (props: EditTaskUserProps) => {
         <>
           <div className="edit-task-user-modal__position">
             <h3 className="edit-task-user-modal__title">タスクリスト</h3>
-            <button className="edit-task-user-modal__button-position" onClick={() => closeModal()}>
+            <button className="edit-task-user-modal__btn-position" onClick={() => closeModal()}>
               <CloseIcon />
             </button>
           </div>
@@ -91,13 +91,16 @@ const EditTaskUser = (props: EditTaskUserProps) => {
           )}
           <div className="edit-task-user-modal__choice-position">
             <span className="edit-task-user-modal__choice">タスクユーザーを追加</span>
-            <button className={'icon--btn'} onClick={() => openAddTaskUser()}>
+            <button className="edit-task-user-modal__choice-btn" onClick={() => openAddTaskUser()}>
               <ChevronRightIcon />
             </button>
           </div>
           <div className="edit-task-user-modal__choice-position">
             <span className="edit-task-user-modal__choice">タスクユーザーを削除</span>
-            <button className={'icon--btn'} onClick={() => openDeleteTaskUser()}>
+            <button
+              className="edit-task-user-modal__choice-btn"
+              onClick={() => openDeleteTaskUser()}
+            >
               <ChevronRightIcon />
             </button>
           </div>
