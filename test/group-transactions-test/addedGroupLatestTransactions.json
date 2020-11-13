@@ -2,19 +2,19 @@
   "transactions_list": [
     {
       "id": 101,
-      "transaction_type":"expense",
-      "posted_date":"2020-11-12T23:54:59Z",
-      "updated_date":"2020-11-12T23:54:59Z",
-      "transaction_date":"2020/11/17(火)",
-      "shop":"ビッグカメラ",
-      "memo":"コーヒーメーカー",
-      "amount":20000,
-      "posted_user_id":"taira",
-      "updated_user_id":null,
-      "payment_user_id":"taira",
-      "big_category_name":"日用品",
-      "medium_category_name":"家電",
-      "custom_category_name":null
+      "transaction_type": "expense",
+      "posted_date": "2020-11-12T23:54:59Z",
+      "updated_date": "2020-11-12T23:54:59Z",
+      "transaction_date": "2020/11/17(火)",
+      "shop": "ビッグカメラ",
+      "memo": "コーヒーメーカー",
+      "amount": 20000,
+      "posted_user_id": "taira",
+      "updated_user_id": null,
+      "payment_user_id": "taira",
+      "big_category_name": "日用品",
+      "medium_category_name": "家電",
+      "custom_category_name": null
     },
     {
       "id": 99,

@@ -194,7 +194,7 @@ export const editGroupTransactions = (
       });
 
       const aligningGroupTransactionsList = nextGroupTransactionsList.sort(
-        (a, b) => Number(a.transaction_date) - Number(b.transaction_date)
+        (a, b) => Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
       );
 
       dispatch(updateGroupTransactionsAction(aligningGroupTransactionsList));
