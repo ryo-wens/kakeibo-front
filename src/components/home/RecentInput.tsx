@@ -5,7 +5,7 @@ import { getLatestTransactions } from '../../reducks/transactions/selectors';
 import { getGroupLatestTransactions } from '../../reducks/groupTransactions/selectors';
 import RecentInputBody from './RecentInputBody';
 import GroupRecentInputBody from './GroupRecentInputBody';
-import '../../assets/recent-input.scss';
+import '../../assets/home/recent-input.scss';
 import { fetchLatestTransactionsList } from '../../reducks/transactions/operations';
 import { fetchLatestGroupTransactionsList } from '../../reducks/groupTransactions/operations';
 import { guidanceMessage } from '../../lib/constant';

@@ -36,7 +36,6 @@ const WeeklyHistory = () => {
   const dispatch = useDispatch();
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
-  console.log(pathName);
 
   return (
     <>
@@ -51,9 +50,9 @@ const WeeklyHistory = () => {
             className={classes.topButton}
             onClick={() => {
               if (pathName !== 'group') {
-                dispatch(push('/history-week'));
+                dispatch(push('/weekly/history'));
               } else {
-                dispatch(push(`/group/${groupId}/history-week`));
+                dispatch(push(`/group/${groupId}/weekly/history`));
               }
             }}
           >
