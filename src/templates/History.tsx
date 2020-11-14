@@ -5,48 +5,16 @@ import { getPathTemplateName, getPathGroupId } from '../lib/path';
 import { year } from '../lib/constant';
 import { DailyHistory } from './index';
 import { MonthlyHistory, GroupMonthlyHistory } from '../components/home';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import FormControl from '@material-ui/core/FormControl';
 import InputLabel from '@material-ui/core/InputLabel';
 import Select from '@material-ui/core/Select';
 import MenuItem from '@material-ui/core/MenuItem';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      display: 'flex',
-      margin: '0 auto',
-      marginTop: 50,
-      flexDirection: 'column',
-      alignItems: 'center',
-      '& > *': {
-        margin: theme.spacing(1),
-      },
-    },
-    topButton: {
-      backgroundColor: '#fff',
-      width: 660,
-    },
-    tableSize: {
-      margin: '0 auto',
-      width: '80%',
-    },
-    formControl: {
-      display: 'flex',
-      margin: '0 auto',
-      marginTop: 40,
-      minWidth: 120,
-      width: 660,
-      backgroundColor: '#fff',
-    },
-  })
-);
+import '../assets/history/history.scss';
 
 const History = () => {
   const dispatch = useDispatch();
-  const classes = useStyles();
   const path = window.location.pathname;
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
@@ -61,24 +29,26 @@ const History = () => {
 
   return (
     <>
-      <div className={classes.root}>
+      <div className="history__position">
         <ButtonGroup
-          className={classes.topButton}
+          className="history__top-button"
           size="large"
           aria-label="small outlined button group"
         >
           <Button
-            className={classes.topButton}
+            className="history__top-button"
             onClick={() => {
               if (pathName !== 'group') {
                 dispatch(push('/daily/history'));
+              } else {
+                dispatch(push(`/group/${groupId}/daily/history`));
               }
             }}
           >
             日ごと
           </Button>
           <Button
-            className={classes.topButton}
+            className="history__top-button"
             onClick={() => {
               if (pathName !== 'group') {
                 dispatch(push('/weekly/history'));
@@ -89,9 +59,10 @@ const History = () => {
           >
             週ごと
           </Button>
-          <Button className={classes.topButton}>月ごと</Button>
+          <Button className="history__top-button">月ごと</Button>
         </ButtonGroup>
-        <FormControl variant="outlined" className={classes.formControl}>
+        <div className="history__spacer" />
+        <FormControl variant="outlined" className="history__selector">
           <InputLabel id="years">年</InputLabel>
           <Select
             id="years"
@@ -107,17 +78,21 @@ const History = () => {
         </FormControl>
       </div>
       {(() => {
-        if (path === '/daily/history') {
-          return <DailyHistory />;
+        if (path === '/daily/history' || path === `/group/${groupId}/daily/history`) {
+          return (
+            <div className="history__table-size">
+              <DailyHistory selectYears={selectYears} />
+            </div>
+          );
         } else if (path === '/weekly/history') {
           return (
-            <div className={classes.tableSize}>
+            <div className="history__table-size">
               <MonthlyHistory />
             </div>
           );
         } else if (`/group/${groupId}/weekly/history`) {
           return (
-            <div className={classes.tableSize}>
+            <div className="history__table-size">
               <GroupMonthlyHistory />
             </div>
           );

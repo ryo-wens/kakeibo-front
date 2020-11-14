@@ -33,6 +33,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/todo/monthly'} component={MonthlyTodo} />
       <Route exact path={'/yearly/budgets'} component={YearlyBudgets} />
       <Route exact path={'/group/:id'} component={Home} />
+      <Route exact path={'/group/:id/daily/history'} component={History} />
       <Route exact path={'/group/:id/weekly/history'} component={History} />
       <Route exact path={'/group/:id/standard/budgets'} component={StandardBudgets} />
       <Route exact path={'/group/:id/custom/budgets/:year/:month'} component={CustomBudgets} />
