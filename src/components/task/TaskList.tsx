@@ -16,13 +16,17 @@ interface TaskListProps {
 }
 
 const TaskList = (props: TaskListProps) => {
-  const [openInputTask, setOpenInputTask] = useState<boolean>(false);
+  const [openAddTask, setOpenAddTask] = useState<boolean>(false);
   const [taskName, setTaskName] = useState<string>('');
 
-  const closeInputTask = useCallback(() => {
-    setOpenInputTask(false);
+  const openAddInputTask = useCallback(() => {
+    setOpenAddTask(true);
+  }, [setOpenAddTask]);
+
+  const closeAddInputTask = useCallback(() => {
+    setOpenAddTask(false);
     setTaskName('');
-  }, [setOpenInputTask, setTaskName]);
+  }, [setOpenAddTask, setTaskName]);
 
   const inputTaskName = useCallback(
     (event) => {
@@ -31,21 +35,21 @@ const TaskList = (props: TaskListProps) => {
     [setTaskName]
   );
 
-  const switchInputTask = () => {
-    if (!openInputTask) {
+  const switchAddInputTask = () => {
+    if (!openAddTask) {
       return (
-        <button className="task-list__add-task-btn" onClick={() => setOpenInputTask(true)}>
+        <button className="task-list__add-task-btn" onClick={openAddInputTask}>
           <AddIcon />
           タスクを追加
         </button>
       );
-    } else if (openInputTask) {
+    } else if (openAddTask) {
       return (
         <>
           <InputTask
             buttonLabel={'追加'}
             groupId={props.groupId}
-            inputTaskClose={closeInputTask}
+            inputTaskClose={closeAddInputTask}
             inputTaskName={inputTaskName}
             noDifferenceTaskName={false}
             operation={addTaskItem(props.groupId, taskName)}
@@ -65,12 +69,17 @@ const TaskList = (props: TaskListProps) => {
             props.groupTasksList.map((groupTaskListItem: TasksListItem) => {
               return (
                 <div key={groupTaskListItem.id}>
-                  <TaskListItem taskName={groupTaskListItem.task_name} />
+                  <TaskListItem
+                    taskListItem={groupTaskListItem}
+                    taskName={taskName}
+                    inputTaskName={inputTaskName}
+                    setTaskName={setTaskName}
+                  />
                 </div>
               );
             })}
         </ul>
-        {switchInputTask()}
+        {switchAddInputTask()}
       </div>
     </>
   );

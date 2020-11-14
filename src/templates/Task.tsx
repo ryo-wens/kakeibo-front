@@ -68,20 +68,18 @@ const Task = () => {
   }, [approvedGroups, groupId]);
 
   return (
-    <>
-      <div className={classes.root}>
-        <EditTaskUser
-          approvedGroup={approvedGroup}
-          groupTasksListForEachUser={groupTasksListForEachUser}
-        />
-        <TaskList
-          groupId={groupId}
-          groupTasksListForEachUser={groupTasksListForEachUser}
-          groupTasksList={groupTasksList}
-        />
-        <SkipDate />
-      </div>
-    </>
+    <div className={classes.root}>
+      <EditTaskUser
+        approvedGroup={approvedGroup}
+        groupTasksListForEachUser={groupTasksListForEachUser}
+      />
+      <TaskList
+        groupId={groupId}
+        groupTasksListForEachUser={groupTasksListForEachUser}
+        groupTasksList={groupTasksList}
+      />
+      <SkipDate />
+    </div>
   );
 };
 
