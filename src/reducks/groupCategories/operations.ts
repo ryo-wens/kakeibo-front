@@ -11,11 +11,11 @@ import {
 import { errorHandling } from '../../lib/validation';
 import { State } from '../store/types';
 
-export const fetchGroupCategories = () => {
+export const fetchGroupCategories = (groupId: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<fetchGroupCategoriesRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/categories`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories`,
         {
           withCredentials: true,
         }

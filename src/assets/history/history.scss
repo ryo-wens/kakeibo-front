@@ -1,0 +1,31 @@
+@import "src/assets/variable";
+
+.history{
+
+  &__position {
+    display: flex;
+    flex-direction: column;
+    margin: 50px auto 0;
+  }
+
+  &__spacer {
+    height: 30px;
+  }
+
+  &__top-button {
+    background-color: $white,;
+    width: 660px;
+  }
+
+  &__selector {
+    display: flex;
+    min-width: 120px;
+    width: 660px;
+    background-color: $white,
+  }
+
+  &__table-size {
+    margin: 0 auto;
+    width: 80%
+  }
+}

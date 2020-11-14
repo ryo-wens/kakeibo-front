@@ -47,7 +47,7 @@ describe('async actions fetchGroupCategories', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupCategories()(store.dispatch);
+    await fetchGroupCategories(groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
