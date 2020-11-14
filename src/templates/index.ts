@@ -9,5 +9,6 @@ export { default as SignUp } from './SignUp';
 export { default as StandardBudgets } from './StandardBudgets';
 export { default as Task } from './Task';
 export { default as Todo } from './Todo';
-export { default as WeeklyHistory } from './WeeklyHistory';
+export { default as History } from './History';
+export { default as DailyHistory } from './DailyHistory';
 export { default as YearlyBudgets } from './YearlyBudgets';
