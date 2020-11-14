@@ -48,6 +48,7 @@ const TaskList = (props: TaskListProps) => {
         <>
           <InputTask
             buttonLabel={'追加'}
+            titleLabel={'追加'}
             groupId={props.groupId}
             inputTaskClose={closeAddInputTask}
             inputTaskName={inputTaskName}

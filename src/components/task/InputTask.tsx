@@ -7,12 +7,14 @@ import '../../assets/task/input-task-user.scss';
 
 interface InputTaskProps {
   buttonLabel: string;
+  titleLabel: string;
   groupId: number;
   inputTaskClose: () => void;
   inputTaskName: (event: React.ChangeEvent<{ value: string }>) => void;
   noDifferenceTaskName: boolean;
   operation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
   taskName: string;
+  deleteOperation?: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
 }
 
 const InputTask = (props: InputTaskProps) => {
@@ -22,7 +24,7 @@ const InputTask = (props: InputTaskProps) => {
   return (
     <>
       <div className="input-task-user">
-        <p className="input-task-user__title">タスクを追加</p>
+        <p className="input-task-user__title">タスクを{props.titleLabel}</p>
         <TextInput
           id="filled-basic"
           variant="filled"
@@ -33,20 +35,30 @@ const InputTask = (props: InputTaskProps) => {
           onChange={props.inputTaskName}
         />
         <div className="input-task-user__btn">
-          <button
-            className="input-task-user__btn--add"
-            disabled={isBlankTaskName || props.noDifferenceTaskName}
-            onClick={() => dispatch(props.operation) && props.inputTaskClose()}
-          >
-            {props.buttonLabel}
-          </button>
-          <button
-            className="input-task-user__btn--cancel"
-            disabled={false}
-            onClick={() => props.inputTaskClose()}
-          >
-            キャンセル
-          </button>
+          <div>
+            <button
+              className="input-task-user__btn--add"
+              disabled={isBlankTaskName || props.noDifferenceTaskName}
+              onClick={() => dispatch(props.operation) && props.inputTaskClose()}
+            >
+              {props.buttonLabel}
+            </button>
+            <button
+              className="input-task-user__btn--cancel"
+              disabled={false}
+              onClick={() => props.inputTaskClose()}
+            >
+              キャンセル
+            </button>
+          </div>
+          {props.titleLabel === '変更' && (
+            <button
+              className="input-task-user__btn--delete"
+              onClick={() => dispatch(props.deleteOperation) && props.inputTaskClose()}
+            >
+              削除
+            </button>
+          )}
         </div>
       </div>
     </>

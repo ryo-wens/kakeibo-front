@@ -19,15 +19,21 @@
   }
 
   &__btn {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px;
 
     &--add {
       @include operation-btn($task-add-color, $white, $task-add-color);
-      margin: 0 0 0 20px;
     }
 
     &--cancel {
       @include operation-btn($white, $task-main_color,$task-border_color);
       margin: 0 0 0 10px;
+    }
+
+    &--delete {
+      @include operation-btn($task-delete-color, $white,$task-delete-color);
     }
   }
 }
