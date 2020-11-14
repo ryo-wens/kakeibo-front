@@ -1,32 +1,36 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
-import { TransactionsList } from '../../reducks/transactions/types';
+import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import EditTransactionModal from '../../components/uikit/EditTransactionModal';
-import { fetchCategories } from '../../reducks/categories/operations';
-import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
-import { getPathTemplateName } from '../../lib/path';
+import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
+import {
+  getGroupIncomeCategories,
+  getGroupExpenseCategories,
+} from '../../reducks/groupCategories/selectors';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import IconButton from '@material-ui/core/IconButton';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CreateIcon from '@material-ui/icons/Create';
 import '../../assets/history/daily-history.scss';
 
-interface DailyHistoryBodyProps {
-  transactionsList: TransactionsList;
+interface GroupDailyHistoryBodyProps {
+  groupTransactionsList: GroupTransactionsList;
   selectYears: number;
 }
-const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
+const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const incomeCategories = getIncomeCategories(selector);
-  const expenseCategories = getExpenseCategories(selector);
+  const groupIncomeCategories = getGroupIncomeCategories(selector);
+  const groupExpenseCategories = getGroupExpenseCategories(selector);
+  const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpnId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length)
-      dispatch(fetchCategories());
+    if (pathName === 'group' && !groupIncomeCategories.length && !groupExpenseCategories.length)
+      dispatch(fetchGroupCategories(groupId));
   }, [pathName]);
 
   const handleOpen = (transactionId: number) => {
@@ -67,7 +71,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
               メモ
             </td>
           </tr>
-          {props.transactionsList.map((transaction) => {
+          {props.groupTransactionsList.map((groupTransaction) => {
             const {
               id,
               transaction_type,
@@ -77,7 +81,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
               amount,
               shop,
               memo,
-            } = transaction;
+            } = groupTransaction;
 
             const categoryName = {
               mediumCategory: medium_category_name !== null ? medium_category_name : '',
@@ -130,4 +134,4 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
     </>
   );
 };
-export default DailyHistoryBody;
+export default GroupDailyHistoryBody;
