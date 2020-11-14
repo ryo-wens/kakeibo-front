@@ -1,9 +1,11 @@
 import React, { useCallback, useState } from 'react';
-import { MonthTables, WeekTables } from './index';
+import { WeekTables } from './index';
 import { DatePicker } from '../uikit';
-import { TodoButton } from '../todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { dateToMonthString, getFirstDayOfMonth, getLastDayOfMonth } from '../../lib/date';
+import { date } from '../../lib/constant';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
+import '../../assets/task/skip-date.scss';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -20,7 +22,6 @@ const useStyles = makeStyles(() =>
 
 const SkipDate = () => {
   const classes = useStyles();
-  const dt: Date = new Date();
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   const handleDateChange = useCallback(
@@ -31,34 +32,50 @@ const SkipDate = () => {
   );
 
   const getTodayDate = useCallback(() => {
-    setSelectedDate(dt);
+    setSelectedDate(date);
   }, [selectedDate]);
 
-  const getPrevMonth = useCallback(() => {
-    const earlyOfMonthDate = getFirstDayOfMonth(selectedDate);
-    const remainingDatesUntilPrevMonth = selectedDate.getDate() - earlyOfMonthDate.getDate();
-    const prevMonth = new Date(
+  const getNextWeek = useCallback(() => {
+    const nextWeek = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth(),
-      selectedDate.getDate() - remainingDatesUntilPrevMonth - 1
+      selectedDate.getDate() + 7
     );
-    setSelectedDate(prevMonth);
+    setSelectedDate(nextWeek);
   }, [selectedDate, setSelectedDate]);
 
-  const getNextMonth = useCallback(() => {
-    const endOfMonthDate = getLastDayOfMonth(selectedDate);
-    const remainingDatesUntilNextMonth = endOfMonthDate.getDate() - selectedDate.getDate();
-    const nextMonth = new Date(
+  const getPrevWeek = useCallback(() => {
+    const previousWeek = new Date(
       selectedDate.getFullYear(),
       selectedDate.getMonth(),
-      selectedDate.getDate() + remainingDatesUntilNextMonth + 1
+      selectedDate.getDate() - 7
     );
-    setSelectedDate(nextMonth);
+    setSelectedDate(previousWeek);
   }, [selectedDate, setSelectedDate]);
 
-  const getThisMonth = dateToMonthString(dt);
-  const getSelectedMonth = dateToMonthString(selectedDate);
-  const equalsSelectedMonthAndThisMonth = getThisMonth === getSelectedMonth;
+  const todayDay = date.getDay();
+
+  const weekStartDate = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth(),
+    selectedDate.getDate() - todayDay
+  );
+  const weekLastDate = new Date(
+    selectedDate.getFullYear(),
+    selectedDate.getMonth(),
+    selectedDate.getDate() - todayDay + 6
+  );
+
+  const displayWeek = (weekDate: Date) => {
+    return (
+      <div className="skip-date__display-week-item">
+        <span className="skip-date__display-week-item--year">{weekDate.getFullYear()}</span>
+        <span className="skip-date__display-week-item--date">
+          {weekDate.getMonth() + 1}月{weekDate.getDate()}日
+        </span>
+      </div>
+    );
+  };
 
   return (
     <>
@@ -72,15 +89,23 @@ const SkipDate = () => {
             required={false}
           />
         </div>
-        <TodoButton
-          label={'<'}
-          disabled={equalsSelectedMonthAndThisMonth}
-          onClick={() => getPrevMonth()}
-        />
-        <TodoButton label={'>'} disabled={false} onClick={() => getNextMonth()} />
-        <TodoButton label={'今月'} disabled={false} onClick={() => getTodayDate()} />
+        <div className="skip-date__display-week">
+          <button className="skip-date__prev-btn" onClick={getPrevWeek}>
+            <ArrowLeftIcon />
+          </button>
+          <div className="skip-date__display-week-items">
+            {displayWeek(weekStartDate)}
+            <span className="skip-date__display-week-item--tilde">〜</span>
+            {displayWeek(weekLastDate)}
+          </div>
+          <button className="skip-date__next-btn" onClick={getNextWeek}>
+            <ArrowRightIcon />
+          </button>
+        </div>
+        <button className="task--btn" disabled={false} onClick={() => getTodayDate()}>
+          今日
+        </button>
       </div>
-      <MonthTables selectedDate={selectedDate} />
       <WeekTables selectedDate={selectedDate} />
     </>
   );

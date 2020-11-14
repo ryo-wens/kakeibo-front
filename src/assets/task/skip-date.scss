@@ -1,0 +1,49 @@
+@import "../variable";
+@import "../modules/task-btn";
+
+.skip-date {
+
+  &__display-week {
+    display: flex;
+  }
+
+  &__prev-btn {
+    @extend .task--btn;
+    border-radius: 0.5rem 0 0 0.5rem;
+  }
+
+  &__next-btn {
+    @extend .task--btn;
+    border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  &__display-week-items {
+    display: flex;
+    align-items: center;
+    background-color: $white;
+    color: $task-main_color;
+    border: $task-border_color solid 2px;
+    border-right: none;
+    border-left: none;
+    padding: 0 15px ;
+  }
+
+  &__display-week-item {
+    width: 70px;
+    display: flex;
+    flex-direction: column;
+    font-weight: bold;
+
+    &--year {
+      font-size: 0.75rem;
+    }
+
+    &--date {
+      font-size: 0.9rem;
+    }
+
+    &--tilde {
+      padding: 0 15px;
+    }
+  }
+}
