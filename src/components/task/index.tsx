@@ -5,3 +5,4 @@ export { default as OperationTaskUser } from './OperationTaskUser';
 export { default as SkipDate } from './SkipDate';
 export { default as TaskList } from './TaskList';
 export { default as TaskListItem } from './TaskListItem';
+export { default as WeekTables } from './WeekTables';

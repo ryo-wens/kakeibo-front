@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react';
-import { MonthTables } from './index';
+import { MonthTables, WeekTables } from './index';
 import { DatePicker } from '../uikit';
 import { TodoButton } from '../todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
@@ -81,6 +81,7 @@ const SkipDate = () => {
         <TodoButton label={'今月'} disabled={false} onClick={() => getTodayDate()} />
       </div>
       <MonthTables selectedDate={selectedDate} />
+      <WeekTables selectedDate={selectedDate} />
     </>
   );
 };
