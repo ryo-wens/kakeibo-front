@@ -6,12 +6,14 @@ import MockAdapter from 'axios-mock-adapter';
 import addGroupTasksUsersResponse from './addGroupTasksUsersResponse.json';
 import addTaskItemResponse from './addTaskItemResponse.json';
 import deleteTaskItemResponse from './deleteTaskItemResponse.json';
+import deleteGroupTasksUsersResponse from './deleteGroupTasksUsersResponse.json';
 import editTaskItemResponse from './editTaskItemResponse.json';
 import fetchTasksListEachUserResponse from './fetchTasksListEachUserResponse.json';
 import fetchTasksListResponse from './fetchTasksListResponse.json';
 import {
   addGroupTasksUsers,
   addTaskItem,
+  deleteGroupTasksUsers,
   deleteTaskItem,
   editTaskItem,
   fetchGroupTasksList,
@@ -227,6 +229,53 @@ describe('async actions groupTasks', () => {
 
     // @ts-ignore
     await addGroupTasksUsers(groupId, users)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('If DELETE_GROUP_TASKS_USERS is successful, the selected task user will be removed from groupTasksListForEachUser.', async () => {
+    const groupId = 1;
+    const users = ['anraku'];
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+
+    const mockResponse = JSON.stringify(deleteGroupTasksUsersResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTasksActions.DELETE_GROUP_TASKS_USERS,
+        payload: {
+          groupTasksListForEachUser: [
+            {
+              id: 1,
+              user_id: 'furusawa',
+              group_id: 1,
+              tasks_list: [
+                {
+                  id: 1,
+                  base_date: '2020-10-14T00:00:00Z',
+                  cycle_type: 'every',
+                  cycle: 7,
+                  task_name: 'トイレ掃除',
+                  group_id: 1,
+                  group_tasks_users_id: 1,
+                },
+              ],
+            },
+          ],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: 'タスクメンバーを削除しました。',
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await deleteGroupTasksUsers(groupId, users)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

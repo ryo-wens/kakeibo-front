@@ -1,7 +1,7 @@
 @import "../variable.scss";
-@import "../modules/icon";
+@import "../mixin/icon-btn";
 
-.add-task-user-modal {
+.operation-task-user-modal {
 
   &__position {
     display: flex;
@@ -15,5 +15,9 @@
     margin: 0;
     color: $task-main_color;
     font-size: $task-title-font_size;
+  }
+
+  &__icon-btn {
+    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
   }
 }

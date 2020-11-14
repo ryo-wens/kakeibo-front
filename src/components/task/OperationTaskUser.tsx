@@ -5,9 +5,9 @@ import { GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import CloseIcon from '@material-ui/icons/Close';
-import '../../assets/task/add-task-user.scss';
 import { useDispatch } from 'react-redux';
-import { addGroupTasksUsers } from '../../reducks/groupTasks/operations';
+import { addGroupTasksUsers, deleteGroupTasksUsers } from '../../reducks/groupTasks/operations';
+import '../../assets/task/operation-task-user.scss';
 
 interface OperationTaskUserProps {
   approvedGroup: Group;
@@ -34,6 +34,20 @@ const OperationTaskUser = (props: OperationTaskUserProps) => {
     },
     [setCheckedUserIds]
   );
+
+  const switchOperation = () => {
+    if (props.label === '追加') {
+      return (
+        dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
+        props.closeTaskUserOperation()
+      );
+    } else if (props.label === '削除') {
+      return (
+        dispatch(deleteGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
+        props.closeTaskUserOperation()
+      );
+    }
+  };
 
   const existsAddTasksUser = () => {
     const user = [];
@@ -109,12 +123,15 @@ const OperationTaskUser = (props: OperationTaskUserProps) => {
 
   return (
     <>
-      <div className="add-task-user-modal__position">
-        <button className={'icon--btn'} onClick={() => props.closeTaskUserOperation()}>
+      <div className="operation-task-user-modal__position">
+        <button
+          className="operation-task-user-modal__icon-btn"
+          onClick={() => props.closeTaskUserOperation()}
+        >
           <ChevronLeftIcon />
         </button>
-        <h3 className="add-task-user-modal__title">タスクユーザーを{props.label}</h3>
-        <button className={'icon--btn'} onClick={() => props.closeModal()}>
+        <h3 className="operation-task-user-modal__title">タスクユーザーを{props.label}</h3>
+        <button className="operation-task-user-modal__icon-btn" onClick={() => props.closeModal()}>
           <CloseIcon />
         </button>
       </div>
@@ -122,7 +139,7 @@ const OperationTaskUser = (props: OperationTaskUserProps) => {
       <TodoButton
         label={props.label}
         disabled={checkedUserIds.length === 0}
-        onClick={() => dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds))}
+        onClick={() => switchOperation()}
       />
     </>
   );

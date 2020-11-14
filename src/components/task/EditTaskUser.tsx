@@ -2,7 +2,7 @@ import React, { useCallback, useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import '../../assets/task/edit-task-user.scss';
-import '../../assets/modules/task-button.scss';
+import '../../assets/modules/task-btn.scss';
 import { GroupTasksListForEachUser, UserTasksListItem } from '../../reducks/groupTasks/types';
 import { OperationTaskUser } from './index';
 import { Group } from '../../reducks/groups/types';
@@ -70,28 +70,37 @@ const EditTaskUser = (props: EditTaskUserProps) => {
         <>
           <div className="edit-task-user-modal__position">
             <h3 className="edit-task-user-modal__title">タスクリスト</h3>
-            <button className="edit-task-user-modal__button-position" onClick={() => closeModal()}>
+            <button className="edit-task-user-modal__btn-position" onClick={() => closeModal()}>
               <CloseIcon />
             </button>
           </div>
-          <ul className="edit-task-user-modal__user-list">
-            {props.groupTasksListForEachUser.map((userTasksListItem: UserTasksListItem) => {
-              return (
-                <li className="edit-task-user-modal__user-list-item" key={userTasksListItem.id}>
-                  {userTasksListItem.user_id}
-                </li>
-              );
-            })}
-          </ul>
+          {!props.groupTasksListForEachUser.length ? (
+            <span className="edit-task-user-modal__text">
+              現在、タスクに参加しているメンバーはいません。
+            </span>
+          ) : (
+            <ul className="edit-task-user-modal__user-list">
+              {props.groupTasksListForEachUser.map((userTasksListItem: UserTasksListItem) => {
+                return (
+                  <li className="edit-task-user-modal__user-list-item" key={userTasksListItem.id}>
+                    {userTasksListItem.user_id}
+                  </li>
+                );
+              })}
+            </ul>
+          )}
           <div className="edit-task-user-modal__choice-position">
             <span className="edit-task-user-modal__choice">タスクユーザーを追加</span>
-            <button className={'icon--btn'} onClick={() => openAddTaskUser()}>
+            <button className="edit-task-user-modal__choice-btn" onClick={() => openAddTaskUser()}>
               <ChevronRightIcon />
             </button>
           </div>
           <div className="edit-task-user-modal__choice-position">
             <span className="edit-task-user-modal__choice">タスクユーザーを削除</span>
-            <button className={'icon--btn'} onClick={() => openDeleteTaskUser()}>
+            <button
+              className="edit-task-user-modal__choice-btn"
+              onClick={() => openDeleteTaskUser()}
+            >
               <ChevronRightIcon />
             </button>
           </div>
