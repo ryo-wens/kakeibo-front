@@ -14,7 +14,6 @@ const useStyles = makeStyles(() =>
   createStyles({
     root: {
       width: '1600px',
-      margin: '30px 0px 0px 30px',
     },
   })
 );
@@ -69,20 +68,18 @@ const Task = () => {
   }, [approvedGroups, groupId]);
 
   return (
-    <>
-      <div className={classes.root}>
-        <EditTaskUser
-          approvedGroup={approvedGroup}
-          groupTasksListForEachUser={groupTasksListForEachUser}
-        />
-        <TaskList
-          groupId={groupId}
-          groupTasksListForEachUser={groupTasksListForEachUser}
-          groupTasksList={groupTasksList}
-        />
-        <SkipDate />
-      </div>
-    </>
+    <div className={classes.root}>
+      <EditTaskUser
+        approvedGroup={approvedGroup}
+        groupTasksListForEachUser={groupTasksListForEachUser}
+      />
+      <TaskList
+        groupId={groupId}
+        groupTasksListForEachUser={groupTasksListForEachUser}
+        groupTasksList={groupTasksList}
+      />
+      <SkipDate />
+    </div>
   );
 };
 

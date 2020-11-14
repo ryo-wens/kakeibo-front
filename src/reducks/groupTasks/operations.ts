@@ -5,6 +5,8 @@ import {
   addGroupTasksUsersRes,
   addTaskItemReq,
   addTaskItemRes,
+  deleteGroupTasksUsersReq,
+  deleteGroupTasksUsersRes,
   deleteTaskItemRes,
   editTaskItemReq,
   editTaskItemRes,
@@ -17,6 +19,7 @@ import {
 import {
   addGroupTasksUsersAction,
   addTaskItemAction,
+  deleteGroupTasksUsersAction,
   deleteTaskItemAction,
   editTaskItemAction,
   fetchGroupTasksListAction,
@@ -75,21 +78,57 @@ export const addGroupTasksUsers = (groupId: number, users: Array<string>) => {
   };
 };
 
+export const deleteGroupTasksUsers = (groupId: number, users: Array<string>) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    const data: deleteGroupTasksUsersReq = {
+      users_list: users,
+    };
+
+    try {
+      const result = await axios.delete<deleteGroupTasksUsersRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
+        { data: JSON.stringify(data), withCredentials: true }
+      );
+      const prevGroupTasksListForEachUser: GroupTasksListForEachUser = getState().groupTasks
+        .groupTasksListForEachUser;
+
+      for (const user of users) {
+        const idx = prevGroupTasksListForEachUser.findIndex(
+          (groupTasksListItem) => groupTasksListItem.user_id === user
+        );
+        prevGroupTasksListForEachUser.splice(idx, 1);
+      }
+
+      const nextGroupTasksListForEachUser: GroupTasksListForEachUser = [
+        ...prevGroupTasksListForEachUser,
+      ];
+
+      dispatch(deleteGroupTasksUsersAction(nextGroupTasksListForEachUser));
+      dispatch(openTextModalAction(result.data.message));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
 export const fetchGroupTasksList = (groupId: number) => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .get<fetchGroupTasksListRes>(
+    try {
+      const result = await axios.get<fetchGroupTasksListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
         { withCredentials: true }
-      )
-      .then((res) => {
-        const groupTasksList: GroupTasksList = res.data.group_tasks_list;
+      );
 
+      if (result.data.group_tasks_list === null) {
+        const groupTasksList: GroupTasksList = [];
         dispatch(fetchGroupTasksListAction(groupTasksList));
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      } else if (result.data.group_tasks_list) {
+        const groupTasksList: GroupTasksList = result.data.group_tasks_list;
+        dispatch(fetchGroupTasksListAction(groupTasksList));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 

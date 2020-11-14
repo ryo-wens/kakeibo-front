@@ -1,0 +1,24 @@
+@import "../variable";
+
+@mixin operation-btn($operation-btn_bg-color, $operation-btn_color, $operation-btn_border-color) {
+  background-color: $operation-btn-bg-color;
+  border: $operation-btn-border-color solid 1px;
+  border-radius: $task-border_radius;
+  color: $operation-btn-color;
+  cursor: pointer;
+  font-size: 0.8rem;
+  padding: 5px 10px;
+
+  &:hover{
+    opacity: 0.9;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:disabled {
+    cursor: default;
+    opacity: 0.6;
+  }
+}
