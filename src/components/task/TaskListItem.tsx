@@ -31,7 +31,7 @@ const TaskListItem = (props: TaskListItemProps) => {
 
     if (!openEditTask) {
       return (
-        <li className="task-list-item" key={groupTaskListItem.id}>
+        <li className="task-list-item">
           <FiberManualRecordIcon
             className="task-list-item__color-icon"
             style={{ fontSize: '1.2rem' }}

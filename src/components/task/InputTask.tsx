@@ -23,7 +23,9 @@ const InputTask = (props: InputTaskProps) => {
 
   return (
     <>
-      <div className="input-task-user">
+      <div
+        className={props.titleLabel === '追加' ? 'input-task-user__add' : 'input-task-user__edit'}
+      >
         <p className="input-task-user__title">タスクを{props.titleLabel}</p>
         <TextInput
           id="filled-basic"
