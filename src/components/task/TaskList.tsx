@@ -48,6 +48,7 @@ const TaskList = (props: TaskListProps) => {
         <>
           <InputTask
             buttonLabel={'追加'}
+            titleLabel={'追加'}
             groupId={props.groupId}
             inputTaskClose={closeAddInputTask}
             inputTaskName={inputTaskName}
@@ -64,11 +65,11 @@ const TaskList = (props: TaskListProps) => {
     <>
       <div className="task-list">
         <h3 className="task-list__title">タスクリスト</h3>
-        <ul>
+        <ul className="task-list__items">
           {props.groupTasksList &&
             props.groupTasksList.map((groupTaskListItem: TasksListItem) => {
               return (
-                <div key={groupTaskListItem.id}>
+                <div className="task-list__items--margin" key={groupTaskListItem.id}>
                   <TaskListItem
                     taskListItem={groupTaskListItem}
                     taskName={taskName}

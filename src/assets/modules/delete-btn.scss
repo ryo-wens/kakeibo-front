@@ -1,0 +1,6 @@
+@import "../variable";
+@import "../mixin/operation-btn";
+
+.delete-btn {
+  @include operation-btn($task-delete-color, $white, $task-delete-color);
+}
