@@ -1,0 +1,56 @@
+@import "src/assets/variable";
+@import "../mixin/display-btn";
+@import "../mixin/icon-btn";
+@import "../mixin/jump-years";
+
+.input-years {
+  align-self: center;
+  background-color: $white;
+  border-radius: $task-border_radius;
+  border: $task-border_color solid 1px;
+  text-align: center;
+  padding-bottom: 20px;
+  margin: 0 auto;
+  width: 250px;
+  height: 95px;
+
+  &__select-position {
+    padding-top: 25px;
+    margin: 0 auto;
+  }
+
+  &__select {
+    font-size:$medium-font_size ;
+    cursor: pointer;
+    margin: 0 auto;
+    height: 35px;
+    width: 65px;
+  }
+
+  &__icon {
+    vertical-align: middle;
+    color: $task-main_color;
+  }
+
+
+  &__btn {
+
+    &__display {
+      @include display-btn($main_color);
+      margin-top: 10px;
+      margin-bottom: 15px;
+
+    }
+
+    &__close {
+      @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+      float: right;
+
+    }
+
+    &__jump-years {
+      @include jump-years($white);
+      margin: 0 auto;
+    }
+  }
+}

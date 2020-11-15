@@ -2,12 +2,16 @@
 
 .daily-history {
 
-  display: table;
+  border-collapse: collapse;
   margin: 0 auto;
   height: auto;
 
   &__spacer {
     margin-top: 50px;
+  }
+
+  &__years {
+    padding-left: 20px;
   }
 
   &__th {

@@ -12,3 +12,4 @@ export { default as SaveButton } from './SaveButton';
 export { default as SelectMenu } from './selectMenu';
 export { default as ModalCategoryInput } from './ModalCategoryInput';
 export { default as AddTransactionModal } from './AddTransactionModal';
+export { default as InputYears } from './InputYears';

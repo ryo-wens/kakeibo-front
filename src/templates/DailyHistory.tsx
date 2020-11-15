@@ -13,6 +13,7 @@ import { getPathGroupId } from '../lib/path';
 
 interface DailyHistoryProps {
   selectYears: number;
+  selectMonth: string;
 }
 
 const DailyHistory = (props: DailyHistoryProps) => {
@@ -42,6 +43,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
               return (
                 <DailyHistoryBody
                   selectYears={props.selectYears}
+                  selectMonth={props.selectMonth}
                   transactionsList={transactionsList}
                 />
               );
@@ -53,6 +55,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
               return (
                 <GroupDailyHistoryBody
                   selectYears={props.selectYears}
+                  selectMonth={props.selectMonth}
                   groupTransactionsList={groupTransactionsList}
                 />
               );
