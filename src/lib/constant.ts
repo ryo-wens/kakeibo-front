@@ -8,3 +8,5 @@ export const month = date.getMonth() + 1;
 export const customMonth = ('0' + month).slice(-2);
 export const guidanceMessage = '「入力フォーム」から家計簿の追加を行ってください';
 export const noTransactionMessage = 'この月には、まだ記録がありません。';
+export const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
+export const years = [year - 3, year - 2, year - 1, year, year + 1, year + 2, year + 3];

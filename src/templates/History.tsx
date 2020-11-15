@@ -2,29 +2,44 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
-import { year } from '../lib/constant';
+import { customMonth, month, year } from '../lib/constant';
 import { DailyHistory } from './index';
 import { MonthlyHistory, GroupMonthlyHistory } from '../components/home';
+import InputYears from '../components/uikit/InputYears';
 import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
+import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import '../assets/history/history.scss';
 
 const History = () => {
   const dispatch = useDispatch();
   const path = window.location.pathname;
+  const [selectedYear, setSelectedYear] = useState<number[]>([year]);
+  const [selectedMonth, setSelectedMonth] = useState<number[]>([month]);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
-  const [selectYears, setSelectYears] = useState<number>(year);
+  const [openSelectYears, setOpenSelectYears] = useState<boolean>(false);
 
-  const handleDateChange = useCallback(
+  const handleSelectYearsOpen = useCallback(() => {
+    setOpenSelectYears(true);
+  }, [setOpenSelectYears]);
+
+  const handleSelectYearsClose = useCallback(() => {
+    setOpenSelectYears(false);
+  }, [setOpenSelectYears]);
+
+  const changeSelectedYear = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
-      setSelectYears(event.target.value as number);
+      setSelectedYear(event.target.value as number[]);
     },
-    [setSelectYears]
+    [setSelectedYear]
+  );
+
+  const changeSelectedMonth = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setSelectedMonth(event.target.value as number[]);
+    },
+    [setSelectedMonth]
   );
 
   return (
@@ -62,26 +77,34 @@ const History = () => {
           <Button className="history__top-button">月ごと</Button>
         </ButtonGroup>
         <div className="history__spacer" />
-        <FormControl variant="outlined" className="history__selector">
-          <InputLabel id="years">年</InputLabel>
-          <Select
-            id="years"
-            labelId="yearsList"
-            value={selectYears}
-            onChange={handleDateChange}
-            label="年"
-          >
-            <MenuItem value={selectYears + 1}>{selectYears + 1}</MenuItem>
-            <MenuItem value={selectYears}>{selectYears}</MenuItem>
-            <MenuItem value={selectYears - 1}>{selectYears - 1}</MenuItem>
-          </Select>
-        </FormControl>
+        {(() => {
+          if (!openSelectYears) {
+            return (
+              <div className="input-years__btn__jump-years">
+                <button className="input-years__btn__jump-years" onClick={handleSelectYearsOpen}>
+                  {selectedYear} 年 {selectedMonth} 月
+                  <ExpandMoreIcon className="input-years__icon" />
+                </button>
+              </div>
+            );
+          } else {
+            return (
+              <InputYears
+                handleSelectYearsClose={handleSelectYearsClose}
+                changeSelectedMonth={changeSelectedMonth}
+                changeSelectedYear={changeSelectedYear}
+                selectedMonth={selectedMonth}
+                selectedYear={selectedYear}
+              />
+            );
+          }
+        })()}
       </div>
       {(() => {
         if (path === '/daily/history' || path === `/group/${groupId}/daily/history`) {
           return (
             <div className="history__table-size">
-              <DailyHistory selectYears={selectYears} />
+              <DailyHistory selectYears={year} selectMonth={customMonth} />
             </div>
           );
         } else if (path === '/weekly/history') {

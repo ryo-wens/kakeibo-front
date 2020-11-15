@@ -10,3 +10,4 @@ export { default as TextInput } from './TextInput';
 export { default as SelectMenu } from './selectMenu';
 export { default as ModalCategoryInput } from './ModalCategoryInput';
 export { default as AddTransactionModal } from './AddTransactionModal';
+export { default as InputYears } from './InputYears';

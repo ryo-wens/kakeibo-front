@@ -1,0 +1,17 @@
+@import "../variable";
+
+@mixin jump-years($jump-years-btn-bg-color ) {
+  background-color: $jump-years-btn-bg-color;
+  border: 1px solid $task-border_color;
+  border-radius: $task-border_radius;
+  cursor: pointer;
+  font-size: $large-font_size;
+  height: 45px;
+  width: 500px;
+
+
+  &:focus{
+    outline: none;
+  }
+
+}
