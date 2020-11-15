@@ -4,7 +4,7 @@ import '../../assets/task/task-list-item.scss';
 import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { TasksListItem } from '../../reducks/groupTasks/types';
 import { InputTask } from './index';
-import { editTaskItem } from '../../reducks/groupTasks/operations';
+import { deleteTaskItem, editTaskItem } from '../../reducks/groupTasks/operations';
 
 interface TaskListItemProps {
   taskListItem: TasksListItem;
@@ -31,7 +31,7 @@ const TaskListItem = (props: TaskListItemProps) => {
 
     if (!openEditTask) {
       return (
-        <li className="task-list-item" key={groupTaskListItem.id}>
+        <li className="task-list-item">
           <FiberManualRecordIcon
             className="task-list-item__color-icon"
             style={{ fontSize: '1.2rem' }}
@@ -46,6 +46,7 @@ const TaskListItem = (props: TaskListItemProps) => {
           <div key={groupTaskListItem.id}>
             <InputTask
               buttonLabel={'保存'}
+              titleLabel={'変更'}
               groupId={props.taskListItem.group_id}
               inputTaskClose={closeEditInputTask}
               inputTaskName={props.inputTaskName}
@@ -60,6 +61,7 @@ const TaskListItem = (props: TaskListItemProps) => {
                 groupTaskListItem.group_tasks_users_id
               )}
               taskName={props.taskName}
+              deleteOperation={deleteTaskItem(groupTaskListItem.group_id, groupTaskListItem.id)}
             />
           </div>
         </>

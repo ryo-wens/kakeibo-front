@@ -1,0 +1,53 @@
+@import "../variable";
+@import "../mixin/icon-btn";
+
+.set-task-list-item {
+  width: 380px;
+  background-color: $white;
+  padding: 20px 0;
+  margin: 20px auto auto auto;
+
+  &__position {
+    display: flex;
+    border-bottom: $task-border_color solid 1px;
+    justify-content: center;
+    position: relative;
+    padding: 0 0 10px 0;
+    margin: 0 0 25px 0;
+  }
+
+  &__btn-position{
+    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    position: absolute;
+    right: 0;
+    margin: 0 20px 0 0;
+  }
+
+  &__title {
+    color: $task-main_color;
+    font-size: $task-title-font_size;
+    margin: 0;
+  }
+
+  &__select-contents {
+    display: flex;
+    &:last-child {
+      margin: 0 0 30px 0;
+    }
+
+    &--key {
+      width: 180px;
+      color: $task-main_color;
+      font-size: $task-title-font_size;
+      font-weight: bold;
+      margin: 0 0 25px 20px;
+    }
+
+  }
+
+  &__operation-btn {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 20px;
+  }
+}
