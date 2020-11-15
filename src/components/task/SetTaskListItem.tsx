@@ -1,20 +1,13 @@
-import React, { useCallback, useState } from 'react';
-import Modal from '@material-ui/core/Modal';
+import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
 import { DeleteButton, SaveButton } from '../uikit';
 
-const SetTaskListItem = () => {
-  const [open, setOpen] = useState<boolean>(false);
+interface SetTaskListItemProps {
+  closeModal: () => void;
+}
 
-  const openModal = useCallback(() => {
-    setOpen(true);
-  }, [setOpen]);
-
-  const closeModal = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
-
+const SetTaskListItem = (props: SetTaskListItemProps) => {
   const selectContents = [
     {
       key: 'タスク名',
@@ -34,11 +27,11 @@ const SetTaskListItem = () => {
     },
   ];
 
-  const body = (
+  return (
     <div className="set-task-list-item">
       <div className="set-task-list-item__position">
         <h3 className="set-task-list-item__title">タスクの割り当て</h3>
-        <button className="set-task-list-item__btn-position" onClick={() => closeModal()}>
+        <button className="set-task-list-item__btn-position" onClick={() => props.closeModal()}>
           <CloseIcon />
         </button>
       </div>
@@ -70,22 +63,6 @@ const SetTaskListItem = () => {
           }}
         />
       </div>
-    </div>
-  );
-
-  return (
-    <div>
-      <button className="task--btn" disabled={false} onClick={() => openModal()}>
-        タスク割り当て
-      </button>
-      <Modal
-        open={open}
-        onClose={closeModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
-      </Modal>
     </div>
   );
 };
