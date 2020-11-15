@@ -6,7 +6,7 @@ import { fetchGroups } from '../reducks/groups/operations';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { EditTaskUser, SkipDate, TaskList, WeekTables } from '../components/task';
+import { EditTaskUser, SetTaskListItem, SkipDate, TaskList, WeekTables } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 import '../assets/task/task.scss';
 
@@ -74,6 +74,7 @@ const Task = () => {
         groupTasksList={groupTasksList}
       />
       <WeekTables selectedDate={selectedDate} />
+      <SetTaskListItem />
     </div>
   );
 };
