@@ -14,6 +14,7 @@ import '../../assets/history/daily-history.scss';
 interface DailyHistoryBodyProps {
   transactionsList: TransactionsList;
   selectYears: number;
+  selectMonth: string;
 }
 const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
   const dispatch = useDispatch();
@@ -41,7 +42,6 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
 
   return (
     <>
-      <h3>{props.selectYears} 年</h3>
       <table className="daily-history">
         <tbody>
           <tr>
