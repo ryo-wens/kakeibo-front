@@ -1,69 +1,56 @@
-import React, { useCallback, useState } from 'react';
-import { WeekTables } from './index';
+import React, { useCallback } from 'react';
 import { DatePicker } from '../uikit';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { date } from '../../lib/constant';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import '../../assets/task/skip-date.scss';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    date: {
-      display: 'flex',
-      justifyContent: 'space-between',
-      width: '700px',
-    },
-    datePicker: {
-      width: `200px`,
-    },
-  })
-);
+interface SkipDateProps {
+  selectedDate: Date;
+  setSelectedDate: React.Dispatch<React.SetStateAction<Date>>;
+}
 
-const SkipDate = () => {
-  const classes = useStyles();
-  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-
+const SkipDate = (props: SkipDateProps) => {
   const handleDateChange = useCallback(
     (selectedDate) => {
-      setSelectedDate(selectedDate as Date);
+      props.setSelectedDate(selectedDate as Date);
     },
-    [setSelectedDate]
+    [props.setSelectedDate]
   );
 
   const getTodayDate = useCallback(() => {
-    setSelectedDate(date);
-  }, [selectedDate]);
+    props.setSelectedDate(date);
+  }, [props.selectedDate]);
 
   const getNextWeek = useCallback(() => {
     const nextWeek = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate() + 7
+      props.selectedDate.getFullYear(),
+      props.selectedDate.getMonth(),
+      props.selectedDate.getDate() + 7
     );
-    setSelectedDate(nextWeek);
-  }, [selectedDate, setSelectedDate]);
+    props.setSelectedDate(nextWeek);
+  }, [props.selectedDate, props.setSelectedDate]);
 
   const getPrevWeek = useCallback(() => {
     const previousWeek = new Date(
-      selectedDate.getFullYear(),
-      selectedDate.getMonth(),
-      selectedDate.getDate() - 7
+      props.selectedDate.getFullYear(),
+      props.selectedDate.getMonth(),
+      props.selectedDate.getDate() - 7
     );
-    setSelectedDate(previousWeek);
-  }, [selectedDate, setSelectedDate]);
+    props.setSelectedDate(previousWeek);
+  }, [props.selectedDate, props.setSelectedDate]);
 
   const todayDay = date.getDay();
 
   const weekStartDate = new Date(
-    selectedDate.getFullYear(),
-    selectedDate.getMonth(),
-    selectedDate.getDate() - todayDay
+    props.selectedDate.getFullYear(),
+    props.selectedDate.getMonth(),
+    props.selectedDate.getDate() - todayDay
   );
   const weekLastDate = new Date(
-    selectedDate.getFullYear(),
-    selectedDate.getMonth(),
-    selectedDate.getDate() - todayDay + 6
+    props.selectedDate.getFullYear(),
+    props.selectedDate.getMonth(),
+    props.selectedDate.getDate() - todayDay + 6
   );
 
   const displayWeek = (weekDate: Date) => {
@@ -79,34 +66,31 @@ const SkipDate = () => {
 
   return (
     <>
-      <div className={classes.date}>
-        <div className={classes.datePicker}>
-          <DatePicker
-            value={selectedDate}
-            onChange={handleDateChange}
-            id={'date-picker-dialog'}
-            label={''}
-            required={false}
-          />
+      <div className="skip-date__date-picker">
+        <DatePicker
+          value={props.selectedDate}
+          onChange={handleDateChange}
+          id={'date-picker-dialog'}
+          label={''}
+          required={false}
+        />
+      </div>
+      <div className="skip-date__display-week">
+        <button className="skip-date__prev-btn" onClick={getPrevWeek}>
+          <ArrowLeftIcon />
+        </button>
+        <div className="skip-date__display-week-items">
+          {displayWeek(weekStartDate)}
+          <span className="skip-date__display-week-item--tilde">〜</span>
+          {displayWeek(weekLastDate)}
         </div>
-        <div className="skip-date__display-week">
-          <button className="skip-date__prev-btn" onClick={getPrevWeek}>
-            <ArrowLeftIcon />
-          </button>
-          <div className="skip-date__display-week-items">
-            {displayWeek(weekStartDate)}
-            <span className="skip-date__display-week-item--tilde">〜</span>
-            {displayWeek(weekLastDate)}
-          </div>
-          <button className="skip-date__next-btn" onClick={getNextWeek}>
-            <ArrowRightIcon />
-          </button>
-        </div>
-        <button className="task--btn" disabled={false} onClick={() => getTodayDate()}>
-          今日
+        <button className="skip-date__next-btn" onClick={getNextWeek}>
+          <ArrowRightIcon />
         </button>
       </div>
-      <WeekTables selectedDate={selectedDate} />
+      <button className="skip-date__today-btn" disabled={false} onClick={() => getTodayDate()}>
+        今日
+      </button>
     </>
   );
 };

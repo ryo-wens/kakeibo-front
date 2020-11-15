@@ -3,12 +3,18 @@
 .week-tables {
   display: flex;
   width: 100%;
+  background-color: $white;
 
   &__item{
     color: $task-sub_color;
-    border: $task-border_color solid 1px;
+    border: #F4F5F7 solid 2.5px;
+    border-right: none;
     width: calc(100%/8);
     padding: 5px 0;
+
+    &:last-child {
+      border-right: #F4F5F7 solid 2.5px;
+    }
   }
 
   &__day {

@@ -1,0 +1,12 @@
+@import "../variable";
+
+.task {
+  width: 100%;
+
+  &__menu {
+    width: 900px;
+    display: flex;
+    justify-content: space-between;
+    margin: 10px 0 20px 0;
+  }
+}

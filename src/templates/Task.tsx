@@ -1,29 +1,21 @@
-import React, { useEffect, useMemo } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import { fetchGroups } from '../reducks/groups/operations';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { EditTaskUser, SkipDate, TaskList } from '../components/task';
+import { EditTaskUser, SkipDate, TaskList, WeekTables } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      width: '1600px',
-    },
-  })
-);
+import '../assets/task/task.scss';
 
 const Task = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
   const groupId = getPathGroupId(window.location.pathname);
+  const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
+  const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
   const unapprovedGroups = getUnapprovedGroups(selector);
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
@@ -68,17 +60,20 @@ const Task = () => {
   }, [approvedGroups, groupId]);
 
   return (
-    <div className={classes.root}>
-      <EditTaskUser
-        approvedGroup={approvedGroup}
-        groupTasksListForEachUser={groupTasksListForEachUser}
-      />
+    <div className="task">
+      <div className="task__menu">
+        <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+        <EditTaskUser
+          approvedGroup={approvedGroup}
+          groupTasksListForEachUser={groupTasksListForEachUser}
+        />
+      </div>
       <TaskList
         groupId={groupId}
         groupTasksListForEachUser={groupTasksListForEachUser}
         groupTasksList={groupTasksList}
       />
-      <SkipDate />
+      <WeekTables selectedDate={selectedDate} />
     </div>
   );
 };

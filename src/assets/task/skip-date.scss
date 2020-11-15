@@ -3,6 +3,10 @@
 
 .skip-date {
 
+  &__date-picker {
+    width: 200px;
+  }
+
   &__display-week {
     display: flex;
   }
@@ -15,6 +19,11 @@
   &__next-btn {
     @extend .task--btn;
     border-radius: 0 0.5rem 0.5rem 0;
+  }
+
+  &__today-btn {
+    @extend .task--btn;
+    height: 38px;
   }
 
   &__display-week-items {
