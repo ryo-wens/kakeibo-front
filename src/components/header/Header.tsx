@@ -18,8 +18,10 @@ import { MobileDrawer } from './index';
 import { InvitationNotifications } from '../todo';
 import SwitchEntity from './SwitchEntity';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { fetchUserInfo } from '../../reducks/users/operations';
 import { fetchGroups } from '../../reducks/groups/operations';
 import { Groups } from '../../reducks/groups/types';
+import { getUserName } from '../../reducks/users/selectors';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
 
@@ -67,6 +69,7 @@ const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
+  const userName: string = getUserName(selector);
   const approvedGroups: Groups = getApprovedGroups(selector);
   const entityType: string = getPathTemplateName(window.location.pathname);
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -80,6 +83,12 @@ const Header = () => {
   };
 
   useEffect(() => {
+    if (userName === '') {
+      dispatch(fetchUserInfo());
+    }
+  }, [userName]);
+
+  useEffect(() => {
     const initialName = async () => {
       if (entityType === 'group') {
         await fetchApprovedGroups();
@@ -91,15 +100,15 @@ const Header = () => {
         }
         setName(groupName);
       } else if (entityType !== 'group') {
-        setName('user name');
+        setName(userName);
       }
     };
     initialName();
-  }, [approvedGroups, entityType, groupId]);
+  }, [approvedGroups, entityType, groupId, userName]);
 
-  const switchToIndividual = () => {
+  const switchToIndividual = (userName: string) => {
     setAnchorEl(null);
-    setName('user name');
+    setName(userName);
     dispatch(push('/'));
   };
 
@@ -134,8 +143,6 @@ const Header = () => {
   const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {
       dispatch(logOut());
-    } else {
-      alert('ログアウトを中止しました');
     }
   };
 
@@ -201,11 +208,13 @@ const Header = () => {
             entityType={entityType}
             groupId={groupId}
             name={name}
+            userName={userName}
             openMenu={openMenu}
-            switchToIndividual={() => switchToIndividual()}
+            switchToIndividual={switchToIndividual}
             switchToGroup={switchToGroup}
             closeMenu={closeMenu}
             anchorEl={anchorEl}
+            approvedGroups={approvedGroups}
           />
           <InvitationNotifications />
           <div className={classes.sectionDesktop}>

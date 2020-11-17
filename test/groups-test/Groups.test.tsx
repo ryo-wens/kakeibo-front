@@ -32,8 +32,8 @@ const store = mockStore({ users: [], groups: [], router: [] });
 const getState = () => {
   return {
     users: {
-      user_id: 'furusawa',
-      user_name: '古澤',
+      id: 'furusawa',
+      name: '古澤',
       email: 'test@gmail.com',
       password: 'password',
     },
