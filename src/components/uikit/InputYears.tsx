@@ -1,15 +1,16 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchTransactionsList } from '../../reducks/transactions/operations';
+import { fetchGroupTransactionsList } from '../../reducks/groupTransactions/operations';
 import { year, month, years, months } from '../../lib/constant';
-import { getPathTemplateName } from '../../lib/path';
+import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/modules/input-years.scss';
 
 interface InputYearsProps {
   handleSelectYearsClose: () => void;
   selectedYear: number[];
-  selectedMonth: number[];
+  selectedMonth: number;
   changeSelectedYear: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeSelectedMonth: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
@@ -17,6 +18,7 @@ interface InputYearsProps {
 const InputYears = (props: InputYearsProps) => {
   const dispatch = useDispatch();
   const pathName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
 
   return (
     <>
@@ -61,6 +63,14 @@ const InputYears = (props: InputYearsProps) => {
                     ('0' + props.selectedMonth).slice(-2)
                   )
                 ) && props.handleSelectYearsClose();
+              } else {
+                dispatch(
+                  fetchGroupTransactionsList(
+                    Number(props.selectedYear),
+                    String(props.selectedMonth),
+                    groupId
+                  )
+                );
               }
             }}
           >
