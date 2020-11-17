@@ -1,5 +1,6 @@
+import { UserInfo } from './types';
 export type userActions = ReturnType<
-  typeof signUpAction | typeof logInAction | typeof logOutAction
+  typeof signUpAction | typeof logInAction | typeof logOutAction | typeof fetchUserInfoAction
 >;
 
 export const SIGN_UP = 'SIGN_UP';
@@ -29,5 +30,13 @@ export const logOutAction = () => {
   return {
     type: LOG_OUT,
     payload: null,
+  };
+};
+
+export const FETCH_USER_INFO = 'FETCH_USER_INFO';
+export const fetchUserInfoAction = (userInfo: UserInfo) => {
+  return {
+    type: FETCH_USER_INFO,
+    payload: userInfo,
   };
 };

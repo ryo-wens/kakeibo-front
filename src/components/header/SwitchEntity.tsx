@@ -2,10 +2,7 @@ import React from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { CreateGroups, GroupMenuButton } from '../todo';
 import { Button, Divider, ListItem, Menu } from '@material-ui/core';
-import { useSelector } from 'react-redux';
-import { State } from '../../reducks/store/types';
 import { Groups } from '../../reducks/groups/types';
-import { getApprovedGroups } from '../../reducks/groups/selectors';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -45,8 +42,10 @@ interface SwitchEntityProps {
   entityType: string;
   groupId: number;
   name: string;
+  userName: string;
+  approvedGroups: Groups;
   openMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  switchToIndividual: () => void;
+  switchToIndividual: (userName: string) => void;
   switchToGroup: (value: number, name: string) => void;
   closeMenu: () => void;
   anchorEl: null | HTMLElement;
@@ -54,8 +53,6 @@ interface SwitchEntityProps {
 
 const SwitchEntity = (props: SwitchEntityProps) => {
   const classes = useStyles();
-  const selector = useSelector((state: State) => state);
-  const approvedGroups: Groups = getApprovedGroups(selector);
 
   return (
     <div>
@@ -69,12 +66,12 @@ const SwitchEntity = (props: SwitchEntityProps) => {
         open={Boolean(props.anchorEl)}
         onClose={props.closeMenu}
       >
-        <ListItem value={'UserName'} onClick={props.switchToIndividual}>
-          UserName
+        <ListItem value={'UserName'} onClick={() => props.switchToIndividual(props.userName)}>
+          {props.userName}
         </ListItem>
         <Divider />
         <span className={classes.group}>グループ</span>
-        {approvedGroups.map((approvedGroup) => {
+        {props.approvedGroups.map((approvedGroup) => {
           return (
             <div key={approvedGroup.group_id} className={classes.groupListItem}>
               <ListItem

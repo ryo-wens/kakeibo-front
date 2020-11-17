@@ -1,9 +1,13 @@
 export interface UserState {
-  user_id: string;
-  user_name: string;
+  id: string;
+  name: string;
   email: string;
-  password: string;
-  confirm_password: string;
+}
+
+export interface UserInfo {
+  id: string;
+  name: string;
+  email: string;
 }
 
 export interface SignupReq {
@@ -13,18 +17,12 @@ export interface SignupReq {
   password: string;
 }
 
-export interface SignupRes {
-  id: string;
-  name: string;
-  email: string;
-}
-
 export interface LoginReq {
   email: string;
   password: string;
 }
 
-export interface LoginRes {
+export interface UserRes {
   id: string;
   name: string;
   email: string;

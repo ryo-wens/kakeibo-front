@@ -35,8 +35,8 @@ const initialState = {
     },
   },
   users: {
-    user_id: '',
-    user_name: '',
+    id: '',
+    name: '',
     email: '',
   },
   groups: {
