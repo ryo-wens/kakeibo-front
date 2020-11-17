@@ -1,21 +1,23 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
+import { fetchTransactionsList } from '../reducks/transactions/operations';
+import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
 import { customMonth, month, year } from '../lib/constant';
 import { DailyHistory } from './index';
 import { MonthlyHistory, GroupMonthlyHistory } from '../components/home';
 import InputYears from '../components/uikit/InputYears';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import ArrowRightIcon from '@material-ui/icons/ArrowRight';
+import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import '../assets/history/history.scss';
 
 const History = () => {
   const dispatch = useDispatch();
   const path = window.location.pathname;
   const [selectedYear, setSelectedYear] = useState<number[]>([year]);
-  const [selectedMonth, setSelectedMonth] = useState<number[]>([month]);
+  const [selectedMonth, setSelectedMonth] = useState<number>(month);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [openSelectYears, setOpenSelectYears] = useState<boolean>(false);
@@ -37,7 +39,7 @@ const History = () => {
 
   const changeSelectedMonth = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
-      setSelectedMonth(event.target.value as number[]);
+      setSelectedMonth(event.target.value as number);
     },
     [setSelectedMonth]
   );
@@ -45,12 +47,8 @@ const History = () => {
   return (
     <>
       <div className="history__position">
-        <ButtonGroup
-          className="history__top-button"
-          size="large"
-          aria-label="small outlined button group"
-        >
-          <Button
+        <div className=" history" aria-label="small outlined button group">
+          <button
             className="history__top-button"
             onClick={() => {
               if (pathName !== 'group') {
@@ -61,8 +59,8 @@ const History = () => {
             }}
           >
             日ごと
-          </Button>
-          <Button
+          </button>
+          <button
             className="history__top-button"
             onClick={() => {
               if (pathName !== 'group') {
@@ -73,17 +71,57 @@ const History = () => {
             }}
           >
             週ごと
-          </Button>
-          <Button className="history__top-button">月ごと</Button>
-        </ButtonGroup>
+          </button>
+          <button className="history__top-button">月ごと</button>
+        </div>
         <div className="history__spacer" />
         {(() => {
           if (!openSelectYears) {
             return (
-              <div className="input-years__btn__jump-years">
+              <div className="history">
+                <button
+                  className="skip-date__prev-btn history__prev-btn"
+                  onClick={() => {
+                    if (pathName !== 'group') {
+                      dispatch(
+                        fetchTransactionsList(String(selectedYear), String(selectedMonth - 1))
+                      ) && setSelectedMonth(selectedMonth - 1);
+                    } else {
+                      dispatch(
+                        fetchGroupTransactionsList(
+                          Number(selectedYear),
+                          String(selectedMonth - 1),
+                          groupId
+                        )
+                      ) && setSelectedMonth(selectedMonth - 1);
+                    }
+                  }}
+                >
+                  <ArrowLeftIcon />
+                </button>
                 <button className="input-years__btn__jump-years" onClick={handleSelectYearsOpen}>
                   {selectedYear} 年 {selectedMonth} 月
                   <ExpandMoreIcon className="input-years__icon" />
+                </button>
+                <button
+                  className="skip-date__next-btn history__next-btn"
+                  onClick={() => {
+                    if (pathName !== 'group') {
+                      dispatch(
+                        fetchTransactionsList(String(selectedYear), String(selectedMonth + 1))
+                      ) && setSelectedMonth(selectedMonth + 1);
+                    } else {
+                      dispatch(
+                        fetchGroupTransactionsList(
+                          Number(selectedYear),
+                          String(selectedMonth + 1),
+                          groupId
+                        )
+                      ) && setSelectedMonth(selectedMonth + 1);
+                    }
+                  }}
+                >
+                  <ArrowRightIcon />
                 </button>
               </div>
             );

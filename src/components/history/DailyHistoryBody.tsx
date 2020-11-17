@@ -7,7 +7,6 @@ import { fetchCategories } from '../../reducks/categories/operations';
 import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
 import { getPathTemplateName } from '../../lib/path';
 import IconButton from '@material-ui/core/IconButton';
-import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CreateIcon from '@material-ui/icons/Create';
 import '../../assets/history/daily-history.scss';
 
@@ -47,9 +46,6 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
           <tr>
             <td className="daily-history__th" align="center">
               編集
-            </td>
-            <td className="daily-history__th" align="center">
-              集計
             </td>
             <td className="daily-history__th" align="center">
               日付
@@ -101,11 +97,6 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
                     transactionDate={transaction_date}
                     transactionsType={transaction_type}
                   />
-                </td>
-                <td className="daily-history__td" scope="row" align="center">
-                  <IconButton size={'small'} onClick={() => console.log('test')}>
-                    <AddCircleOutlineIcon color={'primary'} />
-                  </IconButton>
                 </td>
                 <td className="daily-history__td" align="center">
                   {transaction_date}

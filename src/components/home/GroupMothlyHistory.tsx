@@ -4,7 +4,7 @@ import { fetchGroupTransactionsList } from '../../reducks/groupTransactions/oper
 import { State } from '../../reducks/store/types';
 import { getGroupTransactions } from '../../reducks/groupTransactions/selectors';
 import { incomeTransactionType } from '../../lib/constant';
-import { getPathGroupId } from '../../lib/path';
+import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { year, month, customMonth } from '../../lib/constant';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
@@ -12,14 +12,18 @@ import { EditTransactionModal, SelectMenu } from '../uikit';
 const GroupMonthlyHistory = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
+  const path = window.location.pathname;
   const groupId = getPathGroupId(window.location.pathname);
+  const pathName = getPathTemplateName(window.location.pathname);
   const groupTransactionsList = getGroupTransactions(selector);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    dispatch(fetchGroupTransactionsList(year, customMonth, groupId));
-  }, []);
+    if (pathName === 'group' && !groupTransactionsList.length) {
+      dispatch(fetchGroupTransactionsList(year, customMonth, groupId));
+    }
+  }, [pathName]);
 
   const handleOpen = (transactionId: number) => {
     setOpen(true);
@@ -182,7 +186,7 @@ const GroupMonthlyHistory = () => {
     <>
       <div className="monthly-history-table__spacer" />
       <div className="box__monthlyExpense">
-        <h2>{month}月の支出</h2>
+        {path !== `/group/${groupId}/weekly/history` && <h2>{month}月の支出</h2>}
         <table className="monthly-history-table">
           <tbody className="monthly-history-table__tbody">
             <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
