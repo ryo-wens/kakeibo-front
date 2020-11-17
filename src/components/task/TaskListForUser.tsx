@@ -3,7 +3,6 @@ import { getWeekStartDate } from '../../lib/date';
 import { UserTasksListItem } from '../../reducks/groupTasks/types';
 import AddIcon from '@material-ui/icons/Add';
 import Modal from '@material-ui/core/Modal';
-import { SetTaskListItem } from './index';
 import '../../assets/task/task-list-for-user.scss';
 
 interface TaskListForUserProps {
@@ -48,13 +47,8 @@ const TaskListForUser = (props: TaskListForUserProps) => {
         <th className="task-list-for-user__item">{props.groupTasksListItem.user_id}</th>
         {week}
       </tr>
-      <Modal
-        open={open}
-        onClose={closeModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        <SetTaskListItem closeModal={closeModal} />
+      <Modal open={open} onClose={closeModal}>
+        {/*<SetTaskListItem closeModal={closeModal} />*/}
       </Modal>
     </>
   );

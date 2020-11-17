@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useMemo, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -6,15 +6,17 @@ import { fetchGroups } from '../reducks/groups/operations';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { EditTaskUser, SkipDate, TaskList, TaskListForUser, WeekTables } from '../components/task';
+import { EditTaskUser, SetTaskListItem, SkipDate, TaskList, WeekTables } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 import '../assets/task/task.scss';
-import { UserTasksListItem } from '../reducks/groupTasks/types';
+import Modal from '@material-ui/core/Modal';
+import AddIcon from '@material-ui/icons/Add';
 
 const Task = () => {
   const dispatch = useDispatch();
   const groupId = getPathGroupId(window.location.pathname);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [open, setOpen] = useState<boolean>(false);
 
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
@@ -60,6 +62,14 @@ const Task = () => {
     }
   }, [approvedGroups, groupId]);
 
+  const openModal = useCallback(() => {
+    setOpen(true);
+  }, [setOpen]);
+
+  const closeModal = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
   return (
     <div className="task">
       <div className="task__menu">
@@ -75,13 +85,12 @@ const Task = () => {
         groupTasksList={groupTasksList}
       />
       <WeekTables selectedDate={selectedDate} />
-      {groupTasksListForEachUser.map((groupTasksListItem: UserTasksListItem) => {
-        return (
-          <div key={groupTasksListItem.id}>
-            <TaskListForUser selectedDate={selectedDate} groupTasksListItem={groupTasksListItem} />
-          </div>
-        );
-      })}
+      <button className="task-list-for-user__add-icon" onClick={() => openModal()}>
+        <AddIcon />
+      </button>
+      <Modal open={open} onClose={closeModal}>
+        <SetTaskListItem groupTasksList={groupTasksList} closeModal={closeModal} />
+      </Modal>
     </div>
   );
 };

@@ -3,13 +3,25 @@ import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
 import { DeleteButton, InputInteger, SaveButton } from '../uikit';
 import { isValidBudgetFormat, isValidPreventBeginningZero } from '../../lib/validation';
+import { SelectTaskName } from './index';
+import { GroupTasksList } from '../../reducks/groupTasks/types';
 
 interface SetTaskListItemProps {
+  groupTasksList: GroupTasksList;
   closeModal: () => void;
 }
 
 const SetTaskListItem = (props: SetTaskListItemProps) => {
+  const [taskName, setTaskName] = useState<string>('');
   const [cycle, setCycle] = useState<number>(1);
+
+  const selectTaskName = useCallback(
+    (event: React.ChangeEvent<{ value: string }>) => {
+      console.log(taskName);
+      setTaskName(event.target.value);
+    },
+    [setTaskName]
+  );
 
   const inputCycle = useCallback(
     (event) => {
@@ -33,7 +45,9 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
   const selectContents = [
     {
       key: 'タスク名',
-      value: 'value',
+      value: (
+        <SelectTaskName groupTasksList={props.groupTasksList} selectTaskName={selectTaskName} />
+      ),
     },
     {
       key: '基準日',
