@@ -1,0 +1,16 @@
+@import "../variable";
+
+@mixin switching-btn($switching-btn-bg-color, $switching-btn-border-color ) {
+  background-color: $switching-btn-bg-color;
+  border: 2px solid $switching-btn-border-color ;
+  cursor: pointer;
+  font-size: $task-title-font_size;
+
+  &:hover {
+    opacity: 0.7;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}

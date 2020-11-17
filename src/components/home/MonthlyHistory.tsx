@@ -190,7 +190,7 @@ const MonthlyHistory = () => {
             <>
               <div className="monthly-history-table__spacer" />
               <div className="box__monthlyExpense">
-                <h2>{month}月の支出</h2>
+                {pathName !== 'weekly' && <h2>{month}月の支出</h2>}
                 <table className="monthly-history-table">
                   <tbody className="monthly-history-table__tbody">
                     <tr className="monthly-history-table__thead">{rows().headerRow}</tr>

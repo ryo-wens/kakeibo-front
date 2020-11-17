@@ -42,8 +42,8 @@ export interface State {
     groupCustomBudgetsList: GroupCustomBudgetsList;
   };
   users: {
-    user_id: string;
-    user_name: string;
+    id: string;
+    name: string;
     email: string;
   };
   groups: {

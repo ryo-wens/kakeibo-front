@@ -1,7 +1,10 @@
 @import "src/assets/variable";
 @import "../modules/input-years";
+@import "../task/skip-date";
+@import "../mixin/switching-btn";
 
 .history{
+  display: flex;
 
   &__position {
     display: flex;
@@ -14,8 +17,20 @@
   }
 
   &__top-button {
-    background-color: $white,;
-    width: 660px;
+    @include switching-btn($white, $task-border_color);
+    border-collapse: collapse;
+    height: 45px;
+    width: 220px;
+
+    &:first-child {
+      border-top-left-radius: $task-border_radius;
+      border-bottom-left-radius: $task-border_radius;
+    }
+
+    &:last-child {
+      border-top-right-radius: $task-border_radius;
+      border-bottom-right-radius: $task-border_radius;
+    }
   }
 
   &__selector {
@@ -29,4 +44,13 @@
     margin: 0 auto;
     width: 80%
   }
+
+  &__prev-btn {
+    float: left;
+  }
+
+  &__next-btn {
+    float: right;
+  }
+
 }

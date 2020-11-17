@@ -4,7 +4,7 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { signUp, logIn, logOut } from '../../src/reducks/users/operations';
+import { signUp, logIn, logOut, fetchUserInfo } from '../../src/reducks/users/operations';
 import signUpResponse from './signUpResponse.json';
 import logOutResponse from './logOutResponse.json';
 
@@ -16,14 +16,15 @@ process.on('unhandledRejection', console.dir);
 const userState = JSON.parse(JSON.stringify(signUpResponse));
 const store = mockStore({ userState, router: [] });
 
-describe('async actions signUp', () => {
-  const store = mockStore({ users: [], router: [] });
-  const url = `${process.env.REACT_APP_USER_API_HOST}/signup`;
-  beforeEach(() => {
-    store.clearActions();
-  });
-
+describe('async actions users', () => {
   it('SignUp userData if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const store = mockStore({ users: [], router: [] });
+    const url = `${process.env.REACT_APP_USER_API_HOST}/signup`;
+
     const signUpReq = {
       id: 'kohh20',
       name: '千葉雄喜',
@@ -56,15 +57,14 @@ describe('async actions signUp', () => {
     await signUp('kohh20', '千葉雄喜', 'kohh@gmail.com', 'kohhworst', 'kohhworst')(store.dispatch);
     expect(store.getActions()).toEqual(expectedSignUpActions);
   });
-});
-
-describe('async actions logIn', () => {
-  const url = `${process.env.REACT_APP_USER_API_HOST}/login`;
-  beforeEach(() => {
-    store.clearActions();
-  });
 
   it('LogIn if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const url = `${process.env.REACT_APP_USER_API_HOST}/login`;
+
     const logInReq = {
       email: 'kohh@gmail.com',
       password: 'kohhworst',
@@ -93,15 +93,14 @@ describe('async actions logIn', () => {
     await logIn('kohh@gmail.com', 'kohhworst')(store.dispatch);
     expect(store.getActions()).toEqual(expectedLogInActions);
   });
-});
-
-describe('async actions logOut', () => {
-  const url = `${process.env.REACT_APP_USER_API_HOST}/logout`;
-  beforeEach(() => {
-    store.clearActions();
-  });
 
   it('LogOut if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const url = `${process.env.REACT_APP_USER_API_HOST}/logout`;
+
     const resLogOut = logOutResponse.message;
 
     const expectedLogOutActions = [
@@ -122,5 +121,27 @@ describe('async actions logOut', () => {
 
     await logOut()(store.dispatch);
     expect(store.getActions()).toEqual(expectedLogOutActions);
+  });
+
+  it('Get userInfo if fetch succeeds', async () => {
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const url = `${process.env.REACT_APP_USER_API_HOST}/user`;
+
+    const mockResponse = signUpResponse;
+
+    const expectedUserInfoActions = [
+      {
+        type: actionTypes.FETCH_USER_INFO,
+        payload: mockResponse,
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchUserInfo()(store.dispatch);
+    expect(store.getActions()).toEqual(expectedUserInfoActions);
   });
 });

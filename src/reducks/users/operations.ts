@@ -1,9 +1,9 @@
-import { signUpAction, logInAction, logOutAction } from './actions';
+import { signUpAction, logInAction, logOutAction, fetchUserInfoAction } from './actions';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import axios from 'axios';
-import { SignupReq, SignupRes, LoginReq, LoginRes, LogoutRes } from './types';
-import { isValidEmailFormat, isValidPasswordFormat } from '../../lib/validation';
+import { SignupReq, UserRes, LoginReq, LogoutRes } from './types';
+import { isValidEmailFormat, isValidPasswordFormat, errorHandling } from '../../lib/validation';
 
 export const signUp = (
   userId: string,
@@ -59,7 +59,7 @@ export const signUp = (
       password: password,
     };
     await axios
-      .post<SignupRes>(`${process.env.REACT_APP_USER_API_HOST}/signup`, JSON.stringify(data), {
+      .post<UserRes>(`${process.env.REACT_APP_USER_API_HOST}/signup`, JSON.stringify(data), {
         withCredentials: true,
       })
       .then(() => {
@@ -131,7 +131,7 @@ export const logIn = (email: string, password: string) => {
 
     const data: LoginReq = { email: email, password: password };
     await axios
-      .post<LoginRes>(`${process.env.REACT_APP_USER_API_HOST}/login`, JSON.stringify(data), {
+      .post<UserRes>(`${process.env.REACT_APP_USER_API_HOST}/login`, JSON.stringify(data), {
         withCredentials: true,
       })
       .then(() => {
@@ -178,5 +178,20 @@ export const logOut = () => {
           alert(error);
         }
       });
+  };
+};
+
+export const fetchUserInfo = () => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<UserRes>(`${process.env.REACT_APP_USER_API_HOST}/user`, {
+        withCredentials: true,
+      });
+      const userInfo: UserRes = result.data;
+
+      dispatch(fetchUserInfoAction(userInfo));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
