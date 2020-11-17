@@ -1,13 +1,35 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
-import { DeleteButton, SaveButton } from '../uikit';
+import { DeleteButton, InputInteger, SaveButton } from '../uikit';
+import { isValidBudgetFormat, isValidPreventBeginningZero } from '../../lib/validation';
 
 interface SetTaskListItemProps {
   closeModal: () => void;
 }
 
 const SetTaskListItem = (props: SetTaskListItemProps) => {
+  const [cycle, setCycle] = useState<number>(1);
+
+  const inputCycle = useCallback(
+    (event) => {
+      setCycle(event.target.value);
+    },
+    [setCycle]
+  );
+
+  const switchMessage = () => {
+    if (!cycle) {
+      return '必須項目です';
+    } else if (isValidPreventBeginningZero(cycle)) {
+      return '先頭に0は入力できません';
+    } else if (!isValidBudgetFormat(cycle)) {
+      return '整数のみ入力可能です';
+    } else {
+      return '';
+    }
+  };
+
   const selectContents = [
     {
       key: 'タスク名',
@@ -23,7 +45,15 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
     },
     {
       key: 'サイクル',
-      value: 'value',
+      value: (
+        <InputInteger
+          name={'cycle'}
+          value={cycle}
+          required={true}
+          onChange={inputCycle}
+          message={switchMessage()}
+        />
+      ),
     },
   ];
 

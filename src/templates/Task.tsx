@@ -74,15 +74,12 @@ const Task = () => {
         groupTasksListForEachUser={groupTasksListForEachUser}
         groupTasksList={groupTasksList}
       />
-      <table></table>
       <WeekTables selectedDate={selectedDate} />
       {groupTasksListForEachUser.map((groupTasksListItem: UserTasksListItem) => {
         return (
-          <TaskListForUser
-            selectedDate={selectedDate}
-            groupTasksListItem={groupTasksListItem}
-            key={groupTasksListItem.id}
-          />
+          <div key={groupTasksListItem.id}>
+            <TaskListForUser selectedDate={selectedDate} groupTasksListItem={groupTasksListItem} />
+          </div>
         );
       })}
     </div>

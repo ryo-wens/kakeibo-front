@@ -31,14 +31,12 @@ const TaskListForUser = (props: TaskListForUserProps) => {
       const date = new Date(startDate.setDate(startDate.getDate() + i));
 
       weekTableItems.push(
-        <>
-          <td className="task-list-for-user__item">
-            <span className="task-list-for-user__date">{date.getDate()}</span>
-            <button className="task-list-for-user__add-icon" onClick={() => openModal()}>
-              <AddIcon />
-            </button>
-          </td>
-        </>
+        <td className="task-list-for-user__item" key={i}>
+          <span className="task-list-for-user__date">{date.getDate()}</span>
+          <button className="task-list-for-user__add-icon" onClick={() => openModal()}>
+            <AddIcon />
+          </button>
+        </td>
       );
     }
     return weekTableItems;
