@@ -17,7 +17,9 @@ import groupStandardBudgets from './fetchGroupStandardBudgetsResponse.json';
 import groupEditedStandardBudgets from './editGroupStandardBudgetsResponse.json';
 import groupYearlyBudgets from './fetchGroupYearlyBudgetsResponse.json';
 import groupAddedCustomBudgets from './addGroupCustomBudgetsResponse.json';
+import addGroupCustomBudgetPayload from './addGroupCustomBudgetsPayload.json';
 import groupCustomBudgets from './fetchGroupCustomBudgetsResponse.json';
+import editGroupCustomBudgetPayload from './editGroupCustomBudgetsPayload.json';
 import groupEditedCustomBudgets from './editGroupCustomBudgetsResponse.json';
 import groupDeletedCustomBudgets from './deleteGroupCustomBudgetsResponse.json';
 
@@ -40,7 +42,7 @@ describe('async actions fetchGroupStandardBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_STANDARD_BUDGETS,
+        type: actionTypes.FETCH_GROUP_STANDARD_BUDGETS,
         payload: mockResponse.standard_budgets,
       },
     ];
@@ -142,7 +144,7 @@ describe('async actions editGroupStandardBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_STANDARD_BUDGETS,
+        type: actionTypes.EDIT_GROUP_STANDARD_BUDGETS,
         payload: mockResponse.standard_budgets,
       },
     ];
@@ -203,7 +205,7 @@ describe('async actions getGroupCustomBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_CUSTOM_BUDGETS,
+        type: actionTypes.FETCH_GROUP_CUSTOM_BUDGETS,
         payload: mockResponse.custom_budgets,
       },
     ];
@@ -221,9 +223,17 @@ describe('async actions addGroupCustomBudgets', () => {
   });
   const groupId = 1;
   const selectYear = '2020';
-  const selectMonth = '01';
-  const store = mockStore({ groupCustomBudgets });
+  const selectMonth = '02';
+  const store = mockStore({ groupBudgets: { groupYearlyBudgetsList: groupYearlyBudgets } });
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+
+  const getState = () => {
+    return {
+      groupBudgets: {
+        groupYearlyBudgetsList: groupYearlyBudgets,
+      },
+    };
+  };
 
   it('Add groupCustomBudgets if fetch succeeds', async () => {
     const mockResponse = groupAddedCustomBudgets;
@@ -299,8 +309,8 @@ describe('async actions addGroupCustomBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_CUSTOM_BUDGETS,
-        payload: mockResponse.custom_budgets,
+        type: actionTypes.ADD_GROUP_CUSTOM_BUDGETS,
+        payload: addGroupCustomBudgetPayload,
       },
     ];
 
@@ -311,7 +321,8 @@ describe('async actions addGroupCustomBudgets', () => {
       selectMonth,
       groupId,
       mockRequest.custom_budgets
-    )(store.dispatch);
+      // @ts-ignore
+    )(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -321,8 +332,10 @@ describe('async actions editGroupCustomBudgets', () => {
     store.clearActions();
   });
   const selectYear = '2020';
-  const selectMonth = '01';
-  const store = mockStore({ groupAddedCustomBudgets });
+  const selectMonth = '02';
+  const store = mockStore({
+    groupBudgets: { groupYearlyBudgetsList: addGroupCustomBudgetPayload },
+  });
 
   const groupId = 1;
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
@@ -331,7 +344,7 @@ describe('async actions editGroupCustomBudgets', () => {
     const getState = () => {
       return {
         groupBudgets: {
-          groupCustomBudgetsList: groupAddedCustomBudgets.custom_budgets,
+          groupYearlyBudgetsList: addGroupCustomBudgetPayload,
         },
       };
     };
@@ -409,8 +422,8 @@ describe('async actions editGroupCustomBudgets', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_CUSTOM_BUDGETS,
-        payload: mockResponse.custom_budgets,
+        type: actionTypes.EDIT_GROUP_CUSTOM_BUDGETS,
+        payload: editGroupCustomBudgetPayload,
       },
     ];
 
@@ -431,10 +444,15 @@ describe('async actions deleteGroupCustomBudgets', () => {
   beforeEach(() => {
     store.clearActions();
   });
-  const store = mockStore({ groupYearlyBudgets });
+  const store = mockStore({
+    groupBudgets: {
+      groupYearlyBudgetsList: groupYearlyBudgets,
+      groupStandardBudgetsList: groupEditedStandardBudgets.standard_budgets,
+    },
+  });
 
   const selectYear = '2020';
-  const selectMonth = '01';
+  const selectMonth = '02';
   const groupId = 1;
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
 
@@ -443,21 +461,21 @@ describe('async actions deleteGroupCustomBudgets', () => {
       return {
         groupBudgets: {
           groupStandardBudgetsList: groupEditedStandardBudgets.standard_budgets,
-          groupYearlyBudgetsList: groupYearlyBudgets,
+          groupYearlyBudgetsList: editGroupCustomBudgetPayload,
         },
       };
     };
 
     const mockResponse = groupDeletedCustomBudgets.message;
 
-    const mockRequest = {
+    const mockPayload = {
       year: '2020-01-01T00:00:00Z',
-      yearly_total_budget: 1775000,
+      yearly_total_budget: 1801500,
       monthly_budgets: [
         {
           month: '2020年01月',
-          budget_type: 'StandardBudget',
-          monthly_total_budget: 143500,
+          budget_type: 'CustomBudget',
+          monthly_total_budget: 170000,
         },
         {
           month: '2020年02月',
@@ -520,7 +538,7 @@ describe('async actions deleteGroupCustomBudgets', () => {
     const expectedActions = [
       {
         type: actionTypes.DELETE_GROUP_CUSTOM_BUDGETS,
-        payload: mockRequest,
+        payload: mockPayload,
       },
     ];
 
