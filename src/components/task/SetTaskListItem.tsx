@@ -1,10 +1,11 @@
 import React, { useCallback, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
-import { DeleteButton, InputInteger, SaveButton } from '../uikit';
+import { DatePicker, DeleteButton, InputInteger, SaveButton } from '../uikit';
 import { isValidBudgetFormat, isValidPreventBeginningZero } from '../../lib/validation';
 import { SelectCycleType, SelectTaskName } from './index';
 import { GroupTasksList } from '../../reducks/groupTasks/types';
+import { date } from '../../lib/constant';
 
 interface SetTaskListItemProps {
   groupTasksList: GroupTasksList;
@@ -13,7 +14,8 @@ interface SetTaskListItemProps {
 
 const SetTaskListItem = (props: SetTaskListItemProps) => {
   const [taskName, setTaskName] = useState<string>('');
-  const [cycleType, setCycleType] = useState<string | null>('');
+  const [selectDate, setSelectDate] = useState<Date>(date);
+  const [cycleType, setCycleType] = useState<'every' | 'consecutive' | 'none' | null>('every');
   const [cycle, setCycle] = useState<number>(1);
 
   const selectTaskName = useCallback(
@@ -24,11 +26,18 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
     [setTaskName]
   );
 
+  const handleDateChange = useCallback(
+    (selectedDate) => {
+      setSelectDate(selectedDate as Date);
+    },
+    [setSelectDate]
+  );
+
   const selectCycleType = useCallback(
     (event: React.ChangeEvent<{ value: string }>) => {
       console.log(cycleType);
       if (event.target.value !== 'null') {
-        setCycleType(event.target.value);
+        setCycleType(event.target.value as 'every' | 'consecutive' | 'none');
       } else if (event.target.value === 'null') {
         setCycleType(null);
       }
@@ -64,7 +73,15 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
     },
     {
       key: '基準日',
-      value: 'value',
+      value: (
+        <DatePicker
+          value={selectDate}
+          onChange={handleDateChange}
+          id={'date-picker-dialog'}
+          label={''}
+          required={false}
+        />
+      ),
     },
     {
       key: 'サイクルタイプ',

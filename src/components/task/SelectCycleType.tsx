@@ -5,19 +5,14 @@ interface SelectTaskNameProps {
 }
 
 const SelectTaskName = (props: SelectTaskNameProps) => {
-  const cycleTypes = [
-    { key: 'every', value: 'every' },
-    { key: 'consecutive', value: 'consecutive' },
-    { key: 'none', value: 'none' },
-    { key: 'null', value: 'null' },
-  ];
+  const cycleTypes = ['every', 'consecutive', 'none', 'null'];
 
   return (
     <form>
       <select name={'select-task-name'} required={true} onChange={props.selectCycleType}>
-        {cycleTypes.map((cycleType) => (
-          <option key={cycleType.key} value={cycleType.value}>
-            {cycleType.value}
+        {cycleTypes.map((cycleType: string, index: number) => (
+          <option key={index} value={cycleType}>
+            {cycleType}
           </option>
         ))}
       </select>
