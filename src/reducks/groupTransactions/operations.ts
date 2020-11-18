@@ -54,7 +54,12 @@ export const fetchLatestGroupTransactionsList = (groupId: number) => {
       );
       const latestGroupTransactionsList = result.data.transactions_list;
 
-      dispatch(updateGroupLatestTransactionsAction(latestGroupTransactionsList));
+      if (latestGroupTransactionsList !== undefined) {
+        dispatch(updateGroupLatestTransactionsAction(latestGroupTransactionsList));
+      } else {
+        const emptyGroupLatestTransactionsList: GroupTransactionsList = [];
+        dispatch(updateGroupLatestTransactionsAction(emptyGroupLatestTransactionsList));
+      }
     } catch (error) {
       errorHandling(dispatch, error);
     }

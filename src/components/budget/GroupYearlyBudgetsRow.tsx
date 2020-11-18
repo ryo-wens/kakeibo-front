@@ -45,10 +45,10 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
   });
 
   useEffect(() => {
-    if (pathName === 'group' && !groupYearlyBudgetsList.monthly_budgets.length) {
+    if (pathName === 'group') {
       dispatch(fetchGroupYearlyBudgets(groupId, year));
     }
-  }, [year]);
+  }, [year, groupId]);
 
   useEffect(() => {
     setGroupYearlyBudgets(groupYearlyBudgetsList);
@@ -100,8 +100,6 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
                     onClick={() => {
                       if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
                         dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, groupId));
-                      } else {
-                        alert('削除を中止しました');
                       }
                     }}
                   >

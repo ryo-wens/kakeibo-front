@@ -20,10 +20,10 @@ const GroupMonthlyHistory = () => {
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (pathName === 'group' && !groupTransactionsList.length) {
+    if (pathName === 'group') {
       dispatch(fetchGroupTransactionsList(year, customMonth, groupId));
     }
-  }, [pathName]);
+  }, [pathName, groupId]);
 
   const handleOpen = (transactionId: number) => {
     setOpen(true);
