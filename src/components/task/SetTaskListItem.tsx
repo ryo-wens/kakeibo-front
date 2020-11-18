@@ -3,7 +3,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
 import { DeleteButton, InputInteger, SaveButton } from '../uikit';
 import { isValidBudgetFormat, isValidPreventBeginningZero } from '../../lib/validation';
-import { SelectTaskName } from './index';
+import { SelectCycleType, SelectTaskName } from './index';
 import { GroupTasksList } from '../../reducks/groupTasks/types';
 
 interface SetTaskListItemProps {
@@ -13,6 +13,7 @@ interface SetTaskListItemProps {
 
 const SetTaskListItem = (props: SetTaskListItemProps) => {
   const [taskName, setTaskName] = useState<string>('');
+  const [cycleType, setCycleType] = useState<string | null>('');
   const [cycle, setCycle] = useState<number>(1);
 
   const selectTaskName = useCallback(
@@ -21,6 +22,18 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
       setTaskName(event.target.value);
     },
     [setTaskName]
+  );
+
+  const selectCycleType = useCallback(
+    (event: React.ChangeEvent<{ value: string }>) => {
+      console.log(cycleType);
+      if (event.target.value !== 'null') {
+        setCycleType(event.target.value);
+      } else if (event.target.value === 'null') {
+        setCycleType(null);
+      }
+    },
+    [setCycleType]
   );
 
   const inputCycle = useCallback(
@@ -55,7 +68,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
     },
     {
       key: 'サイクルタイプ',
-      value: 'value',
+      value: <SelectCycleType selectCycleType={selectCycleType} />,
     },
     {
       key: 'サイクル',
