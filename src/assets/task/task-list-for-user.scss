@@ -23,21 +23,4 @@
     display: block;
     font-size: 0.8rem;
   }
-
-  &__add-icon {
-    width: 100%;
-    background-color: $white;
-    border: none ;
-    color: $task-border_color;
-    cursor: pointer;
-    padding: 0;
-
-    &:hover{
-      color: $task-sub_color;
-    }
-
-    &:focus {
-      outline: none;
-    }
-  }
 }

@@ -9,4 +9,33 @@
     justify-content: space-between;
     margin: 10px 0 20px 0;
   }
+
+  &__table {
+    width: 100%;
+  }
+
+  &__assign-task {
+    display: flex;
+  }
+
+  &__assign-task-item {
+    width: calc(100%/8);
+  }
+
+  &__assign-task-btn {
+    width: 100%;
+    background-color: $white;
+    border: none ;
+    color: $task-border_color;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover{
+      color: $task-sub_color;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
 }

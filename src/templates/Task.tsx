@@ -84,13 +84,23 @@ const Task = () => {
         groupTasksListForEachUser={groupTasksListForEachUser}
         groupTasksList={groupTasksList}
       />
-      <WeekTables selectedDate={selectedDate} />
-      <button className="task-list-for-user__add-icon" onClick={() => openModal()}>
-        <AddIcon />
-      </button>
-      <Modal open={open} onClose={closeModal}>
-        <SetTaskListItem groupTasksList={groupTasksList} closeModal={closeModal} />
-      </Modal>
+      <table className="task__table">
+        <thead>
+          <WeekTables selectedDate={selectedDate} />
+        </thead>
+        <tfoot>
+          <tr className="task__assign-task">
+            <th className="task__assign-task-item">
+              <button className="task__assign-task-btn" onClick={() => openModal()}>
+                <AddIcon />
+              </button>
+              <Modal open={open} onClose={closeModal}>
+                <SetTaskListItem groupTasksList={groupTasksList} closeModal={closeModal} />
+              </Modal>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 };
