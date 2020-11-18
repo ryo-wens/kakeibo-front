@@ -103,7 +103,7 @@ const GroupCustomBudgets = () => {
             {groupCustomBudgets.map((groupCustomBudget, index) => {
               const onChangeBudget = (event: { target: { value: string } }) => {
                 const newBudgets = [...groupCustomBudgets];
-                newBudgets[index].budget = Number(event.target.value);
+                newBudgets[index].budget = (event.target.value as unknown) as number;
                 setGroupCustomBudgets(newBudgets);
               };
               return (
@@ -139,7 +139,11 @@ const GroupCustomBudgets = () => {
                 groupInMonth,
                 groupId,
                 groupCustomBudgets.map((groupBudget) => {
-                  const { big_category_name, ...rest } = groupBudget; // eslint-disable-line
+                  let { big_category_name, ...rest } = groupBudget; // eslint-disable-line
+                  rest = {
+                    big_category_id: rest.big_category_id,
+                    budget: Number(rest.budget),
+                  };
                   return rest;
                 })
               )

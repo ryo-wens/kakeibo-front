@@ -92,8 +92,6 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
                     onClick={() => {
                       if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
                         dispatch(deleteCustomBudgets(selectYear, selectMonth));
-                      } else {
-                        alert('削除を中止しました');
                       }
                     }}
                   >
