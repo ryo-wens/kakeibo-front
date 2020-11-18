@@ -12,3 +12,8 @@ export const getGroupLatestTransactions = createSelector(
   [groupTransactionsSelector],
   (state) => state.groupLatestTransactionsList
 );
+
+export const getGroupAccountList = createSelector(
+  [groupTransactionsSelector],
+  (state) => state.groupAccountList
+);

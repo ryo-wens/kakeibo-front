@@ -1,4 +1,8 @@
-import { updateGroupTransactionsAction, updateGroupLatestTransactionsAction } from './actions';
+import {
+  updateGroupTransactionsAction,
+  updateGroupLatestTransactionsAction,
+  fetchGroupAccountAction,
+} from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
 import {
@@ -7,6 +11,7 @@ import {
   FetchGroupTransactionsRes,
   GroupLatestTransactionsListRes,
   deleteGroupTransactionRes,
+  GroupAccountList,
 } from './types';
 import { State } from '../store/types';
 import { push } from 'connected-react-router';
@@ -346,6 +351,24 @@ export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
       );
 
       dispatch(updateGroupLatestTransactionsAction(nextGroupLatestTransactionsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const fetchGroupAccount = (groupId: number, year: number, customMont: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<GroupAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMont}/account`,
+        {
+          withCredentials: true,
+        }
+      );
+      const groupAccountList = result.data;
+
+      dispatch(fetchGroupAccountAction(groupAccountList));
     } catch (error) {
       errorHandling(dispatch, error);
     }

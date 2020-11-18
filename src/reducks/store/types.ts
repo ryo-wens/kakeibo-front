@@ -2,7 +2,7 @@ import { Categories } from '../categories/types';
 import { GroupCategories } from '../groupCategories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
-import { GroupTransactionsList } from '../groupTransactions/types';
+import { GroupTransactionsList, GroupAccountList } from '../groupTransactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import {
   GroupStandardBudgetsList,
@@ -30,6 +30,7 @@ export interface State {
   groupTransactions: {
     groupLatestTransactionsList: GroupTransactionsList;
     groupTransactionsList: GroupTransactionsList;
+    groupAccountList: GroupAccountList;
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;
