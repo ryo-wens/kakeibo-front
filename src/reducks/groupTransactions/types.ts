@@ -41,3 +41,25 @@ export interface FetchGroupTransactionsRes {
 export interface deleteGroupTransactionRes {
   message: string;
 }
+
+export interface GroupAccount {
+  id: number;
+  group_id: number;
+  month: string;
+  payer_user_id: string;
+  recipient_user_id: string;
+  payment_amount: number;
+  payment_confirmation: boolean;
+  receipt_confirmation: boolean;
+}
+
+export interface GroupAccounts extends Array<GroupAccount> {}
+
+export interface GroupAccountList {
+  group_id: number;
+  month: string;
+  group_total_payment_amount: number;
+  group_average_payment_amount: number;
+  group_remaining_amount: number;
+  group_accounts_list: GroupAccounts;
+}
