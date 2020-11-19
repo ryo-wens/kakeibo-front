@@ -3,6 +3,7 @@ import {
   updateGroupLatestTransactionsAction,
   fetchGroupAccountAction,
   addGroupAccountAction,
+  editGroupAccountAction,
 } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -359,11 +360,11 @@ export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
   };
 };
 
-export const fetchGroupAccount = (groupId: number, year: number, customMont: string) => {
+export const fetchGroupAccount = (groupId: number, year: number, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<GroupAccountListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMont}/account`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
         {
           withCredentials: true,
         }
@@ -399,6 +400,33 @@ export const addGroupAccount = (groupId: number, year: number, customMonth: stri
       const groupAccountList = result.data;
 
       dispatch(addGroupAccountAction(groupAccountList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const editGroupAccount = (
+  groupAccountList: GroupAccountList,
+  groupId: number,
+  year: number,
+  customMonth: string
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    try {
+      const result = await axios.put<GroupAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
+        JSON.stringify(groupAccountList),
+        { withCredentials: true }
+      );
+      const editedGroupAccountList = result.data;
+      const prevGroupAccountList = getState().groupTransactions.groupAccountList;
+
+      if (editedGroupAccountList.group_id === prevGroupAccountList.group_id) {
+        dispatch(editGroupAccountAction(editedGroupAccountList));
+      } else {
+        return prevGroupAccountList;
+      }
     } catch (error) {
       errorHandling(dispatch, error);
     }
