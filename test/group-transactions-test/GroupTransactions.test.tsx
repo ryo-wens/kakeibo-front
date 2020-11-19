@@ -17,6 +17,7 @@ import {
   fetchGroupAccount,
   addGroupAccount,
   editGroupAccount,
+  deleteGroupAccount,
 } from '../../src/reducks/groupTransactions/operations';
 import groupTransactions from './groupTransactions.json';
 import groupLatestTransactions from './groupLatestTransactions.json';
@@ -30,6 +31,7 @@ import deleteResponse from './deleteResponse.json';
 import deletedGroupLatestTransaction from './deletedGroupLatestTransactions.json';
 import groupAccountList from './groupAccountList.json';
 import editGroupAccountList from './editGroupAccoountResponse.json';
+import deleteAccountResponse from './deleteGroupAccountResponse.json';
 import { year, customMonth } from '../../src/lib/constant';
 
 const axiosMock = new axiosMockAdapter(axios);
@@ -474,6 +476,14 @@ describe('async actions groupTransactions', () => {
       store.clearActions();
     });
 
+    const getState = () => {
+      return {
+        groupTransactions: {
+          groupAccountList: groupAccountList,
+        },
+      };
+    };
+
     const groupId = 1;
     const year = 2020;
     const customMonth = '11';
@@ -490,7 +500,8 @@ describe('async actions groupTransactions', () => {
 
     axiosMock.onPost(url).reply(201, mockResponse);
 
-    await addGroupAccount(groupId, year, customMonth)(store.dispatch);
+    // @ts-ignore
+    await addGroupAccount(groupId, year, customMonth)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -580,5 +591,46 @@ describe('async actions groupTransactions', () => {
     // @ts-ignore
     await editGroupAccount(requestData, groupId, year, customMonth)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('Delete groupAccountList  if fetch succeeds', async () => {
+    const store = mockStore({
+      groupTransactions: { groupAccountList: editGroupAccountList },
+    });
+
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const getState = () => {
+      return {
+        groupTransactions: {
+          groupAccountList: editGroupAccountList,
+        },
+      };
+    };
+
+    const groupId = 1;
+    const year = 2020;
+    const customMonth = '11';
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+
+    const mockResponse = deleteAccountResponse;
+
+    const expectActions = [
+      {
+        type: actionTypes.DELETE_GROUP_ACCOUNT,
+        payload: {
+          groupAccountList: {},
+          deletedMessage: mockResponse.message,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await deleteGroupAccount(groupId, year, customMonth)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectActions);
   });
 });

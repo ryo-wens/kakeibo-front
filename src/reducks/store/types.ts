@@ -32,6 +32,7 @@ export interface State {
     groupTransactionsList: GroupTransactionsList;
     groupAccountList: GroupAccountList;
     notAccountMessage: string;
+    deletedMessage: string;
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;
