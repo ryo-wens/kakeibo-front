@@ -15,6 +15,7 @@ import {
   editGroupLatestTransactionsList,
   deleteGroupLatestTransactions,
   fetchGroupAccount,
+  addGroupAccount,
 } from '../../src/reducks/groupTransactions/operations';
 import groupTransactions from './groupTransactions.json';
 import groupLatestTransactions from './groupLatestTransactions.json';
@@ -449,13 +450,45 @@ describe('async actions groupTransactions', () => {
     const expectedActions = [
       {
         type: actionTypes.FETCH_GROUP_ACCOUNT,
-        payload: mockResponse,
+        payload: {
+          groupAccountList: mockResponse,
+          notAccountMessage: '',
+        },
       },
     ];
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
     await fetchGroupAccount(groupId, year, customMonth)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('Post groupAccountList  if fetch succeeds', async () => {
+    const store = mockStore({
+      groupLatestTransactionsList: { groupAccountList: groupAccountList },
+    });
+
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const groupId = 1;
+    const year = 2020;
+    const customMonth = '11';
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+
+    const mockResponse = groupAccountList;
+
+    const expectedActions = [
+      {
+        type: actionTypes.ADD_GROUP_ACCOUNT,
+        payload: mockResponse,
+      },
+    ];
+
+    axiosMock.onPost(url).reply(201, mockResponse);
+
+    await addGroupAccount(groupId, year, customMonth)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

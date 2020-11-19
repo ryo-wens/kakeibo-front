@@ -2,6 +2,7 @@ import {
   updateGroupTransactionsAction,
   updateGroupLatestTransactionsAction,
   fetchGroupAccountAction,
+  addGroupAccountAction,
 } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -12,6 +13,7 @@ import {
   GroupLatestTransactionsListRes,
   deleteGroupTransactionRes,
   GroupAccountList,
+  GroupAccountListRes,
 } from './types';
 import { State } from '../store/types';
 import { push } from 'connected-react-router';
@@ -360,7 +362,7 @@ export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
 export const fetchGroupAccount = (groupId: number, year: number, customMont: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
-      const result = await axios.get<GroupAccountList>(
+      const result = await axios.get<GroupAccountListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMont}/account`,
         {
           withCredentials: true,
@@ -368,7 +370,35 @@ export const fetchGroupAccount = (groupId: number, year: number, customMont: str
       );
       const groupAccountList = result.data;
 
-      dispatch(fetchGroupAccountAction(groupAccountList));
+      if (groupAccountList !== undefined) {
+        const message = '';
+
+        dispatch(fetchGroupAccountAction(groupAccountList, message));
+      } else {
+        const message = result.data.message;
+        const emptyGroupAccountList = {} as GroupAccountList;
+
+        dispatch(fetchGroupAccountAction(emptyGroupAccountList, message));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const addGroupAccount = (groupId: number, year: number, customMonth: string) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.post<GroupAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
+        null,
+        {
+          withCredentials: true,
+        }
+      );
+      const groupAccountList = result.data;
+
+      dispatch(addGroupAccountAction(groupAccountList));
     } catch (error) {
       errorHandling(dispatch, error);
     }
