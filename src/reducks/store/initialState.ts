@@ -15,6 +15,7 @@ const initialState = {
   groupTransactions: {
     groupLatestTransactionsList: [],
     groupTransactionsList: [],
+    notAccountMessage: '',
     groupAccountList: {
       group_id: 0,
       month: '',

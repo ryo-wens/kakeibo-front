@@ -17,3 +17,8 @@ export const getGroupAccountList = createSelector(
   [groupTransactionsSelector],
   (state) => state.groupAccountList
 );
+
+export const getNotGroupAccountMessage = createSelector(
+  [groupTransactionsSelector],
+  (state) => state.notAccountMessage
+);

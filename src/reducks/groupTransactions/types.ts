@@ -63,3 +63,13 @@ export interface GroupAccountList {
   group_remaining_amount: number;
   group_accounts_list: GroupAccounts;
 }
+
+export interface GroupAccountListRes {
+  message: string;
+  group_id: number;
+  month: string;
+  group_total_payment_amount: number;
+  group_average_payment_amount: number;
+  group_remaining_amount: number;
+  group_accounts_list: GroupAccounts;
+}
