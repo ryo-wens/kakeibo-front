@@ -3,12 +3,15 @@ import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
 import { DatePicker, DeleteButton, InputInteger, SaveButton } from '../uikit';
 import { isValidBudgetFormat, isValidPreventBeginningZero } from '../../lib/validation';
-import { SelectCycleType, SelectTaskName } from './index';
-import { GroupTasksList } from '../../reducks/groupTasks/types';
+import { SelectCycleType, SelectTaskName, SelectTaskUser } from './index';
+import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { date } from '../../lib/constant';
+import { Group } from '../../reducks/groups/types';
 
 interface SetTaskListItemProps {
+  approvedGroup: Group;
   groupTasksList: GroupTasksList;
+  groupTasksListForEachUser: GroupTasksListForEachUser;
   closeModal: () => void;
 }
 
@@ -17,6 +20,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
   const [selectDate, setSelectDate] = useState<Date>(date);
   const [cycleType, setCycleType] = useState<'every' | 'consecutive' | 'none' | null>('every');
   const [cycle, setCycle] = useState<number>(1);
+  const [taskUser, setTaskUser] = useState<string>('');
 
   const selectTaskName = useCallback(
     (event: React.ChangeEvent<{ value: string }>) => {
@@ -43,6 +47,14 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
       }
     },
     [setCycleType]
+  );
+
+  const selectTaskUser = useCallback(
+    (event: React.ChangeEvent<{ value: string }>) => {
+      console.log(taskUser);
+      setTaskUser(event.target.value);
+    },
+    [setTaskUser]
   );
 
   const inputCycle = useCallback(
@@ -96,6 +108,16 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           required={true}
           onChange={inputCycle}
           message={switchMessage()}
+        />
+      ),
+    },
+    {
+      key: 'タスクユーザー',
+      value: (
+        <SelectTaskUser
+          approvedGroup={props.approvedGroup}
+          groupTasksListForEachUser={props.groupTasksListForEachUser}
+          selectTaskUser={selectTaskUser}
         />
       ),
     },

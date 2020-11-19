@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -24,6 +24,9 @@ const Task = () => {
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
   const groupTasksList = getGroupTasksList(selector);
 
+  const groupIdx = approvedGroups.findIndex((approvedGroup) => approvedGroup.group_id === groupId);
+  const approvedGroup: Group = approvedGroups[groupIdx];
+
   useEffect(() => {
     if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
       dispatch(fetchGroups());
@@ -32,7 +35,7 @@ const Task = () => {
 
   useEffect(() => {
     dispatch(fetchGroups());
-  }, [groupId]);
+  }, []);
 
   useEffect(() => {
     if (groupTasksListForEachUser.length === 0) {
@@ -44,23 +47,7 @@ const Task = () => {
     if (groupTasksList.length === 0) {
       dispatch(fetchGroupTasksList(groupId));
     }
-  }, []);
-
-  const approvedGroup: Group = useMemo(() => {
-    if (approvedGroups.length > 0) {
-      const matchedGroups = approvedGroups.filter(
-        (approvedGroup) => approvedGroup.group_id === groupId
-      );
-      return matchedGroups[0];
-    } else {
-      return {
-        group_id: 0,
-        group_name: '',
-        approved_users_list: [],
-        unapproved_users_list: [],
-      };
-    }
-  }, [approvedGroups, groupId]);
+  }, [groupId]);
 
   const openModal = useCallback(() => {
     setOpen(true);
@@ -95,7 +82,12 @@ const Task = () => {
                 <AddIcon />
               </button>
               <Modal open={open} onClose={closeModal}>
-                <SetTaskListItem groupTasksList={groupTasksList} closeModal={closeModal} />
+                <SetTaskListItem
+                  approvedGroup={approvedGroup}
+                  groupTasksList={groupTasksList}
+                  groupTasksListForEachUser={groupTasksListForEachUser}
+                  closeModal={closeModal}
+                />
               </Modal>
             </th>
           </tr>

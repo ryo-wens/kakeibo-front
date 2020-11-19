@@ -3,6 +3,7 @@ export { default as InputTask } from './InputTask';
 export { default as OperationTaskUser } from './OperationTaskUser';
 export { default as SelectCycleType } from './SelectCycleType';
 export { default as SelectTaskName } from './SelectTaskName';
+export { default as SelectTaskUser } from './SelectTaskUser';
 export { default as SetTaskListItem } from './SetTaskListItem';
 export { default as SkipDate } from './SkipDate';
 export { default as TaskList } from './TaskList';
