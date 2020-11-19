@@ -18,12 +18,10 @@ const WeekTables = (props: WeekTablesProps) => {
       const date = new Date(startDate.setDate(startDate.getDate() + i));
 
       weekTableItems.push(
-        <>
-          <th className="week-tables__item">
-            <span className="week-tables__day">{weekdays[i]}</span>
-            <span className="week-tables__date">{date.getDate()}</span>
-          </th>
-        </>
+        <th className="week-tables__item" key={i}>
+          <span className="week-tables__day">{weekdays[i]}</span>
+          <span className="week-tables__date">{date.getDate()}</span>
+        </th>
       );
     }
     return weekTableItems;

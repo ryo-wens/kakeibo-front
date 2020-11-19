@@ -1,0 +1,23 @@
+@import "../variable";
+
+.input-integer {
+  width: 20%;
+  border: $task-border_color 1px solid;
+  border-radius: 0.3rem;
+  color: #444;
+  font-size: 0.8rem;
+  text-align: center;
+  padding: 3px 8px;
+
+  &::-webkit-outer-spin-button,
+  &::-webkit-inner-spin-button {
+    margin: 0;
+    -webkit-appearance: none;
+    -moz-appearance:textfield;
+  }
+
+  &:focus {
+    border: $task-sub_color solid 2px;
+    outline: none;
+  }
+}
