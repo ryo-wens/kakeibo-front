@@ -21,6 +21,11 @@ export const isValidPasswordFormat = (password: string) => {
   return regex.test(password);
 };
 
+export const isValidPreventBeginningZero = (value: number) => {
+  const regexp = /^0/;
+  return regexp.test(String(value));
+};
+
 export const errorHandling = (
   dispatch: Dispatch<Action>,
   error: {

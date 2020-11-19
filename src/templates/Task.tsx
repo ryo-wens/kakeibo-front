@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -9,11 +9,14 @@ import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/gro
 import { EditTaskUser, SetTaskListItem, SkipDate, TaskList, WeekTables } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 import '../assets/task/task.scss';
+import Modal from '@material-ui/core/Modal';
+import AddIcon from '@material-ui/icons/Add';
 
 const Task = () => {
   const dispatch = useDispatch();
   const groupId = getPathGroupId(window.location.pathname);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [open, setOpen] = useState<boolean>(false);
 
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
@@ -22,42 +25,36 @@ const Task = () => {
   const groupTasksList = getGroupTasksList(selector);
 
   useEffect(() => {
-    if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
+    if (!approvedGroups.length && !unapprovedGroups.length) {
       dispatch(fetchGroups());
     }
   }, []);
 
   useEffect(() => {
-    dispatch(fetchGroups());
-  }, [groupId]);
-
-  useEffect(() => {
-    if (groupTasksListForEachUser.length === 0) {
+    if (!groupTasksListForEachUser.length) {
       dispatch(fetchGroupTasksListEachUser(groupId));
     }
   }, []);
 
   useEffect(() => {
-    if (groupTasksList.length === 0) {
+    if (!groupTasksList.length) {
       dispatch(fetchGroupTasksList(groupId));
     }
   }, []);
 
-  const approvedGroup: Group = useMemo(() => {
-    if (approvedGroups.length > 0) {
-      const matchedGroups = approvedGroups.filter(
-        (approvedGroup) => approvedGroup.group_id === groupId
-      );
-      return matchedGroups[0];
-    } else {
-      return {
-        group_id: 0,
-        group_name: '',
-        approved_users_list: [],
-        unapproved_users_list: [],
-      };
-    }
-  }, [approvedGroups, groupId]);
+  const openModal = useCallback(() => {
+    setOpen(true);
+    dispatch(fetchGroups());
+    dispatch(fetchGroupTasksListEachUser(groupId));
+    dispatch(fetchGroupTasksList(groupId));
+  }, [setOpen]);
+
+  const closeModal = useCallback(() => {
+    setOpen(false);
+  }, [setOpen]);
+
+  const groupIdx = approvedGroups.findIndex((approvedGroup) => approvedGroup.group_id === groupId);
+  const approvedGroup: Group = approvedGroups[groupIdx];
 
   return (
     <div className="task">
@@ -73,8 +70,28 @@ const Task = () => {
         groupTasksListForEachUser={groupTasksListForEachUser}
         groupTasksList={groupTasksList}
       />
-      <WeekTables selectedDate={selectedDate} />
-      <SetTaskListItem />
+      <table className="task__table">
+        <thead>
+          <WeekTables selectedDate={selectedDate} />
+        </thead>
+        <tfoot>
+          <tr className="task__assign-task">
+            <th className="task__assign-task-item">
+              <button className="task__assign-task-btn" onClick={() => openModal()}>
+                <AddIcon />
+              </button>
+              <Modal open={open} onClose={closeModal}>
+                <SetTaskListItem
+                  approvedGroup={approvedGroup}
+                  groupTasksList={groupTasksList}
+                  groupTasksListForEachUser={groupTasksListForEachUser}
+                  closeModal={closeModal}
+                />
+              </Modal>
+            </th>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 };
