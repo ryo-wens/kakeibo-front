@@ -5,6 +5,7 @@ export type groupTransactionsAction = ReturnType<
   | typeof updateGroupLatestTransactionsAction
   | typeof fetchGroupAccountAction
   | typeof addGroupAccountAction
+  | typeof editGroupAccountAction
 >;
 
 export const UPDATE_GROUP_TRANSACTIONS = 'UPDATE_GROUP_TRANSACTIONS';
@@ -43,6 +44,14 @@ export const ADD_GROUP_ACCOUNT = 'ADD_GROUP_ACCOUNT';
 export const addGroupAccountAction = (groupAccountList: GroupAccountList) => {
   return {
     type: ADD_GROUP_ACCOUNT,
+    payload: groupAccountList,
+  };
+};
+
+export const EDIT_GROUP_ACCOUNT = 'EDIT_GROUP_ACCOUNT';
+export const editGroupAccountAction = (groupAccountList: GroupAccountList) => {
+  return {
+    type: EDIT_GROUP_ACCOUNT,
     payload: groupAccountList,
   };
 };
