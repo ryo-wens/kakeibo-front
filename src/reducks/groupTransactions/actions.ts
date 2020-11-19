@@ -6,6 +6,7 @@ export type groupTransactionsAction = ReturnType<
   | typeof fetchGroupAccountAction
   | typeof addGroupAccountAction
   | typeof editGroupAccountAction
+  | typeof deleteGroupAccountAction
 >;
 
 export const UPDATE_GROUP_TRANSACTIONS = 'UPDATE_GROUP_TRANSACTIONS';
@@ -53,5 +54,19 @@ export const editGroupAccountAction = (groupAccountList: GroupAccountList) => {
   return {
     type: EDIT_GROUP_ACCOUNT,
     payload: groupAccountList,
+  };
+};
+
+export const DELETE_GROUP_ACCOUNT = 'DELETE_GROUP_ACCOUNT';
+export const deleteGroupAccountAction = (
+  groupAccountList: GroupAccountList,
+  deletedMessage: string
+) => {
+  return {
+    type: DELETE_GROUP_ACCOUNT,
+    payload: {
+      deletedMessage,
+      groupAccountList,
+    },
   };
 };

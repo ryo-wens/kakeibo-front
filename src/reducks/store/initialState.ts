@@ -16,6 +16,7 @@ const initialState = {
     groupLatestTransactionsList: [],
     groupTransactionsList: [],
     notAccountMessage: '',
+    deletedMessage: '',
     groupAccountList: {
       group_id: 0,
       month: '',

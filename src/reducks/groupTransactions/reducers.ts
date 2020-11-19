@@ -32,6 +32,11 @@ export const groupTransactionsReducer = (
         ...state,
         groupAccountList: action.payload,
       };
+    case Actions.DELETE_GROUP_ACCOUNT:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
