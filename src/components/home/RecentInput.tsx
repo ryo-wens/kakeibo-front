@@ -22,10 +22,10 @@ const RecentInput = () => {
   useEffect(() => {
     if (pathName !== 'group' && !latestTransactionsList.length) {
       dispatch(fetchLatestTransactionsList());
-    } else if (pathName === 'group' && !groupLatestTransactionList.length) {
+    } else if (pathName === 'group') {
       dispatch(fetchLatestGroupTransactionsList(groupId));
     }
-  }, [pathName]);
+  }, [pathName, groupId]);
 
   return (
     <div className="recent-input box__recent ">

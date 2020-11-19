@@ -1,7 +1,9 @@
-import { GroupTransactionsList } from './types';
+import { GroupTransactionsList, GroupAccountList } from './types';
 
 export type groupTransactionsAction = ReturnType<
-  typeof updateGroupTransactionsAction | typeof updateGroupLatestTransactionsAction
+  | typeof updateGroupTransactionsAction
+  | typeof updateGroupLatestTransactionsAction
+  | typeof fetchGroupAccountAction
 >;
 
 export const UPDATE_GROUP_TRANSACTIONS = 'UPDATE_GROUP_TRANSACTIONS';
@@ -19,5 +21,13 @@ export const updateGroupLatestTransactionsAction = (
   return {
     type: UPDATE_GROUP_LATEST_TRANSACTIONS,
     payload: groupLatestTransactionsList,
+  };
+};
+
+export const FETCH_GROUP_ACCOUNT = 'FETCH_GROUP_ACCOUNT';
+export const fetchGroupAccountAction = (groupAccountList: GroupAccountList) => {
+  return {
+    type: FETCH_GROUP_ACCOUNT,
+    payload: groupAccountList,
   };
 };

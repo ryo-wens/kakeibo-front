@@ -156,7 +156,7 @@ const EditStandardBudgets = () => {
                     {customBudgets.map((customBudget, index) => {
                       const onChangeBudget = (event: { target: { value: string } }) => {
                         const newBudgets = [...customBudgets];
-                        newBudgets[index].budget = Number(event.target.value);
+                        newBudgets[index].budget = (event.target.value as unknown) as number;
                         setCustomBudgets(newBudgets);
                       };
                       return (
@@ -191,7 +191,11 @@ const EditStandardBudgets = () => {
                         selectYear,
                         selectMonth,
                         customBudgets.map((budget) => {
-                          const { big_category_name, ...rest } = budget; // eslint-disable-line
+                          let { big_category_name, ...rest } = budget; // eslint-disable-line
+                          rest = {
+                            big_category_id: rest.big_category_id,
+                            budget: Number(rest.budget),
+                          };
                           return rest;
                         })
                       )

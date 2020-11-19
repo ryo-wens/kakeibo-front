@@ -15,6 +15,14 @@ const initialState = {
   groupTransactions: {
     groupLatestTransactionsList: [],
     groupTransactionsList: [],
+    groupAccountList: {
+      group_id: 0,
+      month: '',
+      group_total_payment_amount: 0,
+      group_average_payment_amount: 0,
+      group_remaining_amount: 0,
+      group_accounts_list: [],
+    },
   },
   budgets: {
     standard_budgets_list: [],

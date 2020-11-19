@@ -8,7 +8,9 @@ import Select from '@material-ui/core/Select';
 import { State } from '../../reducks/store/types';
 import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
 import { fetchCategories } from '../../reducks/categories/operations';
+import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
 import { Categories } from '../../reducks/categories/types';
+import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -54,12 +56,16 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
   const selector = useSelector((state: State) => state);
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
+  const groupId = getPathGroupId(window.location.pathname);
+  const pathName = getPathTemplateName(window.location.pathname);
 
   useEffect(() => {
-    if (incomeCategories.length === 0 || expenseCategories.length === 0) {
+    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
       dispatch(fetchCategories());
+    } else if (pathName === 'group') {
+      dispatch(fetchGroupCategories(groupId));
     }
-  }, []);
+  }, [pathName, groupId]);
 
   const categories = useMemo(() => {
     let tmpCategories: ReactElement<Categories>[] = [];
