@@ -24,38 +24,37 @@ const Task = () => {
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
   const groupTasksList = getGroupTasksList(selector);
 
-  const groupIdx = approvedGroups.findIndex((approvedGroup) => approvedGroup.group_id === groupId);
-  const approvedGroup: Group = approvedGroups[groupIdx];
-
   useEffect(() => {
-    if (approvedGroups.length === 0 && unapprovedGroups.length === 0) {
+    if (!approvedGroups.length && !unapprovedGroups.length) {
       dispatch(fetchGroups());
     }
   }, []);
 
   useEffect(() => {
-    dispatch(fetchGroups());
-  }, []);
-
-  useEffect(() => {
-    if (groupTasksListForEachUser.length === 0) {
+    if (!groupTasksListForEachUser.length) {
       dispatch(fetchGroupTasksListEachUser(groupId));
     }
   }, []);
 
   useEffect(() => {
-    if (groupTasksList.length === 0) {
+    if (!groupTasksList.length) {
       dispatch(fetchGroupTasksList(groupId));
     }
-  }, [groupId]);
+  }, []);
 
   const openModal = useCallback(() => {
     setOpen(true);
+    dispatch(fetchGroups());
+    dispatch(fetchGroupTasksListEachUser(groupId));
+    dispatch(fetchGroupTasksList(groupId));
   }, [setOpen]);
 
   const closeModal = useCallback(() => {
     setOpen(false);
   }, [setOpen]);
+
+  const groupIdx = approvedGroups.findIndex((approvedGroup) => approvedGroup.group_id === groupId);
+  const approvedGroup: Group = approvedGroups[groupIdx];
 
   return (
     <div className="task">
