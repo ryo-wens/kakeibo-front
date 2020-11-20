@@ -1,13 +1,16 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTransactions } from '../reducks/transactions/selectors';
 import { getGroupTransactions } from '../reducks/groupTransactions/selectors';
 import { fetchTransactionsList } from '../reducks/transactions/operations';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
+import { fetchCategories } from '../reducks/categories/operations';
+import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 import { State } from '../reducks/store/types';
 import { customMonth, noTransactionMessage } from '../lib/constant';
 import { getPathTemplateName } from '../lib/path';
 import { DailyHistoryBody, GroupDailyHistoryBody } from '../components/history/index';
+import SearchTransaction from '../components/uikit/SearchTransaction';
 import '../assets/history/daily-history.scss';
 import { getPathGroupId } from '../lib/path';
 
@@ -23,6 +26,16 @@ const DailyHistory = (props: DailyHistoryProps) => {
   const groupTransactionsList = getGroupTransactions(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
+  const [openSearchField, setOpenSearchField] = useState<boolean>(false);
+  const [selectDate, setSelectDate] = useState<Date | null>(new Date());
+  const [memo, setMemo] = useState<string>('');
+  const [shop, setShop] = useState<string>('');
+  const [amount, setAmount] = useState<string>('');
+  const [category, setCategory] = useState<string>('');
+  const [bigCategoryId, setBigCategoryId] = useState<number>(0);
+  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
+  const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
+  const [transactionType, setTransactionType] = useState<string>('');
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -32,9 +45,105 @@ const DailyHistory = (props: DailyHistoryProps) => {
     }
   }, [pathName, props.selectYears]);
 
+  useEffect(() => {
+    if (pathName !== 'group') {
+      dispatch(fetchCategories());
+    } else {
+      dispatch(fetchGroupCategories(groupId));
+    }
+  }, [pathName, groupId]);
+
+  const openSearch = useCallback(() => {
+    setOpenSearchField(true);
+  }, [setOpenSearchField]);
+
+  const closeSearch = useCallback(() => {
+    setOpenSearchField(false);
+  }, [setOpenSearchField]);
+
+  const selectDateChange = useCallback((selectDate: Date | null) => {
+    setSelectDate(selectDate as Date);
+  }, []);
+
+  const inputMemo = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setMemo(event.target.value);
+    },
+    [setMemo]
+  );
+
+  const inputShop = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setShop(event.target.value);
+    },
+    [setShop]
+  );
+
+  const inputAmount = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setAmount(event.target.value);
+    },
+    [setAmount]
+  );
+
+  const changeCategory = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setCategory(event.target.value as string);
+    },
+    [setCategory]
+  );
+
+  const selectTransactionType = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setTransactionType(event.target.value as string);
+    },
+    [setTransactionType]
+  );
+
+  const selectCategory = useCallback(
+    (bigCategoryId: number, associatedCategoryId: number | null, category_type: string) => {
+      switch (category_type) {
+        case 'MediumCategory':
+          setBigCategoryId(bigCategoryId);
+          setMediumCategoryId(associatedCategoryId);
+          setCustomCategoryId(null);
+          break;
+        case 'CustomCategory':
+          setBigCategoryId(bigCategoryId);
+          setMediumCategoryId(null);
+          setCustomCategoryId(associatedCategoryId);
+          break;
+      }
+    },
+    [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
+  );
+
   return (
     <>
       <div className="daily-history daily-history__background">
+        <SearchTransaction
+          closeSearch={closeSearch}
+          openSearch={openSearch}
+          openSearchFiled={openSearchField}
+          pathName={pathName}
+          selectDate={selectDate}
+          selectDateChange={selectDateChange}
+          inputAmount={inputAmount}
+          inputMemo={inputMemo}
+          inputShop={inputShop}
+          selectTransactionsType={selectTransactionType}
+          amount={amount}
+          memo={memo}
+          shop={shop}
+          transactionType={transactionType}
+          category={category}
+          selectCategory={selectCategory}
+          changeCategory={changeCategory}
+          bigCategoryId={bigCategoryId}
+          customCategoryId={customCategoryId}
+          mediumCategoryId={mediumCategoryId}
+        />
+        <div className="daily-history__spacer" />
         {(() => {
           if (pathName !== 'group') {
             if (!transactionsList.length) {

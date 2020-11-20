@@ -21,6 +21,7 @@ interface KindProps {
   value: string;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   required: boolean;
+  label: string;
 }
 
 const KindSelectBox = (props: KindProps) => {
@@ -29,7 +30,7 @@ const KindSelectBox = (props: KindProps) => {
   return (
     <FormControl className={classes.formControl}>
       <InputLabel id="kind" required={props.required}>
-        収入or支出(必須)
+        {props.label}
       </InputLabel>
       <Select id="kind" value={props.value} onChange={props.onChange}>
         <MenuItem value={'income'}>収入</MenuItem>

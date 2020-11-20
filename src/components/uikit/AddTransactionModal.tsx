@@ -179,17 +179,22 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       <form className="grid__column">
         <DatePicker
           id={'date-picker-dialog'}
-          label={'日付(必須)'}
+          label={'日付'}
           value={transactionDate}
           onChange={handleDateChange}
           required={true}
         />
-        <KindSelectBox onChange={handleSelect} required={true} value={transactionsType} />
+        <KindSelectBox
+          onChange={handleSelect}
+          required={true}
+          value={transactionsType}
+          label={'支出or収入'}
+        />
         <TextInput
           value={amount}
           type={'tel'}
           id={'amount'}
-          label={'金額(必須)'}
+          label={'金額'}
           onChange={handleAmountChange}
           required={true}
           fullWidth={false}
@@ -205,7 +210,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           value={shop}
           type={'text'}
           id={'shop'}
-          label={'店名(任意)'}
+          label={'店名'}
           onChange={handleShop}
           required={false}
           fullWidth={false}
@@ -214,7 +219,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           value={memo}
           type={'text'}
           id={'memo'}
-          label={'メモ(任意)'}
+          label={'メモ'}
           onChange={handleMemo}
           required={false}
           fullWidth={false}
