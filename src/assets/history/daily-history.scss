@@ -1,4 +1,6 @@
 @import "src/assets/variable";
+@import "../mixin/search-btn";
+@import "../modules/input-years";
 
 .daily-history {
 
@@ -6,13 +8,20 @@
   margin: 0 auto;
   height: auto;
 
-  &__spacer {
-    margin-top: 50px;
-  }
+   &__spacer{
+     height: 30px;
+     display: block;
+     width: 100%;
+   }
 
   &__years {
     padding-left: 20px;
   }
+
+  &__search-btn-position {
+    margin: 0 auto;
+  }
+
 
   &__th {
     align-self: center;
@@ -37,11 +46,40 @@
     padding: 16px;
   }
 
+  &__search-position {
+    display: flex;
+    flex-wrap: wrap;
+  }
+
+  &__form-label {
+    font-size: $small-font-size;
+    display: block;
+  }
+
+  &__input-form {
+    font-size: $middle-font-size;
+    margin-left: 30px;
+    height: 25px;
+    width: 180px;
+  }
+
+  &__select {
+    cursor: pointer;
+    font-size: $middle-font-size;
+    height: 30px;
+    margin: 0 auto;
+    width: 180px;
+  }
+
   &__td {
     border: solid 1px $border_color;
     border-collapse: collapse;
     empty-cells: show;
     text-align: center;
     margin: 0 auto;
+  }
+
+  &__search-btn {
+    @include search-btn($main_color);
   }
 }

@@ -175,7 +175,12 @@ const InputForm = (): JSX.Element => {
         onChange={handleDateChange}
         required={true}
       />
-      <KindSelectBox onChange={handleSelect} required={true} value={transactionsType} />
+      <KindSelectBox
+        onChange={handleSelect}
+        required={true}
+        value={transactionsType}
+        label={'収入or支出(必須)'}
+      />
       <TextInput
         value={amount}
         type={'tel'}
