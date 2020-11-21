@@ -22,6 +22,11 @@ export const transactionsReducer = (
         ...state,
         transactionsList: [...action.payload],
       };
+    case Actions.SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

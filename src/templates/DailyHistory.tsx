@@ -27,10 +27,12 @@ const DailyHistory = (props: DailyHistoryProps) => {
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [openSearchField, setOpenSearchField] = useState<boolean>(false);
-  const [selectDate, setSelectDate] = useState<Date | null>(new Date());
+  const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date());
+  const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date());
   const [memo, setMemo] = useState<string>('');
   const [shop, setShop] = useState<string>('');
-  const [amount, setAmount] = useState<string>('');
+  const [lowAmount, setLowAmount] = useState<string>('');
+  const [highAmount, setHighAmount] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
@@ -61,8 +63,12 @@ const DailyHistory = (props: DailyHistoryProps) => {
     setOpenSearchField(false);
   }, [setOpenSearchField]);
 
-  const selectDateChange = useCallback((selectDate: Date | null) => {
-    setSelectDate(selectDate as Date);
+  const selectStartDateChange = useCallback((selectStartDate: Date | null) => {
+    setStartSelectDate(selectStartDate as Date);
+  }, []);
+
+  const selectEndDateChange = useCallback((selectEndDate: Date | null) => {
+    setEndSelectDate(selectEndDate as Date);
   }, []);
 
   const inputMemo = useCallback(
@@ -79,11 +85,18 @@ const DailyHistory = (props: DailyHistoryProps) => {
     [setShop]
   );
 
-  const inputAmount = useCallback(
+  const inputLowAmount = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
-      setAmount(event.target.value);
+      setLowAmount(event.target.value);
     },
-    [setAmount]
+    [setLowAmount]
+  );
+
+  const inputHighAmount = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setHighAmount(event.target.value);
+    },
+    [setHighAmount]
   );
 
   const changeCategory = useCallback(
@@ -126,13 +139,9 @@ const DailyHistory = (props: DailyHistoryProps) => {
           openSearch={openSearch}
           openSearchFiled={openSearchField}
           pathName={pathName}
-          selectDate={selectDate}
-          selectDateChange={selectDateChange}
-          inputAmount={inputAmount}
           inputMemo={inputMemo}
           inputShop={inputShop}
           selectTransactionsType={selectTransactionType}
-          amount={amount}
           memo={memo}
           shop={shop}
           transactionType={transactionType}
@@ -140,6 +149,14 @@ const DailyHistory = (props: DailyHistoryProps) => {
           selectCategory={selectCategory}
           changeCategory={changeCategory}
           bigCategoryId={bigCategoryId}
+          selectStartDate={selectStartDate}
+          selectEndDate={selectEndDate}
+          highAmount={highAmount}
+          lowAmount={lowAmount}
+          selectStartDateChange={selectStartDateChange}
+          selectEndDateChange={selectEndDateChange}
+          inputHighAmount={inputHighAmount}
+          inputLowAmount={inputLowAmount}
           customCategoryId={customCategoryId}
           mediumCategoryId={mediumCategoryId}
         />

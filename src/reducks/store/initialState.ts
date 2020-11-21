@@ -10,6 +10,7 @@ const initialState = {
   transactions: {
     latestTransactionsList: [],
     transactionsList: [],
+    searchTransactionsList: [],
     noTransactionsMessage: '',
   },
   groupTransactions: {
