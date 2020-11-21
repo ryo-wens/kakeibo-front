@@ -25,6 +25,7 @@ export interface State {
   transactions: {
     latestTransactionsList: TransactionsList;
     transactionsList: TransactionsList;
+    searchTransactionsList: TransactionsList;
     noTransactionsMessage: string;
   };
   groupTransactions: {

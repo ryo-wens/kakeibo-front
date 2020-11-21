@@ -1,4 +1,6 @@
 import React from 'react';
+import { useDispatch } from 'react-redux';
+import { searchTransactions } from '../../reducks/transactions/operations';
 import '../../assets/history/daily-history.scss';
 import { DatePicker, CategoryInput, TextInput, KindSelectBox, GenericButton } from './index';
 
@@ -7,10 +9,12 @@ interface SearchTransactionProps {
   openSearchFiled: boolean;
   openSearch: () => void;
   closeSearch: () => void;
-  selectDateChange: (selectDate: Date | null) => void;
+  selectStartDateChange: (selectStartDate: Date | null) => void;
+  selectEndDateChange: (selectEndDate: Date | null) => void;
   selectTransactionsType: (event: React.ChangeEvent<{ value: unknown }>) => void;
   inputMemo: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  inputAmount: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputLowAmount: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputHighAmount: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inputShop: (event: React.ChangeEvent<HTMLInputElement>) => void;
   changeCategory: (event: React.ChangeEvent<{ value: unknown }>) => void;
   selectCategory: (
@@ -18,8 +22,10 @@ interface SearchTransactionProps {
     associatedCategoryId: number | null,
     category_type: string
   ) => void;
-  selectDate: Date | null;
-  amount: string;
+  selectStartDate: Date | null;
+  selectEndDate: Date | null;
+  lowAmount: string;
+  highAmount: string;
   memo: string;
   shop: string;
   category: string;
@@ -30,6 +36,17 @@ interface SearchTransactionProps {
 }
 
 const SearchTransaction = (props: SearchTransactionProps) => {
+  const dispatch = useDispatch();
+
+  const searchRequestData = {
+    transaction_type: props.transactionType,
+    low_amount: props.lowAmount,
+    high_amount: props.highAmount,
+    big_category_id: 2,
+    memo: props.memo,
+    shop: props.shop,
+  };
+
   return (
     <>
       <button className="daily-history__search-btn" onClick={props.openSearch}>
@@ -78,22 +95,22 @@ const SearchTransaction = (props: SearchTransactionProps) => {
           </div>
           <div>
             <TextInput
-              value={props.shop}
+              value={props.lowAmount}
               fullWidth={true}
               id={'amount'}
               label={'最低金額'}
-              onChange={props.inputAmount}
+              onChange={props.inputLowAmount}
               required={false}
               type={'text'}
             />
           </div>
           <div className="daily-history__input-form">
             <TextInput
-              value={props.shop}
+              value={props.highAmount}
               fullWidth={true}
               id={'amount'}
               label={'最高金額'}
-              onChange={props.inputAmount}
+              onChange={props.inputHighAmount}
               required={false}
               type={'text'}
             />
@@ -102,25 +119,25 @@ const SearchTransaction = (props: SearchTransactionProps) => {
             <DatePicker
               id={'startDate'}
               label={'開始日'}
-              onChange={props.selectDateChange}
+              onChange={props.selectStartDateChange}
               required={false}
-              value={props.selectDate}
+              value={props.selectStartDate}
             />
           </div>
           <div>
             <DatePicker
               id={'endDate'}
               label={'終了日'}
-              onChange={props.selectDateChange}
+              onChange={props.selectEndDateChange}
               required={false}
-              value={props.selectDate}
+              value={props.selectEndDate}
             />
           </div>
           <div className="daily-history__search-btn-position">
             <GenericButton
               disabled={false}
               label={'この条件で絞り込む'}
-              onClick={props.closeSearch}
+              onClick={() => dispatch(searchTransactions(searchRequestData)) && props.closeSearch()}
             />
           </div>
         </div>

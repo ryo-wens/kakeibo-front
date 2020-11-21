@@ -3,6 +3,7 @@ export type transactionActions = ReturnType<
   | typeof updateTransactionsAction
   | typeof fetchTransactionsActions
   | typeof updateLatestTransactionsActions
+  | typeof searchTransactionsActions
 >;
 
 export const FETCH_TRANSACTIONS = 'FETCH_TRANSACTIONS';
@@ -32,5 +33,13 @@ export const updateTransactionsAction = (transactionsList: TransactionsList) => 
   return {
     type: UPDATE_TRANSACTIONS,
     payload: transactionsList,
+  };
+};
+
+export const SEARCH_TRANSACTIONS = 'SEARCH_TRANSACTIONS';
+export const searchTransactionsActions = (searchTransactionsList: TransactionsList) => {
+  return {
+    type: SEARCH_TRANSACTIONS,
+    payload: searchTransactionsList,
   };
 };

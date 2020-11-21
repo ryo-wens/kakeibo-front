@@ -2,6 +2,7 @@ import {
   fetchTransactionsActions,
   updateTransactionsAction,
   updateLatestTransactionsActions,
+  searchTransactionsActions,
 } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -338,6 +339,49 @@ export const deleteLatestTransactions = (id: number) => {
       );
 
       dispatch(updateLatestTransactionsActions(nextLatestTransactionsList));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const searchTransactions = (searchRequestData: {
+  transaction_type?: string;
+  start_transaction_date?: Date | null;
+  end_transaction_date?: Date | null;
+  shop?: string | null;
+  memo?: string | null;
+  low_amount?: string | number;
+  high_amount?: string | number;
+  big_category_id?: number;
+  sort?: string;
+  sort_type?: string;
+  limit?: number;
+}) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<TransactionsList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search?`,
+        {
+          withCredentials: true,
+          params: {
+            start_date: searchRequestData.start_transaction_date,
+            end_date: searchRequestData.end_transaction_date,
+            transaction_type: searchRequestData.transaction_type,
+            low_amount: searchRequestData.low_amount,
+            high_amount: searchRequestData.high_amount,
+            shop: searchRequestData.shop,
+            memo: searchRequestData.memo,
+            big_category_id: searchRequestData.big_category_id,
+            sort: searchRequestData.sort,
+            sort_type: searchRequestData.sort_type,
+            limit: searchRequestData.limit,
+          },
+        }
+      );
+      const searchTransactionsList = result.data;
+
+      dispatch(searchTransactionsActions(searchTransactionsList));
     } catch (error) {
       errorHandling(dispatch, error);
     }
