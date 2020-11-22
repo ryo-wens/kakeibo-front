@@ -346,13 +346,13 @@ export const deleteLatestTransactions = (id: number) => {
 };
 
 export const searchTransactions = (searchRequestData: {
-  transaction_type?: string;
-  start_transaction_date?: Date | null;
-  end_transaction_date?: Date | null;
+  transaction_type?: string | null;
+  start_date?: Date | null;
+  end_date?: Date | null;
   shop?: string | null;
   memo?: string | null;
-  low_amount?: string | number;
-  high_amount?: string | number;
+  low_amount?: string | number | null;
+  high_amount?: string | number | null;
   big_category_id?: number;
   sort?: string;
   sort_type?: string;
@@ -360,13 +360,19 @@ export const searchTransactions = (searchRequestData: {
 }) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
-      const result = await axios.get<TransactionsList>(
+      const result = await axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search?`,
         {
           withCredentials: true,
           params: {
-            start_date: searchRequestData.start_transaction_date,
-            end_date: searchRequestData.end_transaction_date,
+            start_date:
+              searchRequestData.start_date !== null
+                ? moment(searchRequestData.start_date).format()
+                : null,
+            end_date:
+              searchRequestData.end_date !== null
+                ? moment(searchRequestData.end_date).format()
+                : null,
             transaction_type: searchRequestData.transaction_type,
             low_amount: searchRequestData.low_amount,
             high_amount: searchRequestData.high_amount,
@@ -379,9 +385,16 @@ export const searchTransactions = (searchRequestData: {
           },
         }
       );
-      const searchTransactionsList = result.data;
+      const message = result.data.message;
+      const searchTransactionsList: TransactionsList = result.data.transactions_list;
 
-      dispatch(searchTransactionsActions(searchTransactionsList));
+      if (searchTransactionsList !== undefined) {
+        const emptyMessage = '';
+        dispatch(searchTransactionsActions(searchTransactionsList, emptyMessage));
+      } else {
+        const emptySearchTransactionsList: TransactionsList = [];
+        dispatch(searchTransactionsActions(emptySearchTransactionsList, message));
+      }
     } catch (error) {
       errorHandling(dispatch, error);
     }

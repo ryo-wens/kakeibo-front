@@ -1,11 +1,13 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
 import { searchTransactions } from '../../reducks/transactions/operations';
+import { searchGroupTransactions } from '../../reducks/groupTransactions/operations';
 import '../../assets/history/daily-history.scss';
 import { DatePicker, CategoryInput, TextInput, KindSelectBox, GenericButton } from './index';
 
 interface SearchTransactionProps {
   pathName: string;
+  groupId: number;
   openSearchFiled: boolean;
   openSearch: () => void;
   closeSearch: () => void;
@@ -26,8 +28,8 @@ interface SearchTransactionProps {
   selectEndDate: Date | null;
   lowAmount: string;
   highAmount: string;
-  memo: string;
-  shop: string;
+  memo: string | null;
+  shop: string | null;
   category: string;
   bigCategoryId: number;
   mediumCategoryId: number | null;
@@ -39,12 +41,25 @@ const SearchTransaction = (props: SearchTransactionProps) => {
   const dispatch = useDispatch();
 
   const searchRequestData = {
-    transaction_type: props.transactionType,
-    low_amount: props.lowAmount,
-    high_amount: props.highAmount,
+    transaction_type: props.transactionType !== '' ? props.transactionType : null,
+    start_date: props.selectStartDate,
+    end_date: props.selectEndDate,
+    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
+    high_amount: props.highAmount !== '' ? props.highAmount : null,
+    memo: props.memo !== '' ? props.memo : null,
+    shop: props.shop !== '' ? props.shop : null,
     big_category_id: 2,
-    memo: props.memo,
-    shop: props.shop,
+  };
+
+  const groupSearchRequestData = {
+    transaction_type: props.transactionType !== '' ? props.transactionType : null,
+    start_date: props.selectStartDate,
+    end_date: props.selectEndDate,
+    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
+    high_amount: props.highAmount !== '' ? props.highAmount : null,
+    memo: props.memo !== '' ? props.memo : null,
+    shop: props.shop !== '' ? props.shop : null,
+    big_category_id: 2,
   };
 
   return (
@@ -137,7 +152,14 @@ const SearchTransaction = (props: SearchTransactionProps) => {
             <GenericButton
               disabled={false}
               label={'この条件で絞り込む'}
-              onClick={() => dispatch(searchTransactions(searchRequestData)) && props.closeSearch()}
+              onClick={() => {
+                if (props.pathName !== 'group') {
+                  dispatch(searchTransactions(searchRequestData)) && props.closeSearch();
+                } else {
+                  dispatch(searchGroupTransactions(props.groupId, groupSearchRequestData)) &&
+                    props.closeSearch();
+                }
+              }}
             />
           </div>
         </div>

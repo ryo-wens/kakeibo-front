@@ -7,6 +7,7 @@ export type groupTransactionsAction = ReturnType<
   | typeof addGroupAccountAction
   | typeof editGroupAccountAction
   | typeof deleteGroupAccountAction
+  | typeof searchGroupTransactionsAction
 >;
 
 export const UPDATE_GROUP_TRANSACTIONS = 'UPDATE_GROUP_TRANSACTIONS';
@@ -67,6 +68,20 @@ export const deleteGroupAccountAction = (
     payload: {
       deletedMessage,
       groupAccountList,
+    },
+  };
+};
+
+export const SEARCH_GROUP_TRANSACTIONS = 'SEARCH_GROUP_TRANSACTIONS';
+export const searchGroupTransactionsAction = (
+  groupSearchTransactionsList: GroupTransactionsList,
+  notHistoryMessage: string
+) => {
+  return {
+    type: SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsList,
+      notHistoryMessage,
     },
   };
 };

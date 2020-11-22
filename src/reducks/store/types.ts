@@ -27,10 +27,12 @@ export interface State {
     transactionsList: TransactionsList;
     searchTransactionsList: TransactionsList;
     noTransactionsMessage: string;
+    notHistoryMessage: string;
   };
   groupTransactions: {
     groupLatestTransactionsList: GroupTransactionsList;
     groupTransactionsList: GroupTransactionsList;
+    groupSearchTransactionsList: GroupTransactionsList;
     groupAccountList: GroupAccountList;
     notAccountMessage: string;
     deletedMessage: string;

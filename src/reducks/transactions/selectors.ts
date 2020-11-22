@@ -17,3 +17,13 @@ export const getTransactionsMessage = createSelector(
   [transactionsSelector],
   (state) => state.noTransactionsMessage
 );
+
+export const getSearchTransactions = createSelector(
+  [transactionsSelector],
+  (state) => state.searchTransactionsList
+);
+
+export const notHistoryMessage = createSelector(
+  [transactionsSelector],
+  (state) => state.notHistoryMessage
+);

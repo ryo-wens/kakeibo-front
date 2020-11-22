@@ -22,3 +22,13 @@ export const getNotGroupAccountMessage = createSelector(
   [groupTransactionsSelector],
   (state) => state.notAccountMessage
 );
+
+export const getSearchGroupTransactions = createSelector(
+  [groupTransactionsSelector],
+  (state) => state.groupSearchTransactionsList
+);
+
+export const getNotHistoryMessage = createSelector(
+  [groupTransactionsSelector],
+  (state) => state.notAccountMessage
+);

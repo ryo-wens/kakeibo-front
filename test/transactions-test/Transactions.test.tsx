@@ -440,21 +440,13 @@ it('Get transactionsList  search criteria match in  if fetch succeeds', async ()
     store.clearActions();
   });
 
-  const args = {
+  const params = {
     transaction_type: 'expense',
     low_amount: 2000,
     high_amount: 10000,
     big_category_id: 2,
     sort: 'transaction_date',
   };
-
-  // const params = {
-  //   transaction_type: 'expense',
-  //   low_amount: 2000,
-  //   high_amount: 10000,
-  //   big_category_id: 2,
-  //   sort: 'transaction_date',
-  // };
 
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search?`;
 
@@ -463,12 +455,15 @@ it('Get transactionsList  search criteria match in  if fetch succeeds', async ()
   const expectSearchActions = [
     {
       type: actionTypes.SEARCH_TRANSACTIONS,
-      payload: mockResponse,
+      payload: {
+        searchTransactionsList: mockResponse.transactions_list,
+        notHistoryMessage: '',
+      },
     },
   ];
 
   axiosMock.onGet(url).reply(200, mockResponse);
 
-  await searchTransactions(args)(store.dispatch);
+  await searchTransactions(params)(store.dispatch);
   expect(store.getActions()).toEqual(expectSearchActions);
 });

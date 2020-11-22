@@ -37,6 +37,11 @@ export const groupTransactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.SEARCH_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
