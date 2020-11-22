@@ -12,11 +12,14 @@ const initialState = {
     transactionsList: [],
     searchTransactionsList: [],
     noTransactionsMessage: '',
+    notHistoryMessage: '',
   },
   groupTransactions: {
     groupLatestTransactionsList: [],
     groupTransactionsList: [],
+    groupSearchTransactionsList: [],
     notAccountMessage: '',
+    notHistoryMessage: '',
     deletedMessage: '',
     groupAccountList: {
       group_id: 0,

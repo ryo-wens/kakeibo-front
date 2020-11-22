@@ -27,8 +27,8 @@ const DailyHistory = (props: DailyHistoryProps) => {
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [openSearchField, setOpenSearchField] = useState<boolean>(false);
-  const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date());
-  const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date());
+  const [selectStartDate, setStartSelectDate] = useState<Date | null>(null);
+  const [selectEndDate, setEndSelectDate] = useState<Date | null>(null);
   const [memo, setMemo] = useState<string>('');
   const [shop, setShop] = useState<string>('');
   const [lowAmount, setLowAmount] = useState<string>('');
@@ -159,6 +159,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
           inputLowAmount={inputLowAmount}
           customCategoryId={customCategoryId}
           mediumCategoryId={mediumCategoryId}
+          groupId={groupId}
         />
         <div className="daily-history__spacer" />
         {(() => {

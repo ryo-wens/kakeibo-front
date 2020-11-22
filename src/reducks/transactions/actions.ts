@@ -37,9 +37,15 @@ export const updateTransactionsAction = (transactionsList: TransactionsList) => 
 };
 
 export const SEARCH_TRANSACTIONS = 'SEARCH_TRANSACTIONS';
-export const searchTransactionsActions = (searchTransactionsList: TransactionsList) => {
+export const searchTransactionsActions = (
+  searchTransactionsList: TransactionsList,
+  notHistoryMessage: string
+) => {
   return {
     type: SEARCH_TRANSACTIONS,
-    payload: searchTransactionsList,
+    payload: {
+      searchTransactionsList,
+      notHistoryMessage,
+    },
   };
 };

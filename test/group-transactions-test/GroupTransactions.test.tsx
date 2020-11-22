@@ -18,6 +18,7 @@ import {
   addGroupAccount,
   editGroupAccount,
   deleteGroupAccount,
+  searchGroupTransactions,
 } from '../../src/reducks/groupTransactions/operations';
 import groupTransactions from './groupTransactions.json';
 import groupLatestTransactions from './groupLatestTransactions.json';
@@ -32,6 +33,7 @@ import deletedGroupLatestTransaction from './deletedGroupLatestTransactions.json
 import groupAccountList from './groupAccountList.json';
 import editGroupAccountList from './editGroupAccoountResponse.json';
 import deleteAccountResponse from './deleteGroupAccountResponse.json';
+import searchGroupTransactionsRes from './fetchSearchGroupTransactionsResponse.json';
 import { year, customMonth } from '../../src/lib/constant';
 
 const axiosMock = new axiosMockAdapter(axios);
@@ -631,6 +633,41 @@ describe('async actions groupTransactions', () => {
 
     // @ts-ignore
     await deleteGroupAccount(groupId, year, customMonth)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectActions);
+  });
+
+  it('Get groupTransactionsList search criteria match in  if fetch succeeds', async () => {
+    const store = mockStore({ groupTransactions: { groupSearchTransactionsList: [] } });
+
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search?`;
+
+    const params = {
+      transaction_type: 'expense',
+      low_amount: 1000,
+      high_amount: 5000,
+      big_category_id: 2,
+    };
+
+    const mockResponse = searchGroupTransactionsRes;
+
+    const expectActions = [
+      {
+        type: actionTypes.SEARCH_GROUP_TRANSACTIONS,
+        payload: {
+          groupSearchTransactionsList: mockResponse.transactions_list,
+          notHistoryMessage: '',
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await searchGroupTransactions(groupId, params)(store.dispatch);
     expect(store.getActions()).toEqual(expectActions);
   });
 });

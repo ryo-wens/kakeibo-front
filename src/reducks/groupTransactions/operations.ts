@@ -5,6 +5,7 @@ import {
   addGroupAccountAction,
   editGroupAccountAction,
   deleteGroupAccountAction,
+  searchGroupTransactionsAction,
 } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -457,6 +458,65 @@ export const deleteGroupAccount = (groupId: number, year: number, customMonth: s
         dispatch(deleteGroupAccountAction(emptyGroupAccountList, deletedMessage));
       } else {
         return prevGroupAccountList;
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const searchGroupTransactions = (
+  groupId: number,
+  searchRequest: {
+    transaction_type?: string | null;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    shop?: string | null;
+    memo?: string | null;
+    low_amount?: string | number | null;
+    high_amount?: string | number | null;
+    payment_user_id?: string;
+    big_category_id?: number;
+    limit?: number;
+    sort?: string;
+    sort_type?: string;
+  }
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<FetchGroupTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search?`,
+        {
+          withCredentials: true,
+          params: {
+            start_date:
+              searchRequest.start_date !== null ? moment(searchRequest.start_date).format() : null,
+            end_date:
+              searchRequest.end_date !== null ? moment(searchRequest.end_date).format() : null,
+            transaction_type: searchRequest.transaction_type,
+            shop: searchRequest.shop,
+            memo: searchRequest.memo,
+            low_amount: searchRequest.low_amount,
+            high_amount: searchRequest.high_amount,
+            payment_user_id: searchRequest.payment_user_id,
+            limit: searchRequest.limit,
+            sort: searchRequest.sort,
+            big_category_id: searchRequest.big_category_id,
+            sort_type: searchRequest.sort_type,
+          },
+        }
+      );
+      const searchGroupTransactionsList: GroupTransactionsList = result.data.transactions_list;
+      const notHistoryMessage = result.data.message;
+
+      if (searchGroupTransactionsList !== undefined) {
+        const emptyMessage = '';
+        dispatch(searchGroupTransactionsAction(searchGroupTransactionsList, emptyMessage));
+      } else {
+        const emptySearchGroupTransactionsList: GroupTransactionsList = [];
+        dispatch(
+          searchGroupTransactionsAction(emptySearchGroupTransactionsList, notHistoryMessage)
+        );
       }
     } catch (error) {
       errorHandling(dispatch, error);
