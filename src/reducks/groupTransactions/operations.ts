@@ -475,17 +475,17 @@ export const searchGroupTransactions = (
     memo?: string | null;
     low_amount?: string | number | null;
     high_amount?: string | number | null;
-    payment_user_id?: string;
-    big_category_id?: number;
-    limit?: number;
-    sort?: string;
-    sort_type?: string;
+    payment_user_id?: string | null;
+    big_category_id?: number | null;
+    limit?: string | null;
+    sort?: string | null;
+    sort_type?: string | null;
   }
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchGroupTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search?`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search`,
         {
           withCredentials: true,
           params: {

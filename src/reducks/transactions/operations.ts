@@ -353,15 +353,15 @@ export const searchTransactions = (searchRequestData: {
   memo?: string | null;
   low_amount?: string | number | null;
   high_amount?: string | number | null;
-  big_category_id?: number;
-  sort?: string;
-  sort_type?: string;
-  limit?: number;
+  big_category_id?: number | null;
+  sort?: string | null;
+  sort_type?: string | null;
+  limit?: string | null;
 }) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search?`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`,
         {
           withCredentials: true,
           params: {

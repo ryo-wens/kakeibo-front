@@ -448,7 +448,7 @@ it('Get transactionsList  search criteria match in  if fetch succeeds', async ()
     sort: 'transaction_date',
   };
 
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search?`;
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`;
 
   const mockResponse = fetchResSearchTransaction;
 
