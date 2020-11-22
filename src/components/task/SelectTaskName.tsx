@@ -13,7 +13,8 @@ const SelectTaskName = (props: SelectTaskNameProps) => {
         <option value={0}>タスク名を選択</option>
         {props.groupTasksList.map(
           (groupTasksListItem: TasksListItem) =>
-            groupTasksListItem.cycle_type !== 'none' && (
+            groupTasksListItem.cycle_type !== 'none' &&
+            groupTasksListItem.group_tasks_users_id === null && (
               <option key={groupTasksListItem.id} value={groupTasksListItem.id}>
                 {groupTasksListItem.task_name}
               </option>

@@ -78,3 +78,10 @@ export interface editTaskItemRes {
 export interface deleteTaskItemRes {
   message: string;
 }
+
+export interface TaskUser {
+  taskUserId: number;
+  taskName: string;
+}
+
+export interface TaskUsers extends Array<TaskUser> {}

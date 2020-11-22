@@ -5,22 +5,39 @@
   display: flex;
   width: 100%;
   background-color: $white;
+  border-top: #F4F5F7 solid 2.5px;
   align-items: center;
-  border: #F4F5F7 solid 2.0px;
+  height: 40px;
+
+
+  &:last-child {
+    border-bottom: #F4F5F7 solid 2.5px;
+  }
+
 
   &__item{
     color: $task-sub_color;
     border-left: #F4F5F7 solid 2.5px;
     width: calc(100%/8);
+    height: 40px;
     text-align: center;
+    vertical-align: middle;
 
-    &:first-child {
-      border-left: none;
+    &:last-child {
+      border-right: #F4F5F7 solid 2.5px;
     }
   }
 
-  &__date {
+  &__user-name {
+    position: relative;
+    display: inline-block;
+    font-size: 1.0rem;
+    border: $task-sub_color solid 1.5px;
+    border-radius: 0.3rem;
+    padding: 2.5px 50px;
+  }
+
+  &__blank {
     display: block;
-    font-size: 0.8rem;
   }
 }

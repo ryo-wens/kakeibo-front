@@ -3,11 +3,11 @@
 .week-tables {
   display: flex;
   background-color: $white;
+  border-top: #F4F5F7 solid 2.5px;;
 
   &__item{
     color: $task-sub_color;
-    border: #F4F5F7 solid 2.5px;
-    border-right: none;
+    border-left: #F4F5F7 solid 2.5px;
     width: calc(100%/8);
     padding: 5px 0;
 

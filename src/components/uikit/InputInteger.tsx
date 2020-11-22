@@ -15,12 +15,13 @@ const InputInteger = (props: InputIntegerProps) => {
     <>
       <input
         className="input-integer"
-        type="number"
+        type="text"
+        inputMode="numeric"
         name={props.name}
         value={props.value}
-        onChange={props.onChange}
+        onInput={props.onChange}
         required={props.required}
-        step={1}
+        pattern="^\d*$"
       />
       {props.message !== '' && <InvalidMessage message={props.message} />}
     </>

@@ -2,16 +2,17 @@ import React, { useCallback, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
 import { DatePicker, DeleteButton, InputInteger, SaveButton } from '../uikit';
-import { isValidBudgetFormat, isValidPreventBeginningZero } from '../../lib/validation';
 import { SelectCycleType, SelectTaskName, SelectTaskUser } from './index';
 import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { date } from '../../lib/constant';
-import { Group } from '../../reducks/groups/types';
+import { Group, Groups } from '../../reducks/groups/types';
 import { useDispatch } from 'react-redux';
 import { editTaskItem } from '../../reducks/groupTasks/operations';
 
 interface SetTaskListItemProps {
+  approvedGroups: Groups;
   approvedGroup: Group;
+  groupId: number;
   groupTasksList: GroupTasksList;
   groupTasksListForEachUser: GroupTasksListForEachUser;
   closeModal: () => void;
@@ -22,8 +23,9 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
   const [taskItemName, setTaskItemName] = useState<string>('');
   const [taskItemId, setTaskItemId] = useState<number>(0);
   const [baseDate, setBaseDate] = useState<Date>(date);
-  const [cycleType, setCycleType] = useState<'every' | 'consecutive' | 'none' | null>('every');
+  const [cycleType, setCycleType] = useState<'every' | 'consecutive' | 'none'>('every');
   const [cycle, setCycle] = useState<number>(1);
+  const [message, setMessage] = useState<string>('');
   const [taskUserId, setTaskUserId] = useState<number>(0);
 
   const selectTaskName = useCallback(
@@ -50,11 +52,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
 
   const selectCycleType = useCallback(
     (event: React.ChangeEvent<{ value: string }>) => {
-      if (event.target.value !== 'null') {
-        setCycleType(event.target.value as 'every' | 'consecutive' | 'none');
-      } else if (event.target.value === 'null') {
-        setCycleType(null);
-      }
+      setCycleType(event.target.value as 'every' | 'consecutive' | 'none');
     },
     [setCycleType]
   );
@@ -67,23 +65,16 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
   );
 
   const inputCycle = useCallback(
-    (event) => {
-      setCycle(event.target.value);
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      if (isNaN(Number(event.target.value))) {
+        setMessage('半角数字のみ入力可能です');
+      } else {
+        setCycle(Number(event.target.value));
+        setMessage('');
+      }
     },
     [setCycle]
   );
-
-  const switchMessage = () => {
-    if (!cycle) {
-      return '必須項目です';
-    } else if (isValidPreventBeginningZero(cycle)) {
-      return '先頭に0は入力できません';
-    } else if (!isValidBudgetFormat(cycle)) {
-      return '整数のみ入力可能です';
-    } else {
-      return '';
-    }
-  };
 
   const selectContents = [
     {
@@ -116,7 +107,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           value={cycle}
           required={true}
           onChange={inputCycle}
-          message={switchMessage()}
+          message={message}
         />
       ),
     },
@@ -124,7 +115,8 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
       key: 'タスクユーザー',
       value: (
         <SelectTaskUser
-          approvedGroup={props.approvedGroup}
+          groupId={props.groupId}
+          approvedGroups={props.approvedGroups}
           groupTasksListForEachUser={props.groupTasksListForEachUser}
           selectTaskUser={selectTaskUser}
         />
@@ -134,6 +126,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
 
   const existsSelectTaskName = taskItemName === '';
   const existsSelectTaskId = taskItemId === 0;
+  const existsCycle = cycle === 0;
   const existsTaskUserId = taskUserId === 0;
 
   return (
@@ -159,11 +152,11 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
       <div className="set-task-list-item__operation-btn">
         <SaveButton
           label={'追加'}
-          disabled={existsSelectTaskName || existsSelectTaskId || existsTaskUserId}
+          disabled={existsSelectTaskName || existsSelectTaskId || existsCycle || existsTaskUserId}
           onClick={() =>
             dispatch(
               editTaskItem(
-                props.approvedGroup.group_id,
+                props.groupId,
                 taskItemId,
                 baseDate,
                 cycleType,
@@ -171,7 +164,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
                 taskItemName,
                 taskUserId
               )
-            )
+            ) && props.closeModal()
           }
         />
         <DeleteButton

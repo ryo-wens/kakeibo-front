@@ -5,7 +5,7 @@ interface SelectTaskNameProps {
 }
 
 const SelectTaskName = (props: SelectTaskNameProps) => {
-  const cycleTypes = ['every', 'consecutive', 'none', 'null'];
+  const cycleTypes = ['every', 'consecutive', 'none'];
 
   return (
     <form>
