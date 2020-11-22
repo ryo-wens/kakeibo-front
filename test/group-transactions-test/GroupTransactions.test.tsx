@@ -644,7 +644,7 @@ describe('async actions groupTransactions', () => {
     });
 
     const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search?`;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search`;
 
     const params = {
       transaction_type: 'expense',
