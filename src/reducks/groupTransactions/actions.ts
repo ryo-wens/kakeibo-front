@@ -5,6 +5,9 @@ export type groupTransactionsAction = ReturnType<
   | typeof updateGroupLatestTransactionsAction
   | typeof fetchGroupAccountAction
   | typeof addGroupAccountAction
+  | typeof editGroupAccountAction
+  | typeof deleteGroupAccountAction
+  | typeof searchGroupTransactionsAction
 >;
 
 export const UPDATE_GROUP_TRANSACTIONS = 'UPDATE_GROUP_TRANSACTIONS';
@@ -44,5 +47,41 @@ export const addGroupAccountAction = (groupAccountList: GroupAccountList) => {
   return {
     type: ADD_GROUP_ACCOUNT,
     payload: groupAccountList,
+  };
+};
+
+export const EDIT_GROUP_ACCOUNT = 'EDIT_GROUP_ACCOUNT';
+export const editGroupAccountAction = (groupAccountList: GroupAccountList) => {
+  return {
+    type: EDIT_GROUP_ACCOUNT,
+    payload: groupAccountList,
+  };
+};
+
+export const DELETE_GROUP_ACCOUNT = 'DELETE_GROUP_ACCOUNT';
+export const deleteGroupAccountAction = (
+  groupAccountList: GroupAccountList,
+  deletedMessage: string
+) => {
+  return {
+    type: DELETE_GROUP_ACCOUNT,
+    payload: {
+      deletedMessage,
+      groupAccountList,
+    },
+  };
+};
+
+export const SEARCH_GROUP_TRANSACTIONS = 'SEARCH_GROUP_TRANSACTIONS';
+export const searchGroupTransactionsAction = (
+  groupSearchTransactionsList: GroupTransactionsList,
+  notHistoryMessage: string
+) => {
+  return {
+    type: SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsList,
+      notHistoryMessage,
+    },
   };
 };

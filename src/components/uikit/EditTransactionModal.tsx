@@ -322,7 +322,12 @@ const EditTransactionModal = (props: InputModalProps) => {
           onChange={handleDateChange}
           required={false}
         />
-        <KindSelectBox value={transactionsType} onChange={handleSelect} required={false} />
+        <KindSelectBox
+          value={transactionsType}
+          onChange={handleSelect}
+          required={false}
+          label={'支出or収入'}
+        />
         <TextInput
           id={'amount'}
           label={'金額'}

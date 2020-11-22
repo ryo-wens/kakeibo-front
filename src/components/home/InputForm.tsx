@@ -1,16 +1,26 @@
-import React, { useState, useCallback } from 'react';
-import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
-import { useDispatch } from 'react-redux';
+import React, { useState, useCallback, useEffect } from 'react';
+import {
+  GenericButton,
+  DatePicker,
+  CategoryInput,
+  TextInput,
+  KindSelectBox,
+  SelectPayer,
+} from '../uikit/index';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
   addGroupTransactions,
 } from '../../reducks/groupTransactions/operations';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { getUserId } from '../../reducks/users/selectors';
 import { push } from 'connected-react-router';
 import { makeStyles } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
+import { State } from '../../reducks/store/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles({
@@ -23,8 +33,11 @@ const useStyles = makeStyles({
 const InputForm = (): JSX.Element => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: State) => state);
   const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
+  const approvedGroups = getApprovedGroups(selector);
+  const userId = getUserId(selector);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const emptyMemo = memo === '' ? null : memo;
@@ -36,8 +49,18 @@ const InputForm = (): JSX.Element => {
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const paymentUserId = 'taira';
+  const [paymentUserId, setPaymentUserId] = useState<string>(userId);
 
+  useEffect(() => {
+    setPaymentUserId(userId);
+  }, [userId]);
+
+  const handlePayerChange = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setPaymentUserId(event.target.value as string);
+    },
+    [setPaymentUserId]
+  );
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setAmount(event.target.value);
@@ -56,21 +79,18 @@ const InputForm = (): JSX.Element => {
     },
     [setShop]
   );
-
   const handleChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       setCategory(event.target.value as string);
     },
     [setCategory]
   );
-
   const handleSelect = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       setTransactionType(event.target.value as string);
     },
     [setTransactionType]
   );
-
   const handleDateChange = useCallback(
     (transactionDate: Date | null) => {
       setTransactionDate(transactionDate as Date);
@@ -88,16 +108,6 @@ const InputForm = (): JSX.Element => {
   const selectCategory = useCallback(
     (bigCategoryId: number, associatedCategoryId: number | null, category_type: string) => {
       switch (category_type) {
-        case 'IncomeBigCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(null);
-          setCustomCategoryId(null);
-          break;
-        case 'ExpenseBigCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(null);
-          setCustomCategoryId(null);
-          break;
         case 'MediumCategory':
           setBigCategoryId(bigCategoryId);
           setMediumCategoryId(associatedCategoryId);
@@ -165,7 +175,12 @@ const InputForm = (): JSX.Element => {
         onChange={handleDateChange}
         required={true}
       />
-      <KindSelectBox onChange={handleSelect} required={true} value={transactionsType} />
+      <KindSelectBox
+        onChange={handleSelect}
+        required={true}
+        value={transactionsType}
+        label={'収入or支出(必須)'}
+      />
       <TextInput
         value={amount}
         type={'tel'}
@@ -175,6 +190,16 @@ const InputForm = (): JSX.Element => {
         required={true}
         fullWidth={false}
       />
+      {pathName === 'group' && (
+        <SelectPayer
+          onChange={handlePayerChange}
+          required={true}
+          value={paymentUserId}
+          approvedGroups={approvedGroups}
+          groupId={groupId}
+          pathName={pathName}
+        />
+      )}
       <CategoryInput
         value={category}
         onClick={selectCategory}

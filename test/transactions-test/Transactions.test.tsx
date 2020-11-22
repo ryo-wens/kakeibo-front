@@ -14,6 +14,7 @@ import {
   editLatestTransactions,
   deleteTransactions,
   deleteLatestTransactions,
+  searchTransactions,
 } from '../../src/reducks/transactions/operations';
 import transactionsList from './transactions.json';
 import latestTransactionsList from './latestTransactions.json';
@@ -25,6 +26,7 @@ import deleteResTransaction from './deleteReponse.json';
 import addLatestTransaction from './addLatestTransactions.json';
 import editLatestTransaction from './editLatestTransactions.json';
 import deleteTransaction from './deleteLatestTransactions.json';
+import fetchResSearchTransaction from './fetchSearchTransactionsRes.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -426,4 +428,42 @@ describe('async actions deleteLatestTransactions', () => {
     await deleteLatestTransactions(130)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedDeleteActions);
   });
+});
+
+it('Get transactionsList  search criteria match in  if fetch succeeds', async () => {
+  const store = mockStore({
+    transactions: {
+      searchTransactionsList: [],
+    },
+  });
+  beforeEach(() => {
+    store.clearActions();
+  });
+
+  const params = {
+    transaction_type: 'expense',
+    low_amount: 2000,
+    high_amount: 10000,
+    big_category_id: 2,
+    sort: 'transaction_date',
+  };
+
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search?`;
+
+  const mockResponse = fetchResSearchTransaction;
+
+  const expectSearchActions = [
+    {
+      type: actionTypes.SEARCH_TRANSACTIONS,
+      payload: {
+        searchTransactionsList: mockResponse.transactions_list,
+        notHistoryMessage: '',
+      },
+    },
+  ];
+
+  axiosMock.onGet(url).reply(200, mockResponse);
+
+  await searchTransactions(params)(store.dispatch);
+  expect(store.getActions()).toEqual(expectSearchActions);
 });

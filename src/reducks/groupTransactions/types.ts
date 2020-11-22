@@ -38,7 +38,7 @@ export interface FetchGroupTransactionsRes {
   transactions_list: GroupTransactionsList;
 }
 
-export interface deleteGroupTransactionRes {
+export interface deleteActionRes {
   message: string;
 }
 

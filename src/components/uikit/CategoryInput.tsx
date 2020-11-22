@@ -7,16 +7,18 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { State } from '../../reducks/store/types';
 import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
+import {
+  getGroupIncomeCategories,
+  getGroupExpenseCategories,
+} from '../../reducks/groupCategories/selectors';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
 import { Categories } from '../../reducks/categories/types';
 import { getPathTemplateName, getPathGroupId } from '../../lib/path';
+import GroupCategoryInput from './GroupCategoryInput';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    bigCategory: {
-      padding: 8,
-    },
     formControl: {
       marginTop: 0,
       marginBottom: 16,
@@ -56,6 +58,8 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
   const selector = useSelector((state: State) => state);
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
+  const groupIncomeCategories = getGroupIncomeCategories(selector);
+  const groupExpenseCategories = getGroupExpenseCategories(selector);
   const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
 
@@ -138,9 +142,22 @@ const CategoryInput = (props: CategoryProps): JSX.Element => {
       <InputLabel id="category" required={props.required}>
         カテゴリー(必須)
       </InputLabel>
-      <Select MenuProps={MenuProps} value={props.value} onChange={props.onChange}>
-        {categories}
-      </Select>
+      {pathName !== 'group' ? (
+        <Select MenuProps={MenuProps} value={props.value} onChange={props.onChange}>
+          {categories}
+        </Select>
+      ) : (
+        <GroupCategoryInput
+          groupExpenseCategories={groupExpenseCategories}
+          groupIncomeCategories={groupIncomeCategories}
+          kind={props.kind}
+          onChange={props.onChange}
+          onClick={props.onClick}
+          required={props.required}
+          value={props.value}
+          menuProps={MenuProps}
+        />
+      )}
     </FormControl>
   );
 };

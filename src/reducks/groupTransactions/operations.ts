@@ -3,6 +3,9 @@ import {
   updateGroupLatestTransactionsAction,
   fetchGroupAccountAction,
   addGroupAccountAction,
+  editGroupAccountAction,
+  deleteGroupAccountAction,
+  searchGroupTransactionsAction,
 } from './actions';
 import axios from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -11,7 +14,7 @@ import {
   GroupTransactionsList,
   FetchGroupTransactionsRes,
   GroupLatestTransactionsListRes,
-  deleteGroupTransactionRes,
+  deleteActionRes,
   GroupAccountList,
   GroupAccountListRes,
 } from './types';
@@ -313,7 +316,7 @@ export const editGroupLatestTransactionsList = (
 export const deleteGroupTransactions = (id: number, groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
-      const result = await axios.delete<deleteGroupTransactionRes>(
+      const result = await axios.delete<deleteActionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
         {
           withCredentials: true,
@@ -339,7 +342,7 @@ export const deleteGroupTransactions = (id: number, groupId: number) => {
 export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
-      await axios.delete<deleteGroupTransactionRes>(
+      await axios.delete<deleteActionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
         {
           withCredentials: true,
@@ -359,11 +362,11 @@ export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
   };
 };
 
-export const fetchGroupAccount = (groupId: number, year: number, customMont: string) => {
+export const fetchGroupAccount = (groupId: number, year: number, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<GroupAccountListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMont}/account`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
         {
           withCredentials: true,
         }
@@ -387,7 +390,7 @@ export const fetchGroupAccount = (groupId: number, year: number, customMont: str
 };
 
 export const addGroupAccount = (groupId: number, year: number, customMonth: string) => {
-  return async (dispatch: Dispatch<Action>) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
       const result = await axios.post<GroupAccountList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
@@ -397,8 +400,124 @@ export const addGroupAccount = (groupId: number, year: number, customMonth: stri
         }
       );
       const groupAccountList = result.data;
+      const prevGroupAccountList = getState().groupTransactions.groupAccountList;
 
-      dispatch(addGroupAccountAction(groupAccountList));
+      if (prevGroupAccountList.group_id === groupId) {
+        dispatch(addGroupAccountAction(groupAccountList));
+      } else {
+        return prevGroupAccountList;
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const editGroupAccount = (
+  groupAccountList: GroupAccountList,
+  groupId: number,
+  year: number,
+  customMonth: string
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    try {
+      const result = await axios.put<GroupAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
+        JSON.stringify(groupAccountList),
+        { withCredentials: true }
+      );
+      const editedGroupAccountList = result.data;
+      const prevGroupAccountList = getState().groupTransactions.groupAccountList;
+
+      if (editedGroupAccountList.group_id === prevGroupAccountList.group_id) {
+        dispatch(editGroupAccountAction(editedGroupAccountList));
+      } else {
+        return prevGroupAccountList;
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const deleteGroupAccount = (groupId: number, year: number, customMonth: string) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    try {
+      const result = await axios.delete<deleteActionRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
+        {
+          withCredentials: true,
+        }
+      );
+      const deletedMessage = result.data.message;
+      const prevGroupAccountList = getState().groupTransactions.groupAccountList;
+
+      if (prevGroupAccountList.group_id === groupId) {
+        const emptyGroupAccountList = {} as GroupAccountList;
+
+        dispatch(deleteGroupAccountAction(emptyGroupAccountList, deletedMessage));
+      } else {
+        return prevGroupAccountList;
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const searchGroupTransactions = (
+  groupId: number,
+  searchRequest: {
+    transaction_type?: string | null;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    shop?: string | null;
+    memo?: string | null;
+    low_amount?: string | number | null;
+    high_amount?: string | number | null;
+    payment_user_id?: string;
+    big_category_id?: number;
+    limit?: number;
+    sort?: string;
+    sort_type?: string;
+  }
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<FetchGroupTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search?`,
+        {
+          withCredentials: true,
+          params: {
+            start_date:
+              searchRequest.start_date !== null ? moment(searchRequest.start_date).format() : null,
+            end_date:
+              searchRequest.end_date !== null ? moment(searchRequest.end_date).format() : null,
+            transaction_type: searchRequest.transaction_type,
+            shop: searchRequest.shop,
+            memo: searchRequest.memo,
+            low_amount: searchRequest.low_amount,
+            high_amount: searchRequest.high_amount,
+            payment_user_id: searchRequest.payment_user_id,
+            limit: searchRequest.limit,
+            sort: searchRequest.sort,
+            big_category_id: searchRequest.big_category_id,
+            sort_type: searchRequest.sort_type,
+          },
+        }
+      );
+      const searchGroupTransactionsList: GroupTransactionsList = result.data.transactions_list;
+      const notHistoryMessage = result.data.message;
+
+      if (searchGroupTransactionsList !== undefined) {
+        const emptyMessage = '';
+        dispatch(searchGroupTransactionsAction(searchGroupTransactionsList, emptyMessage));
+      } else {
+        const emptySearchGroupTransactionsList: GroupTransactionsList = [];
+        dispatch(
+          searchGroupTransactionsAction(emptySearchGroupTransactionsList, notHistoryMessage)
+        );
+      }
     } catch (error) {
       errorHandling(dispatch, error);
     }

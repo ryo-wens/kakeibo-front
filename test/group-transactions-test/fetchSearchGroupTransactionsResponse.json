@@ -1,0 +1,68 @@
+{
+  "transactions_list":[
+    {
+      "id": 20,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-20T15:28:54Z",
+      "updated_date": "2020-11-20T15:28:54Z",
+      "transaction_date": "2020/11/20(金)",
+      "shop": null,
+      "memo": null,
+      "amount": 2000,
+      "posted_user_id": "taira",
+      "updated_user_id": null,
+      "payment_user_id": "taira",
+      "big_category_name": "食費",
+      "medium_category_name": "夕食",
+      "custom_category_name": null
+    },
+    {
+      "id": 19,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-20T14:17:01Z",
+      "updated_date": "2020-11-20T14:17:01Z",
+      "transaction_date": "2020/11/20(金)",
+      "shop": "ビッグヨーサン",
+      "memo": "鶏肉",
+      "amount": 3000,
+      "posted_user_id": "taira",
+      "updated_user_id": null,
+      "payment_user_id": "tati1",
+      "big_category_name": "食費",
+      "medium_category_name": "食料品",
+      "custom_category_name": null
+    },
+    {
+      "id": 18,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-17T19:53:53Z",
+      "updated_date": "2020-11-17T19:53:53Z",
+      "transaction_date": "2020/11/17(火)",
+      "shop": "すき家",
+      "memo": null,
+      "amount": 1000,
+      "posted_user_id": "taira",
+      "updated_user_id": null,
+      "payment_user_id": "taira",
+      "big_category_name": "食費",
+      "medium_category_name": "昼食",
+      "custom_category_name": null
+    },
+    {
+      "id": 23,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-21T22:41:25Z",
+      "updated_date": "2020-11-21T22:41:25Z",
+      "transaction_date": "2020/11/06(金)",
+      "shop": "コストコ",
+      "memo": "チーズケーキ",
+      "amount": 1200,
+      "posted_user_id": "taira",
+      "updated_user_id": null,
+      "payment_user_id": "taira",
+      "big_category_name": "食費",
+      "medium_category_name": "食料品",
+      "custom_category_name": null
+    }
+  ]
+}

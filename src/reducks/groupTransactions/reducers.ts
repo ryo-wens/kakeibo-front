@@ -27,6 +27,21 @@ export const groupTransactionsReducer = (
         ...state,
         groupAccountList: action.payload,
       };
+    case Actions.EDIT_GROUP_ACCOUNT:
+      return {
+        ...state,
+        groupAccountList: action.payload,
+      };
+    case Actions.DELETE_GROUP_ACCOUNT:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.SEARCH_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

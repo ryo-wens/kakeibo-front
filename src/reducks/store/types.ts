@@ -25,13 +25,17 @@ export interface State {
   transactions: {
     latestTransactionsList: TransactionsList;
     transactionsList: TransactionsList;
+    searchTransactionsList: TransactionsList;
     noTransactionsMessage: string;
+    notHistoryMessage: string;
   };
   groupTransactions: {
     groupLatestTransactionsList: GroupTransactionsList;
     groupTransactionsList: GroupTransactionsList;
+    groupSearchTransactionsList: GroupTransactionsList;
     groupAccountList: GroupAccountList;
     notAccountMessage: string;
+    deletedMessage: string;
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;
