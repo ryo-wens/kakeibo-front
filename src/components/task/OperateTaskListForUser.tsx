@@ -64,6 +64,20 @@ const OperateTaskListForUser = (props: OperateTaskListForUserProps) => {
     setTaskUserId(taskUserId);
   }, [setOpen, setTaskItemName, setTaskItemId, setBaseDate, setCycle, setTaskUserId]);
 
+  const handleDateChange = useCallback(
+    (selectedDate: Date | null) => {
+      setBaseDate(selectedDate as Date);
+    },
+    [setBaseDate]
+  );
+
+  const inputTaskName = useCallback(
+    (event: React.ChangeEvent<HTMLInputElement>) => {
+      setTaskItemName(event.target.value as string);
+    },
+    [setTaskItemName]
+  );
+
   return (
     <>
       <th className="edit-task-list-for-user__task-name" onClick={openModal}>
@@ -80,6 +94,8 @@ const OperateTaskListForUser = (props: OperateTaskListForUserProps) => {
           approvedGroup={props.approvedGroup}
           groupId={props.groupId}
           closeModal={closeModal}
+          handleDateChange={handleDateChange}
+          inputTaskName={inputTaskName}
           label={props.label}
           taskItemName={taskItemName}
           setTaskItemName={setTaskItemName}
