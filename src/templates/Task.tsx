@@ -6,10 +6,16 @@ import { fetchGroups } from '../reducks/groups/operations';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import { EditTaskUser, SkipDate, TaskList, TaskListForUser, WeekTables } from '../components/task';
+import {
+  EditTaskUser,
+  OperateTaskListForUser,
+  SkipDate,
+  TaskList,
+  TaskListForUser,
+  WeekTables,
+} from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 import '../assets/task/task.scss';
-import AddIcon from '@material-ui/icons/Add';
 import { TasksListItem } from '../reducks/groupTasks/types';
 
 const Task = () => {
@@ -65,25 +71,28 @@ const Task = () => {
           {groupTasksList.map((tasksListItem: TasksListItem) => {
             if (tasksListItem.cycle_type !== null && groupTasksListForEachUser.length) {
               return (
-                <TaskListForUser
-                  groupId={groupId}
-                  approvedGroups={approvedGroups}
-                  selectedDate={selectedDate}
-                  groupTaskList={groupTasksList}
-                  groupTasksListForEachUser={groupTasksListForEachUser}
-                  tasksListItem={tasksListItem}
-                />
+                <tr className="task__list-for-user" key={tasksListItem.id}>
+                  <TaskListForUser
+                    groupId={groupId}
+                    approvedGroups={approvedGroups}
+                    selectedDate={selectedDate}
+                    groupTaskList={groupTasksList}
+                    groupTasksListForEachUser={groupTasksListForEachUser}
+                    tasksListItem={tasksListItem}
+                  />
+                </tr>
               );
             }
           })}
         </tbody>
         <tfoot>
           <tr className="task__assign-task">
-            <th className="task__assign-task-item">
-              <button className="task__assign-task-btn">
-                <AddIcon />
-              </button>
-            </th>
+            <OperateTaskListForUser
+              approvedGroups={approvedGroups}
+              approvedGroup={approvedGroup}
+              groupId={groupId}
+              label={'追加'}
+            />
           </tr>
         </tfoot>
       </table>

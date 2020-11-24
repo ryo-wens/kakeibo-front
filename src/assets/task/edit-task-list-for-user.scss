@@ -8,6 +8,24 @@
     width: calc(100%/8);
     height: 40px;
     text-align: center;
+    cursor: pointer;
     vertical-align: middle;
+  }
+
+  &__assign-task-btn {
+    width: 100%;
+    background-color: $white;
+    border: none;
+    color: $task-border_color;
+    cursor: pointer;
+    padding: 0;
+
+    &:hover {
+      color: $task-sub_color;
+    }
+
+    &:focus {
+      outline: none;
+    }
   }
 }

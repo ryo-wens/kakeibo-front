@@ -9,7 +9,7 @@ import {
 } from '../../reducks/groupTasks/types';
 import '../../assets/task/task-list-for-user.scss';
 import { Group, Groups } from '../../reducks/groups/types';
-import { EditTaskListForUser } from './index';
+import { OperateTaskListForUser } from './index';
 
 interface TaskListForUserProps {
   groupId: number;
@@ -78,7 +78,11 @@ const TaskListForUser = (props: TaskListForUserProps) => {
 
       const assignTaskForUser = () => {
         if (differenceDay % cycle === 0) {
-          return <span className="task-list-for-user__user-name">{taskUsers[idx].taskName}</span>;
+          return (
+            <span className="task-list-for-user__user-name" key={taskUsers[idx].taskUserId}>
+              {taskUsers[idx].taskName}
+            </span>
+          );
         } else if (dateToDateString(currentDate) !== dateToDateString(new Date(baseDate))) {
           return <span className="task-list-for-user__blank" />;
         }
@@ -95,15 +99,14 @@ const TaskListForUser = (props: TaskListForUserProps) => {
 
   return (
     <>
-      <tr className="task-list-for-user">
-        <EditTaskListForUser
-          approvedGroups={props.approvedGroups}
-          approvedGroup={approvedGroup}
-          groupId={props.groupId}
-          tasksListItem={props.tasksListItem}
-        />
-        {week}
-      </tr>
+      <OperateTaskListForUser
+        approvedGroups={props.approvedGroups}
+        approvedGroup={approvedGroup}
+        groupId={props.groupId}
+        tasksListItem={props.tasksListItem}
+        label={'保存'}
+      />
+      {week}
     </>
   );
 };

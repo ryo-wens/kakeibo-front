@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import '../../assets/task/edit-task-user.scss';
 import '../../assets/modules/task-btn.scss';
 import { GroupTasksListForEachUser, UserTasksListItem } from '../../reducks/groupTasks/types';
-import { OperationTaskUser } from './index';
+import { OperateTaskUser } from './index';
 import { Group } from '../../reducks/groups/types';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
@@ -64,7 +64,7 @@ const EditTaskUser = (props: EditTaskUserProps) => {
     setOpenDeleteUser(false);
   }, [setOpenDeleteUser, setOpenEditUser]);
 
-  const switchOperationTaskUser = () => {
+  const switchOperateTaskUser = () => {
     if (openEditUser && !openAddUser) {
       return (
         <>
@@ -108,7 +108,7 @@ const EditTaskUser = (props: EditTaskUserProps) => {
       );
     } else if (!openEditUser && openAddUser) {
       return (
-        <OperationTaskUser
+        <OperateTaskUser
           approvedGroup={props.approvedGroup}
           closeTaskUserOperation={closeAddTaskUser}
           closeModal={closeModal}
@@ -118,7 +118,7 @@ const EditTaskUser = (props: EditTaskUserProps) => {
       );
     } else if (!openEditUser && openDeleteUser) {
       return (
-        <OperationTaskUser
+        <OperateTaskUser
           approvedGroup={props.approvedGroup}
           closeTaskUserOperation={closeDeleteTaskUser}
           closeModal={closeModal}
@@ -129,7 +129,7 @@ const EditTaskUser = (props: EditTaskUserProps) => {
     }
   };
 
-  const body = <div className={classes.paper}>{switchOperationTaskUser()}</div>;
+  const body = <div className={classes.paper}>{switchOperateTaskUser()}</div>;
 
   return (
     <div>
