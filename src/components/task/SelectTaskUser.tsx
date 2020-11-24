@@ -1,12 +1,12 @@
-import React from 'react';
+import React, { useCallback } from 'react';
 import { GroupTasksListForEachUser, TaskUser, TaskUsers } from '../../reducks/groupTasks/types';
 import { Group, Groups } from '../../reducks/groups/types';
 
 interface SelectTaskUserProps {
+  groupId: number;
   approvedGroups: Groups;
   groupTasksListForEachUser: GroupTasksListForEachUser;
-  groupId: number;
-  selectTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  setTaskUserId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const SelectTaskUser = (props: SelectTaskUserProps) => {
@@ -32,9 +32,16 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
     return taskUsers;
   };
 
+  const selectTaskUser = useCallback(
+    (event: React.ChangeEvent<HTMLSelectElement>) => {
+      props.setTaskUserId(Number(event.target.value));
+    },
+    [props.setTaskUserId]
+  );
+
   return (
     <form>
-      <select name={'select-task-name'} required={true} onChange={props.selectTaskUser}>
+      <select name={'select-task-name'} required={true} onChange={selectTaskUser}>
         <option value={0}>ユーザーを選択</option>
         {taskUsers().map((taskUser) => (
           <option key={taskUser.taskUserId} value={taskUser.taskUserId}>

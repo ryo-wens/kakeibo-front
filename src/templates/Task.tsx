@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -6,17 +6,9 @@ import { fetchGroups } from '../reducks/groups/operations';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
-import {
-  EditTaskUser,
-  SetTaskListItem,
-  SkipDate,
-  TaskList,
-  TaskListForUser,
-  WeekTables,
-} from '../components/task';
+import { EditTaskUser, SkipDate, TaskList, TaskListForUser, WeekTables } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 import '../assets/task/task.scss';
-import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
 import { TasksListItem } from '../reducks/groupTasks/types';
 
@@ -24,7 +16,6 @@ const Task = () => {
   const dispatch = useDispatch();
   const groupId = getPathGroupId(window.location.pathname);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const [open, setOpen] = useState<boolean>(false);
 
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
@@ -51,16 +42,6 @@ const Task = () => {
       dispatch(fetchGroupTasksListEachUser(groupId));
     }
   }, []);
-
-  const openModal = useCallback(() => {
-    setOpen(true);
-    dispatch(fetchGroups());
-    dispatch(fetchGroupTasksList(groupId));
-  }, [setOpen]);
-
-  const closeModal = useCallback(() => {
-    setOpen(false);
-  }, [setOpen]);
 
   return (
     <div className="task">
@@ -99,19 +80,9 @@ const Task = () => {
         <tfoot>
           <tr className="task__assign-task">
             <th className="task__assign-task-item">
-              <button className="task__assign-task-btn" onClick={() => openModal()}>
+              <button className="task__assign-task-btn">
                 <AddIcon />
               </button>
-              <Modal open={open} onClose={closeModal}>
-                <SetTaskListItem
-                  approvedGroup={approvedGroup}
-                  groupId={groupId}
-                  approvedGroups={approvedGroups}
-                  groupTasksList={groupTasksList}
-                  groupTasksListForEachUser={groupTasksListForEachUser}
-                  closeModal={closeModal}
-                />
-              </Modal>
             </th>
           </tr>
         </tfoot>

@@ -1,3 +1,4 @@
+export { default as EditTaskListForUser } from './EditTaskListForUser';
 export { default as EditTaskUser } from './EditTaskUser';
 export { default as InputTask } from './InputTask';
 export { default as OperationTaskUser } from './OperationTaskUser';
