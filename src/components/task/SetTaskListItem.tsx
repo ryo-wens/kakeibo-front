@@ -2,101 +2,68 @@ import React, { useCallback, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
 import { DatePicker, DeleteButton, InputInteger, SaveButton } from '../uikit';
-import { isValidBudgetFormat, isValidPreventBeginningZero } from '../../lib/validation';
 import { SelectCycleType, SelectTaskName, SelectTaskUser } from './index';
-import { GroupTasksList, GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
-import { date } from '../../lib/constant';
 import { Group } from '../../reducks/groups/types';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { editTaskItem } from '../../reducks/groupTasks/operations';
+import { State } from '../../reducks/store/types';
+import {
+  getGroupTasksList,
+  getGroupTasksListForEachUser,
+} from '../../reducks/groupTasks/selectors';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
 
 interface SetTaskListItemProps {
   approvedGroup: Group;
-  groupTasksList: GroupTasksList;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  groupId: number;
   closeModal: () => void;
+  label: string;
+  taskItemName: string;
+  setTaskItemName: React.Dispatch<React.SetStateAction<string>>;
+  taskItemId: number;
+  setTaskItemId: React.Dispatch<React.SetStateAction<number>>;
+  baseDate: Date | null;
+  setBaseDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  cycleType: 'every' | 'consecutive' | 'none';
+  setCycleType: React.Dispatch<React.SetStateAction<'every' | 'consecutive' | 'none'>>;
+  cycle: number;
+  setCycle: React.Dispatch<React.SetStateAction<number>>;
+  taskUserId: number;
+  setTaskUserId: React.Dispatch<React.SetStateAction<number>>;
 }
 
 const SetTaskListItem = (props: SetTaskListItemProps) => {
   const dispatch = useDispatch();
-  const [taskItemName, setTaskItemName] = useState<string>('');
-  const [taskItemId, setTaskItemId] = useState<number>(0);
-  const [baseDate, setBaseDate] = useState<Date>(date);
-  const [cycleType, setCycleType] = useState<'every' | 'consecutive' | 'none' | null>('every');
-  const [cycle, setCycle] = useState<number>(1);
-  const [taskUserId, setTaskUserId] = useState<number>(0);
+  const selector = useSelector((state: State) => state);
+  const approvedGroups = getApprovedGroups(selector);
+  const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
+  const groupTasksList = getGroupTasksList(selector);
 
-  const selectTaskName = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      if (event.target.value !== String(0)) {
-        const idx = props.groupTasksList.findIndex(
-          (groupTaskListItem) => groupTaskListItem.id === Number(event.target.value)
-        );
-        setTaskItemName(props.groupTasksList[idx].task_name);
-      } else if (event.target.value === String(0)) {
-        setTaskItemName('');
-      }
-      setTaskItemId(Number(event.target.value));
-    },
-    [setTaskItemName]
-  );
+  const [message, setMessage] = useState<string>('');
 
   const handleDateChange = useCallback(
     (selectedDate) => {
-      setBaseDate(selectedDate as Date);
+      props.setBaseDate(selectedDate as Date);
     },
-    [setBaseDate]
+    [props.setBaseDate]
   );
-
-  const selectCycleType = useCallback(
-    (event: React.ChangeEvent<{ value: string }>) => {
-      if (event.target.value !== 'null') {
-        setCycleType(event.target.value as 'every' | 'consecutive' | 'none');
-      } else if (event.target.value === 'null') {
-        setCycleType(null);
-      }
-    },
-    [setCycleType]
-  );
-
-  const selectTaskUser = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      setTaskUserId(Number(event.target.value));
-    },
-    [setTaskUserId]
-  );
-
-  const inputCycle = useCallback(
-    (event) => {
-      setCycle(event.target.value);
-    },
-    [setCycle]
-  );
-
-  const switchMessage = () => {
-    if (!cycle) {
-      return '必須項目です';
-    } else if (isValidPreventBeginningZero(cycle)) {
-      return '先頭に0は入力できません';
-    } else if (!isValidBudgetFormat(cycle)) {
-      return '整数のみ入力可能です';
-    } else {
-      return '';
-    }
-  };
 
   const selectContents = [
     {
       key: 'タスク名',
       value: (
-        <SelectTaskName groupTasksList={props.groupTasksList} selectTaskName={selectTaskName} />
+        <SelectTaskName
+          groupTasksList={groupTasksList}
+          setTaskItemId={props.setTaskItemId}
+          setTaskItemName={props.setTaskItemName}
+        />
       ),
     },
     {
       key: '基準日',
       value: (
         <DatePicker
-          value={baseDate}
+          value={props.baseDate}
           onChange={handleDateChange}
           id={'date-picker-dialog'}
           label={''}
@@ -106,17 +73,16 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
     },
     {
       key: 'サイクルタイプ',
-      value: <SelectCycleType selectCycleType={selectCycleType} />,
+      value: <SelectCycleType cycleType={props.cycleType} setCycleType={props.setCycleType} />,
     },
     {
       key: 'サイクル',
       value: (
         <InputInteger
-          name={'cycle'}
-          value={cycle}
-          required={true}
-          onChange={inputCycle}
-          message={switchMessage()}
+          value={props.cycle}
+          message={message}
+          setCycle={props.setCycle}
+          setMessage={setMessage}
         />
       ),
     },
@@ -124,17 +90,19 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
       key: 'タスクユーザー',
       value: (
         <SelectTaskUser
-          approvedGroup={props.approvedGroup}
-          groupTasksListForEachUser={props.groupTasksListForEachUser}
-          selectTaskUser={selectTaskUser}
+          groupId={props.groupId}
+          approvedGroups={approvedGroups}
+          groupTasksListForEachUser={groupTasksListForEachUser}
+          setTaskUserId={props.setTaskUserId}
         />
       ),
     },
   ];
 
-  const existsSelectTaskName = taskItemName === '';
-  const existsSelectTaskId = taskItemId === 0;
-  const existsTaskUserId = taskUserId === 0;
+  const existsSelectTaskName = props.taskItemName === '';
+  const existsSelectTaskId = props.taskItemId === 0;
+  const existsCycle = props.cycle === 0;
+  const existsTaskUserId = props.taskUserId === 0;
 
   return (
     <div className="set-task-list-item">
@@ -158,29 +126,41 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
       </div>
       <div className="set-task-list-item__operation-btn">
         <SaveButton
-          label={'追加'}
-          disabled={existsSelectTaskName || existsSelectTaskId || existsTaskUserId}
+          label={props.label}
+          disabled={existsSelectTaskName || existsSelectTaskId || existsCycle || existsTaskUserId}
           onClick={() =>
             dispatch(
               editTaskItem(
-                props.approvedGroup.group_id,
-                taskItemId,
-                baseDate,
-                cycleType,
-                cycle,
-                taskItemName,
-                taskUserId
+                props.groupId,
+                props.taskItemId,
+                props.baseDate,
+                props.cycleType,
+                props.cycle,
+                props.taskItemName,
+                props.taskUserId
               )
-            )
+            ) && props.closeModal()
           }
         />
-        <DeleteButton
-          label={'削除'}
-          disabled={false}
-          onClick={() => {
-            console.log('テスト');
-          }}
-        />
+        {props.label === '保存' && (
+          <DeleteButton
+            label={'解除'}
+            disabled={false}
+            onClick={() =>
+              dispatch(
+                editTaskItem(
+                  props.groupId,
+                  props.taskItemId,
+                  null,
+                  null,
+                  null,
+                  props.taskItemName,
+                  null
+                )
+              ) && props.closeModal()
+            }
+          />
+        )}
       </div>
     </div>
   );

@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import '../../assets/task/task-list-item.scss';
-import FiberManualRecordIcon from '@material-ui/icons/FiberManualRecord';
 import { TasksListItem } from '../../reducks/groupTasks/types';
 import { InputTask } from './index';
 import { deleteTaskItem, editTaskItem } from '../../reducks/groupTasks/operations';
@@ -32,10 +31,6 @@ const TaskListItem = (props: TaskListItemProps) => {
     if (!openEditTask) {
       return (
         <li className="task-list-item">
-          <FiberManualRecordIcon
-            className="task-list-item__color-icon"
-            style={{ fontSize: '1.2rem' }}
-          />
           <span className="task-list-item__text">{props.taskListItem.task_name}</span>
           <EditIcon className="task-list-item__edit-icon" onClick={() => openEditInputTask()} />
         </li>

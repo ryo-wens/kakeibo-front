@@ -9,7 +9,7 @@ import { useDispatch } from 'react-redux';
 import { addGroupTasksUsers, deleteGroupTasksUsers } from '../../reducks/groupTasks/operations';
 import '../../assets/task/operation-task-user.scss';
 
-interface OperationTaskUserProps {
+interface OperateTaskUserProps {
   approvedGroup: Group;
   closeTaskUserOperation: () => void;
   closeModal: () => void;
@@ -17,7 +17,7 @@ interface OperationTaskUserProps {
   label: string;
 }
 
-const OperationTaskUser = (props: OperationTaskUserProps) => {
+const OperateTaskUser = (props: OperateTaskUserProps) => {
   const dispatch = useDispatch();
   const [checkedUserIds, setCheckedUserIds] = useState<Array<string>>([]);
 
@@ -145,4 +145,4 @@ const OperationTaskUser = (props: OperationTaskUserProps) => {
   );
 };
 
-export default OperationTaskUser;
+export default OperateTaskUser;

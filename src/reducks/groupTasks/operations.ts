@@ -28,6 +28,7 @@ import {
 import { errorHandling } from '../../lib/validation';
 import { State } from '../store/types';
 import { openTextModalAction } from '../modal/actions';
+import moment from 'moment';
 
 export const fetchGroupTasksListEachUser = (groupId: number) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -188,7 +189,12 @@ export const editTaskItem = (
     await axios
       .put<editTaskItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`,
-        JSON.stringify(data),
+        JSON.stringify(data, function (key, value) {
+          if (key === 'base_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
         { withCredentials: true }
       )
       .then((res) => {

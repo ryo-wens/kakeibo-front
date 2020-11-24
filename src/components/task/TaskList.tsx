@@ -68,16 +68,18 @@ const TaskList = (props: TaskListProps) => {
         <ul className="task-list__items">
           {props.groupTasksList &&
             props.groupTasksList.map((groupTaskListItem: TasksListItem) => {
-              return (
-                <div className="task-list__items--margin" key={groupTaskListItem.id}>
-                  <TaskListItem
-                    taskListItem={groupTaskListItem}
-                    taskName={taskName}
-                    inputTaskName={inputTaskName}
-                    setTaskName={setTaskName}
-                  />
-                </div>
-              );
+              if (groupTaskListItem.cycle_type === null) {
+                return (
+                  <div className="task-list__items--margin" key={groupTaskListItem.id}>
+                    <TaskListItem
+                      taskListItem={groupTaskListItem}
+                      taskName={taskName}
+                      inputTaskName={inputTaskName}
+                      setTaskName={setTaskName}
+                    />
+                  </div>
+                );
+              }
             })}
         </ul>
         {switchAddInputTask()}
