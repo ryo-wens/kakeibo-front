@@ -149,98 +149,108 @@ const Header = () => {
   const menuId = 'primary-search-account-menu';
 
   return (
-    <div className={classes.grow}>
-      <AppBar className={classes.header} position="static">
-        <Toolbar>
-          <div className={classes.sectionMobile}>
-            <MobileDrawer />
-          </div>
-          <Typography variant="h6" noWrap>
-            <Button
-              color="inherit"
-              className={classes.title}
-              onClick={() => existsGroupWhenRouting(`/`)}
-            >
-              家計簿App
-            </Button>
-          </Typography>
-          <div className={classes.sectionDesktop}>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<HistoryIcon />}
-              onClick={() => existsGroupWhenRouting('/daily/history')}
-            >
-              履歴
-            </Button>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<MoneyIcon />}
-              onClick={() => existsGroupWhenRouting('/standard/budgets')}
-            >
-              予算
-            </Button>
-            <Button size="large" className={classes.button} startIcon={<CreditCardIcon />}>
-              集計
-            </Button>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<PlaylistAddCheckIcon />}
-              onClick={() => existsGroupWhenRouting('/todo')}
-            >
-              Todo
-            </Button>
-            {entityType === 'group' && (
-              <Button
-                size="large"
-                className={classes.button}
-                startIcon={<EventAvailableIcon />}
-                onClick={() => existsGroupWhenRouting('/task')}
-              >
-                タスク
-              </Button>
-            )}
-          </div>
-          <div className={classes.grow} />
-          <SwitchEntity
-            entityType={entityType}
-            groupId={groupId}
-            name={name}
-            userName={userName}
-            openMenu={openMenu}
-            switchToIndividual={switchToIndividual}
-            switchToGroup={switchToGroup}
-            closeMenu={closeMenu}
-            anchorEl={anchorEl}
-            approvedGroups={approvedGroups}
-          />
-          <InvitationNotifications />
-          <div className={classes.sectionDesktop}>
-            <Button
-              startIcon={<ExitToAppIcon />}
-              className={classes.button}
-              aria-label="logout"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={() => logOutCheck()}
-            >
-              ログアウト
-            </Button>
-            <Button
-              startIcon={<SettingsIcon />}
-              className={classes.button}
-              aria-label="settings"
-              aria-controls={menuId}
-              aria-haspopup="true"
-            >
-              設定
-            </Button>
-          </div>
-        </Toolbar>
-      </AppBar>
-    </div>
+    <>
+      {(() => {
+        if (entityType !== 'login' && entityType !== 'signup') {
+          return (
+            <div className={classes.grow}>
+              <AppBar className={classes.header} position="static">
+                <Toolbar>
+                  <div className={classes.sectionMobile}>
+                    <MobileDrawer />
+                  </div>
+                  <Typography variant="h6" noWrap>
+                    <Button
+                      color="inherit"
+                      className={classes.title}
+                      onClick={() => existsGroupWhenRouting(`/`)}
+                    >
+                      家計簿App
+                    </Button>
+                  </Typography>
+                  <div className={classes.sectionDesktop}>
+                    <Button
+                      size="large"
+                      className={classes.button}
+                      startIcon={<HistoryIcon />}
+                      onClick={() => existsGroupWhenRouting('/daily/history')}
+                    >
+                      履歴
+                    </Button>
+                    <Button
+                      size="large"
+                      className={classes.button}
+                      startIcon={<MoneyIcon />}
+                      onClick={() => existsGroupWhenRouting('/standard/budgets')}
+                    >
+                      予算
+                    </Button>
+                    <Button size="large" className={classes.button} startIcon={<CreditCardIcon />}>
+                      集計
+                    </Button>
+                    <Button
+                      size="large"
+                      className={classes.button}
+                      startIcon={<PlaylistAddCheckIcon />}
+                      onClick={() => existsGroupWhenRouting('/todo')}
+                    >
+                      Todo
+                    </Button>
+                    {entityType === 'group' && (
+                      <Button
+                        size="large"
+                        className={classes.button}
+                        startIcon={<EventAvailableIcon />}
+                        onClick={() => existsGroupWhenRouting('/task')}
+                      >
+                        タスク
+                      </Button>
+                    )}
+                  </div>
+                  <div className={classes.grow} />
+                  <SwitchEntity
+                    entityType={entityType}
+                    groupId={groupId}
+                    name={name}
+                    userName={userName}
+                    openMenu={openMenu}
+                    switchToIndividual={switchToIndividual}
+                    switchToGroup={switchToGroup}
+                    closeMenu={closeMenu}
+                    anchorEl={anchorEl}
+                    approvedGroups={approvedGroups}
+                  />
+                  <InvitationNotifications />
+                  <div className={classes.sectionDesktop}>
+                    <Button
+                      startIcon={<ExitToAppIcon />}
+                      className={classes.button}
+                      aria-label="logout"
+                      aria-controls={menuId}
+                      aria-haspopup="true"
+                      onClick={() => logOutCheck()}
+                    >
+                      ログアウト
+                    </Button>
+                    <Button
+                      startIcon={<SettingsIcon />}
+                      className={classes.button}
+                      aria-label="settings"
+                      aria-controls={menuId}
+                      aria-haspopup="true"
+                    >
+                      設定
+                    </Button>
+                  </div>
+                </Toolbar>
+              </AppBar>
+            </div>
+          );
+        } else {
+          return null;
+        }
+      })()}
+    </>
   );
 };
 export default Header;

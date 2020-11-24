@@ -3,55 +3,10 @@ import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import axios from 'axios';
 import { SignupReq, UserRes, LoginReq, LogoutRes } from './types';
-import { isValidEmailFormat, isValidPasswordFormat, errorHandling } from '../../lib/validation';
+import { isValidPasswordFormat, errorHandling } from '../../lib/validation';
 
-export const signUp = (
-  userId: string,
-  userName: string,
-  email: string,
-  password: string,
-  confirmPassword: string
-) => {
+export const signUp = (userId: string, userName: string, email: string, password: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    const errorMessages: string[] = [];
-
-    if (userId.length > 10) {
-      errorMessages.push('ユーザーIDは10文字以下で入力してください。');
-    }
-
-    if (userName.length > 50) {
-      errorMessages.push('ユーザー名は50文字以下で入力してください。');
-    }
-
-    if (email.length < 5) {
-      errorMessages.push('メールアドレスは5文字以上で入力してください。');
-    }
-
-    if (email.length > 50) {
-      errorMessages.push('メールアドレスは50文字以下で入力してください。');
-    }
-
-    if (!isValidEmailFormat(email)) {
-      errorMessages.push('メールアドレスの形式に誤りがあります。正しく入力し直してください。');
-    }
-
-    if (password.length < 8) {
-      errorMessages.push('パスワードは8文字以上で入力してください。');
-    }
-
-    if (password.length > 50) {
-      errorMessages.push('パスワードは50文字以下で入力してください。');
-    }
-
-    if (password !== confirmPassword) {
-      errorMessages.push('パスワードと確認パスワードが一致しません。もう一度入力してください。');
-    }
-
-    if (errorMessages.length > 0) {
-      alert(errorMessages.join('\n'));
-      return null;
-    }
-
     const data: SignupReq = {
       id: userId,
       name: userName,
@@ -117,16 +72,8 @@ export const signUp = (
 
 export const logIn = (email: string, password: string) => {
   return async (dispatch: Dispatch<Action>) => {
-    if (!isValidEmailFormat(email)) {
-      const alertMessage: string[] = [];
-      alertMessage.push('メールアドレスの形式に誤りがあります。正しく入力し直してください。');
-      if (!isValidPasswordFormat(password)) {
-        alertMessage.push('パスワードを正しく入力してください。');
-      }
-      if (alertMessage.length > 0) {
-        alert(alertMessage.join('\n'));
-        return null;
-      }
+    if (!isValidPasswordFormat(password)) {
+      alert('パスワードを正しく入力してください。');
     }
 
     const data: LoginReq = { email: email, password: password };
@@ -151,10 +98,10 @@ export const logIn = (email: string, password: string) => {
           if (errorMessages) {
             alert(errorMessages.join('\n'));
           }
-        } else if (error && error.response) {
+        }
+
+        if (error.response) {
           alert(error.response.data.error.message);
-        } else {
-          alert(error);
         }
       });
   };

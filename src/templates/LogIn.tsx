@@ -7,10 +7,12 @@ import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { GenericButton, TextInput } from '../components/uikit/index';
+import { GenericButton, TextArea } from '../components/uikit/index';
 import { useDispatch } from 'react-redux';
 import { logIn } from '../reducks/users/operations';
-
+import { InvalidMessage } from '../components/uikit';
+import { onEmailFocusOut, passWordSubmit } from '../lib/validation';
+import '../assets/modules/text-area.scss';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -35,29 +37,28 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const LogIn = () => {
+  const classes = useStyles();
   const dispatch = useDispatch();
-
   const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('')
-
+  const [password, setPassword] = useState<string>('');
+  const [emailMessage, setEmailMessage] = useState<string>('');
+  const [passwordMessage, setPassWordMessage] = useState<string>('');
 
   const inputEmail = useCallback(
-    (event:React.ChangeEvent<HTMLInputElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value);
     },
     [setEmail]
   );
 
   const inputPassword = useCallback(
-    (event:React.ChangeEvent<HTMLInputElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(event.target.value);
     },
     [setPassword]
   );
 
-  const unLogIn = email === '' || password === '';
-
-  const classes = useStyles();
+  const unLogIn = email === '' || password === '' || password.length < 8;
 
   return (
     <section className="login__form">
@@ -72,31 +73,29 @@ const LogIn = () => {
           </Typography>
           <div className="module-spacer--small" />
           <form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12} className="center">
-                <TextInput
-                  value={email}
-                  required={true}
-                  fullWidth={true}
-                  id={'email'}
-                  label={'メールアドレス'}
-                  type={'email'}
-                  onChange={inputEmail}
-                />
-              </Grid>
-              <div className="module-spacer--small" />
-              <Grid item xs={12} className="center">
-                <TextInput
-                  value={password}
-                  required={true}
-                  fullWidth={true}
-                  id={'password'}
-                  label={'パスワード'}
-                  type={'password'}
-                  onChange={inputPassword}
-                />
-              </Grid>
-            </Grid>
+            <div>
+              <label>メールアドレス</label>
+              <TextArea
+                value={email}
+                id={'email'}
+                type={'email'}
+                onChange={inputEmail}
+                onBlur={() => onEmailFocusOut(email, setEmailMessage)}
+              />
+              <InvalidMessage message={emailMessage} />
+            </div>
+            <div className="module-spacer--small" />
+            <div>
+              <label>パスワード</label>
+              <TextArea
+                value={password}
+                id={'password'}
+                type={'password'}
+                onChange={inputPassword}
+                onBlur={() => passWordSubmit(password, setPassWordMessage)}
+              />
+              <InvalidMessage message={passwordMessage} />
+            </div>
             <div className="module-spacer--small" />
             <div className="center">
               <GenericButton
@@ -106,7 +105,13 @@ const LogIn = () => {
               />
             </div>
             <div className="module-spacer--small" />
-
+            <div className="center">
+              <GenericButton
+                label={'ゲストユーザーログイン'}
+                disabled={false}
+                onClick={() => dispatch(logIn('kakeibo@gmail.com', 'kakeibo1'))}
+              />
+            </div>
             <div className="module-spacer--small" />
             <Grid item className="center">
               <a className={classes.link} onClick={() => dispatch(push('/signup'))}>

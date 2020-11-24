@@ -1,3 +1,4 @@
+import React from 'react';
 import { push } from 'connected-react-router';
 import { Action, Dispatch } from 'redux';
 
@@ -59,4 +60,79 @@ export const totalCustomBudgets = (budgetList: number[]): number => {
   }
 
   return total;
+};
+
+export const onUserIdFocusOut = (
+  userId: string,
+  setUserIdMessage: React.Dispatch<React.SetStateAction<string>>
+) => {
+  if (!userId.length) {
+    return '';
+  } else if (userId.length > 10) {
+    setUserIdMessage('ユーザーIDは10文字以下で入力してください。');
+  }
+};
+
+export const onUserNameFocusOut = (
+  userName: string,
+  setUserNameMessage: React.Dispatch<React.SetStateAction<string>>
+) => {
+  if (!userName.length) {
+    return '';
+  } else if (userName.length > 50) {
+    setUserNameMessage('ユーザー名は50文字以下で入力してください。');
+  }
+};
+
+export const onEmailFocusOut = (
+  email: string,
+  setEmailMessage: React.Dispatch<React.SetStateAction<string>>
+) => {
+  if (!email.length) {
+    return '';
+  } else if (email.length < 5) {
+    setEmailMessage('メールアドレスは5文字以上で入力してください。');
+  } else if (email.length > 50) {
+    setEmailMessage('メールアドレスは50文字以下で入力してください。');
+  } else if (!isValidEmailFormat(email)) {
+    setEmailMessage('メールアドレス形式に誤りがあります。正しく入力し直してください。');
+  }
+};
+
+export const onPasswordFocusOut = (
+  password: string,
+  setPassWordMessage: React.Dispatch<React.SetStateAction<string>>
+) => {
+  if (!password.length) {
+    return '';
+  } else if (password.length < 8) {
+    setPassWordMessage('パスワードは8文字以上で入力してください。');
+  } else if (password.length > 50) {
+    setPassWordMessage('パスワードは50文字以下で入力してください。');
+  }
+};
+
+export const onConfirmPasswordFocusOut = (
+  password: string,
+  confirmPassword: string,
+  setConfirmPasswordMessage: React.Dispatch<React.SetStateAction<string>>
+) => {
+  if (password !== confirmPassword) {
+    setConfirmPasswordMessage(
+      'パスワードと確認パスワードが一致しません。もう一度入力してください。'
+    );
+  }
+};
+
+export const passWordSubmit = (
+  password: string,
+  setPassWordMessage: React.Dispatch<React.SetStateAction<string>>
+) => {
+  if (!password.length) {
+    return '';
+  } else if (!isValidPasswordFormat(password)) {
+    setPassWordMessage('パスワードを正しく入力してください。');
+  } else {
+    return '';
+  }
 };
