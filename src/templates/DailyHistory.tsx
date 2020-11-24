@@ -2,12 +2,13 @@ import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { getTransactions } from '../reducks/transactions/selectors';
 import { getGroupTransactions } from '../reducks/groupTransactions/selectors';
+import { getApprovedGroups } from '../reducks/groups/selectors';
 import { fetchTransactionsList } from '../reducks/transactions/operations';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
 import { fetchCategories } from '../reducks/categories/operations';
 import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 import { State } from '../reducks/store/types';
-import { customMonth, noTransactionMessage } from '../lib/constant';
+import { customMonth, noTransactionMessage, year, month } from '../lib/constant';
 import { getPathTemplateName } from '../lib/path';
 import { DailyHistoryBody, GroupDailyHistoryBody } from '../components/history/index';
 import SearchTransaction from '../components/uikit/SearchTransaction';
@@ -24,20 +25,23 @@ const DailyHistory = (props: DailyHistoryProps) => {
   const selector = useSelector((state: State) => state);
   const transactionsList = getTransactions(selector);
   const groupTransactionsList = getGroupTransactions(selector);
+  const approvedGroup = getApprovedGroups(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [openSearchField, setOpenSearchField] = useState<boolean>(false);
-  const [selectStartDate, setStartSelectDate] = useState<Date | null>(null);
-  const [selectEndDate, setEndSelectDate] = useState<Date | null>(null);
+  const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
+  const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date(year, month, 0));
   const [memo, setMemo] = useState<string>('');
   const [shop, setShop] = useState<string>('');
   const [lowAmount, setLowAmount] = useState<string>('');
   const [highAmount, setHighAmount] = useState<string>('');
   const [category, setCategory] = useState<string>('');
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
-  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
-  const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [transactionType, setTransactionType] = useState<string>('');
+  const [paymentUserId, setPaymentUserId] = useState<string>('');
+  const [sortItem, setSortItem] = useState<string>('');
+  const [sortType, setSortType] = useState<string>('');
+  const [limit, setLimit] = useState<string>('');
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -113,22 +117,39 @@ const DailyHistory = (props: DailyHistoryProps) => {
     [setTransactionType]
   );
 
-  const selectCategory = useCallback(
-    (bigCategoryId: number, associatedCategoryId: number | null, category_type: string) => {
-      switch (category_type) {
-        case 'MediumCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(associatedCategoryId);
-          setCustomCategoryId(null);
-          break;
-        case 'CustomCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(null);
-          setCustomCategoryId(associatedCategoryId);
-          break;
-      }
+  const changePayer = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setPaymentUserId(event.target.value as string);
     },
-    [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
+    [setPaymentUserId]
+  );
+
+  const changeSortItem = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setSortItem(event.target.value as string);
+    },
+    [setSortItem]
+  );
+
+  const changeSortType = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setSortType(event.target.value as string);
+    },
+    [setSortType]
+  );
+
+  const selectCategory = useCallback(
+    (bigCategoryId: number) => {
+      setBigCategoryId(bigCategoryId);
+    },
+    [setBigCategoryId]
+  );
+
+  const selectLimit = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setLimit(event.target.value as string);
+    },
+    [setLimit]
   );
 
   return (
@@ -157,9 +178,16 @@ const DailyHistory = (props: DailyHistoryProps) => {
           selectEndDateChange={selectEndDateChange}
           inputHighAmount={inputHighAmount}
           inputLowAmount={inputLowAmount}
-          customCategoryId={customCategoryId}
-          mediumCategoryId={mediumCategoryId}
           groupId={groupId}
+          approvedGroup={approvedGroup}
+          paymentUserId={paymentUserId}
+          changePayer={changePayer}
+          selectSortItem={changeSortItem}
+          selectSortType={changeSortType}
+          sortItem={sortItem}
+          sortType={sortType}
+          limit={limit}
+          selectLimit={selectLimit}
         />
         <div className="daily-history__spacer" />
         {(() => {
