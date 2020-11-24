@@ -6,7 +6,9 @@ interface SelectTaskUserProps {
   groupId: number;
   approvedGroups: Groups;
   groupTasksListForEachUser: GroupTasksListForEachUser;
+  taskUserId: number;
   setTaskUserId: React.Dispatch<React.SetStateAction<number>>;
+  label: string;
 }
 
 const SelectTaskUser = (props: SelectTaskUserProps) => {
@@ -39,9 +41,22 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
     [props.setTaskUserId]
   );
 
+  const currentSelectTaskUser = () => {
+    if (props.label === '保存') {
+      return props.taskUserId;
+    } else if (props.label === '追加') {
+      return 0;
+    }
+  };
+
   return (
     <form>
-      <select name={'select-task-name'} required={true} onChange={selectTaskUser}>
+      <select
+        name={'select-task-name'}
+        required={true}
+        onChange={selectTaskUser}
+        defaultValue={currentSelectTaskUser()}
+      >
         <option value={0}>ユーザーを選択</option>
         {taskUsers().map((taskUser) => (
           <option key={taskUser.taskUserId} value={taskUser.taskUserId}>

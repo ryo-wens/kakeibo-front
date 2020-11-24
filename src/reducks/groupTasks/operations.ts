@@ -190,7 +190,7 @@ export const editTaskItem = (
       .put<editTaskItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`,
         JSON.stringify(data, function (key, value) {
-          if (key === 'base_date') {
+          if (key === 'base_date' && value !== null) {
             return moment(new Date(value)).format();
           }
           return value;

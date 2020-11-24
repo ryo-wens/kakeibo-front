@@ -104,7 +104,9 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           groupId={props.groupId}
           approvedGroups={approvedGroups}
           groupTasksListForEachUser={groupTasksListForEachUser}
+          taskUserId={props.taskUserId}
           setTaskUserId={props.setTaskUserId}
+          label={props.label}
         />
       ),
     },
