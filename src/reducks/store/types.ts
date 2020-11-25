@@ -51,6 +51,7 @@ export interface State {
     id: string;
     name: string;
     email: string;
+    errorMessage: string;
   };
   groups: {
     approvedGroups: Groups;

@@ -52,6 +52,7 @@ const initialState = {
     id: '',
     name: '',
     email: '',
+    errorMessage: '',
   },
   groups: {
     approvedGroups: [],

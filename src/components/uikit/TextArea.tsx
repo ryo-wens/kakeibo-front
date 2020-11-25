@@ -12,6 +12,7 @@ interface InputFormProps {
 const TextArea = (props: InputFormProps) => {
   return (
     <input
+      autoComplete="off"
       className="text-input__text-form"
       id={props.id}
       value={props.value}

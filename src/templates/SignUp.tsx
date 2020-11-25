@@ -7,9 +7,16 @@ import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { GenericButton, InvalidMessage, TextArea } from '../components/uikit/index';
-import { useDispatch } from 'react-redux';
+import {
+  GenericButton,
+  InvalidMessage,
+  TextArea,
+  ErrorIndication,
+} from '../components/uikit/index';
+import { State } from '../reducks/store/types';
+import { useDispatch, useSelector } from 'react-redux';
 import { signUp } from '../reducks/users/operations';
+import { getErrorMessage } from '../reducks/users/selectors';
 import {
   onUserIdFocusOut,
   onUserNameFocusOut,
@@ -47,6 +54,8 @@ const useStyles = makeStyles((theme) => ({
 const SignUp = (): JSX.Element => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: State) => state);
+  const errorMessage = getErrorMessage(selector);
   const [userId, setUserId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -96,10 +105,16 @@ const SignUp = (): JSX.Element => {
     password === '' ||
     confirmPassword === '' ||
     password.length < 8 ||
-    confirmPassword.length < 8;
+    confirmPassword.length < 8 ||
+    userIdMessage != '' ||
+    userNameMessage !== '' ||
+    passwordMessage !== '' ||
+    confirmPasswordMessage !== '' ||
+    emailMessage !== '';
 
   return (
     <section className="signup__form">
+      <ErrorIndication errorMessage={errorMessage} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
