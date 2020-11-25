@@ -1,6 +1,7 @@
 import React, { useCallback } from 'react';
 import { GroupTasksListForEachUser, TaskUser, TaskUsers } from '../../reducks/groupTasks/types';
 import { Group, Groups } from '../../reducks/groups/types';
+import '../../assets/task/select-task-user.scss';
 
 interface SelectTaskUserProps {
   groupId: number;
@@ -53,6 +54,7 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
     <form>
       <select
         name={'select-task-name'}
+        className="select-task-user"
         required={true}
         onChange={selectTaskUser}
         defaultValue={currentSelectTaskUser()}

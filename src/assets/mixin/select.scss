@@ -1,0 +1,17 @@
+@import "../variable";
+
+@mixin select {
+  -webkit-appearance: none;
+  background-color: $white;
+  color: #333;
+  border: $task-border_color solid 1px;
+  font-size: 0.9rem;
+  width: 100%;
+  padding: 3px 8px;
+  cursor: pointer;
+
+  &:focus {
+    border: $task-sub_color solid 2px;
+    outline: none;
+  }
+}

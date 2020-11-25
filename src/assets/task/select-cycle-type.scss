@@ -1,0 +1,5 @@
+@import "../mixin/select";
+
+.select-cycle-type {
+  @include select;
+}

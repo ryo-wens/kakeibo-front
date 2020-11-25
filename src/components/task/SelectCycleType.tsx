@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import '../../assets/task/select-cycle-type.scss';
 
 interface SelectTaskNameProps {
   cycleType: string;
@@ -16,7 +17,12 @@ const SelectTaskName = (props: SelectTaskNameProps) => {
 
   return (
     <form>
-      <select name={'select-task-name'} required={true} onChange={selectCycleType}>
+      <select
+        name={'select-task-name'}
+        className="select-cycle-type"
+        required={true}
+        onChange={selectCycleType}
+      >
         {cycleTypes.map((cycleType: string, index: number) => (
           <option key={index} value={cycleType}>
             {cycleType}
