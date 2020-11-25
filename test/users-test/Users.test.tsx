@@ -54,7 +54,7 @@ describe('async actions users', () => {
 
     axiosMock.onPost(url, signUpReq).reply(201, resSignUp);
 
-    await signUp('kohh20', '千葉雄喜', 'kohh@gmail.com', 'kohhworst', 'kohhworst')(store.dispatch);
+    await signUp('kohh20', '千葉雄喜', 'kohh@gmail.com', 'kohhworst')(store.dispatch);
     expect(store.getActions()).toEqual(expectedSignUpActions);
   });
 

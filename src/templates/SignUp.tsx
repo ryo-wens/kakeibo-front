@@ -7,9 +7,17 @@ import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { GenericButton, TextInput } from '../components/uikit/index';
+import { GenericButton, InvalidMessage, TextArea } from '../components/uikit/index';
 import { useDispatch } from 'react-redux';
 import { signUp } from '../reducks/users/operations';
+import {
+  onUserIdFocusOut,
+  onUserNameFocusOut,
+  onEmailFocusOut,
+  onPasswordFocusOut,
+  onConfirmPasswordFocusOut,
+} from '../lib/validation';
+import '../assets/modules/text-area.scss';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -37,49 +45,58 @@ const useStyles = makeStyles((theme) => ({
 }));
 
 const SignUp = (): JSX.Element => {
+  const classes = useStyles();
   const dispatch = useDispatch();
-
   const [userId, setUserId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [confirmPassword, setConfirmPassword] = useState<string>('');
+  const [userIdMessage, setUserIdMessage] = useState<string>('');
+  const [userNameMessage, setUserNameMessage] = useState<string>('');
+  const [emailMessage, setEmailMessage] = useState<string>('');
+  const [passwordMessage, setPassWordMessage] = useState<string>('');
+  const [confirmPasswordMessage, setConfirmPasswordMessage] = useState<string>('');
 
   const inputUserId = useCallback(
-    (event:React.ChangeEvent<HTMLInputElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       setUserId(event.target.value);
     },
     [setUserId]
   );
   const inputUserName = useCallback(
-    (event:React.ChangeEvent<HTMLInputElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       setUserName(event.target.value);
     },
     [setUserName]
   );
   const inputEmail = useCallback(
-    (event:React.ChangeEvent<HTMLInputElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value);
     },
     [setEmail]
   );
   const inputPassword = useCallback(
-    (event:React.ChangeEvent<HTMLInputElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(event.target.value);
     },
     [setPassword]
   );
   const inputConfirmPassword = useCallback(
-    (event:React.ChangeEvent<HTMLInputElement>) => {
+    (event: React.ChangeEvent<HTMLInputElement>) => {
       setConfirmPassword(event.target.value);
     },
     [setConfirmPassword]
   );
 
   const unSignUp =
-    userId === '' || userName === '' || email === '' || password === '' || confirmPassword === '';
-
-  const classes = useStyles();
+    userId === '' ||
+    userName === '' ||
+    email === '' ||
+    password === '' ||
+    confirmPassword === '' ||
+    password.length < 8 ||
+    confirmPassword.length < 8;
 
   return (
     <section className="signup__form">
@@ -93,69 +110,73 @@ const SignUp = (): JSX.Element => {
             アカウント登録
           </Typography>
           <form className={classes.form} noValidate>
-            <Grid container spacing={2}>
-              <Grid item xs={12} className="center">
-                <TextInput
-                  id={'userId'}
-                  required={true}
-                  fullWidth={true}
-                  label="ユーザーID"
-                  value={userId}
-                  type="userId"
-                  onChange={inputUserId}
-                />
-              </Grid>
-              <Grid item xs={12} className="center">
-                <TextInput
-                  id={'userName'}
-                  required={true}
-                  fullWidth={true}
-                  label="名前"
-                  value={userName}
-                  type="name"
-                  onChange={inputUserName}
-                />
-              </Grid>
-              <Grid item xs={12} className="center">
-                <TextInput
-                  id={'email'}
-                  required={true}
-                  fullWidth={true}
-                  label="メールアドレス"
-                  value={email}
-                  type="email"
-                  onChange={inputEmail}
-                />
-              </Grid>
-              <Grid item xs={12} className="center">
-                <TextInput
-                  id={'password'}
-                  required={true}
-                  fullWidth={true}
-                  label="パスワード(半角英数字で8文字以上)"
-                  value={password}
-                  type="password"
-                  onChange={inputPassword}
-                />
-              </Grid>
-              <Grid item xs={12} className="center">
-                <TextInput
-                  id={'confirmPassword'}
-                  required={true}
-                  fullWidth={true}
-                  label="パスワードの確認"
-                  value={confirmPassword}
-                  type="password"
-                  onChange={inputConfirmPassword}
-                />
-              </Grid>
-            </Grid>
-            <div className="module-spacer--bit-small" />
+            <div>
+              <label>ユーザーID</label>
+              <TextArea
+                id={'userId'}
+                value={userId}
+                type="userId"
+                onChange={inputUserId}
+                onBlur={() => onUserIdFocusOut(email, setUserIdMessage)}
+              />
+              <InvalidMessage message={userIdMessage} />
+            </div>
+            <div className="module-spacer--small" />
+            <div>
+              <label>名前</label>
+              <TextArea
+                id={'userName'}
+                value={userName}
+                type="name"
+                onChange={inputUserName}
+                onBlur={() => onUserNameFocusOut(userName, setUserNameMessage)}
+              />
+              <InvalidMessage message={userNameMessage} />
+            </div>
+            <div className="module-spacer--small" />
+            <div>
+              <label>メールアドレス</label>
+              <TextArea
+                id={'email'}
+                value={email}
+                type="email"
+                onChange={inputEmail}
+                onBlur={() => onEmailFocusOut(email, setEmailMessage)}
+              />
+              <InvalidMessage message={emailMessage} />
+            </div>
+            <div className="module-spacer--small" />
+            <div>
+              <label>パスワード</label>
+              <TextArea
+                id={'password'}
+                value={password}
+                type="password"
+                onChange={inputPassword}
+                onBlur={() => onPasswordFocusOut(password, setPassWordMessage)}
+              />
+              <InvalidMessage message={passwordMessage} />
+            </div>
+            <div className="module-spacer--small" />
+            <div>
+              <label className="text-input__label">確認用パスワード</label>
+              <TextArea
+                id={'confirmPassword'}
+                value={confirmPassword}
+                type="password"
+                onChange={inputConfirmPassword}
+                onBlur={() =>
+                  onConfirmPasswordFocusOut(password, confirmPassword, setConfirmPasswordMessage)
+                }
+              />
+              <InvalidMessage message={confirmPasswordMessage} />
+            </div>
+            <div className="module-spacer--small" />
             <div className="center">
               <GenericButton
                 label={'アカウントを登録する'}
                 disabled={unSignUp}
-                onClick={() => dispatch(signUp(userId, userName, email, password, confirmPassword))}
+                onClick={() => dispatch(signUp(userId, userName, email, password))}
               />
             </div>
             <div className="module-spacer--bit-small" />

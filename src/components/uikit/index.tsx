@@ -22,3 +22,4 @@ export { default as SelectSort } from './SelectSort';
 export { default as SelectSortType } from './SelectSortType';
 export { default as SelectBigCategory } from './SelectBigCategroy';
 export { default as SelectLimit } from './SelectLimit';
+export { default as TextArea } from './TextArea';

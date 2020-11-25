@@ -1,0 +1,16 @@
+@import "../variable";
+
+.text-input {
+
+  &__text-form {
+    border: 1px solid $task-border_color;
+    border-radius: $task-border_radius;
+    font-size: $middle-font-size;
+    height: 40px;
+    width: 400px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
