@@ -1,130 +1,134 @@
-import { signUpAction, logInAction, logOutAction, fetchUserInfoAction } from './actions';
+import {
+  signUpAction,
+  logInAction,
+  logOutAction,
+  fetchUserInfoAction,
+  informErrorAction,
+} from './actions';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import axios from 'axios';
 import { SignupReq, UserRes, LoginReq, LogoutRes } from './types';
-import { isValidPasswordFormat, errorHandling } from '../../lib/validation';
+import { errorHandling } from '../../lib/validation';
 
 export const signUp = (userId: string, userName: string, email: string, password: string) => {
+  const data: SignupReq = {
+    id: userId,
+    name: userName,
+    email: email,
+    password: password,
+  };
   return async (dispatch: Dispatch<Action>) => {
-    const data: SignupReq = {
-      id: userId,
-      name: userName,
-      email: email,
-      password: password,
-    };
-    await axios
-      .post<UserRes>(`${process.env.REACT_APP_USER_API_HOST}/signup`, JSON.stringify(data), {
-        withCredentials: true,
-      })
-      .then(() => {
-        dispatch(signUpAction(userId, userName, email));
-        dispatch(push('/login'));
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          const errorMessages: string[] = [];
-
-          if (error.response.data.error.id.length > 0) {
-            errorMessages.push(error.response.data.error.id);
-          }
-
-          if (error.response.data.error.name.length > 0) {
-            errorMessages.push(error.response.data.error.name);
-          }
-
-          if (error.response.data.error.email.length > 0) {
-            errorMessages.push(error.response.data.error.email);
-          }
-
-          if (error.response.data.error.password.length > 0) {
-            errorMessages.push(error.response.data.error.password);
-          }
-
-          if (errorMessages.length > 0) {
-            alert(errorMessages.join('\n'));
-          }
+    try {
+      await axios.post<UserRes>(
+        `${process.env.REACT_APP_USER_API_HOST}/signup`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
         }
-        if (error.response.status === 409) {
-          const errorMessages: string[] = [];
+      );
+      dispatch(signUpAction(userId, userName, email));
+      dispatch(push('/login'));
+    } catch (error) {
+      if (error.response.status === 400) {
+        const errorMessages: string[] = [];
 
-          if (error.response.data.error.id.length > 0) {
-            errorMessages.push(error.response.data.error.id);
-          }
-
-          if (error.response.data.error.email.length > 0) {
-            errorMessages.push(error.response.data.error.email);
-          }
-
-          if (errorMessages.length > 0) {
-            alert(errorMessages.join('\n'));
-          }
+        if (error.response.data.error.id.length > 0) {
+          errorMessages.push(error.response.data.error.id);
         }
 
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-        } else {
-          alert(error);
+        if (error.response.data.error.name.length > 0) {
+          errorMessages.push(error.response.data.error.name);
         }
-      });
+
+        if (error.response.data.error.email.length > 0) {
+          errorMessages.push(error.response.data.error.email);
+        }
+
+        if (error.response.data.error.password.length > 0) {
+          errorMessages.push(error.response.data.error.password);
+        }
+
+        if (errorMessages.length > 0) {
+          dispatch(informErrorAction(errorMessages.join('\n')));
+          return;
+        }
+      }
+
+      if (error.response.status === 409) {
+        const errorMessages: string[] = [];
+
+        if (error.response.data.error.id) {
+          errorMessages.push(error.response.data.error.id);
+        }
+
+        if (error.response.data.error.email) {
+          errorMessages.push(error.response.data.error.email);
+        }
+
+        if (errorMessages.length > 0) {
+          dispatch(informErrorAction(errorMessages.join('\n')));
+          return;
+        }
+      }
+
+      if (error.response) {
+        dispatch(informErrorAction(error.response.data.error.message));
+      }
+    }
   };
 };
 
 export const logIn = (email: string, password: string) => {
+  const data: LoginReq = { email: email, password: password };
   return async (dispatch: Dispatch<Action>) => {
-    if (!isValidPasswordFormat(password)) {
-      alert('パスワードを正しく入力してください。');
+    try {
+      await axios.post<UserRes>(
+        `${process.env.REACT_APP_USER_API_HOST}/login`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      );
+      dispatch(logInAction(email));
+      dispatch(push('/'));
+    } catch (error) {
+      if (error.response.status === 400) {
+        const errorMessages: string[] = [];
+
+        if (error.response.data.error.email) {
+          errorMessages.push(error.response.data.error.email);
+        }
+        if (error.response.data.error.password) {
+          errorMessages.push(error.response.data.error.password);
+        }
+        if (errorMessages.length > 0) {
+          dispatch(informErrorAction(errorMessages.join('\n')));
+          return;
+        }
+      }
+
+      if (error.response) {
+        dispatch(informErrorAction(error.response.data.error.message));
+      }
     }
-
-    const data: LoginReq = { email: email, password: password };
-    await axios
-      .post<UserRes>(`${process.env.REACT_APP_USER_API_HOST}/login`, JSON.stringify(data), {
-        withCredentials: true,
-      })
-      .then(() => {
-        dispatch(logInAction(email));
-        dispatch(push('/'));
-      })
-      .catch((error) => {
-        if (error.response.status === 400) {
-          const errorMessages: string[] = [];
-
-          if (error.response.data.error.email) {
-            errorMessages.push(error.response.data.error.email);
-          }
-          if (error.response.data.error.password) {
-            errorMessages.push(error.response.data.error.password);
-          }
-          if (errorMessages) {
-            alert(errorMessages.join('\n'));
-          }
-        }
-
-        if (error.response) {
-          alert(error.response.data.error.message);
-        }
-      });
   };
 };
 
 export const logOut = () => {
   return async (dispatch: Dispatch<Action>) => {
-    await axios
-      .delete<LogoutRes>(`${process.env.REACT_APP_USER_API_HOST}/logout`, {
+    try {
+      await axios.delete<LogoutRes>(`${process.env.REACT_APP_USER_API_HOST}/logout`, {
         withCredentials: true,
-      })
-      .then(() => {
-        dispatch(logOutAction());
-
-        dispatch(push('/login'));
-      })
-      .catch((error) => {
-        if (error && error.response) {
-          alert(error.response.data.error.message);
-        } else {
-          alert(error);
-        }
       });
+      dispatch(logOutAction());
+
+      dispatch(push('/login'));
+    } catch (error) {
+      if (error.response) {
+        dispatch(informErrorAction(error.response.data.error.message));
+      }
+    }
   };
 };
 

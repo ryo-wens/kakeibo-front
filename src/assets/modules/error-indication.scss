@@ -1,0 +1,46 @@
+@import "../variable";
+
+@keyframes fade-in {
+  0% {
+    opacity: 0;
+  }
+  50% {
+    opacity: 1;
+  }
+  75% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
+}
+
+
+.error-indication {
+  display: flex;
+
+  &__body {
+    animation: fade-in 4.5s ease-out forwards;
+    animation-iteration-count: 1;
+    align-items: center;
+    background-color: $task-delete-color;
+    border: $task-border_color solid 2px;
+    border-radius: $task-border_radius;
+    color: $white;
+    justify-content: center;
+    font-size: $medium-font_size;
+    font-weight: bold;
+    text-align: center;
+    height: 3em;
+    width: 30em;
+    white-space: pre-line;
+    position: fixed;
+    top: 8%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: 1000;
+  }
+
+
+}
+

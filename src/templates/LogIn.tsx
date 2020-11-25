@@ -7,12 +7,14 @@ import PersonIcon from '@material-ui/icons/Person';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
-import { GenericButton, TextArea } from '../components/uikit/index';
-import { useDispatch } from 'react-redux';
+import { GenericButton, TextArea, ErrorIndication } from '../components/uikit/index';
+import { useDispatch, useSelector } from 'react-redux';
+import { State } from '../reducks/store/types';
 import { logIn } from '../reducks/users/operations';
 import { InvalidMessage } from '../components/uikit';
 import { onEmailFocusOut, passWordSubmit } from '../lib/validation';
 import '../assets/modules/text-area.scss';
+import { getErrorMessage } from '../reducks/users/selectors';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -39,6 +41,8 @@ const useStyles = makeStyles((theme) => ({
 const LogIn = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: State) => state);
+  const errorMessage = getErrorMessage(selector);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailMessage, setEmailMessage] = useState<string>('');
@@ -58,10 +62,21 @@ const LogIn = () => {
     [setPassword]
   );
 
-  const unLogIn = email === '' || password === '' || password.length < 8;
+  const resetForm = useCallback(() => {
+    setEmail('');
+    setPassword('');
+  }, [setEmail, setPassword]);
+
+  const unLogIn =
+    email === '' ||
+    password === '' ||
+    password.length < 8 ||
+    emailMessage !== '' ||
+    passwordMessage !== '';
 
   return (
     <section className="login__form">
+      <ErrorIndication errorMessage={errorMessage} />
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -101,7 +116,7 @@ const LogIn = () => {
               <GenericButton
                 label={'ログインする'}
                 disabled={unLogIn}
-                onClick={() => dispatch(logIn(email, password))}
+                onClick={() => dispatch(logIn(email, password)) && resetForm()}
               />
             </div>
             <div className="module-spacer--small" />
