@@ -81,7 +81,7 @@ export interface deleteTaskItemRes {
 
 export interface TaskUser {
   taskUserId: number;
-  taskName: string;
+  taskUserName: string;
 }
 
 export interface TaskUsers extends Array<TaskUser> {}

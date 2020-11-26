@@ -46,7 +46,7 @@ const TaskListForUser = (props: TaskListForUserProps) => {
     ) {
       return (
         <span className="task-list-for-user__user-name" key={taskUsers[idx].taskUserId}>
-          {taskUsers[idx].taskName}
+          {taskUsers[idx].taskUserName}
         </span>
       );
     } else {
@@ -66,7 +66,7 @@ const TaskListForUser = (props: TaskListForUserProps) => {
       );
       const taskUser: TaskUser = {
         taskUserId: groupTasksListItem.id,
-        taskName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
       };
       taskUsers.push(taskUser);
     }
