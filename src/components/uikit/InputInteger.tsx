@@ -7,6 +7,7 @@ interface InputIntegerProps {
   message: string;
   setCycle: React.Dispatch<React.SetStateAction<number>>;
   setMessage: React.Dispatch<React.SetStateAction<string>>;
+  cycleType: 'every' | 'consecutive' | 'none';
 }
 
 const InputInteger = (props: InputIntegerProps) => {
@@ -22,6 +23,8 @@ const InputInteger = (props: InputIntegerProps) => {
     [props.setCycle, props.setMessage]
   );
 
+  const currentCycleType = props.cycleType === 'none';
+
   return (
     <>
       <input
@@ -33,6 +36,7 @@ const InputInteger = (props: InputIntegerProps) => {
         onChange={inputCycle}
         required={true}
         pattern="^\d*$"
+        disabled={currentCycleType}
       />
       {props.message !== '' && <InvalidMessage message={props.message} />}
     </>

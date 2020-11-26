@@ -6,12 +6,19 @@
   border: $task-border_color 1px solid;
   border-radius: 0.3rem;
   color: #444;
-  font-size: 0.8rem;
+  font-size: 0.9rem;
   text-align: center;
   padding: 3px 8px;
+  cursor: pointer;
 
   &:focus {
     border: $task-sub_color solid 2px;
     outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    background-color: #efefef;
+    cursor: default;
   }
 }

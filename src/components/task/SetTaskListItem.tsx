@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react';
+import React, { useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
 import { DatePicker, DeleteButton, InputInteger, SaveButton } from '../uikit';
@@ -17,6 +17,8 @@ interface SetTaskListItemProps {
   approvedGroup: Group;
   groupId: number;
   closeModal: () => void;
+  handleDateChange: (date: Date | null) => void;
+  inputTaskName: (event: React.ChangeEvent<HTMLInputElement>) => void;
   label: string;
   taskItemName: string;
   setTaskItemName: React.Dispatch<React.SetStateAction<string>>;
@@ -41,30 +43,39 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
 
   const [message, setMessage] = useState<string>('');
 
-  const handleDateChange = useCallback(
-    (selectedDate) => {
-      props.setBaseDate(selectedDate as Date);
-    },
-    [props.setBaseDate]
-  );
-
-  const selectContents = [
-    {
-      key: 'タスク名',
-      value: (
+  const switchTaskName = () => {
+    if (props.label === '保存') {
+      return (
+        <input
+          id="filled-basic"
+          required={true}
+          type={'text'}
+          value={props.taskItemName}
+          onChange={props.inputTaskName}
+        />
+      );
+    } else if (props.label === '追加') {
+      return (
         <SelectTaskName
           groupTasksList={groupTasksList}
           setTaskItemId={props.setTaskItemId}
           setTaskItemName={props.setTaskItemName}
         />
-      ),
+      );
+    }
+  };
+
+  const selectContents = [
+    {
+      key: 'タスク名',
+      value: switchTaskName(),
     },
     {
       key: '基準日',
       value: (
         <DatePicker
           value={props.baseDate}
-          onChange={handleDateChange}
+          onChange={props.handleDateChange}
           id={'date-picker-dialog'}
           label={''}
           required={false}
@@ -73,7 +84,14 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
     },
     {
       key: 'サイクルタイプ',
-      value: <SelectCycleType cycleType={props.cycleType} setCycleType={props.setCycleType} />,
+      value: (
+        <SelectCycleType
+          cycleType={props.cycleType}
+          setCycleType={props.setCycleType}
+          setCycle={props.setCycle}
+          label={props.label}
+        />
+      ),
     },
     {
       key: 'サイクル',
@@ -83,17 +101,20 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           message={message}
           setCycle={props.setCycle}
           setMessage={setMessage}
+          cycleType={props.cycleType}
         />
       ),
     },
     {
-      key: 'タスクユーザー',
+      key: '割り当てるユーザー',
       value: (
         <SelectTaskUser
           groupId={props.groupId}
           approvedGroups={approvedGroups}
           groupTasksListForEachUser={groupTasksListForEachUser}
+          taskUserId={props.taskUserId}
           setTaskUserId={props.setTaskUserId}
+          label={props.label}
         />
       ),
     },
