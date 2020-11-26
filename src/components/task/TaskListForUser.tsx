@@ -1,5 +1,5 @@
 import React, { useMemo } from 'react';
-import { dateToDateString, getWeekStartDate } from '../../lib/date';
+import { getWeekStartDate } from '../../lib/date';
 import {
   GroupTasksList,
   GroupTasksListForEachUser,
@@ -25,11 +25,34 @@ const TaskListForUser = (props: TaskListForUserProps) => {
   const selectedDate = new Date(dt);
   const baseDate: Date =
     props.tasksListItem.base_date !== null ? props.tasksListItem.base_date : new Date();
+  const cycleType = props.tasksListItem.cycle_type;
   const cycle = props.tasksListItem.cycle !== null ? props.tasksListItem.cycle : 0;
   const groupIdx = props.approvedGroups.findIndex(
     (approvedGroup) => approvedGroup.group_id === props.groupId
   );
   const approvedGroup: Group = props.approvedGroups[groupIdx];
+
+  const assignTaskForUser = (
+    differenceDay: number,
+    baseDay: number,
+    currentDay: number,
+    taskUsers: TaskUsers,
+    idx: number
+  ) => {
+    if (
+      (cycleType === 'every' && differenceDay % cycle === 0) ||
+      cycleType === 'consecutive' ||
+      (cycleType === 'none' && baseDay === currentDay)
+    ) {
+      return (
+        <span className="task-list-for-user__user-name" key={taskUsers[idx].taskUserId}>
+          {taskUsers[idx].taskName}
+        </span>
+      );
+    } else {
+      return <span className="task-list-for-user__blank" />;
+    }
+  };
 
   const week = useMemo(() => {
     const weekTableItems = [];
@@ -58,39 +81,42 @@ const TaskListForUser = (props: TaskListForUserProps) => {
       let differenceDay!: number;
 
       if (baseDay > currentDay) {
-        differenceDay = (new Date(baseDate).getTime() - currentDay) / 86400000;
+        differenceDay = (baseDay - currentDay) / 86400000;
         taskUsers.sort((pre, cur) => cur.taskUserId - pre.taskUserId);
       } else if (baseDay < currentDay) {
-        differenceDay = (currentDay - new Date(baseDate).getTime()) / 86400000;
+        differenceDay = (currentDay - baseDay) / 86400000;
         taskUsers.sort((pre, cur) => pre.taskUserId - cur.taskUserId);
       } else if (baseDay === currentDay) {
         differenceDay = 0;
       }
-
-      const usersListLength = taskUsers.length;
 
       const baseUserIdIdx = taskUsers.findIndex((taskUser) => {
         return taskUser.taskUserId === props.tasksListItem.group_tasks_users_id;
       });
 
       const cycleCount = Math.floor(differenceDay / cycle);
-      const idx = ((cycleCount % usersListLength) + baseUserIdIdx) % usersListLength;
+      const usersListLength = taskUsers.length;
+      let idx!: number;
 
-      const assignTaskForUser = () => {
-        if (differenceDay % cycle === 0) {
-          return (
-            <span className="task-list-for-user__user-name" key={taskUsers[idx].taskUserId}>
-              {taskUsers[idx].taskName}
-            </span>
-          );
-        } else if (dateToDateString(currentDate) !== dateToDateString(new Date(baseDate))) {
-          return <span className="task-list-for-user__blank" />;
+      if (cycleType === 'every') {
+        idx = ((cycleCount % usersListLength) + baseUserIdIdx) % usersListLength;
+      } else if (cycleType === 'consecutive') {
+        if (baseDay > currentDay) {
+          if (differenceDay % cycle === 0) {
+            idx = ((cycleCount % usersListLength) + baseUserIdIdx) % usersListLength;
+          } else {
+            idx = ((cycleCount % usersListLength) + baseUserIdIdx + 1) % usersListLength;
+          }
+        } else if (baseDay <= currentDay) {
+          idx = ((cycleCount % usersListLength) + baseUserIdIdx) % usersListLength;
         }
-      };
+      } else if (cycleType === 'none') {
+        idx = baseUserIdIdx;
+      }
 
       weekTableItems.push(
         <td className="task-list-for-user__item" key={i}>
-          {assignTaskForUser()}
+          {assignTaskForUser(differenceDay, baseDay, currentDay, taskUsers, idx)}
         </td>
       );
     }

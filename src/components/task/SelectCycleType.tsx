@@ -4,6 +4,9 @@ import '../../assets/task/select-cycle-type.scss';
 interface SelectTaskNameProps {
   cycleType: string;
   setCycleType: React.Dispatch<React.SetStateAction<'every' | 'consecutive' | 'none'>>;
+  setCycle: React.Dispatch<React.SetStateAction<number>>;
+
+  label: string;
 }
 
 const SelectTaskName = (props: SelectTaskNameProps) => {
@@ -11,9 +14,20 @@ const SelectTaskName = (props: SelectTaskNameProps) => {
   const selectCycleType = useCallback(
     (event: React.ChangeEvent<{ value: string }>) => {
       props.setCycleType(event.target.value as 'every' | 'consecutive' | 'none');
+      if (event.target.value === 'none') {
+        props.setCycle(Number(1));
+      }
     },
     [props.setCycleType]
   );
+
+  const currentSelectCycleType = () => {
+    if (props.label === '保存') {
+      return props.cycleType;
+    } else if (props.label === '追加') {
+      return 'every';
+    }
+  };
 
   return (
     <form>
@@ -22,6 +36,7 @@ const SelectTaskName = (props: SelectTaskNameProps) => {
         className="select-cycle-type"
         required={true}
         onChange={selectCycleType}
+        defaultValue={currentSelectCycleType()}
       >
         {cycleTypes.map((cycleType: string, index: number) => (
           <option key={index} value={cycleType}>

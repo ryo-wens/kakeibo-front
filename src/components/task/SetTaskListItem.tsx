@@ -84,7 +84,14 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
     },
     {
       key: 'サイクルタイプ',
-      value: <SelectCycleType cycleType={props.cycleType} setCycleType={props.setCycleType} />,
+      value: (
+        <SelectCycleType
+          cycleType={props.cycleType}
+          setCycleType={props.setCycleType}
+          setCycle={props.setCycle}
+          label={props.label}
+        />
+      ),
     },
     {
       key: 'サイクル',
@@ -94,6 +101,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           message={message}
           setCycle={props.setCycle}
           setMessage={setMessage}
+          cycleType={props.cycleType}
         />
       ),
     },
