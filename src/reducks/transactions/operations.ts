@@ -81,6 +81,7 @@ export const addLatestTransactions = (requestData: {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (!isValidAmountFormat(requestData.amount as string)) {
       alert('金額は数字で入力してください。');
+      return;
     }
     try {
       const result = await axios.post<TransactionsRes>(
@@ -171,6 +172,7 @@ export const editTransactions = (
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (!isValidAmountFormat(editRequestData.amount as string)) {
       alert('金額は数字で入力してください。');
+      return;
     }
 
     try {
@@ -242,6 +244,7 @@ export const editLatestTransactions = (
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (!isValidAmountFormat(editRequestData.amount as string)) {
       alert('金額は数字で入力してください。');
+      return;
     }
 
     try {

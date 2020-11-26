@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
 import { getLatestTransactions } from '../../reducks/transactions/selectors';
 import { getGroupLatestTransactions } from '../../reducks/groupTransactions/selectors';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
 import RecentInputBody from './RecentInputBody';
 import GroupRecentInputBody from './GroupRecentInputBody';
 import '../../assets/home/recent-input.scss';
@@ -16,6 +17,7 @@ const RecentInput = () => {
   const selector = useSelector((state: State) => state);
   const latestTransactionsList = getLatestTransactions(selector);
   const groupLatestTransactionList = getGroupLatestTransactions(selector);
+  const approvedGroup = getApprovedGroups(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
 
@@ -43,7 +45,10 @@ const RecentInput = () => {
             return <dt>{guidanceMessage}</dt>;
           } else {
             return (
-              <GroupRecentInputBody groupLatestTransactionsList={groupLatestTransactionList} />
+              <GroupRecentInputBody
+                groupLatestTransactionsList={groupLatestTransactionList}
+                approvedGroup={approvedGroup}
+              />
             );
           }
         }

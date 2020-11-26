@@ -1,7 +1,10 @@
 import React, { useEffect, useCallback, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTransactions } from '../reducks/transactions/selectors';
-import { getGroupTransactions } from '../reducks/groupTransactions/selectors';
+import { getTransactions, getSearchTransactions } from '../reducks/transactions/selectors';
+import {
+  getGroupTransactions,
+  getSearchGroupTransactions,
+} from '../reducks/groupTransactions/selectors';
 import { getApprovedGroups } from '../reducks/groups/selectors';
 import { fetchTransactionsList } from '../reducks/transactions/operations';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
@@ -24,7 +27,9 @@ const DailyHistory = (props: DailyHistoryProps) => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const transactionsList = getTransactions(selector);
+  const searchTransactionsList = getSearchTransactions(selector);
   const groupTransactionsList = getGroupTransactions(selector);
+  const groupSearchTransactionsList = getSearchGroupTransactions(selector);
   const approvedGroup = getApprovedGroups(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
@@ -200,6 +205,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
                   selectYears={props.selectYears}
                   selectMonth={props.selectMonth}
                   transactionsList={transactionsList}
+                  searchTransactionsList={searchTransactionsList}
                 />
               );
             }
@@ -212,6 +218,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
                   selectYears={props.selectYears}
                   selectMonth={props.selectMonth}
                   groupTransactionsList={groupTransactionsList}
+                  groupSearchTransactionsList={groupSearchTransactionsList}
                 />
               );
             }
