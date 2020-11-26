@@ -86,7 +86,10 @@ const SearchTransaction = (props: SearchTransactionProps) => {
 
   return (
     <>
-      <button className="daily-history__search-btn" onClick={props.openSearch}>
+      <button
+        className="daily-history__search-btn"
+        onClick={!props.openSearchFiled ? props.openSearch : props.closeSearch}
+      >
         検索
       </button>
       {props.openSearchFiled && (
@@ -97,11 +100,29 @@ const SearchTransaction = (props: SearchTransactionProps) => {
           <div className="daily-history__search-position">
             <div className="daily-history__spacer" />
             <div>
+              <DatePicker
+                id={'startDate'}
+                label={'開始日'}
+                onChange={props.selectStartDateChange}
+                required={false}
+                value={props.selectStartDate}
+              />
+            </div>
+            <div>
+              <DatePicker
+                id={'endDate'}
+                label={'終了日'}
+                onChange={props.selectEndDateChange}
+                required={false}
+                value={props.selectEndDate}
+              />
+            </div>
+            <div>
               <KindSelectBox
                 onChange={props.selectTransactionsType}
                 required={false}
                 value={props.transactionType}
-                label={'支出or収入'}
+                label={'支出 or 収入'}
               />
             </div>
             <div className="daily-history__input-form">
@@ -127,14 +148,6 @@ const SearchTransaction = (props: SearchTransactionProps) => {
               />
             </div>
             <div className="daily-history__input-form">
-              <SelectBigCategory
-                category={props.category}
-                onChange={props.changeCategory}
-                onClick={props.selectCategory}
-                pathName={props.pathName}
-              />
-            </div>
-            <div>
               <TextInput
                 value={props.lowAmount}
                 fullWidth={true}
@@ -156,34 +169,24 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 type={'text'}
               />
             </div>
-            <div>
-              <DatePicker
-                id={'startDate'}
-                label={'開始日'}
-                onChange={props.selectStartDateChange}
-                required={false}
-                value={props.selectStartDate}
+            <div className="daily-history__input-form">
+              <SelectBigCategory
+                category={props.category}
+                onChange={props.changeCategory}
+                onClick={props.selectCategory}
+                pathName={props.pathName}
               />
             </div>
-            <div>
-              <DatePicker
-                id={'endDate'}
-                label={'終了日'}
-                onChange={props.selectEndDateChange}
-                required={false}
-                value={props.selectEndDate}
-              />
-            </div>
-            <div>
+            <div className="daily-history__input-form">
               <SelectSort selectSortItem={props.selectSortItem} value={props.sortItem} />
             </div>
-            <div>
+            <div className="daily-history__input-form">
               <SelectSortType selectSortType={props.selectSortType} value={props.sortType} />
             </div>
-            <div>
+            <div className="daily-history__input-form">
               <SelectLimit value={props.limit} selectLimit={props.selectLimit} />
             </div>
-            <div>
+            <div className="daily-history__input-form">
               {props.pathName === 'group' && (
                 <SelectPayer
                   value={props.paymentUserId}
@@ -195,6 +198,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 />
               )}
             </div>
+            <div className="daily-history__spacer" />
             <div className="daily-history__search-btn-position">
               <GenericButton
                 disabled={false}

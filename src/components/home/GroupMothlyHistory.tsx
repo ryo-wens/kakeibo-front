@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroupTransactionsList } from '../../reducks/groupTransactions/operations';
 import { State } from '../../reducks/store/types';
 import { getGroupTransactions } from '../../reducks/groupTransactions/selectors';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { incomeTransactionType } from '../../lib/constant';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { year, month, customMonth } from '../../lib/constant';
@@ -16,6 +17,7 @@ const GroupMonthlyHistory = () => {
   const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupTransactionsList = getGroupTransactions(selector);
+  const approvedGroup = getApprovedGroups(selector);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
@@ -84,6 +86,7 @@ const GroupMonthlyHistory = () => {
                 shop,
                 memo,
                 amount,
+                payment_user_id,
               } = groupTransaction;
               const transactionDay = Number(transaction_date.slice(8, 10));
 
@@ -140,6 +143,8 @@ const GroupMonthlyHistory = () => {
                     categoryName={categoryName}
                     transactionDate={transaction_date}
                     transactionsType={transaction_type}
+                    paymentUserId={payment_user_id}
+                    approvedGroups={approvedGroup}
                   />,
                 ];
               }

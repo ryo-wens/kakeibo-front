@@ -86,7 +86,7 @@ const Header = () => {
     if (userName === '') {
       dispatch(fetchUserInfo());
     }
-  }, [userName]);
+  }, [userName, entityType]);
 
   useEffect(() => {
     const initialName = async () => {
@@ -148,6 +148,14 @@ const Header = () => {
 
   const menuId = 'primary-search-account-menu';
 
+  const homeButtonClick = () => {
+    async function click() {
+      await existsGroupWhenRouting(`/`);
+      window.location.reload();
+    }
+    click();
+  };
+
   return (
     <>
       {(() => {
@@ -163,7 +171,7 @@ const Header = () => {
                     <Button
                       color="inherit"
                       className={classes.title}
-                      onClick={() => existsGroupWhenRouting(`/`)}
+                      onClick={() => homeButtonClick()}
                     >
                       家計簿App
                     </Button>

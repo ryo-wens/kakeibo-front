@@ -15,6 +15,7 @@ import '../../assets/history/daily-history.scss';
 
 interface GroupDailyHistoryBodyProps {
   groupTransactionsList: GroupTransactionsList;
+  groupSearchTransactionsList: GroupTransactionsList;
   selectYears: number;
   selectMonth: string;
 }
@@ -67,59 +68,117 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
               メモ
             </td>
           </tr>
-          {props.groupTransactionsList.map((groupTransaction) => {
-            const {
-              id,
-              transaction_type,
-              transaction_date,
-              medium_category_name,
-              custom_category_name,
-              amount,
-              shop,
-              memo,
-            } = groupTransaction;
+          {(() => {
+            if (!props.groupSearchTransactionsList.length) {
+              return props.groupTransactionsList.map((groupTransaction) => {
+                const {
+                  id,
+                  transaction_type,
+                  transaction_date,
+                  medium_category_name,
+                  custom_category_name,
+                  amount,
+                  shop,
+                  memo,
+                } = groupTransaction;
 
-            const categoryName = {
-              mediumCategory: medium_category_name !== null ? medium_category_name : '',
-              customCategory: custom_category_name !== null ? custom_category_name : '',
-            };
+                const categoryName = {
+                  mediumCategory: medium_category_name !== null ? medium_category_name : '',
+                  customCategory: custom_category_name !== null ? custom_category_name : '',
+                };
 
-            return (
-              <tr key={id} className="daily-history__tr">
-                <td className="daily-history__td" align="center">
-                  <IconButton onClick={() => handleOpen(id)}>
-                    <CreateIcon color="primary" />
-                  </IconButton>
-                  <EditTransactionModal
-                    id={id}
-                    onClose={handleClose}
-                    open={openId === id && open}
-                    amount={amount}
-                    memo={memo !== null ? memo : ''}
-                    shop={shop !== null ? shop : ''}
-                    categoryName={categoryName}
-                    transactionDate={transaction_date}
-                    transactionsType={transaction_type}
-                  />
-                </td>
-                <td className="daily-history__td" align="center">
-                  {transaction_date}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {medium_category_name || custom_category_name}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {amount}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {shop}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {memo}
-                </td>
-              </tr>
-            );
-          })}
+                return (
+                  <tr key={id} className="daily-history__tr">
+                    <td className="daily-history__td" align="center">
+                      <IconButton onClick={() => handleOpen(id)}>
+                        <CreateIcon color="primary" />
+                      </IconButton>
+                      <EditTransactionModal
+                        id={id}
+                        onClose={handleClose}
+                        open={openId === id && open}
+                        amount={amount}
+                        memo={memo !== null ? memo : ''}
+                        shop={shop !== null ? shop : ''}
+                        categoryName={categoryName}
+                        transactionDate={transaction_date}
+                        transactionsType={transaction_type}
+                      />
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {transaction_date}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {medium_category_name || custom_category_name}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {amount}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {shop}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {memo}
+                    </td>
+                  </tr>
+                );
+              });
+            } else {
+              return props.groupSearchTransactionsList.map((groupSearchTransaction) => {
+                const {
+                  id,
+                  transaction_type,
+                  transaction_date,
+                  medium_category_name,
+                  custom_category_name,
+                  amount,
+                  shop,
+                  memo,
+                } = groupSearchTransaction;
+
+                const categoryName = {
+                  mediumCategory: medium_category_name !== null ? medium_category_name : '',
+                  customCategory: custom_category_name !== null ? custom_category_name : '',
+                };
+
+                return (
+                  <tr key={id} className="daily-history__tr">
+                    <td className="daily-history__td" align="center">
+                      <IconButton onClick={() => handleOpen(id)}>
+                        <CreateIcon color="primary" />
+                      </IconButton>
+                      <EditTransactionModal
+                        id={id}
+                        onClose={handleClose}
+                        open={openId === id && open}
+                        amount={amount}
+                        memo={memo !== null ? memo : ''}
+                        shop={shop !== null ? shop : ''}
+                        categoryName={categoryName}
+                        transactionDate={transaction_date}
+                        transactionsType={transaction_type}
+                      />
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {transaction_date}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {medium_category_name || custom_category_name}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {amount}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {shop}
+                    </td>
+                    <td className="daily-history__td" align="center">
+                      {memo}
+                    </td>
+                  </tr>
+                );
+              });
+            }
+          })()}
         </tbody>
       </table>
     </>
