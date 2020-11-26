@@ -1,6 +1,10 @@
 import { UserInfo } from './types';
 export type userActions = ReturnType<
-  typeof signUpAction | typeof logInAction | typeof logOutAction | typeof fetchUserInfoAction
+  | typeof signUpAction
+  | typeof logInAction
+  | typeof logOutAction
+  | typeof fetchUserInfoAction
+  | typeof informErrorAction
 >;
 
 export const SIGN_UP = 'SIGN_UP';
@@ -38,5 +42,15 @@ export const fetchUserInfoAction = (userInfo: UserInfo) => {
   return {
     type: FETCH_USER_INFO,
     payload: userInfo,
+  };
+};
+
+export const INFORM_ERROR = 'INFORM_ERROR';
+export const informErrorAction = (errorMessage: string) => {
+  return {
+    type: INFORM_ERROR,
+    payload: {
+      errorMessage: errorMessage,
+    },
   };
 };

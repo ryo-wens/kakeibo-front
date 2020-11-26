@@ -23,6 +23,12 @@ export const usersReducer = (state = initialState.users, action: userActions) =>
         ...state,
         ...action.payload,
       };
+    case Actions.INFORM_ERROR:
+      return {
+        ...state,
+        ...action.payload,
+      };
+
     default:
       return state;
   }
