@@ -21,9 +21,17 @@ export const dateStringToMonthString = (date: string) => {
   return `${prevDates[0]}/${prevDates[1]}`;
 };
 
-export const dateToMonthString = (date: Date) => {
+export const dateToYearAndMonthString = (date: Date) => {
   const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
   return `${date.getFullYear()}/${month}`;
+};
+
+export const dateToYearString = (date: Date) => {
+  return `${date.getFullYear()}`;
+};
+
+export const dateToMonthString = (date: Date) => {
+  return `${date.getMonth() + 1}`;
 };
 
 export const getFirstDayOfMonth = (date: Date) => {
