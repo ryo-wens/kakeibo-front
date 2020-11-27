@@ -1,4 +1,10 @@
-import { createStore as reduxCreateStore, combineReducers, applyMiddleware, compose } from 'redux';
+import {
+  createStore as reduxCreateStore,
+  combineReducers,
+  applyMiddleware,
+  compose,
+  CombinedState,
+} from 'redux';
 import { usersReducer } from '../users/reducers';
 import { categoriesReducer } from '../categories/reducers';
 import { groupCategoriesReducer } from '../groupCategories/reducers';
@@ -15,6 +21,7 @@ import { groupBudgetsReducer } from '../groupBudgets/reducers';
 import { todoListReducer } from '../todoList/reducers';
 import { groupTodoListsReducer } from '../groupTodoList/reducers';
 import { groupTasksReducers } from '../groupTasks/reducers';
+import { userActions } from '../users/actions';
 
 interface ExtendedWindow extends Window {
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -30,22 +37,31 @@ export default function createStore(history: History) {
     diff: true,
   });
 
+  const appReducer = combineReducers({
+    router: connectRouter(history),
+    users: usersReducer,
+    categories: categoriesReducer,
+    groupCategories: groupCategoriesReducer,
+    groups: groupsReducer,
+    groupTasks: groupTasksReducers,
+    todoList: todoListReducer,
+    groupTodoList: groupTodoListsReducer,
+    transactions: transactionsReducer,
+    groupTransactions: groupTransactionsReducer,
+    modal: modalReducer,
+    budgets: budgetsReducer,
+    groupBudgets: groupBudgetsReducer,
+  });
+
+  const rootReducer = (state: CombinedState<any>, action: userActions) => {
+    if (action.type === 'LOG_OUT') {
+      state = undefined;
+    }
+    return appReducer(state, action);
+  };
+
   return reduxCreateStore(
-    combineReducers({
-      router: connectRouter(history),
-      users: usersReducer,
-      categories: categoriesReducer,
-      groupCategories: groupCategoriesReducer,
-      groups: groupsReducer,
-      groupTasks: groupTasksReducers,
-      todoList: todoListReducer,
-      groupTodoList: groupTodoListsReducer,
-      transactions: transactionsReducer,
-      groupTransactions: groupTransactionsReducer,
-      modal: modalReducer,
-      budgets: budgetsReducer,
-      groupBudgets: groupBudgetsReducer,
-    }),
+    rootReducer,
     composeEnhancers(applyMiddleware(routerMiddleware(history), thunk, logger))
   );
 }

@@ -228,6 +228,7 @@ const Header = () => {
                       aria-label="logout"
                       aria-controls={menuId}
                       aria-haspopup="true"
+                      // onClick={() => test()}
                       onClick={() => logOutCheck()}
                     >
                       ログアウト
