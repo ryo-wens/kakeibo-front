@@ -1,9 +1,17 @@
 import React, { useCallback, useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
-import { GenericButton, DatePicker, CategoryInput, TextInput, KindSelectBox } from '../uikit/index';
+import { useDispatch, useSelector } from 'react-redux';
+import {
+  GenericButton,
+  DatePicker,
+  CategoryInput,
+  TextInput,
+  KindSelectBox,
+  SelectPayer,
+} from '../uikit/index';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
@@ -12,6 +20,8 @@ import {
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { getPathTemplateName, getPathGroupId } from '../../lib/path';
+import CloseIcon from '@material-ui/icons/Close';
+import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -50,6 +60,8 @@ interface AddTransactionModalProps {
 const AddTransactionModal = (props: AddTransactionModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const selector = useSelector((state: State) => state);
+  const approvedGroup = getApprovedGroups(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [amount, setAmount] = useState<string>('');
@@ -63,7 +75,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const paymentUserId = 'taira';
+  const [paymentUserId, setPaymentUserId] = useState<string>('');
 
   useEffect(() => {
     setTransactionDate(props.selectDate);
@@ -127,6 +139,21 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
   );
 
+  const resetForm = useCallback(() => {
+    setAmount('');
+    setMemo('');
+    setShop('');
+    setTransactionType('');
+    setCategory('');
+  }, [setAmount, setMemo, setShop, setTransactionType, setCategory]);
+
+  const handlePayerChange = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setPaymentUserId(event.target.value as string);
+    },
+    [setPaymentUserId]
+  );
+
   const unInput = amount === '' || category === '' || transactionsType === '';
 
   const personalAddRequestData: TransactionsReq = {
@@ -157,6 +184,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       await dispatch(addLatestTransactions(personalAddRequestData));
       dispatch(addTransactions());
       props.onClose();
+      resetForm();
     }
     personalTransaction();
   };
@@ -166,12 +194,16 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
       dispatch(addGroupTransactions());
       props.onClose();
+      resetForm();
     }
     groupTransaction();
   };
 
   const body = (
     <div className={classes.paper}>
+      <button className="input-years__btn__close" onClick={props.onClose}>
+        <CloseIcon />
+      </button>
       <h3 className={classes.textPosition}>家計簿の追加</h3>
       <div className={classes.delimiterLine} />
       <div className={classes.smallSpaceTop} />
@@ -199,6 +231,16 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           required={true}
           fullWidth={false}
         />
+        {pathName === 'group' && (
+          <SelectPayer
+            approvedGroups={approvedGroup}
+            groupId={groupId}
+            onChange={handlePayerChange}
+            pathName={pathName}
+            required={true}
+            value={paymentUserId}
+          />
+        )}
         <CategoryInput
           value={category}
           onClick={selectCategory}
