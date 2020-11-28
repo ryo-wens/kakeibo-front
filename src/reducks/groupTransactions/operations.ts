@@ -24,11 +24,17 @@ import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 import moment from 'moment';
 import { customMonth } from '../../lib/constant';
 
-export const fetchGroupTransactionsList = (year: number, customMonth: string, groupId: number) => {
+export const fetchGroupTransactionsList = (
+  groupId: number,
+  selectYears: {
+    selectedYear: string;
+    selectedMonth: string;
+  }
+) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchGroupTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
         {
           withCredentials: true,
         }

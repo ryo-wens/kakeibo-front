@@ -4,7 +4,13 @@ import { push } from 'connected-react-router';
 import { fetchTransactionsList } from '../reducks/transactions/operations';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
-import { customMonth, month, year } from '../lib/constant';
+import { month, year } from '../lib/constant';
+import {
+  prevSelectYears,
+  nextSelectYears,
+  prevButtonDisable,
+  nextButtonDisable,
+} from '../lib/date';
 import { DailyHistory } from './index';
 import { MonthlyHistory, GroupMonthlyHistory } from '../components/home';
 import InputYears from '../components/uikit/InputYears';
@@ -16,7 +22,7 @@ import '../assets/history/history.scss';
 const History = () => {
   const dispatch = useDispatch();
   const path = window.location.pathname;
-  const [selectedYear, setSelectedYear] = useState<number[]>([year]);
+  const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
@@ -30,19 +36,27 @@ const History = () => {
     setOpenSelectYears(false);
   }, [setOpenSelectYears]);
 
-  const changeSelectedYear = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setSelectedYear(event.target.value as number[]);
-    },
-    [setSelectedYear]
-  );
+  const updateSelectedYear = (year: number) => {
+    setSelectedYear(year);
+  };
 
-  const changeSelectedMonth = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setSelectedMonth(event.target.value as number);
-    },
-    [setSelectedMonth]
-  );
+  const updateSelectMonth = (month: number) => {
+    setSelectedMonth(month);
+  };
+
+  const updatePrevYears = () => {
+    const prevYears = prevSelectYears(selectedYear, selectedMonth);
+
+    setSelectedYear(Number(prevYears.selectedYear));
+    setSelectedMonth(Number(prevYears.selectedMonth));
+  };
+
+  const updateNextYears = () => {
+    const nextYears = nextSelectYears(selectedYear, selectedMonth);
+
+    setSelectedYear(Number(nextYears.selectedYear));
+    setSelectedMonth(Number(nextYears.selectedMonth));
+  };
 
   return (
     <>
@@ -80,20 +94,20 @@ const History = () => {
             return (
               <div className="history">
                 <button
+                  disabled={prevButtonDisable(selectedYear, selectedMonth)}
                   className="skip-date__prev-btn history__prev-btn"
                   onClick={() => {
                     if (pathName !== 'group') {
                       dispatch(
-                        fetchTransactionsList(String(selectedYear), String(selectedMonth - 1))
-                      ) && setSelectedMonth(selectedMonth - 1);
+                        fetchTransactionsList(prevSelectYears(selectedYear, selectedMonth))
+                      ) && updatePrevYears();
                     } else {
                       dispatch(
                         fetchGroupTransactionsList(
-                          Number(selectedYear),
-                          String(selectedMonth - 1),
-                          groupId
+                          groupId,
+                          prevSelectYears(selectedYear, selectedMonth)
                         )
-                      ) && setSelectedMonth(selectedMonth - 1);
+                      ) && updatePrevYears();
                     }
                   }}
                 >
@@ -104,20 +118,20 @@ const History = () => {
                   <ExpandMoreIcon className="input-years__icon" />
                 </button>
                 <button
+                  disabled={nextButtonDisable(selectedYear, selectedMonth)}
                   className="skip-date__next-btn history__next-btn"
                   onClick={() => {
                     if (pathName !== 'group') {
                       dispatch(
-                        fetchTransactionsList(String(selectedYear), String(selectedMonth + 1))
-                      ) && setSelectedMonth(selectedMonth + 1);
+                        fetchTransactionsList(nextSelectYears(selectedYear, selectedMonth))
+                      ) && updateNextYears();
                     } else {
                       dispatch(
                         fetchGroupTransactionsList(
-                          Number(selectedYear),
-                          String(selectedMonth + 1),
-                          groupId
+                          groupId,
+                          nextSelectYears(selectedYear, selectedMonth)
                         )
-                      ) && setSelectedMonth(selectedMonth + 1);
+                      ) && updateNextYears();
                     }
                   }}
                 >
@@ -129,10 +143,10 @@ const History = () => {
             return (
               <InputYears
                 handleSelectYearsClose={handleSelectYearsClose}
-                changeSelectedMonth={changeSelectedMonth}
-                changeSelectedYear={changeSelectedYear}
                 selectedMonth={selectedMonth}
                 selectedYear={selectedYear}
+                updateSelectMonth={updateSelectMonth}
+                updateSelectYear={updateSelectedYear}
               />
             );
           }
@@ -142,19 +156,19 @@ const History = () => {
         if (path === '/daily/history' || path === `/group/${groupId}/daily/history`) {
           return (
             <div className="history__table-size">
-              <DailyHistory selectYears={year} selectMonth={customMonth} />
+              <DailyHistory selectYear={selectedYear} selectMonth={selectedMonth} />
             </div>
           );
         } else if (path === '/weekly/history') {
           return (
             <div className="history__table-size">
-              <MonthlyHistory />
+              <MonthlyHistory month={selectedMonth} year={selectedYear} />
             </div>
           );
         } else if (`/group/${groupId}/weekly/history`) {
           return (
             <div className="history__table-size">
-              <GroupMonthlyHistory />
+              <GroupMonthlyHistory month={selectedMonth} year={selectedYear} />
             </div>
           );
         }

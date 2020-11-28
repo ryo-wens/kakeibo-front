@@ -5,6 +5,7 @@ import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import { TransactionsReq } from '../../src/reducks/transactions/types';
+import { SelectYears } from '../../src/lib/date';
 import {
   fetchTransactionsList,
   fetchLatestTransactionsList,
@@ -35,14 +36,16 @@ process.on('unhandledRejection', console.dir);
 
 describe('async actions fetchTransactionsList', () => {
   const store = mockStore({ transactionsList: [] });
-  const date = new Date();
-  const year = date.getFullYear();
-  const month = '11';
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
 
   beforeEach(() => {
     store.clearActions();
   });
+
+  const years: SelectYears = {
+    selectedYear: '2020',
+    selectedMonth: '11',
+  };
+  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${years.selectedYear}-${years.selectedMonth}`;
 
   it('Get transactionsList if fetch succeeds', async () => {
     const mockResponse = transactionsList;
@@ -59,7 +62,7 @@ describe('async actions fetchTransactionsList', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchTransactionsList(String(year), month)(store.dispatch);
+    await fetchTransactionsList(years)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 });

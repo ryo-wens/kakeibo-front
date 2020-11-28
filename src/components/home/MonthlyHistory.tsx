@@ -3,15 +3,21 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchTransactionsList } from '../../reducks/transactions/operations';
 import { State } from '../../reducks/store/types';
 import { getTransactions } from '../../reducks/transactions/selectors';
-import { year, month, customMonth } from '../../lib/constant';
+import { month } from '../../lib/constant';
 import '../../assets/history/monthly-history.scss';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
 import { incomeTransactionType } from '../../lib/constant';
 import { getPathTemplateName } from '../../lib/path';
 import GroupMonthlyHistory from './GroupMothlyHistory';
+import { SelectYears } from '../../lib/date';
 
-const MonthlyHistory = () => {
+interface MonthlyHistoryProps {
+  year: number;
+  month: number;
+}
+
+const MonthlyHistory = (props: MonthlyHistoryProps) => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const pathName = getPathTemplateName(window.location.pathname);
@@ -20,8 +26,12 @@ const MonthlyHistory = () => {
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (pathName !== 'group' && !transactionsList.length) {
-      dispatch(fetchTransactionsList(String(year), customMonth));
+    const years: SelectYears = {
+      selectedYear: String(props.year),
+      selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
+    };
+    if (pathName !== 'group') {
+      dispatch(fetchTransactionsList(years));
     }
   }, [pathName]);
 
@@ -57,19 +67,19 @@ const MonthlyHistory = () => {
     let subTotalAmountRow: ReactElement[] = [];
     let weekNum = 1;
 
-    displayWeeks().map((displayWeek: WeeklyInfo, index: number) => {
+    displayWeeks(props.year, props.month).map((displayWeek: WeeklyInfo, index: number) => {
       headerRow = [
         ...headerRow,
         <th key={index} align="center">
           {weekNum++}週目
           <br />
-          {month + '月' + displayWeek.startDate + '日'}~{displayWeek.endDate + '日'}
+          {props.month + '月' + displayWeek.startDate + '日'}~{displayWeek.endDate + '日'}
         </th>,
       ];
 
       historyRow = [
         ...historyRow,
-        <td className="monthly-history-table__record-second" key={index}>
+        <td className="monthly-history-table__record-second" key={'week' + index}>
           {(() => {
             let items: ReactElement[] = [];
             let prevTransactionDate = '';
@@ -102,7 +112,11 @@ const MonthlyHistory = () => {
               ) {
                 items = [
                   ...items,
-                  <dl className="monthly-history-table__dl" key={id} onClick={() => handleOpen(id)}>
+                  <dl
+                    className="monthly-history-table__dl"
+                    key={'id' + index}
+                    onClick={() => handleOpen(id)}
+                  >
                     <dt>
                       <span>
                         {(() => {
@@ -206,7 +220,7 @@ const MonthlyHistory = () => {
             </>
           );
         } else {
-          return <GroupMonthlyHistory />;
+          return <GroupMonthlyHistory month={props.month} year={props.year} />;
         }
       })()}
     </>

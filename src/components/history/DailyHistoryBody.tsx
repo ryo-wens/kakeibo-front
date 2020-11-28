@@ -14,7 +14,7 @@ interface DailyHistoryBodyProps {
   transactionsList: TransactionsList;
   searchTransactionsList: TransactionsList;
   selectYears: number;
-  selectMonth: string;
+  selectMonth: number;
 }
 const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
   const dispatch = useDispatch();

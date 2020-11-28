@@ -11,16 +11,17 @@ import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operati
 import { fetchCategories } from '../reducks/categories/operations';
 import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 import { State } from '../reducks/store/types';
-import { customMonth, noTransactionMessage, year, month } from '../lib/constant';
+import { noTransactionMessage, year, month } from '../lib/constant';
 import { getPathTemplateName } from '../lib/path';
 import { DailyHistoryBody, GroupDailyHistoryBody } from '../components/history/index';
 import SearchTransaction from '../components/uikit/SearchTransaction';
 import '../assets/history/daily-history.scss';
 import { getPathGroupId } from '../lib/path';
+import { SelectYears } from '../lib/date';
 
 interface DailyHistoryProps {
-  selectYears: number;
-  selectMonth: string;
+  selectYear: number;
+  selectMonth: number;
 }
 
 const DailyHistory = (props: DailyHistoryProps) => {
@@ -49,12 +50,20 @@ const DailyHistory = (props: DailyHistoryProps) => {
   const [limit, setLimit] = useState<string>('');
 
   useEffect(() => {
+    const selectYears: SelectYears = {
+      selectedYear: String(props.selectYear),
+      selectedMonth: props.selectMonth <= 9 ? '0' + props.selectMonth : String(props.selectMonth),
+    };
     if (pathName !== 'group') {
-      dispatch(fetchTransactionsList(String(props.selectYears), customMonth));
+      dispatch(fetchTransactionsList(selectYears));
     } else if (pathName === 'group') {
-      dispatch(fetchGroupTransactionsList(props.selectYears, customMonth, groupId));
+      const selectYears: SelectYears = {
+        selectedYear: String(props.selectYear),
+        selectedMonth: props.selectMonth <= 9 ? '0' + props.selectMonth : String(props.selectMonth),
+      };
+      dispatch(fetchGroupTransactionsList(groupId, selectYears));
     }
-  }, [pathName, props.selectYears]);
+  }, [pathName]);
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -202,7 +211,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
             } else if (transactionsList.length) {
               return (
                 <DailyHistoryBody
-                  selectYears={props.selectYears}
+                  selectYears={props.selectYear}
                   selectMonth={props.selectMonth}
                   transactionsList={transactionsList}
                   searchTransactionsList={searchTransactionsList}
@@ -215,7 +224,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
             } else if (groupTransactionsList.length) {
               return (
                 <GroupDailyHistoryBody
-                  selectYears={props.selectYears}
+                  selectYears={props.selectYear}
                   selectMonth={props.selectMonth}
                   groupTransactionsList={groupTransactionsList}
                   groupSearchTransactionsList={groupSearchTransactionsList}

@@ -19,11 +19,14 @@ import moment from 'moment';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
-export const fetchTransactionsList = (year: string, customMonth: string) => {
+export const fetchTransactionsList = (selectYears: {
+  selectedYear: string;
+  selectedMonth: string;
+}) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${customMonth}`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
         {
           withCredentials: true,
         }

@@ -1,4 +1,5 @@
 import React, { useEffect } from 'react';
+import { year, month } from '../lib/constant';
 import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
 import { useDispatch, useSelector } from 'react-redux';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
@@ -36,7 +37,7 @@ const Home = () => {
         <div className="box__monthlyExpense">
           <HistoryPieChart />
         </div>
-        <MonthlyHistory />
+        <MonthlyHistory month={month} year={year} />
       </div>
       <div className="home__right">
         <div className="box__input" />

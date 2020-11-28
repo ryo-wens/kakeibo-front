@@ -8,6 +8,8 @@ import {
   getGroupIncomeCategories,
   getGroupExpenseCategories,
 } from '../../reducks/groupCategories/selectors';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { getUserId } from '../../reducks/users/selectors';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
@@ -17,13 +19,15 @@ interface GroupDailyHistoryBodyProps {
   groupTransactionsList: GroupTransactionsList;
   groupSearchTransactionsList: GroupTransactionsList;
   selectYears: number;
-  selectMonth: string;
+  selectMonth: number;
 }
 const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const groupIncomeCategories = getGroupIncomeCategories(selector);
   const groupExpenseCategories = getGroupExpenseCategories(selector);
+  const approvedGroup = getApprovedGroups(selector);
+  const userId = getUserId(selector);
   const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
   const [open, setOpen] = useState<boolean>(false);
@@ -103,6 +107,8 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                         categoryName={categoryName}
                         transactionDate={transaction_date}
                         transactionsType={transaction_type}
+                        approvedGroups={approvedGroup}
+                        paymentUserId={userId}
                       />
                     </td>
                     <td className="daily-history__td" align="center">
@@ -157,6 +163,8 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                         categoryName={categoryName}
                         transactionDate={transaction_date}
                         transactionsType={transaction_type}
+                        approvedGroups={approvedGroup}
+                        paymentUserId={userId}
                       />
                     </td>
                     <td className="daily-history__td" align="center">
