@@ -14,6 +14,17 @@ import { GroupTodoList } from '../groupTodoList/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
 
 export interface State {
+  users: {
+    id: string;
+    name: string;
+    email: string;
+    errorMessage: string;
+  };
+  groups: {
+    approvedGroups: Groups;
+    unapprovedGroups: Groups;
+    message: string;
+  };
   categories: {
     incomeList: Categories;
     expenseList: Categories;
@@ -46,17 +57,6 @@ export interface State {
     groupStandardBudgetsList: GroupStandardBudgetsList;
     groupYearlyBudgetsList: GroupYearlyBudgetsList;
     groupCustomBudgetsList: GroupCustomBudgetsList;
-  };
-  users: {
-    id: string;
-    name: string;
-    email: string;
-    errorMessage: string;
-  };
-  groups: {
-    approvedGroups: Groups;
-    unapprovedGroups: Groups;
-    message: string;
   };
   groupTasks: {
     groupTasksListForEachUser: GroupTasksListForEachUser;
