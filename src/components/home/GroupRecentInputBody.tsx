@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
+import { Groups } from '../../reducks/groups/types';
 import { EditTransactionModal } from '../uikit';
 import '../../assets/home/recent-input.scss';
 
 interface RecentInputBodyProps {
   groupLatestTransactionsList: GroupTransactionsList;
+  approvedGroup: Groups;
 }
 
 const GroupRecentInputBody = (props: RecentInputBodyProps) => {
@@ -32,6 +34,7 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
         memo,
         shop,
         amount,
+        payment_user_id,
       } = groupTransaction;
       const categoryName = {
         mediumCategory: medium_category_name !== null ? medium_category_name : '',
@@ -60,6 +63,8 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
             onClose={handleClose}
             transactionDate={transaction_date}
             transactionsType={transaction_type}
+            approvedGroups={props.approvedGroup}
+            paymentUserId={payment_user_id}
           />
         </div>
       );

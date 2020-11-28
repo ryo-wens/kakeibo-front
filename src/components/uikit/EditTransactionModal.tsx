@@ -22,6 +22,7 @@ import {
   ModalCategoryInput,
   TextInput,
   KindSelectBox,
+  SelectPayer,
 } from '../uikit/index';
 import { getExpenseCategories, getIncomeCategories } from '../../reducks/categories/selectors';
 import { State } from '../../reducks/store/types';
@@ -31,7 +32,9 @@ import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
+import { Groups } from '../../reducks/groups/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,6 +80,8 @@ interface InputModalProps {
     customCategory: string | null;
   };
   transactionsType: string;
+  paymentUserId?: string;
+  approvedGroups?: Groups;
 }
 
 const EditTransactionModal = (props: InputModalProps) => {
@@ -94,7 +99,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
   const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
-  const paymentUserId = 'taira';
+  const [paymentUserId, setPaymentUserId] = useState<string>(String(props.paymentUserId));
 
   const categoryId = (): CategoryId => {
     const categoriesId: CategoryId = {
@@ -192,6 +197,10 @@ const EditTransactionModal = (props: InputModalProps) => {
     setTransactionDate(changeTransactionDate);
   }, [props.transactionDate]);
 
+  useEffect(() => {
+    setPaymentUserId(String(props.paymentUserId));
+  }, [props.paymentUserId]);
+
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setAmount(event.target.value);
@@ -237,6 +246,13 @@ const EditTransactionModal = (props: InputModalProps) => {
       setTransactionDate(transactionDate as Date);
     },
     [setTransactionDate]
+  );
+
+  const handlePayerChange = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setPaymentUserId(event.target.value as string);
+    },
+    [setPaymentUserId]
   );
 
   const selectCategory = useCallback(
@@ -309,6 +325,9 @@ const EditTransactionModal = (props: InputModalProps) => {
 
   const body = (
     <div className={classes.paper}>
+      <button className="input-years__btn__close" onClick={props.onClose}>
+        <CloseIcon />
+      </button>
       <h3 className={classes.textPosition} id="simple-modal-title">
         家計簿の編集
       </h3>
@@ -337,6 +356,16 @@ const EditTransactionModal = (props: InputModalProps) => {
           onChange={handleAmountChange}
           value={amount}
         />
+        {pathName === 'group' && (
+          <SelectPayer
+            approvedGroups={props.approvedGroups as Groups}
+            groupId={groupId}
+            onChange={handlePayerChange}
+            pathName={pathName}
+            required={true}
+            value={paymentUserId}
+          />
+        )}
         <ModalCategoryInput
           kind={transactionsType}
           value={category}
