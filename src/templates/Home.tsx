@@ -1,4 +1,5 @@
 import React from 'react';
+import { year, month } from '../lib/constant';
 import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
 
 const Home = () => {
@@ -12,7 +13,7 @@ const Home = () => {
         <div className="box__monthlyExpense">
           <HistoryPieChart />
         </div>
-        <MonthlyHistory />
+        <MonthlyHistory month={month} year={year} />
       </div>
       <div className="home__right">
         <div className="box__input" />

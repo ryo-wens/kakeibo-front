@@ -6,11 +6,16 @@ import { getGroupTransactions } from '../../reducks/groupTransactions/selectors'
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { incomeTransactionType } from '../../lib/constant';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
-import { year, month, customMonth } from '../../lib/constant';
-import { displayWeeks, WeeklyInfo } from '../../lib/date';
+import { month } from '../../lib/constant';
+import { displayWeeks, WeeklyInfo, SelectYears } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
 
-const GroupMonthlyHistory = () => {
+interface GroupMonthlyHistoryProps {
+  year: number;
+  month: number;
+}
+
+const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const path = window.location.pathname;
@@ -22,8 +27,12 @@ const GroupMonthlyHistory = () => {
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
+    const years: SelectYears = {
+      selectedYear: String(props.year),
+      selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
+    };
     if (pathName === 'group') {
-      dispatch(fetchGroupTransactionsList(year, customMonth, groupId));
+      dispatch(fetchGroupTransactionsList(groupId, years));
     }
   }, [pathName, groupId]);
 
@@ -59,13 +68,13 @@ const GroupMonthlyHistory = () => {
     let subTotalAmountRow: ReactElement[] = [];
     let weekNum = 1;
 
-    displayWeeks().map((displayWeek: WeeklyInfo, index: number) => {
+    displayWeeks(props.year, props.month).map((displayWeek: WeeklyInfo, index: number) => {
       headerRow = [
         ...headerRow,
         <th key={index} align="center">
           {weekNum++}週目
           <br />
-          {month + '月' + displayWeek.startDate + '日'}~{displayWeek.endDate + '日'}
+          {props.month + '月' + displayWeek.startDate + '日'}~{displayWeek.endDate + '日'}
         </th>,
       ];
 
@@ -105,7 +114,11 @@ const GroupMonthlyHistory = () => {
               ) {
                 items = [
                   ...items,
-                  <dl className="monthly-history-table__dl" key={id} onClick={() => handleOpen(id)}>
+                  <dl
+                    className="monthly-history-table__dl"
+                    key={'id' + index}
+                    onClick={() => handleOpen(id)}
+                  >
                     <dt>
                       <span>
                         {(() => {

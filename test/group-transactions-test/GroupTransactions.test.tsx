@@ -5,6 +5,7 @@ import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
 import { GroupTransactionsReq } from '../../src/reducks/groupTransactions/types';
+import { SelectYears } from '../../src/lib/date';
 import {
   addGroupTransactions,
   fetchGroupTransactionsList,
@@ -34,7 +35,6 @@ import groupAccountList from './groupAccountList.json';
 import editGroupAccountList from './editGroupAccoountResponse.json';
 import deleteAccountResponse from './deleteGroupAccountResponse.json';
 import searchGroupTransactionsRes from './fetchSearchGroupTransactionsResponse.json';
-import { year, customMonth } from '../../src/lib/constant';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -52,7 +52,13 @@ describe('async actions groupTransactions', () => {
     const store = mockStore({ groupTransactions: { groupTransactionsList: [] } });
 
     const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}`;
+
+    const years: SelectYears = {
+      selectedYear: '2020',
+      selectedMonth: '11',
+    };
+
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${years.selectedYear}-${years.selectedMonth}`;
 
     const expectedAddActions = [
       {
@@ -63,7 +69,7 @@ describe('async actions groupTransactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupTransactionsList(year, customMonth, groupId)(store.dispatch);
+    await fetchGroupTransactionsList(groupId, years)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 
