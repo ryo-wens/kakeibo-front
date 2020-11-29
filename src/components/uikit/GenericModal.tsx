@@ -8,10 +8,8 @@ import { ModalInform } from './index';
 import { getModalMessage } from '../../reducks/modal/selectors';
 import { State } from '../../reducks/store/types';
 import { deleteTodoListItem } from '../../reducks/todoList/operations';
-import { groupWithdrawal } from '../../reducks/groups/operations';
 import { deleteGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
-import { push } from 'connected-react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,8 +31,8 @@ interface GenericModalProps {
   buttonLabel: string;
   menuLabel: string;
   modalText: string;
-  closeMenu?: () => void;
   todoListItemId?: number;
+  onClickGroupWithdrawal?: () => void;
 }
 
 const GenericModal = (props: GenericModalProps) => {
@@ -44,7 +42,7 @@ const GenericModal = (props: GenericModalProps) => {
   const [open, setOpen] = useState<boolean>(false);
   const modalMessage = getModalMessage(selector);
   const templateName = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
+  const pathGroupId = getPathGroupId(window.location.pathname);
 
   const openModal = () => {
     setOpen(true);
@@ -54,24 +52,14 @@ const GenericModal = (props: GenericModalProps) => {
     setOpen(false);
   };
 
-  const onClickGroupWithdrawal = () => {
-    const closeMenu = props.closeMenu as () => void;
-    closeMenu();
-    dispatch(groupWithdrawal(groupId));
-    dispatch(push('/'));
-  };
-
   const switchOperation = () => {
-    const todoListItemId = props.todoListItemId as number;
-    switch (true) {
-      case templateName === 'todo':
-        return dispatch(deleteTodoListItem(todoListItemId)) && closeModal();
-      case templateName === 'group' && typeof props.todoListItemId === 'number':
-        return dispatch(deleteGroupTodoListItem(groupId, todoListItemId)) && closeModal();
-      case templateName === `group`:
-        return onClickGroupWithdrawal();
-      default:
-        return;
+    const todoListItemId = props.todoListItemId;
+    if (templateName === 'todo' && todoListItemId) {
+      return dispatch(deleteTodoListItem(todoListItemId)) && closeModal();
+    } else if (templateName === 'group' && todoListItemId) {
+      return dispatch(deleteGroupTodoListItem(pathGroupId, todoListItemId)) && closeModal();
+    } else if (props.onClickGroupWithdrawal) {
+      return props.onClickGroupWithdrawal();
     }
   };
 

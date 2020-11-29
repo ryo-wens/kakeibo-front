@@ -5,6 +5,10 @@ import { IconButton } from '@material-ui/core';
 import { GenericModal } from '../uikit';
 import { EditGroupMembers, EditGroupName } from './index';
 import { Group } from '../../reducks/groups/types';
+import { groupWithdrawal } from '../../reducks/groups/operations';
+import { push } from 'connected-react-router';
+import { useDispatch } from 'react-redux';
+import { getPathGroupId } from '../../lib/path';
 
 interface MenuButtonProps {
   approvedGroup: Group;
@@ -12,6 +16,9 @@ interface MenuButtonProps {
 }
 
 const GroupMenuButton = (props: MenuButtonProps) => {
+  const dispatch = useDispatch();
+  const pathGroupId = getPathGroupId(window.location.pathname);
+  const groupId = props.approvedGroup.group_id;
   const [anchorEl, setAnchorEl] = React.useState<null | HTMLElement>(null);
 
   const openGroupMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -20,6 +27,15 @@ const GroupMenuButton = (props: MenuButtonProps) => {
 
   const closeGroupMenu = () => {
     setAnchorEl(null);
+  };
+
+  const onClickGroupWithdrawal = () => {
+    setAnchorEl(null);
+    props.closeMenu();
+    dispatch(groupWithdrawal(groupId));
+    if (pathGroupId === groupId) {
+      dispatch(push('/'));
+    }
   };
 
   return (
@@ -43,9 +59,9 @@ const GroupMenuButton = (props: MenuButtonProps) => {
         <EditGroupMembers modalTitleLabel={'メンバーの編集'} approvedGroup={props.approvedGroup} />
         <GenericModal
           buttonLabel={'退会'}
-          closeMenu={props.closeMenu}
           menuLabel={'グループを退会'}
           modalText={`${props.approvedGroup.group_name}を退会しますか？`}
+          onClickGroupWithdrawal={onClickGroupWithdrawal}
         />
       </Menu>
     </>

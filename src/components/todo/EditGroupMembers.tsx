@@ -65,7 +65,6 @@ const EditGroupMembers = (props: EditGroupMembersProps) => {
   const [userId, setUserId] = useState<string>('');
 
   const groupId = props.approvedGroup.group_id;
-
   const isBlankUserId = userId === '';
 
   const handleOpen = () => {
