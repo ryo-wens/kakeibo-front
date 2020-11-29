@@ -80,10 +80,13 @@ const EditTaskUser = (props: EditTaskUserProps) => {
             </span>
           ) : (
             <ul className="edit-task-user-modal__user-list">
-              {props.groupTasksListForEachUser.map((userTasksListItem: UserTasksListItem) => {
+              {props.groupTasksListForEachUser.map((groupTasksListItem: UserTasksListItem) => {
+                const idx = props.approvedGroup.approved_users_list.findIndex(
+                  (user) => user.user_id === groupTasksListItem.user_id
+                );
                 return (
-                  <li className="edit-task-user-modal__user-list-item" key={userTasksListItem.id}>
-                    {userTasksListItem.user_id}
+                  <li className="edit-task-user-modal__user-list-item" key={groupTasksListItem.id}>
+                    {props.approvedGroup.approved_users_list[idx].user_name}
                   </li>
                 );
               })}

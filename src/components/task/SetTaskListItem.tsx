@@ -94,7 +94,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
       ),
     },
     {
-      key: 'サイクル',
+      key: 'サイクル日数',
       value: (
         <InputInteger
           value={props.cycle}

@@ -57,11 +57,12 @@ const OperateTaskListForUser = (props: OperateTaskListForUserProps) => {
 
   const closeModal = useCallback(() => {
     setOpen(false);
-    setTaskItemName(taskItemName);
-    setTaskItemId(taskItemId);
-    setBaseDate(baseDate);
-    setCycle(cycle);
-    setTaskUserId(taskUserId);
+    setTaskItemName('');
+    setTaskItemId(0);
+    setBaseDate(date);
+    setCycleType('every');
+    setCycle(1);
+    setTaskUserId(0);
   }, [setOpen, setTaskItemName, setTaskItemId, setBaseDate, setCycle, setTaskUserId]);
 
   const handleDateChange = useCallback(

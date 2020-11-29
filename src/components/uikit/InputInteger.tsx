@@ -23,21 +23,28 @@ const InputInteger = (props: InputIntegerProps) => {
     [props.setCycle, props.setMessage]
   );
 
-  const currentCycleType = props.cycleType === 'none';
-
   return (
     <>
-      <input
-        className="input-integer"
-        type="text"
-        inputMode="numeric"
-        name="cycle"
-        value={props.value}
-        onChange={inputCycle}
-        required={true}
-        pattern="^\d*$"
-        disabled={currentCycleType}
-      />
+      {props.cycleType !== 'none' ? (
+        <input
+          className="input-integer"
+          type="text"
+          inputMode="numeric"
+          name="cycle"
+          value={props.value}
+          onChange={inputCycle}
+          required={true}
+          pattern="^\d*$"
+        />
+      ) : (
+        <input
+          className="input-integer"
+          type="text"
+          name="disabled-cycle"
+          value={'-'}
+          disabled={true}
+        />
+      )}
       {props.message !== '' && <InvalidMessage message={props.message} />}
     </>
   );

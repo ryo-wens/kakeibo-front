@@ -28,7 +28,7 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
       });
       const taskUser: TaskUser = {
         taskUserId: groupTasksListItem.id,
-        taskName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
       };
       taskUsers.push(taskUser);
     }
@@ -53,7 +53,7 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
   return (
     <form>
       <select
-        name={'select-task-name'}
+        name={'select-task-user'}
         className="select-task-user"
         required={true}
         onChange={selectTaskUser}
@@ -62,7 +62,7 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
         <option value={0}>ユーザーを選択</option>
         {taskUsers().map((taskUser) => (
           <option key={taskUser.taskUserId} value={taskUser.taskUserId}>
-            {taskUser.taskName}
+            {taskUser.taskUserName}
           </option>
         ))}
       </select>
