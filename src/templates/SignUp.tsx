@@ -105,12 +105,7 @@ const SignUp = (): JSX.Element => {
     password === '' ||
     confirmPassword === '' ||
     password.length < 8 ||
-    confirmPassword.length < 8 ||
-    userIdMessage != '' ||
-    userNameMessage !== '' ||
-    passwordMessage !== '' ||
-    confirmPasswordMessage !== '' ||
-    emailMessage !== '';
+    confirmPassword.length < 8;
 
   return (
     <section className="signup__form">
@@ -132,7 +127,7 @@ const SignUp = (): JSX.Element => {
                 value={userId}
                 type="userId"
                 onChange={inputUserId}
-                onBlur={() => onUserIdFocusOut(email, setUserIdMessage)}
+                onBlur={() => onUserIdFocusOut(userId, setUserIdMessage)}
               />
               <InvalidMessage message={userIdMessage} />
             </div>
@@ -162,7 +157,7 @@ const SignUp = (): JSX.Element => {
             </div>
             <div className="module-spacer--small" />
             <div>
-              <label>パスワード</label>
+              <label>パスワード（半角英数字の8文字以上で入力してください）</label>
               <TextArea
                 id={'password'}
                 value={password}

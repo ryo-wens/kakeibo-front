@@ -12,6 +12,7 @@ import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { getUserId } from '../../reducks/users/selectors';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
@@ -62,6 +63,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const approvedGroup = getApprovedGroups(selector);
+  const userId = getUserId(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [amount, setAmount] = useState<string>('');
@@ -75,11 +77,15 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const [paymentUserId, setPaymentUserId] = useState<string>('');
+  const [paymentUserId, setPaymentUserId] = useState<string>(userId);
 
   useEffect(() => {
     setTransactionDate(props.selectDate);
   }, [props.selectDate]);
+
+  useEffect(() => {
+    setPaymentUserId(userId);
+  }, [userId]);
 
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {

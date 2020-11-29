@@ -1,24 +1,41 @@
-import React from 'react';
+import React, { useCallback, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { fetchTransactionsList } from '../../reducks/transactions/operations';
 import { fetchGroupTransactionsList } from '../../reducks/groupTransactions/operations';
-import { year, month, years, months } from '../../lib/constant';
+import { years, months } from '../../lib/constant';
 import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/modules/input-years.scss';
+import { SelectYears } from '../../lib/date';
 
 interface InputYearsProps {
   handleSelectYearsClose: () => void;
-  selectedYear: number[];
+  selectedYear: number;
   selectedMonth: number;
-  changeSelectedYear: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  changeSelectedMonth: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  updateSelectYear: (year: number) => void;
+  updateSelectMonth: (month: number) => void;
 }
 
 const InputYears = (props: InputYearsProps) => {
   const dispatch = useDispatch();
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
+  const [itemYear, setItemYear] = useState<number>(props.selectedYear);
+  const [itemMonth, setItemMonth] = useState<number>(props.selectedMonth);
+
+  const changeItemYear = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setItemYear(Number(event.target.value));
+    },
+    [setItemYear]
+  );
+
+  const changeItemMonth = useCallback(
+    (event: React.ChangeEvent<{ value: unknown }>) => {
+      setItemMonth(Number(event.target.value));
+    },
+    [setItemMonth]
+  );
 
   return (
     <>
@@ -28,8 +45,8 @@ const InputYears = (props: InputYearsProps) => {
         </button>
         <form className="input-years__select-position">
           <select
-            defaultValue={year}
-            onChange={props.changeSelectedYear}
+            defaultValue={props.selectedYear}
+            onChange={changeItemYear}
             className="input-years__select"
           >
             {years.map((year, index) => (
@@ -40,9 +57,9 @@ const InputYears = (props: InputYearsProps) => {
           </select>
           年
           <select
-            defaultValue={month}
+            defaultValue={props.selectedMonth}
             className="input-years__select"
-            onChange={props.changeSelectedMonth}
+            onChange={changeItemMonth}
           >
             {months.map((month, index) => (
               <option key={index} value={month}>
@@ -56,21 +73,24 @@ const InputYears = (props: InputYearsProps) => {
           <button
             className="input-years__btn__display"
             onClick={() => {
+              const selectYears: SelectYears = {
+                selectedYear: String(itemYear),
+                selectedMonth: itemMonth <= 9 ? '0' + itemMonth : String(itemMonth),
+              };
               if (pathName !== 'group') {
-                dispatch(
-                  fetchTransactionsList(
-                    String(props.selectedYear),
-                    ('0' + props.selectedMonth).slice(-2)
-                  )
-                ) && props.handleSelectYearsClose();
+                dispatch(fetchTransactionsList(selectYears));
+                props.updateSelectYear(itemYear);
+                props.updateSelectMonth(itemMonth);
+                props.handleSelectYearsClose();
               } else {
-                dispatch(
-                  fetchGroupTransactionsList(
-                    Number(props.selectedYear),
-                    String(props.selectedMonth),
-                    groupId
-                  )
-                );
+                const selectYears: SelectYears = {
+                  selectedYear: String(itemYear),
+                  selectedMonth: itemMonth <= 9 ? '0' + itemMonth : String(itemMonth),
+                };
+                dispatch(fetchGroupTransactionsList(groupId, selectYears));
+                props.updateSelectYear(itemYear);
+                props.updateSelectMonth(itemMonth);
+                props.handleSelectYearsClose();
               }
             }}
           >

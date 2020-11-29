@@ -1,4 +1,4 @@
-import { year, month, customMonth } from './constant';
+import { customMonth, year } from './constant';
 
 export const dateStringToDate = (date: string) => {
   const prevDates = date.split(/[/()]/, 3);
@@ -70,7 +70,7 @@ export interface WeeklyInfo {
 }
 export type Weeks = Array<WeeklyInfo>;
 
-export const displayWeeks = () => {
+export const displayWeeks = (year: number, month: number) => {
   const startDate = new Date(year, month - 1, 1);
   const endDate = new Date(year, month, 0);
   const endDayCount = endDate.getDate();
@@ -126,4 +126,68 @@ export const selectedDate = (startDay: number, endDay: number): Date[] => {
   }
 
   return selectedDays;
+};
+
+export interface SelectYears {
+  selectedYear: string;
+  selectedMonth: string;
+}
+
+export const prevSelectYears = (selectedYear: number, selectedMonth: number): SelectYears => {
+  const nextMonth = selectedMonth - 1;
+
+  if (nextMonth === 0) {
+    return {
+      selectedYear: String(selectedYear - 1),
+      selectedMonth: '12',
+    };
+  } else if (nextMonth <= 9) {
+    return {
+      selectedYear: String(selectedYear),
+      selectedMonth: '0' + nextMonth,
+    };
+  } else {
+    return {
+      selectedYear: String(selectedYear),
+      selectedMonth: String(nextMonth),
+    };
+  }
+};
+
+export const nextSelectYears = (selectedYear: number, selectedMonth: number): SelectYears => {
+  const nextMonth = selectedMonth + 1;
+
+  if (nextMonth === 13) {
+    return {
+      selectedYear: String(selectedYear + 1),
+      selectedMonth: '01',
+    };
+  } else if (nextMonth <= 9) {
+    return {
+      selectedYear: String(selectedYear),
+      selectedMonth: '0' + nextMonth,
+    };
+  } else {
+    return {
+      selectedYear: String(selectedYear),
+      selectedMonth: String(nextMonth),
+    };
+  }
+};
+
+export interface BaseYear {
+  selectedYear: boolean;
+  selectedMonth: boolean;
+}
+
+export const prevButtonDisable = (selectedYear: number, selectedMonth: number) => {
+  const minimumBaseYear = year - 3;
+
+  return selectedYear === minimumBaseYear && selectedMonth === 1;
+};
+
+export const nextButtonDisable = (selectedYear: number, selectedMonth: number) => {
+  const maximumBaseYear = year + 3;
+
+  return selectedYear === maximumBaseYear && selectedMonth === 12;
 };

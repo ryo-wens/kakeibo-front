@@ -67,12 +67,7 @@ const LogIn = () => {
     setPassword('');
   }, [setEmail, setPassword]);
 
-  const unLogIn =
-    email === '' ||
-    password === '' ||
-    password.length < 8 ||
-    emailMessage !== '' ||
-    passwordMessage !== '';
+  const unLogIn = email === '' || password === '' || password.length < 8;
 
   return (
     <section className="login__form">
