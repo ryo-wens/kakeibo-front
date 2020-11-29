@@ -37,7 +37,6 @@ const EditGroupName = (props: EditGroupNameProps) => {
   const [groupName, setGroupName] = useState<string>('');
 
   const groupId = props.approvedGroup.group_id;
-
   const initialGroupName = props.approvedGroup.group_name;
 
   const isBlankGroupName = groupName === '';
