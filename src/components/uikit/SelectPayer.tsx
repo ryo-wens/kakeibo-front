@@ -1,5 +1,5 @@
 import React from 'react';
-import { Groups, GroupUsers } from '../../reducks/groups/types';
+import { ApprovedGroupUsers, Groups } from '../../reducks/groups/types';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import InputLabel from '@material-ui/core/InputLabel';
 import MenuItem from '@material-ui/core/MenuItem';
@@ -30,8 +30,8 @@ interface SelectPayerProps {
 const SelectPayer = (props: SelectPayerProps) => {
   const classes = useStyles();
 
-  const paymentUsers = (): GroupUsers => {
-    let users!: GroupUsers;
+  const paymentUsers = (): ApprovedGroupUsers => {
+    let users!: ApprovedGroupUsers;
 
     for (const group of props.approvedGroups) {
       if (props.groupId === group.group_id) {
