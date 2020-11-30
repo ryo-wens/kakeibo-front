@@ -119,7 +119,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           )
         );
       } else if (templateName === 'group') {
-        return dispatch(
+        dispatch(
           editGroupTodoListItem(
             groupId,
             todoListItemId,

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchExpiredTodoList, fetchMonthTodoList } from '../reducks/todoList/operations';
@@ -11,9 +11,7 @@ import {
 } from '../reducks/todoList/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { DatePicker } from '../components/uikit';
-import { ExpiredTodoList, MonthlyTodoList, TodoButton, TodoMenu } from '../components/todo';
-import { dateToMonthString, getFirstDayOfNextMonth, getLastDayOfPrevMonth } from '../lib/date';
+import { ExpiredTodoList, MonthlyTodoList, SkipMonth, TodoMenu } from '../components/todo';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
   getGroupExpiredTodoList,
@@ -101,47 +99,11 @@ const MonthlyTodo = () => {
     }
   }, [groupId]);
 
-  const handleDateChange = useCallback(
-    (selectedDate) => {
-      setSelectedDate(selectedDate as Date);
-    },
-    [setSelectedDate]
-  );
-
-  const getTodayDate = useCallback(() => {
-    setSelectedDate(date);
-  }, [selectedDate]);
-
-  const switchFetchMonthTodoList = (date: Date) => {
-    const year = String(date.getFullYear());
-    const month: string = ('0' + (date.getMonth() + 1)).slice(-2);
-    if (entityType !== 'group') {
-      dispatch(fetchMonthTodoList(year, month));
-    } else if (entityType === 'group') {
-      dispatch(fetchGroupMonthTodoList(groupId, year, month));
-    }
-  };
-
-  const getPrevMonth = useCallback(() => {
-    const lastDayOfPrevMonth = getLastDayOfPrevMonth(selectedDate);
-    setSelectedDate(lastDayOfPrevMonth);
-    switchFetchMonthTodoList(lastDayOfPrevMonth);
-  }, [selectedDate, setSelectedDate]);
-
-  const getNextMonth = useCallback(() => {
-    const firstDayOfNextMonth = getFirstDayOfNextMonth(selectedDate);
-    setSelectedDate(firstDayOfNextMonth);
-    switchFetchMonthTodoList(firstDayOfNextMonth);
-  }, [selectedDate, setSelectedDate]);
-
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {
       return <ExpiredTodoList expiredTodoList={todoList} />;
     }
   };
-
-  const equalsSelectedMonthAndCurrentMonth =
-    dateToMonthString(selectedDate) === dateToMonthString(new Date());
 
   return (
     <>
@@ -150,24 +112,7 @@ const MonthlyTodo = () => {
         {entityType !== 'group'
           ? existsExpiredTodoList(expiredTodoList)
           : existsExpiredTodoList(groupExpiredTodoList)}
-        <div className={classes.date}>
-          <div className={classes.datePicker}>
-            <DatePicker
-              value={selectedDate}
-              onChange={handleDateChange}
-              id={'date-picker-dialog'}
-              label={''}
-              required={false}
-            />
-          </div>
-          <TodoButton
-            label={'<'}
-            disabled={equalsSelectedMonthAndCurrentMonth}
-            onClick={() => getPrevMonth()}
-          />
-          <TodoButton label={'>'} disabled={false} onClick={() => getNextMonth()} />
-          <TodoButton label={'今日'} disabled={false} onClick={() => getTodayDate()} />
-        </div>
+        <SkipMonth selectDate={selectedDate} setSelectDate={setSelectedDate} />
         <MonthlyTodoList
           selectedDate={selectedDate}
           groupId={groupId}

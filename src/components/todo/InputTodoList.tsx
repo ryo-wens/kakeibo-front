@@ -98,11 +98,6 @@ const InputTodoList = (props: InputTodoListProps) => {
               onChange={props.inputTodoContent}
             />
             <div className={classes.buttons} style={{ justifyContent: 'flex-end' }}>
-              <TodoButton
-                label={'画像をアップロード'}
-                disabled={false}
-                onClick={() => console.log('クリック')}
-              />
               <MuiPickersUtilsProvider utils={DateFnsUtils}>
                 <KeyboardDatePicker
                   margin="normal"
