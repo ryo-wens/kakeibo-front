@@ -29,6 +29,7 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
       const taskUser: TaskUser = {
         taskUserId: groupTasksListItem.id,
         taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        taskUserColor: approvedGroup.approved_users_list[approvedUserIdx].color_code,
       };
       taskUsers.push(taskUser);
     }
