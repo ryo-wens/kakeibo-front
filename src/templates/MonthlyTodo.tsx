@@ -29,7 +29,7 @@ import { GroupTodoList } from '../reducks/groupTodoList/types';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      width: '700px',
+      width: '600px',
       margin: '40px 0px 0px 200px',
     },
     date: {

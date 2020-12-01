@@ -22,6 +22,9 @@ const useStyles = makeStyles(() =>
       outline: 'none',
       width: '70px',
     },
+    dueDate: {
+      color: '#666',
+    },
   })
 );
 
@@ -42,11 +45,15 @@ const ExpiredTodoList = (props: ExpiredTodoListProps) => {
   };
 
   const expiredTodoList = props.expiredTodoList.map((todoListItem: TodoListItem) => {
+    const displayDueDate = () => {
+      return <span className={classes.dueDate}>{todoListItem.due_date}</span>;
+    };
     return (
       <TodoListItemComponent
         key={todoListItem.id}
         todoListItem={todoListItem}
         selectedDate={date}
+        displayDueDate={displayDueDate}
       />
     );
   });
