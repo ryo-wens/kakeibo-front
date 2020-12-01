@@ -6,12 +6,12 @@ import { ExistsTodoLists } from './index';
 import { TodoList } from '../../reducks/todoList/types';
 import { GroupTodoList } from '../../reducks/groupTodoList/types';
 
-interface SwitchTodoListsProps {
+interface SwitchTodoListProps {
   implementationTodoList: TodoList | GroupTodoList;
   dueTodoList: TodoList | GroupTodoList;
 }
 
-const SwitchTodoLists = (props: SwitchTodoListsProps) => {
+const SwitchTodoList = (props: SwitchTodoListProps) => {
   const [value, setValue] = useState<number>(0);
 
   const switchTab = (event: React.ChangeEvent<unknown>, value: number) => {
@@ -44,4 +44,4 @@ const SwitchTodoLists = (props: SwitchTodoListsProps) => {
     </>
   );
 };
-export default SwitchTodoLists;
+export default SwitchTodoList;

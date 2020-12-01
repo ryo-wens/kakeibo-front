@@ -24,7 +24,11 @@ import {
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
 import { errorHandling } from '../../lib/validation';
-import { dateStringToMonthString, dateToDateString, dateToMonthString } from '../../lib/date';
+import {
+  dateStringToMonthString,
+  dateToDateString,
+  dateToYearAndMonthString,
+} from '../../lib/date';
 
 export const createGroupTodoListItem = (
   groupId: number,
@@ -127,7 +131,7 @@ export const createGroupTodoListItem = (
         responseDate: string
       ) => {
         let nextTodoList: GroupTodoList = [];
-        if (dateToMonthString(selectedDate) === responseMonth) {
+        if (dateToYearAndMonthString(selectedDate) === responseMonth) {
           let idx = 0;
           if (responseDate === result.data.implementation_date) {
             idx = prevTodoList.findIndex(
@@ -138,7 +142,7 @@ export const createGroupTodoListItem = (
           }
 
           nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
-        } else if (dateToMonthString(selectedDate) !== responseMonth) {
+        } else if (dateToYearAndMonthString(selectedDate) !== responseMonth) {
           nextTodoList = [...prevTodoList];
         }
         return nextTodoList;
@@ -313,7 +317,7 @@ export const editGroupTodoListItem = (
           (listItem: GroupTodoListItem) => listItem.id === result.data.id
         );
 
-        if (dateToMonthString(selectedDate) === responseMonth) {
+        if (dateToYearAndMonthString(selectedDate) === responseMonth) {
           const prevCompleteFlag = prevTodoList[prevItemIdx].complete_flag;
           if (prevCompleteFlag !== result.data.complete_flag) {
             prevTodoList[prevItemIdx] = result.data;
@@ -331,7 +335,7 @@ export const editGroupTodoListItem = (
 
             nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
           }
-        } else if (dateToMonthString(selectedDate) !== responseMonth) {
+        } else if (dateToYearAndMonthString(selectedDate) !== responseMonth) {
           prevTodoList.splice(prevItemIdx, 1);
           nextTodoList = [...prevTodoList];
         }

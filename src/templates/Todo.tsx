@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
-import { AddTodo, ExpiredTodoList, TodoMenu } from '../components/todo';
+import { AddTodo, ExpiredTodoList, SwitchTodoList, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   getExpiredTodoList,
@@ -15,21 +15,20 @@ import {
   getTodayTodoListMessage,
 } from '../reducks/todoList/selectors';
 import {
-  fetchDateTodoList,
-  fetchExpiredTodoList,
-  fetchMonthTodoList,
-} from '../reducks/todoList/operations';
-import { getWeekDay } from '../lib/date';
-import SwitchTodoLists from '../components/todo/SwitchTodoLists';
-import {
-  fetchGroupExpiredTodoList,
-  fetchGroupTodayTodoList,
-} from '../reducks/groupTodoList/operations';
-import {
   getGroupTodayImplementationTodoList,
   getGroupTodayDueTodoList,
   getGroupExpiredTodoList,
 } from '../reducks/groupTodoList/selectors';
+import { getWeekDay } from '../lib/date';
+import {
+  fetchDateTodoList,
+  fetchExpiredTodoList,
+  fetchMonthTodoList,
+} from '../reducks/todoList/operations';
+import {
+  fetchGroupExpiredTodoList,
+  fetchGroupTodayTodoList,
+} from '../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
 import { TodoList } from '../reducks/todoList/types';
@@ -128,12 +127,12 @@ const Todo = () => {
           今日 {today.getMonth() + 1}/{today.getDate()} ({getWeekDay(today)})
         </span>
         {entityType !== 'group' ? (
-          <SwitchTodoLists
+          <SwitchTodoList
             implementationTodoList={todayImplementationTodoList}
             dueTodoList={todayDueTodoList}
           />
         ) : (
-          <SwitchTodoLists
+          <SwitchTodoList
             implementationTodoList={groupTodayImplementationTodoList}
             dueTodoList={groupTodayDueTodoList}
           />
