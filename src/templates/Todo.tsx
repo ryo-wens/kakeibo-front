@@ -62,6 +62,23 @@ const Todo = () => {
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
 
+  const fetchGroupTodoList = () => {
+    dispatch(fetchGroups());
+    dispatch(fetchGroupExpiredTodoList(groupId));
+    dispatch(fetchGroupTodayTodoList(groupId, todayYear, todayMonth, todayDate));
+    dispatch(fetchGroupMonthTodoList(groupId, todayYear, todayMonth));
+  };
+
+  useEffect(() => {
+    if (entityType === 'group') {
+      fetchGroupTodoList();
+      const interval = setInterval(() => {
+        fetchGroupTodoList();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
   useEffect(() => {
     if (entityType !== 'group' && !expiredTodoList.length) {
       dispatch(fetchExpiredTodoList());
@@ -89,15 +106,6 @@ const Todo = () => {
       dispatch(fetchMonthTodoList(todayYear, todayMonth));
     }
   }, [todayYear, todayMonth]);
-
-  useEffect(() => {
-    if (entityType === 'group') {
-      dispatch(fetchGroups());
-      dispatch(fetchGroupExpiredTodoList(groupId));
-      dispatch(fetchGroupTodayTodoList(groupId, todayYear, todayMonth, todayDate));
-      dispatch(fetchGroupMonthTodoList(groupId, todayYear, todayMonth));
-    }
-  }, []);
 
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {
