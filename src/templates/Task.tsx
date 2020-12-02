@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
-import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
+import { getApprovedGroups } from '../reducks/groups/selectors';
 import { fetchGroups } from '../reducks/groups/operations';
 import { Group } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
@@ -25,28 +25,23 @@ const Task = () => {
 
   const selector = useSelector((state: State) => state);
   const approvedGroups = getApprovedGroups(selector);
-  const unapprovedGroups = getUnapprovedGroups(selector);
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
   const groupTasksList = getGroupTasksList(selector);
   const groupIdx = approvedGroups.findIndex((approvedGroup) => approvedGroup.group_id === groupId);
   const approvedGroup: Group = approvedGroups[groupIdx];
 
-  useEffect(() => {
-    if (!approvedGroups.length && !unapprovedGroups.length) {
-      dispatch(fetchGroups());
-    }
-  }, []);
+  const fetchGroupTasks = () => {
+    dispatch(fetchGroups());
+    dispatch(fetchGroupTasksList(groupId));
+    dispatch(fetchGroupTasksListEachUser(groupId));
+  };
 
   useEffect(() => {
-    if (!groupTasksList.length) {
-      dispatch(fetchGroupTasksList(groupId));
-    }
-  }, []);
-
-  useEffect(() => {
-    if (!groupTasksListForEachUser.length) {
-      dispatch(fetchGroupTasksListEachUser(groupId));
-    }
+    fetchGroupTasks();
+    const interval = setInterval(() => {
+      fetchGroupTasks();
+    }, 3000);
+    return () => clearInterval(interval);
   }, []);
 
   return (

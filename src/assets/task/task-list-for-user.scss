@@ -3,7 +3,6 @@
 
 .task-list-for-user {
   &__item{
-    color: $task-sub_color;
     border-left: #F4F5F7 solid 2.5px;
     width: calc(100%/8);
     height: 40px;
@@ -18,10 +17,13 @@
   &__user-name {
     position: relative;
     display: inline-block;
-    font-size: 1.0rem;
-    border: $task-sub_color solid 1.5px;
+    width: 90%;
+    border: solid 1.5px;
     border-radius: 0.3rem;
-    padding: 2.5px 50px;
+    color: $task-main_color;
+    font-size: 1.0rem;
+    font-weight: bold;
+    padding: 2.5px 0;
   }
 
   &__blank {

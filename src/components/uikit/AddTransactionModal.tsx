@@ -23,6 +23,7 @@ import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
 import { State } from '../../reducks/store/types';
+import { customMonth } from '../../lib/constant';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -188,7 +189,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const personalAddTransaction = () => {
     async function personalTransaction() {
       await dispatch(addLatestTransactions(personalAddRequestData));
-      dispatch(addTransactions());
+      dispatch(addTransactions(customMonth));
       props.onClose();
       resetForm();
     }
@@ -198,7 +199,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const groupAddTransaction = () => {
     async function groupTransaction() {
       await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
-      dispatch(addGroupTransactions());
+      dispatch(addGroupTransactions(customMonth));
       props.onClose();
       resetForm();
     }
