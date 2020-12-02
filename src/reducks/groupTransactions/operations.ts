@@ -22,7 +22,6 @@ import { State } from '../store/types';
 import { push } from 'connected-react-router';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 import moment from 'moment';
-import { customMonth } from '../../lib/constant';
 
 export const fetchGroupTransactionsList = (
   groupId: number,
@@ -148,7 +147,7 @@ export const addGroupLatestTransactions = (
   };
 };
 
-export const addGroupTransactions = () => {
+export const addGroupTransactions = (customMonth: string) => {
   return (dispatch: Dispatch<Action>, getState: () => State) => {
     const prevGroupTransactionsList = getState().groupTransactions.groupTransactionsList;
     const groupLatestTransactionsList = getState().groupTransactions.groupLatestTransactionsList;

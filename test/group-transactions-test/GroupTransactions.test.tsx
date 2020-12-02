@@ -203,7 +203,7 @@ describe('async actions groupTransactions', () => {
 
     axiosMock.onPost(url).reply(201, mockResponse);
 
-    await addGroupTransactions()(
+    await addGroupTransactions('11')(
       store.dispatch,
       // @ts-ignore
       getState
