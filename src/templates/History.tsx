@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { useDispatch } from 'react-redux';
 import { push } from 'connected-react-router';
 import { fetchTransactionsList } from '../reducks/transactions/operations';
@@ -10,6 +10,7 @@ import {
   nextSelectYears,
   prevButtonDisable,
   nextButtonDisable,
+  SelectYears,
 } from '../lib/date';
 import { DailyHistory } from './index';
 import { MonthlyHistory, GroupMonthlyHistory } from '../components/home';
@@ -18,6 +19,8 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import '../assets/history/history.scss';
+import { fetchGroups } from '../reducks/groups/operations';
+import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 
 const History = () => {
   const dispatch = useDispatch();
@@ -27,6 +30,26 @@ const History = () => {
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [openSelectYears, setOpenSelectYears] = useState<boolean>(false);
+
+  const fetchGroupHistoryData = () => {
+    const years: SelectYears = {
+      selectedYear: String(selectedYear),
+      selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
+    };
+    dispatch(fetchGroups());
+    dispatch(fetchGroupTransactionsList(groupId, years));
+    dispatch(fetchGroupCategories(groupId));
+  };
+
+  useEffect(() => {
+    if (pathName === 'group') {
+      fetchGroupHistoryData();
+      const interval = setInterval(() => {
+        fetchGroupHistoryData();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [selectedYear, selectedMonth]);
 
   const handleSelectYearsOpen = useCallback(() => {
     setOpenSelectYears(true);
