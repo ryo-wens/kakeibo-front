@@ -22,12 +22,20 @@ const RecentInput = () => {
   const groupId = getPathGroupId(window.location.pathname);
 
   useEffect(() => {
+    if (pathName === 'group') {
+      dispatch(fetchLatestGroupTransactionsList(groupId));
+      const interval = setInterval(() => {
+        dispatch(fetchLatestGroupTransactionsList(groupId));
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, []);
+
+  useEffect(() => {
     if (pathName !== 'group' && !latestTransactionsList.length) {
       dispatch(fetchLatestTransactionsList());
-    } else if (pathName === 'group') {
-      dispatch(fetchLatestGroupTransactionsList(groupId));
     }
-  }, [pathName, groupId]);
+  }, []);
 
   return (
     <div className="recent-input box__recent ">
