@@ -22,7 +22,6 @@ import {
   fetchGroupMonthTodoList,
   fetchGroupTodayTodoList,
 } from '../reducks/groupTodoList/operations';
-import { date } from '../lib/constant';
 import { TodoList } from '../reducks/todoList/types';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
 
@@ -55,16 +54,33 @@ const MonthlyTodo = () => {
   const groupMonthDueTodoList = getGroupMonthDueTodoList(selector);
   const entityType = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
-  const todayYear = String(date.getFullYear());
-  const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
-  const todayDate: string = ('0' + date.getDate()).slice(-2);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const year = String(selectedDate.getFullYear());
+  const month: string = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
+  const date: string = ('0' + selectedDate.getDate()).slice(-2);
+
+  const fetchGroupTodoList = () => {
+    dispatch(fetchGroups());
+    dispatch(fetchGroupExpiredTodoList(groupId));
+    dispatch(fetchGroupTodayTodoList(groupId, year, month, date));
+    dispatch(fetchGroupMonthTodoList(groupId, year, month));
+  };
+
+  useEffect(() => {
+    if (entityType === 'group') {
+      fetchGroupTodoList();
+      const interval = setInterval(() => {
+        fetchGroupTodoList();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [selectedDate]);
 
   useEffect(() => {
     if (entityType !== 'group' && !expiredTodoList.length) {
       dispatch(fetchExpiredTodoList());
     }
-  }, [entityType]);
+  }, []);
 
   useEffect(() => {
     if (
@@ -73,18 +89,9 @@ const MonthlyTodo = () => {
       !monthDueTodoList.length &&
       !monthTodoListMessage
     ) {
-      dispatch(fetchMonthTodoList(todayYear, todayMonth));
+      dispatch(fetchMonthTodoList(year, month));
     }
   }, []);
-
-  useEffect(() => {
-    if (entityType === 'group') {
-      dispatch(fetchGroups());
-      dispatch(fetchGroupExpiredTodoList(groupId));
-      dispatch(fetchGroupTodayTodoList(groupId, todayYear, todayMonth, todayDate));
-      dispatch(fetchGroupMonthTodoList(groupId, todayYear, todayMonth));
-    }
-  }, [entityType, groupId]);
 
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {
