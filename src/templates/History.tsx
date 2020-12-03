@@ -30,6 +30,8 @@ const History = () => {
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [openSelectYears, setOpenSelectYears] = useState<boolean>(false);
+  const [itemYear, setItemYear] = useState<number>(selectedYear);
+  const [itemMonth, setItemMonth] = useState<number>(selectedMonth);
 
   const fetchGroupHistoryData = () => {
     const years: SelectYears = {
@@ -59,7 +61,7 @@ const History = () => {
     setOpenSelectYears(false);
   }, [setOpenSelectYears]);
 
-  const updateSelectedYear = (year: number) => {
+  const updateSelectYear = (year: number) => {
     setSelectedYear(year);
   };
 
@@ -79,6 +81,28 @@ const History = () => {
 
     setSelectedYear(Number(nextYears.selectedYear));
     setSelectedMonth(Number(nextYears.selectedMonth));
+  };
+
+  const onClickDisplayYears = () => {
+    const selectYears: SelectYears = {
+      selectedYear: String(itemYear),
+      selectedMonth: itemMonth <= 9 ? '0' + itemMonth : String(itemMonth),
+    };
+    if (pathName !== 'group') {
+      dispatch(fetchTransactionsList(selectYears));
+      updateSelectYear(itemYear);
+      updateSelectMonth(itemMonth);
+      handleSelectYearsClose();
+    } else {
+      const selectYears: SelectYears = {
+        selectedYear: String(itemYear),
+        selectedMonth: itemMonth <= 9 ? '0' + itemMonth : String(itemMonth),
+      };
+      dispatch(fetchGroupTransactionsList(groupId, selectYears));
+      updateSelectYear(itemYear);
+      updateSelectMonth(itemMonth);
+      handleSelectYearsClose();
+    }
   };
 
   return (
@@ -166,10 +190,11 @@ const History = () => {
             return (
               <InputYears
                 handleSelectYearsClose={handleSelectYearsClose}
-                selectedMonth={selectedMonth}
                 selectedYear={selectedYear}
-                updateSelectMonth={updateSelectMonth}
-                updateSelectYear={updateSelectedYear}
+                selectedMonth={selectedMonth}
+                setItemYear={setItemYear}
+                setItemMonth={setItemMonth}
+                onClickDisplayYears={onClickDisplayYears}
               />
             );
           }
