@@ -20,6 +20,7 @@ import TableHead from '@material-ui/core/TableHead';
 import TableBody from '@material-ui/core/TableBody';
 import GenericButton from '../uikit/GenericButton';
 import { getPathGroupId, getGroupPathYear, getGroupPathMonth } from '../../lib/path';
+import { fetchGroups } from '../../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -74,13 +75,28 @@ const EditGroupStandardBudgets = () => {
   const groupCustomBudgetsList = getGroupCustomBudgets(selector);
   const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
   const unInputBudgets = groupCustomBudgets === groupCustomBudgetsList;
+  const [editing, setEditing] = useState<boolean>(false);
 
-  useEffect(() => {
+  const fetchEditGroupStandardBudgetsData = () => {
     async function fetchGroupBudgets() {
       await dispatch(fetchGroupStandardBudgets(groupId));
       dispatch(copyGroupStandardBudgets());
     }
     fetchGroupBudgets();
+    dispatch(fetchGroups());
+  };
+
+  useEffect(() => {
+    if (!editing) {
+      const interval = setInterval(() => {
+        fetchEditGroupStandardBudgetsData();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [groupCustomBudgets]);
+
+  useEffect(() => {
+    fetchEditGroupStandardBudgetsData();
   }, []);
 
   useEffect(() => {
@@ -110,6 +126,7 @@ const EditGroupStandardBudgets = () => {
                 const newBudgets = [...groupCustomBudgets];
                 newBudgets[index].budget = (event.target.value as unknown) as number;
                 setGroupCustomBudgets(newBudgets);
+                setEditing(true);
               };
               return (
                 <TableRow key={groupCustomBudget.big_category_id}>
@@ -137,7 +154,7 @@ const EditGroupStandardBudgets = () => {
         <GenericButton
           label={'更新する'}
           disabled={unInputBudgets}
-          onClick={() =>
+          onClick={() => {
             dispatch(
               addGroupCustomBudgets(
                 groupInYear,
@@ -152,8 +169,9 @@ const EditGroupStandardBudgets = () => {
                   return rest;
                 })
               )
-            ) && dispatch(push(`/group/${groupId}/yearly/budgets`))
-          }
+            );
+            dispatch(push(`/group/${groupId}/yearly/budgets`));
+          }}
         />
       </div>
     </>
