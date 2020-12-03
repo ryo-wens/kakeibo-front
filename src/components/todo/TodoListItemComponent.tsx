@@ -17,7 +17,7 @@ import { date } from '../../lib/constant';
 const useStyles = makeStyles(() =>
   createStyles({
     root: {
-      width: '700px',
+      width: '600px',
       height: 'auto',
     },
     groupMenu: {
@@ -32,6 +32,7 @@ const useStyles = makeStyles(() =>
 interface TodoListItemComponentProps {
   todoListItem: TodoListItem | GroupTodoListItem;
   selectedDate: Date | null;
+  displayDueDate?: () => void;
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
@@ -171,6 +172,11 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
                   onChange={(event) => handleChangeChecked(event)}
                 />
                 {switchStrikethrough()}
+                {(() => {
+                  if (props.displayDueDate) {
+                    return props.displayDueDate();
+                  }
+                })()}
               </ListItem>
               <TodoListItemMenuButton
                 openInputTodoList={() => openInputTodoList()}
