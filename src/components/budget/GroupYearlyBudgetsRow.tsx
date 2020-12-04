@@ -15,7 +15,8 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { standardBudgetType } from '../../lib/constant';
 import { getGroupYearlyBudgets } from '../../reducks/groupBudgets/selectors';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { getPathGroupId } from '../../lib/path';
+import { fetchGroups } from '../../reducks/groups/operations';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -35,7 +36,6 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
   const dispatch = useDispatch();
   const year = props.years;
   const groupId = getPathGroupId(window.location.pathname);
-  const pathName = getPathTemplateName(window.location.pathname);
   const selector = useSelector((state: State) => state);
   const groupYearlyBudgetsList = getGroupYearlyBudgets(selector);
   const [groupYearlyBudgets, setGroupYearlyBudgets] = useState<GroupYearlyBudgetsList>({
@@ -44,11 +44,21 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
     monthly_budgets: [],
   });
 
+  const fetchGroupYearlyBudgetsData = () => {
+    dispatch(fetchGroups());
+    dispatch(fetchGroupYearlyBudgets(groupId, year));
+  };
+
   useEffect(() => {
-    if (pathName === 'group') {
-      dispatch(fetchGroupYearlyBudgets(groupId, year));
-    }
-  }, [year, groupId]);
+    const interval = setInterval(() => {
+      fetchGroupYearlyBudgetsData();
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [year]);
+
+  useEffect(() => {
+    fetchGroupYearlyBudgetsData();
+  }, [year]);
 
   useEffect(() => {
     setGroupYearlyBudgets(groupYearlyBudgetsList);

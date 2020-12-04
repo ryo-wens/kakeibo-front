@@ -17,6 +17,7 @@ import {
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 import '../assets/task/task.scss';
 import { TasksListItem } from '../reducks/groupTasks/types';
+import { Header } from '../components/header';
 
 const Task = () => {
   const dispatch = useDispatch();
@@ -45,53 +46,58 @@ const Task = () => {
   }, []);
 
   return (
-    <div className="task">
-      <div className="task__menu">
-        <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-        <EditTaskUser
-          approvedGroup={approvedGroup}
-          groupTasksListForEachUser={groupTasksListForEachUser}
-        />
-      </div>
-      <TaskList
-        groupId={groupId}
-        groupTasksListForEachUser={groupTasksListForEachUser}
-        groupTasksList={groupTasksList}
-      />
-      <table className="task__table">
-        <thead>
-          <WeekTables selectedDate={selectedDate} />
-        </thead>
-        <tbody>
-          {groupTasksList.map((tasksListItem: TasksListItem) => {
-            if (tasksListItem.cycle_type !== null && groupTasksListForEachUser.length) {
-              return (
-                <tr className="task__list-for-user" key={tasksListItem.id}>
-                  <TaskListForUser
-                    groupId={groupId}
-                    approvedGroups={approvedGroups}
-                    selectedDate={selectedDate}
-                    groupTaskList={groupTasksList}
-                    groupTasksListForEachUser={groupTasksListForEachUser}
-                    tasksListItem={tasksListItem}
-                  />
-                </tr>
-              );
-            }
-          })}
-        </tbody>
-        <tfoot>
-          <tr className="task__assign-task">
-            <OperateTaskListForUser
-              approvedGroups={approvedGroups}
+    <>
+      <Header />
+      <main className="section__container">
+        <div className="task">
+          <div className="task__menu">
+            <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+            <EditTaskUser
               approvedGroup={approvedGroup}
-              groupId={groupId}
-              label={'追加'}
+              groupTasksListForEachUser={groupTasksListForEachUser}
             />
-          </tr>
-        </tfoot>
-      </table>
-    </div>
+          </div>
+          <TaskList
+            groupId={groupId}
+            groupTasksListForEachUser={groupTasksListForEachUser}
+            groupTasksList={groupTasksList}
+          />
+          <table className="task__table">
+            <thead>
+              <WeekTables selectedDate={selectedDate} />
+            </thead>
+            <tbody>
+              {groupTasksList.map((tasksListItem: TasksListItem) => {
+                if (tasksListItem.cycle_type !== null && groupTasksListForEachUser.length) {
+                  return (
+                    <tr className="task__list-for-user" key={tasksListItem.id}>
+                      <TaskListForUser
+                        groupId={groupId}
+                        approvedGroups={approvedGroups}
+                        selectedDate={selectedDate}
+                        groupTaskList={groupTasksList}
+                        groupTasksListForEachUser={groupTasksListForEachUser}
+                        tasksListItem={tasksListItem}
+                      />
+                    </tr>
+                  );
+                }
+              })}
+            </tbody>
+            <tfoot>
+              <tr className="task__assign-task">
+                <OperateTaskListForUser
+                  approvedGroups={approvedGroups}
+                  approvedGroup={approvedGroup}
+                  groupId={groupId}
+                  label={'追加'}
+                />
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </main>
+    </>
   );
 };
 

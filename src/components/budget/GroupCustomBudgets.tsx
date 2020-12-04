@@ -19,6 +19,7 @@ import Paper from '@material-ui/core/Paper';
 import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import { getGroupPathYear, getGroupPathMonth, getPathGroupId } from '../../lib/path';
+import { fetchGroups } from '../../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,9 +74,24 @@ const GroupCustomBudgets = () => {
   const groupCustomBudgetsList = getGroupCustomBudgets(selector);
   const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
   const unInput = groupCustomBudgets === groupCustomBudgetsList;
+  const [editing, setEditing] = useState<boolean>(false);
+
+  const fetchGroupCustomBudgetsData = () => {
+    dispatch(fetchGroups());
+    dispatch(fetchGroupCustomBudgets(groupInYear, groupInMonth, groupId));
+  };
 
   useEffect(() => {
-    dispatch(fetchGroupCustomBudgets(groupInYear, groupInMonth, groupId));
+    if (!editing) {
+      const interval = setInterval(() => {
+        fetchGroupCustomBudgetsData();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [groupCustomBudgets]);
+
+  useEffect(() => {
+    fetchGroupCustomBudgetsData();
   }, []);
 
   useEffect(() => {
@@ -105,6 +121,7 @@ const GroupCustomBudgets = () => {
                 const newBudgets = [...groupCustomBudgets];
                 newBudgets[index].budget = (event.target.value as unknown) as number;
                 setGroupCustomBudgets(newBudgets);
+                setEditing(true);
               };
               return (
                 <TableRow key={groupCustomBudget.big_category_id}>
@@ -132,7 +149,7 @@ const GroupCustomBudgets = () => {
         <GenericButton
           label={'更新する'}
           disabled={unInput}
-          onClick={() =>
+          onClick={() => {
             dispatch(
               editGroupCustomBudgets(
                 groupInYear,
@@ -147,8 +164,9 @@ const GroupCustomBudgets = () => {
                   return rest;
                 })
               )
-            ) && dispatch(push(`/group/${groupId}/yearly/budgets`))
-          }
+            );
+            dispatch(push(`/group/${groupId}/yearly/budgets`));
+          }}
         />
       </div>
     </>

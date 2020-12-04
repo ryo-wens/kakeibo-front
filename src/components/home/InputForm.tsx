@@ -81,6 +81,10 @@ const InputForm = (): JSX.Element => {
   useEffect(() => {
     if (pathName === 'group') {
       dispatch(fetchGroupCategories(groupId));
+      const interval = setInterval(() => {
+        dispatch(fetchGroupCategories(groupId));
+      }, 3000);
+      return () => clearInterval(interval);
     }
   }, [pathName]);
 

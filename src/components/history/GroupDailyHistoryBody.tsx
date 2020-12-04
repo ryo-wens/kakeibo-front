@@ -1,16 +1,10 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import EditTransactionModal from '../../components/uikit/EditTransactionModal';
-import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
-import {
-  getGroupIncomeCategories,
-  getGroupExpenseCategories,
-} from '../../reducks/groupCategories/selectors';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { getUserId } from '../../reducks/users/selectors';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import '../../assets/history/daily-history.scss';
@@ -22,21 +16,11 @@ interface GroupDailyHistoryBodyProps {
   selectMonth: number;
 }
 const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
-  const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const groupIncomeCategories = getGroupIncomeCategories(selector);
-  const groupExpenseCategories = getGroupExpenseCategories(selector);
   const approvedGroup = getApprovedGroups(selector);
   const userId = getUserId(selector);
-  const groupId = getPathGroupId(window.location.pathname);
-  const pathName = getPathTemplateName(window.location.pathname);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpnId] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    if (pathName === 'group' && !groupIncomeCategories.length && !groupExpenseCategories.length)
-      dispatch(fetchGroupCategories(groupId));
-  }, [pathName]);
 
   const handleOpen = (transactionId: number) => {
     setOpen(true);

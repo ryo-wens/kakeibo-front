@@ -24,6 +24,7 @@ import {
 } from '../reducks/groupTodoList/operations';
 import { TodoList } from '../reducks/todoList/types';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
+import { Header } from '../components/header';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -60,7 +61,6 @@ const MonthlyTodo = () => {
   const date: string = ('0' + selectedDate.getDate()).slice(-2);
 
   const fetchGroupTodoList = () => {
-    dispatch(fetchGroups());
     dispatch(fetchGroupExpiredTodoList(groupId));
     dispatch(fetchGroupTodayTodoList(groupId, year, month, date));
     dispatch(fetchGroupMonthTodoList(groupId, year, month));
@@ -75,6 +75,14 @@ const MonthlyTodo = () => {
       return () => clearInterval(interval);
     }
   }, [selectedDate]);
+
+  useEffect(() => {
+    dispatch(fetchGroups());
+    const interval = setInterval(() => {
+      dispatch(fetchGroups());
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [entityType]);
 
   useEffect(() => {
     if (entityType !== 'group' && !expiredTodoList.length) {
@@ -101,21 +109,24 @@ const MonthlyTodo = () => {
 
   return (
     <>
-      <TodoMenu />
-      <div className={classes.root}>
-        {entityType !== 'group'
-          ? existsExpiredTodoList(expiredTodoList)
-          : existsExpiredTodoList(groupExpiredTodoList)}
-        <SkipMonth selectDate={selectedDate} setSelectDate={setSelectedDate} />
-        <MonthlyTodoList
-          selectedDate={selectedDate}
-          groupId={groupId}
-          groupMonthImplementationTodoList={groupMonthImplementationTodoList}
-          groupMonthDueTodoList={groupMonthDueTodoList}
-          monthImplementationTodoList={monthImplementationTodoList}
-          monthDueTodoList={monthDueTodoList}
-        />
-      </div>
+      <Header />
+      <main className="section__container">
+        <TodoMenu />
+        <div className={classes.root}>
+          {entityType !== 'group'
+            ? existsExpiredTodoList(expiredTodoList)
+            : existsExpiredTodoList(groupExpiredTodoList)}
+          <SkipMonth selectDate={selectedDate} setSelectDate={setSelectedDate} />
+          <MonthlyTodoList
+            selectedDate={selectedDate}
+            groupId={groupId}
+            groupMonthImplementationTodoList={groupMonthImplementationTodoList}
+            groupMonthDueTodoList={groupMonthDueTodoList}
+            monthImplementationTodoList={monthImplementationTodoList}
+            monthDueTodoList={monthDueTodoList}
+          />
+        </div>
+      </main>
     </>
   );
 };
