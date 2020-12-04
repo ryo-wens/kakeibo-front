@@ -1,4 +1,15 @@
 const initialState = {
+  users: {
+    id: '',
+    name: '',
+    email: '',
+    errorMessage: '',
+  },
+  groups: {
+    approvedGroups: [],
+    unapprovedGroups: [],
+    message: '',
+  },
   categories: {
     incomeList: [],
     expenseList: [],
@@ -48,21 +59,11 @@ const initialState = {
       monthly_budgets: [],
     },
   },
-  users: {
-    id: '',
-    name: '',
-    email: '',
-    errorMessage: '',
-  },
-  groups: {
-    approvedGroups: [],
-    unapprovedGroups: [],
-    message: '',
-  },
   groupTasks: {
     groupTasksListForEachUser: [],
     groupTasksList: [],
   },
+
   todoList: {
     expiredTodoList: [],
     todayImplementationTodoList: [],

@@ -1,5 +1,4 @@
 import React, { useCallback, useState } from 'react';
-import { TodoButton } from '../todo';
 import { Group } from '../../reducks/groups/types';
 import { GroupTasksListForEachUser } from '../../reducks/groupTasks/types';
 import { Checkbox, FormControlLabel, FormGroup } from '@material-ui/core';
@@ -8,6 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useDispatch } from 'react-redux';
 import { addGroupTasksUsers, deleteGroupTasksUsers } from '../../reducks/groupTasks/operations';
 import '../../assets/task/operation-task-user.scss';
+import { DeleteButton, SaveButton } from '../uikit';
 
 interface OperateTaskUserProps {
   approvedGroup: Group;
@@ -34,20 +34,6 @@ const OperateTaskUser = (props: OperateTaskUserProps) => {
     },
     [setCheckedUserIds]
   );
-
-  const switchOperation = () => {
-    if (props.label === '追加') {
-      return (
-        dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
-        props.closeTaskUserOperation()
-      );
-    } else if (props.label === '削除') {
-      return (
-        dispatch(deleteGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
-        props.closeTaskUserOperation()
-      );
-    }
-  };
 
   const existsAddTasksUser = () => {
     const user = [];
@@ -102,6 +88,9 @@ const OperateTaskUser = (props: OperateTaskUserProps) => {
   const existsTaskUsers = () => {
     if (props.groupTasksListForEachUser.length) {
       return props.groupTasksListForEachUser.map((groupTasksListItem) => {
+        const idx = props.approvedGroup.approved_users_list.findIndex(
+          (user) => user.user_id === groupTasksListItem.user_id
+        );
         return (
           <FormControlLabel
             control={
@@ -111,13 +100,39 @@ const OperateTaskUser = (props: OperateTaskUserProps) => {
                 color="primary"
               />
             }
-            label={groupTasksListItem.user_id}
+            label={props.approvedGroup.approved_users_list[idx].user_name}
             key={groupTasksListItem.id}
           />
         );
       });
     } else {
       return <span>現在、タスクに参加しているメンバーはいません。</span>;
+    }
+  };
+
+  const switchOperateButton = () => {
+    if (props.label === '追加') {
+      return (
+        <SaveButton
+          label={props.label}
+          disabled={checkedUserIds.length === 0}
+          onClick={() =>
+            dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
+            props.closeTaskUserOperation()
+          }
+        />
+      );
+    } else if (props.label === '削除') {
+      return (
+        <DeleteButton
+          label={props.label}
+          disabled={checkedUserIds.length === 0}
+          onClick={() =>
+            dispatch(deleteGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
+            props.closeTaskUserOperation()
+          }
+        />
+      );
     }
   };
 
@@ -136,11 +151,7 @@ const OperateTaskUser = (props: OperateTaskUserProps) => {
         </button>
       </div>
       <FormGroup>{props.label === '追加' ? existsAddTasksUser() : existsTaskUsers()}</FormGroup>
-      <TodoButton
-        label={props.label}
-        disabled={checkedUserIds.length === 0}
-        onClick={() => switchOperation()}
-      />
+      {switchOperateButton()}
     </>
   );
 };

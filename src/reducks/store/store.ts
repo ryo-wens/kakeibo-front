@@ -1,10 +1,4 @@
-import {
-  createStore as reduxCreateStore,
-  combineReducers,
-  applyMiddleware,
-  compose,
-  CombinedState,
-} from 'redux';
+import { createStore as reduxCreateStore, combineReducers, applyMiddleware, compose } from 'redux';
 import { usersReducer } from '../users/reducers';
 import { categoriesReducer } from '../categories/reducers';
 import { groupCategoriesReducer } from '../groupCategories/reducers';
@@ -40,20 +34,20 @@ export default function createStore(history: History) {
   const appReducer = combineReducers({
     router: connectRouter(history),
     users: usersReducer,
+    groups: groupsReducer,
     categories: categoriesReducer,
     groupCategories: groupCategoriesReducer,
-    groups: groupsReducer,
+    transactions: transactionsReducer,
+    groupTransactions: groupTransactionsReducer,
+    budgets: budgetsReducer,
+    groupBudgets: groupBudgetsReducer,
     groupTasks: groupTasksReducers,
     todoList: todoListReducer,
     groupTodoList: groupTodoListsReducer,
-    transactions: transactionsReducer,
-    groupTransactions: groupTransactionsReducer,
     modal: modalReducer,
-    budgets: budgetsReducer,
-    groupBudgets: groupBudgetsReducer,
   });
 
-  const rootReducer = (state: CombinedState<any>, action: userActions) => {
+  const rootReducer = (state: ReturnType<typeof appReducer> | undefined, action: userActions) => {
     if (action.type === 'LOG_OUT') {
       state = undefined;
     }

@@ -1,8 +1,11 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { CreateGroups, GroupMenuButton } from '../todo';
 import { Button, Divider, ListItem, Menu } from '@material-ui/core';
 import { Groups } from '../../reducks/groups/types';
+import { push } from 'connected-react-router';
+import { fetchGroups } from '../../reducks/groups/operations';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -39,34 +42,54 @@ const useStyles = makeStyles((theme: Theme) =>
 );
 
 interface SwitchEntityProps {
-  entityType: string;
-  groupId: number;
-  name: string;
-  userName: string;
   approvedGroups: Groups;
-  openMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
-  switchToIndividual: (userName: string) => void;
-  switchToGroup: (value: number, name: string) => void;
-  closeMenu: () => void;
-  anchorEl: null | HTMLElement;
+  userName: string;
+  entityType: string;
+  name: string;
+  setName: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const SwitchEntity = (props: SwitchEntityProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+
+  const switchToIndividual = (userName: string) => {
+    setAnchorEl(null);
+    props.setName(userName);
+    dispatch(push('/'));
+  };
+
+  const switchToGroup = (groupId: number, groupName: string) => {
+    setAnchorEl(null);
+    props.setName(groupName);
+    dispatch(push(`/group/${groupId}`));
+  };
+
+  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+    if (!props.approvedGroups.length) {
+      dispatch(fetchGroups());
+    }
+  };
+
+  const closeMenu = () => {
+    setAnchorEl(null);
+  };
 
   return (
     <div>
-      <Button className={classes.button} onClick={props.openMenu}>
+      <Button className={classes.button} onClick={openMenu}>
         {props.name}
       </Button>
       <Menu
         id="simple-menu"
-        anchorEl={props.anchorEl}
+        anchorEl={anchorEl}
         keepMounted
-        open={Boolean(props.anchorEl)}
-        onClose={props.closeMenu}
+        open={Boolean(anchorEl)}
+        onClose={closeMenu}
       >
-        <ListItem value={'UserName'} onClick={() => props.switchToIndividual(props.userName)}>
+        <ListItem value={'UserName'} onClick={() => switchToIndividual(props.userName)}>
           {props.userName}
         </ListItem>
         <Divider />
@@ -77,13 +100,11 @@ const SwitchEntity = (props: SwitchEntityProps) => {
               <ListItem
                 button={true}
                 key={approvedGroup.group_id}
-                onClick={() =>
-                  props.switchToGroup(approvedGroup.group_id, approvedGroup.group_name)
-                }
+                onClick={() => switchToGroup(approvedGroup.group_id, approvedGroup.group_name)}
               >
                 {approvedGroup.group_name}
               </ListItem>
-              <GroupMenuButton approvedGroup={approvedGroup} closeMenu={props.closeMenu} />
+              <GroupMenuButton approvedGroup={approvedGroup} closeMenu={closeMenu} />
             </div>
           );
         })}
@@ -91,7 +112,7 @@ const SwitchEntity = (props: SwitchEntityProps) => {
         <CreateGroups
           modalTitleLabel={'グループ作成'}
           modalTextFieldLabel={'グループ名'}
-          closeMenu={props.closeMenu}
+          closeMenu={closeMenu}
         />
       </Menu>
     </div>

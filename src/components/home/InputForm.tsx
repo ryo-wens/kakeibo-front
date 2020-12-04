@@ -28,6 +28,7 @@ import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { State } from '../../reducks/store/types';
 import { Category, AssociatedCategory } from '../../reducks/categories/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { customMonth } from '../../lib/constant';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -197,7 +198,7 @@ const InputForm = (): JSX.Element => {
   const addTransaction = () => {
     async function addedTransaction() {
       await dispatch(addLatestTransactions(personalAddRequestData));
-      dispatch(addTransactions());
+      dispatch(addTransactions(customMonth));
       resetInputForm();
     }
     addedTransaction();
@@ -206,7 +207,7 @@ const InputForm = (): JSX.Element => {
   const addGroupTransaction = () => {
     async function addedGroupTransaction() {
       await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
-      dispatch(addGroupTransactions());
+      dispatch(addGroupTransactions(customMonth));
       resetInputForm();
     }
     addedGroupTransaction();

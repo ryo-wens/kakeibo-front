@@ -45,8 +45,12 @@ const TaskListForUser = (props: TaskListForUserProps) => {
       (cycleType === 'none' && baseDay === currentDay)
     ) {
       return (
-        <span className="task-list-for-user__user-name" key={taskUsers[idx].taskUserId}>
-          {taskUsers[idx].taskName}
+        <span
+          className="task-list-for-user__user-name"
+          key={taskUsers[idx].taskUserId}
+          style={{ borderColor: taskUsers[idx].taskUserColor }}
+        >
+          {taskUsers[idx].taskUserName}
         </span>
       );
     } else {
@@ -66,7 +70,8 @@ const TaskListForUser = (props: TaskListForUserProps) => {
       );
       const taskUser: TaskUser = {
         taskUserId: groupTasksListItem.id,
-        taskName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        taskUserColor: approvedGroup.approved_users_list[approvedUserIdx].color_code,
       };
       taskUsers.push(taskUser);
     }

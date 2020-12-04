@@ -72,7 +72,6 @@ const Header = () => {
   const userName: string = getUserName(selector);
   const approvedGroups: Groups = getApprovedGroups(selector);
   const entityType: string = getPathTemplateName(window.location.pathname);
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
   const groupId: number = getPathGroupId(window.location.pathname);
   const [name, setName] = useState<string>('');
 
@@ -105,29 +104,6 @@ const Header = () => {
     };
     initialName();
   }, [approvedGroups, entityType, groupId, userName]);
-
-  const switchToIndividual = (userName: string) => {
-    setAnchorEl(null);
-    setName(userName);
-    dispatch(push('/'));
-  };
-
-  const switchToGroup = (groupId: number, groupName: string) => {
-    setAnchorEl(null);
-    setName(groupName);
-    dispatch(push(`/group/${groupId}`));
-  };
-
-  const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-    if (!approvedGroups.length) {
-      dispatch(fetchGroups());
-    }
-  };
-
-  const closeMenu = () => {
-    setAnchorEl(null);
-  };
 
   const existsGroupWhenRouting = useCallback(
     (path: string) => {
@@ -217,16 +193,11 @@ const Header = () => {
                   </div>
                   <div className={classes.grow} />
                   <SwitchEntity
-                    entityType={entityType}
-                    groupId={groupId}
-                    name={name}
-                    userName={userName}
-                    openMenu={openMenu}
-                    switchToIndividual={switchToIndividual}
-                    switchToGroup={switchToGroup}
-                    closeMenu={closeMenu}
-                    anchorEl={anchorEl}
                     approvedGroups={approvedGroups}
+                    userName={userName}
+                    entityType={entityType}
+                    name={name}
+                    setName={setName}
                   />
                   <InvitationNotifications />
                   <div className={classes.sectionDesktop}>
@@ -236,7 +207,6 @@ const Header = () => {
                       aria-label="logout"
                       aria-controls={menuId}
                       aria-haspopup="true"
-                      // onClick={() => test()}
                       onClick={() => logOutCheck()}
                     >
                       ログアウト

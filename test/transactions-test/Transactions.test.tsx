@@ -194,7 +194,7 @@ describe('async actions addTransactions', () => {
       },
     ];
 
-    await addTransactions()(
+    await addTransactions('11')(
       store.dispatch,
       // @ts-ignore
       getState

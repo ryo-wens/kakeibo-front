@@ -12,7 +12,7 @@ import CloseIcon from '@material-ui/icons/Close';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      width: 400,
+      width: 350,
       margin: '20px auto auto auto',
       backgroundColor: theme.palette.background.paper,
       border: '2px solid #000',
@@ -69,7 +69,7 @@ const EditTaskUser = (props: EditTaskUserProps) => {
       return (
         <>
           <div className="edit-task-user-modal__position">
-            <h3 className="edit-task-user-modal__title">タスクリスト</h3>
+            <h3 className="edit-task-user-modal__title">タスクユーザーリスト</h3>
             <button className="edit-task-user-modal__btn-position" onClick={() => closeModal()}>
               <CloseIcon />
             </button>
@@ -80,29 +80,28 @@ const EditTaskUser = (props: EditTaskUserProps) => {
             </span>
           ) : (
             <ul className="edit-task-user-modal__user-list">
-              {props.groupTasksListForEachUser.map((userTasksListItem: UserTasksListItem) => {
+              {props.groupTasksListForEachUser.map((groupTasksListItem: UserTasksListItem) => {
+                const idx = props.approvedGroup.approved_users_list.findIndex(
+                  (user) => user.user_id === groupTasksListItem.user_id
+                );
                 return (
-                  <li className="edit-task-user-modal__user-list-item" key={userTasksListItem.id}>
-                    {userTasksListItem.user_id}
+                  <li className="edit-task-user-modal__user-list-item" key={groupTasksListItem.id}>
+                    {props.approvedGroup.approved_users_list[idx].user_name}
                   </li>
                 );
               })}
             </ul>
           )}
-          <div className="edit-task-user-modal__choice-position">
+          <div className="edit-task-user-modal__choice-position" onClick={() => openAddTaskUser()}>
             <span className="edit-task-user-modal__choice">タスクユーザーを追加</span>
-            <button className="edit-task-user-modal__choice-btn" onClick={() => openAddTaskUser()}>
-              <ChevronRightIcon />
-            </button>
+            <ChevronRightIcon className="edit-task-user-modal__choice-icon" />
           </div>
-          <div className="edit-task-user-modal__choice-position">
+          <div
+            className="edit-task-user-modal__choice-position"
+            onClick={() => openDeleteTaskUser()}
+          >
             <span className="edit-task-user-modal__choice">タスクユーザーを削除</span>
-            <button
-              className="edit-task-user-modal__choice-btn"
-              onClick={() => openDeleteTaskUser()}
-            >
-              <ChevronRightIcon />
-            </button>
+            <ChevronRightIcon className="edit-task-user-modal__choice-icon" />
           </div>
         </>
       );

@@ -2,8 +2,7 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
-import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
-import { AddTodo, ExpiredTodoList, TodoMenu } from '../components/todo';
+import { AddTodo, ExpiredTodoList, SwitchTodoList, TodoMenu } from '../components/todo';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   getExpiredTodoList,
@@ -15,24 +14,25 @@ import {
   getTodayTodoListMessage,
 } from '../reducks/todoList/selectors';
 import {
-  fetchDateTodoList,
-  fetchExpiredTodoList,
-  fetchMonthTodoList,
-} from '../reducks/todoList/operations';
-import { getWeekDay } from '../lib/date';
-import SwitchTodoLists from '../components/todo/SwitchTodoLists';
-import {
-  fetchGroupExpiredTodoList,
-  fetchGroupTodayTodoList,
-} from '../reducks/groupTodoList/operations';
-import {
   getGroupTodayImplementationTodoList,
   getGroupTodayDueTodoList,
   getGroupExpiredTodoList,
 } from '../reducks/groupTodoList/selectors';
+import { getWeekDay } from '../lib/date';
+import {
+  fetchDateTodoList,
+  fetchExpiredTodoList,
+  fetchMonthTodoList,
+} from '../reducks/todoList/operations';
+import {
+  fetchGroupExpiredTodoList,
+  fetchGroupMonthTodoList,
+  fetchGroupTodayTodoList,
+} from '../reducks/groupTodoList/operations';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
 import { TodoList } from '../reducks/todoList/types';
+import { date } from '../lib/constant';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -46,8 +46,6 @@ const Todo = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
-  const unapprovedGroups = getUnapprovedGroups(selector);
   const expiredTodoList = getExpiredTodoList(selector);
   const groupExpiredTodoList = getGroupExpiredTodoList(selector);
   const todayImplementationTodoList = getTodayImplementationTodoList(selector);
@@ -60,16 +58,30 @@ const Todo = () => {
   const groupTodayDueTodoList = getGroupTodayDueTodoList(selector);
   const entityType = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
-  const today: Date = new Date();
-  const year = String(today.getFullYear());
-  const month: string = ('0' + (today.getMonth() + 1)).slice(-2);
-  const date: string = ('0' + today.getDate()).slice(-2);
+  const todayYear = String(date.getFullYear());
+  const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
+  const todayDate: string = ('0' + date.getDate()).slice(-2);
+
+  const fetchGroupTodoList = () => {
+    dispatch(fetchGroups());
+    dispatch(fetchGroupExpiredTodoList(groupId));
+    dispatch(fetchGroupTodayTodoList(groupId, todayYear, todayMonth, todayDate));
+    dispatch(fetchGroupMonthTodoList(groupId, todayYear, todayMonth));
+  };
+
+  useEffect(() => {
+    if (entityType === 'group') {
+      fetchGroupTodoList();
+      const interval = setInterval(() => {
+        fetchGroupTodoList();
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, []);
 
   useEffect(() => {
     if (entityType !== 'group' && !expiredTodoList.length) {
       dispatch(fetchExpiredTodoList());
-    } else if (entityType === 'group' && !groupExpiredTodoList.length) {
-      dispatch(fetchGroupExpiredTodoList(groupId));
     }
   }, [entityType]);
 
@@ -80,7 +92,7 @@ const Todo = () => {
       !todayDueTodoList.length &&
       !todayTodoListMessage
     ) {
-      dispatch(fetchDateTodoList(year, month, date));
+      dispatch(fetchDateTodoList(todayYear, todayMonth, todayDate));
     }
   }, []);
 
@@ -91,25 +103,9 @@ const Todo = () => {
       !monthDueTodoList.length &&
       !monthTodoListMessage
     ) {
-      dispatch(fetchMonthTodoList(year, month));
+      dispatch(fetchMonthTodoList(todayYear, todayMonth));
     }
-  }, []);
-
-  useEffect(() => {
-    if (entityType === 'group' && !approvedGroups.length && !unapprovedGroups.length) {
-      dispatch(fetchGroups());
-    }
-  }, []);
-
-  useEffect(() => {
-    if (
-      entityType === 'group' &&
-      !groupTodayImplementationTodoList.length &&
-      !groupTodayDueTodoList.length
-    ) {
-      dispatch(fetchGroupTodayTodoList(groupId, year, month, date));
-    }
-  }, []);
+  }, [todayYear, todayMonth]);
 
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {
@@ -125,21 +121,21 @@ const Todo = () => {
           ? existsExpiredTodoList(expiredTodoList)
           : existsExpiredTodoList(groupExpiredTodoList)}
         <span>
-          今日 {today.getMonth() + 1}/{today.getDate()} ({getWeekDay(today)})
+          今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
         </span>
         {entityType !== 'group' ? (
-          <SwitchTodoLists
+          <SwitchTodoList
             implementationTodoList={todayImplementationTodoList}
             dueTodoList={todayDueTodoList}
           />
         ) : (
-          <SwitchTodoLists
+          <SwitchTodoList
             implementationTodoList={groupTodayImplementationTodoList}
             dueTodoList={groupTodayDueTodoList}
           />
         )}
         <div>
-          <AddTodo date={today} groupId={groupId} />
+          <AddTodo date={date} groupId={groupId} />
         </div>
       </div>
     </>

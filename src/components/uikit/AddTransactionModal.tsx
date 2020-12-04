@@ -225,7 +225,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const personalAddTransaction = () => {
     async function personalTransaction() {
       await dispatch(addLatestTransactions(personalAddRequestData));
-      dispatch(addTransactions());
+      dispatch(addTransactions(customMonth));
       props.onClose();
       resetForm();
     }
@@ -235,7 +235,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const groupAddTransaction = () => {
     async function groupTransaction() {
       await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
-      dispatch(addGroupTransactions());
+      dispatch(addGroupTransactions(customMonth));
       props.onClose();
       resetForm();
     }

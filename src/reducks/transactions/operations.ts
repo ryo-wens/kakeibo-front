@@ -16,7 +16,6 @@ import {
   DeleteTransactionRes,
 } from './types';
 import moment from 'moment';
-import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
 export const fetchTransactionsList = (selectYears: {
@@ -133,7 +132,7 @@ export const addLatestTransactions = (requestData: {
   };
 };
 
-export const addTransactions = () => {
+export const addTransactions = (customMonth: string) => {
   return (dispatch: Dispatch<Action>, getState: () => State) => {
     const prevTransactionsList = getState().transactions.transactionsList;
     const latestTransactionsList = getState().transactions.latestTransactionsList;
