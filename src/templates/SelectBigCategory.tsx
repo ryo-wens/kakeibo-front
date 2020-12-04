@@ -13,10 +13,11 @@ import Paper from '@material-ui/core/Paper';
 import { State } from '../reducks/store/types';
 import { Category } from '../reducks/categories/types';
 import { getIncomeCategories, getExpenseCategories } from '../reducks/categories/selectors';
+import { Header } from '../components/header';
 
 const useStyles = makeStyles({
   tablePosition: {
-    margin:'0 auto'
+    margin: '0 auto',
   },
   tableParent: {
     maxWidth: 480,
@@ -36,8 +37,8 @@ const useStyles = makeStyles({
   tableCategory: {
     cursor: 'pointer',
     textAlign: 'center',
-    '&:hover':{
-      textDecoration:'underline',
+    '&:hover': {
+      textDecoration: 'underline',
     },
   },
 });
@@ -71,30 +72,35 @@ const SelectBigCategory = () => {
 
   return (
     <>
-      <div className={classes.tablePosition}>
-      <h4 className={classes.tableMain}>カテゴリーを追加したい大カテゴリーを選択してください</h4>
-      <TableContainer className={classes.tableParent} component={Paper}>
-        <Table className={classes.table} aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableTop}>大カテゴリー</TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {bigCategories.map((bigCategory) => (
-              <TableRow
-                key={bigCategory.name}
-                onClick={() => dispatch(push(`/custom-categories/${bigCategory.id}`))}
-              >
-                <TableCell className={classes.tableCategory} component="th" scope="row">
-                  {bigCategory.name}
-                </TableCell>
-              </TableRow>
-            ))}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      </div>
+      <Header />
+      <main className="section__container">
+        <div className={classes.tablePosition}>
+          <h4 className={classes.tableMain}>
+            カテゴリーを追加したい大カテゴリーを選択してください
+          </h4>
+          <TableContainer className={classes.tableParent} component={Paper}>
+            <Table className={classes.table} aria-label="simple table">
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.tableTop}>大カテゴリー</TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {bigCategories.map((bigCategory) => (
+                  <TableRow
+                    key={bigCategory.name}
+                    onClick={() => dispatch(push(`/custom-categories/${bigCategory.id}`))}
+                  >
+                    <TableCell className={classes.tableCategory} component="th" scope="row">
+                      {bigCategory.name}
+                    </TableCell>
+                  </TableRow>
+                ))}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </main>
     </>
   );
 };

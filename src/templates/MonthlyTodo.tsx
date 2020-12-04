@@ -24,6 +24,7 @@ import {
 } from '../reducks/groupTodoList/operations';
 import { TodoList } from '../reducks/todoList/types';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
+import { Header } from '../components/header';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -108,21 +109,24 @@ const MonthlyTodo = () => {
 
   return (
     <>
-      <TodoMenu />
-      <div className={classes.root}>
-        {entityType !== 'group'
-          ? existsExpiredTodoList(expiredTodoList)
-          : existsExpiredTodoList(groupExpiredTodoList)}
-        <SkipMonth selectDate={selectedDate} setSelectDate={setSelectedDate} />
-        <MonthlyTodoList
-          selectedDate={selectedDate}
-          groupId={groupId}
-          groupMonthImplementationTodoList={groupMonthImplementationTodoList}
-          groupMonthDueTodoList={groupMonthDueTodoList}
-          monthImplementationTodoList={monthImplementationTodoList}
-          monthDueTodoList={monthDueTodoList}
-        />
-      </div>
+      <Header />
+      <main className="section__container">
+        <TodoMenu />
+        <div className={classes.root}>
+          {entityType !== 'group'
+            ? existsExpiredTodoList(expiredTodoList)
+            : existsExpiredTodoList(groupExpiredTodoList)}
+          <SkipMonth selectDate={selectedDate} setSelectDate={setSelectedDate} />
+          <MonthlyTodoList
+            selectedDate={selectedDate}
+            groupId={groupId}
+            groupMonthImplementationTodoList={groupMonthImplementationTodoList}
+            groupMonthDueTodoList={groupMonthDueTodoList}
+            monthImplementationTodoList={monthImplementationTodoList}
+            monthDueTodoList={monthDueTodoList}
+          />
+        </div>
+      </main>
     </>
   );
 };

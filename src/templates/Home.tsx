@@ -9,6 +9,7 @@ import { getUserName } from '../reducks/users/selectors';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import { SelectYears } from '../lib/date';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
+import { Header } from '../components/header';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -47,19 +48,22 @@ const Home = () => {
 
   return (
     <>
-      <div className="home__left">
-        <InputForm />
-        <RecentInput />
-      </div>
-      <div className="home__center">
-        <div className="box__monthlyExpense">
-          <HistoryPieChart />
+      <Header />
+      <main className="section__container">
+        <div className="home__left">
+          <InputForm />
+          <RecentInput />
         </div>
-        <MonthlyHistory month={month} year={year} />
-      </div>
-      <div className="home__right">
-        <div className="box__input" />
-      </div>
+        <div className="home__center">
+          <div className="box__monthlyExpense">
+            <HistoryPieChart />
+          </div>
+          <MonthlyHistory month={month} year={year} />
+        </div>
+        <div className="home__right">
+          <div className="box__input" />
+        </div>
+      </main>
     </>
   );
 };
