@@ -8,6 +8,8 @@ import {
   SelectPayer,
 } from '../uikit/index';
 import { useDispatch, useSelector } from 'react-redux';
+import { fetchCategories } from '../../reducks/categories/operations';
+import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
@@ -15,38 +17,40 @@ import {
 } from '../../reducks/groupTransactions/operations';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { getUserId } from '../../reducks/users/selectors';
-import { push } from 'connected-react-router';
-import { makeStyles } from '@material-ui/core/styles';
+import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
+import {
+  getGroupIncomeCategories,
+  getGroupExpenseCategories,
+} from '../../reducks/groupCategories/selectors';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { State } from '../../reducks/store/types';
+import { Category, AssociatedCategory } from '../../reducks/categories/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { customMonth } from '../../lib/constant';
 
-const useStyles = makeStyles({
-  link: {
-    cursor: 'pointer',
-    color: '#154bd4',
-    textDecoration: 'underLine',
-  },
-});
 const InputForm = (): JSX.Element => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
   const approvedGroups = getApprovedGroups(selector);
   const userId = getUserId(selector);
+  const incomeCategories = getIncomeCategories(selector);
+  const expenseCategories = getExpenseCategories(selector);
+  const groupIncomeCategories = getGroupIncomeCategories(selector);
+  const groupExpenseCategories = getGroupExpenseCategories(selector);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string>('');
   const emptyShop = shop === '' ? null : shop;
-  const [category, setCategory] = useState<string>('');
   const [transactionDate, setTransactionDate] = useState<Date | null>(new Date());
-  const [transactionsType, setTransactionType] = useState<string>('');
+  const [transactionsType, setTransactionType] = useState<string>('expense');
+  const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
+  const [bigCategory, setBigCategory] = useState<string | null>('');
+  const [associatedCategory, setAssociatedCategory] = useState<string>('');
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
@@ -56,75 +60,117 @@ const InputForm = (): JSX.Element => {
     setPaymentUserId(userId);
   }, [userId]);
 
+  useEffect(() => {
+    setTransactionDate(new Date());
+    setShop('');
+    setMemo('');
+    setAmount('');
+    setBigCategoryId(0);
+    setMediumCategoryId(null);
+    setCustomCategoryId(null);
+    setBigCategory('');
+    setAssociatedCategory('');
+  }, [transactionsType]);
+
+  useEffect(() => {
+    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+      dispatch(fetchCategories());
+    }
+  }, [pathName]);
+
+  useEffect(() => {
+    if (pathName === 'group') {
+      dispatch(fetchGroupCategories(groupId));
+    }
+  }, [pathName]);
+
   const handlePayerChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       setPaymentUserId(event.target.value as string);
     },
     [setPaymentUserId]
   );
+
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setAmount(event.target.value);
     },
     [setAmount]
   );
+
   const handleMemo = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setMemo(event.target.value);
     },
     [setMemo]
   );
+
   const handleShop = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setShop(event.target.value);
     },
     [setShop]
   );
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setCategory(event.target.value as string);
-    },
-    [setCategory]
-  );
+
   const handleSelect = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       setTransactionType(event.target.value as string);
     },
     [setTransactionType]
   );
+
   const handleDateChange = useCallback(
     (transactionDate: Date | null) => {
       setTransactionDate(transactionDate as Date);
     },
     [setTransactionDate]
   );
+
   const resetInputForm = useCallback(() => {
     setAmount('');
-    setTransactionType('');
-    setCategory('');
+    setTransactionType('expense');
+    setBigCategory('');
     setShop('');
     setMemo('');
-  }, [setAmount, setTransactionType, setCategory, setShop, setMemo]);
+  }, [setAmount, setTransactionType, setBigCategory, setShop, setMemo]);
 
   const selectCategory = useCallback(
-    (bigCategoryId: number, associatedCategoryId: number | null, category_type: string) => {
-      switch (category_type) {
+    (
+      bigCategoryIndex: number,
+      bigCategory: Category | null,
+      associatedCategory: AssociatedCategory
+    ) => {
+      setBigCategoryIndex(bigCategoryIndex);
+      setAssociatedCategory(associatedCategory.name);
+
+      if (bigCategory !== null) {
+        setTransactionType(bigCategory.transaction_type);
+        setBigCategoryId(bigCategory.id);
+        setBigCategory(bigCategory.name);
+      }
+
+      switch (associatedCategory.category_type) {
         case 'MediumCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(associatedCategoryId);
+          setMediumCategoryId(associatedCategory.id);
           setCustomCategoryId(null);
           break;
         case 'CustomCategory':
-          setBigCategoryId(bigCategoryId);
           setMediumCategoryId(null);
-          setCustomCategoryId(associatedCategoryId);
+          setCustomCategoryId(associatedCategory.id);
           break;
       }
     },
-    [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
+    [
+      setTransactionType,
+      setBigCategoryIndex,
+      setBigCategoryId,
+      setMediumCategoryId,
+      setCustomCategoryId,
+    ]
   );
 
-  const unInput = amount === '' || category === '' || transactionsType === '';
+  const unInput =
+    amount === '' || bigCategory === '' || bigCategoryId === 0 || transactionsType === '';
 
   const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,
@@ -136,6 +182,7 @@ const InputForm = (): JSX.Element => {
     medium_category_id: mediumCategoryId,
     custom_category_id: customCategoryId,
   };
+
   const groupAddRequestData: GroupTransactionsReq = {
     transaction_type: transactionsType,
     transaction_date: transactionDate,
@@ -168,7 +215,7 @@ const InputForm = (): JSX.Element => {
 
   return (
     <form className="grid__column box__input" autoComplete="on">
-      <h3>入力フォーム</h3>
+      <h3>家計簿入力フォーム</h3>
       <DatePicker
         id={'date-picker-dialog'}
         label={'日付(必須)'}
@@ -188,7 +235,7 @@ const InputForm = (): JSX.Element => {
         id={'amount'}
         label={'金額(必須)'}
         onChange={handleAmountChange}
-        required={true}
+        required={false}
         fullWidth={false}
       />
       {pathName === 'group' && (
@@ -202,11 +249,15 @@ const InputForm = (): JSX.Element => {
         />
       )}
       <CategoryInput
-        value={category}
+        bigCategory={bigCategory}
+        associatedCategory={associatedCategory}
         onClick={selectCategory}
-        onChange={handleChange}
         required={true}
         kind={transactionsType}
+        bigCategoryIndex={bigCategoryIndex}
+        bigCategoryId={bigCategoryId}
+        expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+        incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
       />
       <TextInput
         value={shop}
@@ -232,9 +283,6 @@ const InputForm = (): JSX.Element => {
         label={'入力する'}
         disabled={unInput}
       />
-      <a className={classes.link} onClick={() => dispatch(push('/big-categories'))}>
-        カテゴリーを追加する
-      </a>
     </form>
   );
 };

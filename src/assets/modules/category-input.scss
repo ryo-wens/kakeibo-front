@@ -1,0 +1,155 @@
+@import "../variable";
+@import "input-years";
+
+.category-input {
+
+  &__btn-position {
+    position: relative;
+  }
+
+  &__button-display {
+    position: relative;
+    background-color: $white;
+    border: 1px solid #ccc;
+    border-radius: $task-border_radius;
+    cursor: pointer;
+    font-size: 1rem;
+    text-align: center;
+    margin:10px 0 10px 0;
+    //margin-bottom: 10px;
+    top: 0;
+    width: 13rem;
+
+    &:hover {
+      opacity: 0.6;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__menu {
+    background-color: $white;
+    height: 470px;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border-radius: $task-border_radius;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: block;
+    padding: 2px;
+    top: 30%;
+    list-style: none;
+    float: left;
+    position: absolute;
+    width: 100%;
+    z-index: 400;
+  }
+
+  &__medium-menu {
+    background-color: $white;
+    height: auto;
+    background-clip: padding-box;
+    border: 1px solid #ccc;
+    border-radius: $task-border_radius;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    display: block;
+    padding: 0 2px;
+    top: 90%;
+    list-style: none;
+    position: absolute;
+    width: 100%;
+    z-index: 400;
+  }
+
+  &__sub-menu {
+    display: none;
+    height: auto;
+    top: 0;
+    color: #000000;
+    left: 100%;
+    float: right;
+    margin-top: -30px;
+    position: relative;
+    z-index: 200;
+  }
+
+
+  &__menu-item {
+    background-clip: border-box;
+    cursor: pointer;
+    display: block;
+    text-align: left;
+    text-decoration: none;
+    font-weight: normal;
+    padding-top: 5px;
+    white-space: nowrap;
+    outline: none;
+
+    &:hover {
+      background-color: #08c;
+      color: $white;
+    }
+
+    &:hover #medium-category  {
+      display: block;
+    }
+  }
+
+  &__icon-arrow {
+    position: absolute;
+    right: 0;
+  }
+
+  &__icon-add {
+    color: #4db5fa;
+    right: 0;
+    padding-bottom: 5px;
+    position: absolute;
+
+    &:hover {
+      opacity: 0.6;
+    }
+
+  }
+
+  &__icon-edit {
+    color: #4db5fa;
+    position: absolute;
+    right: 32px;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+
+  &__icon-delete {
+    color: #4db5fa;
+    position: absolute;
+    right: 0;
+
+    &:hover {
+      opacity: 0.6;
+    }
+  }
+
+  &__add-form {
+    border: 1px solid #ccc;
+    border-radius: $task-border_radius;
+    display: block;
+    font-size: $medium-font_size;
+    font-weight: normal;
+    height: 1.5rem;
+    margin-bottom: 10px;
+    width: 11rem;
+  }
+
+  &__form-position {
+    display: flex;
+  }
+
+  &_spacer {
+    height: 20px;
+  }
+
+}

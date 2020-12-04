@@ -166,7 +166,12 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
       operationRow = [
         ...operationRow,
         <td className="monthly-history-table__record-third" key={index} align={'center'}>
-          <SelectMenu startDate={displayWeek.startDate} endDate={displayWeek.endDate} />
+          <SelectMenu
+            startDate={displayWeek.startDate}
+            endDate={displayWeek.endDate}
+            month={props.month}
+            year={props.year}
+          />
         </td>,
       ];
 
