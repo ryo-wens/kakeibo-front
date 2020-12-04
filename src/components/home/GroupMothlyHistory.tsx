@@ -1,13 +1,12 @@
-import React, { ReactElement, useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { fetchGroupTransactionsList } from '../../reducks/groupTransactions/operations';
+import React, { ReactElement, useState } from 'react';
+import { useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
 import { getGroupTransactions } from '../../reducks/groupTransactions/selectors';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { incomeTransactionType } from '../../lib/constant';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { getPathGroupId } from '../../lib/path';
 import { month } from '../../lib/constant';
-import { displayWeeks, WeeklyInfo, SelectYears } from '../../lib/date';
+import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
 
 interface GroupMonthlyHistoryProps {
@@ -16,25 +15,13 @@ interface GroupMonthlyHistoryProps {
 }
 
 const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
-  const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const path = window.location.pathname;
   const groupId = getPathGroupId(window.location.pathname);
-  const pathName = getPathTemplateName(window.location.pathname);
   const groupTransactionsList = getGroupTransactions(selector);
   const approvedGroup = getApprovedGroups(selector);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
-
-  useEffect(() => {
-    const years: SelectYears = {
-      selectedYear: String(props.year),
-      selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
-    };
-    if (pathName === 'group') {
-      dispatch(fetchGroupTransactionsList(groupId, years));
-    }
-  }, [pathName, groupId]);
 
   const handleOpen = (transactionId: number) => {
     setOpen(true);

@@ -17,7 +17,8 @@ import TableContainer from '@material-ui/core/TableContainer';
 import TableCell from '@material-ui/core/TableCell';
 import TextField from '@material-ui/core/TextField';
 import GenericButton from '../uikit/GenericButton';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { getPathGroupId } from '../../lib/path';
+import { fetchGroups } from '../../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,14 +69,26 @@ const GroupStandardBudgets = () => {
   const selector = useSelector((state: State) => state);
   const groupStandardBudgetsList = getGroupStandardBudgets(selector);
   const [groupStandardBudgets, setGroupStandardBudgets] = useState<GroupStandardBudgetsList>([]);
-  const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const unEditBudgets = groupStandardBudgets === groupStandardBudgetsList;
+  const [editing, setEditing] = useState<boolean>(false);
+
+  const fetchGroupStandardBudgetsData = () => {
+    dispatch(fetchGroups());
+    dispatch(fetchGroupStandardBudgets(groupId));
+  };
 
   useEffect(() => {
-    if (pathName === 'group') {
-      dispatch(fetchGroupStandardBudgets(groupId));
+    if (!editing) {
+      const interval = setInterval(() => {
+        fetchGroupStandardBudgetsData();
+      }, 3000);
+      return () => clearInterval(interval);
     }
+  }, [groupStandardBudgets]);
+
+  useEffect(() => {
+    fetchGroupStandardBudgetsData();
   }, []);
 
   useEffect(() => {
@@ -105,6 +118,7 @@ const GroupStandardBudgets = () => {
                 const newBudgets = [...groupStandardBudgets];
                 newBudgets[index].budget = (event.target.value as unknown) as number;
                 setGroupStandardBudgets(newBudgets);
+                setEditing(true);
               };
               return (
                 <TableRow key={groupBudget.big_category_id}>
@@ -132,7 +146,7 @@ const GroupStandardBudgets = () => {
         <GenericButton
           label={'更新する'}
           disabled={unEditBudgets}
-          onClick={() =>
+          onClick={() => {
             dispatch(
               editGroupStandardBudgets(
                 groupStandardBudgets.map((groupBudget) => {
@@ -144,8 +158,9 @@ const GroupStandardBudgets = () => {
                   return rest;
                 })
               )
-            )
-          }
+            );
+            setEditing(false);
+          }}
         />
       </div>
     </>

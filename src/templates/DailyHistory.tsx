@@ -7,9 +7,7 @@ import {
 } from '../reducks/groupTransactions/selectors';
 import { getApprovedGroups } from '../reducks/groups/selectors';
 import { fetchTransactionsList } from '../reducks/transactions/operations';
-import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
 import { fetchCategories } from '../reducks/categories/operations';
-import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 import { State } from '../reducks/store/types';
 import { noTransactionMessage, year, month } from '../lib/constant';
 import { getPathTemplateName } from '../lib/path';
@@ -56,22 +54,9 @@ const DailyHistory = (props: DailyHistoryProps) => {
     };
     if (pathName !== 'group') {
       dispatch(fetchTransactionsList(selectYears));
-    } else if (pathName === 'group') {
-      const selectYears: SelectYears = {
-        selectedYear: String(props.selectYear),
-        selectedMonth: props.selectMonth <= 9 ? '0' + props.selectMonth : String(props.selectMonth),
-      };
-      dispatch(fetchGroupTransactionsList(groupId, selectYears));
+      dispatch(fetchCategories());
     }
   }, [pathName]);
-
-  useEffect(() => {
-    if (pathName !== 'group') {
-      dispatch(fetchCategories());
-    } else {
-      dispatch(fetchGroupCategories(groupId));
-    }
-  }, [pathName, groupId]);
 
   const openSearch = useCallback(() => {
     setOpenSearchField(true);

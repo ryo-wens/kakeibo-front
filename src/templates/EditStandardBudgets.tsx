@@ -30,6 +30,7 @@ import {
   getPathMonth,
 } from '../lib/path';
 import EditGroupStandardBudgets from '../components/budget/EditGroupStandardBudgets';
+import { fetchGroups } from '../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -89,6 +90,16 @@ const EditStandardBudgets = () => {
   const yearsInPersonal = `${selectYear}年${selectMonth}月`;
   const yearsInGroup = `${yearInGroup}年${monthInGroup}月`;
   const unInputBudgets = customBudgets === customBudgetsList;
+
+  useEffect(() => {
+    if (pathName !== 'group') {
+      dispatch(fetchGroups());
+      const interval = setInterval(() => {
+        dispatch(fetchGroups());
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [pathName]);
 
   useEffect(() => {
     async function fetch() {

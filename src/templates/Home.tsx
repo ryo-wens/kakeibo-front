@@ -2,24 +2,42 @@ import React, { useEffect } from 'react';
 import { year, month } from '../lib/constant';
 import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
 import { useDispatch, useSelector } from 'react-redux';
-import { getApprovedGroups, getUnapprovedGroups } from '../reducks/groups/selectors';
 import { State } from '../reducks/store/types';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchUserInfo } from '../reducks/users/operations';
 import { getUserName } from '../reducks/users/selectors';
+import { getPathGroupId, getPathTemplateName } from '../lib/path';
+import { SelectYears } from '../lib/date';
+import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
 
 const Home = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
-  const unapprovedGroups = getUnapprovedGroups(selector);
   const userName: string = getUserName(selector);
+  const pathName = getPathTemplateName(window.location.pathname);
+  const groupId = getPathGroupId(window.location.pathname);
 
   useEffect(() => {
-    if (!approvedGroups.length && !unapprovedGroups.length) {
-      dispatch(fetchGroups());
+    if (pathName === 'group') {
+      const years: SelectYears = {
+        selectedYear: String(year),
+        selectedMonth: month <= 9 ? '0' + month : String(month),
+      };
+      dispatch(fetchGroupTransactionsList(groupId, years));
+      const interval = setInterval(() => {
+        dispatch(fetchGroupTransactionsList(groupId, years));
+      }, 3000);
+      return () => clearInterval(interval);
     }
-  }, []);
+  }, [pathName]);
+
+  useEffect(() => {
+    dispatch(fetchGroups());
+    const interval = setInterval(() => {
+      dispatch(fetchGroups());
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [pathName]);
 
   useEffect(() => {
     if (!userName) {

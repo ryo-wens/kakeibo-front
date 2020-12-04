@@ -26,6 +26,7 @@ import {
   getGroupPathMonth,
 } from '../lib/path';
 import GroupCustomBudgets from '../components/budget/GroupCustomBudgets';
+import { fetchGroups } from '../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -85,6 +86,16 @@ const CustomBudgets = () => {
   const customBudgetsList = getCustomBudgets(selector);
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
   const unInput = customBudgets === customBudgetsList;
+
+  useEffect(() => {
+    if (pathName !== 'group') {
+      dispatch(fetchGroups());
+      const interval = setInterval(() => {
+        dispatch(fetchGroups());
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [pathName]);
 
   useEffect(() => {
     if (pathName !== 'group') {
