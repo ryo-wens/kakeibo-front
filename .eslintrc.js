@@ -23,5 +23,6 @@ module.exports = {
     '@typescript-eslint/explicit-module-boundary-types': 'off',
     'prettier/prettier': 0,
     '@typescript-eslint/no-empty-interface': 0,
+    'react/prop-types': 0,
   },
 };

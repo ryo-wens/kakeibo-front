@@ -11,7 +11,14 @@ import {
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
+import { fetchCategories } from '../../reducks/categories/operations';
+import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
+import {
+  getGroupIncomeCategories,
+  getGroupExpenseCategories,
+} from '../../reducks/groupCategories/selectors';
 import { getUserId } from '../../reducks/users/selectors';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
 import {
@@ -23,6 +30,7 @@ import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
 import { State } from '../../reducks/store/types';
+import { AssociatedCategory, Category } from '../../reducks/categories/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -64,6 +72,10 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const selector = useSelector((state: State) => state);
   const approvedGroup = getApprovedGroups(selector);
   const userId = getUserId(selector);
+  const incomeCategories = getIncomeCategories(selector);
+  const expenseCategories = getExpenseCategories(selector);
+  const groupIncomeCategories = getGroupIncomeCategories(selector);
+  const groupExpenseCategories = getGroupExpenseCategories(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const [amount, setAmount] = useState<string>('');
@@ -71,13 +83,15 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string>('');
   const emptyShop = shop === '' ? null : shop;
-  const [category, setCategory] = useState<string>('');
   const [transactionDate, setTransactionDate] = useState<Date | null>(props.selectDate);
-  const [transactionsType, setTransactionType] = useState<string>('');
+  const [transactionsType, setTransactionType] = useState<string>('expense');
+  const [paymentUserId, setPaymentUserId] = useState<string>(userId);
+  const [bigCategory, setBigCategory] = useState<string | null>('');
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
+  const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const [paymentUserId, setPaymentUserId] = useState<string>(userId);
+  const [associatedCategory, setAssociatedCategory] = useState<string>('');
 
   useEffect(() => {
     setTransactionDate(props.selectDate);
@@ -86,6 +100,18 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   useEffect(() => {
     setPaymentUserId(userId);
   }, [userId]);
+
+  useEffect(() => {
+    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+      dispatch(fetchCategories());
+    }
+  }, [pathName]);
+
+  useEffect(() => {
+    if (pathName === 'group') {
+      dispatch(fetchGroupCategories(groupId));
+    }
+  }, [pathName]);
 
   const handleAmountChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -106,13 +132,6 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     [setShop]
   );
 
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setCategory(event.target.value as string);
-    },
-    [setCategory]
-  );
-
   const handleSelect = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       setTransactionType(event.target.value as string);
@@ -128,21 +147,38 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   );
 
   const selectCategory = useCallback(
-    (bigCategoryId: number, associatedCategoryId: number | null, category_type: string) => {
-      switch (category_type) {
+    (
+      bigCategoryIndex: number,
+      bigCategory: Category | null,
+      associatedCategory: AssociatedCategory
+    ) => {
+      setBigCategoryIndex(bigCategoryIndex);
+      setAssociatedCategory(associatedCategory.name);
+
+      if (bigCategory !== null) {
+        setTransactionType(bigCategory.transaction_type);
+        setBigCategoryId(bigCategory.id);
+        setBigCategory(bigCategory.name);
+      }
+
+      switch (associatedCategory.category_type) {
         case 'MediumCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(associatedCategoryId);
+          setMediumCategoryId(associatedCategory.id);
           setCustomCategoryId(null);
           break;
         case 'CustomCategory':
-          setBigCategoryId(bigCategoryId);
           setMediumCategoryId(null);
-          setCustomCategoryId(associatedCategoryId);
+          setCustomCategoryId(associatedCategory.id);
           break;
       }
     },
-    [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
+    [
+      setTransactionType,
+      setBigCategoryIndex,
+      setBigCategoryId,
+      setMediumCategoryId,
+      setCustomCategoryId,
+    ]
   );
 
   const resetForm = useCallback(() => {
@@ -150,8 +186,8 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     setMemo('');
     setShop('');
     setTransactionType('');
-    setCategory('');
-  }, [setAmount, setMemo, setShop, setTransactionType, setCategory]);
+    setBigCategory('');
+  }, [setAmount, setMemo, setShop, setTransactionType, setBigCategory]);
 
   const handlePayerChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -160,7 +196,8 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     [setPaymentUserId]
   );
 
-  const unInput = amount === '' || category === '' || transactionsType === '';
+  const unInput =
+    amount === '' || bigCategory === '' || bigCategoryId === 0 || transactionsType === '';
 
   const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,
@@ -248,11 +285,15 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           />
         )}
         <CategoryInput
-          value={category}
-          onClick={selectCategory}
-          onChange={handleChange}
-          required={true}
+          associatedCategory={associatedCategory}
+          bigCategory={bigCategory}
+          bigCategoryId={bigCategoryId}
+          bigCategoryIndex={bigCategoryIndex}
           kind={transactionsType}
+          onClick={selectCategory}
+          required={true}
+          expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+          incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
         />
         <TextInput
           value={shop}

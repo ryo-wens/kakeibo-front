@@ -7,6 +7,8 @@ import AddTransactionModal from './AddTransactionModal';
 interface SelectMenuProps {
   startDate: number;
   endDate: number;
+  year: number;
+  month: number;
 }
 const SelectMenu = (props: SelectMenuProps) => {
   const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
@@ -32,7 +34,7 @@ const SelectMenu = (props: SelectMenuProps) => {
   };
 
   const selectedDays = (index: number): Date => {
-    return selectedDate(props.startDate, props.endDate)[index];
+    return selectedDate(props.startDate, props.endDate, props.year, props.month)[index];
   };
 
   return (
@@ -53,7 +55,7 @@ const SelectMenu = (props: SelectMenuProps) => {
         open={Boolean(anchorEl)}
         onClose={handleClose}
       >
-        {weekDays(props.startDate, props.endDate).map((weekDay, index) => {
+        {weekDays(props.startDate, props.endDate, props.month).map((weekDay, index) => {
           return (
             <MenuItem key={index} onClick={() => modalOpen(index)}>
               {weekDay}
