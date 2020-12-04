@@ -22,6 +22,7 @@ import FormControl from '@material-ui/core/FormControl';
 import Select from '@material-ui/core/Select';
 import { State } from '../reducks/store/types';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
+import { fetchGroups } from '../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,6 +78,16 @@ const YearlyBudgets = () => {
   const [years, setYears] = useState<number>(date.getFullYear());
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
+
+  useEffect(() => {
+    if (pathName !== 'group') {
+      dispatch(fetchGroups());
+      const interval = setInterval(() => {
+        dispatch(fetchGroups());
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [pathName]);
 
   useEffect(() => {
     dispatch(fetchStandardBudgets());

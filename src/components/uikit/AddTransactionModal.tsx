@@ -12,7 +12,6 @@ import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { fetchCategories } from '../../reducks/categories/operations';
-import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
 import {
@@ -31,6 +30,7 @@ import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
 import { State } from '../../reducks/store/types';
 import { AssociatedCategory, Category } from '../../reducks/categories/types';
+import { customMonth } from '../../lib/constant';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -104,12 +104,6 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   useEffect(() => {
     if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
       dispatch(fetchCategories());
-    }
-  }, [pathName]);
-
-  useEffect(() => {
-    if (pathName === 'group') {
-      dispatch(fetchGroupCategories(groupId));
     }
   }, [pathName]);
 

@@ -29,13 +29,13 @@ const RecentInput = () => {
       }, 3000);
       return () => clearInterval(interval);
     }
-  }, []);
+  }, [pathName]);
 
   useEffect(() => {
     if (pathName !== 'group' && !latestTransactionsList.length) {
       dispatch(fetchLatestTransactionsList());
     }
-  }, []);
+  }, [pathName]);
 
   return (
     <div className="recent-input box__recent ">

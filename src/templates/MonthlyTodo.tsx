@@ -60,7 +60,6 @@ const MonthlyTodo = () => {
   const date: string = ('0' + selectedDate.getDate()).slice(-2);
 
   const fetchGroupTodoList = () => {
-    dispatch(fetchGroups());
     dispatch(fetchGroupExpiredTodoList(groupId));
     dispatch(fetchGroupTodayTodoList(groupId, year, month, date));
     dispatch(fetchGroupMonthTodoList(groupId, year, month));
@@ -75,6 +74,14 @@ const MonthlyTodo = () => {
       return () => clearInterval(interval);
     }
   }, [selectedDate]);
+
+  useEffect(() => {
+    dispatch(fetchGroups());
+    const interval = setInterval(() => {
+      dispatch(fetchGroups());
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [entityType]);
 
   useEffect(() => {
     if (entityType !== 'group' && !expiredTodoList.length) {

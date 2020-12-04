@@ -19,6 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import GenericButton from '../components/uikit/GenericButton';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
 import GroupStandardBudgets from '../components/budget/GroupStandardBudgets';
+import { fetchGroups } from '../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,6 +74,16 @@ const StandardBudgets = () => {
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
   const unEditBudgets = budgets === standardBudgets;
+
+  useEffect(() => {
+    if (pathName !== 'group') {
+      dispatch(fetchGroups());
+      const interval = setInterval(() => {
+        dispatch(fetchGroups());
+      }, 3000);
+      return () => clearInterval(interval);
+    }
+  }, [pathName]);
 
   useEffect(() => {
     if (!standardBudgets.length && pathName !== 'group') {

@@ -38,11 +38,9 @@ const History = () => {
       selectedYear: String(selectedYear),
       selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
     };
-    dispatch(fetchGroups());
     dispatch(fetchGroupTransactionsList(groupId, years));
     dispatch(fetchGroupCategories(groupId));
   };
-
   useEffect(() => {
     if (pathName === 'group') {
       fetchGroupHistoryData();
@@ -52,6 +50,14 @@ const History = () => {
       return () => clearInterval(interval);
     }
   }, [selectedYear, selectedMonth]);
+
+  useEffect(() => {
+    dispatch(fetchGroups());
+    const interval = setInterval(() => {
+      dispatch(fetchGroups());
+    }, 3000);
+    return () => clearInterval(interval);
+  }, [pathName]);
 
   const handleSelectYearsOpen = useCallback(() => {
     setOpenSelectYears(true);
