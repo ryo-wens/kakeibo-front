@@ -1,15 +1,11 @@
 import React from 'react';
 import './assets/style.scss';
-import { Header } from './components/header';
 import Router from './Router';
 
 const App = () => {
   return (
     <>
-      <Header />
-      <main className="section__container">
-        <Router />
-      </main>
+      <Router />
     </>
   );
 };

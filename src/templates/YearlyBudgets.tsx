@@ -23,6 +23,7 @@ import Select from '@material-ui/core/Select';
 import { State } from '../reducks/store/types';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
 import { fetchGroups } from '../reducks/groups/operations';
+import { Header } from '../components/header';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -101,71 +102,82 @@ const YearlyBudgets = () => {
   );
 
   return (
-    <div className={classes.mainPosition}>
-      <ButtonGroup className={classes.buttonPosition} size="large" aria-label="budgets-kind">
-        <Button
-          className={classes.buttonSize}
-          onClick={() => {
-            {
-              pathName !== 'group'
-                ? dispatch(push('/standard/budgets'))
-                : dispatch(push(`/group/${groupId}/standard/budgets`));
-            }
-          }}
-        >
-          標準予算
-        </Button>
-        <Button
-          className={classes.buttonSize}
-          onClick={() => {
-            pathName !== 'group'
-              ? dispatch(push('/yearly/budgets'))
-              : dispatch(push(`/group/${groupId}/yearly/budgets`));
-          }}
-        >
-          月別カスタム予算
-        </Button>
-      </ButtonGroup>
-      <FormControl variant="outlined" className={classes.formControl}>
-        <InputLabel id="years">年</InputLabel>
-        <Select id="years" labelId="yearsList" value={years} onChange={handleDateChange} label="年">
-          <MenuItem value={years + 1}>{years + 1}</MenuItem>
-          <MenuItem value={years}>{years}</MenuItem>
-          <MenuItem value={years - 1}>{years - 1}</MenuItem>
-        </Select>
-      </FormControl>
-      <h1>総額 ¥ {pathName !== 'group' ? totalBudget : totalGroupBudget}</h1>
-      <TableContainer className={classes.tablePosition} component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableTop} align="center">
-                月
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                予算の種類
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                期間
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                1ヶ月の予算
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                操作
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
-            {pathName !== 'group' ? (
-              <YearlyBudgetsRow years={years} />
-            ) : (
-              <GroupYearlyBudgetsRow years={years} />
-            )}
-          </TableBody>
-        </Table>
-      </TableContainer>
-    </div>
+    <>
+      <Header />
+      <main className="section__container">
+        <div className={classes.mainPosition}>
+          <ButtonGroup className={classes.buttonPosition} size="large" aria-label="budgets-kind">
+            <Button
+              className={classes.buttonSize}
+              onClick={() => {
+                {
+                  pathName !== 'group'
+                    ? dispatch(push('/standard/budgets'))
+                    : dispatch(push(`/group/${groupId}/standard/budgets`));
+                }
+              }}
+            >
+              標準予算
+            </Button>
+            <Button
+              className={classes.buttonSize}
+              onClick={() => {
+                pathName !== 'group'
+                  ? dispatch(push('/yearly/budgets'))
+                  : dispatch(push(`/group/${groupId}/yearly/budgets`));
+              }}
+            >
+              月別カスタム予算
+            </Button>
+          </ButtonGroup>
+          <FormControl variant="outlined" className={classes.formControl}>
+            <InputLabel id="years">年</InputLabel>
+            <Select
+              id="years"
+              labelId="yearsList"
+              value={years}
+              onChange={handleDateChange}
+              label="年"
+            >
+              <MenuItem value={years + 1}>{years + 1}</MenuItem>
+              <MenuItem value={years}>{years}</MenuItem>
+              <MenuItem value={years - 1}>{years - 1}</MenuItem>
+            </Select>
+          </FormControl>
+          <h1>総額 ¥ {pathName !== 'group' ? totalBudget : totalGroupBudget}</h1>
+          <TableContainer className={classes.tablePosition} component={Paper}>
+            <Table>
+              <TableHead>
+                <TableRow>
+                  <TableCell className={classes.tableTop} align="center">
+                    月
+                  </TableCell>
+                  <TableCell className={classes.tableTop} align="center">
+                    予算の種類
+                  </TableCell>
+                  <TableCell className={classes.tableTop} align="center">
+                    期間
+                  </TableCell>
+                  <TableCell className={classes.tableTop} align="center">
+                    1ヶ月の予算
+                  </TableCell>
+                  <TableCell className={classes.tableTop} align="center">
+                    操作
+                  </TableCell>
+                </TableRow>
+              </TableHead>
+              <TableBody>
+                {pathName !== 'group' ? (
+                  <YearlyBudgetsRow years={years} />
+                ) : (
+                  <GroupYearlyBudgetsRow years={years} />
+                )}
+              </TableBody>
+            </Table>
+          </TableContainer>
+        </div>
+      </main>
+    </>
   );
 };
 export default YearlyBudgets;

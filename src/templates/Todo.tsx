@@ -33,6 +33,7 @@ import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
 import { TodoList } from '../reducks/todoList/types';
 import { date } from '../lib/constant';
+import { Header } from '../components/header';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -122,29 +123,32 @@ const Todo = () => {
 
   return (
     <>
-      <TodoMenu />
-      <div className={classes.root}>
-        {entityType !== 'group'
-          ? existsExpiredTodoList(expiredTodoList)
-          : existsExpiredTodoList(groupExpiredTodoList)}
-        <span>
-          今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-        </span>
-        {entityType !== 'group' ? (
-          <SwitchTodoList
-            implementationTodoList={todayImplementationTodoList}
-            dueTodoList={todayDueTodoList}
-          />
-        ) : (
-          <SwitchTodoList
-            implementationTodoList={groupTodayImplementationTodoList}
-            dueTodoList={groupTodayDueTodoList}
-          />
-        )}
-        <div>
-          <AddTodo date={date} groupId={groupId} />
+      <Header />
+      <main className="section__container">
+        <TodoMenu />
+        <div className={classes.root}>
+          {entityType !== 'group'
+            ? existsExpiredTodoList(expiredTodoList)
+            : existsExpiredTodoList(groupExpiredTodoList)}
+          <span>
+            今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
+          </span>
+          {entityType !== 'group' ? (
+            <SwitchTodoList
+              implementationTodoList={todayImplementationTodoList}
+              dueTodoList={todayDueTodoList}
+            />
+          ) : (
+            <SwitchTodoList
+              implementationTodoList={groupTodayImplementationTodoList}
+              dueTodoList={groupTodayDueTodoList}
+            />
+          )}
+          <div>
+            <AddTodo date={date} groupId={groupId} />
+          </div>
         </div>
-      </div>
+      </main>
     </>
   );
 };

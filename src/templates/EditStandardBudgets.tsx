@@ -31,6 +31,7 @@ import {
 } from '../lib/path';
 import EditGroupStandardBudgets from '../components/budget/EditGroupStandardBudgets';
 import { fetchGroups } from '../reducks/groups/operations';
+import { Header } from '../components/header';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -116,111 +117,120 @@ const EditStandardBudgets = () => {
   }, [customBudgetsList]);
 
   return (
-    <div className={classes.root}>
-      <ButtonGroup className={classes.buttonGroupPosition} size="large" aria-label="budgets-kind">
-        <Button
-          className={classes.buttonSize}
-          onClick={() => {
+    <>
+      <Header />
+      <main className="section__container">
+        <div className={classes.root}>
+          <ButtonGroup
+            className={classes.buttonGroupPosition}
+            size="large"
+            aria-label="budgets-kind"
+          >
+            <Button
+              className={classes.buttonSize}
+              onClick={() => {
+                if (pathName !== 'group') {
+                  dispatch(push('/standard/budgets'));
+                } else {
+                  dispatch(push(`/group/${groupId}/standard/budgets`));
+                }
+              }}
+            >
+              標準
+            </Button>
+            <Button
+              className={classes.buttonSize}
+              onClick={() => {
+                if (pathName !== 'group') {
+                  dispatch(push('/yearly/budgets'));
+                } else {
+                  dispatch(push(`/group/${groupId}/yearly/budgets`));
+                }
+              }}
+            >
+              月ごと
+            </Button>
+          </ButtonGroup>
+          <h1>{pathName !== 'group' ? yearsInPersonal : yearsInGroup}</h1>
+          {(() => {
             if (pathName !== 'group') {
-              dispatch(push('/standard/budgets'));
-            } else {
-              dispatch(push(`/group/${groupId}/standard/budgets`));
-            }
-          }}
-        >
-          標準
-        </Button>
-        <Button
-          className={classes.buttonSize}
-          onClick={() => {
-            if (pathName !== 'group') {
-              dispatch(push('/yearly/budgets'));
-            } else {
-              dispatch(push(`/group/${groupId}/yearly/budgets`));
-            }
-          }}
-        >
-          月ごと
-        </Button>
-      </ButtonGroup>
-      <h1>{pathName !== 'group' ? yearsInPersonal : yearsInGroup}</h1>
-      {(() => {
-        if (pathName !== 'group') {
-          return (
-            <>
-              <TableContainer className={classes.tablePosition} component={Paper}>
-                <Table>
-                  <TableHead>
-                    <TableRow>
-                      <TableCell className={classes.tableTop} align="center">
-                        カテゴリー
-                      </TableCell>
-                      <TableCell className={classes.tableTop} align="center">
-                        先月の支出
-                      </TableCell>
-                      <TableCell className={classes.tableTop} align="center">
-                        予算
-                      </TableCell>
-                    </TableRow>
-                  </TableHead>
-                  <TableBody>
-                    {customBudgets.map((customBudget, index) => {
-                      const onChangeBudget = (event: { target: { value: string } }) => {
-                        const newBudgets = [...customBudgets];
-                        newBudgets[index].budget = (event.target.value as unknown) as number;
-                        setCustomBudgets(newBudgets);
-                      };
-                      return (
-                        <TableRow key={customBudget.big_category_id}>
-                          <TableCell className={classes.tableSize} component="th" scope="row">
-                            {customBudget.big_category_name}
+              return (
+                <>
+                  <TableContainer className={classes.tablePosition} component={Paper}>
+                    <Table>
+                      <TableHead>
+                        <TableRow>
+                          <TableCell className={classes.tableTop} align="center">
+                            カテゴリー
                           </TableCell>
-                          <TableCell className={classes.tableSize}>￥10,000</TableCell>
-                          <TableCell className={classes.tableSize} align="center">
-                            <TextField
-                              size={'small'}
-                              id={'budgets'}
-                              variant="outlined"
-                              type={'number'}
-                              value={customBudget.budget}
-                              onChange={onChangeBudget}
-                            />
+                          <TableCell className={classes.tableTop} align="center">
+                            先月の支出
+                          </TableCell>
+                          <TableCell className={classes.tableTop} align="center">
+                            予算
                           </TableCell>
                         </TableRow>
-                      );
-                    })}
-                  </TableBody>
-                </Table>
-              </TableContainer>
-              <div className={classes.updateButton}>
-                <GenericButton
-                  label={'更新する'}
-                  disabled={unInputBudgets}
-                  onClick={() =>
-                    dispatch(
-                      addCustomBudgets(
-                        selectYear,
-                        selectMonth,
-                        customBudgets.map((budget) => {
-                          let { big_category_name, ...rest } = budget; // eslint-disable-line
-                          rest = {
-                            big_category_id: rest.big_category_id,
-                            budget: Number(rest.budget),
+                      </TableHead>
+                      <TableBody>
+                        {customBudgets.map((customBudget, index) => {
+                          const onChangeBudget = (event: { target: { value: string } }) => {
+                            const newBudgets = [...customBudgets];
+                            newBudgets[index].budget = (event.target.value as unknown) as number;
+                            setCustomBudgets(newBudgets);
                           };
-                          return rest;
-                        })
-                      )
-                    ) && dispatch(push('/yearly/budgets'))
-                  }
-                />
-              </div>
-            </>
-          );
-        } else {
-          return <EditGroupStandardBudgets />;
-        }
-      })()}
-    </div>
+                          return (
+                            <TableRow key={customBudget.big_category_id}>
+                              <TableCell className={classes.tableSize} component="th" scope="row">
+                                {customBudget.big_category_name}
+                              </TableCell>
+                              <TableCell className={classes.tableSize}>￥10,000</TableCell>
+                              <TableCell className={classes.tableSize} align="center">
+                                <TextField
+                                  size={'small'}
+                                  id={'budgets'}
+                                  variant="outlined"
+                                  type={'number'}
+                                  value={customBudget.budget}
+                                  onChange={onChangeBudget}
+                                />
+                              </TableCell>
+                            </TableRow>
+                          );
+                        })}
+                      </TableBody>
+                    </Table>
+                  </TableContainer>
+                  <div className={classes.updateButton}>
+                    <GenericButton
+                      label={'更新する'}
+                      disabled={unInputBudgets}
+                      onClick={() =>
+                        dispatch(
+                          addCustomBudgets(
+                            selectYear,
+                            selectMonth,
+                            customBudgets.map((budget) => {
+                              let { big_category_name, ...rest } = budget; // eslint-disable-line
+                              rest = {
+                                big_category_id: rest.big_category_id,
+                                budget: Number(rest.budget),
+                              };
+                              return rest;
+                            })
+                          )
+                        ) && dispatch(push('/yearly/budgets'))
+                      }
+                    />
+                  </div>
+                </>
+              );
+            } else {
+              return <EditGroupStandardBudgets />;
+            }
+          })()}
+        </div>
+      </main>
+    </>
   );
 };
 
