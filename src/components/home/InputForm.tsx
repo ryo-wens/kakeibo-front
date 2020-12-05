@@ -29,6 +29,7 @@ import { State } from '../../reducks/store/types';
 import { Category, AssociatedCategory } from '../../reducks/categories/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { customMonth } from '../../lib/constant';
+import { isValidAmountFormat } from '../../lib/validation';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -174,7 +175,11 @@ const InputForm = (): JSX.Element => {
   );
 
   const unInput =
-    amount === '' || bigCategory === '' || bigCategoryId === 0 || transactionsType === '';
+    amount === '' ||
+    !isValidAmountFormat(amount) ||
+    bigCategory === '' ||
+    bigCategoryId === 0 ||
+    transactionsType === '';
 
   const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,

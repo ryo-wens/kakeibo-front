@@ -31,6 +31,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { State } from '../../reducks/store/types';
 import { AssociatedCategory, Category } from '../../reducks/categories/types';
 import { customMonth } from '../../lib/constant';
+import { isValidAmountFormat } from '../../lib/validation';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -191,7 +192,11 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   );
 
   const unInput =
-    amount === '' || bigCategory === '' || bigCategoryId === 0 || transactionsType === '';
+    amount === '' ||
+    !isValidAmountFormat(amount) ||
+    bigCategory === '' ||
+    bigCategoryId === 0 ||
+    transactionsType === '';
 
   const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,
@@ -216,24 +221,28 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     custom_category_id: customCategoryId,
   };
 
-  const personalAddTransaction = () => {
-    async function personalTransaction() {
-      await dispatch(addLatestTransactions(personalAddRequestData));
-      dispatch(addTransactions(customMonth));
-      props.onClose();
-      resetForm();
-    }
-    personalTransaction();
-  };
+  const switchingAddTransaction = () => {
+    const personalAddTransaction = () => {
+      async function personalTransaction() {
+        await dispatch(addLatestTransactions(personalAddRequestData));
+        dispatch(addTransactions(customMonth));
+        props.onClose();
+        resetForm();
+      }
+      personalTransaction();
+    };
 
-  const groupAddTransaction = () => {
-    async function groupTransaction() {
-      await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
-      dispatch(addGroupTransactions(customMonth));
-      props.onClose();
-      resetForm();
-    }
-    groupTransaction();
+    const groupAddTransaction = () => {
+      async function groupTransaction() {
+        await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
+        dispatch(addGroupTransactions(customMonth));
+        props.onClose();
+        resetForm();
+      }
+      groupTransaction();
+    };
+
+    return pathName !== 'group' ? personalAddTransaction() : groupAddTransaction();
   };
 
   const body = (
@@ -311,7 +320,9 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       <div className={classes.buttonPosition}>
         <GenericButton
           startIcon={<AddCircleOutlineIcon />}
-          onClick={pathName !== 'group' ? personalAddTransaction : groupAddTransaction}
+          onClick={() => {
+            switchingAddTransaction();
+          }}
           label={'追加する'}
           disabled={unInput}
         />
@@ -322,7 +333,18 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   return (
     <Modal
       open={props.open}
-      onClose={props.onClose}
+      onClose={() => {
+        props.onClose();
+        setAmount('');
+        setMemo('');
+        setShop('');
+        setTransactionType('expense');
+        setBigCategory('');
+        setAssociatedCategory('');
+        setBigCategoryId(0);
+        setMediumCategoryId(null);
+        setCustomCategoryId(null);
+      }}
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"
     >
