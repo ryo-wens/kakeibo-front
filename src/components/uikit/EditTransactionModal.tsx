@@ -19,14 +19,18 @@ import Modal from '@material-ui/core/Modal';
 import {
   GenericButton,
   DatePicker,
-  ModalCategoryInput,
+  CategoryInput,
   TextInput,
   KindSelectBox,
   SelectPayer,
 } from '../uikit/index';
 import { getExpenseCategories, getIncomeCategories } from '../../reducks/categories/selectors';
+import {
+  getGroupIncomeCategories,
+  getGroupExpenseCategories,
+} from '../../reducks/groupCategories/selectors';
 import { State } from '../../reducks/store/types';
-import { CategoryId, CategoryName } from '../../reducks/categories/types';
+import { AssociatedCategory, Category, CategoryId } from '../../reducks/categories/types';
 import { expenseTransactionType, incomeTransactionType } from '../../lib/constant';
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -34,6 +38,7 @@ import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { Groups } from '../../reducks/groups/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { isValidAmountFormat } from '../../lib/validation';
 import CloseIcon from '@material-ui/icons/Close';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -76,8 +81,9 @@ interface InputModalProps {
   memo: string | null;
   shop: string | null;
   categoryName: {
-    mediumCategory: string | null;
-    customCategory: string | null;
+    bigCategory: string;
+    mediumCategory: string;
+    customCategory: string;
   };
   transactionsType: string;
   paymentUserId?: string;
@@ -87,19 +93,32 @@ interface InputModalProps {
 const EditTransactionModal = (props: InputModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const id = props.id;
+  const groupId = getPathGroupId(window.location.pathname);
+  const pathName = getPathTemplateName(window.location.pathname);
   const selector = useSelector((state: State) => state);
   const incomeCategories = getIncomeCategories(selector);
   const expenseCategories = getExpenseCategories(selector);
-  const id = props.id;
+  const groupIncomeCategories = getGroupIncomeCategories(selector);
+  const groupExpenseCategories = getGroupExpenseCategories(selector);
   const [amount, setAmount] = useState<string>(String(props.amount));
   const [memo, setMemo] = useState<string | null>(props.memo);
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string | null>(props.shop);
   const emptyShop = shop === '' ? null : shop;
   const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
-  const groupId = getPathGroupId(window.location.pathname);
-  const pathName = getPathTemplateName(window.location.pathname);
   const [paymentUserId, setPaymentUserId] = useState<string>(String(props.paymentUserId));
+  const [bigCategory, setBigCategory] = useState<string | null>(props.categoryName.bigCategory);
+  const [associatedCategory, setAssociatedCategory] = useState<string>(
+    props.categoryName.mediumCategory || props.categoryName.customCategory
+  );
+  const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
+  const [bigCategoryId, setBigCategoryId] = useState<number>(0);
+  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
+  const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
+  const adjustTransactionDate = props.transactionDate.replace('/', '-').slice(0, 10);
+  const changeTypeTransactionDate = new Date(adjustTransactionDate);
+  const [transactionDate, setTransactionDate] = useState<Date | null>(changeTypeTransactionDate);
 
   const categoryId = (): CategoryId => {
     const categoriesId: CategoryId = {
@@ -109,32 +128,64 @@ const EditTransactionModal = (props: InputModalProps) => {
     };
 
     if (props.transactionsType === expenseTransactionType) {
-      for (const expenseCategory of expenseCategories) {
-        for (const associatedCategory of expenseCategory.associated_categories_list) {
-          if (props.categoryName.mediumCategory === associatedCategory.name) {
-            categoriesId.bigCategoryId = associatedCategory.big_category_id;
-            categoriesId.mediumCategoryId = associatedCategory.id;
-            categoriesId.customCategoryId = null;
-          } else if (props.categoryName.customCategory === associatedCategory.name) {
-            categoriesId.bigCategoryId = associatedCategory.big_category_id;
-            categoriesId.mediumCategoryId = null;
-            categoriesId.customCategoryId = associatedCategory.id;
+      if (pathName !== 'group') {
+        for (const expenseCategory of expenseCategories) {
+          for (const associatedCategory of expenseCategory.associated_categories_list) {
+            if (props.categoryName.mediumCategory === associatedCategory.name) {
+              categoriesId.bigCategoryId = associatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = associatedCategory.id;
+              categoriesId.customCategoryId = null;
+            } else if (props.categoryName.customCategory === associatedCategory.name) {
+              categoriesId.bigCategoryId = associatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = null;
+              categoriesId.customCategoryId = associatedCategory.id;
+            }
+          }
+        }
+      } else if (pathName === 'group') {
+        for (const groupExpenseCategory of groupExpenseCategories) {
+          for (const groupAssociatedCategory of groupExpenseCategory.associated_categories_list) {
+            if (props.categoryName.mediumCategory === groupAssociatedCategory.name) {
+              categoriesId.bigCategoryId = groupAssociatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = groupAssociatedCategory.id;
+              categoriesId.customCategoryId = null;
+            } else if (props.categoryName.customCategory === groupAssociatedCategory.name) {
+              categoriesId.bigCategoryId = groupAssociatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = null;
+              categoriesId.customCategoryId = groupAssociatedCategory.id;
+            }
           }
         }
       }
     }
 
     if (props.transactionsType === incomeTransactionType) {
-      for (const incomeCategory of incomeCategories) {
-        for (const associatedCategory of incomeCategory.associated_categories_list) {
-          if (props.categoryName.mediumCategory === associatedCategory.name) {
-            categoriesId.bigCategoryId = associatedCategory.big_category_id;
-            categoriesId.mediumCategoryId = associatedCategory.id;
-            categoriesId.customCategoryId = null;
-          } else if (props.categoryName.customCategory === associatedCategory.name) {
-            categoriesId.bigCategoryId = associatedCategory.big_category_id;
-            categoriesId.mediumCategoryId = null;
-            categoriesId.customCategoryId = associatedCategory.id;
+      if (pathName !== 'group') {
+        for (const incomeCategory of incomeCategories) {
+          for (const associatedCategory of incomeCategory.associated_categories_list) {
+            if (props.categoryName.mediumCategory === associatedCategory.name) {
+              categoriesId.bigCategoryId = associatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = associatedCategory.id;
+              categoriesId.customCategoryId = null;
+            } else if (props.categoryName.customCategory === associatedCategory.name) {
+              categoriesId.bigCategoryId = associatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = null;
+              categoriesId.customCategoryId = associatedCategory.id;
+            }
+          }
+        }
+      } else if (pathName === 'group') {
+        for (const groupIncomeCategory of groupIncomeCategories) {
+          for (const groupAssociatedCategory of groupIncomeCategory.associated_categories_list) {
+            if (props.categoryName.mediumCategory === groupAssociatedCategory.name) {
+              categoriesId.bigCategoryId = groupAssociatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = groupAssociatedCategory.id;
+              categoriesId.customCategoryId = null;
+            } else if (props.categoryName.customCategory === groupAssociatedCategory.name) {
+              categoriesId.bigCategoryId = groupAssociatedCategory.big_category_id;
+              categoriesId.mediumCategoryId = null;
+              categoriesId.customCategoryId = groupAssociatedCategory.id;
+            }
           }
         }
       }
@@ -143,24 +194,12 @@ const EditTransactionModal = (props: InputModalProps) => {
     return categoriesId;
   };
 
-  const customTransactionDate = props.transactionDate.replace('/', '-').slice(0, 10);
-
-  const changeTransactionDate = new Date(customTransactionDate);
-
-  const [transactionDate, setTransactionDate] = useState<Date | null>(changeTransactionDate);
-
-  const [category, setCategory] = useState<CategoryName>({
-    mediumCategory: props.categoryName.mediumCategory,
-    customCategory: props.categoryName.customCategory,
-  });
-
-  const [bigCategoryId, setBigCategoryId] = useState<number>(categoryId().bigCategoryId);
-  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(
-    categoryId().mediumCategoryId
-  );
-  const [customCategoryId, setCustomCategoryId] = useState<number | null>(
-    categoryId().customCategoryId
-  );
+  useEffect(() => {
+    if (props.open) {
+      setBigCategory('');
+      setAssociatedCategory('');
+    }
+  }, [transactionsType]);
 
   useEffect(() => {
     setMemo(props.memo);
@@ -175,11 +214,12 @@ const EditTransactionModal = (props: InputModalProps) => {
   }, [props.amount]);
 
   useEffect(() => {
-    setCategory({
-      customCategory: props.categoryName.customCategory,
-      mediumCategory: props.categoryName.mediumCategory,
-    });
-  }, [props.categoryName.customCategory, props.categoryName.mediumCategory]);
+    setBigCategory(props.categoryName.bigCategory);
+  }, [props.categoryName.bigCategory]);
+
+  useEffect(() => {
+    setAssociatedCategory(props.categoryName.mediumCategory || props.categoryName.customCategory);
+  }, [props.categoryName.mediumCategory, props.categoryName.customCategory]);
 
   useEffect(() => {
     setBigCategoryId(categoryId().bigCategoryId);
@@ -194,7 +234,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   }, [categoryId().customCategoryId]);
 
   useEffect(() => {
-    setTransactionDate(changeTransactionDate);
+    setTransactionDate(changeTypeTransactionDate);
   }, [props.transactionDate]);
 
   useEffect(() => {
@@ -220,20 +260,6 @@ const EditTransactionModal = (props: InputModalProps) => {
     [setShop]
   );
 
-  const handleChange = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setCategory((...category) => {
-        return {
-          ...category,
-          mediumCategory: event.target.value as string,
-          ...category,
-          customCategory: event.target.value as string,
-        };
-      });
-    },
-    [setCategory]
-  );
-
   const handleSelect = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       setTransactionType(event.target.value as string);
@@ -256,21 +282,38 @@ const EditTransactionModal = (props: InputModalProps) => {
   );
 
   const selectCategory = useCallback(
-    (bigCategoryId: number, associatedCategoryId: number | null, category_type: string) => {
-      switch (category_type) {
+    (
+      bigCategoryIndex: number,
+      bigCategory: Category | null,
+      associatedCategory: AssociatedCategory
+    ) => {
+      setBigCategoryIndex(bigCategoryIndex);
+      setAssociatedCategory(associatedCategory.name);
+
+      if (bigCategory !== null) {
+        setTransactionType(bigCategory.transaction_type);
+        setBigCategoryId(bigCategory.id);
+        setBigCategory(bigCategory.name);
+      }
+
+      switch (associatedCategory.category_type) {
         case 'MediumCategory':
-          setBigCategoryId(bigCategoryId);
-          setMediumCategoryId(associatedCategoryId);
+          setMediumCategoryId(associatedCategory.id);
           setCustomCategoryId(null);
           break;
         case 'CustomCategory':
-          setBigCategoryId(bigCategoryId);
           setMediumCategoryId(null);
-          setCustomCategoryId(associatedCategoryId);
+          setCustomCategoryId(associatedCategory.id);
           break;
       }
     },
-    [setBigCategoryId, setMediumCategoryId, setCustomCategoryId]
+    [
+      setTransactionType,
+      setBigCategoryIndex,
+      setBigCategoryId,
+      setMediumCategoryId,
+      setCustomCategoryId,
+    ]
   );
 
   const personalEditRequestData: TransactionsReq = {
@@ -318,14 +361,36 @@ const EditTransactionModal = (props: InputModalProps) => {
     groupTransaction();
   };
   const groupEditTransaction = (): void => {
-    dispatch(editGroupLatestTransactionsList(id, groupId, groupEditRequestData));
     dispatch(editGroupTransactions(id, groupId, groupEditRequestData));
+    dispatch(editGroupLatestTransactionsList(id, groupId, groupEditRequestData));
     props.onClose();
   };
 
+  const resetForm = () => {
+    setMemo(props.memo);
+    setShop(props.shop);
+    setAmount(String(props.amount));
+    setTransactionType(props.transactionsType);
+    setTransactionDate(changeTypeTransactionDate);
+    setBigCategoryId(categoryId().bigCategoryId);
+    setMediumCategoryId(categoryId().mediumCategoryId);
+    setCustomCategoryId(categoryId().customCategoryId);
+    setBigCategory(props.categoryName.bigCategory);
+    setAssociatedCategory(props.categoryName.mediumCategory || props.categoryName.customCategory);
+    setPaymentUserId(String(props.paymentUserId));
+  };
+
+  const unInput = !isValidAmountFormat(amount);
+
   const body = (
     <div className={classes.paper}>
-      <button className="input-years__btn__close" onClick={props.onClose}>
+      <button
+        className="input-years__btn__close"
+        onClick={() => {
+          props.onClose();
+          resetForm();
+        }}
+      >
         <CloseIcon />
       </button>
       <h3 className={classes.textPosition} id="simple-modal-title">
@@ -366,10 +431,14 @@ const EditTransactionModal = (props: InputModalProps) => {
             value={paymentUserId}
           />
         )}
-        <ModalCategoryInput
+        <CategoryInput
+          associatedCategory={associatedCategory}
+          bigCategory={bigCategory}
+          bigCategoryId={bigCategoryId}
+          bigCategoryIndex={bigCategoryIndex}
+          expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+          incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
           kind={transactionsType}
-          value={category}
-          onChange={handleChange}
           onClick={selectCategory}
           required={false}
         />
@@ -397,7 +466,7 @@ const EditTransactionModal = (props: InputModalProps) => {
         <GenericButton
           label={'更新する'}
           onClick={pathName !== 'group' ? personalEditTransaction : groupEditTransaction}
-          disabled={false}
+          disabled={unInput}
         />
         <IconButton
           className={classes.deleteButtonPosition}
@@ -426,7 +495,10 @@ const EditTransactionModal = (props: InputModalProps) => {
     <div>
       <Modal
         open={props.open}
-        onClose={props.onClose}
+        onClose={() => {
+          props.onClose();
+          resetForm();
+        }}
         onBackdropClick={props.onClose}
         disableBackdropClick={false}
         aria-labelledby="simple-modal-title"
