@@ -6,11 +6,10 @@ import {
   getExpiredTodoList,
   getMonthDueTodoList,
   getMonthImplementationTodoList,
-  getMonthTodoListMessage,
 } from '../reducks/todoList/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ExpiredTodoList, MonthlyTodoList, SkipMonth, TodoMenu } from '../components/todo';
+import { ExpiredTodoList, MonthlyTodoList, TodoMenu } from '../components/todo';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
   getGroupExpiredTodoList,
@@ -25,6 +24,8 @@ import {
 import { TodoList } from '../reducks/todoList/types';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
 import { Header } from '../components/header';
+import InputYears from '../components/uikit/InputYears';
+import { month, year } from '../lib/constant';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -50,20 +51,31 @@ const MonthlyTodo = () => {
   const groupExpiredTodoList = getGroupExpiredTodoList(selector);
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
-  const monthTodoListMessage = getMonthTodoListMessage(selector);
   const groupMonthImplementationTodoList = getGroupMonthImplementationTodoList(selector);
   const groupMonthDueTodoList = getGroupMonthDueTodoList(selector);
   const entityType = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
+  const [selectedYear, setSelectedYear] = useState<number>(year);
+  const [selectedMonth, setSelectedMonth] = useState<number>(month);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
-  const year = String(selectedDate.getFullYear());
-  const month: string = ('0' + (selectedDate.getMonth() + 1)).slice(-2);
-  const date: string = ('0' + selectedDate.getDate()).slice(-2);
+
+  useEffect(() => {
+    setSelectedDate(new Date(selectedYear, selectedMonth - 1));
+  }, [selectedYear, selectedMonth]);
 
   const fetchGroupTodoList = () => {
     dispatch(fetchGroupExpiredTodoList(groupId));
-    dispatch(fetchGroupTodayTodoList(groupId, year, month, date));
-    dispatch(fetchGroupMonthTodoList(groupId, year, month));
+    dispatch(
+      fetchGroupTodayTodoList(
+        groupId,
+        String(selectedYear),
+        ('0' + selectedMonth).slice(-2),
+        ('0' + selectedDate.getDate()).slice(-2)
+      )
+    );
+    dispatch(
+      fetchGroupMonthTodoList(groupId, String(selectedYear), ('0' + selectedMonth).slice(-2))
+    );
   };
 
   useEffect(() => {
@@ -74,7 +86,7 @@ const MonthlyTodo = () => {
       }, 3000);
       return () => clearInterval(interval);
     }
-  }, [selectedDate]);
+  }, [selectedDate, selectedYear, selectedMonth]);
 
   useEffect(() => {
     dispatch(fetchGroups());
@@ -85,21 +97,16 @@ const MonthlyTodo = () => {
   }, [entityType]);
 
   useEffect(() => {
-    if (entityType !== 'group' && !expiredTodoList.length) {
+    if (entityType !== 'group') {
       dispatch(fetchExpiredTodoList());
     }
-  }, []);
+  }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
-    if (
-      entityType !== 'group' &&
-      !monthImplementationTodoList.length &&
-      !monthDueTodoList.length &&
-      !monthTodoListMessage
-    ) {
-      dispatch(fetchMonthTodoList(year, month));
+    if (entityType !== 'group') {
+      dispatch(fetchMonthTodoList(String(selectedYear), ('0' + selectedMonth).slice(-2)));
     }
-  }, []);
+  }, [selectedYear, selectedMonth]);
 
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {
@@ -116,7 +123,12 @@ const MonthlyTodo = () => {
           {entityType !== 'group'
             ? existsExpiredTodoList(expiredTodoList)
             : existsExpiredTodoList(groupExpiredTodoList)}
-          <SkipMonth selectDate={selectedDate} setSelectDate={setSelectedDate} />
+          <InputYears
+            selectedYear={selectedYear}
+            selectedMonth={selectedMonth}
+            setSelectedMonth={setSelectedMonth}
+            setSelectedYear={setSelectedYear}
+          />
           <MonthlyTodoList
             selectedDate={selectedDate}
             groupId={groupId}

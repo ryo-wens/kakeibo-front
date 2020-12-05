@@ -22,24 +22,22 @@ const SkipMonth = (props: SkipMonthProps) => {
   const [openSelectYears, setOpenSelectYears] = useState<boolean>(false);
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
-  const [itemYear, setItemYear] = useState<number>(selectedYear);
-  const [itemMonth, setItemMonth] = useState<number>(selectedMonth);
 
-  const updateSelectMonth = (month: number) => {
-    setSelectedMonth(month);
-  };
-
-  const updateSelectYear = (year: number) => {
-    setSelectedYear(year);
-  };
-
+  // const updateSelectMonth = (month: number) => {
+  //   setSelectedMonth(month);
+  // };
+  //
+  // const updateSelectYear = (year: number) => {
+  //   setSelectedYear(year);
+  // };
+  //
   const handleSelectYearsOpen = useCallback(() => {
     setOpenSelectYears(true);
   }, [setOpenSelectYears]);
-
-  const handleSelectYearsClose = useCallback(() => {
-    setOpenSelectYears(false);
-  }, [setOpenSelectYears]);
+  //
+  // const handleSelectYearsClose = useCallback(() => {
+  //   setOpenSelectYears(false);
+  // }, [setOpenSelectYears]);
 
   const getTodayDate = useCallback(() => {
     props.setSelectDate(date);
@@ -74,34 +72,14 @@ const SkipMonth = (props: SkipMonthProps) => {
     }
   };
 
-  const onClickDisplayYears = () => {
-    const year = String(itemYear);
-    const month: string = ('0' + String(itemMonth)).slice(-2);
-    if (entityType !== 'group') {
-      dispatch(fetchMonthTodoList(year, month));
-      updateSelectYear(itemYear);
-      updateSelectMonth(itemMonth);
-      handleSelectYearsClose();
-      props.setSelectDate(new Date(itemYear, itemMonth - 1));
-    } else if (entityType === 'group') {
-      dispatch(fetchGroupMonthTodoList(groupId, year, month));
-      updateSelectYear(itemYear);
-      updateSelectMonth(itemMonth);
-      handleSelectYearsClose();
-      props.setSelectDate(new Date(itemYear, itemMonth - 1));
-    }
-  };
-
   return (
     <>
       {openSelectYears ? (
         <InputYears
-          handleSelectYearsClose={handleSelectYearsClose}
-          selectedMonth={selectedMonth}
           selectedYear={selectedYear}
-          setItemYear={setItemYear}
-          setItemMonth={setItemMonth}
-          onClickDisplayYears={onClickDisplayYears}
+          selectedMonth={selectedMonth}
+          setSelectedMonth={setSelectedMonth}
+          setSelectedYear={setSelectedYear}
         />
       ) : (
         <div className="skip-month">
