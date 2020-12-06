@@ -77,6 +77,7 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                 id,
                 transaction_date,
                 transaction_type,
+                big_category_name,
                 medium_category_name,
                 custom_category_name,
                 shop,
@@ -87,6 +88,7 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
               const transactionDay = Number(transaction_date.slice(8, 10));
 
               const categoryName = {
+                bigCategory: big_category_name,
                 mediumCategory: medium_category_name !== null ? medium_category_name : '',
                 customCategory: custom_category_name !== null ? custom_category_name : '',
               };

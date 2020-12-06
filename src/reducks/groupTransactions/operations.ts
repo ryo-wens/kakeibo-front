@@ -196,7 +196,12 @@ export const editGroupTransactions = (
     try {
       const result = await axios.put<GroupTransactions>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
-        JSON.stringify(requestData),
+        JSON.stringify(requestData, function (key, value) {
+          if (key === 'transaction_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
         {
           withCredentials: true,
         }
@@ -270,7 +275,12 @@ export const editGroupLatestTransactionsList = (
     try {
       const result = await axios.put<GroupTransactions>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
-        JSON.stringify(requestData),
+        JSON.stringify(requestData, function (key, value) {
+          if (key === 'transaction_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
         {
           withCredentials: true,
         }
