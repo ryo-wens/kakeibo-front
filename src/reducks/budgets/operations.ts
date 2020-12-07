@@ -4,7 +4,7 @@ import {
   updateStandardBudgetsActions,
   updateYearlyBudgetsActions,
 } from './actions';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
 import { State } from '../store/types';
 import { standardBudgetType, customBudgetType } from '../../lib/constant';
@@ -26,12 +26,13 @@ import {
   YearlyBudgetsList,
 } from './types';
 
-export const fetchStandardBudgets = () => {
+export const fetchStandardBudgets = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     try {
       const result = await axios.get<fetchStandardBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -39,7 +40,11 @@ export const fetchStandardBudgets = () => {
 
       dispatch(updateStandardBudgetsActions(standardBudgetsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
@@ -83,12 +88,13 @@ export const editStandardBudgets = (budgets: BudgetsReq) => {
   };
 };
 
-export const fetchYearlyBudgets = (year: number) => {
+export const fetchYearlyBudgets = (year: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     try {
       const result = await axios.get<YearlyBudgetsList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${year}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -96,17 +102,26 @@ export const fetchYearlyBudgets = (year: number) => {
 
       dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
 
-export const fetchCustomBudgets = (selectYear: string, selectMonth: string) => {
+export const fetchCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  signal: CancelTokenSource
+) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     try {
       const result = await axios.get<fetchCustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -114,7 +129,11 @@ export const fetchCustomBudgets = (selectYear: string, selectMonth: string) => {
 
       dispatch(updateCustomBudgetsActions(customBudgets));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };

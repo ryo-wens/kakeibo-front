@@ -14,6 +14,7 @@ import { State } from '../reducks/store/types';
 import { Category } from '../reducks/categories/types';
 import { getIncomeCategories, getExpenseCategories } from '../reducks/categories/selectors';
 import { Header } from '../components/header';
+import axios from 'axios';
 
 const useStyles = makeStyles({
   tablePosition: {
@@ -51,8 +52,10 @@ const SelectBigCategory = () => {
   const expenseCategories = getExpenseCategories(selector);
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
     if (incomeCategories.length === 0 || expenseCategories.length === 0) {
-      dispatch(fetchCategories());
+      dispatch(fetchCategories(signal));
+      return () => signal.cancel();
     }
   }, []);
 

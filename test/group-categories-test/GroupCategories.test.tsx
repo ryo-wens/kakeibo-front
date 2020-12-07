@@ -33,6 +33,7 @@ describe('async actions fetchGroupCategories', () => {
 
   it('Get groupCategories if fetch succeeds', async () => {
     const mockResponse = groupCategories;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -47,7 +48,7 @@ describe('async actions fetchGroupCategories', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupCategories(groupId)(store.dispatch);
+    await fetchGroupCategories(groupId, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

@@ -19,6 +19,7 @@ import TextField from '@material-ui/core/TextField';
 import GenericButton from '../uikit/GenericButton';
 import { getPathGroupId } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
+import axios, { CancelTokenSource } from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -73,23 +74,24 @@ const GroupStandardBudgets = () => {
   const unEditBudgets = groupStandardBudgets === groupStandardBudgetsList;
   const [editing, setEditing] = useState<boolean>(false);
 
-  const fetchGroupStandardBudgetsData = () => {
-    dispatch(fetchGroups());
-    dispatch(fetchGroupStandardBudgets(groupId));
+  const fetchGroupStandardBudgetsData = (signal: CancelTokenSource) => {
+    dispatch(fetchGroups(signal));
+    dispatch(fetchGroupStandardBudgets(groupId, signal));
   };
 
   useEffect(() => {
     if (!editing) {
+      const signal = axios.CancelToken.source();
+      fetchGroupStandardBudgetsData(signal);
       const interval = setInterval(() => {
-        fetchGroupStandardBudgetsData();
+        fetchGroupStandardBudgetsData(signal);
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
-  }, [groupStandardBudgets]);
-
-  useEffect(() => {
-    fetchGroupStandardBudgetsData();
-  }, []);
+  }, [editing]);
 
   useEffect(() => {
     setGroupStandardBudgets(groupStandardBudgetsList);

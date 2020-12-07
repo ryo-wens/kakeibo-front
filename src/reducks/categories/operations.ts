@@ -1,5 +1,5 @@
 import { updateIncomeCategoriesAction, updateExpenseCategoriesAction } from './actions';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
 import {
   Category,
@@ -13,10 +13,11 @@ import {
 import { State } from '../store/types';
 import { errorHandling } from '../../lib/validation';
 
-export const fetchCategories = () => {
+export const fetchCategories = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<fetchCategoriesRes>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`, {
+        cancelToken: signal.token,
         withCredentials: true,
       })
       .then((res) => {
@@ -26,7 +27,11 @@ export const fetchCategories = () => {
         dispatch(updateExpenseCategoriesAction(expense));
       })
       .catch((error) => {
-        errorHandling(dispatch, error);
+        if (axios.isCancel(error)) {
+          return;
+        } else {
+          errorHandling(dispatch, error);
+        }
       });
   };
 };

@@ -24,6 +24,7 @@ import { State } from '../reducks/store/types';
 import { getPathTemplateName, getPathGroupId } from '../lib/path';
 import { fetchGroups } from '../reducks/groups/operations';
 import { Header } from '../components/header';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -82,16 +83,22 @@ const YearlyBudgets = () => {
 
   useEffect(() => {
     if (pathName !== 'group') {
-      dispatch(fetchGroups());
+      const signal = axios.CancelToken.source();
+      dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroups());
+        dispatch(fetchGroups(signal));
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
   }, [pathName]);
 
   useEffect(() => {
-    dispatch(fetchStandardBudgets());
+    const signal = axios.CancelToken.source();
+    dispatch(fetchStandardBudgets(signal));
+    return () => signal.cancel();
   }, []);
 
   const handleDateChange = useCallback(

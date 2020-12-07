@@ -17,6 +17,7 @@ import { standardBudgetType } from '../../lib/constant';
 import { getGroupYearlyBudgets } from '../../reducks/groupBudgets/selectors';
 import { getPathGroupId } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
+import axios, { CancelTokenSource } from 'axios';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -44,20 +45,21 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
     monthly_budgets: [],
   });
 
-  const fetchGroupYearlyBudgetsData = () => {
-    dispatch(fetchGroups());
-    dispatch(fetchGroupYearlyBudgets(groupId, year));
+  const fetchGroupYearlyBudgetsData = (signal: CancelTokenSource) => {
+    dispatch(fetchGroups(signal));
+    dispatch(fetchGroupYearlyBudgets(groupId, year, signal));
   };
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
+    fetchGroupYearlyBudgetsData(signal);
     const interval = setInterval(() => {
-      fetchGroupYearlyBudgetsData();
+      fetchGroupYearlyBudgetsData(signal);
     }, 3000);
-    return () => clearInterval(interval);
-  }, [year]);
-
-  useEffect(() => {
-    fetchGroupYearlyBudgetsData();
+    return () => {
+      signal.cancel();
+      clearInterval(interval);
+    };
   }, [year]);
 
   useEffect(() => {

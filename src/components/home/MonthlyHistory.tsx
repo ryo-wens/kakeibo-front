@@ -11,6 +11,7 @@ import { incomeTransactionType } from '../../lib/constant';
 import { getPathTemplateName } from '../../lib/path';
 import GroupMonthlyHistory from './GroupMothlyHistory';
 import { SelectYears } from '../../lib/date';
+import axios from 'axios';
 
 interface MonthlyHistoryProps {
   year: number;
@@ -24,6 +25,7 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
   const transactionsList = getTransactions(selector);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
+  const signal = axios.CancelToken.source();
 
   useEffect(() => {
     const years: SelectYears = {
@@ -31,7 +33,8 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
       selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
     };
     if (pathName !== 'group') {
-      dispatch(fetchTransactionsList(years));
+      dispatch(fetchTransactionsList(years, signal));
+      return () => signal.cancel();
     }
   }, [pathName]);
 

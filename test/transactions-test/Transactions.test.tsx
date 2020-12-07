@@ -49,6 +49,7 @@ describe('async actions fetchTransactionsList', () => {
 
   it('Get transactionsList if fetch succeeds', async () => {
     const mockResponse = transactionsList;
+    const signal = axios.CancelToken.source();
 
     const expectedAddActions = [
       {
@@ -62,7 +63,7 @@ describe('async actions fetchTransactionsList', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchTransactionsList(years)(store.dispatch);
+    await fetchTransactionsList(years, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 });
@@ -78,6 +79,7 @@ describe('async actions fetchLatestTransactionsList', () => {
 
   it('Get latestTransactionsList if fetch succeeds', async () => {
     const mockResponse = latestTransactionsList;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -88,7 +90,7 @@ describe('async actions fetchLatestTransactionsList', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchLatestTransactionsList()(store.dispatch);
+    await fetchLatestTransactionsList(signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

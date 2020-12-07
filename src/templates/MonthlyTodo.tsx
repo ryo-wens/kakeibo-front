@@ -26,6 +26,7 @@ import { GroupTodoList } from '../reducks/groupTodoList/types';
 import { Header } from '../components/header';
 import InputYears from '../components/uikit/InputYears';
 import { month, year } from '../lib/constant';
+import axios, { CancelTokenSource } from 'axios';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -63,50 +64,70 @@ const MonthlyTodo = () => {
     setSelectedDate(new Date(selectedYear, selectedMonth - 1));
   }, [selectedYear, selectedMonth]);
 
-  const fetchGroupTodoList = () => {
-    dispatch(fetchGroupExpiredTodoList(groupId));
+  const fetchGroupTodoList = (signal: CancelTokenSource) => {
+    dispatch(fetchGroupExpiredTodoList(groupId, signal));
     dispatch(
       fetchGroupTodayTodoList(
         groupId,
         String(selectedYear),
         ('0' + selectedMonth).slice(-2),
-        ('0' + selectedDate.getDate()).slice(-2)
+        ('0' + selectedDate.getDate()).slice(-2),
+        signal
       )
     );
     dispatch(
-      fetchGroupMonthTodoList(groupId, String(selectedYear), ('0' + selectedMonth).slice(-2))
+      fetchGroupMonthTodoList(
+        groupId,
+        String(selectedYear),
+        ('0' + selectedMonth).slice(-2),
+        signal
+      )
     );
   };
 
   useEffect(() => {
     if (entityType === 'group') {
-      fetchGroupTodoList();
+      const signal = axios.CancelToken.source();
+      fetchGroupTodoList(signal);
       const interval = setInterval(() => {
-        fetchGroupTodoList();
+        fetchGroupTodoList(signal);
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
-  }, [selectedDate, selectedYear, selectedMonth]);
+  }, [selectedYear, selectedMonth, selectedDate]);
 
   useEffect(() => {
-    dispatch(fetchGroups());
+    const signal = axios.CancelToken.source();
+    dispatch(fetchGroups(signal));
     const interval = setInterval(() => {
-      dispatch(fetchGroups());
+      dispatch(fetchGroups(signal));
     }, 3000);
-    return () => clearInterval(interval);
-  }, [entityType]);
 
-  useEffect(() => {
-    if (entityType !== 'group') {
-      dispatch(fetchExpiredTodoList());
-    }
+    return () => {
+      signal.cancel();
+      clearInterval(interval);
+    };
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
     if (entityType !== 'group') {
-      dispatch(fetchMonthTodoList(String(selectedYear), ('0' + selectedMonth).slice(-2)));
+      const signal = axios.CancelToken.source();
+      dispatch(fetchExpiredTodoList(signal));
+      dispatch(fetchMonthTodoList(String(selectedYear), ('0' + selectedMonth).slice(-2), signal));
+      return () => signal.cancel();
     }
-  }, [selectedYear, selectedMonth]);
+  }, [selectedYear, selectedMonth, selectedDate]);
+
+  // useEffect(() => {
+  //   const signal = axios.CancelToken.source();
+  //   if (entityType !== 'group') {
+  //     dispatch(fetchExpiredTodoList(signal));
+  //     return () => signal.cancel();
+  //   }
+  // }, [selectedYear, selectedMonth]);
 
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {

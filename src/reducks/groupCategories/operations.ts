@@ -1,5 +1,5 @@
 import { updateGroupIncomeCategoriesAction, updateGroupExpenseCategoriesAction } from './actions';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
 import {
   fetchGroupCategoriesRes,
@@ -11,12 +11,13 @@ import {
 import { errorHandling } from '../../lib/validation';
 import { State } from '../store/types';
 
-export const fetchGroupCategories = (groupId: number) => {
+export const fetchGroupCategories = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     await axios
       .get<fetchGroupCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       )
@@ -27,7 +28,11 @@ export const fetchGroupCategories = (groupId: number) => {
         dispatch(updateGroupExpenseCategoriesAction(groupExpenseCategories));
       })
       .catch((error) => {
-        errorHandling(dispatch, error);
+        if (axios.isCancel(error)) {
+          return;
+        } else {
+          errorHandling(dispatch, error);
+        }
       });
   };
 };

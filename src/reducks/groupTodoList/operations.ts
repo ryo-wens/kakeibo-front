@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
 import { State } from '../store/types';
 import moment from 'moment';
@@ -385,13 +385,15 @@ export const fetchGroupTodayTodoList = (
   groupId: number,
   year: string,
   month: string,
-  date: string
+  date: string,
+  signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchGroupDateTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -421,17 +423,27 @@ export const fetchGroupTodayTodoList = (
         );
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
 
-export const fetchGroupMonthTodoList = (groupId: number, year: string, month: string) => {
+export const fetchGroupMonthTodoList = (
+  groupId: number,
+  year: string,
+  month: string,
+  signal: CancelTokenSource
+) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchGroupMonthTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -461,17 +473,22 @@ export const fetchGroupMonthTodoList = (groupId: number, year: string, month: st
         );
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
 
-export const fetchGroupExpiredTodoList = (groupId: number) => {
+export const fetchGroupExpiredTodoList = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchGroupExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -479,7 +496,11 @@ export const fetchGroupExpiredTodoList = (groupId: number) => {
 
       dispatch(fetchGroupExpiredTodoListAction(groupExpiredTodoList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };

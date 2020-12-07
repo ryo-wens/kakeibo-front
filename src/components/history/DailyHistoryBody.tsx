@@ -9,6 +9,7 @@ import { getPathTemplateName } from '../../lib/path';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import '../../assets/history/daily-history.scss';
+import axios from 'axios';
 
 interface DailyHistoryBodyProps {
   transactionsList: TransactionsList;
@@ -26,8 +27,11 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
   const [openId, setOpnId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length)
-      dispatch(fetchCategories());
+    const signal = axios.CancelToken.source();
+    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+      dispatch(fetchCategories(signal));
+    }
+    return () => signal.cancel();
   }, [pathName]);
 
   const handleOpen = (transactionId: number) => {

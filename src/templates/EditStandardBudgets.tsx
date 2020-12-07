@@ -32,6 +32,7 @@ import {
 import EditGroupStandardBudgets from '../components/budget/EditGroupStandardBudgets';
 import { fetchGroups } from '../reducks/groups/operations';
 import { Header } from '../components/header';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -93,20 +94,27 @@ const EditStandardBudgets = () => {
   const unInputBudgets = customBudgets === customBudgetsList;
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
     if (pathName !== 'group') {
-      dispatch(fetchGroups());
+      dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroups());
+        dispatch(fetchGroups(signal));
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
   }, [pathName]);
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
     async function fetch() {
       if (pathName !== 'group') {
-        await dispatch(fetchStandardBudgets());
+        await dispatch(fetchStandardBudgets(signal));
         dispatch(copyStandardBudgets());
+
+        return () => signal.cancel();
       }
     }
     fetch();

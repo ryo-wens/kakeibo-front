@@ -20,6 +20,7 @@ import Table from '@material-ui/core/Table';
 import TableHead from '@material-ui/core/TableHead';
 import { getGroupPathYear, getGroupPathMonth, getPathGroupId } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
+import axios, { CancelTokenSource } from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,23 +77,24 @@ const GroupCustomBudgets = () => {
   const unInput = groupCustomBudgets === groupCustomBudgetsList;
   const [editing, setEditing] = useState<boolean>(false);
 
-  const fetchGroupCustomBudgetsData = () => {
-    dispatch(fetchGroups());
-    dispatch(fetchGroupCustomBudgets(groupInYear, groupInMonth, groupId));
+  const fetchGroupCustomBudgetsData = (signal: CancelTokenSource) => {
+    dispatch(fetchGroups(signal));
+    dispatch(fetchGroupCustomBudgets(groupInYear, groupInMonth, groupId, signal));
   };
 
   useEffect(() => {
     if (!editing) {
+      const signal = axios.CancelToken.source();
+      fetchGroupCustomBudgetsData(signal);
       const interval = setInterval(() => {
-        fetchGroupCustomBudgetsData();
+        fetchGroupCustomBudgetsData(signal);
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
-  }, [groupCustomBudgets]);
-
-  useEffect(() => {
-    fetchGroupCustomBudgetsData();
-  }, []);
+  }, [editing]);
 
   useEffect(() => {
     setGroupCustomBudgets(groupCustomBudgetsList);
@@ -166,6 +168,7 @@ const GroupCustomBudgets = () => {
               )
             );
             dispatch(push(`/group/${groupId}/yearly/budgets`));
+            setEditing(false);
           }}
         />
       </div>

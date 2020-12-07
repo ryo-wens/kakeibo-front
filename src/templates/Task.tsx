@@ -18,6 +18,7 @@ import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/grou
 import '../assets/task/task.scss';
 import { TasksListItem } from '../reducks/groupTasks/types';
 import { Header } from '../components/header';
+import axios, { CancelTokenSource } from 'axios';
 
 const Task = () => {
   const dispatch = useDispatch();
@@ -31,19 +32,23 @@ const Task = () => {
   const groupIdx = approvedGroups.findIndex((approvedGroup) => approvedGroup.group_id === groupId);
   const approvedGroup: Group = approvedGroups[groupIdx];
 
-  const fetchGroupTasks = () => {
-    dispatch(fetchGroups());
-    dispatch(fetchGroupTasksList(groupId));
-    dispatch(fetchGroupTasksListEachUser(groupId));
+  const fetchGroupTasks = (signal: CancelTokenSource) => {
+    dispatch(fetchGroups(signal));
+    dispatch(fetchGroupTasksListEachUser(groupId, signal));
+    dispatch(fetchGroupTasksList(groupId, signal));
   };
 
   useEffect(() => {
-    fetchGroupTasks();
+    const signal = axios.CancelToken.source();
+    fetchGroupTasks(signal);
     const interval = setInterval(() => {
-      fetchGroupTasks();
+      fetchGroupTasks(signal);
     }, 3000);
-    return () => clearInterval(interval);
-  }, []);
+    return () => {
+      signal.cancel();
+      clearInterval(interval);
+    };
+  }, [selectedDate]);
 
   return (
     <>

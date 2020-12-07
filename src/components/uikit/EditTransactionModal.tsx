@@ -35,6 +35,7 @@ import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { Groups } from '../../reducks/groups/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -100,6 +101,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const groupId = getPathGroupId(window.location.pathname);
   const pathName = getPathTemplateName(window.location.pathname);
   const [paymentUserId, setPaymentUserId] = useState<string>(String(props.paymentUserId));
+  const signal = axios.CancelToken.source();
 
   const categoryId = (): CategoryId => {
     const categoriesId: CategoryId = {
@@ -298,7 +300,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const personalDeleteTransaction = (): void => {
     async function personalTransaction() {
       await dispatch(deleteLatestTransactions(id));
-      dispatch(fetchLatestTransactionsList());
+      dispatch(fetchLatestTransactionsList(signal));
       dispatch(deleteTransactions(id));
     }
     personalTransaction();
@@ -312,7 +314,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const groupDeleteTransaction = (): void => {
     async function groupTransaction() {
       dispatch(deleteGroupLatestTransactions(id, groupId));
-      dispatch(fetchLatestGroupTransactionsList(groupId));
+      dispatch(fetchLatestGroupTransactionsList(groupId, signal));
       dispatch(deleteGroupTransactions(id, groupId));
     }
     groupTransaction();

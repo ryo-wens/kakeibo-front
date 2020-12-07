@@ -352,11 +352,12 @@ describe('async actions todoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('Get todayImplementationTodoList and todayDueTodoLists when FETCH_DATE_TODO_LISTS succeeds.', async () => {
+  it('Get todayImplementationTodoList and todayDueTodoLists when FETCH_DATE_TODO_LIST succeeds.', async () => {
     const year = '2020';
     const month = '09';
     const date = '27';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchDateTodoListResponse);
 
@@ -403,7 +404,7 @@ describe('async actions todoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await fetchDateTodoList(year, month, date)(store.dispatch);
+    await fetchDateTodoList(year, month, date, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -411,6 +412,7 @@ describe('async actions todoLists', () => {
     const year = '2020';
     const month = '09';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchMonthTodoListResponse);
 
@@ -466,12 +468,13 @@ describe('async actions todoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await fetchMonthTodoList(year, month)(store.dispatch);
+    await fetchMonthTodoList(year, month, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
   it('Get expiredTodoList when FETCH_EXPIRED_TODO_LIST succeeds.', async () => {
     const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchExpiredTodoListResponse);
 
@@ -496,7 +499,7 @@ describe('async actions todoLists', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchExpiredTodoList()(store.dispatch);
+    await fetchExpiredTodoList(signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

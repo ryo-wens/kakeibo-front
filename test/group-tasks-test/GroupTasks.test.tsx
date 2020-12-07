@@ -113,6 +113,7 @@ describe('async actions groupTasks', () => {
   it('Get groupTasksListForEachUser when FETCH_GROUP_TASKS_LIST_EACH_USER succeeds.', async () => {
     const groupId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchTasksListEachUserResponse);
 
@@ -160,7 +161,7 @@ describe('async actions groupTasks', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupTasksListEachUser(groupId)(store.dispatch);
+    await fetchGroupTasksListEachUser(groupId, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -282,6 +283,7 @@ describe('async actions groupTasks', () => {
   it('Get groupTasksList when FETCH_GROUP_TASKS_LIST succeeds.', async () => {
     const groupId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchTasksListResponse);
 
@@ -315,7 +317,7 @@ describe('async actions groupTasks', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupTasksList(groupId)(store.dispatch);
+    await fetchGroupTasksList(groupId, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

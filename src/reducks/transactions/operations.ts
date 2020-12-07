@@ -4,7 +4,7 @@ import {
   updateLatestTransactionsActions,
   searchTransactionsActions,
 } from './actions';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import { State } from '../store/types';
@@ -18,15 +18,19 @@ import {
 import moment from 'moment';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
-export const fetchTransactionsList = (selectYears: {
-  selectedYear: string;
-  selectedMonth: string;
-}) => {
+export const fetchTransactionsList = (
+  selectYears: {
+    selectedYear: string;
+    selectedMonth: string;
+  },
+  signal: CancelTokenSource
+) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -47,17 +51,22 @@ export const fetchTransactionsList = (selectYears: {
         dispatch(fetchTransactionsActions(emptyTransactionsList, resMessage));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
 
-export const fetchLatestTransactionsList = () => {
+export const fetchLatestTransactionsList = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchLatestTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -65,7 +74,11 @@ export const fetchLatestTransactionsList = () => {
 
       dispatch(updateLatestTransactionsActions(latestTransactionsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
