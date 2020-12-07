@@ -121,14 +121,6 @@ const MonthlyTodo = () => {
     }
   }, [selectedYear, selectedMonth, selectedDate]);
 
-  // useEffect(() => {
-  //   const signal = axios.CancelToken.source();
-  //   if (entityType !== 'group') {
-  //     dispatch(fetchExpiredTodoList(signal));
-  //     return () => signal.cancel();
-  //   }
-  // }, [selectedYear, selectedMonth]);
-
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {
       return <ExpiredTodoList expiredTodoList={todoList} />;

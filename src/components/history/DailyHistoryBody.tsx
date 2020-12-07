@@ -27,11 +27,11 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
   const [openId, setOpnId] = useState<number | undefined>(undefined);
 
   useEffect(() => {
-    const signal = axios.CancelToken.source();
     if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+      const signal = axios.CancelToken.source();
       dispatch(fetchCategories(signal));
+      return () => signal.cancel();
     }
-    return () => signal.cancel();
   }, [pathName]);
 
   const handleOpen = (transactionId: number) => {
