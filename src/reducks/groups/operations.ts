@@ -8,7 +8,7 @@ import {
   groupWithdrawalAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import {
   ApprovedGroupUser,
   createGroupReq,
@@ -115,14 +115,12 @@ export const updateGroupName = (groupId: number, groupName: string) => {
   };
 };
 
-export const fetchGroups = () => {
+export const fetchGroups = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchGroupsRes>(
         `${process.env.REACT_APP_USER_API_HOST}/groups`,
-        {
-          withCredentials: true,
-        }
+        { cancelToken: signal.token, withCredentials: true }
       );
 
       const approvedGroups = result.data.approved_group_list;
@@ -138,7 +136,11 @@ export const fetchGroups = () => {
         dispatch(fetchGroupsAction(approvedGroups, unapprovedGroups, message));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };

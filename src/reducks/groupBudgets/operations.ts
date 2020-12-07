@@ -8,7 +8,7 @@ import {
   copyGroupStandardBudgetsActions,
   deleteGroupCustomBudgetsActions,
 } from './actions';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
 import {
   GroupStandardBudgetsList,
@@ -24,19 +24,24 @@ import { totalCustomBudgets } from '../../lib/validation';
 import { State } from '../store/types';
 import { customBudgetType, standardBudgetType } from '../../lib/constant';
 
-export const fetchGroupStandardBudgets = (groupId: number) => {
+export const fetchGroupStandardBudgets = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     try {
       const result = await axios.get<GroupStandardBudgetsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
       const groupStandardBudgetsList = result.data.standard_budgets;
       dispatch(fetchGroupStandardBudgetsActions(groupStandardBudgetsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
@@ -83,19 +88,28 @@ export const editGroupStandardBudgets = (groupBudgets: GroupBudgetsReq) => {
   };
 };
 
-export const fetchGroupYearlyBudgets = (groupId: number, year: number) => {
+export const fetchGroupYearlyBudgets = (
+  groupId: number,
+  year: number,
+  signal: CancelTokenSource
+) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     try {
       const result = await axios.get<GroupYearlyBudgetsList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${year}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
       const groupYearlyBudgetsList = result.data;
       dispatch(fetchGroupYearlyBudgetsActions(groupYearlyBudgetsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
@@ -123,13 +137,15 @@ export const copyGroupStandardBudgets = () => {
 export const fetchGroupCustomBudgets = (
   selectYear: string,
   selectMonth: string,
-  groupId: number
+  groupId: number,
+  signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     try {
       const result = await axios.get<GroupCustomBudgetsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -137,7 +153,11 @@ export const fetchGroupCustomBudgets = (
 
       dispatch(fetchGroupCustomBudgetsActions(groupCustomBudgets));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };

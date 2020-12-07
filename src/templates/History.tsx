@@ -13,6 +13,7 @@ import '../assets/history/history.scss';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 import { Header } from '../components/header';
+import axios, { CancelTokenSource } from 'axios';
 
 const History = () => {
   const dispatch = useDispatch();
@@ -22,43 +23,53 @@ const History = () => {
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
 
-  const fetchGroupHistoryData = () => {
+  const fetchGroupHistoryData = (signal: CancelTokenSource) => {
     const years: SelectYears = {
       selectedYear: String(selectedYear),
       selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
     };
-    dispatch(fetchGroupTransactionsList(groupId, years));
-    dispatch(fetchGroupCategories(groupId));
+    dispatch(fetchGroupTransactionsList(groupId, years, signal));
+    dispatch(fetchGroupCategories(groupId, signal));
   };
 
   useEffect(() => {
     if (pathName === 'group') {
-      fetchGroupHistoryData();
+      const signal = axios.CancelToken.source();
+      fetchGroupHistoryData(signal);
       const interval = setInterval(() => {
-        fetchGroupHistoryData();
+        fetchGroupHistoryData(signal);
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
     if (pathName !== 'group') {
+      const signal = axios.CancelToken.source();
       const selectYears: SelectYears = {
         selectedYear: String(selectedYear),
         selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
       };
 
-      dispatch(fetchTransactionsList(selectYears));
+      dispatch(fetchTransactionsList(selectYears, signal));
+      return () => signal.cancel();
     }
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
-    dispatch(fetchGroups());
+    const signal = axios.CancelToken.source();
+    dispatch(fetchGroups(signal));
     const interval = setInterval(() => {
-      dispatch(fetchGroups());
+      dispatch(fetchGroups(signal));
     }, 3000);
-    return () => clearInterval(interval);
-  }, [pathName]);
+    return () => {
+      signal.cancel();
+      clearInterval(interval);
+    };
+  }, [pathName, selectedYear, selectedMonth]);
 
   return (
     <>

@@ -39,6 +39,7 @@ describe('async actions fetchGroupStandardBudgets', () => {
 
   it('Get groupStandardBudgetsList if fetch succeeds', async () => {
     const mockResponse = groupStandardBudgets;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -49,7 +50,7 @@ describe('async actions fetchGroupStandardBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupStandardBudgets(groupId)(store.dispatch);
+    await fetchGroupStandardBudgets(groupId, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -174,6 +175,7 @@ describe('async actions getGroupYearlyBudgets', () => {
 
   it('Get groupYearlyBudgets if fetch succeeds', async () => {
     const mockResponse = groupYearlyBudgets;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -184,7 +186,7 @@ describe('async actions getGroupYearlyBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupYearlyBudgets(groupId, year)(store.dispatch);
+    await fetchGroupYearlyBudgets(groupId, year, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -202,6 +204,7 @@ describe('async actions getGroupCustomBudgets', () => {
 
   it('Get groupCustomBudgets if fetch succeeds', async () => {
     const mockResponse = groupCustomBudgets;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -212,7 +215,7 @@ describe('async actions getGroupCustomBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupCustomBudgets(selectYear, selectMonth, groupId)(store.dispatch);
+    await fetchGroupCustomBudgets(selectYear, selectMonth, groupId, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

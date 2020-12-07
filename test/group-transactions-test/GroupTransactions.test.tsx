@@ -59,6 +59,7 @@ describe('async actions groupTransactions', () => {
     };
 
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${years.selectedYear}-${years.selectedMonth}`;
+    const signal = axios.CancelToken.source();
 
     const expectedAddActions = [
       {
@@ -69,7 +70,7 @@ describe('async actions groupTransactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupTransactionsList(groupId, years)(store.dispatch);
+    await fetchGroupTransactionsList(groupId, years, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 
@@ -84,6 +85,7 @@ describe('async actions groupTransactions', () => {
 
     const groupId = 1;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`;
+    const signal = axios.CancelToken.source();
 
     const expectedAddActions = [
       {
@@ -94,7 +96,7 @@ describe('async actions groupTransactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchLatestGroupTransactionsList(groupId)(store.dispatch);
+    await fetchLatestGroupTransactionsList(groupId, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 

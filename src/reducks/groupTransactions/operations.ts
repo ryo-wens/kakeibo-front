@@ -7,7 +7,7 @@ import {
   deleteGroupAccountAction,
   searchGroupTransactionsAction,
 } from './actions';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
 import {
   GroupTransactions,
@@ -28,13 +28,15 @@ export const fetchGroupTransactionsList = (
   selectYears: {
     selectedYear: string;
     selectedMonth: string;
-  }
+  },
+  signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<FetchGroupTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -53,17 +55,22 @@ export const fetchGroupTransactionsList = (
         dispatch(updateGroupTransactionsAction(emptyGroupTransactionsList));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
 
-export const fetchLatestGroupTransactionsList = (groupId: number) => {
+export const fetchLatestGroupTransactionsList = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<GroupLatestTransactionsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -76,7 +83,11 @@ export const fetchLatestGroupTransactionsList = (groupId: number) => {
         dispatch(updateGroupLatestTransactionsAction(emptyGroupLatestTransactionsList));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };

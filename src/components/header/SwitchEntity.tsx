@@ -6,6 +6,7 @@ import { Groups } from '../../reducks/groups/types';
 import { push } from 'connected-react-router';
 import { fetchGroups } from '../../reducks/groups/operations';
 import { useDispatch } from 'react-redux';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -68,8 +69,10 @@ const SwitchEntity = (props: SwitchEntityProps) => {
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
+    const signal = axios.CancelToken.source();
+
     if (!props.approvedGroups.length) {
-      dispatch(fetchGroups());
+      dispatch(fetchGroups(signal));
     }
   };
 

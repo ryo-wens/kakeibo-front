@@ -32,6 +32,7 @@ import { State } from '../../reducks/store/types';
 import { AssociatedCategory, Category } from '../../reducks/categories/types';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -103,9 +104,12 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   }, [userId]);
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
+
     if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
-      dispatch(fetchCategories());
+      dispatch(fetchCategories(signal));
     }
+    return () => signal.cancel();
   }, [pathName]);
 
   const handleAmountChange = useCallback(

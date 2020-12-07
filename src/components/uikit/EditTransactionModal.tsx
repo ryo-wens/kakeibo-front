@@ -40,6 +40,7 @@ import { Groups } from '../../reducks/groups/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { isValidAmountFormat } from '../../lib/validation';
 import CloseIcon from '@material-ui/icons/Close';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -119,6 +120,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const adjustTransactionDate = props.transactionDate.replace('/', '-').slice(0, 10);
   const changeTypeTransactionDate = new Date(adjustTransactionDate);
   const [transactionDate, setTransactionDate] = useState<Date | null>(changeTypeTransactionDate);
+  const signal = axios.CancelToken.source();
 
   const categoryId = (): CategoryId => {
     const categoriesId: CategoryId = {
@@ -341,7 +343,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const personalDeleteTransaction = (): void => {
     async function personalTransaction() {
       await dispatch(deleteLatestTransactions(id));
-      dispatch(fetchLatestTransactionsList());
+      dispatch(fetchLatestTransactionsList(signal));
       dispatch(deleteTransactions(id));
     }
     personalTransaction();
@@ -355,7 +357,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const groupDeleteTransaction = (): void => {
     async function groupTransaction() {
       dispatch(deleteGroupLatestTransactions(id, groupId));
-      dispatch(fetchLatestGroupTransactionsList(groupId));
+      dispatch(fetchLatestGroupTransactionsList(groupId, signal));
       dispatch(deleteGroupTransactions(id, groupId));
     }
     groupTransaction();

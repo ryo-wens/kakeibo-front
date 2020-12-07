@@ -23,19 +23,20 @@ import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import Modal from '@material-ui/core/Modal';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     tablePosition: {
-      margin:'0 auto'
+      margin: '0 auto',
     },
     tableTitle: {
       textAlign: 'center',
       marginTop: '30px',
     },
     tableSubTitle: {
-      textAlign:'left',
-      marginLeft:16
+      textAlign: 'left',
+      marginLeft: 16,
     },
     tableMain: {
       maxWidth: 660,
@@ -52,13 +53,13 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     tableCell: {
       border: 'solid 1px #e1e3e3',
-      lineHeight:"initial"
+      lineHeight: 'initial',
     },
     textSize: {
-      fontSize: "0.889rem;"
+      fontSize: '0.889rem;',
     },
     root: {
-      fontSize:"initial",
+      fontSize: 'initial',
     },
     modalPosition: {
       width: 520,
@@ -85,17 +86,20 @@ const InputCustomCategory = () => {
   const expenseCategories = getExpenseCategories(selector);
   const isNameInput = name === '';
 
-  const handleOpen =useCallback( (selectedId: number, selectedName: string) => {
-    setName(selectedName);
-    setId(selectedId);
-    setOpen(true);
-  },[setName,setId,setOpen])
+  const handleOpen = useCallback(
+    (selectedId: number, selectedName: string) => {
+      setName(selectedName);
+      setId(selectedId);
+      setOpen(true);
+    },
+    [setName, setId, setOpen]
+  );
 
-  const handleClose =useCallback( () => {
+  const handleClose = useCallback(() => {
     setName('');
     setId(0);
     setOpen(false);
-  },[setName,setId,setOpen])
+  }, [setName, setId, setOpen]);
 
   const handleChange = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -105,8 +109,10 @@ const InputCustomCategory = () => {
   );
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
     if (incomeCategories.length === 0 || expenseCategories.length === 0) {
-      dispatch(fetchCategories());
+      dispatch(fetchCategories(signal));
+      return () => signal.cancel();
     }
   }, []);
 
@@ -147,13 +153,11 @@ const InputCustomCategory = () => {
         nextCategories = [
           ...nextCategories,
           <TableRow key={mediumCategory.name}>
-            <TableCell className={ classes.tableCell } component="th" scope="row">
+            <TableCell className={classes.tableCell} component="th" scope="row">
               {mediumCategory.name}
             </TableCell>
-            <TableCell  className={classes.tableCell} align="center">
-              <div className={classes.textSize }>
-              デフォルトのカテゴリーは編集できません
-              </div>
+            <TableCell className={classes.tableCell} align="center">
+              <div className={classes.textSize}>デフォルトのカテゴリーは編集できません</div>
             </TableCell>
           </TableRow>,
         ];
@@ -161,25 +165,25 @@ const InputCustomCategory = () => {
         nextCategories = [
           ...nextCategories,
           <TableRow key={mediumCategory.name}>
-            <TableCell className = {classes.tableCell} component="th" scope="row">
+            <TableCell className={classes.tableCell} component="th" scope="row">
               {mediumCategory.name}
             </TableCell>
-            <TableCell className = {classes.tableCell} align="center">
+            <TableCell className={classes.tableCell} align="center">
               <IconButton
                 color="primary"
-                size={"small"}
+                size={'small'}
                 onClick={() => handleOpen(mediumCategory.id, mediumCategory.name)}
               >
-                <CreateIcon className={ classes.root} />
+                <CreateIcon className={classes.root} />
               </IconButton>
               <IconButton
                 color="primary"
-                size = {"small"}
+                size={'small'}
                 onClick={() =>
                   deleteCategoryCheck(mediumCategory.id, mediumCategory.big_category_id)
                 }
               >
-                <DeleteIcon className={ classes.root} />
+                <DeleteIcon className={classes.root} />
               </IconButton>
             </TableCell>
           </TableRow>,
@@ -192,63 +196,63 @@ const InputCustomCategory = () => {
   return (
     <>
       <div className={classes.tablePosition}>
-      <h3 className={classes.tableTitle}>追加するカテゴリー名を入力してください</h3>
-      <TableContainer className={classes.tableMain} component={Paper}>
-        <h3 className={classes.tableSubTitle}>追加</h3>
-        <TextInput
-          label={'追加するカテゴリー名'}
-          value={name}
-          id={'customCategory'}
-          type={'text'}
-          fullWidth={false}
-          required={false}
-          onChange={handleChange}
-        />
-        <GenericButton
-          startIcon={<AddCircleOutlineIcon/>}
-          onClick={() => dispatch(addCustomCategories(name, bigCategoryId)) && setName('')}
-          label={'追加する'}
-          disabled={isNameInput}
-        />
-        <h3 className={classes.tableSubTitle}>編集</h3>
-        <Table aria-label="simple table">
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableTop} align="center">
-                中カテゴリー
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                操作
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody >{categoryDisplay}</TableBody>
-        </Table>
-      </TableContainer>
-      <Modal open={open} onClose={handleClose}>
-        <div className={classes.modalPosition}>
-          <h3>カテゴリー編集</h3>
+        <h3 className={classes.tableTitle}>追加するカテゴリー名を入力してください</h3>
+        <TableContainer className={classes.tableMain} component={Paper}>
+          <h3 className={classes.tableSubTitle}>追加</h3>
           <TextInput
-            label={'カテゴリー名'}
-            id={'editCategory'}
+            label={'追加するカテゴリー名'}
+            value={name}
+            id={'customCategory'}
+            type={'text'}
             fullWidth={false}
             required={false}
-            type={'text'}
-            value={name}
             onChange={handleChange}
           />
-          <div className={classes.buttonsPosition}>
-            <GenericButton
-              label={'編集する'}
-              disabled={isNameInput}
-              onClick={() => {
-                dispatch(editCustomCategories(id, name, bigCategoryId)) && handleClose();
-              }}
+          <GenericButton
+            startIcon={<AddCircleOutlineIcon />}
+            onClick={() => dispatch(addCustomCategories(name, bigCategoryId)) && setName('')}
+            label={'追加する'}
+            disabled={isNameInput}
+          />
+          <h3 className={classes.tableSubTitle}>編集</h3>
+          <Table aria-label="simple table">
+            <TableHead>
+              <TableRow>
+                <TableCell className={classes.tableTop} align="center">
+                  中カテゴリー
+                </TableCell>
+                <TableCell className={classes.tableTop} align="center">
+                  操作
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>{categoryDisplay}</TableBody>
+          </Table>
+        </TableContainer>
+        <Modal open={open} onClose={handleClose}>
+          <div className={classes.modalPosition}>
+            <h3>カテゴリー編集</h3>
+            <TextInput
+              label={'カテゴリー名'}
+              id={'editCategory'}
+              fullWidth={false}
+              required={false}
+              type={'text'}
+              value={name}
+              onChange={handleChange}
             />
-            <GenericButton  disabled={false} label={'キャンセル'} onClick={handleClose} />
+            <div className={classes.buttonsPosition}>
+              <GenericButton
+                label={'編集する'}
+                disabled={isNameInput}
+                onClick={() => {
+                  dispatch(editCustomCategories(id, name, bigCategoryId)) && handleClose();
+                }}
+              />
+              <GenericButton disabled={false} label={'キャンセル'} onClick={handleClose} />
+            </div>
           </div>
-        </div>
-      </Modal>
+        </Modal>
       </div>
     </>
   );

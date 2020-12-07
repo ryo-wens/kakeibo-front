@@ -16,6 +16,7 @@ import SearchTransaction from '../components/uikit/SearchTransaction';
 import '../assets/history/daily-history.scss';
 import { getPathGroupId } from '../lib/path';
 import { SelectYears } from '../lib/date';
+import axios from 'axios';
 
 interface DailyHistoryProps {
   selectYear: number;
@@ -53,8 +54,10 @@ const DailyHistory = (props: DailyHistoryProps) => {
       selectedMonth: props.selectMonth <= 9 ? '0' + props.selectMonth : String(props.selectMonth),
     };
     if (pathName !== 'group') {
-      dispatch(fetchTransactionsList(selectYears));
-      dispatch(fetchCategories());
+      const signal = axios.CancelToken.source();
+      dispatch(fetchTransactionsList(selectYears, signal));
+      dispatch(fetchCategories(signal));
+      return () => signal.cancel();
     }
   }, [pathName]);
 

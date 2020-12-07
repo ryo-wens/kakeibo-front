@@ -201,6 +201,8 @@ describe('async actions groups', () => {
 
   it('Get approvedGroups and unapprovedGroups when fetch is successful', async () => {
     const url = `${process.env.REACT_APP_USER_API_HOST}/groups`;
+    const signal = axios.CancelToken.source();
+
     const mockResponse = JSON.stringify(fetchGroupsResponse);
     const expectedActions = [
       {
@@ -255,7 +257,7 @@ describe('async actions groups', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroups()(store.dispatch);
+    await fetchGroups(signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 

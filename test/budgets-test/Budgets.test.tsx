@@ -35,6 +35,7 @@ describe('async actions fetchBudgets', () => {
   const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`;
 
   it('Get standard_budgets if fetch succeeds', async () => {
+    const signal = axios.CancelToken.source();
     const mockStandardBudgets = standardBudgets;
 
     const expectedActions = [
@@ -46,7 +47,7 @@ describe('async actions fetchBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockStandardBudgets);
 
-    await fetchStandardBudgets()(store.dispatch);
+    await fetchStandardBudgets(signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -163,6 +164,7 @@ describe('async actions getYearlyBudgets', () => {
 
   it('Get yearly_budgets if fetch succeeds', async () => {
     const mockYearlyBudgets = yearlyBudgets;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -173,7 +175,7 @@ describe('async actions getYearlyBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockYearlyBudgets);
 
-    await fetchYearlyBudgets(year)(store.dispatch);
+    await fetchYearlyBudgets(year, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });
@@ -189,6 +191,7 @@ describe('async actions getCustomBudgets', () => {
 
   it('Get custom_budgets if fetch succeeds', async () => {
     const mockCustomBudgets = customBudgets;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -199,7 +202,7 @@ describe('async actions getCustomBudgets', () => {
 
     axiosMock.onGet(url).reply(200, mockCustomBudgets);
 
-    await fetchCustomBudgets(selectYear, selectMonth)(store.dispatch);
+    await fetchCustomBudgets(selectYear, selectMonth, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

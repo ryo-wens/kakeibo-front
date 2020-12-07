@@ -30,6 +30,7 @@ import { Category, AssociatedCategory } from '../../reducks/categories/types';
 import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
+import axios from 'axios';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -56,6 +57,7 @@ const InputForm = (): JSX.Element => {
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
+  const signal = axios.CancelToken.source();
 
   useEffect(() => {
     setPaymentUserId(userId);
@@ -75,17 +77,21 @@ const InputForm = (): JSX.Element => {
 
   useEffect(() => {
     if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
-      dispatch(fetchCategories());
+      dispatch(fetchCategories(signal));
     }
+    return () => signal.cancel();
   }, [pathName]);
 
   useEffect(() => {
     if (pathName === 'group') {
-      dispatch(fetchGroupCategories(groupId));
+      dispatch(fetchGroupCategories(groupId, signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroupCategories(groupId));
+        dispatch(fetchGroupCategories(groupId, signal));
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
   }, [pathName]);
 

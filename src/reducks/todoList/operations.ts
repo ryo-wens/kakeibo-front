@@ -1,6 +1,6 @@
 import { Action, Dispatch } from 'redux';
 import { State } from '../store/types';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import {
   createTodoListItemAction,
   deleteTodoListItemAction,
@@ -378,12 +378,18 @@ export const editTodoListItem = (
   };
 };
 
-export const fetchDateTodoList = (year: string, month: string, date: string) => {
+export const fetchDateTodoList = (
+  year: string,
+  month: string,
+  date: string,
+  signal: CancelTokenSource
+) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchTodayTodoListsRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -400,17 +406,22 @@ export const fetchDateTodoList = (year: string, month: string, date: string) => 
         dispatch(fetchDateTodoListAction(implementationTodoList, dueTodoList, message));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
 
-export const fetchMonthTodoList = (year: string, month: string) => {
+export const fetchMonthTodoList = (year: string, month: string, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchMonthTodoListsRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -431,17 +442,22 @@ export const fetchMonthTodoList = (year: string, month: string) => {
         );
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
 
-export const fetchExpiredTodoList = () => {
+export const fetchExpiredTodoList = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -449,7 +465,11 @@ export const fetchExpiredTodoList = () => {
 
       dispatch(fetchExpiredTodoListAction(expiredTodoList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };
