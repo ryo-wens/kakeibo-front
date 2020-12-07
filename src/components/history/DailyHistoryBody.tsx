@@ -75,6 +75,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
                   id,
                   transaction_type,
                   transaction_date,
+                  big_category_name,
                   medium_category_name,
                   custom_category_name,
                   amount,
@@ -83,6 +84,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
                 } = transaction;
 
                 const categoryName = {
+                  bigCategory: big_category_name,
                   mediumCategory: medium_category_name !== null ? medium_category_name : '',
                   customCategory: custom_category_name !== null ? custom_category_name : '',
                 };
@@ -129,6 +131,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
                   id,
                   transaction_type,
                   transaction_date,
+                  big_category_name,
                   medium_category_name,
                   custom_category_name,
                   amount,
@@ -137,6 +140,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
                 } = searchTransaction;
 
                 const categoryName = {
+                  bigCategory: big_category_name,
                   mediumCategory: medium_category_name !== null ? medium_category_name : '',
                   customCategory: custom_category_name !== null ? custom_category_name : '',
                 };

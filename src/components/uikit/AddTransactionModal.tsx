@@ -180,14 +180,6 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     ]
   );
 
-  const resetForm = useCallback(() => {
-    setAmount('');
-    setMemo('');
-    setShop('');
-    setTransactionType('');
-    setBigCategory('');
-  }, [setAmount, setMemo, setShop, setTransactionType, setBigCategory]);
-
   const handlePayerChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
       setPaymentUserId(event.target.value as string);
@@ -249,9 +241,28 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     return pathName !== 'group' ? personalAddTransaction() : groupAddTransaction();
   };
 
+  const resetForm = () => {
+    setAmount('');
+    setMemo('');
+    setShop('');
+    setTransactionType('expense');
+    setBigCategory('');
+    setAssociatedCategory('');
+    setBigCategoryId(0);
+    setMediumCategoryId(null);
+    setCustomCategoryId(null);
+    setPaymentUserId(userId);
+  };
+
   const body = (
     <div className={classes.paper}>
-      <button className="input-years__btn__close" onClick={props.onClose}>
+      <button
+        className="input-years__btn__close"
+        onClick={() => {
+          props.onClose();
+          resetForm();
+        }}
+      >
         <CloseIcon />
       </button>
       <h3 className={classes.textPosition}>家計簿の追加</h3>
@@ -339,15 +350,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       open={props.open}
       onClose={() => {
         props.onClose();
-        setAmount('');
-        setMemo('');
-        setShop('');
-        setTransactionType('expense');
-        setBigCategory('');
-        setAssociatedCategory('');
-        setBigCategoryId(0);
-        setMediumCategoryId(null);
-        setCustomCategoryId(null);
+        resetForm();
       }}
       aria-labelledby="simple-modal-title"
       aria-describedby="simple-modal-description"

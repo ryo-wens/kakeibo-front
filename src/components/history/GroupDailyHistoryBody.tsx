@@ -63,6 +63,7 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                   id,
                   transaction_type,
                   transaction_date,
+                  big_category_name,
                   medium_category_name,
                   custom_category_name,
                   amount,
@@ -71,6 +72,7 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                 } = groupTransaction;
 
                 const categoryName = {
+                  bigCategory: big_category_name,
                   mediumCategory: medium_category_name !== null ? medium_category_name : '',
                   customCategory: custom_category_name !== null ? custom_category_name : '',
                 };
@@ -119,6 +121,7 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                   id,
                   transaction_type,
                   transaction_date,
+                  big_category_name,
                   medium_category_name,
                   custom_category_name,
                   amount,
@@ -127,6 +130,7 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                 } = groupSearchTransaction;
 
                 const categoryName = {
+                  bigCategory: big_category_name,
                   mediumCategory: medium_category_name !== null ? medium_category_name : '',
                   customCategory: custom_category_name !== null ? custom_category_name : '',
                 };
