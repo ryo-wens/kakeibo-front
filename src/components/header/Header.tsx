@@ -83,8 +83,8 @@ const Header = () => {
   };
 
   useEffect(() => {
-    const signal = axios.CancelToken.source();
     if (userName === '') {
+      const signal = axios.CancelToken.source();
       dispatch(fetchUserInfo(signal));
       return () => signal.cancel();
     }
@@ -92,8 +92,8 @@ const Header = () => {
 
   useEffect(() => {
     const initialName = async () => {
-      const signal = axios.CancelToken.source();
       if (entityType === 'group') {
+        const signal = axios.CancelToken.source();
         await fetchApprovedGroups(signal);
         let groupName = '';
         for (const approvedGroup of approvedGroups) {

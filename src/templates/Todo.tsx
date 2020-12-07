@@ -71,8 +71,8 @@ const Todo = () => {
   };
 
   useEffect(() => {
-    const signal = axios.CancelToken.source();
     if (entityType === 'group') {
+      const signal = axios.CancelToken.source();
       fetchGroupTodoList(signal);
       const interval = setInterval(() => {
         fetchGroupTodoList(signal);
@@ -97,34 +97,34 @@ const Todo = () => {
   }, [todayYear, todayMonth, todayDate]);
 
   useEffect(() => {
-    const signal = axios.CancelToken.source();
     if (entityType !== 'group' && !expiredTodoList.length) {
+      const signal = axios.CancelToken.source();
       dispatch(fetchExpiredTodoList(signal));
       return () => signal.cancel();
     }
   }, [todayYear, todayMonth, todayDate]);
 
   useEffect(() => {
-    const signal = axios.CancelToken.source();
     if (
       entityType !== 'group' &&
       !todayImplementationTodoList.length &&
       !todayDueTodoList.length &&
       !todayTodoListMessage
     ) {
+      const signal = axios.CancelToken.source();
       dispatch(fetchDateTodoList(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();
     }
   }, [todayYear, todayMonth, todayDate]);
 
   useEffect(() => {
-    const signal = axios.CancelToken.source();
     if (
       entityType !== 'group' &&
       !monthImplementationTodoList.length &&
       !monthDueTodoList.length &&
       !monthTodoListMessage
     ) {
+      const signal = axios.CancelToken.source();
       dispatch(fetchMonthTodoList(todayYear, todayMonth, signal));
       return () => signal.cancel();
     }
