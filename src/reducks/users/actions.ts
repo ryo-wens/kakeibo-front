@@ -1,10 +1,11 @@
-import { UserInfo } from './types';
+import { UserInfo, ConflictMessage } from './types';
 export type userActions = ReturnType<
   | typeof signUpAction
   | typeof logInAction
   | typeof logOutAction
   | typeof fetchUserInfoAction
   | typeof informErrorAction
+  | typeof conflictMessageAction
 >;
 
 export const SIGN_UP = 'SIGN_UP';
@@ -51,6 +52,16 @@ export const informErrorAction = (errorMessage: string) => {
     type: INFORM_ERROR,
     payload: {
       errorMessage: errorMessage,
+    },
+  };
+};
+
+export const CONFLICT_MESSAGE = 'CONFLICT_MESSAGE';
+export const conflictMessageAction = (conflictMessage: ConflictMessage) => {
+  return {
+    type: CONFLICT_MESSAGE,
+    payload: {
+      conflictMessage: conflictMessage,
     },
   };
 };

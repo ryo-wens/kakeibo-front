@@ -4,14 +4,21 @@ import {
   logOutAction,
   fetchUserInfoAction,
   informErrorAction,
+  conflictMessageAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
+import { SignupReq, UserRes, LoginReq, LogoutRes, ConflictMessage } from './types';
 import axios, { CancelTokenSource } from 'axios';
-import { SignupReq, UserRes, LoginReq, LogoutRes } from './types';
 import { errorHandling } from '../../lib/validation';
 
-export const signUp = (userId: string, userName: string, email: string, password: string) => {
+export const signUp = (
+  userId: string,
+  userName: string,
+  email: string,
+  password: string,
+  confirmPassword: string
+) => {
   const data: SignupReq = {
     id: userId,
     name: userName,
@@ -19,6 +26,12 @@ export const signUp = (userId: string, userName: string, email: string, password
     password: password,
   };
   return async (dispatch: Dispatch<Action>) => {
+    if (password !== confirmPassword) {
+      return dispatch(
+        informErrorAction('パスワードと確認パスワードが一致しません。もう一度入力してください。')
+      );
+    }
+
     try {
       await axios.post<UserRes>(
         `${process.env.REACT_APP_USER_API_HOST}/signup`,
@@ -27,53 +40,18 @@ export const signUp = (userId: string, userName: string, email: string, password
           withCredentials: true,
         }
       );
+      const emptyMessage: ConflictMessage = { id: '', email: '' };
+
+      dispatch(conflictMessageAction(emptyMessage));
       dispatch(signUpAction(userId, userName, email));
       dispatch(push('/login'));
     } catch (error) {
       if (error.response.status === 400) {
-        const errorMessages: string[] = [];
-
-        if (error.response.data.error.id.length > 0) {
-          errorMessages.push(error.response.data.error.id);
-        }
-
-        if (error.response.data.error.name.length > 0) {
-          errorMessages.push(error.response.data.error.name);
-        }
-
-        if (error.response.data.error.email.length > 0) {
-          errorMessages.push(error.response.data.error.email);
-        }
-
-        if (error.response.data.error.password.length > 0) {
-          errorMessages.push(error.response.data.error.password);
-        }
-
-        if (errorMessages.length > 0) {
-          dispatch(informErrorAction(errorMessages.join('\n')));
-          return;
-        }
+        dispatch(informErrorAction(error.response.data.error));
       }
 
       if (error.response.status === 409) {
-        const errorMessages: string[] = [];
-
-        if (error.response.data.error.id) {
-          errorMessages.push(error.response.data.error.id);
-        }
-
-        if (error.response.data.error.email) {
-          errorMessages.push(error.response.data.error.email);
-        }
-
-        if (errorMessages.length > 0) {
-          dispatch(informErrorAction(errorMessages.join('\n')));
-          return;
-        }
-      }
-
-      if (error.response) {
-        dispatch(informErrorAction(error.response.data.error.message));
+        dispatch(conflictMessageAction(error.response.data.error));
       }
     }
   };
@@ -90,22 +68,12 @@ export const logIn = (email: string, password: string) => {
           withCredentials: true,
         }
       );
+      dispatch(informErrorAction(''));
       dispatch(logInAction(email));
       dispatch(push('/'));
     } catch (error) {
       if (error.response.status === 400) {
-        const errorMessages: string[] = [];
-
-        if (error.response.data.error.email) {
-          errorMessages.push(error.response.data.error.email);
-        }
-        if (error.response.data.error.password) {
-          errorMessages.push(error.response.data.error.password);
-        }
-        if (errorMessages.length > 0) {
-          dispatch(informErrorAction(errorMessages.join('\n')));
-          return;
-        }
+        dispatch(informErrorAction(error.response.data.error));
       }
 
       if (error.response) {

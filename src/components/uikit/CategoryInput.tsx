@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useRef } from 'react';
 import { useDispatch } from 'react-redux';
 import { Dispatch, Action } from 'redux';
 import { State } from '../../reducks/store/types';
@@ -53,9 +53,11 @@ const CategoryInput = (props: CategoryInputProps) => {
   const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const bigMenuRef = useRef<HTMLAnchorElement>(null);
+  const mediumMenuRef = useRef<HTMLAnchorElement>(null);
 
   const clickBigMenuOpen = useCallback(() => {
-    setBigCategoryMenuOpen(true);
+    setBigCategoryMenuOpen((bigCategoryMenuOpen) => !bigCategoryMenuOpen);
   }, [setBigCategoryMenuOpen]);
 
   const clickBigMenuClose = useCallback(() => {
@@ -280,7 +282,6 @@ const CategoryInput = (props: CategoryInputProps) => {
       bigCategoriesList = props.expenseCategories.map((expenseCategory, bigCategoriesIndex) => {
         return (
           <li
-            tabIndex={1}
             onClick={() => {
               props.onClick(
                 bigCategoriesIndex,
@@ -777,27 +778,55 @@ const CategoryInput = (props: CategoryInputProps) => {
     <div className="category-input__btn-position">
       <div>
         <button
-          type="button"
-          onClick={bigCategoryMenuOpen ? clickBigMenuClose : clickBigMenuOpen}
+          type={'button'}
+          onClick={() => {
+            clickBigMenuOpen();
+            if (bigMenuRef.current !== null) {
+              bigMenuRef.current.focus();
+            }
+          }}
           className="category-input__button-display"
         >
           {props.bigCategory === '' ? '大カテゴリー(必須)' : props.bigCategory}
           <ExpandMoreIcon className="input-years__icon" />
         </button>
-        {bigCategoryMenuOpen && bigCategoriesList()}
+        <a
+          className="category-input__link"
+          ref={bigMenuRef}
+          href="javascript:void (0)"
+          onBlur={() => {
+            setBigCategoryMenuOpen(false);
+          }}
+        >
+          {bigCategoryMenuOpen && bigCategoriesList()}
+        </a>
       </div>
       <div className="category-input_spacer" />
       <div>
         <button
+          type={'button'}
           disabled={props.bigCategory === ''}
-          type="button"
-          onClick={mediumCategoryMenuOpen ? clickMediumMenuClose : clickMediumMenuOpen}
+          onClick={() => {
+            clickMediumMenuOpen();
+            if (mediumMenuRef.current !== null) {
+              mediumMenuRef.current.focus();
+            }
+          }}
           className="category-input__button-display"
         >
           {props.associatedCategory === '' ? '中カテゴリー(必須)' : props.associatedCategory}
           <ExpandMoreIcon className="input-years__icon" />
         </button>
-        {mediumCategoryMenuOpen && mediumCategoriesList()}
+        <a
+          className="category-input__link"
+          ref={mediumMenuRef}
+          href="javascript:void (0)"
+          onBlur={() => {
+            setMediumCategoryMenuOpen(false);
+          }}
+        >
+          {mediumCategoryMenuOpen && mediumCategoriesList()}
+        </a>
       </div>
     </div>
   );

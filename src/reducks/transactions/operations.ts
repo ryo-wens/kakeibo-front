@@ -71,8 +71,13 @@ export const fetchLatestTransactionsList = (signal: CancelTokenSource) => {
         }
       );
       const latestTransactionsList = result.data.transactions_list;
+      const emptyTransactionsList: TransactionsList = [];
 
-      dispatch(updateLatestTransactionsActions(latestTransactionsList));
+      if (latestTransactionsList !== undefined) {
+        dispatch(updateLatestTransactionsActions(latestTransactionsList));
+      } else {
+        dispatch(updateLatestTransactionsActions(emptyTransactionsList));
+      }
     } catch (error) {
       if (axios.isCancel(error)) {
         return;

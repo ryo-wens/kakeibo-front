@@ -70,6 +70,8 @@ export const onUserIdFocusOut = (
     return '';
   } else if (userId.length > 10) {
     setUserIdMessage('ユーザーIDは10文字以下で入力してください。');
+  } else if (userId.length < 10) {
+    setUserIdMessage('');
   }
 };
 
@@ -81,6 +83,8 @@ export const onUserNameFocusOut = (
     return '';
   } else if (userName.length > 50) {
     setUserNameMessage('ユーザー名は50文字以下で入力してください。');
+  } else if (userName.length < 50) {
+    setUserNameMessage('');
   }
 };
 
@@ -90,12 +94,14 @@ export const onEmailFocusOut = (
 ) => {
   if (!email.length) {
     return '';
-  } else if (email.length < 5) {
-    setEmailMessage('メールアドレスは5文字以上で入力してください。');
-  } else if (email.length > 50) {
-    setEmailMessage('メールアドレスは50文字以下で入力してください。');
+  } else if (email.length < 5 || email.length > 50) {
+    setEmailMessage('メールアドレスに誤りがあります。正しく入力してください。');
   } else if (!isValidEmailFormat(email)) {
     setEmailMessage('メールアドレス形式に誤りがあります。正しく入力し直してください。');
+  } else if (isValidEmailFormat(email)) {
+    setEmailMessage('');
+  } else if (email.length > 5 || email.length < 50) {
+    setEmailMessage('');
   }
 };
 
@@ -109,6 +115,10 @@ export const onPasswordFocusOut = (
     setPassWordMessage('パスワードは8文字以上で入力してください。');
   } else if (password.length > 50) {
     setPassWordMessage('パスワードは50文字以下で入力してください。');
+  } else if (password.length > 8) {
+    setPassWordMessage('');
+  } else if (password.length < 50) {
+    setPassWordMessage('');
   }
 };
 
@@ -121,6 +131,8 @@ export const onConfirmPasswordFocusOut = (
     setConfirmPasswordMessage(
       'パスワードと確認パスワードが一致しません。もう一度入力してください。'
     );
+  } else if (password === confirmPassword) {
+    setConfirmPasswordMessage('');
   }
 };
 
@@ -130,9 +142,15 @@ export const passWordSubmit = (
 ) => {
   if (!password.length) {
     return '';
+  } else if (password.length < 8) {
+    setPassWordMessage('パスワードは8文字以上で入力してください。');
   } else if (!isValidPasswordFormat(password)) {
-    setPassWordMessage('パスワードを正しく入力してください。');
-  } else {
+    setPassWordMessage('パスワードに誤りがあります。パスワードを正しく入力してください。');
+  } else if (password.length > 8) {
+    setPassWordMessage('');
+  } else if (isValidPasswordFormat(password)) {
     return '';
+  } else if (password.length > 8) {
+    setPassWordMessage('');
   }
 };

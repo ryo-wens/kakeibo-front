@@ -28,6 +28,11 @@ export const usersReducer = (state = initialState.users, action: userActions) =>
         ...state,
         ...action.payload,
       };
+    case Actions.CONFLICT_MESSAGE:
+      return {
+        ...state,
+        ...action.payload,
+      };
 
     default:
       return state;

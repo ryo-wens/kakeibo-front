@@ -3,22 +3,14 @@ import '../../assets/modules/error-indication.scss';
 
 interface ErrorIndicationProps {
   errorMessage: string;
+  submit: boolean;
+  setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ErrorIndication = (props: ErrorIndicationProps) => {
   return (
     <>
-      {(() => {
-        if (!props.errorMessage.length) {
-          return null;
-        } else {
-          return (
-            <dialog className="error-indication error-indication__body">
-              {props.errorMessage}
-            </dialog>
-          );
-        }
-      })()}
+      <dialog className="error-indication error-indication__body">{props.errorMessage}</dialog>
     </>
   );
 };

@@ -4,6 +4,10 @@ const initialState = {
     name: '',
     email: '',
     errorMessage: '',
+    conflictMessage: {
+      id: '',
+      email: '',
+    },
   },
   groups: {
     approvedGroups: [],
