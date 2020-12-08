@@ -13,6 +13,7 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { standardBudgetType } from '../../lib/constant';
 import { getYearlyBudgets } from '../../reducks/budgets/selectors';
 import { getPathTemplateName } from '../../lib/path';
+import axios from 'axios';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -42,7 +43,9 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
 
   useEffect(() => {
     if (pathName !== 'group') {
-      dispatch(fetchYearlyBudgets(year));
+      const signal = axios.CancelToken.source();
+      dispatch(fetchYearlyBudgets(year, signal));
+      return () => signal.cancel();
     }
   }, [year]);
 

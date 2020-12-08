@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
 import {
   addGroupTasksUsersReq,
@@ -30,14 +30,12 @@ import { State } from '../store/types';
 import { openTextModalAction } from '../modal/actions';
 import moment from 'moment';
 
-export const fetchGroupTasksListEachUser = (groupId: number) => {
+export const fetchGroupTasksListEachUser = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     await axios
       .get<fetchGroupTasksListEachUserRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
-        {
-          withCredentials: true,
-        }
+        { cancelToken: signal.token, withCredentials: true }
       )
       .then((res) => {
         const groupTasksListForEachUser: GroupTasksListForEachUser =
@@ -46,7 +44,11 @@ export const fetchGroupTasksListEachUser = (groupId: number) => {
         dispatch(fetchGroupTasksListEachUserAction(groupTasksListForEachUser));
       })
       .catch((error) => {
-        errorHandling(dispatch, error);
+        if (axios.isCancel(error)) {
+          return;
+        } else {
+          errorHandling(dispatch, error);
+        }
       });
   };
 };
@@ -112,12 +114,12 @@ export const deleteGroupTasksUsers = (groupId: number, users: Array<string>) => 
   };
 };
 
-export const fetchGroupTasksList = (groupId: number) => {
+export const fetchGroupTasksList = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<fetchGroupTasksListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
-        { withCredentials: true }
+        { cancelToken: signal.token, withCredentials: true }
       );
 
       if (result.data.group_tasks_list === null) {
@@ -128,7 +130,11 @@ export const fetchGroupTasksList = (groupId: number) => {
         dispatch(fetchGroupTasksListAction(groupTasksList));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState } from 'react';
 import 'date-fns';
 import { TodoButton } from './index';
 import { AddButton } from '../uikit';
@@ -68,10 +68,6 @@ const AddTodo = (props: AddTodoProps) => {
     setSelectedDueDate(date);
   };
 
-  useEffect(() => {
-    handleClose();
-  }, [props.groupId]);
-
   const inputTodo = useCallback(
     (event) => {
       setTodoContent(event.target.value);
@@ -81,7 +77,7 @@ const AddTodo = (props: AddTodoProps) => {
 
   const isBlankTodoContent = todoContent === '';
 
-  const switchOperation = () => {
+  const addTodo = () => {
     if (entityType === 'todo') {
       return dispatch(
         createTodoListItem(
@@ -149,7 +145,10 @@ const AddTodo = (props: AddTodoProps) => {
             <TodoButton
               label={'Todoを追加'}
               disabled={isBlankTodoContent}
-              onClick={() => switchOperation() && handleClose()}
+              onClick={() => {
+                addTodo();
+                handleClose();
+              }}
             />
             <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
           </div>

@@ -32,6 +32,7 @@ describe('async actions getCategories', () => {
 
   it('Get categories if fetch succeeds', async () => {
     const mockResponse = categories;
+    const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
@@ -46,7 +47,7 @@ describe('async actions getCategories', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchCategories()(store.dispatch);
+    await fetchCategories(signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

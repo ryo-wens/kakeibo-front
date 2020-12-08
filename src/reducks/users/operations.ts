@@ -8,8 +8,8 @@ import {
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
-import axios from 'axios';
 import { SignupReq, UserRes, LoginReq, LogoutRes, ConflictMessage } from './types';
+import axios, { CancelTokenSource } from 'axios';
 import { errorHandling } from '../../lib/validation';
 
 export const signUp = (
@@ -100,17 +100,22 @@ export const logOut = () => {
   };
 };
 
-export const fetchUserInfo = () => {
+export const fetchUserInfo = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<UserRes>(`${process.env.REACT_APP_USER_API_HOST}/user`, {
+        cancelToken: signal.token,
         withCredentials: true,
       });
       const userInfo: UserRes = result.data;
 
       dispatch(fetchUserInfoAction(userInfo));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
     }
   };
 };

@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
@@ -24,6 +24,7 @@ import { Groups } from '../../reducks/groups/types';
 import { getUserName } from '../../reducks/users/selectors';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
+import axios, { CancelTokenSource } from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -75,22 +76,25 @@ const Header = () => {
   const groupId: number = getPathGroupId(window.location.pathname);
   const [name, setName] = useState<string>('');
 
-  const fetchApprovedGroups = () => {
+  const fetchApprovedGroups = (signal: CancelTokenSource) => {
     if (!approvedGroups.length) {
-      dispatch(fetchGroups());
+      dispatch(fetchGroups(signal));
     }
   };
 
   useEffect(() => {
     if (userName === '') {
-      dispatch(fetchUserInfo());
+      const signal = axios.CancelToken.source();
+      dispatch(fetchUserInfo(signal));
+      return () => signal.cancel();
     }
-  }, [userName, entityType]);
+  }, []);
 
   useEffect(() => {
     const initialName = async () => {
       if (entityType === 'group') {
-        await fetchApprovedGroups();
+        const signal = axios.CancelToken.source();
+        await fetchApprovedGroups(signal);
         let groupName = '';
         for (const approvedGroup of approvedGroups) {
           if (approvedGroup.group_id === groupId) {
@@ -98,23 +102,21 @@ const Header = () => {
           }
         }
         setName(groupName);
+        return () => signal.cancel();
       } else if (entityType !== 'group') {
         setName(userName);
       }
     };
     initialName();
-  }, [approvedGroups, entityType, groupId, userName]);
+  }, [approvedGroups, entityType, groupId]);
 
-  const existsGroupWhenRouting = useCallback(
-    (path: string) => {
-      if (entityType !== 'group') {
-        return dispatch(push(`${path}`));
-      } else if (entityType === 'group') {
-        return dispatch(push(`/group/${groupId}${path}`));
-      }
-    },
-    [entityType, groupId]
-  );
+  const existsGroupWhenRouting = (path: string) => {
+    if (entityType !== 'group') {
+      return dispatch(push(`${path}`));
+    } else if (entityType === 'group') {
+      return dispatch(push(`/group/${groupId}${path}`));
+    }
+  };
 
   const logOutCheck = () => {
     if (window.confirm('ログアウトしても良いですか？ ')) {

@@ -144,6 +144,7 @@ describe('async actions users', () => {
     });
 
     const url = `${process.env.REACT_APP_USER_API_HOST}/user`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = signUpResponse;
 
@@ -156,7 +157,7 @@ describe('async actions users', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchUserInfo()(store.dispatch);
+    await fetchUserInfo(signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedUserInfoActions);
   });
 });

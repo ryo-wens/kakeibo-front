@@ -11,6 +11,7 @@ import { fetchLatestTransactionsList } from '../../reducks/transactions/operatio
 import { fetchLatestGroupTransactionsList } from '../../reducks/groupTransactions/operations';
 import { guidanceMessage } from '../../lib/constant';
 import { getPathTemplateName, getPathGroupId } from '../../lib/path';
+import axios from 'axios';
 
 const RecentInput = () => {
   const dispatch = useDispatch();
@@ -20,20 +21,25 @@ const RecentInput = () => {
   const approvedGroup = getApprovedGroups(selector);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
+  const signal = axios.CancelToken.source();
 
   useEffect(() => {
     if (pathName === 'group') {
-      dispatch(fetchLatestGroupTransactionsList(groupId));
+      dispatch(fetchLatestGroupTransactionsList(groupId, signal));
       const interval = setInterval(() => {
-        dispatch(fetchLatestGroupTransactionsList(groupId));
+        dispatch(fetchLatestGroupTransactionsList(groupId, signal));
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
   }, [pathName]);
 
   useEffect(() => {
     if (pathName !== 'group' && !latestTransactionsList.length) {
-      dispatch(fetchLatestTransactionsList());
+      dispatch(fetchLatestTransactionsList(signal));
+      return () => signal.cancel();
     }
   }, [pathName]);
 

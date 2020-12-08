@@ -10,7 +10,6 @@ export { default as InputTodoList } from './InputTodoList';
 export { default as InvitationNotifications } from './InvitationNotifications';
 export { default as MobileTodoMenu } from './MobileTodoMenu';
 export { default as MonthlyTodoList } from './MonthlyTodoList';
-export { default as SkipMonth } from './SkipMonth';
 export { default as SwitchTodoList } from './SwitchTodoList';
 export { default as TextInput } from './TextInput';
 export { default as TodoButton } from './TodoButton';

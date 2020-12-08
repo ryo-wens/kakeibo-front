@@ -21,6 +21,7 @@ import TableBody from '@material-ui/core/TableBody';
 import GenericButton from '../uikit/GenericButton';
 import { getPathGroupId, getGroupPathYear, getGroupPathMonth } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
+import axios, { CancelTokenSource } from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -77,27 +78,28 @@ const EditGroupStandardBudgets = () => {
   const unInputBudgets = groupCustomBudgets === groupCustomBudgetsList;
   const [editing, setEditing] = useState<boolean>(false);
 
-  const fetchEditGroupStandardBudgetsData = () => {
-    async function fetchGroupBudgets() {
-      await dispatch(fetchGroupStandardBudgets(groupId));
+  const fetchEditGroupStandardBudgetsData = (signal: CancelTokenSource) => {
+    async function fetchGroupBudgets(signal: CancelTokenSource) {
+      await dispatch(fetchGroupStandardBudgets(groupId, signal));
       dispatch(copyGroupStandardBudgets());
+      dispatch(fetchGroups(signal));
     }
-    fetchGroupBudgets();
-    dispatch(fetchGroups());
+    fetchGroupBudgets(signal);
   };
 
   useEffect(() => {
     if (!editing) {
+      const signal = axios.CancelToken.source();
+      fetchEditGroupStandardBudgetsData(signal);
       const interval = setInterval(() => {
-        fetchEditGroupStandardBudgetsData();
+        fetchEditGroupStandardBudgetsData(signal);
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
-  }, [groupCustomBudgets]);
-
-  useEffect(() => {
-    fetchEditGroupStandardBudgetsData();
-  }, []);
+  }, [editing]);
 
   useEffect(() => {
     setGroupCustomBudgets(groupCustomBudgetsList);
@@ -171,6 +173,7 @@ const EditGroupStandardBudgets = () => {
               )
             );
             dispatch(push(`/group/${groupId}/yearly/budgets`));
+            setEditing(false);
           }}
         />
       </div>

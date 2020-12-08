@@ -392,6 +392,7 @@ describe('async actions groupTodoLists', () => {
     const month = '09';
     const date = '27';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchGroupTodayTodoListResponse);
 
@@ -440,7 +441,7 @@ describe('async actions groupTodoLists', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupTodayTodoList(groupId, year, month, date)(store.dispatch);
+    await fetchGroupTodayTodoList(groupId, year, month, date, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -449,6 +450,7 @@ describe('async actions groupTodoLists', () => {
     const year = '2020';
     const month = '09';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchGroupMonthTodoListResponse);
 
@@ -527,13 +529,14 @@ describe('async actions groupTodoLists', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupMonthTodoList(groupId, year, month)(store.dispatch);
+    await fetchGroupMonthTodoList(groupId, year, month, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
   it('Get groupExpiredTodoList when FETCH_GROUP_EXPIRED_TODO_LIST succeeds.', async () => {
     const groupId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`;
+    const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchGroupExpiredTodoListResponse);
 
@@ -559,7 +562,7 @@ describe('async actions groupTodoLists', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupExpiredTodoList(groupId)(store.dispatch);
+    await fetchGroupExpiredTodoList(groupId, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

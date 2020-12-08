@@ -21,6 +21,7 @@ import { getPathTemplateName, getPathGroupId } from '../lib/path';
 import GroupStandardBudgets from '../components/budget/GroupStandardBudgets';
 import { fetchGroups } from '../reducks/groups/operations';
 import { Header } from '../components/header';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -78,17 +79,23 @@ const StandardBudgets = () => {
 
   useEffect(() => {
     if (pathName !== 'group') {
-      dispatch(fetchGroups());
+      const signal = axios.CancelToken.source();
+      dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroups());
+        dispatch(fetchGroups(signal));
       }, 3000);
-      return () => clearInterval(interval);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
     }
   }, [pathName]);
 
   useEffect(() => {
     if (!standardBudgets.length && pathName !== 'group') {
-      dispatch(fetchStandardBudgets());
+      const signal = axios.CancelToken.source();
+      dispatch(fetchStandardBudgets(signal));
+      return () => signal.cancel();
     }
   }, []);
 
