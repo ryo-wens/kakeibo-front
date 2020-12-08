@@ -31,3 +31,8 @@ export interface UserRes {
 export interface LogoutRes {
   message: string;
 }
+
+export interface ConflictMessage {
+  id: string;
+  email: string;
+}

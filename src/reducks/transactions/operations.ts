@@ -62,8 +62,13 @@ export const fetchLatestTransactionsList = () => {
         }
       );
       const latestTransactionsList = result.data.transactions_list;
+      const emptyTransactionsList: TransactionsList = [];
 
-      dispatch(updateLatestTransactionsActions(latestTransactionsList));
+      if (latestTransactionsList !== undefined) {
+        dispatch(updateLatestTransactionsActions(latestTransactionsList));
+      } else {
+        dispatch(updateLatestTransactionsActions(emptyTransactionsList));
+      }
     } catch (error) {
       errorHandling(dispatch, error);
     }

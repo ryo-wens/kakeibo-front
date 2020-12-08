@@ -19,6 +19,10 @@ export interface State {
     name: string;
     email: string;
     errorMessage: string;
+    conflictMessage: {
+      id: string;
+      email: string;
+    };
   };
   groups: {
     approvedGroups: Groups;

@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { push } from 'connected-react-router';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -16,7 +16,7 @@ import {
 import { State } from '../reducks/store/types';
 import { useDispatch, useSelector } from 'react-redux';
 import { signUp } from '../reducks/users/operations';
-import { getErrorMessage } from '../reducks/users/selectors';
+import { getErrorMessage, getConflictMessage } from '../reducks/users/selectors';
 import {
   onUserIdFocusOut,
   onUserNameFocusOut,
@@ -24,7 +24,9 @@ import {
   onPasswordFocusOut,
   onConfirmPasswordFocusOut,
 } from '../lib/validation';
+import { ConflictMessage } from '../reducks/users/types';
 import '../assets/modules/text-area.scss';
+import { conflictMessageAction, informErrorAction } from '../reducks/users/actions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -56,6 +58,13 @@ const SignUp = (): JSX.Element => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const errorMessage = getErrorMessage(selector);
+  const conflictMessage = getConflictMessage(selector);
+  const [submit, setSubmit] = useState<boolean>(false);
+  const [message, setMessage] = useState<string>('');
+  const [conflictUserIdMessage, setConflictUserIdMessage] = useState<string>('');
+  const [conflictEmailMessage, setConflictEmailMessage] = useState<string>('');
+  const [conflictUserId, setConflictUserId] = useState<string>('');
+  const [conflictEmail, setConflictEmail] = useState<string>('');
   const [userId, setUserId] = useState<string>('');
   const [userName, setUserName] = useState<string>('');
   const [email, setEmail] = useState<string>('');
@@ -67,33 +76,80 @@ const SignUp = (): JSX.Element => {
   const [passwordMessage, setPassWordMessage] = useState<string>('');
   const [confirmPasswordMessage, setConfirmPasswordMessage] = useState<string>('');
 
+  useEffect(() => {
+    setMessage(errorMessage);
+  }, [errorMessage]);
+
+  useEffect(() => {
+    setConflictUserId(userId);
+    if (conflictMessage.id === undefined) {
+      setConflictUserIdMessage('');
+    } else {
+      setConflictUserIdMessage(conflictMessage.id);
+    }
+  }, [conflictMessage.id]);
+
+  useEffect(() => {
+    setConflictEmail(email);
+    if (conflictMessage.email === undefined) {
+      setConflictEmailMessage('');
+    } else {
+      setConflictEmailMessage(conflictMessage.email);
+    }
+  }, [conflictMessage.email]);
+
+  useEffect(() => {
+    if (userId === conflictUserId) {
+      setConflictUserIdMessage(conflictMessage.id);
+    } else if (userId !== conflictUserId) {
+      setConflictUserIdMessage('');
+    }
+  }, [userId]);
+
+  useEffect(() => {
+    if (email === conflictEmail) {
+      setConflictEmailMessage(conflictMessage.email);
+    } else if (email !== conflictEmail) {
+      setConflictEmailMessage('');
+    }
+  }, [email]);
+
   const inputUserId = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setUserId(event.target.value);
+      setSubmit(false);
     },
     [setUserId]
   );
+
   const inputUserName = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setUserName(event.target.value);
+      setSubmit(false);
     },
     [setUserName]
   );
+
   const inputEmail = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value);
+      setSubmit(false);
     },
     [setEmail]
   );
+
   const inputPassword = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(event.target.value);
+      setSubmit(false);
     },
     [setPassword]
   );
+
   const inputConfirmPassword = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setConfirmPassword(event.target.value);
+      setSubmit(false);
     },
     [setConfirmPassword]
   );
@@ -105,11 +161,33 @@ const SignUp = (): JSX.Element => {
     password === '' ||
     confirmPassword === '' ||
     password.length < 8 ||
-    confirmPassword.length < 8;
+    confirmPassword.length < 8 ||
+    userIdMessage !== '' ||
+    userNameMessage !== '' ||
+    emailMessage !== '' ||
+    passwordMessage !== '' ||
+    confirmPasswordMessage !== '' ||
+    userId === conflictUserId ||
+    email === conflictEmail;
 
   return (
     <section className="signup__form">
-      <ErrorIndication errorMessage={errorMessage} />
+      {(() => {
+        if (
+          submit &&
+          (conflictUserIdMessage.length > 0 ||
+            conflictEmailMessage.length > 0 ||
+            message.length > 0)
+        ) {
+          return (
+            <ErrorIndication
+              errorMessage={message || conflictUserIdMessage.concat('\n', conflictEmailMessage)}
+              submit={submit}
+              setSubmit={setSubmit}
+            />
+          );
+        }
+      })()}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -129,7 +207,9 @@ const SignUp = (): JSX.Element => {
                 onChange={inputUserId}
                 onBlur={() => onUserIdFocusOut(userId, setUserIdMessage)}
               />
-              <InvalidMessage message={userIdMessage} />
+              <InvalidMessage
+                message={userId !== conflictUserId ? userIdMessage : conflictUserIdMessage}
+              />
             </div>
             <div className="module-spacer--small" />
             <div>
@@ -153,7 +233,9 @@ const SignUp = (): JSX.Element => {
                 onChange={inputEmail}
                 onBlur={() => onEmailFocusOut(email, setEmailMessage)}
               />
-              <InvalidMessage message={emailMessage} />
+              <InvalidMessage
+                message={email !== conflictEmail ? emailMessage : conflictEmailMessage}
+              />
             </div>
             <div className="module-spacer--small" />
             <div>
@@ -186,13 +268,26 @@ const SignUp = (): JSX.Element => {
               <GenericButton
                 label={'アカウントを登録する'}
                 disabled={unSignUp}
-                onClick={() => dispatch(signUp(userId, userName, email, password))}
+                onClick={() => {
+                  dispatch(signUp(userId, userName, email, password, confirmPassword));
+                  const emptyMessage: ConflictMessage = { id: '', email: '' };
+                  dispatch(conflictMessageAction(emptyMessage));
+                  setSubmit(true);
+                }}
               />
             </div>
             <div className="module-spacer--bit-small" />
             <Grid container justify="center">
               <Grid item>
-                <a className={classes.link} onClick={() => dispatch(push('/login'))}>
+                <a
+                  className={classes.link}
+                  onClick={() => {
+                    const emptyMessage: ConflictMessage = { id: '', email: '' };
+                    dispatch(informErrorAction(''));
+                    dispatch(conflictMessageAction(emptyMessage));
+                    dispatch(push('/login'));
+                  }}
+                >
                   すでにアカウントをお持ちの方はこちら
                 </a>
               </Grid>

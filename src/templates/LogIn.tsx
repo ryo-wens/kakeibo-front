@@ -1,4 +1,4 @@
-import React, { useState, useCallback } from 'react';
+import React, { useState, useCallback, useEffect } from 'react';
 import { push } from 'connected-react-router';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -12,9 +12,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { logIn } from '../reducks/users/operations';
 import { InvalidMessage } from '../components/uikit';
-import { onEmailFocusOut, passWordSubmit } from '../lib/validation';
+import { isValidEmailFormat, onEmailFocusOut, passWordSubmit } from '../lib/validation';
 import '../assets/modules/text-area.scss';
 import { getErrorMessage } from '../reducks/users/selectors';
+import { informErrorAction } from '../reducks/users/actions';
 
 const useStyles = makeStyles((theme) => ({
   paper: {
@@ -43,14 +44,21 @@ const LogIn = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const errorMessage = getErrorMessage(selector);
+  const [message, setMessage] = useState<string>('');
+  const [submit, setSubmit] = useState<boolean>(false);
   const [email, setEmail] = useState<string>('');
   const [password, setPassword] = useState<string>('');
   const [emailMessage, setEmailMessage] = useState<string>('');
   const [passwordMessage, setPassWordMessage] = useState<string>('');
 
+  useEffect(() => {
+    setMessage(errorMessage);
+  }, [errorMessage]);
+
   const inputEmail = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setEmail(event.target.value);
+      setSubmit(false);
     },
     [setEmail]
   );
@@ -58,20 +66,22 @@ const LogIn = () => {
   const inputPassword = useCallback(
     (event: React.ChangeEvent<HTMLInputElement>) => {
       setPassword(event.target.value);
+      setSubmit(false);
     },
     [setPassword]
   );
 
-  const resetForm = useCallback(() => {
-    setEmail('');
-    setPassword('');
-  }, [setEmail, setPassword]);
-
-  const unLogIn = email === '' || password === '' || password.length < 8;
+  const unLogIn =
+    email === '' || password === '' || password.length < 8 || !isValidEmailFormat(email) || submit;
 
   return (
     <section className="login__form">
-      <ErrorIndication errorMessage={errorMessage} />
+      {(() => {
+        if (submit && message.length > 0) {
+          return <ErrorIndication errorMessage={message} submit={submit} setSubmit={setSubmit} />;
+        }
+      })()}
+
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <div className={classes.paper}>
@@ -111,7 +121,10 @@ const LogIn = () => {
               <GenericButton
                 label={'ログインする'}
                 disabled={unLogIn}
-                onClick={() => dispatch(logIn(email, password)) && resetForm()}
+                onClick={() => {
+                  dispatch(logIn(email, password));
+                  setSubmit(true);
+                }}
               />
             </div>
             <div className="module-spacer--small" />
@@ -124,7 +137,13 @@ const LogIn = () => {
             </div>
             <div className="module-spacer--small" />
             <Grid item className="center">
-              <a className={classes.link} onClick={() => dispatch(push('/signup'))}>
+              <a
+                className={classes.link}
+                onClick={() => {
+                  dispatch(push('/signup'));
+                  dispatch(informErrorAction(''));
+                }}
+              >
                 アカウント登録がお済みでない方はこちら
               </a>
             </Grid>
