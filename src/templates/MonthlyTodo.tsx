@@ -9,7 +9,7 @@ import {
 } from '../reducks/todoList/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ExpiredTodoList, MonthlyTodoList, TodoMenu } from '../components/todo';
+import { ExpiredTodoList, MonthlyTodoList, SwitchDateButton } from '../components/todo';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
   getGroupExpiredTodoList,
@@ -131,11 +131,8 @@ const MonthlyTodo = () => {
     <>
       <Header />
       <main className="section__container">
-        <TodoMenu />
         <div className={classes.root}>
-          {entityType !== 'group'
-            ? existsExpiredTodoList(expiredTodoList)
-            : existsExpiredTodoList(groupExpiredTodoList)}
+          <SwitchDateButton />
           <InputYears
             selectedYear={selectedYear}
             selectedMonth={selectedMonth}
@@ -151,6 +148,9 @@ const MonthlyTodo = () => {
             monthDueTodoList={monthDueTodoList}
           />
         </div>
+        {entityType !== 'group'
+          ? existsExpiredTodoList(expiredTodoList)
+          : existsExpiredTodoList(groupExpiredTodoList)}
       </main>
     </>
   );

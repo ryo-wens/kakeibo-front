@@ -1,0 +1,14 @@
+@import "../variable";
+
+.todo {
+  width: 100%;
+
+  &__contents {
+    display: flex;
+    margin: 20px 20px 0 20px;
+  }
+
+  &__contents-item {
+    width: calc(100%/2.5);
+  }
+}

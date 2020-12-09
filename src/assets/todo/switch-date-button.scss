@@ -1,0 +1,26 @@
+@import "../variable";
+@import "../mixin/main-btn";
+
+.switch-date-button {
+  display: flex;
+  margin-bottom: 30px;
+  height: 40px;
+
+  & button {
+    @include main-btn;
+
+    &:hover {
+      color: $task-main_color;
+      background-color: $white;
+    }
+
+    &:first-child {
+      border-radius: 0.5rem 0 0 0.5rem;
+    }
+
+    &:last-child {
+      border-radius: 0 0.5rem 0.5rem 0;
+      border-left: none;
+    }
+  }
+}

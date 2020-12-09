@@ -15,5 +15,5 @@ export { default as TextInput } from './TextInput';
 export { default as TodoButton } from './TodoButton';
 export { default as TodoListItemComponent } from './TodoListItemComponent';
 export { default as TodoListItemMenuButton } from './TodoListItemMenuButton';
-export { default as TodoMenu } from './TodoMenu';
+export { default as SwitchDateButton } from './SwitchDateButton';
 export { default as WeeksTabs } from './WeeksTabs';
