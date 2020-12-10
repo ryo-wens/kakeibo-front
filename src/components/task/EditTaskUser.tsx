@@ -3,7 +3,7 @@ import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import '../../assets/task/edit-task-user.scss';
 import '../../assets/modules/task-btn.scss';
-import { GroupTasksListForEachUser, UserTasksListItem } from '../../reducks/groupTasks/types';
+import { GroupTasksListForEachUser, TaskUsers } from '../../reducks/groupTasks/types';
 import { OperateTaskUser } from './index';
 import { Group } from '../../reducks/groups/types';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
@@ -25,6 +25,7 @@ const useStyles = makeStyles((theme: Theme) =>
 interface EditTaskUserProps {
   approvedGroup: Group;
   groupTasksListForEachUser: GroupTasksListForEachUser;
+  participatingTaskUsers: TaskUsers;
 }
 
 const EditTaskUser = (props: EditTaskUserProps) => {
@@ -34,15 +35,15 @@ const EditTaskUser = (props: EditTaskUserProps) => {
   const [openAddUser, setOpenAddUser] = useState<boolean>(false);
   const [openDeleteUser, setOpenDeleteUser] = useState<boolean>(false);
 
-  const openModal = useCallback(() => {
+  const openModal = () => {
     setOpen(true);
     setOpenEditUser(true);
-  }, [setOpen, setOpenEditUser]);
+  };
 
-  const closeModal = useCallback(() => {
+  const closeModal = () => {
     setOpen(false);
     setOpenAddUser(false);
-  }, [setOpen, setOpenAddUser]);
+  };
 
   const openAddTaskUser = useCallback(() => {
     setOpenEditUser(false);
@@ -80,13 +81,10 @@ const EditTaskUser = (props: EditTaskUserProps) => {
             </span>
           ) : (
             <ul className="edit-task-user-modal__user-list">
-              {props.groupTasksListForEachUser.map((groupTasksListItem: UserTasksListItem) => {
-                const idx = props.approvedGroup.approved_users_list.findIndex(
-                  (user) => user.user_id === groupTasksListItem.user_id
-                );
+              {props.participatingTaskUsers.map((user) => {
                 return (
-                  <li className="edit-task-user-modal__user-list-item" key={groupTasksListItem.id}>
-                    {props.approvedGroup.approved_users_list[idx].user_name}
+                  <li className="edit-task-user-modal__user-list-item" key={user.taskUserId}>
+                    {user.taskUserName}
                   </li>
                 );
               })}

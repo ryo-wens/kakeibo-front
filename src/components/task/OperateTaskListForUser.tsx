@@ -2,13 +2,12 @@ import React, { useCallback, useState } from 'react';
 import { TasksListItem } from '../../reducks/groupTasks/types';
 import { SetTaskListItem } from './index';
 import Modal from '@material-ui/core/Modal';
-import { Group, Groups } from '../../reducks/groups/types';
+import { Group } from '../../reducks/groups/types';
 import { date } from '../../lib/constant';
 import '../../assets/task/edit-task-list-for-user.scss';
 import AddIcon from '@material-ui/icons/Add';
 
 interface OperateTaskListForUserProps {
-  approvedGroups: Groups;
   approvedGroup: Group;
   groupId: number;
   label: string;

@@ -1,4 +1,4 @@
-import React, { useMemo } from 'react';
+import React from 'react';
 import { getWeekStartDate } from '../../lib/date';
 import {
   GroupTasksList,
@@ -8,12 +8,12 @@ import {
   TaskUsers,
 } from '../../reducks/groupTasks/types';
 import '../../assets/task/task-list-for-user.scss';
-import { Group, Groups } from '../../reducks/groups/types';
+import { Group } from '../../reducks/groups/types';
 import { OperateTaskListForUser } from './index';
 
 interface TaskListForUserProps {
   groupId: number;
-  approvedGroups: Groups;
+  approvedGroup: Group;
   selectedDate: Date;
   groupTaskList: GroupTasksList;
   groupTasksListForEachUser: GroupTasksListForEachUser;
@@ -27,10 +27,7 @@ const TaskListForUser = (props: TaskListForUserProps) => {
     props.tasksListItem.base_date !== null ? props.tasksListItem.base_date : new Date();
   const cycleType = props.tasksListItem.cycle_type;
   const cycle = props.tasksListItem.cycle !== null ? props.tasksListItem.cycle : 0;
-  const groupIdx = props.approvedGroups.findIndex(
-    (approvedGroup) => approvedGroup.group_id === props.groupId
-  );
-  const approvedGroup: Group = props.approvedGroups[groupIdx];
+  const approvedGroup: Group = props.approvedGroup;
 
   const assignTaskForUser = (
     differenceDay: number,
@@ -58,7 +55,7 @@ const TaskListForUser = (props: TaskListForUserProps) => {
     }
   };
 
-  const week = useMemo(() => {
+  const week = () => {
     const weekTableItems = [];
     const startDate = getWeekStartDate(selectedDate);
     const groupUsersList = Array.from(props.groupTasksListForEachUser);
@@ -126,18 +123,17 @@ const TaskListForUser = (props: TaskListForUserProps) => {
       );
     }
     return weekTableItems;
-  }, [selectedDate]);
+  };
 
   return (
     <>
       <OperateTaskListForUser
-        approvedGroups={props.approvedGroups}
         approvedGroup={approvedGroup}
         groupId={props.groupId}
         tasksListItem={props.tasksListItem}
         label={'保存'}
       />
-      {week}
+      {week()}
     </>
   );
 };
