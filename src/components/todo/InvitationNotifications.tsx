@@ -67,7 +67,7 @@ const InvitationNotifications = () => {
       {unapprovedGroups.length > 0 ? (
         <p>グループから招待されています。</p>
       ) : (
-        <p>招待されているグループはありません。</p>
+        <p>通知はありません。</p>
       )}
       {unapprovedGroups.length > 0 &&
         unapprovedGroups.map((unapprovedGroup) => {

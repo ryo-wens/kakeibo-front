@@ -36,3 +36,13 @@ export const getMonthTodoListMessage = createSelector(
   [todoListSelector],
   (state) => state.monthTodoListMessage
 );
+
+export const getSearchTodoList = createSelector(
+  [todoListSelector],
+  (state) => state.searchTodoList
+);
+
+export const getSearchTodoListMessage = createSelector(
+  [todoListSelector],
+  (state) => state.searchTodoListMessage
+);

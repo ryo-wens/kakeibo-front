@@ -8,7 +8,6 @@ import {
   getMonthImplementationTodoList,
 } from '../reducks/todoList/selectors';
 import { State } from '../reducks/store/types';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import {
   ExpiredTodoList,
   MonthlyTodoList,
@@ -34,24 +33,7 @@ import { month, year } from '../lib/constant';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/monthly-todo.scss';
 
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      width: '600px',
-      margin: '40px 0px 0px 200px',
-    },
-    date: {
-      display: 'flex',
-      justifyContent: 'space-between',
-    },
-    datePicker: {
-      width: `200px`,
-    },
-  })
-);
-
 const MonthlyTodo = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const expiredTodoList = getExpiredTodoList(selector);

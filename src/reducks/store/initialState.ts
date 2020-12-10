@@ -76,6 +76,8 @@ const initialState = {
     monthImplementationTodoList: [],
     monthDueTodoList: [],
     monthTodoListMessage: '',
+    searchTodoList: [],
+    searchTodoListMessage: '',
   },
   groupTodoList: {
     groupExpiredTodoList: [],

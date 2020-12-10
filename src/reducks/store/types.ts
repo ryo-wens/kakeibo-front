@@ -74,6 +74,8 @@ export interface State {
     monthImplementationTodoList: TodoList;
     monthDueTodoList: TodoList;
     monthTodoListMessage: string;
+    searchTodoList: TodoList;
+    searchTodoListMessage: string;
   };
   groupTodoList: {
     groupExpiredTodoList: GroupTodoList;
