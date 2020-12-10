@@ -2,7 +2,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
-import { AddTodo, ExpiredTodoList, SwitchTodoList, SwitchDateButton } from '../components/todo';
+import {
+  AddTodo,
+  ExpiredTodoList,
+  SwitchTodoList,
+  SwitchDateButton,
+  SearchTodoList,
+} from '../components/todo';
 import {
   getExpiredTodoList,
   getMonthDueTodoList,
@@ -132,31 +138,32 @@ const Todo = () => {
       <Header />
       <main className="section__container">
         <div className="todo">
-          <SwitchDateButton />
-          <div className="todo__contents">
-            <div className="todo__contents-item">
-              <span>
-                今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-              </span>
+          <div className="todo__today-list">
+            <div className="todo__menu">
+              <SwitchDateButton />
+              <SearchTodoList />
+            </div>
+            <span className="todo__today-date">
+              今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
+            </span>
 
-              {entityType !== 'group' ? (
-                <SwitchTodoList
-                  implementationTodoList={todayImplementationTodoList}
-                  dueTodoList={todayDueTodoList}
-                />
-              ) : (
-                <SwitchTodoList
-                  implementationTodoList={groupTodayImplementationTodoList}
-                  dueTodoList={groupTodayDueTodoList}
-                />
-              )}
-              <AddTodo date={date} groupId={groupId} />
-            </div>
-            <div className="todo__contents-item">
-              {entityType !== 'group'
-                ? existsExpiredTodoList(expiredTodoList)
-                : existsExpiredTodoList(groupExpiredTodoList)}
-            </div>
+            {entityType !== 'group' ? (
+              <SwitchTodoList
+                implementationTodoList={todayImplementationTodoList}
+                dueTodoList={todayDueTodoList}
+              />
+            ) : (
+              <SwitchTodoList
+                implementationTodoList={groupTodayImplementationTodoList}
+                dueTodoList={groupTodayDueTodoList}
+              />
+            )}
+            <AddTodo date={date} groupId={groupId} />
+          </div>
+          <div className="todo__expired-list">
+            {entityType !== 'group'
+              ? existsExpiredTodoList(expiredTodoList)
+              : existsExpiredTodoList(groupExpiredTodoList)}
           </div>
         </div>
       </main>

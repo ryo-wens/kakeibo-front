@@ -4,7 +4,6 @@ import { TodoListItemComponent } from './index';
 import { date } from '../../lib/constant';
 import { Divider } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import '../../assets/todo/expired-todo-list.scss';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -84,8 +83,7 @@ const ExpiredTodoList = (props: ExpiredTodoListProps) => {
   };
 
   return (
-    <div className="expired-todo-list">
-      {/*<div className={classes.root}>*/}
+    <div>
       <span>期限切れのTodo</span>
       <Divider />
       {switchExpanded()}

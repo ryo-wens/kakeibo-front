@@ -1,0 +1,8 @@
+@import "../variable";
+@import "../modules/task-btn";
+
+.search-todo-list {
+  @extend .task--btn;
+  height: 40px;
+  margin-left: 20px;
+}
