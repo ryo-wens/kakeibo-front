@@ -83,7 +83,7 @@ const ExpiredTodoList = (props: ExpiredTodoListProps) => {
   };
 
   return (
-    <div className={classes.root}>
+    <div>
       <span>期限切れのTodo</span>
       <Divider />
       {switchExpanded()}

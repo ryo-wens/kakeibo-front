@@ -9,7 +9,12 @@ import {
 } from '../reducks/todoList/selectors';
 import { State } from '../reducks/store/types';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
-import { ExpiredTodoList, MonthlyTodoList, TodoMenu } from '../components/todo';
+import {
+  ExpiredTodoList,
+  MonthlyTodoList,
+  SearchTodoList,
+  SwitchDateButton,
+} from '../components/todo';
 import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
   getGroupExpiredTodoList,
@@ -27,6 +32,7 @@ import { Header } from '../components/header';
 import InputYears from '../components/uikit/InputYears';
 import { month, year } from '../lib/constant';
 import axios, { CancelTokenSource } from 'axios';
+import '../assets/todo/monthly-todo.scss';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -131,25 +137,32 @@ const MonthlyTodo = () => {
     <>
       <Header />
       <main className="section__container">
-        <TodoMenu />
-        <div className={classes.root}>
-          {entityType !== 'group'
-            ? existsExpiredTodoList(expiredTodoList)
-            : existsExpiredTodoList(groupExpiredTodoList)}
-          <InputYears
-            selectedYear={selectedYear}
-            selectedMonth={selectedMonth}
-            setSelectedMonth={setSelectedMonth}
-            setSelectedYear={setSelectedYear}
-          />
-          <MonthlyTodoList
-            selectedDate={selectedDate}
-            groupId={groupId}
-            groupMonthImplementationTodoList={groupMonthImplementationTodoList}
-            groupMonthDueTodoList={groupMonthDueTodoList}
-            monthImplementationTodoList={monthImplementationTodoList}
-            monthDueTodoList={monthDueTodoList}
-          />
+        <div className="monthly-todo">
+          <div className="monthly-todo__monthly-list">
+            <div className="monthly-todo__menu">
+              <SwitchDateButton />
+              <SearchTodoList />
+            </div>
+            <InputYears
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
+              setSelectedYear={setSelectedYear}
+            />
+            <MonthlyTodoList
+              selectedDate={selectedDate}
+              groupId={groupId}
+              groupMonthImplementationTodoList={groupMonthImplementationTodoList}
+              groupMonthDueTodoList={groupMonthDueTodoList}
+              monthImplementationTodoList={monthImplementationTodoList}
+              monthDueTodoList={monthDueTodoList}
+            />
+          </div>
+          <div className="monthly-todo__expired-list">
+            {entityType !== 'group'
+              ? existsExpiredTodoList(expiredTodoList)
+              : existsExpiredTodoList(groupExpiredTodoList)}
+          </div>
         </div>
       </main>
     </>

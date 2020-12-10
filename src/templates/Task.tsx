@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { State } from '../reducks/store/types';
 import { getApprovedGroups } from '../reducks/groups/selectors';
 import { fetchGroups } from '../reducks/groups/operations';
-import { Group } from '../reducks/groups/types';
+import { Group, Groups } from '../reducks/groups/types';
 import { getPathGroupId } from '../lib/path';
 import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
 import {
@@ -16,7 +16,13 @@ import {
 } from '../components/task';
 import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
 import '../assets/task/task.scss';
-import { TasksListItem } from '../reducks/groupTasks/types';
+import {
+  GroupTasksList,
+  GroupTasksListForEachUser,
+  TasksListItem,
+  TaskUser,
+  TaskUsers,
+} from '../reducks/groupTasks/types';
 import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
 
@@ -29,8 +35,9 @@ const Task = () => {
   const approvedGroups = getApprovedGroups(selector);
   const groupTasksListForEachUser = getGroupTasksListForEachUser(selector);
   const groupTasksList = getGroupTasksList(selector);
-  const groupIdx = approvedGroups.findIndex((approvedGroup) => approvedGroup.group_id === groupId);
-  const approvedGroup: Group = approvedGroups[groupIdx];
+  const [taskListForUser, setTaskListForUser] = useState<GroupTasksListForEachUser>([]);
+  const [taskList, setTaskList] = useState<GroupTasksList>([]);
+  const [groups, setGroups] = useState<Groups>([]);
 
   const fetchGroupTasks = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
@@ -50,6 +57,39 @@ const Task = () => {
     };
   }, [selectedDate]);
 
+  useEffect(() => {
+    setGroups(approvedGroups);
+  }, [approvedGroups]);
+
+  useEffect(() => {
+    setTaskListForUser(groupTasksListForEachUser);
+  }, [groupTasksListForEachUser]);
+
+  useEffect(() => {
+    setTaskList(groupTasksList);
+  }, [groupTasksList]);
+
+  const idx = groups.findIndex((group) => group.group_id === groupId);
+  const approvedGroup = groups[idx];
+
+  const participatingTaskUsers = (approvedGroup: Group) => {
+    const taskUsers: TaskUsers = [];
+    for (const taskListForUserItem of taskListForUser) {
+      if (taskListForUserItem.group_id === groupId && approvedGroup.group_id === groupId) {
+        const approvedUserIdx = approvedGroup.approved_users_list.findIndex(
+          (approvedUser) => approvedUser.user_id === taskListForUserItem.user_id
+        );
+        const taskUser: TaskUser = {
+          taskUserId: taskListForUserItem.id,
+          taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+          taskUserColor: approvedGroup.approved_users_list[approvedUserIdx].color_code,
+        };
+        taskUsers.push(taskUser);
+      }
+    }
+    return taskUsers;
+  };
+
   return (
     <>
       <Header />
@@ -59,29 +99,35 @@ const Task = () => {
             <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
             <EditTaskUser
               approvedGroup={approvedGroup}
-              groupTasksListForEachUser={groupTasksListForEachUser}
+              groupTasksListForEachUser={taskListForUser}
+              participatingTaskUsers={participatingTaskUsers(approvedGroup)}
             />
           </div>
           <TaskList
             groupId={groupId}
-            groupTasksListForEachUser={groupTasksListForEachUser}
-            groupTasksList={groupTasksList}
+            groupTasksList={taskList}
+            groupTasksListForEachUser={taskListForUser}
           />
           <table className="task__table">
             <thead>
               <WeekTables selectedDate={selectedDate} />
             </thead>
             <tbody>
-              {groupTasksList.map((tasksListItem: TasksListItem) => {
-                if (tasksListItem.cycle_type !== null && groupTasksListForEachUser.length) {
+              {taskList.map((tasksListItem: TasksListItem) => {
+                if (
+                  tasksListItem.cycle_type !== null &&
+                  taskListForUser.length &&
+                  approvedGroup !== undefined &&
+                  tasksListItem.group_id === groupId
+                ) {
                   return (
                     <tr className="task__list-for-user" key={tasksListItem.id}>
                       <TaskListForUser
                         groupId={groupId}
-                        approvedGroups={approvedGroups}
+                        approvedGroup={approvedGroup}
                         selectedDate={selectedDate}
-                        groupTaskList={groupTasksList}
-                        groupTasksListForEachUser={groupTasksListForEachUser}
+                        groupTaskList={taskList}
+                        groupTasksListForEachUser={taskListForUser}
                         tasksListItem={tasksListItem}
                       />
                     </tr>
@@ -92,7 +138,6 @@ const Task = () => {
             <tfoot>
               <tr className="task__assign-task">
                 <OperateTaskListForUser
-                  approvedGroups={approvedGroups}
                   approvedGroup={approvedGroup}
                   groupId={groupId}
                   label={'追加'}

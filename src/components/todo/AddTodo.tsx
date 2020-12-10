@@ -18,11 +18,11 @@ const useStyles = makeStyles((theme: Theme) =>
     textarea: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '600px',
+        width: '500px',
       },
     },
     box: {
-      width: '700px',
+      width: '100%',
       borderColor: '#ccc',
     },
     buttons: {

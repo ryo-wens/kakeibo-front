@@ -2,8 +2,13 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
-import { AddTodo, ExpiredTodoList, SwitchTodoList, TodoMenu } from '../components/todo';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
+import {
+  AddTodo,
+  ExpiredTodoList,
+  SwitchTodoList,
+  SwitchDateButton,
+  SearchTodoList,
+} from '../components/todo';
 import {
   getExpiredTodoList,
   getMonthDueTodoList,
@@ -35,17 +40,9 @@ import { TodoList } from '../reducks/todoList/types';
 import { date } from '../lib/constant';
 import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    root: {
-      margin: '40px 0px 0px 200px',
-    },
-  })
-);
+import '../assets/todo/todo.scss';
 
 const Todo = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const expiredTodoList = getExpiredTodoList(selector);
@@ -140,27 +137,33 @@ const Todo = () => {
     <>
       <Header />
       <main className="section__container">
-        <TodoMenu />
-        <div className={classes.root}>
-          {entityType !== 'group'
-            ? existsExpiredTodoList(expiredTodoList)
-            : existsExpiredTodoList(groupExpiredTodoList)}
-          <span>
-            今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-          </span>
-          {entityType !== 'group' ? (
-            <SwitchTodoList
-              implementationTodoList={todayImplementationTodoList}
-              dueTodoList={todayDueTodoList}
-            />
-          ) : (
-            <SwitchTodoList
-              implementationTodoList={groupTodayImplementationTodoList}
-              dueTodoList={groupTodayDueTodoList}
-            />
-          )}
-          <div>
+        <div className="todo">
+          <div className="todo__today-list">
+            <div className="todo__menu">
+              <SwitchDateButton />
+              <SearchTodoList />
+            </div>
+            <span className="todo__today-date">
+              今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
+            </span>
+
+            {entityType !== 'group' ? (
+              <SwitchTodoList
+                implementationTodoList={todayImplementationTodoList}
+                dueTodoList={todayDueTodoList}
+              />
+            ) : (
+              <SwitchTodoList
+                implementationTodoList={groupTodayImplementationTodoList}
+                dueTodoList={groupTodayDueTodoList}
+              />
+            )}
             <AddTodo date={date} groupId={groupId} />
+          </div>
+          <div className="todo__expired-list">
+            {entityType !== 'group'
+              ? existsExpiredTodoList(expiredTodoList)
+              : existsExpiredTodoList(groupExpiredTodoList)}
           </div>
         </div>
       </main>
