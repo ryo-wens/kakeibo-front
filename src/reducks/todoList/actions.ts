@@ -108,3 +108,14 @@ export const deleteTodoListItemAction = (
     },
   };
 };
+
+export const SEARCH_TODO_LIST = 'SEARCH_TODO_LIST';
+export const searchTodoListAction = (searchTodoList: TodoList, searchTodoListMessage: string) => {
+  return {
+    type: SEARCH_TODO_LIST,
+    payload: {
+      searchTodoList: searchTodoList,
+      searchTodoListMessage: searchTodoListMessage,
+    },
+  };
+};
