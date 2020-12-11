@@ -18,9 +18,9 @@ export const getGroupAccountList = createSelector(
   (state) => state.groupAccountList
 );
 
-export const getNotGroupAccountMessage = createSelector(
+export const getDeleteAccountMessage = createSelector(
   [groupTransactionsSelector],
-  (state) => state.notAccountMessage
+  (state) => state.deletedMessage
 );
 
 export const getSearchGroupTransactions = createSelector(

@@ -29,16 +29,10 @@ export const updateGroupLatestTransactionsAction = (
 };
 
 export const FETCH_GROUP_ACCOUNT = 'FETCH_GROUP_ACCOUNT';
-export const fetchGroupAccountAction = (
-  groupAccountList: GroupAccountList,
-  notAccountMessage: string
-) => {
+export const fetchGroupAccountAction = (groupAccountList: GroupAccountList) => {
   return {
     type: FETCH_GROUP_ACCOUNT,
-    payload: {
-      groupAccountList,
-      notAccountMessage,
-    },
+    payload: groupAccountList,
   };
 };
 

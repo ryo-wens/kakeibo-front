@@ -1,0 +1,87 @@
+@import "../variable";
+
+.payoff {
+  margin: 0 auto;
+
+  &__box-size {
+  width: 50%;
+  }
+
+  &__background {
+    background-color: $white;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: auto;
+    margin-top: 40px;
+    margin-bottom: 60px;
+    width: 100%;
+    padding: 16px;
+  }
+
+  &__delimiterLine {
+    border-bottom: 1px solid;
+  }
+
+  &__group-name {
+    font-size: medium;
+    font-weight: bold;
+    text-align: center;
+
+    &__position {
+      margin-top: 5px;
+      margin-left: auto;
+    }
+  }
+
+  &__amount-list {
+    font-size: medium;
+    font-weight: bold;
+    width: 30%;
+  }
+
+  &__account-btn {
+    background-color: orange;
+    cursor: pointer;
+    color:$white;
+    font-size: medium;
+    font-weight: normal;
+
+    &:focus {
+      outline: none;
+    }
+
+    &:hover {
+      opacity: 0.7;
+    }
+  }
+
+  &__spacer-big {
+    height: $big-spacer
+  }
+
+  &__spacer-small {
+    height: $small-spacer;
+  }
+
+  &__text-position {
+    margin-top: 8px;
+  }
+
+  &__account-form {
+    display: flex;
+  }
+
+  &__account-li {
+    list-style: none;
+    margin-left: 35px;
+  }
+
+  &__sub-title {
+    font-weight: bolder;
+
+    &__color-red {
+      color: #E74C3C;
+    }
+  }
+}
