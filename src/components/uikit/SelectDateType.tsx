@@ -43,7 +43,7 @@ const SelectDateType = (props: SelectDateTypeProps) => {
         <MenuItem value={'implementation_date'}>実施日</MenuItem>
         <MenuItem value={'due_date'}>締切日</MenuItem>
         <MenuItem value={'posted_date'}>投稿日</MenuItem>
-        <MenuItem value={'updated_date'}>変更日</MenuItem>
+        <MenuItem value={'updated_date'}>更新日</MenuItem>
         {props.id === 'sortItem' && <MenuItem value={'todo_content'}>Todo名</MenuItem>}
       </Select>
     </FormControl>

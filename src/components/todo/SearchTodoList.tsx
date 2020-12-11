@@ -5,13 +5,13 @@ import '../../assets/todo/search-todo-list.scss';
 
 const SearchTodoList = () => {
   const [openSearchField, setOpenSearchField] = useState<boolean>(false);
+  const [dateType, setDateType] = useState<string>('implementation_date');
   const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
   const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date(year, month, 0));
-  const [dateType, setDateType] = useState<string>('implementation_date');
-  const [completeFlag, setCompleteFlag] = useState<string | boolean>('all');
-  const [taskContent, setTaskContent] = useState<string>('');
+  const [completeFlag, setCompleteFlag] = useState<boolean | string>('all');
+  const [todoContent, setTodoContent] = useState<string>('');
   const [sortItem, setSortItem] = useState<string>('implementation_date');
-  const [sortType, setSortType] = useState<string>('');
+  const [sortType, setSortType] = useState<string>('desc');
   const [limit, setLimit] = useState<string>('');
 
   const openSearch = () => {
@@ -39,13 +39,13 @@ const SearchTodoList = () => {
       setCompleteFlag(true);
     } else if (event.target.value === 'false') {
       setCompleteFlag(false);
-    } else if (event.target.value === '') {
+    } else if (event.target.value === 'all') {
       setCompleteFlag('all');
     }
   };
 
   const inputTaskContent = (event: React.ChangeEvent<{ value: string }>) => {
-    setTaskContent(event.target.value);
+    setTodoContent(event.target.value);
   };
 
   const selectSortItemChange = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -73,7 +73,7 @@ const SearchTodoList = () => {
           selectStartDate={selectStartDate}
           selectEndDate={selectEndDate}
           completeFlag={completeFlag}
-          taskContent={taskContent}
+          todoContent={todoContent}
           sortItem={sortItem}
           sortType={sortType}
           limit={limit}

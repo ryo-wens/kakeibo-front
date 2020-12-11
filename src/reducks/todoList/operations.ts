@@ -8,6 +8,7 @@ import {
   fetchDateTodoListAction,
   fetchExpiredTodoListAction,
   fetchMonthTodoListAction,
+  searchTodoListAction,
 } from './actions';
 import {
   createTodoListItemReq,
@@ -20,6 +21,7 @@ import {
   fetchTodayTodoListsRes,
   TodoListItem,
   TodoList,
+  fetchSearchTodoListRes,
 } from './types';
 import moment from 'moment';
 import { openTextModalAction } from '../modal/actions';
@@ -513,6 +515,50 @@ export const deleteTodoListItem = (todoListItemId: number) => {
         )
       );
       dispatch(openTextModalAction(message));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const searchTodoList = (searchRequestData: {
+  date_type: string;
+  start_date: Date | null;
+  end_date: Date | null;
+  sort: string;
+  sort_type: string;
+  complete_flag?: boolean | string;
+  todo_content?: string;
+  limit?: string;
+}) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<fetchSearchTodoListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/todo-list/search`,
+        {
+          withCredentials: true,
+          params: {
+            date_type: searchRequestData.date_type,
+            start_date: moment(searchRequestData.start_date).format(),
+            end_date: moment(searchRequestData.end_date).format(),
+            complete_flag: searchRequestData.complete_flag,
+            todo_content: searchRequestData.todo_content,
+            sort: searchRequestData.sort,
+            sort_type: searchRequestData.sort_type,
+            limit: searchRequestData.limit,
+          },
+        }
+      );
+      const searchTodoList: TodoList = result.data.search_todo_list;
+      const message: string = result.data.message;
+
+      if (searchTodoList === undefined) {
+        const searchTodoList: TodoList = [];
+        dispatch(searchTodoListAction(searchTodoList, message));
+      } else if (message === undefined) {
+        const message = '';
+        dispatch(searchTodoListAction(searchTodoList, message));
+      }
     } catch (error) {
       errorHandling(dispatch, error);
     }

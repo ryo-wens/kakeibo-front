@@ -4,6 +4,9 @@ import CloseIcon from '@material-ui/icons/Close';
 import { TextInput } from './index';
 import SelectDateType from '../uikit/SelectDateType';
 import '../../assets/todo/search-field.scss';
+import { useDispatch } from 'react-redux';
+import { searchTodoList } from '../../reducks/todoList/operations';
+import { searchTodoRequestData } from '../../reducks/todoList/types';
 
 interface SearchFieldProps {
   closeSearch: () => void;
@@ -11,7 +14,7 @@ interface SearchFieldProps {
   selectStartDate: Date | null;
   selectEndDate: Date | null;
   completeFlag: string | boolean;
-  taskContent: string;
+  todoContent: string;
   sortItem: string;
   sortType: string;
   limit: string;
@@ -26,6 +29,8 @@ interface SearchFieldProps {
 }
 
 const SearchField = (props: SearchFieldProps) => {
+  const dispatch = useDispatch();
+
   const searchFiled = [
     {
       key: '日時の種類',
@@ -80,7 +85,7 @@ const SearchField = (props: SearchFieldProps) => {
           required={true}
           rows={1}
           type={'text'}
-          value={props.taskContent}
+          value={props.todoContent}
           onChange={props.inputTaskContent}
         />
       ),
@@ -106,6 +111,27 @@ const SearchField = (props: SearchFieldProps) => {
     },
   ];
 
+  const searchRequestData = () => {
+    const requestData: searchTodoRequestData = {
+      date_type: props.dateType,
+      start_date: props.selectStartDate,
+      end_date: props.selectEndDate,
+      sort: props.sortItem,
+      sort_type: props.sortType,
+    };
+
+    if (props.completeFlag !== 'all') {
+      requestData.complete_flag = props.completeFlag;
+    }
+    if (props.todoContent !== '') {
+      requestData.todo_content = props.todoContent;
+    }
+    if (props.limit !== '') {
+      requestData.limit = props.limit;
+    }
+    return requestData;
+  };
+
   return (
     <>
       <div className="search-field">
@@ -124,7 +150,12 @@ const SearchField = (props: SearchFieldProps) => {
           );
         })}
         <div className="search-field__search-btn">
-          <button className="save-btn">この条件で検索</button>
+          <button
+            className="save-btn"
+            onClick={() => dispatch(searchTodoList(searchRequestData()))}
+          >
+            この条件で検索
+          </button>
         </div>
       </div>
     </>
