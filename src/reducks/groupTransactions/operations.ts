@@ -388,27 +388,23 @@ export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
   };
 };
 
-export const fetchGroupAccount = (groupId: number, year: number, customMonth: string) => {
+export const fetchGroupAccount = (
+  groupId: number,
+  year: number,
+  customMonth: string,
+  signal: CancelTokenSource
+) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.get<GroupAccountListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
         {
+          cancelToken: signal.token,
           withCredentials: true,
         }
       );
       const groupAccountList = result.data;
-
-      if (groupAccountList !== undefined) {
-        const message = '';
-
-        dispatch(fetchGroupAccountAction(groupAccountList, message));
-      } else {
-        const message = result.data.message;
-        const emptyGroupAccountList = {} as GroupAccountList;
-
-        dispatch(fetchGroupAccountAction(emptyGroupAccountList, message));
-      }
+      dispatch(fetchGroupAccountAction(groupAccountList));
     } catch (error) {
       errorHandling(dispatch, error);
     }
@@ -416,7 +412,7 @@ export const fetchGroupAccount = (groupId: number, year: number, customMonth: st
 };
 
 export const addGroupAccount = (groupId: number, year: number, customMonth: string) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+  return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.post<GroupAccountList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
@@ -426,13 +422,8 @@ export const addGroupAccount = (groupId: number, year: number, customMonth: stri
         }
       );
       const groupAccountList = result.data;
-      const prevGroupAccountList = getState().groupTransactions.groupAccountList;
 
-      if (prevGroupAccountList.group_id === groupId) {
-        dispatch(addGroupAccountAction(groupAccountList));
-      } else {
-        return prevGroupAccountList;
-      }
+      dispatch(addGroupAccountAction(groupAccountList));
     } catch (error) {
       errorHandling(dispatch, error);
     }

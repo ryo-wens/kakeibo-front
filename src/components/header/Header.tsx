@@ -163,6 +163,16 @@ const Header = () => {
             >
               予算
             </Button>
+            {entityType === 'group' && (
+              <Button
+                size="large"
+                className={classes.button}
+                startIcon={<MoneyIcon />}
+                onClick={() => existsGroupWhenRouting('/accounting')}
+              >
+                会計
+              </Button>
+            )}
             <Button size="large" className={classes.button} startIcon={<CreditCardIcon />}>
               集計
             </Button>
