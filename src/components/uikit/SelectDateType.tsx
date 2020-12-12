@@ -20,31 +20,39 @@ const useStyles = makeStyles((theme: Theme) =>
 interface SelectDateTypeProps {
   id: string;
   label: string;
-  value: string | boolean;
-  selectDateTypeChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  selectSortTypeChange?: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  value: string;
+  selectChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
 const SelectDateType = (props: SelectDateTypeProps) => {
   const classes = useStyles();
 
-  const selectChange = () => {
-    if (props.id === 'dateType') {
-      return props.selectDateTypeChange;
-    } else if (props.id === 'sortItem') {
-      return props.selectSortTypeChange;
-    }
+  const dateTypes = [
+    { key: '実施日', value: 'implementation_date' },
+    { key: '締切日', value: 'due_date' },
+  ];
+
+  const sortItems = [
+    { key: '実施日', value: 'implementation_date' },
+    { key: '締切日', value: 'due_date' },
+    { key: '投稿日', value: 'posted_date' },
+    { key: '更新日', value: 'updated_date' },
+    { key: 'Todo名', value: 'todo_content' },
+  ];
+
+  const selectItems = (items: { key: string; value: string }[]) => {
+    return items.map((item) => (
+      <MenuItem value={item.value} key={item.key}>
+        {item.key}
+      </MenuItem>
+    ));
   };
 
   return (
     <FormControl className={classes.formControl}>
       <InputLabel id={props.id}>{props.label}</InputLabel>
-      <Select id={props.id} value={props.value} onChange={selectChange()}>
-        <MenuItem value={'implementation_date'}>実施日</MenuItem>
-        <MenuItem value={'due_date'}>締切日</MenuItem>
-        <MenuItem value={'posted_date'}>投稿日</MenuItem>
-        <MenuItem value={'updated_date'}>更新日</MenuItem>
-        {props.id === 'sortItem' && <MenuItem value={'todo_content'}>Todo名</MenuItem>}
+      <Select id={props.id} value={props.value} onChange={props.selectChange}>
+        {props.id === 'dateType' ? selectItems(dateTypes) : selectItems(sortItems)}
       </Select>
     </FormControl>
   );

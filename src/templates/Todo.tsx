@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
@@ -60,6 +60,8 @@ const Todo = () => {
   const todayYear = String(date.getFullYear());
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
+  const [openSearchTodoList, setOpenSearchTodoList] = useState<boolean>(false);
+  const [openSearchResultTodoList, setOpenSearchResultTodoList] = useState<boolean>(false);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroupExpiredTodoList(groupId, signal));
@@ -133,39 +135,58 @@ const Todo = () => {
     }
   };
 
+  const openSearch = () => {
+    setOpenSearchTodoList(true);
+  };
+
+  const closeSearch = () => {
+    setOpenSearchTodoList(false);
+    setOpenSearchResultTodoList(false);
+  };
+
   return (
     <>
       <Header />
       <main className="section__container">
-        <div className="todo">
-          <div className="todo__today-list">
-            <div className="todo__menu">
-              <SwitchDateButton />
-              <SearchTodoList />
-            </div>
-            <span className="todo__today-date">
-              今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-            </span>
+        {!openSearchTodoList ? (
+          <div className="todo">
+            <div className="todo__today-list">
+              <div className="todo__menu">
+                <SwitchDateButton />
+                <button className="todo__search" onClick={() => openSearch()}>
+                  検索
+                </button>
+              </div>
+              <span className="todo__today-date">
+                今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
+              </span>
 
-            {entityType !== 'group' ? (
-              <SwitchTodoList
-                implementationTodoList={todayImplementationTodoList}
-                dueTodoList={todayDueTodoList}
-              />
-            ) : (
-              <SwitchTodoList
-                implementationTodoList={groupTodayImplementationTodoList}
-                dueTodoList={groupTodayDueTodoList}
-              />
-            )}
-            <AddTodo date={date} groupId={groupId} />
+              {entityType !== 'group' ? (
+                <SwitchTodoList
+                  implementationTodoList={todayImplementationTodoList}
+                  dueTodoList={todayDueTodoList}
+                />
+              ) : (
+                <SwitchTodoList
+                  implementationTodoList={groupTodayImplementationTodoList}
+                  dueTodoList={groupTodayDueTodoList}
+                />
+              )}
+              <AddTodo date={date} groupId={groupId} />
+            </div>
+            <div className="todo__expired-list">
+              {entityType !== 'group'
+                ? existsExpiredTodoList(expiredTodoList)
+                : existsExpiredTodoList(groupExpiredTodoList)}
+            </div>
           </div>
-          <div className="todo__expired-list">
-            {entityType !== 'group'
-              ? existsExpiredTodoList(expiredTodoList)
-              : existsExpiredTodoList(groupExpiredTodoList)}
-          </div>
-        </div>
+        ) : (
+          <SearchTodoList
+            openSearchResultTodoList={openSearchResultTodoList}
+            setOpenSearchResultTodoList={setOpenSearchResultTodoList}
+            closeSearch={closeSearch}
+          />
+        )}
       </main>
     </>
   );

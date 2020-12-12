@@ -1,26 +1,25 @@
 import React, { useState } from 'react';
 import SearchField from './SearchField';
 import { month, year } from '../../lib/constant';
-import '../../assets/todo/search-todo-list.scss';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import { SearchResultTodoList } from './index';
 
-const SearchTodoList = () => {
-  const [openSearchField, setOpenSearchField] = useState<boolean>(false);
+interface SearchTodoListProps {
+  openSearchResultTodoList: boolean;
+  setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
+  closeSearch: () => void;
+}
+
+const SearchTodoList = (props: SearchTodoListProps) => {
+  const [currentDateType, setCurrentDateType] = useState<string>('');
   const [dateType, setDateType] = useState<string>('implementation_date');
   const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
   const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date(year, month, 0));
   const [completeFlag, setCompleteFlag] = useState<boolean | string>('all');
   const [todoContent, setTodoContent] = useState<string>('');
   const [sortItem, setSortItem] = useState<string>('implementation_date');
-  const [sortType, setSortType] = useState<string>('desc');
+  const [sortType, setSortType] = useState<string>('asc');
   const [limit, setLimit] = useState<string>('');
-
-  const openSearch = () => {
-    setOpenSearchField(true);
-  };
-
-  const closeSearch = () => {
-    setOpenSearchField(false);
-  };
 
   const selectDateTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setDateType(event.target.value as string);
@@ -62,13 +61,17 @@ const SearchTodoList = () => {
 
   return (
     <>
-      {!openSearchField ? (
-        <button className="search-todo-list" onClick={() => openSearch()}>
-          検索
-        </button>
-      ) : (
+      <div className="search-field">
+        <div className="search-field__position">
+          <button className="search-field__btn-position" onClick={() => props.closeSearch()}>
+            <ChevronLeftIcon />
+          </button>
+          <h3 className="search-field__title">Todoを検索</h3>
+        </div>
         <SearchField
-          closeSearch={closeSearch}
+          closeSearch={props.closeSearch}
+          setCurrentDateType={setCurrentDateType}
+          setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}
           dateType={dateType}
           selectStartDate={selectStartDate}
           selectEndDate={selectEndDate}
@@ -86,7 +89,10 @@ const SearchTodoList = () => {
           selectSortType={selectSortType}
           selectLimit={selectLimit}
         />
-      )}
+        {props.openSearchResultTodoList && (
+          <SearchResultTodoList currentDateType={currentDateType} />
+        )}
+      </div>
     </>
   );
 };

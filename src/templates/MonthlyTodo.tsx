@@ -47,6 +47,8 @@ const MonthlyTodo = () => {
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
+  const [openSearchTodoList, setOpenSearchTodoList] = useState<boolean>(false);
+  const [openSearchResultTodoList, setOpenSearchResultTodoList] = useState<boolean>(false);
 
   useEffect(() => {
     setSelectedDate(new Date(selectedYear, selectedMonth - 1));
@@ -115,37 +117,56 @@ const MonthlyTodo = () => {
     }
   };
 
+  const openSearch = () => {
+    setOpenSearchTodoList(true);
+  };
+
+  const closeSearch = () => {
+    setOpenSearchTodoList(false);
+    setOpenSearchResultTodoList(false);
+  };
+
   return (
     <>
       <Header />
       <main className="section__container">
-        <div className="monthly-todo">
-          <div className="monthly-todo__monthly-list">
-            <div className="monthly-todo__menu">
-              <SwitchDateButton />
-              <SearchTodoList />
+        {!openSearchTodoList ? (
+          <div className="monthly-todo">
+            <div className="monthly-todo__monthly-list">
+              <div className="monthly-todo__menu">
+                <SwitchDateButton />
+                <button className="todo__search" onClick={() => openSearch()}>
+                  検索
+                </button>
+              </div>
+              <InputYears
+                selectedYear={selectedYear}
+                selectedMonth={selectedMonth}
+                setSelectedMonth={setSelectedMonth}
+                setSelectedYear={setSelectedYear}
+              />
+              <MonthlyTodoList
+                selectedDate={selectedDate}
+                groupId={groupId}
+                groupMonthImplementationTodoList={groupMonthImplementationTodoList}
+                groupMonthDueTodoList={groupMonthDueTodoList}
+                monthImplementationTodoList={monthImplementationTodoList}
+                monthDueTodoList={monthDueTodoList}
+              />
             </div>
-            <InputYears
-              selectedYear={selectedYear}
-              selectedMonth={selectedMonth}
-              setSelectedMonth={setSelectedMonth}
-              setSelectedYear={setSelectedYear}
-            />
-            <MonthlyTodoList
-              selectedDate={selectedDate}
-              groupId={groupId}
-              groupMonthImplementationTodoList={groupMonthImplementationTodoList}
-              groupMonthDueTodoList={groupMonthDueTodoList}
-              monthImplementationTodoList={monthImplementationTodoList}
-              monthDueTodoList={monthDueTodoList}
-            />
+            <div className="monthly-todo__expired-list">
+              {entityType !== 'group'
+                ? existsExpiredTodoList(expiredTodoList)
+                : existsExpiredTodoList(groupExpiredTodoList)}
+            </div>
           </div>
-          <div className="monthly-todo__expired-list">
-            {entityType !== 'group'
-              ? existsExpiredTodoList(expiredTodoList)
-              : existsExpiredTodoList(groupExpiredTodoList)}
-          </div>
-        </div>
+        ) : (
+          <SearchTodoList
+            openSearchResultTodoList={openSearchResultTodoList}
+            setOpenSearchResultTodoList={setOpenSearchResultTodoList}
+            closeSearch={closeSearch}
+          />
+        )}
       </main>
     </>
   );

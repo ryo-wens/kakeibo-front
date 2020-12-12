@@ -1,6 +1,5 @@
 import React from 'react';
 import { DatePicker, SelectCompleteFlag, SelectLimit, SelectSortType } from '../uikit';
-import CloseIcon from '@material-ui/icons/Close';
 import { TextInput } from './index';
 import SelectDateType from '../uikit/SelectDateType';
 import '../../assets/todo/search-field.scss';
@@ -10,6 +9,8 @@ import { searchTodoRequestData } from '../../reducks/todoList/types';
 
 interface SearchFieldProps {
   closeSearch: () => void;
+  setCurrentDateType: React.Dispatch<React.SetStateAction<string>>;
+  setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
   dateType: string;
   selectStartDate: Date | null;
   selectEndDate: Date | null;
@@ -33,38 +34,31 @@ const SearchField = (props: SearchFieldProps) => {
 
   const searchFiled = [
     {
-      key: '日時の種類',
+      key: '日時の指定',
       value: (
-        <SelectDateType
-          value={props.dateType}
-          label={'日時の種類'}
-          id={'dateType'}
-          selectDateTypeChange={props.selectDateTypeChange}
-        />
-      ),
-    },
-    {
-      key: '開始日',
-      value: (
-        <DatePicker
-          id={'startDate'}
-          label={'開始日'}
-          onChange={props.selectStartDateChange}
-          required={false}
-          value={props.selectStartDate}
-        />
-      ),
-    },
-    {
-      key: '終了日',
-      value: (
-        <DatePicker
-          id={'startDate'}
-          label={'終了日'}
-          onChange={props.selectEndDateChange}
-          required={false}
-          value={props.selectEndDate}
-        />
+        <div className="search-field__date-designation">
+          <SelectDateType
+            value={props.dateType}
+            label={'日時の種類'}
+            id={'dateType'}
+            selectChange={props.selectDateTypeChange}
+          />
+          <DatePicker
+            id={'startDate'}
+            label={'開始日'}
+            onChange={props.selectStartDateChange}
+            required={false}
+            value={props.selectStartDate}
+          />
+          <span>〜</span>
+          <DatePicker
+            id={'startDate'}
+            label={'終了日'}
+            onChange={props.selectEndDateChange}
+            required={false}
+            value={props.selectEndDate}
+          />
+        </div>
       ),
     },
     {
@@ -97,7 +91,7 @@ const SearchField = (props: SearchFieldProps) => {
           value={props.sortItem}
           label={'並び替え項目'}
           id={'sortItem'}
-          selectDateTypeChange={props.selectSortItemChange}
+          selectChange={props.selectSortItemChange}
         />
       ),
     },
@@ -134,29 +128,25 @@ const SearchField = (props: SearchFieldProps) => {
 
   return (
     <>
-      <div className="search-field">
-        <div className="search-field__position">
-          <h3 className="search-field__title">Todoを検索</h3>
-          <button className="search-field__btn-position" onClick={() => props.closeSearch()}>
-            <CloseIcon />
-          </button>
-        </div>
-        {searchFiled.map((searchEntry) => {
-          return (
-            <div className="search-field__select-contents" key={searchEntry.key}>
-              <span className="search-field__select-contents--key">{searchEntry.key}</span>
-              <span className="search-field__select-contents--value">{searchEntry.value}</span>
-            </div>
-          );
-        })}
-        <div className="search-field__search-btn">
-          <button
-            className="save-btn"
-            onClick={() => dispatch(searchTodoList(searchRequestData()))}
-          >
-            この条件で検索
-          </button>
-        </div>
+      {searchFiled.map((searchEntry) => {
+        return (
+          <div className="search-field__select-contents" key={searchEntry.key}>
+            <span className="search-field__select-contents--key">{searchEntry.key}</span>
+            <span className="search-field__select-contents--value">{searchEntry.value}</span>
+          </div>
+        );
+      })}
+      <div className="search-field__search-btn">
+        <button
+          className="save-btn"
+          onClick={() => {
+            dispatch(searchTodoList(searchRequestData()));
+            props.setOpenSearchResultTodoList(true);
+            props.setCurrentDateType(props.dateType);
+          }}
+        >
+          この条件で検索
+        </button>
       </div>
     </>
   );
