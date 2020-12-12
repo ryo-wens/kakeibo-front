@@ -33,9 +33,9 @@ const initialState = {
     groupLatestTransactionsList: [],
     groupTransactionsList: [],
     groupSearchTransactionsList: [],
-    notAccountMessage: '',
     notHistoryMessage: '',
     deletedMessage: '',
+    notAccountMessage: '',
     groupAccountList: {
       group_id: 0,
       month: '',

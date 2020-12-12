@@ -20,7 +20,7 @@ export const groupTransactionsReducer = (
     case Actions.FETCH_GROUP_ACCOUNT:
       return {
         ...state,
-        ...action.payload,
+        groupAccountList: action.payload,
       };
     case Actions.ADD_GROUP_ACCOUNT:
       return {

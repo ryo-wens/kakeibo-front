@@ -457,6 +457,7 @@ describe('async actions groupTransactions', () => {
     const groupId = 1;
     const year = 2020;
     const customMonth = '11';
+    const signal = axios.CancelToken.source();
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
 
     const mockResponse = groupAccountList;
@@ -464,16 +465,13 @@ describe('async actions groupTransactions', () => {
     const expectedActions = [
       {
         type: actionTypes.FETCH_GROUP_ACCOUNT,
-        payload: {
-          groupAccountList: mockResponse,
-          notAccountMessage: '',
-        },
+        payload: mockResponse,
       },
     ];
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await fetchGroupAccount(groupId, year, customMonth)(store.dispatch);
+    await fetchGroupAccount(groupId, year, customMonth, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
