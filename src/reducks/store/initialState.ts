@@ -87,6 +87,8 @@ const initialState = {
     groupMonthImplementationTodoList: [],
     groupMonthDueTodoList: [],
     groupMonthTodoListMessage: '',
+    groupSearchTodoList: [],
+    groupSearchTodoListMessage: '',
   },
   modal: {
     message: '',

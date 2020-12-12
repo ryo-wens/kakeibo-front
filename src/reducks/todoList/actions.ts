@@ -5,6 +5,7 @@ export type todoListsActions = ReturnType<
   | typeof fetchDateTodoListAction
   | typeof fetchMonthTodoListAction
   | typeof deleteTodoListItemAction
+  | typeof searchTodoListAction
 >;
 
 export const CREATE_TODO_LIST_ITEM = 'CREATE_TODO_LIST_ITEM';
