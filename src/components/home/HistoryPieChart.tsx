@@ -1,54 +1,58 @@
 import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, Label } from 'recharts';
+import { FetchTransactions } from '../../reducks/transactions/types';
+import { GroupTransactions } from '../../reducks/groupTransactions/types';
+import { incomeTransactionType, colors } from '../../lib/constant';
+import { getPathTemplateName } from '../../lib/path';
 
-const HistoryPieChart = () => {
-  const data = [
-    {
-      id: 0,
-      name: '食費',
-      value: 3000,
-    },
-    {
-      id: 1,
-      name: '日用品',
-      value: 2000,
-    },
-    {
-      id: 2,
-      name: '交通費',
-      value: 3800,
-    },
-    {
-      id: 3,
-      name: '衣類',
-      value: 8000,
-    },
-    {
-      id: 4,
-      name: '趣味',
-      value: 4000,
-    },
-  ];
+interface HistoryPieChartProps {
+  sortTransactionsList: (FetchTransactions | GroupTransactions)[];
+}
 
-  const colors = ['#00C49F', '#FFBB28', '#0088FE', '#FF8042', '#FFBEDA'];
+const HistoryPieChart = (props: HistoryPieChartProps) => {
+  const pathName = getPathTemplateName(window.location.pathname);
+
+  const totalExpense = () => {
+    let total = 0;
+
+    if (pathName !== 'group') {
+      for (const transaction of props.sortTransactionsList) {
+        if (transaction.transaction_type !== incomeTransactionType) {
+          total += transaction.amount;
+        }
+      }
+    } else if (pathName === 'group') {
+      for (const groupTransaction of props.sortTransactionsList) {
+        if (groupTransaction.transaction_type !== incomeTransactionType) {
+          total += groupTransaction.amount;
+        }
+      }
+    }
+
+    return total !== 0 ? '今月の総支出' + '\n' + '￥' + total.toLocaleString() : '-';
+  };
 
   return (
     <PieChart className="pie__chart" width={200} height={200}>
       <Pie
-        data={data}
+        data={props.sortTransactionsList}
         innerRadius={60}
         outerRadius={100}
-        nameKey={'name'}
-        dataKey={'value'}
+        nameKey={'big_category_name'}
+        dataKey={'amount'}
         cx="50%"
         cy="50%"
       >
-        {data.map((item) => (
-          <Cell key={item.id} fill={colors[item.id % colors.length]} />
-        ))}
-        <Label width={30} position={'center'}>
-          今月の支出総額
-        </Label>
+        {props.sortTransactionsList.map((transaction: FetchTransactions | GroupTransactions) => {
+          return (
+            <Cell
+              key={transaction.id}
+              fill={colors[transaction.big_category_name.length % colors.length]}
+            />
+          );
+        })}
+
+        <Label width={30} position={'center'} value={totalExpense()} />
       </Pie>
       <Tooltip />
     </PieChart>

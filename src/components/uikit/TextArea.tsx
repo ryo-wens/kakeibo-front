@@ -7,6 +7,7 @@ interface InputFormProps {
   type: string;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   onBlur: ((event: React.FocusEvent<HTMLInputElement>) => void) | undefined;
+  placeholder: string;
 }
 
 const TextArea = (props: InputFormProps) => {
@@ -19,6 +20,7 @@ const TextArea = (props: InputFormProps) => {
       type={props.type}
       onChange={props.onChange}
       onBlur={props.onBlur}
+      placeholder={props.placeholder}
     />
   );
 };

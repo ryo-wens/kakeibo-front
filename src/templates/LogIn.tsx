@@ -101,6 +101,7 @@ const LogIn = () => {
                 type={'email'}
                 onChange={inputEmail}
                 onBlur={() => onEmailFocusOut(email, setEmailMessage)}
+                placeholder={''}
               />
               <InvalidMessage message={emailMessage} />
             </div>
@@ -113,6 +114,7 @@ const LogIn = () => {
                 type={'password'}
                 onChange={inputPassword}
                 onBlur={() => passWordSubmit(password, setPassWordMessage)}
+                placeholder={''}
               />
               <InvalidMessage message={passwordMessage} />
             </div>

@@ -22,6 +22,11 @@ export const isValidPasswordFormat = (password: string) => {
   return regex.test(password);
 };
 
+export const isValidUserInfoFormat = (userId: string) => {
+  const regex = /^.*\s/;
+  return regex.test(userId);
+};
+
 export const isValidPreventBeginningZero = (value: number) => {
   const regexp = /^0/;
   return regexp.test(String(value));
@@ -68,8 +73,12 @@ export const onUserIdFocusOut = (
 ) => {
   if (!userId.length) {
     return '';
+  } else if (isValidUserInfoFormat(userId)) {
+    setUserIdMessage('空白を空けずに入力してください。');
   } else if (userId.length > 10) {
     setUserIdMessage('ユーザーIDは10文字以下で入力してください。');
+  } else if (!isValidUserInfoFormat(userId)) {
+    setUserIdMessage('');
   } else if (userId.length < 10) {
     setUserIdMessage('');
   }
@@ -81,8 +90,12 @@ export const onUserNameFocusOut = (
 ) => {
   if (!userName.length) {
     return '';
+  } else if (isValidUserInfoFormat(userName)) {
+    setUserNameMessage('空白を空けずに入力してください。');
   } else if (userName.length > 50) {
     setUserNameMessage('ユーザー名は50文字以下で入力してください。');
+  } else if (!isValidUserInfoFormat(userName)) {
+    setUserNameMessage('');
   } else if (userName.length < 50) {
     setUserNameMessage('');
   }

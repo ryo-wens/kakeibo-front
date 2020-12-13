@@ -19,7 +19,11 @@ import {
   getGroupExpenseCategories,
 } from '../../reducks/groupCategories/selectors';
 import { getUserId } from '../../reducks/users/selectors';
-import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
+import {
+  addTransactions,
+  addLatestTransactions,
+  fetchTransactionsList,
+} from '../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
   addGroupTransactions,
@@ -66,12 +70,15 @@ interface AddTransactionModalProps {
   open: boolean;
   onClose: () => void;
   selectDate: Date;
+  year: number;
+  month: number;
 }
 
 const AddTransactionModal = (props: AddTransactionModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
+  const signal = axios.CancelToken.source();
   const approvedGroup = getApprovedGroups(selector);
   const userId = getUserId(selector);
   const incomeCategories = getIncomeCategories(selector);
@@ -94,6 +101,10 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [associatedCategory, setAssociatedCategory] = useState<string>('');
+  const years = {
+    selectedYear: String(props.year),
+    selectedMonth: String(props.month),
+  };
 
   useEffect(() => {
     setTransactionDate(props.selectDate);
@@ -222,6 +233,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       async function personalTransaction() {
         await dispatch(addLatestTransactions(personalAddRequestData));
         dispatch(addTransactions(customMonth));
+        dispatch(fetchTransactionsList(years, signal));
         props.onClose();
         resetForm();
       }

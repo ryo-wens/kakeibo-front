@@ -27,3 +27,23 @@ export const notHistoryMessage = createSelector(
   [transactionsSelector],
   (state) => state.notHistoryMessage
 );
+
+export const getSortCategoryTransactions = createSelector([transactionsSelector], (state) => {
+  return [
+    ...state.transactionsList
+      .reduce((acc, transaction) => {
+        const key = transaction.big_category_name + '-' + transaction.big_category_name;
+
+        const item =
+          acc.get(key) ||
+          Object.assign({}, transaction, {
+            amount: 0,
+          });
+
+        item.amount += transaction.amount;
+
+        return acc.set(key, item);
+      }, new Map())
+      .values(),
+  ];
+});
