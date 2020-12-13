@@ -65,3 +65,15 @@ export interface fetchGroupExpiredTodoListRes {
 export interface deleteGroupTodoListItemRes {
   message: string;
 }
+
+export interface searchGroupTodoRequestData {
+  date_type: string;
+  start_date: Date | null;
+  end_date: Date | null;
+  sort: string;
+  sort_type: string;
+  complete_flag?: boolean | string;
+  todo_content?: string;
+  limit?: string;
+  user_id?: Array<string>;
+}

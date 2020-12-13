@@ -1,16 +1,20 @@
 import React from 'react';
 import { DatePicker, SelectCompleteFlag, SelectLimit, SelectSortType } from '../uikit';
-import { TextInput } from './index';
-import SelectDateType from '../uikit/SelectDateType';
+import { SelectDateType, SelectUsers, TextInput } from './index';
 import '../../assets/todo/search-field.scss';
 import { useDispatch } from 'react-redux';
 import { searchTodoList } from '../../reducks/todoList/operations';
 import { searchTodoRequestData } from '../../reducks/todoList/types';
+import { Groups } from '../../reducks/groups/types';
+import { searchGroupTodoRequestData } from '../../reducks/groupTodoList/types';
+import { useLocation } from 'react-router';
 
 interface SearchFieldProps {
+  approvedGroups: Groups;
   closeSearch: () => void;
   setCurrentDateType: React.Dispatch<React.SetStateAction<string>>;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
+  setUsersIds: React.Dispatch<React.SetStateAction<Array<string>>>;
   dateType: string;
   selectStartDate: Date | null;
   selectEndDate: Date | null;
@@ -19,6 +23,7 @@ interface SearchFieldProps {
   sortItem: string;
   sortType: string;
   limit: string;
+  userIds: Array<string>;
   selectDateTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   selectStartDateChange: (selectStartDate: Date | null) => void;
   selectEndDateChange: (selectEndDate: Date | null) => void;
@@ -31,6 +36,7 @@ interface SearchFieldProps {
 
 const SearchField = (props: SearchFieldProps) => {
   const dispatch = useDispatch();
+  const pathName = useLocation().pathname.split('/')[1];
 
   const searchFiled = [
     {
@@ -106,7 +112,7 @@ const SearchField = (props: SearchFieldProps) => {
   ];
 
   const searchRequestData = () => {
-    const requestData: searchTodoRequestData = {
+    const data: searchTodoRequestData | searchGroupTodoRequestData = {
       date_type: props.dateType,
       start_date: props.selectStartDate,
       end_date: props.selectEndDate,
@@ -115,16 +121,28 @@ const SearchField = (props: SearchFieldProps) => {
     };
 
     if (props.completeFlag !== 'all') {
-      requestData.complete_flag = props.completeFlag;
+      data.complete_flag = props.completeFlag;
     }
     if (props.todoContent !== '') {
-      requestData.todo_content = props.todoContent;
+      data.todo_content = props.todoContent;
     }
     if (props.limit !== '') {
-      requestData.limit = props.limit;
+      data.limit = props.limit;
     }
-    return requestData;
+    return data;
   };
+
+  const searchGroupRequestData = (data: searchGroupTodoRequestData) => {
+    if (props.userIds !== [] && pathName === 'group') {
+      data.user_id = props.userIds;
+    }
+    return data;
+  };
+
+  const requestData: searchTodoRequestData = searchRequestData();
+  const groupRequestData: searchGroupTodoRequestData = searchGroupRequestData(searchRequestData());
+
+  console.log(groupRequestData); // npm run lint 時に warning が出力される為、仮実装
 
   return (
     <>
@@ -136,11 +154,19 @@ const SearchField = (props: SearchFieldProps) => {
           </div>
         );
       })}
+      {pathName === 'group' && (
+        <div className="search-field__select-contents">
+          <span className="search-field__select-contents--key">ユーザーを選択</span>
+          <span className="search-field__select-contents--value">
+            <SelectUsers approvedGroups={props.approvedGroups} setUsersIds={props.setUsersIds} />
+          </span>
+        </div>
+      )}
       <div className="search-field__search-btn">
         <button
           className="save-btn"
           onClick={() => {
-            dispatch(searchTodoList(searchRequestData()));
+            dispatch(searchTodoList(requestData));
             props.setOpenSearchResultTodoList(true);
             props.setCurrentDateType(props.dateType);
           }}

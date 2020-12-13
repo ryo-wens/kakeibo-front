@@ -11,8 +11,6 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: theme.spacing(1),
       minWidth: 200,
       width: 'calc(80% - 16px)',
-      marginTop: 0,
-      marginBottom: 16,
     },
   })
 );

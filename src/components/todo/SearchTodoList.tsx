@@ -3,11 +3,13 @@ import SearchField from './SearchField';
 import { month, year } from '../../lib/constant';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { SearchResultTodoList } from './index';
+import { Groups } from '../../reducks/groups/types';
 
 interface SearchTodoListProps {
   openSearchResultTodoList: boolean;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
   closeSearch: () => void;
+  approvedGroups: Groups;
 }
 
 const SearchTodoList = (props: SearchTodoListProps) => {
@@ -20,6 +22,7 @@ const SearchTodoList = (props: SearchTodoListProps) => {
   const [sortItem, setSortItem] = useState<string>('implementation_date');
   const [sortType, setSortType] = useState<string>('asc');
   const [limit, setLimit] = useState<string>('');
+  const [userIds, setUserIds] = useState<Array<string>>([]);
 
   const selectDateTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setDateType(event.target.value as string);
@@ -69,9 +72,11 @@ const SearchTodoList = (props: SearchTodoListProps) => {
           <h3 className="search-field__title">Todoを検索</h3>
         </div>
         <SearchField
+          approvedGroups={props.approvedGroups}
           closeSearch={props.closeSearch}
           setCurrentDateType={setCurrentDateType}
           setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}
+          setUsersIds={setUserIds}
           dateType={dateType}
           selectStartDate={selectStartDate}
           selectEndDate={selectEndDate}
@@ -80,6 +85,7 @@ const SearchTodoList = (props: SearchTodoListProps) => {
           sortItem={sortItem}
           sortType={sortType}
           limit={limit}
+          userIds={userIds}
           selectDateTypeChange={selectDateTypeChange}
           selectStartDateChange={selectStartDateChange}
           selectEndDateChange={selectEndDateChange}

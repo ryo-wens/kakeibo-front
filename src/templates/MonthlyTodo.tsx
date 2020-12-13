@@ -14,7 +14,6 @@ import {
   SearchTodoList,
   SwitchDateButton,
 } from '../components/todo';
-import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import {
   getGroupExpiredTodoList,
   getGroupMonthDueTodoList,
@@ -32,18 +31,22 @@ import InputYears from '../components/uikit/InputYears';
 import { month, year } from '../lib/constant';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/monthly-todo.scss';
+import { getApprovedGroups } from '../reducks/groups/selectors';
+import { useLocation, useParams } from 'react-router';
 
 const MonthlyTodo = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
+  const approvedGroups = getApprovedGroups(selector);
   const expiredTodoList = getExpiredTodoList(selector);
   const groupExpiredTodoList = getGroupExpiredTodoList(selector);
   const monthImplementationTodoList = getMonthImplementationTodoList(selector);
   const monthDueTodoList = getMonthDueTodoList(selector);
   const groupMonthImplementationTodoList = getGroupMonthImplementationTodoList(selector);
   const groupMonthDueTodoList = getGroupMonthDueTodoList(selector);
-  const entityType = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
+  const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
+
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -55,10 +58,10 @@ const MonthlyTodo = () => {
   }, [selectedYear, selectedMonth]);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
-    dispatch(fetchGroupExpiredTodoList(groupId, signal));
+    dispatch(fetchGroupExpiredTodoList(Number(id), signal));
     dispatch(
       fetchGroupTodayTodoList(
-        groupId,
+        Number(id),
         String(selectedYear),
         ('0' + selectedMonth).slice(-2),
         ('0' + selectedDate.getDate()).slice(-2),
@@ -67,7 +70,7 @@ const MonthlyTodo = () => {
     );
     dispatch(
       fetchGroupMonthTodoList(
-        groupId,
+        Number(id),
         String(selectedYear),
         ('0' + selectedMonth).slice(-2),
         signal
@@ -76,7 +79,7 @@ const MonthlyTodo = () => {
   };
 
   useEffect(() => {
-    if (entityType === 'group') {
+    if (pathName === 'group') {
       const signal = axios.CancelToken.source();
       fetchGroupTodoList(signal);
       const interval = setInterval(() => {
@@ -103,7 +106,7 @@ const MonthlyTodo = () => {
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
-    if (entityType !== 'group') {
+    if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
       dispatch(fetchExpiredTodoList(signal));
       dispatch(fetchMonthTodoList(String(selectedYear), ('0' + selectedMonth).slice(-2), signal));
@@ -147,7 +150,7 @@ const MonthlyTodo = () => {
               />
               <MonthlyTodoList
                 selectedDate={selectedDate}
-                groupId={groupId}
+                groupId={Number(id)}
                 groupMonthImplementationTodoList={groupMonthImplementationTodoList}
                 groupMonthDueTodoList={groupMonthDueTodoList}
                 monthImplementationTodoList={monthImplementationTodoList}
@@ -155,7 +158,7 @@ const MonthlyTodo = () => {
               />
             </div>
             <div className="monthly-todo__expired-list">
-              {entityType !== 'group'
+              {pathName !== 'group'
                 ? existsExpiredTodoList(expiredTodoList)
                 : existsExpiredTodoList(groupExpiredTodoList)}
             </div>
@@ -165,6 +168,7 @@ const MonthlyTodo = () => {
             openSearchResultTodoList={openSearchResultTodoList}
             setOpenSearchResultTodoList={setOpenSearchResultTodoList}
             closeSearch={closeSearch}
+            approvedGroups={approvedGroups}
           />
         )}
       </main>
