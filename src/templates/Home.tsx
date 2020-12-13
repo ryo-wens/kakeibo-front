@@ -1,6 +1,5 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../reducks/store/types';
 import axios from 'axios';
 import { SelectYears } from '../lib/date';
 import { year, month } from '../lib/constant';
@@ -9,14 +8,18 @@ import { Header } from '../components/header';
 import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
-import { getSortCategoryTransactions } from '../reducks/transactions/selectors';
-import { getSortCategoryGroupTransactions } from '../reducks/groupTransactions/selectors';
+import { getSortCategoryTransactions, getTotalExpense } from '../reducks/transactions/selectors';
+import {
+  getSortCategoryGroupTransactions,
+  getTotalGroupExpense,
+} from '../reducks/groupTransactions/selectors';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const sortCategoryTransactionsList = getSortCategoryTransactions(selector);
-  const sortCategoryGroupTransactionsList = getSortCategoryGroupTransactions(selector);
+  const sortCategoryTransactionsList = useSelector(getSortCategoryTransactions);
+  const thisMonthTotalExpense = useSelector(getTotalExpense);
+  const sortCategoryGroupTransactionsList = useSelector(getSortCategoryGroupTransactions);
+  const thisMonthGroupTotalExpense = useSelector(getTotalGroupExpense);
   const pathName = getPathTemplateName(window.location.pathname);
   const groupId = getPathGroupId(window.location.pathname);
 
@@ -69,6 +72,9 @@ const Home = () => {
                 pathName !== 'group'
                   ? sortCategoryTransactionsList
                   : sortCategoryGroupTransactionsList
+              }
+              thisMonthTotalExpense={
+                pathName !== 'group' ? thisMonthTotalExpense : thisMonthGroupTotalExpense
               }
             />
           </div>

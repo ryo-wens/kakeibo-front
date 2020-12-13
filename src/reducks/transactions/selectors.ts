@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
+import { incomeTransactionType } from '../../lib/constant';
 
 const transactionsSelector = (state: State) => state.transactions;
 
@@ -46,4 +47,17 @@ export const getSortCategoryTransactions = createSelector([transactionsSelector]
       }, new Map())
       .values(),
   ];
+});
+
+const transactionsList = (state: State) => state.transactions.transactionsList;
+
+export const getTotalExpense = createSelector([transactionsList], (transactionsList) => {
+  let total = 0;
+
+  for (const transaction of transactionsList) {
+    if (transaction.transaction_type !== incomeTransactionType) {
+      total += transaction.amount;
+    }
+  }
+  return total;
 });

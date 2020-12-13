@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
+import { incomeTransactionType } from '../../lib/constant';
 
 const groupTransactionsSelector = (state: State) => state.groupTransactions;
 
@@ -53,5 +54,21 @@ export const getSortCategoryGroupTransactions = createSelector(
         }, new Map())
         .values(),
     ];
+  }
+);
+
+const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
+
+export const getTotalGroupExpense = createSelector(
+  [groupTransactionsList],
+  (groupTransactionsList) => {
+    let total = 0;
+
+    for (const groupTransaction of groupTransactionsList) {
+      if (groupTransaction.transaction_type !== incomeTransactionType) {
+        total += groupTransaction.amount;
+      }
+    }
+    return total;
   }
 );
