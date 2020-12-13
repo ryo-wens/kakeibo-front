@@ -1,9 +1,9 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 import axios from 'axios';
 import { SelectYears } from '../lib/date';
 import { year, month } from '../lib/constant';
-import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import { Header } from '../components/header';
 import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
 import { fetchGroups } from '../reducks/groups/operations';
@@ -16,12 +16,12 @@ import {
 
 const Home = () => {
   const dispatch = useDispatch();
+  const pathName = useLocation().pathname.split('/')[1];
+  const groupId = Number(useLocation().pathname.split('/')[2]);
   const sortCategoryTransactionsList = useSelector(getSortCategoryTransactions);
   const thisMonthTotalExpense = useSelector(getTotalExpense);
   const sortCategoryGroupTransactionsList = useSelector(getSortCategoryGroupTransactions);
   const thisMonthGroupTotalExpense = useSelector(getTotalGroupExpense);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();

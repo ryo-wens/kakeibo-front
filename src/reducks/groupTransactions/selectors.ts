@@ -34,11 +34,13 @@ export const getNotHistoryMessage = createSelector(
   (state) => state.notAccountMessage
 );
 
+const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
+
 export const getSortCategoryGroupTransactions = createSelector(
-  [groupTransactionsSelector],
-  (state) => {
+  [groupTransactionsList],
+  (groupTransactionsList) => {
     return [
-      ...state.groupTransactionsList
+      ...groupTransactionsList
         .reduce((acc, groupTransaction) => {
           const key = groupTransaction.big_category_name + '-' + groupTransaction.big_category_name;
 
@@ -56,8 +58,6 @@ export const getSortCategoryGroupTransactions = createSelector(
     ];
   }
 );
-
-const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
 
 export const getTotalGroupExpense = createSelector(
   [groupTransactionsList],

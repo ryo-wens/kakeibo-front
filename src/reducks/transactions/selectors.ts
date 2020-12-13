@@ -29,27 +29,30 @@ export const notHistoryMessage = createSelector(
   (state) => state.notHistoryMessage
 );
 
-export const getSortCategoryTransactions = createSelector([transactionsSelector], (state) => {
-  return [
-    ...state.transactionsList
-      .reduce((acc, transaction) => {
-        const key = transaction.big_category_name + '-' + transaction.big_category_name;
-
-        const item =
-          acc.get(key) ||
-          Object.assign({}, transaction, {
-            amount: 0,
-          });
-
-        item.amount += transaction.amount;
-
-        return acc.set(key, item);
-      }, new Map())
-      .values(),
-  ];
-});
-
 const transactionsList = (state: State) => state.transactions.transactionsList;
+
+export const getSortCategoryTransactions = createSelector(
+  [transactionsList],
+  (transactionsList) => {
+    return [
+      ...transactionsList
+        .reduce((acc, transaction) => {
+          const key = transaction.big_category_name + '-' + transaction.big_category_name;
+
+          const item =
+            acc.get(key) ||
+            Object.assign({}, transaction, {
+              amount: 0,
+            });
+
+          item.amount += transaction.amount;
+
+          return acc.set(key, item);
+        }, new Map())
+        .values(),
+    ];
+  }
+);
 
 export const getTotalExpense = createSelector([transactionsList], (transactionsList) => {
   let total = 0;

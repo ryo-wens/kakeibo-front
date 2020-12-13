@@ -32,10 +32,10 @@ const HistoryPieChart = (props: HistoryPieChartProps) => {
 
         <Label
           width={30}
-          position={'center'}
+          position="center"
           value={
             props.thisMonthTotalExpense !== 0
-              ? '今月の総支出' + '\n' + '￥' + props.thisMonthTotalExpense.toLocaleString()
+              ? `今月の総支出 \n  ${'￥' + props.thisMonthTotalExpense.toLocaleString()}`
               : '-'
           }
         />
