@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
 import { SelectYears } from '../lib/date';
 import { year, month } from '../lib/constant';
@@ -17,7 +17,7 @@ import {
 const Home = () => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const groupId = Number(useLocation().pathname.split('/')[2]);
+  const { id } = useParams();
   const sortCategoryTransactionsList = useSelector(getSortCategoryTransactions);
   const thisMonthTotalExpense = useSelector(getTotalExpense);
   const sortCategoryGroupTransactionsList = useSelector(getSortCategoryGroupTransactions);
@@ -30,10 +30,10 @@ const Home = () => {
         selectedYear: String(year),
         selectedMonth: month <= 9 ? '0' + month : String(month),
       };
-      dispatch(fetchGroupTransactionsList(groupId, years, signal));
+      dispatch(fetchGroupTransactionsList(Number(id), years, signal));
       dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroupTransactionsList(groupId, years, signal));
+        dispatch(fetchGroupTransactionsList(Number(id), years, signal));
         dispatch(fetchGroups(signal));
       }, 3000);
       return () => {
@@ -41,7 +41,7 @@ const Home = () => {
         clearInterval(interval);
       };
     }
-  }, [pathName, groupId]);
+  }, [pathName, id]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
