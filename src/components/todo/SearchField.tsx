@@ -7,7 +7,8 @@ import { searchTodoList } from '../../reducks/todoList/operations';
 import { searchTodoRequestData } from '../../reducks/todoList/types';
 import { Groups } from '../../reducks/groups/types';
 import { searchGroupTodoRequestData } from '../../reducks/groupTodoList/types';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
+import { searchGroupTodoList } from '../../reducks/groupTodoList/operations';
 
 interface SearchFieldProps {
   approvedGroups: Groups;
@@ -37,6 +38,7 @@ interface SearchFieldProps {
 const SearchField = (props: SearchFieldProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
 
   const searchFiled = [
     {
@@ -133,7 +135,7 @@ const SearchField = (props: SearchFieldProps) => {
   };
 
   const searchGroupRequestData = (data: searchGroupTodoRequestData) => {
-    if (props.userIds !== [] && pathName === 'group') {
+    if (pathName === 'group' && props.userIds !== []) {
       data.user_id = props.userIds;
     }
     return data;
@@ -141,8 +143,6 @@ const SearchField = (props: SearchFieldProps) => {
 
   const requestData: searchTodoRequestData = searchRequestData();
   const groupRequestData: searchGroupTodoRequestData = searchGroupRequestData(searchRequestData());
-
-  console.log(groupRequestData); // npm run lint 時に warning が出力される為、仮実装
 
   return (
     <>
@@ -166,7 +166,10 @@ const SearchField = (props: SearchFieldProps) => {
         <button
           className="save-btn"
           onClick={() => {
-            dispatch(searchTodoList(requestData));
+            pathName === 'group'
+              ? dispatch(searchGroupTodoList(Number(id), groupRequestData))
+              : dispatch(searchTodoList(requestData));
+
             props.setOpenSearchResultTodoList(true);
             props.setCurrentDateType(props.dateType);
           }}

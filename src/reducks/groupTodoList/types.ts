@@ -77,3 +77,8 @@ export interface searchGroupTodoRequestData {
   limit?: string;
   user_id?: Array<string>;
 }
+
+export interface fetchSearchGroupTodoListRes {
+  search_todo_list: GroupTodoList;
+  message: string;
+}

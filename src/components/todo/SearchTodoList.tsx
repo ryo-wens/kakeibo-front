@@ -4,6 +4,13 @@ import { month, year } from '../../lib/constant';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { SearchResultTodoList } from './index';
 import { Groups } from '../../reducks/groups/types';
+import { useSelector } from 'react-redux';
+import { getSearchTodoList, getSearchTodoListMessage } from '../../reducks/todoList/selectors';
+import {
+  getGroupSearchTodoList,
+  getGroupSearchTodoListMessage,
+} from '../../reducks/groupTodoList/selectors';
+import { useLocation } from 'react-router';
 
 interface SearchTodoListProps {
   openSearchResultTodoList: boolean;
@@ -13,6 +20,11 @@ interface SearchTodoListProps {
 }
 
 const SearchTodoList = (props: SearchTodoListProps) => {
+  const pathName = useLocation().pathname.split('/')[1];
+  const searchTodoList = useSelector(getSearchTodoList);
+  const searchTodoListMessage = useSelector(getSearchTodoListMessage);
+  const groupSearchTodoList = useSelector(getGroupSearchTodoList);
+  const groupSearchTodoListMessage = useSelector(getGroupSearchTodoListMessage);
   const [currentDateType, setCurrentDateType] = useState<string>('');
   const [dateType, setDateType] = useState<string>('implementation_date');
   const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
@@ -96,7 +108,11 @@ const SearchTodoList = (props: SearchTodoListProps) => {
           selectLimit={selectLimit}
         />
         {props.openSearchResultTodoList && (
-          <SearchResultTodoList currentDateType={currentDateType} />
+          <SearchResultTodoList
+            currentDateType={currentDateType}
+            todoList={pathName === 'group' ? groupSearchTodoList : searchTodoList}
+            message={pathName === 'group' ? groupSearchTodoListMessage : searchTodoListMessage}
+          />
         )}
       </div>
     </>
