@@ -62,3 +62,19 @@ export interface fetchExpiredTodoListRes {
 export interface deleteTodoListItemRes {
   message: string;
 }
+
+export interface searchTodoRequestData {
+  date_type: string;
+  start_date: Date | null;
+  end_date: Date | null;
+  sort: string;
+  sort_type: string;
+  complete_flag?: boolean | string;
+  todo_content?: string;
+  limit?: string;
+}
+
+export interface fetchSearchTodoListRes {
+  search_todo_list: TodoList;
+  message: string;
+}

@@ -12,6 +12,7 @@ import {
   fetchDateTodoList,
   fetchExpiredTodoList,
   fetchMonthTodoList,
+  searchTodoList,
 } from '../../src/reducks/todoList/operations';
 import createTodoListItemResponse from './createTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
@@ -19,6 +20,7 @@ import fetchDateTodoListResponse from './fetchDateTodoListResponse.json';
 import fetchMonthTodoListResponse from './fetchMonthTodoListResponse.json';
 import fetchExpiredTodoListResponse from './fetchExpiredTodoListResponse.json';
 import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
+import searchTodoListResponse from './searchTodoListResponse.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -95,6 +97,8 @@ const getState = () => {
         },
       ],
       monthTodoListMessage: '',
+      searchTodoList: [],
+      searchTodoListMessage: '',
     },
     modal: {
       message: '',
@@ -563,6 +567,46 @@ describe('async actions todoLists', () => {
 
     // @ts-ignore
     await deleteTodoListItem(todoListItemId)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it("get searchTodoList  search criteria match in  if fetch succeeds'", async () => {
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/search`;
+
+    const params = {
+      date_type: 'implementation_date',
+      start_date: new Date('2020-09-01T00:00:00'),
+      end_date: new Date('2020-09-30T00:00:00'),
+      sort: 'implementation_date',
+      sort_type: 'desc',
+    };
+
+    const mockResponse = JSON.stringify(searchTodoListResponse);
+
+    const expectedAction = [
+      {
+        type: TodoListsActions.SEARCH_TODO_LIST,
+        payload: {
+          searchTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+            },
+          ],
+          searchTodoListMessage: '',
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await searchTodoList(params)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

@@ -10,6 +10,7 @@ import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse.j
 import fetchGroupMonthTodoListResponse from './fetchGroupMonthTodoListResponse.json';
 import fetchGroupExpiredTodoListResponse from './fetchGroupExpiredTodoListResponse.json';
 import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
+import searchGroupTodoListResponse from './searchGroupTodoListResponse.json';
 import {
   createGroupTodoListItem,
   deleteGroupTodoListItem,
@@ -17,8 +18,11 @@ import {
   fetchGroupTodayTodoList,
   fetchGroupMonthTodoList,
   fetchGroupExpiredTodoList,
+  searchGroupTodoList,
 } from '../../src/reducks/groupTodoList/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
+import * as TodoListsActions from '../../src/reducks/todoList/actions';
+import { searchTodoList } from '../../src/reducks/todoList/operations';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -100,6 +104,8 @@ const getState = () => {
         },
       ],
       groupMonthTodoListMessage: '',
+      groupSearchTodoList: [],
+      groupSearchTodoListMessage: '',
     },
     modal: { message: '', open: false },
     router: {
@@ -630,6 +636,50 @@ describe('async actions groupTodoLists', () => {
 
     // @ts-ignore
     await deleteGroupTodoListItem(groupId, todoListItemId)(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it("get searchGroupTodoList  search criteria match in  if fetch succeeds'", async () => {
+    const groupId = 1;
+
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/search`;
+
+    const params = {
+      date_type: 'implementation_date',
+      start_date: new Date('2020-09-01T00:00:00'),
+      end_date: new Date('2020-09-30T00:00:00'),
+      sort: 'implementation_date',
+      sort_type: 'desc',
+      user_id: 'furusawa',
+    };
+
+    const mockResponse = JSON.stringify(searchGroupTodoListResponse);
+
+    const expectedAction = [
+      {
+        type: GroupTodoListActions.SEARCH_GROUP_TODO_LIST,
+        payload: {
+          groupSearchTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupSearchTodoListMessage: '',
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await searchGroupTodoList(groupId, params)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

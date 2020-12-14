@@ -5,6 +5,7 @@ export type todoListsActions = ReturnType<
   | typeof fetchDateTodoListAction
   | typeof fetchMonthTodoListAction
   | typeof deleteTodoListItemAction
+  | typeof searchTodoListAction
 >;
 
 export const CREATE_TODO_LIST_ITEM = 'CREATE_TODO_LIST_ITEM';
@@ -105,6 +106,17 @@ export const deleteTodoListItemAction = (
       todayDueTodoList: todayDueTodoList,
       monthImplementationTodoList: monthImplementationTodoList,
       monthDueTodoList: monthDueTodoList,
+    },
+  };
+};
+
+export const SEARCH_TODO_LIST = 'SEARCH_TODO_LIST';
+export const searchTodoListAction = (searchTodoList: TodoList, searchTodoListMessage: string) => {
+  return {
+    type: SEARCH_TODO_LIST,
+    payload: {
+      searchTodoList: searchTodoList,
+      searchTodoListMessage: searchTodoListMessage,
     },
   };
 };

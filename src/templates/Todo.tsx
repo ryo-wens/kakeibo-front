@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
 import { State } from '../reducks/store/types';
@@ -34,17 +34,19 @@ import {
   fetchGroupMonthTodoList,
   fetchGroupTodayTodoList,
 } from '../reducks/groupTodoList/operations';
-import { getPathGroupId, getPathTemplateName } from '../lib/path';
 import { GroupTodoList } from '../reducks/groupTodoList/types';
 import { TodoList } from '../reducks/todoList/types';
 import { date } from '../lib/constant';
 import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/todo.scss';
+import { getApprovedGroups } from '../reducks/groups/selectors';
+import { useLocation, useParams } from 'react-router';
 
 const Todo = () => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
+  const approvedGroups = getApprovedGroups(selector);
   const expiredTodoList = getExpiredTodoList(selector);
   const groupExpiredTodoList = getGroupExpiredTodoList(selector);
   const todayImplementationTodoList = getTodayImplementationTodoList(selector);
@@ -55,20 +57,22 @@ const Todo = () => {
   const monthTodoListMessage = getMonthTodoListMessage(selector);
   const groupTodayImplementationTodoList = getGroupTodayImplementationTodoList(selector);
   const groupTodayDueTodoList = getGroupTodayDueTodoList(selector);
-  const entityType = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
+  const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
   const todayYear = String(date.getFullYear());
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
+  const [openSearchTodoList, setOpenSearchTodoList] = useState<boolean>(false);
+  const [openSearchResultTodoList, setOpenSearchResultTodoList] = useState<boolean>(false);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
-    dispatch(fetchGroupExpiredTodoList(groupId, signal));
-    dispatch(fetchGroupTodayTodoList(groupId, todayYear, todayMonth, todayDate, signal));
-    dispatch(fetchGroupMonthTodoList(groupId, todayYear, todayMonth, signal));
+    dispatch(fetchGroupExpiredTodoList(Number(id), signal));
+    dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
+    dispatch(fetchGroupMonthTodoList(Number(id), todayYear, todayMonth, signal));
   };
 
   useEffect(() => {
-    if (entityType === 'group') {
+    if (pathName === 'group') {
       const signal = axios.CancelToken.source();
       fetchGroupTodoList(signal);
       const interval = setInterval(() => {
@@ -91,10 +95,10 @@ const Todo = () => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, [todayYear, todayMonth, todayDate]);
+  }, []);
 
   useEffect(() => {
-    if (entityType !== 'group' && !expiredTodoList.length) {
+    if (pathName !== 'group' && !expiredTodoList.length) {
       const signal = axios.CancelToken.source();
       dispatch(fetchExpiredTodoList(signal));
       return () => signal.cancel();
@@ -103,7 +107,7 @@ const Todo = () => {
 
   useEffect(() => {
     if (
-      entityType !== 'group' &&
+      pathName !== 'group' &&
       !todayImplementationTodoList.length &&
       !todayDueTodoList.length &&
       !todayTodoListMessage
@@ -116,7 +120,7 @@ const Todo = () => {
 
   useEffect(() => {
     if (
-      entityType !== 'group' &&
+      pathName !== 'group' &&
       !monthImplementationTodoList.length &&
       !monthDueTodoList.length &&
       !monthTodoListMessage
@@ -133,39 +137,59 @@ const Todo = () => {
     }
   };
 
+  const openSearch = () => {
+    setOpenSearchTodoList(true);
+  };
+
+  const closeSearch = () => {
+    setOpenSearchTodoList(false);
+    setOpenSearchResultTodoList(false);
+  };
+
   return (
     <>
       <Header />
       <main className="section__container">
-        <div className="todo">
-          <div className="todo__today-list">
-            <div className="todo__menu">
-              <SwitchDateButton />
-              <SearchTodoList />
-            </div>
-            <span className="todo__today-date">
-              今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-            </span>
+        {!openSearchTodoList ? (
+          <div className="todo">
+            <div className="todo__today-list">
+              <div className="todo__menu">
+                <SwitchDateButton />
+                <button className="todo__search" onClick={() => openSearch()}>
+                  検索
+                </button>
+              </div>
+              <span className="todo__today-date">
+                今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
+              </span>
 
-            {entityType !== 'group' ? (
-              <SwitchTodoList
-                implementationTodoList={todayImplementationTodoList}
-                dueTodoList={todayDueTodoList}
-              />
-            ) : (
-              <SwitchTodoList
-                implementationTodoList={groupTodayImplementationTodoList}
-                dueTodoList={groupTodayDueTodoList}
-              />
-            )}
-            <AddTodo date={date} groupId={groupId} />
+              {pathName !== 'group' ? (
+                <SwitchTodoList
+                  implementationTodoList={todayImplementationTodoList}
+                  dueTodoList={todayDueTodoList}
+                />
+              ) : (
+                <SwitchTodoList
+                  implementationTodoList={groupTodayImplementationTodoList}
+                  dueTodoList={groupTodayDueTodoList}
+                />
+              )}
+              <AddTodo date={date} groupId={Number(id)} />
+            </div>
+            <div className="todo__expired-list">
+              {pathName !== 'group'
+                ? existsExpiredTodoList(expiredTodoList)
+                : existsExpiredTodoList(groupExpiredTodoList)}
+            </div>
           </div>
-          <div className="todo__expired-list">
-            {entityType !== 'group'
-              ? existsExpiredTodoList(expiredTodoList)
-              : existsExpiredTodoList(groupExpiredTodoList)}
-          </div>
-        </div>
+        ) : (
+          <SearchTodoList
+            openSearchResultTodoList={openSearchResultTodoList}
+            setOpenSearchResultTodoList={setOpenSearchResultTodoList}
+            closeSearch={closeSearch}
+            approvedGroups={approvedGroups}
+          />
+        )}
       </main>
     </>
   );

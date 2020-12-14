@@ -13,6 +13,7 @@ import {
   fetchGroupMonthTodoListRes,
   GroupTodoListItem,
   GroupTodoList,
+  fetchSearchGroupTodoListRes,
 } from './types';
 import {
   createGroupTodoListItemAction,
@@ -21,6 +22,7 @@ import {
   fetchGroupTodayTodoListAction,
   fetchGroupMonthTodoListAction,
   fetchGroupExpiredTodoListAction,
+  groupSearchTodoListAction,
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
 import { errorHandling } from '../../lib/validation';
@@ -29,6 +31,7 @@ import {
   dateToDateString,
   dateToYearAndMonthString,
 } from '../../lib/date';
+import QueryString from 'qs';
 
 export const createGroupTodoListItem = (
   groupId: number,
@@ -551,6 +554,58 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
         )
       );
       dispatch(openTextModalAction(message));
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
+  };
+};
+
+export const searchGroupTodoList = (
+  groupId: number,
+  searchGroupRequestData: {
+    date_type: string;
+    start_date: Date | null;
+    end_date: Date | null;
+    sort: string;
+    sort_type: string;
+    complete_flag?: boolean | string;
+    todo_content?: string;
+    limit?: string;
+    user_id?: string[];
+  }
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<fetchSearchGroupTodoListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/search`,
+        {
+          withCredentials: true,
+          params: {
+            date_type: searchGroupRequestData.date_type,
+            start_date: moment(searchGroupRequestData.start_date).format(),
+            end_date: moment(searchGroupRequestData.end_date).format(),
+            complete_flag: searchGroupRequestData.complete_flag,
+            todo_content: searchGroupRequestData.todo_content,
+            sort: searchGroupRequestData.sort,
+            sort_type: searchGroupRequestData.sort_type,
+            limit: searchGroupRequestData.limit,
+            user_id: searchGroupRequestData.user_id,
+          },
+          paramsSerializer: (params) => {
+            return QueryString.stringify(params, { encode: false, arrayFormat: 'repeat' });
+          },
+        }
+      );
+      const searchTodoList: GroupTodoList = result.data.search_todo_list;
+      const message: string = result.data.message;
+
+      if (searchTodoList === undefined) {
+        const searchTodoList: GroupTodoList = [];
+        dispatch(groupSearchTodoListAction(searchTodoList, message));
+      } else if (message === undefined) {
+        const message = '';
+        dispatch(groupSearchTodoListAction(searchTodoList, message));
+      }
     } catch (error) {
       errorHandling(dispatch, error);
     }

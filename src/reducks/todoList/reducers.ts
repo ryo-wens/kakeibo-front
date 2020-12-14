@@ -34,6 +34,11 @@ export const todoListReducer = (state = initialState.todoList, action: todoLists
         ...state,
         ...action.payload,
       };
+    case Actions.SEARCH_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

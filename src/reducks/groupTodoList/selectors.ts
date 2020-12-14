@@ -33,3 +33,12 @@ export const getGroupMonthTodoListMessage = createSelector(
   [groupTodoListSelector],
   (state) => state.groupMonthTodoListMessage
 );
+
+export const getGroupSearchTodoList = createSelector(
+  [groupTodoListSelector],
+  (state) => state.groupSearchTodoList
+);
+export const getGroupSearchTodoListMessage = createSelector(
+  [groupTodoListSelector],
+  (state) => state.groupSearchTodoListMessage
+);

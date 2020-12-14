@@ -74,6 +74,8 @@ export interface State {
     monthImplementationTodoList: TodoList;
     monthDueTodoList: TodoList;
     monthTodoListMessage: string;
+    searchTodoList: TodoList;
+    searchTodoListMessage: string;
   };
   groupTodoList: {
     groupExpiredTodoList: GroupTodoList;
@@ -83,6 +85,8 @@ export interface State {
     groupMonthImplementationTodoList: GroupTodoList;
     groupMonthDueTodoList: GroupTodoList;
     groupMonthTodoListMessage: string;
+    groupSearchTodoList: GroupTodoList;
+    groupSearchTodoListMessage: string;
   };
   modal: {
     message: string;

@@ -1,20 +1,30 @@
 import React from 'react';
 import { DatePicker, SelectCompleteFlag, SelectLimit, SelectSortType } from '../uikit';
-import CloseIcon from '@material-ui/icons/Close';
-import { TextInput } from './index';
-import SelectDateType from '../uikit/SelectDateType';
+import { SelectDateType, SelectUsers, TextInput } from './index';
 import '../../assets/todo/search-field.scss';
+import { useDispatch } from 'react-redux';
+import { searchTodoList } from '../../reducks/todoList/operations';
+import { searchTodoRequestData } from '../../reducks/todoList/types';
+import { Groups } from '../../reducks/groups/types';
+import { searchGroupTodoRequestData } from '../../reducks/groupTodoList/types';
+import { useLocation, useParams } from 'react-router';
+import { searchGroupTodoList } from '../../reducks/groupTodoList/operations';
 
 interface SearchFieldProps {
+  approvedGroups: Groups;
   closeSearch: () => void;
+  setCurrentDateType: React.Dispatch<React.SetStateAction<string>>;
+  setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
+  setUsersIds: React.Dispatch<React.SetStateAction<Array<string>>>;
   dateType: string;
   selectStartDate: Date | null;
   selectEndDate: Date | null;
   completeFlag: string | boolean;
-  taskContent: string;
+  todoContent: string;
   sortItem: string;
   sortType: string;
   limit: string;
+  userIds: Array<string>;
   selectDateTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   selectStartDateChange: (selectStartDate: Date | null) => void;
   selectEndDateChange: (selectEndDate: Date | null) => void;
@@ -26,40 +36,37 @@ interface SearchFieldProps {
 }
 
 const SearchField = (props: SearchFieldProps) => {
+  const dispatch = useDispatch();
+  const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
+
   const searchFiled = [
     {
-      key: '日時の種類',
+      key: '日時の指定',
       value: (
-        <SelectDateType
-          value={props.dateType}
-          label={'日時の種類'}
-          id={'dateType'}
-          selectDateTypeChange={props.selectDateTypeChange}
-        />
-      ),
-    },
-    {
-      key: '開始日',
-      value: (
-        <DatePicker
-          id={'startDate'}
-          label={'開始日'}
-          onChange={props.selectStartDateChange}
-          required={false}
-          value={props.selectStartDate}
-        />
-      ),
-    },
-    {
-      key: '終了日',
-      value: (
-        <DatePicker
-          id={'startDate'}
-          label={'終了日'}
-          onChange={props.selectEndDateChange}
-          required={false}
-          value={props.selectEndDate}
-        />
+        <div className="search-field__date-designation">
+          <SelectDateType
+            value={props.dateType}
+            label={'日時の種類'}
+            id={'dateType'}
+            selectChange={props.selectDateTypeChange}
+          />
+          <DatePicker
+            id={'startDate'}
+            label={'開始日'}
+            onChange={props.selectStartDateChange}
+            required={false}
+            value={props.selectStartDate}
+          />
+          <span>〜</span>
+          <DatePicker
+            id={'startDate'}
+            label={'終了日'}
+            onChange={props.selectEndDateChange}
+            required={false}
+            value={props.selectEndDate}
+          />
+        </div>
       ),
     },
     {
@@ -80,7 +87,7 @@ const SearchField = (props: SearchFieldProps) => {
           required={true}
           rows={1}
           type={'text'}
-          value={props.taskContent}
+          value={props.todoContent}
           onChange={props.inputTaskContent}
         />
       ),
@@ -92,7 +99,7 @@ const SearchField = (props: SearchFieldProps) => {
           value={props.sortItem}
           label={'並び替え項目'}
           id={'sortItem'}
-          selectDateTypeChange={props.selectSortItemChange}
+          selectChange={props.selectSortItemChange}
         />
       ),
     },
@@ -106,26 +113,69 @@ const SearchField = (props: SearchFieldProps) => {
     },
   ];
 
+  const searchRequestData = () => {
+    const data: searchTodoRequestData | searchGroupTodoRequestData = {
+      date_type: props.dateType,
+      start_date: props.selectStartDate,
+      end_date: props.selectEndDate,
+      sort: props.sortItem,
+      sort_type: props.sortType,
+    };
+
+    if (props.completeFlag !== 'all') {
+      data.complete_flag = props.completeFlag;
+    }
+    if (props.todoContent !== '') {
+      data.todo_content = props.todoContent;
+    }
+    if (props.limit !== '') {
+      data.limit = props.limit;
+    }
+    return data;
+  };
+
+  const searchGroupRequestData = (data: searchGroupTodoRequestData) => {
+    if (pathName === 'group' && props.userIds !== []) {
+      data.user_id = props.userIds;
+    }
+    return data;
+  };
+
+  const requestData: searchTodoRequestData = searchRequestData();
+  const groupRequestData: searchGroupTodoRequestData = searchGroupRequestData(searchRequestData());
+
   return (
     <>
-      <div className="search-field">
-        <div className="search-field__position">
-          <h3 className="search-field__title">Todoを検索</h3>
-          <button className="search-field__btn-position" onClick={() => props.closeSearch()}>
-            <CloseIcon />
-          </button>
+      {searchFiled.map((searchEntry) => {
+        return (
+          <div className="search-field__select-contents" key={searchEntry.key}>
+            <span className="search-field__select-contents--key">{searchEntry.key}</span>
+            <span className="search-field__select-contents--value">{searchEntry.value}</span>
+          </div>
+        );
+      })}
+      {pathName === 'group' && (
+        <div className="search-field__select-contents">
+          <span className="search-field__select-contents--key">ユーザーを選択</span>
+          <span className="search-field__select-contents--value">
+            <SelectUsers approvedGroups={props.approvedGroups} setUsersIds={props.setUsersIds} />
+          </span>
         </div>
-        {searchFiled.map((searchEntry) => {
-          return (
-            <div className="search-field__select-contents" key={searchEntry.key}>
-              <span className="search-field__select-contents--key">{searchEntry.key}</span>
-              <span className="search-field__select-contents--value">{searchEntry.value}</span>
-            </div>
-          );
-        })}
-        <div className="search-field__search-btn">
-          <button className="save-btn">この条件で検索</button>
-        </div>
+      )}
+      <div className="search-field__search-btn">
+        <button
+          className="save-btn"
+          onClick={() => {
+            pathName === 'group'
+              ? dispatch(searchGroupTodoList(Number(id), groupRequestData))
+              : dispatch(searchTodoList(requestData));
+
+            props.setOpenSearchResultTodoList(true);
+            props.setCurrentDateType(props.dateType);
+          }}
+        >
+          この条件で検索
+        </button>
       </div>
     </>
   );
