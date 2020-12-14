@@ -21,8 +21,6 @@ import {
   searchGroupTodoList,
 } from '../../src/reducks/groupTodoList/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
-import * as TodoListsActions from '../../src/reducks/todoList/actions';
-import { searchTodoList } from '../../src/reducks/todoList/operations';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -104,7 +102,18 @@ const getState = () => {
         },
       ],
       groupMonthTodoListMessage: '',
-      groupSearchTodoList: [],
+      groupSearchTodoList: [
+        {
+          id: 1,
+          posted_date: '2020-09-25T10:54:46Z',
+          updated_date: '2020-09-25T10:54:46Z',
+          implementation_date: '2020/09/25(金)',
+          due_date: '2020/09/25(金)',
+          todo_content: '携帯支払い',
+          complete_flag: false,
+          user_id: 'furusawa',
+        },
+      ],
       groupSearchTodoListMessage: '',
     },
     modal: { message: '', open: false },
@@ -282,9 +291,9 @@ describe('async actions groupTodoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('If EDIT_GROUP_TODO_LIST_ITEM is successful, the updated todoListItem will be reflected in the groupTodoList managed by the store.', async () => {
+  it('edit data in groupTodoList if fetch succeeds', async () => {
     const groupId = 1;
-    const todoListItemId = 1;
+    const todoListItemId = 2;
     const today = new Date();
     const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
@@ -365,6 +374,18 @@ describe('async actions groupTodoLists', () => {
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
               todo_content: '買い物へ行く',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
+          groupSearchTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
               complete_flag: false,
               user_id: 'furusawa',
             },

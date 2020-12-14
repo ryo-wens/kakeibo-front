@@ -249,6 +249,7 @@ export const editGroupTodoListItem = (
         .groupMonthImplementationTodoList;
       const prevGroupMonthDueTodoList: GroupTodoList = getState().groupTodoList
         .groupMonthDueTodoList;
+      const prevGroupSearchTodoList: GroupTodoList = getState().groupTodoList.groupSearchTodoList;
 
       const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
       const responseDueMonth = dateStringToMonthString(result.data.due_date);
@@ -345,6 +346,12 @@ export const editGroupTodoListItem = (
         return nextTodoList;
       };
 
+      const searchTodoListItemIdx = prevGroupSearchTodoList.findIndex(
+        (item) => item.id === todoListItemId
+      );
+      prevGroupSearchTodoList[searchTodoListItemIdx] = result.data;
+      const nextGroupSearchTodoList: GroupTodoList = [...prevGroupSearchTodoList];
+
       const nextGroupExpiredTodoList: GroupTodoList = updateGroupExpiredTodoList(
         prevGroupExpiredTodoList,
         result.data.due_date
@@ -375,7 +382,8 @@ export const editGroupTodoListItem = (
           nextGroupTodayImplementationTodoList,
           nextGroupTodayDueTodoList,
           nextGroupMonthImplementationTodoList,
-          nextGroupMonthDueTodoList
+          nextGroupMonthDueTodoList,
+          nextGroupSearchTodoList
         )
       );
     } catch (error) {

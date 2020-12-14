@@ -33,7 +33,8 @@ export const editGroupTodoListItemAction = (
   groupTodayImplementationTodoList: GroupTodoList,
   groupTodayDueTodoList: GroupTodoList,
   groupMonthImplementationTodoList: GroupTodoList,
-  groupMonthDueTodoList: GroupTodoList
+  groupMonthDueTodoList: GroupTodoList,
+  groupSearchTodoList: GroupTodoList
 ) => {
   return {
     type: EDIT_GROUP_TODO_LIST_ITEM,
@@ -43,6 +44,7 @@ export const editGroupTodoListItemAction = (
       groupTodayDueTodoList: groupTodayDueTodoList,
       groupMonthImplementationTodoList: groupMonthImplementationTodoList,
       groupMonthDueTodoList: groupMonthDueTodoList,
+      groupSearchTodoList: groupSearchTodoList,
     },
   };
 };
