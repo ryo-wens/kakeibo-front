@@ -245,6 +245,7 @@ export const editTodoListItem = (
       const prevMonthImplementationTodoList: TodoList = getState().todoList
         .monthImplementationTodoList;
       const prevMonthDueTodoList: TodoList = getState().todoList.monthDueTodoList;
+      const prevSearchTodoList: TodoList = getState().todoList.searchTodoList;
 
       const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
       const responseDueMonth = dateStringToMonthString(result.data.due_date);
@@ -341,6 +342,12 @@ export const editTodoListItem = (
         return nextTodoList;
       };
 
+      const searchTodoListItemIdx = prevSearchTodoList.findIndex(
+        (item) => item.id === todoListItemId
+      );
+      prevSearchTodoList[searchTodoListItemIdx] = result.data;
+      const nextSearchTodoList: TodoList = [...prevSearchTodoList];
+
       const nextExpiredTodoList: TodoList = updateExpiredTodoList(
         prevExpiredTodoList,
         result.data.due_date
@@ -371,7 +378,8 @@ export const editTodoListItem = (
           nextTodayImplementationTodoLists,
           nextTodayDueTodoLists,
           nextMonthImplementationTodoList,
-          nextMonthDueTodoLists
+          nextMonthDueTodoLists,
+          nextSearchTodoList
         )
       );
     } catch (error) {

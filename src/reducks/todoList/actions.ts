@@ -34,7 +34,8 @@ export const editTodoListItemAction = (
   todayImplementationTodoList: TodoList,
   todayDueTodoList: TodoList,
   monthImplementationTodoList: TodoList,
-  monthDueTodoList: TodoList
+  monthDueTodoList: TodoList,
+  searchTodoList: TodoList
 ) => {
   return {
     type: EDIT_TODO_LIST_ITEM,
@@ -44,6 +45,7 @@ export const editTodoListItemAction = (
       todayDueTodoList: todayDueTodoList,
       monthImplementationTodoList: monthImplementationTodoList,
       monthDueTodoList: monthDueTodoList,
+      searchTodoList: searchTodoList,
     },
   };
 };
