@@ -642,6 +642,18 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
           ],
+          groupSearchTodoList: [
+            {
+              id: 1,
+              posted_date: '2020-09-25T10:54:46Z',
+              updated_date: '2020-09-25T10:54:46Z',
+              implementation_date: '2020/09/25(金)',
+              due_date: '2020/09/25(金)',
+              todo_content: '携帯支払い',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+          ],
         },
       },
       {

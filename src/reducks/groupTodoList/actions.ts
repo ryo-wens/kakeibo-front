@@ -97,7 +97,8 @@ export const deleteGroupTodoListItemAction = (
   groupTodayImplementationTodoList: GroupTodoList,
   groupTodayDueTodoList: GroupTodoList,
   groupMonthImplementationTodoList: GroupTodoList,
-  groupMonthDueTodoList: GroupTodoList
+  groupMonthDueTodoList: GroupTodoList,
+  groupSearchTodoList: GroupTodoList
 ) => {
   return {
     type: DELETE_GROUP_TODO_LIST_ITEM,
@@ -107,6 +108,7 @@ export const deleteGroupTodoListItemAction = (
       groupTodayDueTodoList: groupTodayDueTodoList,
       groupMonthImplementationTodoList: groupMonthImplementationTodoList,
       groupMonthDueTodoList: groupMonthDueTodoList,
+      groupSearchTodoList: groupSearchTodoList,
     },
   };
 };
