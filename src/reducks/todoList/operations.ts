@@ -493,33 +493,37 @@ export const deleteTodoListItem = (todoListItemId: number) => {
           withCredentials: true,
         }
       );
-      const prevExpiredTodoList = getState().todoList.expiredTodoList;
-      const prevTodayImplementationTodoList = getState().todoList.todayImplementationTodoList;
-      const prevTodayDueTodoList = getState().todoList.todayDueTodoList;
+      const prevExpiredTodoList: TodoList = getState().todoList.expiredTodoList;
+      const prevTodayImplementationTodoList: TodoList = getState().todoList
+        .todayImplementationTodoList;
+      const prevTodayDueTodoList: TodoList = getState().todoList.todayDueTodoList;
       const prevMonthImplementationTodoList: TodoList = getState().todoList
         .monthImplementationTodoList;
       const prevMonthDueTodoList: TodoList = getState().todoList.monthDueTodoList;
+      const prevSearchTodoList: TodoList = getState().todoList.searchTodoList;
       const message = result.data.message;
 
-      const updateTodoList = (prevTodoList: TodoList) => {
+      const nextTodoList = (prevTodoList: TodoList) => {
         return prevTodoList.filter((prevTodoListItem) => {
           return prevTodoListItem.id !== todoListItemId;
         });
       };
 
-      const updateExpiredTodoList = updateTodoList(prevExpiredTodoList);
-      const updateTodayImplementationTodoList = updateTodoList(prevTodayImplementationTodoList);
-      const updateTodayDueTodoList = updateTodoList(prevTodayDueTodoList);
-      const updateMonthImplementationTodoList = updateTodoList(prevMonthImplementationTodoList);
-      const updateMonthDueTodoList = updateTodoList(prevMonthDueTodoList);
+      const nextExpiredTodoList = nextTodoList(prevExpiredTodoList);
+      const nextTodayImplementationTodoList = nextTodoList(prevTodayImplementationTodoList);
+      const nextTodayDueTodoList = nextTodoList(prevTodayDueTodoList);
+      const nextMonthImplementationTodoList = nextTodoList(prevMonthImplementationTodoList);
+      const nextMonthDueTodoList = nextTodoList(prevMonthDueTodoList);
+      const nextSearchTodoList = nextTodoList(prevSearchTodoList);
 
       dispatch(
         deleteTodoListItemAction(
-          updateExpiredTodoList,
-          updateTodayImplementationTodoList,
-          updateTodayDueTodoList,
-          updateMonthImplementationTodoList,
-          updateMonthDueTodoList
+          nextExpiredTodoList,
+          nextTodayImplementationTodoList,
+          nextTodayDueTodoList,
+          nextMonthImplementationTodoList,
+          nextMonthDueTodoList,
+          nextSearchTodoList
         )
       );
       dispatch(openTextModalAction(message));

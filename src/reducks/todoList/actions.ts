@@ -98,7 +98,8 @@ export const deleteTodoListItemAction = (
   todayImplementationTodoList: TodoList,
   todayDueTodoList: TodoList,
   monthImplementationTodoList: TodoList,
-  monthDueTodoList: TodoList
+  monthDueTodoList: TodoList,
+  searchTodoList: TodoList
 ) => {
   return {
     type: DELETE_TODO_LIST_ITEM,
@@ -108,6 +109,7 @@ export const deleteTodoListItemAction = (
       todayDueTodoList: todayDueTodoList,
       monthImplementationTodoList: monthImplementationTodoList,
       monthDueTodoList: monthDueTodoList,
+      searchTodoList: searchTodoList,
     },
   };
 };
