@@ -181,7 +181,9 @@ const SignUp = (): JSX.Element => {
         ) {
           return (
             <ErrorIndication
-              errorMessage={message || conflictUserIdMessage.concat('\n', conflictEmailMessage)}
+              errorMessage={
+                message !== '' ? message : conflictUserIdMessage.concat('\n', conflictEmailMessage)
+              }
               submit={submit}
               setSubmit={setSubmit}
             />
@@ -206,6 +208,7 @@ const SignUp = (): JSX.Element => {
                 type="userId"
                 onChange={inputUserId}
                 onBlur={() => onUserIdFocusOut(userId, setUserIdMessage)}
+                placeholder={'スペースを空けずに入力してください'}
               />
               <InvalidMessage
                 message={userId !== conflictUserId ? userIdMessage : conflictUserIdMessage}
@@ -220,6 +223,7 @@ const SignUp = (): JSX.Element => {
                 type="name"
                 onChange={inputUserName}
                 onBlur={() => onUserNameFocusOut(userName, setUserNameMessage)}
+                placeholder={'スペースを空けずに入力してください'}
               />
               <InvalidMessage message={userNameMessage} />
             </div>
@@ -232,6 +236,7 @@ const SignUp = (): JSX.Element => {
                 type="email"
                 onChange={inputEmail}
                 onBlur={() => onEmailFocusOut(email, setEmailMessage)}
+                placeholder={''}
               />
               <InvalidMessage
                 message={email !== conflictEmail ? emailMessage : conflictEmailMessage}
@@ -246,6 +251,7 @@ const SignUp = (): JSX.Element => {
                 type="password"
                 onChange={inputPassword}
                 onBlur={() => onPasswordFocusOut(password, setPassWordMessage)}
+                placeholder={''}
               />
               <InvalidMessage message={passwordMessage} />
             </div>
@@ -260,6 +266,7 @@ const SignUp = (): JSX.Element => {
                 onBlur={() =>
                   onConfirmPasswordFocusOut(password, confirmPassword, setConfirmPasswordMessage)
                 }
+                placeholder={''}
               />
               <InvalidMessage message={confirmPasswordMessage} />
             </div>

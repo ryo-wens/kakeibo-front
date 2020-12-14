@@ -15,6 +15,20 @@ export const noTransactionMessage = 'この月には、まだ記録がありま�
 export const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const years = [year - 3, year - 2, year - 1, year, year + 1, year + 2, year + 3];
 
+export const colors = [
+  '#e8ff3d',
+  '#FF8042',
+  '#f573b4',
+  '#FFBEDA',
+  '#029c4f',
+  '#00C49F',
+  '#196c85',
+  '#8426a6',
+  '#2020f5',
+  '#0088FE',
+  '#5da1f5',
+];
+
 export const defaultIncomeCategoryList: AssociatedCategory[] = [
   {
     category_type: 'MediumCategory',

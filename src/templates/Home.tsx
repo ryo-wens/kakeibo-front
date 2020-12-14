@@ -1,18 +1,27 @@
 import React, { useEffect } from 'react';
-import { year, month } from '../lib/constant';
-import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
-import { useDispatch } from 'react-redux';
-import { fetchGroups } from '../reducks/groups/operations';
-import { getPathGroupId, getPathTemplateName } from '../lib/path';
-import { SelectYears } from '../lib/date';
-import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
-import { Header } from '../components/header';
+import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
+import { SelectYears } from '../lib/date';
+import { year, month } from '../lib/constant';
+import { Header } from '../components/header';
+import { InputForm, RecentInput, MonthlyHistory, HistoryPieChart } from '../components/home';
+import { fetchGroups } from '../reducks/groups/operations';
+import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
+import { getSortCategoryTransactions, getTotalExpense } from '../reducks/transactions/selectors';
+import {
+  getSortCategoryGroupTransactions,
+  getTotalGroupExpense,
+} from '../reducks/groupTransactions/selectors';
 
 const Home = () => {
   const dispatch = useDispatch();
-  const pathName = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
+  const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
+  const sortCategoryTransactionsList = useSelector(getSortCategoryTransactions);
+  const thisMonthTotalExpense = useSelector(getTotalExpense);
+  const sortCategoryGroupTransactionsList = useSelector(getSortCategoryGroupTransactions);
+  const thisMonthGroupTotalExpense = useSelector(getTotalGroupExpense);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -21,10 +30,10 @@ const Home = () => {
         selectedYear: String(year),
         selectedMonth: month <= 9 ? '0' + month : String(month),
       };
-      dispatch(fetchGroupTransactionsList(groupId, years, signal));
+      dispatch(fetchGroupTransactionsList(Number(id), years, signal));
       dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroupTransactionsList(groupId, years, signal));
+        dispatch(fetchGroupTransactionsList(Number(id), years, signal));
         dispatch(fetchGroups(signal));
       }, 3000);
       return () => {
@@ -32,7 +41,7 @@ const Home = () => {
         clearInterval(interval);
       };
     }
-  }, [pathName]);
+  }, [pathName, id]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -58,7 +67,16 @@ const Home = () => {
         </div>
         <div className="home__center">
           <div className="box__monthlyExpense">
-            <HistoryPieChart />
+            <HistoryPieChart
+              sortTransactionsList={
+                pathName !== 'group'
+                  ? sortCategoryTransactionsList
+                  : sortCategoryGroupTransactionsList
+              }
+              thisMonthTotalExpense={
+                pathName !== 'group' ? thisMonthTotalExpense : thisMonthGroupTotalExpense
+              }
+            />
           </div>
           <MonthlyHistory month={month} year={year} />
         </div>

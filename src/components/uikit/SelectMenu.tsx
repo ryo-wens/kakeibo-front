@@ -63,7 +63,13 @@ const SelectMenu = (props: SelectMenuProps) => {
           );
         })}
       </Menu>
-      <AddTransactionModal selectDate={selectedDays(id)} open={open} onClose={modalClose} />
+      <AddTransactionModal
+        selectDate={selectedDays(id)}
+        open={open}
+        onClose={modalClose}
+        month={props.month}
+        year={props.year}
+      />
     </div>
   );
 };
