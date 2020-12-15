@@ -8,7 +8,6 @@ export { default as SearchField } from './SearchField';
 export { default as SearchTodoList } from './SearchTodoList';
 export { default as SearchResultTodoList } from './SearchResultTodoList';
 export { default as SelectDateType } from './SelectDateType';
-export { default as SelectUsers } from './SelectUsers';
 export { default as SwitchDateButton } from './SwitchDateButton';
 export { default as SwitchTodoList } from './SwitchTodoList';
 export { default as TextInput } from './TextInput';

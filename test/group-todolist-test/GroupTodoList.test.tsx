@@ -683,7 +683,6 @@ describe('async actions groupTodoLists', () => {
       end_date: new Date('2020-09-30T00:00:00'),
       sort: 'implementation_date',
       sort_type: 'desc',
-      user_id: 'furusawa',
     };
 
     const mockResponse = JSON.stringify(searchGroupTodoListResponse);

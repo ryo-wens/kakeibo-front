@@ -5,7 +5,6 @@ import '../../assets/todo/search-field.scss';
 import { useDispatch } from 'react-redux';
 import { searchTodoList } from '../../reducks/todoList/operations';
 import { searchTodoRequestData } from '../../reducks/todoList/types';
-import { searchGroupTodoRequestData } from '../../reducks/groupTodoList/types';
 import { useLocation, useParams } from 'react-router';
 import { searchGroupTodoList } from '../../reducks/groupTodoList/operations';
 
@@ -112,7 +111,7 @@ const SearchField = (props: SearchFieldProps) => {
   ];
 
   const searchRequestData = () => {
-    const data: searchTodoRequestData | searchGroupTodoRequestData = {
+    const data: searchTodoRequestData = {
       date_type: props.dateType,
       start_date: props.selectStartDate,
       end_date: props.selectEndDate,
@@ -132,15 +131,7 @@ const SearchField = (props: SearchFieldProps) => {
     return data;
   };
 
-  const searchGroupRequestData = (data: searchGroupTodoRequestData) => {
-    if (pathName === 'group' && props.userIds !== []) {
-      data.user_id = props.userIds;
-    }
-    return data;
-  };
-
   const requestData: searchTodoRequestData = searchRequestData();
-  const groupRequestData: searchGroupTodoRequestData = searchGroupRequestData(searchRequestData());
 
   return (
     <>
@@ -157,7 +148,7 @@ const SearchField = (props: SearchFieldProps) => {
           className="save-btn"
           onClick={() => {
             pathName === 'group'
-              ? dispatch(searchGroupTodoList(Number(id), groupRequestData))
+              ? dispatch(searchGroupTodoList(Number(id), requestData))
               : dispatch(searchTodoList(requestData));
 
             props.setOpenSearchResultTodoList(true);

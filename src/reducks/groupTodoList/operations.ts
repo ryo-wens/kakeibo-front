@@ -31,7 +31,6 @@ import {
   dateToDateString,
   dateToYearAndMonthString,
 } from '../../lib/date';
-import QueryString from 'qs';
 
 export const createGroupTodoListItem = (
   groupId: number,
@@ -582,7 +581,6 @@ export const searchGroupTodoList = (
     complete_flag?: boolean | string;
     todo_content?: string;
     limit?: string;
-    user_id?: string[];
   }
 ) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -600,10 +598,6 @@ export const searchGroupTodoList = (
             sort: searchGroupRequestData.sort,
             sort_type: searchGroupRequestData.sort_type,
             limit: searchGroupRequestData.limit,
-            user_id: searchGroupRequestData.user_id,
-          },
-          paramsSerializer: (params) => {
-            return QueryString.stringify(params, { encode: false, arrayFormat: 'repeat' });
           },
         }
       );
