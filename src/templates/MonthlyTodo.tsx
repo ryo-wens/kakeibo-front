@@ -7,7 +7,6 @@ import {
   getMonthDueTodoList,
   getMonthImplementationTodoList,
 } from '../reducks/todoList/selectors';
-import { State } from '../reducks/store/types';
 import {
   ExpiredTodoList,
   MonthlyTodoList,
@@ -31,19 +30,16 @@ import InputYears from '../components/uikit/InputYears';
 import { month, year } from '../lib/constant';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/monthly-todo.scss';
-import { getApprovedGroups } from '../reducks/groups/selectors';
 import { useLocation, useParams } from 'react-router';
 
 const MonthlyTodo = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
-  const expiredTodoList = getExpiredTodoList(selector);
-  const groupExpiredTodoList = getGroupExpiredTodoList(selector);
-  const monthImplementationTodoList = getMonthImplementationTodoList(selector);
-  const monthDueTodoList = getMonthDueTodoList(selector);
-  const groupMonthImplementationTodoList = getGroupMonthImplementationTodoList(selector);
-  const groupMonthDueTodoList = getGroupMonthDueTodoList(selector);
+  const expiredTodoList = useSelector(getExpiredTodoList);
+  const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
+  const monthImplementationTodoList = useSelector(getMonthImplementationTodoList);
+  const monthDueTodoList = useSelector(getMonthDueTodoList);
+  const groupMonthImplementationTodoList = useSelector(getGroupMonthImplementationTodoList);
+  const groupMonthDueTodoList = useSelector(getGroupMonthDueTodoList);
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
 
@@ -168,7 +164,6 @@ const MonthlyTodo = () => {
             openSearchResultTodoList={openSearchResultTodoList}
             setOpenSearchResultTodoList={setOpenSearchResultTodoList}
             closeSearch={closeSearch}
-            approvedGroups={approvedGroups}
           />
         )}
       </main>

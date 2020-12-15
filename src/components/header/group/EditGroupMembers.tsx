@@ -8,11 +8,11 @@ import IconButton from '@material-ui/core/IconButton';
 import { List, ListItem } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Group } from '../../reducks/groups/types';
+import { Group } from '../../../reducks/groups/types';
 import ListItemText from '@material-ui/core/ListItemText';
-import { TodoButton } from './index';
+import { TodoButton } from '../../todo';
 import { useDispatch } from 'react-redux';
-import { inviteGroupUsers } from '../../reducks/groups/operations';
+import { inviteGroupUsers } from '../../../reducks/groups/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({

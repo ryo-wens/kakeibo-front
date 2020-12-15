@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
-import { State } from '../reducks/store/types';
 import {
   AddTodo,
   ExpiredTodoList,
@@ -40,23 +39,20 @@ import { date } from '../lib/constant';
 import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/todo.scss';
-import { getApprovedGroups } from '../reducks/groups/selectors';
 import { useLocation, useParams } from 'react-router';
 
 const Todo = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
-  const expiredTodoList = getExpiredTodoList(selector);
-  const groupExpiredTodoList = getGroupExpiredTodoList(selector);
-  const todayImplementationTodoList = getTodayImplementationTodoList(selector);
-  const todayDueTodoList = getTodayDueTodoList(selector);
-  const todayTodoListMessage = getTodayTodoListMessage(selector);
-  const monthImplementationTodoList = getMonthImplementationTodoList(selector);
-  const monthDueTodoList = getMonthDueTodoList(selector);
-  const monthTodoListMessage = getMonthTodoListMessage(selector);
-  const groupTodayImplementationTodoList = getGroupTodayImplementationTodoList(selector);
-  const groupTodayDueTodoList = getGroupTodayDueTodoList(selector);
+  const expiredTodoList = useSelector(getExpiredTodoList);
+  const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
+  const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
+  const todayDueTodoList = useSelector(getTodayDueTodoList);
+  const todayTodoListMessage = useSelector(getTodayTodoListMessage);
+  const monthImplementationTodoList = useSelector(getMonthImplementationTodoList);
+  const monthDueTodoList = useSelector(getMonthDueTodoList);
+  const monthTodoListMessage = useSelector(getMonthTodoListMessage);
+  const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
+  const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
   const todayYear = String(date.getFullYear());
@@ -187,7 +183,6 @@ const Todo = () => {
             openSearchResultTodoList={openSearchResultTodoList}
             setOpenSearchResultTodoList={setOpenSearchResultTodoList}
             closeSearch={closeSearch}
-            approvedGroups={approvedGroups}
           />
         )}
       </main>
