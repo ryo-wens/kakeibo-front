@@ -249,6 +249,7 @@ export const editGroupTodoListItem = (
         .groupMonthImplementationTodoList;
       const prevGroupMonthDueTodoList: GroupTodoList = getState().groupTodoList
         .groupMonthDueTodoList;
+      const prevGroupSearchTodoList: GroupTodoList = getState().groupTodoList.groupSearchTodoList;
 
       const responseImplementationMonth = dateStringToMonthString(result.data.implementation_date);
       const responseDueMonth = dateStringToMonthString(result.data.due_date);
@@ -345,6 +346,12 @@ export const editGroupTodoListItem = (
         return nextTodoList;
       };
 
+      const searchTodoListItemIdx = prevGroupSearchTodoList.findIndex(
+        (item) => item.id === todoListItemId
+      );
+      prevGroupSearchTodoList[searchTodoListItemIdx] = result.data;
+      const nextGroupSearchTodoList: GroupTodoList = [...prevGroupSearchTodoList];
+
       const nextGroupExpiredTodoList: GroupTodoList = updateGroupExpiredTodoList(
         prevGroupExpiredTodoList,
         result.data.due_date
@@ -375,7 +382,8 @@ export const editGroupTodoListItem = (
           nextGroupTodayImplementationTodoList,
           nextGroupTodayDueTodoList,
           nextGroupMonthImplementationTodoList,
-          nextGroupMonthDueTodoList
+          nextGroupMonthDueTodoList,
+          nextGroupSearchTodoList
         )
       );
     } catch (error) {
@@ -526,31 +534,34 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
         .groupMonthImplementationTodoList;
       const prevGroupMonthDueTodoList: GroupTodoList = getState().groupTodoList
         .groupMonthDueTodoList;
+      const prevGroupSearchTodoList: GroupTodoList = getState().groupTodoList.groupSearchTodoList;
       const message = result.data.message;
 
-      const updateTodoList = (prevTodoList: GroupTodoList) => {
+      const nextTodoList = (prevTodoList: GroupTodoList) => {
         return prevTodoList.filter((prevTodoListItem) => {
           return prevTodoListItem.id !== todoListItemId;
         });
       };
 
-      const updateGroupExpiredTodoList = updateTodoList(prevGroupExpiredTodoList);
-      const updateGroupTodayImplementationTodoList = updateTodoList(
+      const nextGroupExpiredTodoList = nextTodoList(prevGroupExpiredTodoList);
+      const nextGroupTodayImplementationTodoList = nextTodoList(
         prevGroupTodayImplementationTodoList
       );
-      const updateGroupTodayDueTodoList = updateTodoList(prevGroupTodayDueTodoList);
-      const updateGroupMonthImplementationTodoList = updateTodoList(
+      const nextGroupTodayDueTodoList = nextTodoList(prevGroupTodayDueTodoList);
+      const nextGroupMonthImplementationTodoList = nextTodoList(
         prevGroupMonthImplementationTodoList
       );
-      const updateGroupMonthDueTodoList = updateTodoList(prevGroupMonthDueTodoList);
+      const nextGroupMonthDueTodoList = nextTodoList(prevGroupMonthDueTodoList);
+      const nextGroupSearchTodoList = nextTodoList(prevGroupSearchTodoList);
 
       dispatch(
         deleteGroupTodoListItemAction(
-          updateGroupExpiredTodoList,
-          updateGroupTodayImplementationTodoList,
-          updateGroupTodayDueTodoList,
-          updateGroupMonthImplementationTodoList,
-          updateGroupMonthDueTodoList
+          nextGroupExpiredTodoList,
+          nextGroupTodayImplementationTodoList,
+          nextGroupTodayDueTodoList,
+          nextGroupMonthImplementationTodoList,
+          nextGroupMonthDueTodoList,
+          nextGroupSearchTodoList
         )
       );
       dispatch(openTextModalAction(message));
