@@ -16,6 +16,16 @@ export interface GroupYearlyBudgetsList {
   monthly_budgets: GroupMonthlyBudgetsList;
 }
 
+export interface CurrentMonthGroupBudgetStatus {
+  label: string;
+  percentage: number;
+  remainingBudget: number;
+  remainingBudgetMessage: string;
+  totalExpense: string;
+}
+
+export interface CurrentMonthBudgetGroupStatusList extends Array<CurrentMonthGroupBudgetStatus> {}
+
 export interface GroupStandardBudgetsList extends Array<GroupBudget> {}
 export interface GroupCustomBudgetsList extends Array<GroupBudget> {}
 export interface GroupMonthlyBudgetsList extends Array<GroupMonthlyBudgets> {}
