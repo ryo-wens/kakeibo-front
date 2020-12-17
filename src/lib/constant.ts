@@ -9,24 +9,37 @@ export const mediumCategoryType = 'MediumCategory';
 export const date = new Date();
 export const year = date.getFullYear();
 export const month = date.getMonth() + 1;
+export const todayDate = date.getDate();
+export const todayOfWeek = date.getDay();
+export const thisMonthStartDate = new Date(year, month - 1, 1).getDate();
+export const thisMonthEndDate = new Date(year, month + 1, 0).getDate();
 export const customMonth = ('0' + month).slice(-2);
 export const guidanceMessage = '「入力フォーム」から家計簿の追加を行ってください';
 export const noTransactionMessage = 'この月には、まだ記録がありません。';
 export const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const years = [year - 3, year - 2, year - 1, year, year + 1, year + 2, year + 3];
 
+export const monthStatusColor = '#47a414';
+export const weekStatusColor = '#ffba16';
+export const dayStatusColor = '#f45e36';
+
 export const colors = [
-  '#e8ff3d',
-  '#FF8042',
-  '#f573b4',
-  '#FFBEDA',
-  '#029c4f',
-  '#00C49F',
-  '#196c85',
-  '#8426a6',
-  '#2020f5',
+  '#ff6600',
   '#0088FE',
+  '#029c4f',
+  '#f9d423',
+  '#2020f5',
+  '#f573b4',
+  '#00C49F',
+  '#FFBEDA',
+  '#a8e063',
+  '#8426a6',
+  '#00ced1',
+  '#e9967a',
   '#5da1f5',
+  '#ff416c',
+  '#e8ff3d',
+  '#bdc3c7',
 ];
 
 export const defaultIncomeCategoryList: AssociatedCategory[] = [

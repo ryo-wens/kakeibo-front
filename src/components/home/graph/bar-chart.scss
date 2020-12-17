@@ -1,0 +1,28 @@
+@import "src/assets/variable";
+
+.bar-chart {
+
+  &__remaining-budget{
+    text-align: center;
+    display: flex;
+    flex-direction: column;
+
+    &__over-budget-color {
+      color: #E74C3C;
+    }
+  }
+
+  &__message-spacer {
+    height: 90px;
+
+    &__small {
+      height: 30px;
+    }
+  }
+
+  &__message-box {
+    background-color: $white;
+    border: 1px solid #ccc;
+    border-radius: $task-border_radius;
+  }
+}
