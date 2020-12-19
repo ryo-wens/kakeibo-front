@@ -16,6 +16,16 @@ export interface YearlyBudgetsList {
   monthly_budgets: MonthlyBudgetsList;
 }
 
+export interface CurrentMonthBudgetStatus {
+  label: string;
+  percentage: number;
+  remainingBudget: number;
+  remainingBudgetMessage: string;
+  totalExpense: string;
+}
+
+export interface CurrentMonthBudgetStatusList extends Array<CurrentMonthBudgetStatus> {}
+
 export interface StandardBudgetsListRes {
   standard_budgets: Budget[];
 }
