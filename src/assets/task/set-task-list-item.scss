@@ -1,5 +1,6 @@
 @import "../variable";
 @import "../mixin/icon-btn";
+@import "../mixin/operation-btn";
 
 .set-task-list-item {
   width: 380px;
@@ -49,5 +50,9 @@
     display: flex;
     justify-content: space-between;
     margin: 0 20px;
+
+    &--release {
+      @include operation-btn($task-delete-color, $white, $task-delete-color);
+    }
   }
 }

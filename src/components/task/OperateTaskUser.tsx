@@ -7,7 +7,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { useDispatch } from 'react-redux';
 import { addGroupTasksUsers, deleteGroupTasksUsers } from '../../reducks/groupTasks/operations';
 import '../../assets/task/operation-task-user.scss';
-import { DeleteButton, SaveButton } from '../uikit';
+import { SaveButton } from '../uikit';
 
 interface OperateTaskUserProps {
   approvedGroup: Group;
@@ -124,14 +124,16 @@ const OperateTaskUser = (props: OperateTaskUserProps) => {
       );
     } else if (props.label === '削除') {
       return (
-        <DeleteButton
-          label={props.label}
+        <button
+          className="operation-task-user-modal__delete-btn"
           disabled={checkedUserIds.length === 0}
           onClick={() =>
             dispatch(deleteGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds)) &&
             props.closeTaskUserOperation()
           }
-        />
+        >
+          {props.label}
+        </button>
       );
     }
   };

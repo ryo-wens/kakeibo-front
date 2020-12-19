@@ -1,41 +1,33 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import 'date-fns';
-import { TodoButton } from './index';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
-import { editTodoListItem } from '../../reducks/todoList/operations';
-import { editGroupTodoListItem } from '../../reducks/groupTodoList/operations';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
-import { date } from '../../lib/constant';
+import { deleteTodoListItem } from '../../reducks/todoList/operations';
+import { deleteGroupTodoListItem } from '../../reducks/groupTodoList/operations';
+import './input-todo-list.scss';
+import { DeleteButton } from '../uikit';
+import { useLocation, useParams } from 'react-router';
+import CloseIcon from '@material-ui/icons/Close';
+import { Action, Dispatch } from 'redux';
+import { State } from '../../reducks/store/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     textarea: {
       '& > *': {
         margin: theme.spacing(1),
-        width: '500px',
+        width: '100%',
       },
-    },
-    box: {
-      width: '100%',
-      borderColor: '#ccc',
-    },
-    inputTodoList: {
-      margin: '10px',
-    },
-    buttons: {
-      display: 'flex',
     },
   })
 );
 
 interface InputTodoListProps {
   buttonLabel: string;
-  inputTodoContent: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  inputTodoContent: (event: React.ChangeEvent<{ value: string }>) => void;
   inputImplementationDate: (date: Date | null) => void;
   inputDueDate: (date: Date | null) => void;
   closeInputTodoList: () => void;
@@ -45,100 +37,115 @@ interface InputTodoListProps {
   selectedDueDate: Date | null;
   todoContent: string;
   completeFlag: boolean;
-  closeWhenSave: () => void;
+  onClickSave: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  closeInputTodo: React.Dispatch<React.SetStateAction<boolean>>;
+  disabledSaveButton: boolean;
+  onClickCloseInputTodoList: (event: Event) => void;
 }
 
-const InputTodoList = (props: InputTodoListProps) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-  const isBlankTodoContent = props.todoContent === '';
-  const entityType = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
+const InputTodoList = React.forwardRef(
+  (props: InputTodoListProps, inputTodoRef: React.Ref<HTMLDivElement>) => {
+    const classes = useStyles();
+    const dispatch = useDispatch();
+    const pathName = useLocation().pathname.split('/')[1];
+    const { id } = useParams();
 
-  const switchOperation = () => {
-    if (entityType === 'todo') {
-      return dispatch(
-        editTodoListItem(
-          props.todoListItemId,
-          date,
-          props.selectedDate,
-          props.selectedImplementationDate,
-          props.selectedDueDate,
-          props.todoContent,
-          props.completeFlag
-        )
-      );
-    } else if (entityType === 'group') {
-      return dispatch(
-        editGroupTodoListItem(
-          groupId,
-          props.todoListItemId,
-          date,
-          props.selectedDate,
-          props.selectedImplementationDate,
-          props.selectedDueDate,
-          props.todoContent,
-          props.completeFlag
-        )
-      );
-    }
-  };
+    useEffect(() => {
+      document.addEventListener('click', props.onClickCloseInputTodoList);
+      return () => {
+        document.removeEventListener('click', props.onClickCloseInputTodoList);
+      };
+    }, [props.onClickCloseInputTodoList]);
 
-  return (
-    <>
-      <div className={classes.inputTodoList}>
-        <form noValidate autoComplete="off">
-          <Box border={1} className={classes.box}>
-            <TextField
-              className={classes.textarea}
-              id="filled-basic"
-              variant="outlined"
-              type={'text'}
-              value={props.todoContent}
-              onChange={props.inputTodoContent}
+    return (
+      <div className="input-todo-list" ref={inputTodoRef as React.RefObject<HTMLDivElement>}>
+        <div className="input-todo-list__title">
+          <p className="input-todo-list__title--text">Todoを編集</p>
+          <button
+            className="input-todo-list__title--close-btn"
+            onClick={() => props.closeInputTodoList()}
+          >
+            <CloseIcon />
+          </button>
+        </div>
+        <TextField
+          className={classes.textarea}
+          id="filled-basic"
+          variant="outlined"
+          type={'text'}
+          value={props.todoContent}
+          onChange={props.inputTodoContent}
+        />
+        <div className={pathName === '' ? 'input-todo-list__date--home' : 'input-todo-list__date'}>
+          <MuiPickersUtilsProvider utils={DateFnsUtils}>
+            <KeyboardDatePicker
+              margin="normal"
+              id="date-picker-dialog"
+              label="実施日"
+              format="yyyy年 MM月dd日"
+              value={props.selectedImplementationDate}
+              onChange={props.inputImplementationDate}
+              minDate={new Date()}
+              required={true}
+              onOpen={() => document.removeEventListener('click', props.onClickCloseInputTodoList)}
+              onClose={() => document.addEventListener('click', props.onClickCloseInputTodoList)}
             />
-            <div className={classes.buttons} style={{ justifyContent: 'flex-end' }}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  margin="normal"
-                  id="date-picker-dialog"
-                  label="実施日"
-                  format="yyyy年 MM月dd日"
-                  value={props.selectedImplementationDate}
-                  onChange={props.inputImplementationDate}
-                  minDate={new Date()}
-                  required={true}
-                />
-                <KeyboardDatePicker
-                  margin="normal"
-                  id="date-picker-dialog"
-                  label="期限日"
-                  format="yyyy年 MM月dd日"
-                  value={props.selectedDueDate}
-                  onChange={props.inputDueDate}
-                  minDate={props.selectedImplementationDate}
-                  required={true}
-                />
-              </MuiPickersUtilsProvider>
-            </div>
-          </Box>
-
-          <div className={classes.buttons}>
-            <TodoButton
-              label={props.buttonLabel}
-              disabled={isBlankTodoContent}
-              onClick={() => switchOperation() && props.closeWhenSave()}
+            <KeyboardDatePicker
+              margin="normal"
+              id="date-picker-dialog"
+              label="期限日"
+              format="yyyy年 MM月dd日"
+              value={props.selectedDueDate}
+              onChange={props.inputDueDate}
+              minDate={props.selectedImplementationDate}
+              required={true}
+              onOpen={() => document.removeEventListener('click', props.onClickCloseInputTodoList)}
+              onClose={() => document.addEventListener('click', props.onClickCloseInputTodoList)}
             />
-            <TodoButton
-              label={'キャンセル'}
+          </MuiPickersUtilsProvider>
+        </div>
+
+        <div className="input-todo-list__btn">
+          <div>
+            <button
+              className="input-todo-list__btn--save"
+              disabled={props.disabledSaveButton}
+              onClick={() => {
+                dispatch(props.onClickSave);
+                props.closeInputTodo(false);
+              }}
+            >
+              {props.buttonLabel}
+            </button>
+            <button
+              className="input-todo-list__btn--cancel"
               disabled={false}
-              onClick={() => props.closeInputTodoList()}
-            />
+              onClick={() => {
+                props.closeInputTodoList();
+                document.removeEventListener('click', props.onClickCloseInputTodoList);
+              }}
+            >
+              キャンセル
+            </button>
           </div>
-        </form>
+          <DeleteButton
+            buttonLabel={'削除'}
+            disabled={false}
+            contentName={props.todoContent}
+            modalTitle={'Todo'}
+            onClickDelete={
+              pathName === 'group'
+                ? deleteGroupTodoListItem(Number(id), props.todoListItemId)
+                : deleteTodoListItem(props.todoListItemId)
+            }
+            onClickCloseInputTodoList={props.onClickCloseInputTodoList}
+          />
+        </div>
       </div>
-    </>
-  );
-};
+    );
+    // };
+  }
+);
 
+InputTodoList.displayName = 'InputTodoList';
 export default InputTodoList;

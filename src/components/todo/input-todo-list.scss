@@ -1,0 +1,54 @@
+@import "../../assets/variable";
+@import "../../assets/mixin/operation-btn";
+@import "../../assets/mixin/icon-btn";
+
+.input-todo-list {
+  background-color: $white;
+  border: $task-border_color solid 1px;
+  border-radius: 0.6rem;
+  padding: 10px 0;
+
+  &__title {
+    display: flex;
+    justify-content: space-between;
+    border-bottom: $task-border_color solid 1px;
+    padding: 0 10px 10px 10px;
+
+    &--text {
+      font-size: $task-title-font_size;
+      font-weight: bold;
+      color: $task-main_color;
+      margin: 0;
+    }
+
+    &--close-btn {
+      @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    }
+  }
+
+  &__date {
+    display: flex;
+    margin: 10px 20px;
+
+    &--home {
+      display: block;
+      text-align: center;
+      margin-bottom: 10px;
+    }
+  }
+
+  &__btn {
+    display: flex;
+    justify-content: space-between;
+    margin: 0 10px;
+
+    &--save {
+      @include operation-btn($task-add-color, $white, $task-add-color);
+    }
+
+    &--cancel {
+      @include operation-btn($white, $task-main_color,$task-border_color);
+      margin: 0 0 0 10px;
+    }
+  }
+}

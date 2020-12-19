@@ -132,31 +132,35 @@ const MonthlyTodo = () => {
         {!openSearchTodoList ? (
           <div className="monthly-todo">
             <div className="monthly-todo__monthly-list">
-              <div className="monthly-todo__menu">
-                <SwitchDateButton />
-                <button className="todo__search" onClick={() => openSearch()}>
-                  検索
-                </button>
+              <div className="monthly-todo__monthly-list-content">
+                <div className="monthly-todo__menu">
+                  <SwitchDateButton />
+                  <button className="todo__search" onClick={() => openSearch()}>
+                    検索
+                  </button>
+                </div>
+                <InputYears
+                  selectedYear={selectedYear}
+                  selectedMonth={selectedMonth}
+                  setSelectedMonth={setSelectedMonth}
+                  setSelectedYear={setSelectedYear}
+                />
+                <MonthlyTodoList
+                  selectedDate={selectedDate}
+                  groupId={Number(id)}
+                  groupMonthImplementationTodoList={groupMonthImplementationTodoList}
+                  groupMonthDueTodoList={groupMonthDueTodoList}
+                  monthImplementationTodoList={monthImplementationTodoList}
+                  monthDueTodoList={monthDueTodoList}
+                />
               </div>
-              <InputYears
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                setSelectedMonth={setSelectedMonth}
-                setSelectedYear={setSelectedYear}
-              />
-              <MonthlyTodoList
-                selectedDate={selectedDate}
-                groupId={Number(id)}
-                groupMonthImplementationTodoList={groupMonthImplementationTodoList}
-                groupMonthDueTodoList={groupMonthDueTodoList}
-                monthImplementationTodoList={monthImplementationTodoList}
-                monthDueTodoList={monthDueTodoList}
-              />
             </div>
             <div className="monthly-todo__expired-list">
-              {pathName !== 'group'
-                ? existsExpiredTodoList(expiredTodoList)
-                : existsExpiredTodoList(groupExpiredTodoList)}
+              <div className="monthly-todo__expired-list-content">
+                {pathName !== 'group'
+                  ? existsExpiredTodoList(expiredTodoList)
+                  : existsExpiredTodoList(groupExpiredTodoList)}
+              </div>
             </div>
           </div>
         ) : (

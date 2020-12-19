@@ -3,4 +3,25 @@
 
 .delete-btn {
   @include operation-btn($task-delete-color, $white, $task-delete-color);
+
+  &__modal-title {
+    margin: 0;
+    color: $task-main_color;
+    font-size: $task-title-font_size;
+  }
+
+  &__modal-text {
+    margin-bottom: 20px;
+    color: #333;
+    font-size: $task-title-font_size;
+  }
+
+  &__modal-btn {
+    display: flex;
+
+    &--cancel {
+      @include operation-btn($white, $task-main_color,$task-border_color);
+      margin: 0 0 0 10px;
+    }
+  }
 }

@@ -1,0 +1,28 @@
+@import "../../../assets/variable";
+
+.current-schedule {
+  background-color: $white;
+  border-radius: 0.6rem;
+  padding: 10px;
+
+  &__title {
+    color: $task-main_color;
+    margin: 0 0 10px 0;
+  }
+
+  &__content {
+    background-color: #F4F5F7;
+    border-radius: 0.6rem;
+    padding: 10px;
+    margin-bottom: 10px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    > h4 {
+      color: $task-main_color;
+      margin: 0;
+    }
+  }
+}

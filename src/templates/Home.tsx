@@ -13,6 +13,7 @@ import {
   getSortCategoryGroupTransactions,
   getTotalGroupExpense,
 } from '../reducks/groupTransactions/selectors';
+import CurrentSchedule from '../components/home/current-schedule/CurrentSchedule';
 
 const Home = () => {
   const dispatch = useDispatch();
@@ -81,7 +82,7 @@ const Home = () => {
           <MonthlyHistory month={month} year={year} />
         </div>
         <div className="home__right">
-          <div className="box__input" />
+          <CurrentSchedule />
         </div>
       </main>
     </>

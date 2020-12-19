@@ -91,7 +91,7 @@ const Todo = () => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, []);
+  }, [todayYear, todayMonth, todayDate]);
 
   useEffect(() => {
     if (pathName !== 'group' && !expiredTodoList.length) {
@@ -149,33 +149,37 @@ const Todo = () => {
         {!openSearchTodoList ? (
           <div className="todo">
             <div className="todo__today-list">
-              <div className="todo__menu">
-                <SwitchDateButton />
-                <button className="todo__search" onClick={() => openSearch()}>
-                  検索
-                </button>
-              </div>
-              <span className="todo__today-date">
-                今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-              </span>
+              <div className="todo__today-list-content">
+                <div className="todo__menu">
+                  <SwitchDateButton />
+                  <button className="todo__search" onClick={() => openSearch()}>
+                    検索
+                  </button>
+                </div>
+                <span className="todo__today-date">
+                  今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
+                </span>
 
-              {pathName !== 'group' ? (
-                <SwitchTodoList
-                  implementationTodoList={todayImplementationTodoList}
-                  dueTodoList={todayDueTodoList}
-                />
-              ) : (
-                <SwitchTodoList
-                  implementationTodoList={groupTodayImplementationTodoList}
-                  dueTodoList={groupTodayDueTodoList}
-                />
-              )}
-              <AddTodo date={date} groupId={Number(id)} />
+                {pathName !== 'group' ? (
+                  <SwitchTodoList
+                    implementationTodoList={todayImplementationTodoList}
+                    dueTodoList={todayDueTodoList}
+                  />
+                ) : (
+                  <SwitchTodoList
+                    implementationTodoList={groupTodayImplementationTodoList}
+                    dueTodoList={groupTodayDueTodoList}
+                  />
+                )}
+                <AddTodo date={date} groupId={Number(id)} />
+              </div>
             </div>
             <div className="todo__expired-list">
-              {pathName !== 'group'
-                ? existsExpiredTodoList(expiredTodoList)
-                : existsExpiredTodoList(groupExpiredTodoList)}
+              <div className="todo__expired-list-content">
+                {pathName !== 'group'
+                  ? existsExpiredTodoList(expiredTodoList)
+                  : existsExpiredTodoList(groupExpiredTodoList)}
+              </div>
             </div>
           </div>
         ) : (

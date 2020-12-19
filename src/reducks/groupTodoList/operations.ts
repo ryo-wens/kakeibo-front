@@ -351,10 +351,10 @@ export const editGroupTodoListItem = (
       prevGroupSearchTodoList[searchTodoListItemIdx] = result.data;
       const nextGroupSearchTodoList: GroupTodoList = [...prevGroupSearchTodoList];
 
-      const nextGroupExpiredTodoList: GroupTodoList = updateGroupExpiredTodoList(
-        prevGroupExpiredTodoList,
-        result.data.due_date
-      );
+      const nextGroupExpiredTodoList: GroupTodoList =
+        prevGroupExpiredTodoList === []
+          ? []
+          : updateGroupExpiredTodoList(prevGroupExpiredTodoList, result.data.due_date);
 
       const nextGroupTodayImplementationTodoList: GroupTodoList = updateGroupTodayTodoList(
         prevGroupTodayImplementationTodoList,
@@ -364,16 +364,23 @@ export const editGroupTodoListItem = (
         prevGroupTodayDueTodoList,
         result.data.due_date
       );
-      const nextGroupMonthImplementationTodoList: GroupTodoList = updateGroupMonthTodoList(
-        prevGroupMonthImplementationTodoList,
-        responseImplementationMonth,
-        result.data.implementation_date
-      );
-      const nextGroupMonthDueTodoList: GroupTodoList = updateGroupMonthTodoList(
-        prevGroupMonthDueTodoList,
-        responseDueMonth,
-        result.data.due_date
-      );
+      const nextGroupMonthImplementationTodoList: GroupTodoList =
+        prevGroupMonthImplementationTodoList === []
+          ? []
+          : updateGroupMonthTodoList(
+              prevGroupMonthImplementationTodoList,
+              responseImplementationMonth,
+              result.data.implementation_date
+            );
+
+      const nextGroupMonthDueTodoList: GroupTodoList =
+        prevGroupMonthDueTodoList === []
+          ? []
+          : updateGroupMonthTodoList(
+              prevGroupMonthDueTodoList,
+              responseDueMonth,
+              result.data.due_date
+            );
 
       dispatch(
         editGroupTodoListItemAction(
