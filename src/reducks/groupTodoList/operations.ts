@@ -352,7 +352,7 @@ export const editGroupTodoListItem = (
       const nextGroupSearchTodoList: GroupTodoList = [...prevGroupSearchTodoList];
 
       const nextGroupExpiredTodoList: GroupTodoList =
-        prevGroupExpiredTodoList === []
+        prevGroupExpiredTodoList.length === 0
           ? []
           : updateGroupExpiredTodoList(prevGroupExpiredTodoList, result.data.due_date);
 
@@ -365,7 +365,7 @@ export const editGroupTodoListItem = (
         result.data.due_date
       );
       const nextGroupMonthImplementationTodoList: GroupTodoList =
-        prevGroupMonthImplementationTodoList === []
+        prevGroupMonthImplementationTodoList.length === 0
           ? []
           : updateGroupMonthTodoList(
               prevGroupMonthImplementationTodoList,
@@ -374,7 +374,7 @@ export const editGroupTodoListItem = (
             );
 
       const nextGroupMonthDueTodoList: GroupTodoList =
-        prevGroupMonthDueTodoList === []
+        prevGroupMonthDueTodoList.length === 0
           ? []
           : updateGroupMonthTodoList(
               prevGroupMonthDueTodoList,

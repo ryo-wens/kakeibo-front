@@ -2,5 +2,5 @@
 @import "../mixin/operation-btn";
 
 .save-btn {
-  @include operation-btn($task-add-color, $white, $task-add-color);
+  @include operation-btn($task-add-color, white, $task-add-color);
 }

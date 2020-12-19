@@ -4,7 +4,7 @@
 
 .set-task-list-item {
   width: 380px;
-  background-color: $white;
+  background-color: white;
   padding: 20px 0;
   margin: 20px auto auto auto;
 
@@ -52,7 +52,7 @@
     margin: 0 20px;
 
     &--release {
-      @include operation-btn($task-delete-color, $white, $task-delete-color);
+      @include operation-btn($task-delete-color, white, $task-delete-color);
     }
   }
 }

@@ -19,7 +19,7 @@ const SwitchDateButton = () => {
     }
   };
 
-  const test = (page: string) => {
+  const currentTemplateButtonStyle = (page: string) => {
     if (currentPage === page) {
       return {
         color: '#fff',
@@ -34,14 +34,14 @@ const SwitchDateButton = () => {
     <div className="switch-date-button">
       <button
         onClick={() => switchDateTodoList(`/todo`)}
-        style={test('todo')}
+        style={currentTemplateButtonStyle('todo')}
         disabled={currentPage === 'todo'}
       >
         今日
       </button>
       <button
         onClick={() => switchDateTodoList(`/todo/monthly`)}
-        style={test('monthly')}
+        style={currentTemplateButtonStyle('monthly')}
         disabled={currentPage === 'monthly'}
       >
         月間予定

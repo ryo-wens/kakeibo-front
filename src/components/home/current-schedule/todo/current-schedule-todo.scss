@@ -1,0 +1,29 @@
+@import "../../../../assets/variable";
+
+.current-schedule-todo {
+  margin: 15px 0 0 0;
+
+  &__switch-button {
+    display: flex;
+    justify-content: center;
+    background-color: white;
+    border-radius: 1.0rem;
+    padding: 2px 0;
+    margin: 0 0 10px 0;
+
+    > button {
+      background-color: white;
+      color: #ADADAD;
+      border: white solid 1.5px;
+      font-size: 0.8rem;
+      padding: 6px 20px;
+      cursor: pointer;
+      border-radius: 1.0rem;
+
+      &:focus {
+        outline: none;
+      }
+
+    }
+  }
+}

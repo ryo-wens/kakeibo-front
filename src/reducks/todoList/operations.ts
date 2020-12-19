@@ -349,7 +349,7 @@ export const editTodoListItem = (
       const nextSearchTodoList: TodoList = [...prevSearchTodoList];
 
       const nextExpiredTodoList: TodoList =
-        prevExpiredTodoList === []
+        prevExpiredTodoList.length === 0
           ? []
           : updateExpiredTodoList(prevExpiredTodoList, result.data.due_date);
 
@@ -361,16 +361,18 @@ export const editTodoListItem = (
         prevTodayDueTodoList,
         result.data.due_date
       );
+
       const nextMonthImplementationTodoList: TodoList =
-        prevMonthImplementationTodoList === []
+        prevMonthImplementationTodoList.length === 0
           ? []
           : updateMonthTodoList(
               prevMonthImplementationTodoList,
               responseImplementationMonth,
               result.data.implementation_date
             );
+
       const nextMonthDueTodoLists: TodoList =
-        prevMonthDueTodoList === []
+        prevMonthDueTodoList.length === 0
           ? []
           : updateMonthTodoList(prevMonthDueTodoList, responseDueMonth, result.data.due_date);
 

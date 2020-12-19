@@ -2,7 +2,7 @@
 @import "../mixin/operation-btn";
 
 .delete-btn {
-  @include operation-btn($task-delete-color, $white, $task-delete-color);
+  @include operation-btn($task-delete-color, white, $task-delete-color);
 
   &__modal-title {
     margin: 0;
@@ -20,7 +20,7 @@
     display: flex;
 
     &--cancel {
-      @include operation-btn($white, $task-main_color,$task-border_color);
+      @include operation-btn(white, $task-main_color,$task-border_color);
       margin: 0 0 0 10px;
     }
   }

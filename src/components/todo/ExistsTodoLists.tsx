@@ -19,7 +19,6 @@ const ExistsTodoLists = (props: ExistTodoListsProps) => {
     if (todoLists.length > 0) {
       return (
         <>
-          <p>{planName}のTodo</p>
           {todoLists.map((todoList: TodoListItem | GroupTodoListItem) => {
             return (
               <div key={todoList.id}>

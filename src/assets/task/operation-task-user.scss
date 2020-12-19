@@ -23,6 +23,6 @@
   }
 
   &__delete-btn {
-    @include operation-btn($task-delete-color, $white,$task-delete-color);
+    @include operation-btn($task-delete-color, white,$task-delete-color);
   }
 }
