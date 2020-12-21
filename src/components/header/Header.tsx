@@ -127,7 +127,7 @@ const Header = () => {
 
   const homeButtonClick = () => {
     async function click() {
-      await existsGroupWhenRouting(`/`);
+      await existsGroupWhenRouting(``);
       window.location.reload();
     }
     click();

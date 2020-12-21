@@ -1,17 +1,17 @@
 import React from 'react';
-import { TodoListItem, TodoList } from '../../reducks/todoList/types';
-import { TodoListItemComponent } from './index';
-import { GroupTodoListItem, GroupTodoList } from '../../reducks/groupTodoList/types';
-import { date } from '../../lib/constant';
+import { TodoListItem, TodoList } from '../../../../reducks/todoList/types';
+import { TodoListItemComponent } from '../../index';
+import { GroupTodoListItem, GroupTodoList } from '../../../../reducks/groupTodoList/types';
+import { date } from '../../../../lib/constant';
 
-interface ExistTodoListsProps {
+interface TodayTodoListProps {
   planName: string;
-  todoList: TodoList | GroupTodoList;
+  planTodoList: TodoList | GroupTodoList;
   implementationTodoList: TodoList | GroupTodoList;
   dueTodoList: TodoList | GroupTodoList;
 }
 
-const ExistsTodoLists = (props: ExistTodoListsProps) => {
+const TodayTodoList = (props: TodayTodoListProps) => {
   const existsPlanTodoLists = (
     todoLists: (TodoListItem | GroupTodoListItem)[],
     planName: string
@@ -29,15 +29,15 @@ const ExistsTodoLists = (props: ExistTodoListsProps) => {
         </>
       );
     } else {
-      return <p>{planName}のTodoはありません。</p>;
+      return <p>{planName}のTodoは登録されていません。</p>;
     }
   };
 
   return props.implementationTodoList.length === 0 && props.dueTodoList.length === 0 ? (
-    <p>今日実施予定todo、締切予定todoは登録されていません。</p>
+    <p>今日の、実施予定todo、締切予定todoは登録されていません。</p>
   ) : (
-    <>{existsPlanTodoLists(props.todoList, props.planName)}</>
+    <>{existsPlanTodoLists(props.planTodoList, props.planName)}</>
   );
 };
 
-export default ExistsTodoLists;
+export default TodayTodoList;

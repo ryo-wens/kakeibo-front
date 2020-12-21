@@ -1,13 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
-import {
-  AddTodo,
-  ExpiredTodoList,
-  SwitchTodoList,
-  SwitchDateButton,
-  SearchTodoList,
-} from '../components/todo';
+import { AddTodo, ExpiredTodoList, SwitchDateButton, SearchTodoList } from '../components/todo';
 import {
   getExpiredTodoList,
   getMonthDueTodoList,
@@ -40,6 +34,7 @@ import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/todo.scss';
 import { useLocation, useParams } from 'react-router';
+import SwitchTodoList from '../components/todo/switch-schedule-todo-list/SwitchScheduleTodoList';
 
 const Todo = () => {
   const dispatch = useDispatch();
@@ -160,18 +155,19 @@ const Todo = () => {
                   今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
                 </span>
 
-                {pathName !== 'group' ? (
-                  <SwitchTodoList
-                    implementationTodoList={todayImplementationTodoList}
-                    dueTodoList={todayDueTodoList}
-                  />
-                ) : (
-                  <SwitchTodoList
-                    implementationTodoList={groupTodayImplementationTodoList}
-                    dueTodoList={groupTodayDueTodoList}
-                  />
-                )}
-                <AddTodo date={date} groupId={Number(id)} />
+                <div className="todo__today-switch-todo-list">
+                  <div className="todo__today-switch-todo-list--width">
+                    <SwitchTodoList
+                      implementationTodoList={
+                        pathName === 'group'
+                          ? groupTodayImplementationTodoList
+                          : todayImplementationTodoList
+                      }
+                      dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+                    />
+                    <AddTodo date={date} groupId={Number(id)} />
+                  </div>
+                </div>
               </div>
             </div>
             <div className="todo__expired-list">

@@ -5,7 +5,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import { date } from '../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import './current-shedule.scss';
-import CurrentScheduleTodo from './todo/CurrentScheduleTodo';
 import {
   getTodayDueTodoList,
   getTodayImplementationTodoList,
@@ -15,6 +14,7 @@ import {
   getGroupTodayImplementationTodoList,
 } from '../../../reducks/groupTodoList/selectors';
 import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operations';
+import SwitchTodoList from '../../todo/switch-schedule-todo-list/SwitchScheduleTodoList';
 
 const CurrentSchedule = () => {
   const dispatch = useDispatch();
@@ -59,12 +59,14 @@ const CurrentSchedule = () => {
       <h3 className="current-schedule__title">今日の予定</h3>
       <div className="current-schedule__content">
         <h4>Todoリスト</h4>
-        <CurrentScheduleTodo
-          implementationTodoList={
-            pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
-          }
-          dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
-        />
+        <div className="current-schedule__todo">
+          <SwitchTodoList
+            implementationTodoList={
+              pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
+            }
+            dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+          />
+        </div>
       </div>
       <div className="current-schedule__content">
         <h4>買い物リスト</h4>

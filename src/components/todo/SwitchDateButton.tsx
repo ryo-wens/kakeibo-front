@@ -23,7 +23,7 @@ const SwitchDateButton = () => {
     if (currentPage === page) {
       return {
         color: '#fff',
-        backgroundColor: '#45697E',
+        backgroundColor: '#5D6C89',
       };
     } else {
       return;

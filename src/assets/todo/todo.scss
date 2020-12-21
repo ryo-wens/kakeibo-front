@@ -13,7 +13,7 @@
   &__today-list-content {
     background-color: white;
     border-radius: 0.6rem;
-    padding: 15px;
+    padding: 20px;
   }
 
   &__expired-list {
@@ -46,4 +46,15 @@
     margin: 0 0 10px 10px;
   }
 
+  &__today-switch-todo-list {
+    background-color: #F4F5F7;
+    border-radius: 0.6rem;
+    padding: 25px 0;
+    height: auto;
+
+    &--width {
+      width: 60%;
+      margin: auto;
+    }
+  }
 }

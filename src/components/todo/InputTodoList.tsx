@@ -47,7 +47,8 @@ const InputTodoList = React.forwardRef(
   (props: InputTodoListProps, inputTodoRef: React.Ref<HTMLDivElement>) => {
     const classes = useStyles();
     const dispatch = useDispatch();
-    const pathName = useLocation().pathname.split('/')[1];
+    const entityType = useLocation().pathname.split('/')[1];
+    const pathName = useLocation().pathname.split('/').slice(-1)[0];
     const { id } = useParams();
 
     useEffect(() => {
@@ -76,7 +77,13 @@ const InputTodoList = React.forwardRef(
           value={props.todoContent}
           onChange={props.inputTodoContent}
         />
-        <div className={pathName === '' ? 'input-todo-list__date--home' : 'input-todo-list__date'}>
+        <div
+          className={
+            pathName === '' || pathName === id
+              ? 'input-todo-list__date--home'
+              : 'input-todo-list__date'
+          }
+        >
           <MuiPickersUtilsProvider utils={DateFnsUtils}>
             <KeyboardDatePicker
               margin="normal"
@@ -134,7 +141,7 @@ const InputTodoList = React.forwardRef(
             contentName={props.todoContent}
             modalTitle={'Todo'}
             onClickDelete={
-              pathName === 'group'
+              entityType === 'group'
                 ? deleteGroupTodoListItem(Number(id), props.todoListItemId)
                 : deleteTodoListItem(props.todoListItemId)
             }

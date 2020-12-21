@@ -12,7 +12,7 @@
   &__monthly-list-content {
     background-color: white;
     border-radius: 0.6rem;
-    padding: 15px;
+    padding: 20px;
   }
 
   &__expired-list {
@@ -29,5 +29,21 @@
   &__menu {
     display: flex;
     margin-bottom: 30px;
+  }
+
+  &__switch-todo-list {
+    background-color: #F4F5F7;
+    border-radius: 0.6rem;
+    padding: 25px 0;
+    height: auto;
+
+    &--width {
+      width: 60%;
+      margin: auto;
+    }
+  }
+
+  &__spacer {
+    margin-bottom: 20px;
   }
 }
