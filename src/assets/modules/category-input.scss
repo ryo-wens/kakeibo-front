@@ -9,7 +9,7 @@
 
   &__button-display {
     position: relative;
-    background-color: $white;
+    background-color: white;
     border: 1px solid #ccc;
     border-radius: $task-border_radius;
     cursor: pointer;
@@ -30,7 +30,7 @@
   }
 
   &__menu {
-    background-color: $white;
+    background-color: white;
     height: 470px;
     background-clip: padding-box;
     border: 1px solid #ccc;
@@ -47,7 +47,7 @@
   }
 
   &__medium-menu {
-    background-color: $white;
+    background-color: white;
     height: auto;
     background-clip: padding-box;
     border: 1px solid #ccc;
@@ -88,7 +88,7 @@
 
     &:hover {
       background-color: #08c;
-      color: $white;
+      color: white;
     }
 
     &:hover #medium-category  {

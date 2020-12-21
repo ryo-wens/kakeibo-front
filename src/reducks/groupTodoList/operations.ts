@@ -31,7 +31,6 @@ import {
   dateToDateString,
   dateToYearAndMonthString,
 } from '../../lib/date';
-import QueryString from 'qs';
 
 export const createGroupTodoListItem = (
   groupId: number,
@@ -352,10 +351,10 @@ export const editGroupTodoListItem = (
       prevGroupSearchTodoList[searchTodoListItemIdx] = result.data;
       const nextGroupSearchTodoList: GroupTodoList = [...prevGroupSearchTodoList];
 
-      const nextGroupExpiredTodoList: GroupTodoList = updateGroupExpiredTodoList(
-        prevGroupExpiredTodoList,
-        result.data.due_date
-      );
+      const nextGroupExpiredTodoList: GroupTodoList =
+        prevGroupExpiredTodoList.length === 0
+          ? []
+          : updateGroupExpiredTodoList(prevGroupExpiredTodoList, result.data.due_date);
 
       const nextGroupTodayImplementationTodoList: GroupTodoList = updateGroupTodayTodoList(
         prevGroupTodayImplementationTodoList,
@@ -365,16 +364,23 @@ export const editGroupTodoListItem = (
         prevGroupTodayDueTodoList,
         result.data.due_date
       );
-      const nextGroupMonthImplementationTodoList: GroupTodoList = updateGroupMonthTodoList(
-        prevGroupMonthImplementationTodoList,
-        responseImplementationMonth,
-        result.data.implementation_date
-      );
-      const nextGroupMonthDueTodoList: GroupTodoList = updateGroupMonthTodoList(
-        prevGroupMonthDueTodoList,
-        responseDueMonth,
-        result.data.due_date
-      );
+      const nextGroupMonthImplementationTodoList: GroupTodoList =
+        prevGroupMonthImplementationTodoList.length === 0
+          ? []
+          : updateGroupMonthTodoList(
+              prevGroupMonthImplementationTodoList,
+              responseImplementationMonth,
+              result.data.implementation_date
+            );
+
+      const nextGroupMonthDueTodoList: GroupTodoList =
+        prevGroupMonthDueTodoList.length === 0
+          ? []
+          : updateGroupMonthTodoList(
+              prevGroupMonthDueTodoList,
+              responseDueMonth,
+              result.data.due_date
+            );
 
       dispatch(
         editGroupTodoListItemAction(
@@ -582,7 +588,6 @@ export const searchGroupTodoList = (
     complete_flag?: boolean | string;
     todo_content?: string;
     limit?: string;
-    user_id?: string[];
   }
 ) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -600,10 +605,6 @@ export const searchGroupTodoList = (
             sort: searchGroupRequestData.sort,
             sort_type: searchGroupRequestData.sort_type,
             limit: searchGroupRequestData.limit,
-            user_id: searchGroupRequestData.user_id,
-          },
-          paramsSerializer: (params) => {
-            return QueryString.stringify(params, { encode: false, arrayFormat: 'repeat' });
           },
         }
       );

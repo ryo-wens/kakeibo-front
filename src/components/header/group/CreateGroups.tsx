@@ -2,10 +2,9 @@ import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import MenuItem from '@material-ui/core/MenuItem';
-import { TodoButton, TextInput } from './index';
-import { updateGroupName } from '../../reducks/groups/operations';
-import { Group } from '../../reducks/groups/types';
+import { TodoButton, TextInput } from '../../todo';
+import { createGroup } from '../../../reducks/groups/operations';
+import { AddButton } from '../../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -23,30 +22,23 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface EditGroupNameProps {
-  approvedGroup: Group;
-  closeGroupMenu: () => void;
+interface CreateGroupsProps {
   modalTitleLabel: string;
   modalTextFieldLabel: string;
+  closeMenu: () => void;
 }
 
-const EditGroupName = (props: EditGroupNameProps) => {
+const CreateGroups = (props: CreateGroupsProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>('');
 
-  const groupId = props.approvedGroup.group_id;
-  const initialGroupName = props.approvedGroup.group_name;
-
-  const isBlankGroupName = groupName === '';
-
-  const openModal = (initialGroupName: string) => {
+  const handleOpen = () => {
     setOpen(true);
-    setGroupName(initialGroupName);
   };
 
-  const closeModal = () => {
+  const handleClose = () => {
     setOpen(false);
     setGroupName('');
   };
@@ -58,11 +50,13 @@ const EditGroupName = (props: EditGroupNameProps) => {
     [setGroupName]
   );
 
-  const onClickSaveButton = () => {
-    dispatch(updateGroupName(groupId, groupName));
-    closeModal();
-    props.closeGroupMenu();
+  const onClickCreateButton = () => {
+    props.closeMenu();
+    handleClose();
+    dispatch(createGroup(groupName));
   };
+
+  const isBlankGroupName = groupName === '';
 
   const body = (
     <div className={classes.paper}>
@@ -79,21 +73,21 @@ const EditGroupName = (props: EditGroupNameProps) => {
       />
       <div className={classes.buttons}>
         <TodoButton
-          label={'保存'}
+          label={'作成'}
           disabled={isBlankGroupName}
-          onClick={() => onClickSaveButton()}
+          onClick={() => onClickCreateButton()}
         />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={() => closeModal()} />
+        <TodoButton label={'キャンセル'} disabled={false} onClick={handleClose} />
       </div>
     </div>
   );
 
   return (
     <>
-      <MenuItem onClick={() => openModal(initialGroupName)}>グループ名の編集</MenuItem>
+      <AddButton label={'グループ作成'} onClick={() => handleOpen()} />
       <Modal
         open={open}
-        onClose={closeModal}
+        onClose={handleClose}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
@@ -103,4 +97,4 @@ const EditGroupName = (props: EditGroupNameProps) => {
   );
 };
 
-export default EditGroupName;
+export default CreateGroups;

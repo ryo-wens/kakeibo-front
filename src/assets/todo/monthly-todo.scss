@@ -3,10 +3,27 @@
 .monthly-todo {
   width: 100%;
   display: flex;
-  margin: 20px 20px 0 20px;
 
   &__monthly-list {
-    width: calc(70% - 20px);
+    width: calc((100% - 60px) * 0.7);
+    margin-left: 20px;
+  }
+
+  &__monthly-list-content {
+    background-color: white;
+    border-radius: 0.6rem;
+    padding: 20px;
+  }
+
+  &__expired-list {
+    width: calc((100% - 60px) * 0.3);
+    margin: 0 20px;
+  }
+
+  &__expired-list-content {
+    background-color: white;
+    border-radius: 0.6rem;
+    padding: 15px;
   }
 
   &__menu {
@@ -14,8 +31,19 @@
     margin-bottom: 30px;
   }
 
-  &__expired-list {
-    width: calc(30% - 20px);
-    margin-left: 20px;
+  &__switch-todo-list {
+    background-color: #F4F5F7;
+    border-radius: 0.6rem;
+    padding: 25px 0;
+    height: auto;
+
+    &--width {
+      width: 60%;
+      margin: auto;
+    }
+  }
+
+  &__spacer {
+    margin-bottom: 20px;
   }
 }

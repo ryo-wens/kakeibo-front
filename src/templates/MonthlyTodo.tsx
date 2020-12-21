@@ -7,13 +7,7 @@ import {
   getMonthDueTodoList,
   getMonthImplementationTodoList,
 } from '../reducks/todoList/selectors';
-import { State } from '../reducks/store/types';
-import {
-  ExpiredTodoList,
-  MonthlyTodoList,
-  SearchTodoList,
-  SwitchDateButton,
-} from '../components/todo';
+import { ExpiredTodoList, SearchTodoList, SwitchDateButton } from '../components/todo';
 import {
   getGroupExpiredTodoList,
   getGroupMonthDueTodoList,
@@ -31,19 +25,17 @@ import InputYears from '../components/uikit/InputYears';
 import { month, year } from '../lib/constant';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/monthly-todo.scss';
-import { getApprovedGroups } from '../reducks/groups/selectors';
 import { useLocation, useParams } from 'react-router';
+import SwitchTodoList from '../components/todo/switch-schedule-todo-list/SwitchScheduleTodoList';
 
 const MonthlyTodo = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
-  const expiredTodoList = getExpiredTodoList(selector);
-  const groupExpiredTodoList = getGroupExpiredTodoList(selector);
-  const monthImplementationTodoList = getMonthImplementationTodoList(selector);
-  const monthDueTodoList = getMonthDueTodoList(selector);
-  const groupMonthImplementationTodoList = getGroupMonthImplementationTodoList(selector);
-  const groupMonthDueTodoList = getGroupMonthDueTodoList(selector);
+  const expiredTodoList = useSelector(getExpiredTodoList);
+  const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
+  const monthImplementationTodoList = useSelector(getMonthImplementationTodoList);
+  const monthDueTodoList = useSelector(getMonthDueTodoList);
+  const groupMonthImplementationTodoList = useSelector(getGroupMonthImplementationTodoList);
+  const groupMonthDueTodoList = useSelector(getGroupMonthDueTodoList);
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
 
@@ -136,31 +128,41 @@ const MonthlyTodo = () => {
         {!openSearchTodoList ? (
           <div className="monthly-todo">
             <div className="monthly-todo__monthly-list">
-              <div className="monthly-todo__menu">
-                <SwitchDateButton />
-                <button className="todo__search" onClick={() => openSearch()}>
-                  検索
-                </button>
+              <div className="monthly-todo__monthly-list-content">
+                <div className="monthly-todo__menu">
+                  <SwitchDateButton />
+                  <button className="todo__search" onClick={() => openSearch()}>
+                    検索
+                  </button>
+                </div>
+                <div className="monthly-todo__switch-todo-list">
+                  <div className="monthly-todo__switch-todo-list--width">
+                    <InputYears
+                      selectedYear={selectedYear}
+                      selectedMonth={selectedMonth}
+                      setSelectedMonth={setSelectedMonth}
+                      setSelectedYear={setSelectedYear}
+                    />
+                    <div className="monthly-todo__spacer" />
+                    <SwitchTodoList
+                      implementationTodoList={
+                        pathName === 'group'
+                          ? groupMonthImplementationTodoList
+                          : monthImplementationTodoList
+                      }
+                      dueTodoList={pathName === 'group' ? groupMonthDueTodoList : monthDueTodoList}
+                      selectedDate={selectedDate}
+                    />
+                  </div>
+                </div>
               </div>
-              <InputYears
-                selectedYear={selectedYear}
-                selectedMonth={selectedMonth}
-                setSelectedMonth={setSelectedMonth}
-                setSelectedYear={setSelectedYear}
-              />
-              <MonthlyTodoList
-                selectedDate={selectedDate}
-                groupId={Number(id)}
-                groupMonthImplementationTodoList={groupMonthImplementationTodoList}
-                groupMonthDueTodoList={groupMonthDueTodoList}
-                monthImplementationTodoList={monthImplementationTodoList}
-                monthDueTodoList={monthDueTodoList}
-              />
             </div>
             <div className="monthly-todo__expired-list">
-              {pathName !== 'group'
-                ? existsExpiredTodoList(expiredTodoList)
-                : existsExpiredTodoList(groupExpiredTodoList)}
+              <div className="monthly-todo__expired-list-content">
+                {pathName !== 'group'
+                  ? existsExpiredTodoList(expiredTodoList)
+                  : existsExpiredTodoList(groupExpiredTodoList)}
+              </div>
             </div>
           </div>
         ) : (
@@ -168,7 +170,6 @@ const MonthlyTodo = () => {
             openSearchResultTodoList={openSearchResultTodoList}
             setOpenSearchResultTodoList={setOpenSearchResultTodoList}
             closeSearch={closeSearch}
-            approvedGroups={approvedGroups}
           />
         )}
       </main>

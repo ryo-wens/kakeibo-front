@@ -1,5 +1,6 @@
 @import "../variable.scss";
 @import "../mixin/icon-btn";
+@import "../mixin/operation-btn";
 
 .operation-task-user-modal {
 
@@ -19,5 +20,9 @@
 
   &__icon-btn {
     @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+  }
+
+  &__delete-btn {
+    @include operation-btn($task-delete-color, white,$task-delete-color);
   }
 }

@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import { CreateGroups, GroupMenuButton } from '../todo';
+import { CreateGroups, GroupMenuButton } from './index';
 import { Button, Divider, ListItem, Menu } from '@material-ui/core';
-import { Groups } from '../../reducks/groups/types';
+import { Groups } from '../../../reducks/groups/types';
 import { push } from 'connected-react-router';
-import { fetchGroups } from '../../reducks/groups/operations';
+import { fetchGroups } from '../../../reducks/groups/operations';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
 
