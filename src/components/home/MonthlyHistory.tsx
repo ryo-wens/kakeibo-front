@@ -1,17 +1,19 @@
 import React, { ReactElement, useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchTransactionsList } from '../../reducks/transactions/operations';
-import { State } from '../../reducks/store/types';
 import { getTransactions } from '../../reducks/transactions/selectors';
+import { getGroupTransactions } from '../../reducks/groupTransactions/selectors';
 import { month } from '../../lib/constant';
 import '../../assets/history/monthly-history.scss';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
 import { incomeTransactionType } from '../../lib/constant';
-import { getPathTemplateName } from '../../lib/path';
-import GroupMonthlyHistory from './GroupMothlyHistory';
+import { bigCategoryColor } from '../../lib/function';
 import { SelectYears } from '../../lib/date';
 import axios from 'axios';
+import { currentWeekNumber } from '../../lib/constant';
+import GroupMonthlyHistory from './GroupMothlyHistory';
+import { useLocation } from 'react-router';
 
 interface MonthlyHistoryProps {
   year: number;
@@ -20,9 +22,9 @@ interface MonthlyHistoryProps {
 
 const MonthlyHistory = (props: MonthlyHistoryProps) => {
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const transactionsList = getTransactions(selector);
+  const pathName = useLocation().pathname.split('/')[1];
+  const transactionsList = useSelector(getTransactions);
+  const groupTransactionsList = useSelector(getGroupTransactions);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
   const signal = axios.CancelToken.source();
@@ -63,6 +65,16 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
     return oneWeekSubTotal;
   };
 
+  const currentWeekBorder = (weekNum: number) => {
+    if (weekNum === currentWeekNumber) {
+      return {
+        border: 'solid 2px #E2750F',
+      };
+    } else {
+      return;
+    }
+  };
+
   const rows = () => {
     let headerRow: ReactElement[] = [];
     let historyRow: ReactElement[] = [];
@@ -82,7 +94,11 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
 
       historyRow = [
         ...historyRow,
-        <td className="monthly-history-table__record-second" key={'week' + index}>
+        <td
+          style={currentWeekBorder(index + 1)}
+          className="monthly-history-table__record-second"
+          key={'week' + index}
+        >
           {(() => {
             let items: ReactElement[] = [];
             let prevTransactionDate = '';
@@ -128,7 +144,7 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
                           if (prevTransactionDate != transaction_date) {
                             prevTransactionDate = transaction_date;
                             return (
-                              <span>
+                              <span className="monthly-history-table__item-font">
                                 {transaction_date}
                                 <br />
                               </span>
@@ -139,12 +155,37 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
                         })()}
                         {(() => {
                           if (medium_category_name != null) {
-                            return medium_category_name;
+                            return (
+                              <>
+                                <span
+                                  style={bigCategoryColor(big_category_name)}
+                                  className="monthly-history-table__category-color"
+                                />
+                                <span className="monthly-history-table__item-font monthly-history-table__item-font--weight">
+                                  {medium_category_name}
+                                </span>
+                                <span className="monthly-history-table__item-font--position monthly-history-table__item-font">
+                                  ¥{amount.toLocaleString()}
+                                </span>
+                              </>
+                            );
                           }
 
-                          return custom_category_name;
+                          return (
+                            <>
+                              <span
+                                style={bigCategoryColor(big_category_name)}
+                                className="monthly-history-table__category-color"
+                              />
+                              <span className="monthly-history-table__item-font monthly-history-table__item-font--weight">
+                                {custom_category_name}
+                              </span>
+                              <span className="monthly-history-table__item-font--position monthly-history-table__item-font">
+                                ¥{amount.toLocaleString()}
+                              </span>
+                            </>
+                          );
                         })()}
-                        ¥{amount}
                       </span>
                     </dt>
                   </dl>,
@@ -212,7 +253,7 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
         if (pathName !== 'group') {
           return (
             <>
-              <div className="monthly-history-table__spacer" />
+              <div className="monthly-history-table__spacer__big" />
               <div className="box__monthlyExpense">
                 {pathName !== 'weekly' && <h2>{month}月の支出</h2>}
                 <table className="monthly-history-table">
@@ -230,7 +271,13 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
             </>
           );
         } else {
-          return <GroupMonthlyHistory month={props.month} year={props.year} />;
+          return (
+            <GroupMonthlyHistory
+              month={props.month}
+              year={props.year}
+              groupTransactionsList={groupTransactionsList}
+            />
+          );
         }
       })()}
     </>

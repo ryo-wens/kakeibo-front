@@ -14,6 +14,7 @@ export const todayOfWeek = date.getDay();
 export const thisMonthStartDate = new Date(year, month - 1, 1).getDate();
 export const thisMonthEndDate = new Date(year, month + 1, 0).getDate();
 export const customMonth = ('0' + month).slice(-2);
+export const currentWeekNumber = Math.floor((date.getDate() - date.getDay() + 12) / 7);
 export const guidanceMessage = '「入力フォーム」から家計簿の追加を行ってください';
 export const noTransactionMessage = 'この月には、まだ記録がありません。';
 export const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];

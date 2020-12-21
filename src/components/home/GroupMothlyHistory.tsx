@@ -3,23 +3,30 @@ import { useSelector } from 'react-redux';
 import { State } from '../../reducks/store/types';
 import { getGroupTransactions } from '../../reducks/groupTransactions/selectors';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { incomeTransactionType } from '../../lib/constant';
-import { getPathGroupId } from '../../lib/path';
+import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
+import { currentWeekNumber, incomeTransactionType } from '../../lib/constant';
+import { bigCategoryColor } from '../../lib/function';
 import { month } from '../../lib/constant';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
 import { EditTransactionModal, SelectMenu } from '../uikit';
+import { useParams } from 'react-router';
+import './color-explanation.scss';
+import ColorExplanation from './ColorExplanation';
 
 interface GroupMonthlyHistoryProps {
   year: number;
   month: number;
+  groupTransactionsList: GroupTransactionsList;
 }
 
 const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
   const selector = useSelector((state: State) => state);
+  const { id } = useParams();
   const path = window.location.pathname;
-  const groupId = getPathGroupId(window.location.pathname);
+  const approvedGroup = useSelector(getApprovedGroups);
+  const currentGroupId = approvedGroup.findIndex((group) => group.group_id === Number(id));
+  const currentGroup = approvedGroup[currentGroupId];
   const groupTransactionsList = getGroupTransactions(selector);
-  const approvedGroup = getApprovedGroups(selector);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
 
@@ -48,6 +55,28 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
     return oneWeekSubTotal;
   };
 
+  const currentWeekBorder = (weekNum: number) => {
+    if (weekNum === currentWeekNumber) {
+      return {
+        border: 'solid 2px #E2750F',
+      };
+    } else {
+      return;
+    }
+  };
+
+  const payerColor = (payerUserId: string): React.CSSProperties | undefined => {
+    let color = '';
+
+    for (const groupUser of currentGroup.approved_users_list) {
+      if (groupUser.user_id === payerUserId) {
+        color = groupUser.color_code;
+      }
+    }
+
+    return { borderBottom: `2px solid ${color}` };
+  };
+
   const rows = () => {
     let headerRow: ReactElement[] = [];
     let historyRow: ReactElement[] = [];
@@ -67,7 +96,11 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
 
       historyRow = [
         ...historyRow,
-        <td className="monthly-history-table__record-second" key={index}>
+        <td
+          style={currentWeekBorder(index + 1)}
+          className="monthly-history-table__record-second"
+          key={index}
+        >
           {(() => {
             let items: ReactElement[] = [];
             let prevTransactionDate = '';
@@ -114,10 +147,12 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                           if (prevTransactionDate != transaction_date) {
                             prevTransactionDate = transaction_date;
                             return (
-                              <span>
-                                {transaction_date}
-                                <br />
-                              </span>
+                              <>
+                                <span className="monthly-history-table__item-font">
+                                  {transaction_date}
+                                  <br />
+                                </span>
+                              </>
                             );
                           } else {
                             return;
@@ -125,12 +160,41 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                         })()}
                         {(() => {
                           if (groupTransaction.medium_category_name != null) {
-                            return medium_category_name;
+                            return (
+                              <>
+                                <span
+                                  style={bigCategoryColor(big_category_name)}
+                                  className="monthly-history-table__category-color"
+                                />
+                                <span className="monthly-history-table__item-font monthly-history-table__item-font--weight">
+                                  {medium_category_name}
+                                </span>
+                                <span
+                                  style={payerColor(payment_user_id)}
+                                  className="monthly-history-table__item-font--position monthly-history-table__item-font"
+                                >
+                                  ¥ {amount.toLocaleString()}
+                                </span>
+                                <span />
+                              </>
+                            );
                           }
 
-                          return custom_category_name;
+                          return (
+                            <>
+                              <span
+                                style={bigCategoryColor(big_category_name)}
+                                className="monthly-history-table__category-color"
+                              />
+                              <span className="monthly-history-table__item-font monthly-history-table__item-font--weight">
+                                {custom_category_name}
+                              </span>
+                              <span className="monthly-history-table__item-font--position monthly-history-table__item-font">
+                                ¥ {amount.toLocaleString()}
+                              </span>
+                            </>
+                          );
                         })()}
-                        ¥{amount}
                       </span>
                     </dt>
                   </dl>,
@@ -196,9 +260,12 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
 
   return (
     <>
-      <div className="monthly-history-table__spacer" />
+      <div className="monthly-history-table__spacer__big" />
       <div className="box__monthlyExpense">
-        {path !== `/group/${groupId}/weekly/history` && <h2>{month}月の支出</h2>}
+        {path !== `/group/${Number(id)}/weekly/history` && <h2>{month}月の支出</h2>}
+        <ColorExplanation approvedGroup={currentGroup} />
+        <div className="color-explanation__spacer--small" />
+        <div className="monthly-history-table__spacer__small" />
         <table className="monthly-history-table">
           <tbody className="monthly-history-table__tbody">
             <tr className="monthly-history-table__thead">{rows().headerRow}</tr>
