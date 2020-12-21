@@ -3,7 +3,6 @@ import SearchField from './SearchField';
 import { month, year } from '../../lib/constant';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import { SearchResultTodoList } from './index';
-import { Groups } from '../../reducks/groups/types';
 import { useSelector } from 'react-redux';
 import { getSearchTodoList, getSearchTodoListMessage } from '../../reducks/todoList/selectors';
 import {
@@ -16,7 +15,6 @@ interface SearchTodoListProps {
   openSearchResultTodoList: boolean;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
   closeSearch: () => void;
-  approvedGroups: Groups;
 }
 
 const SearchTodoList = (props: SearchTodoListProps) => {
@@ -84,7 +82,6 @@ const SearchTodoList = (props: SearchTodoListProps) => {
           <h3 className="search-field__title">Todoを検索</h3>
         </div>
         <SearchField
-          approvedGroups={props.approvedGroups}
           closeSearch={props.closeSearch}
           setCurrentDateType={setCurrentDateType}
           setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}

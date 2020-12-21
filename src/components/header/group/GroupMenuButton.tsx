@@ -2,13 +2,13 @@ import React from 'react';
 import Menu from '@material-ui/core/Menu';
 import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
 import { IconButton } from '@material-ui/core';
-import { GenericModal } from '../uikit';
+import { GenericModal } from '../../uikit';
 import { EditGroupMembers, EditGroupName } from './index';
-import { Group } from '../../reducks/groups/types';
-import { groupWithdrawal } from '../../reducks/groups/operations';
+import { Group } from '../../../reducks/groups/types';
+import { groupWithdrawal } from '../../../reducks/groups/operations';
 import { push } from 'connected-react-router';
 import { useDispatch } from 'react-redux';
-import { getPathGroupId } from '../../lib/path';
+import { getPathGroupId } from '../../../lib/path';
 
 interface MenuButtonProps {
   approvedGroup: Group;

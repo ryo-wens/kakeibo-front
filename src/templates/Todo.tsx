@@ -1,14 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchGroups } from '../reducks/groups/operations';
-import { State } from '../reducks/store/types';
-import {
-  AddTodo,
-  ExpiredTodoList,
-  SwitchTodoList,
-  SwitchDateButton,
-  SearchTodoList,
-} from '../components/todo';
+import { AddTodo, ExpiredTodoList, SwitchDateButton, SearchTodoList } from '../components/todo';
 import {
   getExpiredTodoList,
   getMonthDueTodoList,
@@ -40,23 +33,21 @@ import { date } from '../lib/constant';
 import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
 import '../assets/todo/todo.scss';
-import { getApprovedGroups } from '../reducks/groups/selectors';
 import { useLocation, useParams } from 'react-router';
+import SwitchTodoList from '../components/todo/switch-schedule-todo-list/SwitchScheduleTodoList';
 
 const Todo = () => {
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
-  const expiredTodoList = getExpiredTodoList(selector);
-  const groupExpiredTodoList = getGroupExpiredTodoList(selector);
-  const todayImplementationTodoList = getTodayImplementationTodoList(selector);
-  const todayDueTodoList = getTodayDueTodoList(selector);
-  const todayTodoListMessage = getTodayTodoListMessage(selector);
-  const monthImplementationTodoList = getMonthImplementationTodoList(selector);
-  const monthDueTodoList = getMonthDueTodoList(selector);
-  const monthTodoListMessage = getMonthTodoListMessage(selector);
-  const groupTodayImplementationTodoList = getGroupTodayImplementationTodoList(selector);
-  const groupTodayDueTodoList = getGroupTodayDueTodoList(selector);
+  const expiredTodoList = useSelector(getExpiredTodoList);
+  const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
+  const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
+  const todayDueTodoList = useSelector(getTodayDueTodoList);
+  const todayTodoListMessage = useSelector(getTodayTodoListMessage);
+  const monthImplementationTodoList = useSelector(getMonthImplementationTodoList);
+  const monthDueTodoList = useSelector(getMonthDueTodoList);
+  const monthTodoListMessage = useSelector(getMonthTodoListMessage);
+  const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
+  const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
   const todayYear = String(date.getFullYear());
@@ -95,7 +86,7 @@ const Todo = () => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, []);
+  }, [todayYear, todayMonth, todayDate]);
 
   useEffect(() => {
     if (pathName !== 'group' && !expiredTodoList.length) {
@@ -153,33 +144,38 @@ const Todo = () => {
         {!openSearchTodoList ? (
           <div className="todo">
             <div className="todo__today-list">
-              <div className="todo__menu">
-                <SwitchDateButton />
-                <button className="todo__search" onClick={() => openSearch()}>
-                  検索
-                </button>
-              </div>
-              <span className="todo__today-date">
-                今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-              </span>
+              <div className="todo__today-list-content">
+                <div className="todo__menu">
+                  <SwitchDateButton />
+                  <button className="todo__search" onClick={() => openSearch()}>
+                    検索
+                  </button>
+                </div>
+                <span className="todo__today-date">
+                  今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
+                </span>
 
-              {pathName !== 'group' ? (
-                <SwitchTodoList
-                  implementationTodoList={todayImplementationTodoList}
-                  dueTodoList={todayDueTodoList}
-                />
-              ) : (
-                <SwitchTodoList
-                  implementationTodoList={groupTodayImplementationTodoList}
-                  dueTodoList={groupTodayDueTodoList}
-                />
-              )}
-              <AddTodo date={date} groupId={Number(id)} />
+                <div className="todo__today-switch-todo-list">
+                  <div className="todo__today-switch-todo-list--width">
+                    <SwitchTodoList
+                      implementationTodoList={
+                        pathName === 'group'
+                          ? groupTodayImplementationTodoList
+                          : todayImplementationTodoList
+                      }
+                      dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+                    />
+                    <AddTodo date={date} groupId={Number(id)} />
+                  </div>
+                </div>
+              </div>
             </div>
             <div className="todo__expired-list">
-              {pathName !== 'group'
-                ? existsExpiredTodoList(expiredTodoList)
-                : existsExpiredTodoList(groupExpiredTodoList)}
+              <div className="todo__expired-list-content">
+                {pathName !== 'group'
+                  ? existsExpiredTodoList(expiredTodoList)
+                  : existsExpiredTodoList(groupExpiredTodoList)}
+              </div>
             </div>
           </div>
         ) : (
@@ -187,7 +183,6 @@ const Todo = () => {
             openSearchResultTodoList={openSearchResultTodoList}
             setOpenSearchResultTodoList={setOpenSearchResultTodoList}
             closeSearch={closeSearch}
-            approvedGroups={approvedGroups}
           />
         )}
       </main>

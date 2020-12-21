@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import '../../assets/task/set-task-list-item.scss';
-import { DatePicker, DeleteButton, InputInteger, SaveButton } from '../uikit';
+import { DatePicker, InputInteger, SaveButton } from '../uikit';
 import { SelectCycleType, SelectTaskName, SelectTaskUser } from './index';
 import { Group } from '../../reducks/groups/types';
 import { useDispatch, useSelector } from 'react-redux';
@@ -164,10 +164,9 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           }
         />
         {props.label === '保存' && (
-          <DeleteButton
-            label={'解除'}
-            disabled={false}
-            onClick={() =>
+          <button
+            className="set-task-list-item__operation-btn--release"
+            onClick={() => {
               dispatch(
                 editTaskItem(
                   props.groupId,
@@ -178,9 +177,12 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
                   props.taskItemName,
                   null
                 )
-              ) && props.closeModal()
-            }
-          />
+              );
+              props.closeModal();
+            }}
+          >
+            解除
+          </button>
         )}
       </div>
     </div>

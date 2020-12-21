@@ -1,17 +1,14 @@
 import React from 'react';
 import { DatePicker, SelectCompleteFlag, SelectLimit, SelectSortType } from '../uikit';
-import { SelectDateType, SelectUsers, TextInput } from './index';
+import { SelectDateType, TextInput } from './index';
 import '../../assets/todo/search-field.scss';
 import { useDispatch } from 'react-redux';
 import { searchTodoList } from '../../reducks/todoList/operations';
 import { searchTodoRequestData } from '../../reducks/todoList/types';
-import { Groups } from '../../reducks/groups/types';
-import { searchGroupTodoRequestData } from '../../reducks/groupTodoList/types';
 import { useLocation, useParams } from 'react-router';
 import { searchGroupTodoList } from '../../reducks/groupTodoList/operations';
 
 interface SearchFieldProps {
-  approvedGroups: Groups;
   closeSearch: () => void;
   setCurrentDateType: React.Dispatch<React.SetStateAction<string>>;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
@@ -114,7 +111,7 @@ const SearchField = (props: SearchFieldProps) => {
   ];
 
   const searchRequestData = () => {
-    const data: searchTodoRequestData | searchGroupTodoRequestData = {
+    const data: searchTodoRequestData = {
       date_type: props.dateType,
       start_date: props.selectStartDate,
       end_date: props.selectEndDate,
@@ -134,15 +131,7 @@ const SearchField = (props: SearchFieldProps) => {
     return data;
   };
 
-  const searchGroupRequestData = (data: searchGroupTodoRequestData) => {
-    if (pathName === 'group' && props.userIds !== []) {
-      data.user_id = props.userIds;
-    }
-    return data;
-  };
-
   const requestData: searchTodoRequestData = searchRequestData();
-  const groupRequestData: searchGroupTodoRequestData = searchGroupRequestData(searchRequestData());
 
   return (
     <>
@@ -154,20 +143,12 @@ const SearchField = (props: SearchFieldProps) => {
           </div>
         );
       })}
-      {pathName === 'group' && (
-        <div className="search-field__select-contents">
-          <span className="search-field__select-contents--key">ユーザーを選択</span>
-          <span className="search-field__select-contents--value">
-            <SelectUsers approvedGroups={props.approvedGroups} setUsersIds={props.setUsersIds} />
-          </span>
-        </div>
-      )}
       <div className="search-field__search-btn">
         <button
           className="save-btn"
           onClick={() => {
             pathName === 'group'
-              ? dispatch(searchGroupTodoList(Number(id), groupRequestData))
+              ? dispatch(searchGroupTodoList(Number(id), requestData))
               : dispatch(searchTodoList(requestData));
 
             props.setOpenSearchResultTodoList(true);

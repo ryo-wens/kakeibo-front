@@ -348,10 +348,10 @@ export const editTodoListItem = (
       prevSearchTodoList[searchTodoListItemIdx] = result.data;
       const nextSearchTodoList: TodoList = [...prevSearchTodoList];
 
-      const nextExpiredTodoList: TodoList = updateExpiredTodoList(
-        prevExpiredTodoList,
-        result.data.due_date
-      );
+      const nextExpiredTodoList: TodoList =
+        prevExpiredTodoList.length === 0
+          ? []
+          : updateExpiredTodoList(prevExpiredTodoList, result.data.due_date);
 
       const nextTodayImplementationTodoLists: TodoList = updateTodayTodoList(
         prevTodayImplementationTodoList,
@@ -361,16 +361,20 @@ export const editTodoListItem = (
         prevTodayDueTodoList,
         result.data.due_date
       );
-      const nextMonthImplementationTodoList: TodoList = updateMonthTodoList(
-        prevMonthImplementationTodoList,
-        responseImplementationMonth,
-        result.data.implementation_date
-      );
-      const nextMonthDueTodoLists: TodoList = updateMonthTodoList(
-        prevMonthDueTodoList,
-        responseDueMonth,
-        result.data.due_date
-      );
+
+      const nextMonthImplementationTodoList: TodoList =
+        prevMonthImplementationTodoList.length === 0
+          ? []
+          : updateMonthTodoList(
+              prevMonthImplementationTodoList,
+              responseImplementationMonth,
+              result.data.implementation_date
+            );
+
+      const nextMonthDueTodoLists: TodoList =
+        prevMonthDueTodoList.length === 0
+          ? []
+          : updateMonthTodoList(prevMonthDueTodoList, responseDueMonth, result.data.due_date);
 
       dispatch(
         editTodoListItemAction(
