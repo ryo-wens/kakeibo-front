@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
-import { Groups } from '../../reducks/groups/types';
+import { Groups, Group } from '../../reducks/groups/types';
 import { EditTransactionModal } from '../uikit';
+import { bigCategoryColor } from '../../lib/function';
 import '../../assets/home/recent-input.scss';
 
 interface RecentInputBodyProps {
   groupLatestTransactionsList: GroupTransactionsList;
   approvedGroup: Groups;
+  currentGroup: Group;
 }
 
 const GroupRecentInputBody = (props: RecentInputBodyProps) => {
@@ -21,6 +23,18 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
   const handleClose = () => {
     setOpen(false);
     setOpenId(undefined);
+  };
+
+  const payerColor = (payerUserId: string): React.CSSProperties | undefined => {
+    let color = '';
+
+    for (const groupUser of props.currentGroup.approved_users_list) {
+      if (groupUser.user_id === payerUserId) {
+        color = groupUser.color_code;
+      }
+    }
+
+    return { borderBottom: `2px solid ${color}` };
   };
 
   const latestGroupTransaction = () => {
@@ -45,14 +59,34 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
 
       return (
         <div key={index}>
-          <dl className="recent-input__recent_delimiterLine" onClick={() => handleOpen(id)}>
+          <dl className="recent-input__recent-box" onClick={() => handleOpen(id)}>
             <dt className="recent-input__recent-text">{transaction_date}</dt>
-            <dt className="recent-input__recent-text">￥ {amount.toLocaleString()}</dt>
             <dt className="recent-input__recent-text">
-              {medium_category_name !== null ? medium_category_name : custom_category_name}
+              <span
+                style={bigCategoryColor(big_category_name)}
+                className="recent-input__category-icon"
+              />
+              {medium_category_name || custom_category_name}
             </dt>
-            <dt>{shop}</dt>
-            <dt>{memo}</dt>
+            <dt className="recent-input__recent-text">
+              <span style={payerColor(payment_user_id)}>￥ {amount.toLocaleString()}</span>
+            </dt>
+            <dt>
+              {shop !== null ? (
+                <>
+                  <span className="recent-input__item-font">店名: </span>
+                  {shop}
+                </>
+              ) : null}
+            </dt>
+            <dt>
+              {memo !== null ? (
+                <>
+                  <span className="recent-input__item-font">メモ :</span>
+                  {memo}
+                </>
+              ) : null}
+            </dt>
           </dl>
           <EditTransactionModal
             key={index}

@@ -1,16 +1,16 @@
 @import "src/assets/variable.scss";
 
-.btn--primary,
-a.btn--primary {
-  background-color:  #4db5fa;
+.btn--primary {
+  background-color: #ff6600;
+  border-radius: 4px;
   color: $white;
   cursor: pointer;
+  font-weight: bolder;
+
   width: 100px;
   height: 40px;
-}
-.btn--primary:hover,
-a.btn--secondary:hover {
-  background: #68c1fc;
-  color: $white;
 
+  &:hover {
+    opacity: 0.7;
+  }
 }

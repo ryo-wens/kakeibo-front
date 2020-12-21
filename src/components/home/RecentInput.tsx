@@ -15,13 +15,15 @@ import axios from 'axios';
 
 const RecentInput = () => {
   const dispatch = useDispatch();
+  const signal = axios.CancelToken.source();
+  const { id } = useParams();
+  const pathName = useLocation().pathname.split('/')[1];
   const selector = useSelector((state: State) => state);
   const latestTransactionsList = getLatestTransactions(selector);
   const groupLatestTransactionList = getGroupLatestTransactions(selector);
   const approvedGroup = getApprovedGroups(selector);
-  const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
-  const signal = axios.CancelToken.source();
+  const currentGroupId = approvedGroup.findIndex((group) => group.group_id === Number(id));
+  const currentGroup = approvedGroup[currentGroupId];
 
   useEffect(() => {
     if (pathName === 'group') {
@@ -46,7 +48,6 @@ const RecentInput = () => {
   return (
     <div className="recent-input box__recent ">
       <h3>最近の入力</h3>
-      <div />
       {(() => {
         if (pathName !== 'group') {
           if (!latestTransactionsList.length) {
@@ -62,6 +63,7 @@ const RecentInput = () => {
               <GroupRecentInputBody
                 groupLatestTransactionsList={groupLatestTransactionList}
                 approvedGroup={approvedGroup}
+                currentGroup={currentGroup}
               />
             );
           }

@@ -1,0 +1,39 @@
+@import "src/assets/variable";
+
+.color-explanation {
+
+  &__payer-color {
+    display: flex;
+    width: 12px;
+    height: 4px;
+    margin-right: 3px;
+  }
+
+  &__payer-position {
+    align-items: center;
+    display: flex;
+    padding-left: 8px;
+  }
+
+  &__spacer {
+    display: block;
+    width: 100%;
+
+    &--small {
+      height: 10px;
+    }
+
+    &--medium {
+      height: 30px;
+    }
+  }
+
+
+  &__icon-position {
+    display: flex;
+  }
+
+  &__group-text {
+    font-weight: bolder;
+  }
+}

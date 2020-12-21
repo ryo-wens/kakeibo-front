@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
 import { fetchTransactionsList } from '../reducks/transactions/operations';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
-import { getPathTemplateName, getPathGroupId } from '../lib/path';
+import { getGroupTransactions } from '../reducks/groupTransactions/selectors';
 import { month, year } from '../lib/constant';
 import { SelectYears } from '../lib/date';
 import { DailyHistory } from './index';
@@ -14,22 +14,24 @@ import { fetchGroups } from '../reducks/groups/operations';
 import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
+import { useLocation, useParams } from 'react-router';
 
 const History = () => {
   const dispatch = useDispatch();
   const path = window.location.pathname;
+  const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
+  const groupTransactionsList = useSelector(getGroupTransactions);
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
 
   const fetchGroupHistoryData = (signal: CancelTokenSource) => {
     const years: SelectYears = {
       selectedYear: String(selectedYear),
       selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
     };
-    dispatch(fetchGroupTransactionsList(groupId, years, signal));
-    dispatch(fetchGroupCategories(groupId, signal));
+    dispatch(fetchGroupTransactionsList(Number(id), years, signal));
+    dispatch(fetchGroupCategories(Number(id), signal));
   };
 
   useEffect(() => {
@@ -83,7 +85,7 @@ const History = () => {
                 if (pathName !== 'group') {
                   dispatch(push('/daily/history'));
                 } else {
-                  dispatch(push(`/group/${groupId}/daily/history`));
+                  dispatch(push(`/group/${Number(id)}/daily/history`));
                 }
               }}
             >
@@ -95,7 +97,7 @@ const History = () => {
                 if (pathName !== 'group') {
                   dispatch(push('/weekly/history'));
                 } else {
-                  dispatch(push(`/group/${groupId}/weekly/history`));
+                  dispatch(push(`/group/${Number(id)}/weekly/history`));
                 }
               }}
             >
@@ -112,7 +114,7 @@ const History = () => {
           />
         </div>
         {(() => {
-          if (path === '/daily/history' || path === `/group/${groupId}/daily/history`) {
+          if (path === '/daily/history' || path === `/group/${Number(id)}/daily/history`) {
             return (
               <div className="history__table-size">
                 <DailyHistory selectYear={selectedYear} selectMonth={selectedMonth} />
@@ -124,10 +126,14 @@ const History = () => {
                 <MonthlyHistory month={selectedMonth} year={selectedYear} />
               </div>
             );
-          } else if (`/group/${groupId}/weekly/history`) {
+          } else if (`/group/${Number(id)}/weekly/history`) {
             return (
               <div className="history__table-size">
-                <GroupMonthlyHistory month={selectedMonth} year={selectedYear} />
+                <GroupMonthlyHistory
+                  month={selectedMonth}
+                  year={selectedYear}
+                  groupTransactionsList={groupTransactionsList}
+                />
               </div>
             );
           }

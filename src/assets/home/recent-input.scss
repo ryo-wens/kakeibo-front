@@ -6,16 +6,37 @@
   justify-content: center;
   align-items: center;
 
-  &__recent_delimiterLine {
-    border-bottom: 1px solid;
+  &__recent-box {
+    border: 1px solid #F4F5F7;
+    box-sizing: border-box;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    border-radius: 5px;
     cursor: pointer;
+    padding: 3px;
   }
 
   &__recent-text {
     font-size: $medium-font_size;
     width: 190px;
     max-width: 250px;
-    //font-weight: $large-font_weight;
+  }
+
+  &__category-icon {
+    display: inline-block;
+    margin-right: 4px;
+    width: 10px;
+    height: 10px;
+  }
+
+  &__item-font {
+    font-size: 14px;
+    padding-right: 1rem;
+  }
+
+  &__border-spacer {
+    display: block;
+    height: 1px;
+    width: 100%;
   }
 
 }
