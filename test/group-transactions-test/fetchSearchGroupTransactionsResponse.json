@@ -12,8 +12,11 @@
       "posted_user_id": "taira",
       "updated_user_id": null,
       "payment_user_id": "taira",
+      "big_category_id": 2,
       "big_category_name": "食費",
+      "medium_category_id": 9,
       "medium_category_name": "夕食",
+      "custom_category_id": null,
       "custom_category_name": null
     },
     {
@@ -28,8 +31,11 @@
       "posted_user_id": "taira",
       "updated_user_id": null,
       "payment_user_id": "tati1",
+      "big_category_id": 2,
       "big_category_name": "食費",
+      "medium_category_id": 6,
       "medium_category_name": "食料品",
+      "custom_category_id": null,
       "custom_category_name": null
     },
     {
@@ -44,8 +50,11 @@
       "posted_user_id": "taira",
       "updated_user_id": null,
       "payment_user_id": "taira",
+      "big_category_id": 2,
       "big_category_name": "食費",
+      "medium_category_id": 8,
       "medium_category_name": "昼食",
+      "custom_category_id": null,
       "custom_category_name": null
     },
     {
@@ -60,8 +69,11 @@
       "posted_user_id": "taira",
       "updated_user_id": null,
       "payment_user_id": "taira",
+      "big_category_id": 2,
       "big_category_name": "食費",
+      "medium_category_id": 6,
       "medium_category_name": "食料品",
+      "custom_category_id": null,
       "custom_category_name": null
     }
   ]

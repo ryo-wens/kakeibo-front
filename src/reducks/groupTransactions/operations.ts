@@ -43,12 +43,7 @@ export const fetchGroupTransactionsList = (
       const groupTransactionsList = result.data.transactions_list;
 
       if (groupTransactionsList !== undefined) {
-        const aligningGroupTransactionsList = groupTransactionsList.sort(
-          (a, b) =>
-            Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
-        );
-
-        dispatch(updateGroupTransactionsAction(aligningGroupTransactionsList));
+        dispatch(updateGroupTransactionsAction(groupTransactionsList));
       } else {
         const emptyGroupTransactionsList: GroupTransactionsList = [];
 

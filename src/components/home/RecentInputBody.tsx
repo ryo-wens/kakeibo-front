@@ -28,6 +28,9 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
         id,
         transaction_type,
         transaction_date,
+        big_category_id,
+        medium_category_id,
+        custom_category_id,
         big_category_name,
         medium_category_name,
         custom_category_name,
@@ -81,6 +84,9 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
             onClose={handleClose}
             transactionDate={transaction_date}
             transactionsType={transaction_type}
+            bigCategoryId={big_category_id}
+            mediumCategoryId={medium_category_id}
+            customCategoryId={custom_category_id}
           />
         </div>
       );

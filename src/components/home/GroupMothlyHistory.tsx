@@ -110,6 +110,9 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                 id,
                 transaction_date,
                 transaction_type,
+                big_category_id,
+                medium_category_id,
+                custom_category_id,
                 big_category_name,
                 medium_category_name,
                 custom_category_name,
@@ -211,6 +214,9 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                     transactionsType={transaction_type}
                     paymentUserId={payment_user_id}
                     approvedGroups={approvedGroup}
+                    bigCategoryId={big_category_id}
+                    mediumCategoryId={medium_category_id}
+                    customCategoryId={custom_category_id}
                   />,
                 ];
               }

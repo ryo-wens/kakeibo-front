@@ -38,13 +38,9 @@ export const fetchTransactionsList = (
       const transactionsList = result.data.transactions_list;
 
       if (transactionsList !== undefined) {
-        const resMessage = '';
-        const aligningTransactionsList = transactionsList.sort(
-          (a, b) =>
-            Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
-        );
+        const message = '';
 
-        dispatch(fetchTransactionsActions(aligningTransactionsList, resMessage));
+        dispatch(fetchTransactionsActions(transactionsList, message));
       } else {
         const emptyTransactionsList: TransactionsList = [];
 
