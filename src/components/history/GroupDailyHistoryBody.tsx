@@ -63,6 +63,9 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                   id,
                   transaction_type,
                   transaction_date,
+                  big_category_id,
+                  medium_category_id,
+                  custom_category_id,
                   big_category_name,
                   medium_category_name,
                   custom_category_name,
@@ -95,6 +98,9 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                         transactionsType={transaction_type}
                         approvedGroups={approvedGroup}
                         paymentUserId={userId}
+                        bigCategoryId={big_category_id}
+                        mediumCategoryId={medium_category_id}
+                        customCategoryId={custom_category_id}
                       />
                     </td>
                     <td className="daily-history__td" align="center">
@@ -121,6 +127,9 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                   id,
                   transaction_type,
                   transaction_date,
+                  big_category_id,
+                  medium_category_id,
+                  custom_category_id,
                   big_category_name,
                   medium_category_name,
                   custom_category_name,
@@ -153,6 +162,9 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                         transactionsType={transaction_type}
                         approvedGroups={approvedGroup}
                         paymentUserId={userId}
+                        bigCategoryId={big_category_id}
+                        mediumCategoryId={medium_category_id}
+                        customCategoryId={custom_category_id}
                       />
                     </td>
                     <td className="daily-history__td" align="center">

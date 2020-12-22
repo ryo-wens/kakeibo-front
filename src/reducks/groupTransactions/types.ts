@@ -10,8 +10,11 @@ export interface GroupTransactions {
   posted_user_id: string;
   updated_user_id: string;
   payment_user_id: string;
+  big_category_id: number;
   big_category_name: string;
+  medium_category_id: number;
   medium_category_name: string | null;
+  custom_category_id: number;
   custom_category_name: string | null;
 }
 
