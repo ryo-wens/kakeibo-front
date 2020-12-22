@@ -7,7 +7,7 @@ import {
   getMonthDueTodoList,
   getMonthImplementationTodoList,
 } from '../reducks/todoList/selectors';
-import { ExpiredTodoList, SearchTodoList, SwitchDateButton } from '../components/todo';
+import { ExpiredTodoList, SearchTodoList } from '../components/todo';
 import {
   getGroupExpiredTodoList,
   getGroupMonthDueTodoList,
@@ -130,7 +130,6 @@ const MonthlyTodo = () => {
             <div className="monthly-todo__monthly-list">
               <div className="monthly-todo__monthly-list-content">
                 <div className="monthly-todo__menu">
-                  <SwitchDateButton />
                   <button className="todo__search" onClick={() => openSearch()}>
                     検索
                   </button>
