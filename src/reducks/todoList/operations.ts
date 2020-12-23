@@ -18,10 +18,10 @@ import {
   editTodoListItemRes,
   fetchExpiredTodoListRes,
   fetchMonthTodoListsRes,
-  fetchTodayTodoListsRes,
-  TodoListItem,
-  TodoList,
   fetchSearchTodoListRes,
+  fetchTodayTodoListsRes,
+  TodoList,
+  TodoListItem,
 } from './types';
 import moment from 'moment';
 import { openTextModalAction } from '../modal/actions';
@@ -95,12 +95,14 @@ export const createTodoListItem = (
         prevTodoList: TodoList,
         nextTodoListItem: TodoListItem
       ) => {
+        let nextTodoList: TodoList = [];
         if (idx !== -1) {
           prevTodoList.splice(idx, 0, nextTodoListItem);
+          nextTodoList = prevTodoList.concat();
         } else if (idx === -1) {
-          prevTodoList.push(nextTodoListItem);
+          nextTodoList = prevTodoList.concat(nextTodoListItem);
         }
-        return prevTodoList;
+        return nextTodoList;
       };
 
       const expiredTodoList = (prevTodoList: TodoList, responseDate: string) => {
@@ -111,7 +113,7 @@ export const createTodoListItem = (
 
           nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
         } else if (dateToDateString(today) <= responseDate) {
-          nextTodoList = [...prevTodoList];
+          nextTodoList = prevTodoList.concat();
         }
         return nextTodoList;
       };
@@ -119,9 +121,9 @@ export const createTodoListItem = (
       const todayTodoList = (prevTodoList: TodoList, responseDate: string) => {
         let nextTodoList: TodoList = [];
         if (dateToDateString(today) === responseDate) {
-          nextTodoList = [newTodoListItem, ...prevTodoList];
+          nextTodoList = [newTodoListItem].concat(prevTodoList);
         } else if (dateToDateString(today) !== responseDate) {
-          nextTodoList = [...prevTodoList];
+          nextTodoList = prevTodoList.concat();
         }
         return nextTodoList;
       };
@@ -144,7 +146,7 @@ export const createTodoListItem = (
 
           nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
         } else if (dateToYearAndMonthString(selectedDate) !== responseMonth) {
-          nextTodoList = [...prevTodoList];
+          nextTodoList = prevTodoList.concat();
         }
         return nextTodoList;
       };
@@ -255,12 +257,14 @@ export const editTodoListItem = (
         prevTodoList: TodoList,
         nextTodoListItem: TodoListItem
       ) => {
+        let nextTodoList: TodoList = [];
         if (idx !== -1) {
           prevTodoList.splice(idx, 0, nextTodoListItem);
+          nextTodoList = prevTodoList.concat();
         } else if (idx === -1) {
-          prevTodoList.push(nextTodoListItem);
+          nextTodoList = prevTodoList.concat(nextTodoListItem);
         }
-        return prevTodoList;
+        return nextTodoList;
       };
 
       const updateExpiredTodoList = (prevTodoList: TodoList, responseDate: string) => {
@@ -273,7 +277,7 @@ export const editTodoListItem = (
         if (dateToDateString(today) > responseDate) {
           if (result.data.complete_flag === true) {
             prevTodoList.splice(prevItemIdx, 1);
-            nextTodoList = [...prevTodoList];
+            nextTodoList = prevTodoList.concat();
           } else if (result.data.complete_flag === false) {
             if (prevItemIdx !== -1) {
               prevTodoList.splice(prevItemIdx, 1);
@@ -286,7 +290,7 @@ export const editTodoListItem = (
             nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
           }
         } else if (dateToDateString(today) <= responseDate) {
-          nextTodoList = [...prevTodoList];
+          nextTodoList = prevTodoList.concat();
         }
         return nextTodoList;
       };
@@ -298,10 +302,22 @@ export const editTodoListItem = (
         );
 
         if (dateToDateString(today) === responseDate) {
-          prevTodoList[prevItemIdx] = result.data;
-          nextTodoList = [...prevTodoList];
+          if (prevItemIdx === -1) {
+            nextTodoList = [result.data].concat(prevTodoList);
+            return nextTodoList;
+          }
+
+          const prevCompleteFlag = prevTodoList[prevItemIdx].complete_flag;
+          if (prevCompleteFlag === result.data.complete_flag) {
+            prevTodoList.splice(prevItemIdx, 1);
+            nextTodoList = [result.data].concat(prevTodoList);
+          } else if (prevCompleteFlag !== result.data.complete_flag) {
+            prevTodoList[prevItemIdx] = result.data;
+            nextTodoList = prevTodoList.concat();
+          }
         } else if (dateToDateString(today) !== responseDate) {
-          nextTodoList = [...prevTodoList];
+          prevTodoList.splice(prevItemIdx, 1);
+          nextTodoList = prevTodoList.concat();
         }
         return nextTodoList;
       };
@@ -319,9 +335,10 @@ export const editTodoListItem = (
 
         if (dateToYearAndMonthString(selectedDate) === responseMonth) {
           const prevCompleteFlag = prevTodoList[prevItemIdx].complete_flag;
+
           if (prevCompleteFlag !== result.data.complete_flag) {
             prevTodoList[prevItemIdx] = result.data;
-            nextTodoList = [...prevTodoList];
+            nextTodoList = prevTodoList.concat();
           } else if (prevCompleteFlag === result.data.complete_flag) {
             prevTodoList.splice(prevItemIdx, 1);
 

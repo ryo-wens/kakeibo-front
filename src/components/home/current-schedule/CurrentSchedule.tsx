@@ -14,7 +14,8 @@ import {
   getGroupTodayImplementationTodoList,
 } from '../../../reducks/groupTodoList/selectors';
 import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operations';
-import SwitchTodoList from '../../todo/switch-schedule-todo-list/SwitchScheduleTodoList';
+import SwitchItemTabs from '../../uikit/tabs/SwitchItemTabs';
+import TodayTodoList from '../../todo/page/today-todo-area/today-todo-list/TodayTodoList';
 
 const CurrentSchedule = () => {
   const dispatch = useDispatch();
@@ -60,11 +61,37 @@ const CurrentSchedule = () => {
       <div className="current-schedule__content">
         <h4>Todoリスト</h4>
         <div className="current-schedule__todo">
-          <SwitchTodoList
-            implementationTodoList={
-              pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
+          <SwitchItemTabs
+            leftButtonLabel={'実施予定のToDo'}
+            rightButtonLabel={'締切予定のToDo'}
+            leftItem={
+              <TodayTodoList
+                planName={'実施予定'}
+                planTodoList={
+                  pathName === 'group'
+                    ? groupTodayImplementationTodoList
+                    : todayImplementationTodoList
+                }
+                implementationTodoList={
+                  pathName === 'group'
+                    ? groupTodayImplementationTodoList
+                    : todayImplementationTodoList
+                }
+                dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+              />
             }
-            dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+            rightItem={
+              <TodayTodoList
+                planName={'締切予定'}
+                planTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+                implementationTodoList={
+                  pathName === 'group'
+                    ? groupTodayImplementationTodoList
+                    : todayImplementationTodoList
+                }
+                dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+              />
+            }
           />
         </div>
       </div>

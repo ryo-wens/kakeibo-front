@@ -1,8 +1,8 @@
 import React from 'react';
-import { TodoListItem, TodoList } from '../../../../reducks/todoList/types';
-import { TodoListItemComponent } from '../../index';
-import { GroupTodoListItem, GroupTodoList } from '../../../../reducks/groupTodoList/types';
-import { date } from '../../../../lib/constant';
+import { TodoListItem, TodoList } from '../../../../../reducks/todoList/types';
+import { TodoListItemComponent } from '../../../index';
+import { GroupTodoListItem, GroupTodoList } from '../../../../../reducks/groupTodoList/types';
+import { date } from '../../../../../lib/constant';
 
 interface TodayTodoListProps {
   planName: string;

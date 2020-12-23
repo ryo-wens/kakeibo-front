@@ -11,7 +11,6 @@ import {
   EditStandardBudgets,
   History,
   Task,
-  MonthlyTodo,
   PayOff,
 } from './templates';
 
@@ -27,7 +26,6 @@ const Router = (): JSX.Element => {
       <Route exact path={'/standard/budgets'} component={StandardBudgets} />
       <Route exact path={'/standard/budgets/:year/:month'} component={EditStandardBudgets} />
       <Route exact path={'/todo'} component={Todo} />
-      <Route exact path={'/todo/monthly'} component={MonthlyTodo} />
       <Route exact path={'/yearly/budgets'} component={YearlyBudgets} />
       <Route exact path={'/group/:id'} component={Home} />
       <Route exact path={'/group/:id/daily/history'} component={History} />
@@ -43,7 +41,6 @@ const Router = (): JSX.Element => {
       />
       <Route exact path={'/group/:id/task'} component={Task} />
       <Route exact path={'/group/:id/todo'} component={Todo} />
-      <Route exact path={'/group/:id/todo/monthly'} component={MonthlyTodo} />
     </Switch>
   );
 };

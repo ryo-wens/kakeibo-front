@@ -185,7 +185,8 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
             completeFlag={checked}
             onClickSave={
               pathName === 'group'
-                ? editTodoListItem(
+                ? editGroupTodoListItem(
+                    Number(id),
                     props.todoListItem.id,
                     date,
                     props.selectedDate,

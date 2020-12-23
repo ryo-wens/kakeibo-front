@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Header } from '../components/header';
-import TodoPage from '../components/todo/todo-page/TodoPage';
+import TodoPage from '../components/todo/page/TodoPage';
 import '../assets/todo/todo.scss';
 
 const Todo = () => {
