@@ -106,3 +106,30 @@ export const getCurrentMonthBudgets = createSelector(
     return currentBudgetStatusList;
   }
 );
+
+const standardBudgetsList = (state: State) => state.budgets.standard_budgets_list;
+
+export const getTotalStandardBudget = createSelector(
+  [standardBudgetsList],
+  (standardBudgetsList) => {
+    let totalStandardBudget = 0;
+
+    for (let i = 0; i < standardBudgetsList.length; i++) {
+      totalStandardBudget += standardBudgetsList[i].budget;
+    }
+
+    return totalStandardBudget;
+  }
+);
+
+const customBudgetsList = (state: State) => state.budgets.custom_budgets_list;
+
+export const getTotalCustomBudget = createSelector([customBudgetsList], (customBudgetsList) => {
+  let totalCustomBudget = 0;
+
+  for (let i = 0; i < customBudgetsList.length; i++) {
+    totalCustomBudget += customBudgetsList[i].budget;
+  }
+
+  return totalCustomBudget;
+});
