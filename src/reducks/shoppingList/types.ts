@@ -64,3 +64,8 @@ export interface ShoppingListItemByCategories {
 }
 
 export interface ShoppingListByCategories extends Array<ShoppingListItemByCategories> {}
+
+export interface FetchTodayShoppingListRes {
+  regular_shopping_list: RegularShoppingList;
+  shopping_list: ShoppingList;
+}
