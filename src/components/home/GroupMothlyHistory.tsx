@@ -60,12 +60,10 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
       return {
         border: 'solid 2px #E2750F',
       };
-    } else {
-      return;
     }
   };
 
-  const payerColor = (payerUserId: string): React.CSSProperties | undefined => {
+  const payerUnderLineColor = (payerUserId: string): React.CSSProperties | undefined => {
     let color = '';
 
     for (const groupUser of currentGroup.approved_users_list) {
@@ -173,7 +171,7 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                                   {medium_category_name}
                                 </span>
                                 <span
-                                  style={payerColor(payment_user_id)}
+                                  style={payerUnderLineColor(payment_user_id)}
                                   className="monthly-history-table__item-font--position monthly-history-table__item-font"
                                 >
                                   ¥ {amount.toLocaleString()}

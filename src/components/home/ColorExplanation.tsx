@@ -7,8 +7,8 @@ interface ColorExplanationProps {
 }
 
 const ColorExplanation = (props: ColorExplanationProps) => {
-  const payerColor = (payerUserId: string): React.CSSProperties | undefined => {
-    let color = '';
+  const payerColorBox = (payerUserId: string): React.CSSProperties => {
+    let color!: string;
 
     if (props.approvedGroup !== undefined) {
       for (const groupUser of props.approvedGroup.approved_users_list) {
@@ -34,7 +34,7 @@ const ColorExplanation = (props: ColorExplanationProps) => {
                 <div key={group.user_id} className="color-explanation__payer-position">
                   <span
                     className="color-explanation__payer-color"
-                    style={payerColor(group.user_id)}
+                    style={payerColorBox(group.user_id)}
                   />
                   <span>{group.user_name}</span>
                 </div>
