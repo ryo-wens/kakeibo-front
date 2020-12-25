@@ -72,9 +72,9 @@ const GroupCustomBudgets = () => {
               <th align="center">予算</th>
             </tr>
             {groupCustomBudgets.map((groupCustomBudget, index) => {
-              const onChangeBudget = (event: { target: { value: string } }) => {
-                const newBudgets = [...groupCustomBudgets];
-                newBudgets[index].budget = (event.target.value as unknown) as number;
+              const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
+                const newBudgets = groupCustomBudgets.concat();
+                newBudgets[index].budget = Number(event.target.value);
                 setGroupCustomBudgets(newBudgets);
                 setEditing(true);
               };
@@ -112,11 +112,10 @@ const GroupCustomBudgets = () => {
                   Number(id),
                   groupCustomBudgets.map((groupBudget) => {
                     let { big_category_name, last_month_expenses, ...rest } = groupBudget; // eslint-disable-line
-                    rest = {
+                    return {
                       big_category_id: rest.big_category_id,
                       budget: Number(rest.budget),
                     };
-                    return rest;
                   })
                 )
               );

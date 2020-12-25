@@ -75,7 +75,7 @@ const EditStandardBudgets = () => {
                 {
                   pathName !== 'group'
                     ? dispatch(push('/standard/budgets'))
-                    : dispatch(push(`/group/${Number(id)}/standard/budgets`));
+                    : dispatch(push(`/group/${id}/standard/budgets`));
                 }
               }}
             >
@@ -86,95 +86,90 @@ const EditStandardBudgets = () => {
               onClick={() => {
                 pathName !== 'group'
                   ? dispatch(push('/yearly/budgets'))
-                  : dispatch(push(`/group/${Number(id)}/yearly/budgets`));
+                  : dispatch(push(`/group/${id}/yearly/budgets`));
               }}
             >
               月別カスタム予算
             </Button>
           </ButtonGroup>
         </div>
-        {(() => {
-          if (pathName !== 'group') {
-            return (
-              <>
-                <div className="budget__spacer budget__spacer--medium" />
-                <div className="budget budget__background budget__background__table">
-                  <div className="budget__spacer budget__spacer--medium" />
-                  <div className="budget__total-budget budget__total-budget__position">
-                    カスタム予算追加
-                  </div>
-                  <div className="budget__total-budget budget__total-budget__space">
-                    {yearsInPersonal}
-                  </div>
-                  <div className="budget__total-budget budget__total-budget__space">
-                    総予算 ¥ {totalStandardBudget}
-                  </div>
-                  <div className="budget__spacer budget__spacer--medium" />
-                  <table className="budget budget__background__table">
-                    <tbody>
-                      <tr className="budget__th">
-                        <th align="center">カテゴリー</th>
-                        <th align="center">先月の支出</th>
-                        <th align="center">予算</th>
+        {pathName !== 'group' ? (
+          <>
+            <div className="budget__spacer budget__spacer--medium" />
+            <div className="budget budget__background budget__background__table">
+              <div className="budget__spacer budget__spacer--medium" />
+              <div className="budget__total-budget budget__total-budget__position">
+                カスタム予算追加
+              </div>
+              <div className="budget__total-budget budget__total-budget__space">
+                {yearsInPersonal}
+              </div>
+              <div className="budget__total-budget budget__total-budget__space">
+                総予算 ¥ {totalStandardBudget}
+              </div>
+              <div className="budget__spacer budget__spacer--medium" />
+              <table className="budget budget__background__table">
+                <tbody>
+                  <tr className="budget__th">
+                    <th align="center">カテゴリー</th>
+                    <th align="center">先月の支出</th>
+                    <th align="center">予算</th>
+                  </tr>
+                  {customBudgets.map((customBudget, index) => {
+                    const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
+                      const newBudgets = customBudgets.concat();
+                      newBudgets[index].budget = Number(event.target.value);
+                      setCustomBudgets(newBudgets);
+                    };
+                    return (
+                      <tr key={customBudget.big_category_id}>
+                        <td className="budget__td" scope="row">
+                          {customBudget.big_category_name}
+                        </td>
+                        <td className="budget__td">￥ {customBudget.last_month_expenses}</td>
+                        <td className="budget__td" align="center">
+                          <TextField
+                            size={'small'}
+                            id={'budgets'}
+                            variant="outlined"
+                            type={'number'}
+                            value={customBudget.budget}
+                            onChange={onChangeBudget}
+                          />
+                        </td>
                       </tr>
-                      {customBudgets.map((customBudget, index) => {
-                        const onChangeBudget = (event: { target: { value: string } }) => {
-                          const newBudgets = [...customBudgets];
-                          newBudgets[index].budget = (event.target.value as unknown) as number;
-                          setCustomBudgets(newBudgets);
-                        };
-                        return (
-                          <tr key={customBudget.big_category_id}>
-                            <td className="budget__td" scope="row">
-                              {customBudget.big_category_name}
-                            </td>
-                            <td className="budget__td">￥ {customBudget.last_month_expenses}</td>
-                            <td className="budget__td" align="center">
-                              <TextField
-                                size={'small'}
-                                id={'budgets'}
-                                variant="outlined"
-                                type={'number'}
-                                value={customBudget.budget}
-                                onChange={onChangeBudget}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                  <div className="budget__spacer budget__spacer--medium" />
-                  <div className="budget__submit-btn">
-                    <GenericButton
-                      label={'更新する'}
-                      disabled={unInputBudgets}
-                      onClick={() => {
-                        dispatch(
-                          addCustomBudgets(
-                            selectYear,
-                            selectMonth,
-                            customBudgets.map((budget) => {
-                              let { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
-                              rest = {
-                                big_category_id: rest.big_category_id,
-                                budget: Number(rest.budget),
-                              };
-                              return rest;
-                            })
-                          )
-                        );
-                        dispatch(push('/yearly/budgets'));
-                      }}
-                    />
-                  </div>
-                </div>
-              </>
-            );
-          } else {
-            return <EditGroupStandardBudgets />;
-          }
-        })()}
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div className="budget__spacer budget__spacer--medium" />
+              <div className="budget__submit-btn">
+                <GenericButton
+                  label={'更新する'}
+                  disabled={unInputBudgets}
+                  onClick={() => {
+                    dispatch(
+                      addCustomBudgets(
+                        selectYear,
+                        selectMonth,
+                        customBudgets.map((budget) => {
+                          let { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
+                          return {
+                            big_category_id: rest.big_category_id,
+                            budget: Number(rest.budget),
+                          };
+                        })
+                      )
+                    );
+                    dispatch(push('/yearly/budgets'));
+                  }}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <EditGroupStandardBudgets />
+        )}
       </main>
     </>
   );

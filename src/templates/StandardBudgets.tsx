@@ -70,7 +70,7 @@ const StandardBudgets = () => {
                 {
                   pathName !== 'group'
                     ? dispatch(push('/standard/budgets'))
-                    : dispatch(push(`/group/${Number(id)}/standard/budgets`));
+                    : dispatch(push(`/group/${id}/standard/budgets`));
                 }
               }}
             >
@@ -81,89 +81,84 @@ const StandardBudgets = () => {
               onClick={() => {
                 pathName !== 'group'
                   ? dispatch(push('/yearly/budgets'))
-                  : dispatch(push(`/group/${Number(id)}/yearly/budgets`));
+                  : dispatch(push(`/group/${id}/yearly/budgets`));
               }}
             >
               月別カスタム予算
             </Button>
           </ButtonGroup>
         </div>
-        {(() => {
-          if (pathName !== 'group') {
-            return (
-              <>
-                <div className="budget__spacer budget__spacer--medium" />
-                <div className="budget budget__background budget__background__table">
-                  <div className="budget__spacer budget__spacer--medium" />
-                  <div className="budget__total-budget budget__total-budget__position">
-                    標準予算設定
-                  </div>
-                  <div className="budget__total-budget budget__total-budget__space">
-                    総予算 ¥ {totalStandardBudget}
-                  </div>
-                  <div className="budget__spacer budget__spacer--medium" />
-                  <table className="budget budget__background__table">
-                    <tbody>
-                      <tr className="budget__th">
-                        <th align="center">カテゴリー</th>
-                        <th align="center">先月の支出</th>
-                        <th align="center">予算</th>
+        {pathName !== 'group' ? (
+          <>
+            <div className="budget__spacer budget__spacer--medium" />
+            <div className="budget budget__background budget__background__table">
+              <div className="budget__spacer budget__spacer--medium" />
+              <div className="budget__total-budget budget__total-budget__position">
+                標準予算設定
+              </div>
+              <div className="budget__total-budget budget__total-budget__space">
+                総予算 ¥ {totalStandardBudget}
+              </div>
+              <div className="budget__spacer budget__spacer--medium" />
+              <table className="budget budget__background__table">
+                <tbody>
+                  <tr className="budget__th">
+                    <th align="center">カテゴリー</th>
+                    <th align="center">先月の支出</th>
+                    <th align="center">予算</th>
+                  </tr>
+                  {budgets.map((budget, index) => {
+                    const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
+                      const newBudgets = budgets.concat();
+                      newBudgets[index].budget = Number(event.target.value);
+                      setBudgets(newBudgets);
+                    };
+                    return (
+                      <tr key={budget.big_category_id}>
+                        <td className="budget__td" scope="row">
+                          {budget.big_category_name}
+                        </td>
+                        <td className="budget__td">￥ {budget.last_month_expenses}</td>
+                        <td className="budget__td" align="center">
+                          <TextField
+                            size={'small'}
+                            id={'budgets'}
+                            variant="outlined"
+                            type={'number'}
+                            value={budget.budget}
+                            onChange={onChangeBudget}
+                          />
+                        </td>
                       </tr>
-                      {budgets.map((budget, index) => {
-                        const onChangeBudget = (event: { target: { value: string } }) => {
-                          const newBudgets = [...budgets];
-                          newBudgets[index].budget = (event.target.value as unknown) as number;
-                          setBudgets(newBudgets);
-                        };
-                        return (
-                          <tr key={budget.big_category_id}>
-                            <td className="budget__td" scope="row">
-                              {budget.big_category_name}
-                            </td>
-                            <td className="budget__td">￥ {budget.last_month_expenses}</td>
-                            <td className="budget__td" align="center">
-                              <TextField
-                                size={'small'}
-                                id={'budgets'}
-                                variant="outlined"
-                                type={'number'}
-                                value={budget.budget}
-                                onChange={onChangeBudget}
-                              />
-                            </td>
-                          </tr>
-                        );
-                      })}
-                    </tbody>
-                  </table>
-                  <div className="budget__spacer budget__spacer--medium" />
-                  <div className="budget__submit-btn">
-                    <GenericButton
-                      label={'更新する'}
-                      disabled={unEditBudgets}
-                      onClick={() => {
-                        dispatch(
-                          editStandardBudgets(
-                            budgets.map((budget) => {
-                              let { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
-                              rest = {
-                                big_category_id: rest.big_category_id,
-                                budget: Number(rest.budget),
-                              };
-                              return rest;
-                            })
-                          )
-                        );
-                      }}
-                    />
-                  </div>
-                </div>
-              </>
-            );
-          } else {
-            return <GroupStandardBudgets />;
-          }
-        })()}
+                    );
+                  })}
+                </tbody>
+              </table>
+              <div className="budget__spacer budget__spacer--medium" />
+              <div className="budget__submit-btn">
+                <GenericButton
+                  label={'更新する'}
+                  disabled={unEditBudgets}
+                  onClick={() => {
+                    dispatch(
+                      editStandardBudgets(
+                        budgets.map((budget) => {
+                          let { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
+                          return {
+                            big_category_id: rest.big_category_id,
+                            budget: Number(rest.budget),
+                          };
+                        })
+                      )
+                    );
+                  }}
+                />
+              </div>
+            </div>
+          </>
+        ) : (
+          <GroupStandardBudgets />
+        )}
       </main>
     </>
   );
