@@ -68,12 +68,14 @@ const initialState = {
     groupTasksList: [],
   },
   shoppingList: {
+    loading: false,
     expiredShoppingList: [],
     regularShoppingList: [],
     todayShoppingList: [],
     todayShoppingListByCategories: [],
     monthlyShoppingList: [],
     monthlyShoppingListByCategories: [],
+    errorMessage: '',
   },
   todoList: {
     expiredTodoList: [],

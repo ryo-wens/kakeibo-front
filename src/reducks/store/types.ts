@@ -68,12 +68,14 @@ export interface State {
     groupTasksList: GroupTasksList;
   };
   shoppingList: {
+    loading: boolean;
     regularShoppingList: RegularShoppingList;
     todayShoppingList: ShoppingList;
     todayShoppingListByCategories: ShoppingListByCategories;
     monthlyShoppingList: ShoppingList;
     monthlyShoppingListByCategories: ShoppingListByCategories;
     expiredShoppingList: ShoppingList;
+    errorMessage: string;
   };
   todoList: {
     expiredTodoList: TodoList;

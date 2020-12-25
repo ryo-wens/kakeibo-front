@@ -17,6 +17,7 @@ const store = mockStore({ shoppingList: [], modal: [], router: [] });
 const getState = () => {
   return {
     shoppingList: {
+      loading: false,
       expiredShoppingList: [],
       regularShoppingList: [
         {
@@ -132,6 +133,7 @@ const getState = () => {
           ],
         },
       ],
+      errorMessage: '',
     },
     modal: {
       message: '',
@@ -188,6 +190,7 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.FETCH_TODAY_SHOPPING_LIST,
         payload: {
+          loading: false,
           regularShoppingList: [
             {
               id: 1,

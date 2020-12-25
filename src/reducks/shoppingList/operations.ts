@@ -1,8 +1,8 @@
 import { Action, Dispatch } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
-import { errorHandling } from '../../lib/validation';
 import { FetchTodayShoppingListRes, RegularShoppingList, ShoppingList } from './types';
-import { fetchTodayShoppingListAction } from './actions';
+import { failedFetchDataAction, fetchTodayShoppingListAction } from './actions';
+import { push } from 'connected-react-router';
 
 export const fetchTodayShoppingList = (
   year: string,
@@ -27,7 +27,10 @@ export const fetchTodayShoppingList = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        errorHandling(dispatch, error);
+        dispatch(failedFetchDataAction(error.response.data.error.message));
+        if (error.response.status === 401) {
+          dispatch(push('/login'));
+        }
       }
     }
   };
