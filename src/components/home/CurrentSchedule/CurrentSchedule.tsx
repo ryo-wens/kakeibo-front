@@ -15,7 +15,7 @@ import {
 } from '../../../reducks/groupTodoList/selectors';
 import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operations';
 import SwitchItemTabs from '../../uikit/tabs/SwitchItemTabs';
-import TodayTodoList from '../../todo/page/today-todo-area/today-todo-list/TodayTodoList';
+import TodayTodoList from '../../todo/Page/TodayTodoArea/TodayTodoList/TodayTodoList';
 
 const CurrentSchedule = () => {
   const dispatch = useDispatch();

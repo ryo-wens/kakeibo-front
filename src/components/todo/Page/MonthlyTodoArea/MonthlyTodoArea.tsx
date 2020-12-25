@@ -18,7 +18,7 @@ import {
 import { fetchGroups } from '../../../../reducks/groups/operations';
 import { fetchMonthTodoList } from '../../../../reducks/todoList/operations';
 import InputYears from '../../../uikit/InputYears';
-import MonthlyTodoList from './monthly-todo-list/MonthlyTodoList';
+import MonthlyTodoList from './MonthlyTodoList/MonthlyTodoList';
 import './monthly-todo-area.scss';
 import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
 

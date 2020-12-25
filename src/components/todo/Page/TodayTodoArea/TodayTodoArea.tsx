@@ -18,7 +18,7 @@ import {
 } from '../../../../reducks/groupTodoList/selectors';
 import { useLocation, useParams } from 'react-router';
 import { date } from '../../../../lib/constant';
-import TodayTodoList from './today-todo-list/TodayTodoList';
+import TodayTodoList from './TodayTodoList/TodayTodoList';
 import { AddTodo } from '../../index';
 import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
 

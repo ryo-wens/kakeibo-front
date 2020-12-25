@@ -113,7 +113,7 @@ export const createTodoListItem = (
 
           nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
         } else if (dateToDateString(today) <= responseDate) {
-          nextTodoList = prevTodoList.concat();
+          nextTodoList = prevTodoList;
         }
         return nextTodoList;
       };
@@ -123,7 +123,7 @@ export const createTodoListItem = (
         if (dateToDateString(today) === responseDate) {
           nextTodoList = [newTodoListItem].concat(prevTodoList);
         } else if (dateToDateString(today) !== responseDate) {
-          nextTodoList = prevTodoList.concat();
+          nextTodoList = prevTodoList;
         }
         return nextTodoList;
       };
@@ -146,7 +146,7 @@ export const createTodoListItem = (
 
           nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
         } else if (dateToYearAndMonthString(selectedDate) !== responseMonth) {
-          nextTodoList = prevTodoList.concat();
+          nextTodoList = prevTodoList;
         }
         return nextTodoList;
       };
@@ -290,7 +290,12 @@ export const editTodoListItem = (
             nextTodoList = pushResponseTodoListItem(idx, prevTodoList, result.data);
           }
         } else if (dateToDateString(today) <= responseDate) {
-          nextTodoList = prevTodoList.concat();
+          if (prevItemIdx !== -1) {
+            prevTodoList.splice(prevItemIdx, 1);
+            nextTodoList = prevTodoList.concat();
+          } else if (prevItemIdx === -1) {
+            nextTodoList = prevTodoList;
+          }
         }
         return nextTodoList;
       };

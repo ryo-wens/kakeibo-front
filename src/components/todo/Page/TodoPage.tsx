@@ -13,8 +13,8 @@ import axios from 'axios';
 import { useLocation, useParams } from 'react-router';
 import './todo-page.scss';
 import SwitchTodayOrMonthlyButton from '../SwitchTodayOrMonthlyButton';
-import TodayTodoArea from './today-todo-area/TodayTodoArea';
-import MonthlyTodoArea from './monthly-todo-area/MonthlyTodoArea';
+import TodayTodoArea from './TodayTodoArea/TodayTodoArea';
+import MonthlyTodoArea from './MonthlyTodoArea/MonthlyTodoArea';
 
 const TodoPage = () => {
   const dispatch = useDispatch();
