@@ -7,17 +7,20 @@ interface ColorExplanationProps {
 }
 
 const ColorExplanation = (props: ColorExplanationProps) => {
-  const payerColorBox = (payerUserId: string): React.CSSProperties => {
-    let color!: string;
+  const payerColorBox = (payerUserId?: string): React.CSSProperties => {
+    let color = '';
 
-    if (props.approvedGroup !== undefined) {
-      for (const groupUser of props.approvedGroup.approved_users_list) {
-        if (groupUser.user_id === payerUserId) {
-          color = groupUser.color_code;
+    if (props.approvedGroup) {
+      if (props.approvedGroup.approved_users_list) {
+        const approvedUser = props.approvedGroup.approved_users_list.find(
+          (user) => user.user_id === payerUserId
+        );
+
+        if (approvedUser) {
+          color = approvedUser.color_code;
         }
       }
     }
-
     return { backgroundColor: color, boxSizing: 'border-box' };
   };
 
