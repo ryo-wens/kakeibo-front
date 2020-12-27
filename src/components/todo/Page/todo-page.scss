@@ -1,15 +1,16 @@
-@import "../variable";
+@import "../../../assets/variable";
+@import "../../../assets/modules/task-btn";
 
-.monthly-todo {
+.todo-page {
   width: 100%;
   display: flex;
 
-  &__monthly-list {
+  &__today-list {
     width: calc((100% - 60px) * 0.7);
     margin-left: 20px;
   }
 
-  &__monthly-list-content {
+  &__today-list-content {
     background-color: white;
     border-radius: 0.6rem;
     padding: 20px;
@@ -31,7 +32,21 @@
     margin-bottom: 30px;
   }
 
-  &__switch-todo-list {
+  &__search {
+    @extend .task--btn;
+    height: 40px;
+    margin-left: 20px;
+  }
+
+  &__today-date {
+    display: inline-block;
+    color: $task-main_color;
+    font-size: 1.2rem;
+    font-weight: bold;
+    margin: 0 0 10px 10px;
+  }
+
+  &__switch-schedule-todo-list {
     background-color: #F4F5F7;
     border-radius: 0.6rem;
     padding: 25px 0;
@@ -41,9 +56,5 @@
       width: 60%;
       margin: auto;
     }
-  }
-
-  &__spacer {
-    margin-bottom: 20px;
   }
 }

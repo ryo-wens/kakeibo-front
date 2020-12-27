@@ -12,6 +12,7 @@ import { createTodoListItem } from '../../reducks/todoList/operations';
 import { createGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathTemplateName } from '../../lib/path';
 import { date } from '../../lib/constant';
+import { useParams } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -33,7 +34,6 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface AddTodoProps {
   date: Date;
-  groupId?: number;
 }
 
 const AddTodo = (props: AddTodoProps) => {
@@ -46,6 +46,7 @@ const AddTodo = (props: AddTodoProps) => {
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(props.date);
   const entityType = getPathTemplateName(window.location.pathname);
+  const { id } = useParams();
   const today = date;
 
   const handleOpen = () => {
@@ -88,10 +89,10 @@ const AddTodo = (props: AddTodoProps) => {
           todoContent
         )
       );
-    } else if (entityType === 'group' && typeof props.groupId === 'number') {
+    } else if (entityType === 'group') {
       return dispatch(
         createGroupTodoListItem(
-          props.groupId,
+          Number(id),
           today,
           props.date,
           selectedImplementationDate,

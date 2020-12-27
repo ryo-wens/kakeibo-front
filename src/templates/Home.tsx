@@ -18,7 +18,7 @@ import { getCurrentMonthBudgets } from '../reducks/budgets/selectors';
 import { getCurrentMonthGroupBudget } from '../reducks/groupBudgets/selectors';
 import { fetchYearlyBudgets } from '../reducks/budgets/operations';
 import { fetchGroupYearlyBudgets } from '../reducks/groupBudgets/operations';
-import CurrentSchedule from '../components/home/current-schedule/CurrentSchedule';
+import CurrentSchedule from '../components/home/CurrentSchedule/CurrentSchedule';
 
 const Home = () => {
   const dispatch = useDispatch();

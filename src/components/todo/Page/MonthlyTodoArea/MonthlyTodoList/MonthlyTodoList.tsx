@@ -1,14 +1,13 @@
 import React from 'react';
-import { AddTodo, TodoListItemComponent } from '../../index';
-import { TodoList } from '../../../../reducks/todoList/types';
+import { AddTodo, TodoListItemComponent } from '../../../index';
+import { TodoList } from '../../../../../reducks/todoList/types';
 import {
   dateStringToDate,
   getWeekDay,
   getLastDayOfMonth,
   getFirstDayOfMonth,
-} from '../../../../lib/date';
-import { useParams } from 'react-router';
-import { GroupTodoList } from '../../../../reducks/groupTodoList/types';
+} from '../../../../../lib/date';
+import { GroupTodoList } from '../../../../../reducks/groupTodoList/types';
 
 interface MonthlyTodoListProps {
   planName: string;
@@ -22,7 +21,6 @@ const MonthlyTodoList = (props: MonthlyTodoListProps) => {
   const dt: Date = props.selectedDate !== null ? props.selectedDate : new Date();
   const selectedDate = new Date(dt);
   const lastDayOfMonth = getLastDayOfMonth(selectedDate);
-  const { id } = useParams();
 
   const month = (todoList: TodoList | GroupTodoList, selectedDate: Date) => {
     const month = [];
@@ -55,7 +53,7 @@ const MonthlyTodoList = (props: MonthlyTodoListProps) => {
             {date.getMonth() + 1}/{date.getDate()} （{getWeekDay(date)}）
           </p>
           {dateTodoLists}
-          <AddTodo date={date} groupId={Number(id)} />
+          <AddTodo date={date} />
         </div>
       );
     }
