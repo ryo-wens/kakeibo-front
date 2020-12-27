@@ -115,7 +115,7 @@ const EditGroupStandardBudgets = () => {
                   groupInMonth,
                   Number(id),
                   groupCustomBudgets.map((groupCustomBudget) => {
-                    let { big_category_name, last_month_expenses, ...rest } = groupCustomBudget; // eslint-disable-line
+                    const { big_category_name, last_month_expenses, ...rest } = groupCustomBudget; // eslint-disable-line
                     return {
                       big_category_id: rest.big_category_id,
                       budget: Number(rest.budget),

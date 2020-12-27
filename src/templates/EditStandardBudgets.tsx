@@ -153,7 +153,7 @@ const EditStandardBudgets = () => {
                         selectYear,
                         selectMonth,
                         customBudgets.map((budget) => {
-                          let { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
+                          const { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
                           return {
                             big_category_id: rest.big_category_id,
                             budget: Number(rest.budget),

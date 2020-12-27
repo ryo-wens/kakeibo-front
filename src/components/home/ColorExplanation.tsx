@@ -8,7 +8,7 @@ interface ColorExplanationProps {
 
 const ColorExplanation = (props: ColorExplanationProps) => {
   const payerColorBox = (payerUserId?: string): React.CSSProperties => {
-    let color = '';
+    let color;
 
     if (props.approvedGroup) {
       if (props.approvedGroup.approved_users_list) {
