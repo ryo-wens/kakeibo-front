@@ -5,82 +5,34 @@ import {
   addGroupCustomBudgets,
   copyGroupStandardBudgets,
 } from '../../reducks/groupBudgets/operations';
-import { State } from '../../reducks/store/types';
 import { GroupCustomBudgetsList } from '../../reducks/groupBudgets/types';
-import { getGroupCustomBudgets } from '../../reducks/groupBudgets/selectors';
-import { makeStyles, createStyles, Theme } from '@material-ui/core/styles';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
+import {
+  getGroupCustomBudgets,
+  getGroupTotalStandardBudget,
+} from '../../reducks/groupBudgets/selectors';
 import TextField from '@material-ui/core/TextField';
 import { push } from 'connected-react-router';
-import TableContainer from '@material-ui/core/TableContainer';
-import Paper from '@material-ui/core/Paper';
-import Table from '@material-ui/core/Table';
-import TableHead from '@material-ui/core/TableHead';
-import TableBody from '@material-ui/core/TableBody';
 import GenericButton from '../uikit/GenericButton';
-import { getPathGroupId, getGroupPathYear, getGroupPathMonth } from '../../lib/path';
+import { getGroupPathYear, getGroupPathMonth } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
 import axios, { CancelTokenSource } from 'axios';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    root: {
-      margin: '0 auto',
-      flexDirection: 'column',
-      alignItems: 'center',
-      '& > *': {
-        margin: theme.spacing(1),
-      },
-    },
-    tablePosition: {
-      margin: '0 auto',
-      marginTop: 40,
-      alignItems: 'center',
-      tableLayout: 'fixed',
-      width: '100%',
-    },
-    tableSize: {
-      width: 250,
-      textAlign: 'center',
-    },
-    buttonSize: {
-      width: 360,
-      marginTop: 40,
-      backgroundColor: '#fff',
-      margin: '0 auto',
-    },
-    buttonGroupPosition: {
-      margin: '0 auto',
-      marginLeft: '7%',
-    },
-    updateButton: {
-      textAlign: 'center',
-    },
-    tableTop: {
-      backgroundColor: '#4db5fa',
-    },
-    tableMain: {
-      border: 'solid 1px #e1e3e3',
-    },
-  })
-);
+import { useParams } from 'react-router';
 
 const EditGroupStandardBudgets = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
-  const groupId = getPathGroupId(window.location.pathname);
+  const { id } = useParams();
   const groupInYear = getGroupPathYear(window.location.pathname);
   const groupInMonth = getGroupPathMonth(window.location.pathname);
-  const selector = useSelector((state: State) => state);
-  const groupCustomBudgetsList = getGroupCustomBudgets(selector);
+  const yearsInGroup = `${groupInYear}年${groupInMonth}月`;
+  const groupCustomBudgetsList = useSelector(getGroupCustomBudgets);
+  const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
   const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
-  const unInputBudgets = groupCustomBudgets === groupCustomBudgetsList;
+  const unAddCustomBudgets = groupCustomBudgets === groupCustomBudgetsList;
   const [editing, setEditing] = useState<boolean>(false);
 
   const fetchEditGroupStandardBudgetsData = (signal: CancelTokenSource) => {
     async function fetchGroupBudgets(signal: CancelTokenSource) {
-      await dispatch(fetchGroupStandardBudgets(groupId, signal));
+      await dispatch(fetchGroupStandardBudgets(Number(id), signal));
       dispatch(copyGroupStandardBudgets());
       dispatch(fetchGroups(signal));
     }
@@ -107,75 +59,75 @@ const EditGroupStandardBudgets = () => {
 
   return (
     <>
-      <TableContainer className={classes.tablePosition} component={Paper}>
-        <Table>
-          <TableHead>
-            <TableRow>
-              <TableCell className={classes.tableTop} align="center">
-                カテゴリー
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                先月の支出
-              </TableCell>
-              <TableCell className={classes.tableTop} align="center">
-                予算
-              </TableCell>
-            </TableRow>
-          </TableHead>
-          <TableBody>
+      <div className="budget__spacer budget__spacer--medium" />
+      <div className="budget budget__background budget__background__table">
+        <div className="budget__spacer budget__spacer--medium" />
+        <div className="budget__total-budget budget__total-budget__position">標準予算設定</div>
+        <div className="budget__total-budget budget__total-budget__space">{yearsInGroup}</div>
+        <div className="budget__total-budget budget__total-budget__space">
+          総予算 ¥ {groupTotalStandardBudget}
+        </div>
+        <div className="budget__spacer budget__spacer--medium" />
+        <table className="budget budget__background__table">
+          <tbody>
+            <tr className="budget__th">
+              <th align="center">カテゴリー</th>
+              <th align="center">先月の支出</th>
+              <th align="center">予算</th>
+            </tr>
             {groupCustomBudgets.map((groupCustomBudget, index) => {
-              const onChangeBudget = (event: { target: { value: string } }) => {
-                const newBudgets = [...groupCustomBudgets];
-                newBudgets[index].budget = (event.target.value as unknown) as number;
+              const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
+                const newBudgets = groupCustomBudgets.concat();
+                newBudgets[index].budget = Number(event.target.value);
                 setGroupCustomBudgets(newBudgets);
                 setEditing(true);
               };
               return (
-                <TableRow key={groupCustomBudget.big_category_id}>
-                  <TableCell className={classes.tableSize} component="th" scope="row">
+                <tr key={groupCustomBudget.big_category_id}>
+                  <td className="budget__td" scope="row">
                     {groupCustomBudget.big_category_name}
-                  </TableCell>
-                  <TableCell className={classes.tableSize}>￥10,000</TableCell>
-                  <TableCell className={classes.tableSize} align="center">
+                  </td>
+                  <td className="budget__td">￥ {groupCustomBudget.last_month_expenses}</td>
+                  <td className="budget__td" align="center">
                     <TextField
                       size={'small'}
-                      id={'groupBudgets'}
+                      id={'budgets'}
                       variant="outlined"
                       type={'number'}
                       value={groupCustomBudget.budget}
                       onChange={onChangeBudget}
                     />
-                  </TableCell>
-                </TableRow>
+                  </td>
+                </tr>
               );
             })}
-          </TableBody>
-        </Table>
-      </TableContainer>
-      <div className={classes.updateButton}>
-        <GenericButton
-          label={'更新する'}
-          disabled={unInputBudgets}
-          onClick={() => {
-            dispatch(
-              addGroupCustomBudgets(
-                groupInYear,
-                groupInMonth,
-                groupId,
-                groupCustomBudgets.map((groupCustomBudget) => {
-                  let { big_category_name, ...rest } = groupCustomBudget; // eslint-disable-line
-                  rest = {
-                    big_category_id: rest.big_category_id,
-                    budget: Number(rest.budget),
-                  };
-                  return rest;
-                })
-              )
-            );
-            dispatch(push(`/group/${groupId}/yearly/budgets`));
-            setEditing(false);
-          }}
-        />
+          </tbody>
+        </table>
+        <div className="budget__spacer budget__spacer--medium" />
+        <div className="budget__submit-btn">
+          <GenericButton
+            label={'更新する'}
+            disabled={unAddCustomBudgets}
+            onClick={() => {
+              dispatch(
+                addGroupCustomBudgets(
+                  groupInYear,
+                  groupInMonth,
+                  Number(id),
+                  groupCustomBudgets.map((groupCustomBudget) => {
+                    const { big_category_name, last_month_expenses, ...rest } = groupCustomBudget; // eslint-disable-line
+                    return {
+                      big_category_id: rest.big_category_id,
+                      budget: Number(rest.budget),
+                    };
+                  })
+                )
+              );
+              dispatch(push(`/group/${id}/yearly/budgets`));
+              setEditing(false);
+            }}
+          />
+        </div>
       </div>
     </>
   );

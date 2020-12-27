@@ -108,3 +108,33 @@ export const getCurrentMonthGroupBudget = createSelector(
     return currentBudgetStatusList;
   }
 );
+
+const groupStandardBudgetsList = (state: State) => state.groupBudgets.groupStandardBudgetsList;
+
+export const getGroupTotalStandardBudget = createSelector(
+  [groupStandardBudgetsList],
+  (groupStandardBudgetsList) => {
+    let totalStandardBudget = 0;
+
+    for (let i = 0; i < groupStandardBudgetsList.length; i++) {
+      totalStandardBudget += groupStandardBudgetsList[i].budget;
+    }
+
+    return totalStandardBudget;
+  }
+);
+
+const groupCustomBudgetsList = (state: State) => state.groupBudgets.groupCustomBudgetsList;
+
+export const getTotalGroupCustomBudget = createSelector(
+  [groupCustomBudgetsList],
+  (groupCustomBudgetsList) => {
+    let totalCustomBudget = 0;
+
+    for (let i = 0; i < groupCustomBudgetsList.length; i++) {
+      totalCustomBudget += groupCustomBudgetsList[i].budget;
+    }
+
+    return totalCustomBudget;
+  }
+);

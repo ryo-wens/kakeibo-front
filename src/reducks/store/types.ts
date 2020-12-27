@@ -12,6 +12,7 @@ import {
 import { TodoList } from '../todoList/types';
 import { GroupTodoList } from '../groupTodoList/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
+import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
 
 export interface State {
   users: {
@@ -65,6 +66,16 @@ export interface State {
   groupTasks: {
     groupTasksListForEachUser: GroupTasksListForEachUser;
     groupTasksList: GroupTasksList;
+  };
+  shoppingList: {
+    loading: boolean;
+    regularShoppingList: RegularShoppingList;
+    todayShoppingList: ShoppingList;
+    todayShoppingListByCategories: ShoppingListByCategories;
+    monthlyShoppingList: ShoppingList;
+    monthlyShoppingListByCategories: ShoppingListByCategories;
+    expiredShoppingList: ShoppingList;
+    errorMessage: string;
   };
   todoList: {
     expiredTodoList: TodoList;
