@@ -1,7 +1,6 @@
 export { default as CustomBudgets } from './CustomBudgets';
 export { default as Home } from './Home';
 export { default as LogIn } from './LogIn';
-// export { default as MonthlyTodo } from './MonthlyTodo';
 export { default as EditStandardBudgets } from './EditStandardBudgets';
 export { default as SignUp } from './SignUp';
 export { default as StandardBudgets } from './StandardBudgets';
