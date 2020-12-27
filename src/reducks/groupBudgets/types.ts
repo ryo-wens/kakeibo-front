@@ -2,6 +2,7 @@ export interface GroupBudget {
   big_category_id: number;
   big_category_name: string;
   budget: number;
+  last_month_expenses: number;
 }
 
 export interface GroupMonthlyBudgets {
