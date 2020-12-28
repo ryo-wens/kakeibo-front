@@ -1,4 +1,4 @@
-import { colors } from './constant';
+import { colors } from './colorConstant';
 
 export const bigCategoryColor = (bigCategoryName: string) => {
   if (bigCategoryName === '食費') {
