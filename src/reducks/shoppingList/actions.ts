@@ -1,9 +1,10 @@
-import { RegularShoppingList, ShoppingList } from './types';
+import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from './types';
 export type ShoppingListActions = ReturnType<
   | typeof waitingFetchDataAction
   | typeof fetchTodayShoppingListAction
-  | typeof failedFetchDataAction
+  | typeof fetchTodayShoppingListByCategoriesAction
   | typeof fetchMonthlyShoppingListAction
+  | typeof failedFetchDataAction
 >;
 
 export const WAITING_FETCH_DATA = 'WAITING_FETCH_DATA';
@@ -27,6 +28,21 @@ export const fetchTodayShoppingListAction = (
       loading: false,
       regularShoppingList: regularShoppingList,
       todayShoppingList: todayShoppingList,
+    },
+  };
+};
+
+export const FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES = 'FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES';
+export const fetchTodayShoppingListByCategoriesAction = (
+  regularShoppingList: RegularShoppingList,
+  todayShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      loading: false,
+      regularShoppingList: regularShoppingList,
+      todayShoppingListByCategories: todayShoppingListByCategories,
     },
   };
 };

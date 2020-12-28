@@ -70,6 +70,11 @@ export interface FetchTodayShoppingListRes {
   shopping_list: ShoppingList;
 }
 
+export interface FetchTodayShoppingListByCategoriesRes {
+  regular_shopping_list: RegularShoppingList;
+  shopping_list_by_categories: ShoppingListByCategories;
+}
+
 export interface FetchMonthlyShoppingListRes {
   regular_shopping_list: RegularShoppingList;
   shopping_list: ShoppingList;

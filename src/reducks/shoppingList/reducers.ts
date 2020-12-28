@@ -17,6 +17,11 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FETCH_MONTHLY_SHOPPING_LIST:
       return {
         ...state,
