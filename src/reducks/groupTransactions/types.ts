@@ -67,6 +67,20 @@ export interface GroupAccountList {
   group_accounts_list: GroupAccounts;
 }
 
+export interface YearlyAccount {
+  month: string;
+  calculation_status: string;
+  payment_status: string;
+  receipt_status: string;
+}
+
+export interface YearlyAccounts extends Array<YearlyAccount> {}
+
+export interface GroupYearlyAccountList {
+  Year: string;
+  yearly_accounting_status: YearlyAccounts;
+}
+
 export interface GroupAccountListRes {
   message: string;
   group_id: number;

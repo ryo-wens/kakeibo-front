@@ -2,16 +2,19 @@ import {
   updateGroupTransactionsAction,
   updateGroupLatestTransactionsAction,
   fetchGroupAccountAction,
+  fetchGroupYearlyAccountListAction,
   addGroupAccountAction,
   editGroupAccountAction,
   deleteGroupAccountAction,
   searchGroupTransactionsAction,
+  failedFetchDataAction,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
 import {
   GroupTransactions,
   GroupTransactionsList,
+  GroupYearlyAccountList,
   FetchGroupTransactionsRes,
   GroupLatestTransactionsListRes,
   deleteActionRes,
@@ -406,6 +409,37 @@ export const fetchGroupAccount = (
   };
 };
 
+export const fetchGroupYearlyAccountList = (
+  groupId: number,
+  year: number,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<GroupYearlyAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const groupYearlyAccountList = result.data;
+
+      dispatch(fetchGroupYearlyAccountListAction(groupYearlyAccountList));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        dispatch(failedFetchDataAction(error.response.data.error.message));
+
+        if (error.response.status === 401) {
+          dispatch(push('/login'));
+        }
+      }
+    }
+  };
+};
+
 export const addGroupAccount = (groupId: number, year: number, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
@@ -420,7 +454,14 @@ export const addGroupAccount = (groupId: number, year: number, customMonth: stri
 
       dispatch(addGroupAccountAction(groupAccountList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        dispatch(failedFetchDataAction(error.response.data.error.message));
+        if (error.response.status === 401) {
+          dispatch(push('/login'));
+        }
+      }
     }
   };
 };

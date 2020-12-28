@@ -2,7 +2,7 @@ import React from 'react';
 import { PieChart, Pie, Cell, Tooltip, Label } from 'recharts';
 import { FetchTransactions } from '../../../reducks/transactions/types';
 import { GroupTransactions } from '../../../reducks/groupTransactions/types';
-import { colors } from '../../../lib/constant';
+import { colors } from '../../../lib/colorConstant';
 import './bar-chart.scss';
 
 interface HistoryPieChartProps {

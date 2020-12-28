@@ -19,6 +19,11 @@ export const getGroupAccountList = createSelector(
   (state) => state.groupAccountList
 );
 
+export const getGroupYearlyAccountList = createSelector(
+  [groupTransactionsSelector],
+  (state) => state.groupYearlyAccountList
+);
+
 export const getDeleteAccountMessage = createSelector(
   [groupTransactionsSelector],
   (state) => state.deletedMessage

@@ -2,7 +2,7 @@ import React from 'react';
 import { Cell, BarChart, Bar, XAxis, YAxis, Tooltip } from 'recharts';
 import { CurrentMonthBudgetStatusList } from '../../../reducks/budgets/types';
 import { CurrentMonthBudgetGroupStatusList } from '../../../reducks/groupBudgets/types';
-import { monthStatusColor, weekStatusColor, dayStatusColor } from '../../../lib/constant';
+import { monthStatusColor, weekStatusColor, dayStatusColor } from '../../../lib/colorConstant';
 import './bar-chart.scss';
 
 interface HistoryBarChartProps {
