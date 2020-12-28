@@ -62,6 +62,22 @@ export const fetchMonthlyShoppingListAction = (
   };
 };
 
+export const FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES =
+  'FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES';
+export const fetchMonthlyShoppingListByCategoriesAction = (
+  regularShoppingList: RegularShoppingList,
+  monthlyShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      loading: false,
+      regularShoppingList: regularShoppingList,
+      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+    },
+  };
+};
+
 export const FAILED_FETCH_DATA = 'FAILED_FETCH_DATA';
 export const failedFetchDataAction = (errorMessage: string) => {
   return {

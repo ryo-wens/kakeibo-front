@@ -1,6 +1,7 @@
 import { Action, Dispatch } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
 import {
+  FetchMonthlyShoppingListByCategoriesRes,
   FetchMonthlyShoppingListRes,
   FetchTodayShoppingListByCategoriesRes,
   FetchTodayShoppingListRes,
@@ -11,6 +12,7 @@ import {
 import {
   failedFetchDataAction,
   fetchMonthlyShoppingListAction,
+  fetchMonthlyShoppingListByCategoriesAction,
   fetchTodayShoppingListAction,
   fetchTodayShoppingListByCategoriesAction,
 } from './actions';
@@ -101,6 +103,43 @@ export const fetchMonthlyShoppingList = (
       const monthlyShoppingList: ShoppingList = result.data.shopping_list;
 
       dispatch(fetchMonthlyShoppingListAction(regularShoppingList, monthlyShoppingList));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        dispatch(failedFetchDataAction(error.response.data.error.message));
+        if (error.response.status === 401) {
+          dispatch(push('/login'));
+        }
+      }
+    }
+  };
+};
+
+export const fetchMonthlyShoppingListByCategories = (
+  year: string,
+  month: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
+      const monthlyShoppingListByCategories: ShoppingListByCategories =
+        result.data.shopping_list_by_categories;
+
+      dispatch(
+        fetchMonthlyShoppingListByCategoriesAction(
+          regularShoppingList,
+          monthlyShoppingListByCategories
+        )
+      );
     } catch (error) {
       if (axios.isCancel(error)) {
         return;
