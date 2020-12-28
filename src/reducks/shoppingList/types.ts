@@ -69,3 +69,8 @@ export interface FetchTodayShoppingListRes {
   regular_shopping_list: RegularShoppingList;
   shopping_list: ShoppingList;
 }
+
+export interface FetchMonthlyShoppingListRes {
+  regular_shopping_list: RegularShoppingList;
+  shopping_list: ShoppingList;
+}
