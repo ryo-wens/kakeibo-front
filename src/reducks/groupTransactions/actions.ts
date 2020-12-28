@@ -1,9 +1,12 @@
 import { GroupTransactionsList, GroupAccountList, GroupYearlyAccountList } from './types';
 
 export type groupTransactionsAction = ReturnType<
+  | typeof startFetchDataAction
+  | typeof failedFetchDataAction
   | typeof updateGroupTransactionsAction
   | typeof updateGroupLatestTransactionsAction
   | typeof fetchGroupAccountAction
+  | typeof fetchGroupYearlyAccountListAction
   | typeof addGroupAccountAction
   | typeof editGroupAccountAction
   | typeof deleteGroupAccountAction
@@ -13,8 +16,10 @@ export type groupTransactionsAction = ReturnType<
 export const WAITING_FETCH_DATA = 'WAITING_FETCH_DATA';
 export const startFetchDataAction = () => {
   return {
-    types: WAITING_FETCH_DATA,
-    payload: true,
+    type: WAITING_FETCH_DATA,
+    payload: {
+      loading: true,
+    },
   };
 };
 
