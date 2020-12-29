@@ -79,12 +79,13 @@ export const fetchMonthlyShoppingListByCategoriesAction = (
 };
 
 export const FAILED_FETCH_DATA = 'FAILED_FETCH_DATA';
-export const failedFetchDataAction = (errorMessage: string) => {
+export const failedFetchDataAction = (statusCode: number, errorMessage: string) => {
   return {
     type: FAILED_FETCH_DATA,
     payload: {
       loading: false,
-      errorMessage: errorMessage,
+      statusCode: statusCode,
+      message: errorMessage,
     },
   };
 };

@@ -75,7 +75,10 @@ export interface State {
     monthlyShoppingList: ShoppingList;
     monthlyShoppingListByCategories: ShoppingListByCategories;
     expiredShoppingList: ShoppingList;
-    errorMessage: string;
+    error: {
+      statusCode: number;
+      message: string;
+    };
   };
   todoList: {
     expiredTodoList: TodoList;

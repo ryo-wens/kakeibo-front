@@ -1,12 +1,11 @@
-import React from 'react';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import {
-  fetchMonthlyShoppingList,
-  fetchMonthlyShoppingListByCategories,
   fetchTodayShoppingList,
   fetchTodayShoppingListByCategories,
+  fetchMonthlyShoppingList,
+  fetchMonthlyShoppingListByCategories,
 } from '../../src/reducks/shoppingList/operations';
 import axios from 'axios';
 import * as ShoppingListActions from '../../src/reducks/shoppingList/actions';

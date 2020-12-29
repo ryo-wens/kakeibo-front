@@ -75,7 +75,10 @@ const initialState = {
     todayShoppingListByCategories: [],
     monthlyShoppingList: [],
     monthlyShoppingListByCategories: [],
-    errorMessage: '',
+    error: {
+      statusCode: 0,
+      message: '',
+    },
   },
   todoList: {
     expiredTodoList: [],

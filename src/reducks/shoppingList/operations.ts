@@ -16,7 +16,6 @@ import {
   fetchTodayShoppingListAction,
   fetchTodayShoppingListByCategoriesAction,
 } from './actions';
-import { push } from 'connected-react-router';
 
 export const fetchTodayShoppingList = (
   year: string,
@@ -41,10 +40,7 @@ export const fetchTodayShoppingList = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.data.error.message));
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
-        }
+        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
       }
     }
   };
@@ -76,10 +72,7 @@ export const fetchTodayShoppingListByCategories = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.data.error.message));
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
-        }
+        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
       }
     }
   };
@@ -107,10 +100,7 @@ export const fetchMonthlyShoppingList = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.data.error.message));
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
-        }
+        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
       }
     }
   };
@@ -144,10 +134,7 @@ export const fetchMonthlyShoppingListByCategories = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.data.error.message));
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
-        }
+        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
       }
     }
   };
