@@ -16,6 +16,7 @@ import {
   editGroupLatestTransactionsList,
   deleteGroupLatestTransactions,
   fetchGroupAccount,
+  fetchGroupYearlyAccountList,
   addGroupAccount,
   editGroupAccount,
   deleteGroupAccount,
@@ -35,6 +36,7 @@ import groupAccountList from './groupAccountList.json';
 import editGroupAccountList from './editGroupAccoountResponse.json';
 import deleteAccountResponse from './deleteGroupAccountResponse.json';
 import searchGroupTransactionsRes from './fetchSearchGroupTransactionsResponse.json';
+import groupYearlyAccountListRes from './groupYearlyAccountList.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -674,6 +676,36 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     await searchGroupTransactions(groupId, params)(store.dispatch);
+    expect(store.getActions()).toEqual(expectActions);
+  });
+
+  it('Get groupYearlyAccountList if fetch succeeds', async () => {
+    const store = mockStore({ groupTransactions: { groupYearlyAccountList: {} } });
+
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const groupId = 1;
+    const year = 2020;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = groupYearlyAccountListRes;
+
+    const expectActions = [
+      {
+        type: actionTypes.FETCH_GROUP_YEARLY_ACCOUNT,
+        payload: {
+          loading: false,
+          groupYearlyAccountList: mockResponse,
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupYearlyAccountList(groupId, year, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectActions);
   });
 });
