@@ -30,6 +30,7 @@ const initialState = {
     notHistoryMessage: '',
   },
   groupTransactions: {
+    loading: false,
     groupLatestTransactionsList: [],
     groupTransactionsList: [],
     groupSearchTransactionsList: [],
@@ -43,6 +44,10 @@ const initialState = {
       group_average_payment_amount: 0,
       group_remaining_amount: 0,
       group_accounts_list: [],
+    },
+    groupYearlyAccountList: {
+      year: '',
+      yearly_accounting_status: [],
     },
   },
   budgets: {

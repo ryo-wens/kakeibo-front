@@ -7,6 +7,16 @@ export const groupTransactionsReducer = (
   action: groupTransactionsAction
 ) => {
   switch (action.type) {
+    case Actions.WAITING_FETCH_DATA:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_DATA:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.UPDATE_GROUP_TRANSACTIONS:
       return {
         ...state,
@@ -21,6 +31,11 @@ export const groupTransactionsReducer = (
       return {
         ...state,
         groupAccountList: action.payload,
+      };
+    case Actions.FETCH_GROUP_YEARLY_ACCOUNT:
+      return {
+        ...state,
+        ...action.payload,
       };
     case Actions.ADD_GROUP_ACCOUNT:
       return {

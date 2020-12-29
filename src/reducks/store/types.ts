@@ -2,7 +2,11 @@ import { Categories } from '../categories/types';
 import { GroupCategories } from '../groupCategories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
-import { GroupTransactionsList, GroupAccountList } from '../groupTransactions/types';
+import {
+  GroupTransactionsList,
+  GroupAccountList,
+  GroupYearlyAccountList,
+} from '../groupTransactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import {
   GroupStandardBudgetsList,
@@ -50,6 +54,8 @@ export interface State {
     groupTransactionsList: GroupTransactionsList;
     groupSearchTransactionsList: GroupTransactionsList;
     groupAccountList: GroupAccountList;
+    groupYearlyAccountList: GroupYearlyAccountList;
+    loading: boolean;
     notAccountMessage: string;
     deletedMessage: string;
   };
