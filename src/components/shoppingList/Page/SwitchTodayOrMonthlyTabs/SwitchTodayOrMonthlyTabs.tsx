@@ -9,11 +9,14 @@ interface SwitchTodayOrMonthlyTabsProps {
 const SwitchTodayOrMonthlyTabs = (props: SwitchTodayOrMonthlyTabsProps) => {
   const [currentItems, setCurrentItems] = useState<number>(0);
 
+  const currentBtnTextColor = '#fff';
+  const currentBtnBgColor = '#5D6C89';
+
   const currentButtonStyle = (value: number) => {
     if (currentItems === value) {
       return {
-        color: '#fff',
-        backgroundColor: '#5D6C89',
+        color: currentBtnTextColor,
+        backgroundColor: currentBtnBgColor,
       };
     }
   };
