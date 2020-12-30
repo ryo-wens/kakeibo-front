@@ -84,8 +84,10 @@ export const failedFetchDataAction = (statusCode: number, errorMessage: string) 
     type: FAILED_FETCH_DATA,
     payload: {
       loading: false,
-      statusCode: statusCode,
-      message: errorMessage,
+      error: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
     },
   };
 };
