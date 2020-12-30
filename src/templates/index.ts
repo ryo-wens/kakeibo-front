@@ -10,3 +10,4 @@ export { default as History } from './History';
 export { default as DailyHistory } from './DailyHistory';
 export { default as YearlyBudgets } from './YearlyBudgets';
 export { default as PayOff } from './PayOff';
+export { default as YearlyAccount } from './YearlyAccount';

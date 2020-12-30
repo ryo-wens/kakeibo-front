@@ -12,6 +12,7 @@ import {
   History,
   Task,
   PayOff,
+  YearlyAccount,
 } from './templates';
 
 const Router = (): JSX.Element => {
@@ -30,7 +31,8 @@ const Router = (): JSX.Element => {
       <Route exact path={'/group/:id'} component={Home} />
       <Route exact path={'/group/:id/daily/history'} component={History} />
       <Route exact path={'/group/:id/weekly/history'} component={History} />
-      <Route exact path={'/group/:id/accounting'} component={PayOff} />
+      <Route exact path={'/group/:id/accounting'} component={YearlyAccount} />
+      <Route exact path={'/group/:id/accounting/:year/:month'} component={PayOff} />
       <Route exact path={'/group/:id/standard/budgets'} component={StandardBudgets} />
       <Route exact path={'/group/:id/custom/budgets/:year/:month'} component={CustomBudgets} />
       <Route exact path={'/group/:id/yearly/budgets'} component={YearlyBudgets} />

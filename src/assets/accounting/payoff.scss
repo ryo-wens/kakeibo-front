@@ -24,7 +24,7 @@
   }
 
   &__group-name {
-    font-size: medium;
+    font-size: 1.5rem;
     font-weight: bold;
     text-align: center;
 
@@ -41,7 +41,10 @@
   }
 
   &__account-btn {
-    background-color: orange;
+    background-color: $display-btn-main_color;
+    border: none;
+    box-shadow: 0 4px 6px rgba(0,0,0,0.2);
+    border-radius: 0.4rem;
     cursor: pointer;
     color: white;
     font-size: medium;
@@ -52,7 +55,11 @@
     }
 
     &:hover {
-      opacity: 0.7;
+      opacity: 0.8;
+    }
+
+    &--position {
+      text-align: center;
     }
   }
 
