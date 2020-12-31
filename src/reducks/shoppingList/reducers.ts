@@ -7,12 +7,27 @@ export const shoppingListReducers = (
   action: ShoppingListActions
 ) => {
   switch (action.type) {
-    case Actions.START_FETCH_DATA:
+    case Actions.WAITING_FETCH_DATA:
       return {
         ...state,
         ...action.payload,
       };
     case Actions.FETCH_TODAY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_MONTHLY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
       return {
         ...state,
         ...action.payload,
