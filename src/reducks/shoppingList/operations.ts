@@ -1,6 +1,7 @@
 import { Action, Dispatch } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
 import {
+  FetchExpiredShoppingListRes,
   FetchMonthlyShoppingListByCategoriesRes,
   FetchMonthlyShoppingListRes,
   FetchTodayShoppingListByCategoriesRes,
@@ -11,11 +12,35 @@ import {
 } from './types';
 import {
   failedFetchDataAction,
+  fetchExpiredShoppingListAction,
   fetchMonthlyShoppingListAction,
   fetchMonthlyShoppingListByCategoriesAction,
   fetchTodayShoppingListAction,
   fetchTodayShoppingListByCategoriesAction,
 } from './actions';
+
+export const fetchExpiredShoppingList = (signal: CancelTokenSource) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<FetchExpiredShoppingListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const expiredShoppingList: ShoppingList = result.data.expired_shopping_list;
+
+      dispatch(fetchExpiredShoppingListAction(expiredShoppingList));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
+      }
+    }
+  };
+};
 
 export const fetchTodayShoppingList = (
   year: string,

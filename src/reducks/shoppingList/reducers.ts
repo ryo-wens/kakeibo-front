@@ -12,6 +12,11 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_EXPIRED_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FETCH_TODAY_SHOPPING_LIST:
       return {
         ...state,
