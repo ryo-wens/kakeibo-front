@@ -1,6 +1,7 @@
 import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from './types';
 export type ShoppingListActions = ReturnType<
   | typeof waitingFetchDataAction
+  | typeof fetchExpiredShoppingListAction
   | typeof fetchTodayShoppingListAction
   | typeof fetchTodayShoppingListByCategoriesAction
   | typeof fetchMonthlyShoppingListAction
@@ -13,6 +14,17 @@ export const waitingFetchDataAction = () => {
     type: WAITING_FETCH_DATA,
     payload: {
       loading: true,
+    },
+  };
+};
+
+export const FETCH_EXPIRED_SHOPPING_LIST = 'FETCH_EXPIRED_SHOPPING_LIST';
+export const fetchExpiredShoppingListAction = (expiredShoppingList: ShoppingList) => {
+  return {
+    type: FETCH_EXPIRED_SHOPPING_LIST,
+    payload: {
+      loading: false,
+      expiredShoppingList: expiredShoppingList,
     },
   };
 };
