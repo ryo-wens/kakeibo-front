@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Header } from '../components/header';
 import TodoPage from '../components/todo/Page/TodoPage';
 import '../assets/todo/todo.scss';
+import ShoppingListPage from '../components/shoppingList/Page/ShoppingListPage';
 
 const Todo = () => {
   const [currentPage, setCurrentPage] = useState<number>(0);
@@ -36,6 +37,7 @@ const Todo = () => {
             {currentPageButton(1, '買い物リスト')}
           </div>
           {currentPage === 0 && <TodoPage />}
+          {currentPage === 1 && <ShoppingListPage />}
         </div>
       </main>
     </>

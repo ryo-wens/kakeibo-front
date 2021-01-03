@@ -88,3 +88,5 @@ export interface FetchMonthlyShoppingListByCategoriesRes {
   regular_shopping_list: RegularShoppingList;
   shopping_list_by_categories: ShoppingListByCategories;
 }
+
+export type TodayOrMonthly = 'today' | 'monthly';
