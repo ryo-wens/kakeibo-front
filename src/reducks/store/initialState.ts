@@ -36,7 +36,6 @@ const initialState = {
     groupSearchTransactionsList: [],
     notHistoryMessage: '',
     deletedMessage: '',
-    notAccountMessage: '',
     groupAccountList: {
       group_id: 0,
       month: '',
@@ -48,6 +47,11 @@ const initialState = {
     groupYearlyAccountList: {
       year: '',
       yearly_accounting_status: [],
+    },
+    groupTransactionsError: {
+      loading: false,
+      statusCode: 0,
+      errorMessage: '',
     },
   },
   budgets: {

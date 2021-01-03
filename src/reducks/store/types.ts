@@ -6,6 +6,7 @@ import {
   GroupTransactionsList,
   GroupAccountList,
   GroupYearlyAccountList,
+  ErrorInfo,
 } from '../groupTransactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import {
@@ -55,9 +56,9 @@ export interface State {
     groupSearchTransactionsList: GroupTransactionsList;
     groupAccountList: GroupAccountList;
     groupYearlyAccountList: GroupYearlyAccountList;
-    loading: boolean;
     notAccountMessage: string;
     deletedMessage: string;
+    groupTransactionsError: ErrorInfo;
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;

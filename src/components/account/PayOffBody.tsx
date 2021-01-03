@@ -4,13 +4,15 @@ import { useParams } from 'react-router';
 import { GroupAccountList } from '../../reducks/groupTransactions/types';
 import { Groups } from '../../reducks/groups/types';
 import { editGroupAccount } from '../../reducks/groupTransactions/operations';
-import { customMonth, year } from '../../lib/constant';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
 import '../../assets/accounting/payoff.scss';
 
 interface PayOffBodyPros {
   groupAccountList: GroupAccountList;
   approvedGroup: Groups;
+  selectMonth: string;
+  selectYear: string;
+  completeJudge: { completeJudge: boolean; completeMonth: string };
 }
 
 const PayOffBody = (props: PayOffBodyPros) => {
@@ -24,6 +26,13 @@ const PayOffBody = (props: PayOffBodyPros) => {
     group_total_payment_amount: 0,
     month: '',
   });
+  const currentSelectMonth = accountList.month.split('-')[1];
+  const completeMonth = props.completeJudge.completeMonth.split('-')[1];
+
+  const displayAccountList =
+    currentSelectMonth === props.selectMonth &&
+    props.groupAccountList.group_accounts_list !== undefined &&
+    !props.completeJudge.completeJudge;
 
   useEffect(() => {
     setAccountList(props.groupAccountList);
@@ -34,7 +43,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
     const groupUserList: { userId: string; userName: string }[] = [];
     for (const group of props.approvedGroup) {
       for (const user of group.approved_users_list) {
-        if (user.group_id === id) {
+        if (user.group_id === Number(id)) {
           groupUser = {
             userId: user.user_id,
             userName: user.user_name,
@@ -50,7 +59,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
   return (
     <>
       <div>
-        {props.groupAccountList.group_accounts_list !== undefined &&
+        {displayAccountList &&
           accountList.group_accounts_list.map((groupAccount) => {
             const transactionUserName = () => {
               const userName = {
@@ -105,8 +114,8 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                   editGroupAccount(
                                     props.groupAccountList,
                                     Number(id),
-                                    year,
-                                    customMonth
+                                    props.selectYear,
+                                    props.selectMonth
                                   )
                                 );
                                 return null;
@@ -126,8 +135,8 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                   editGroupAccount(
                                     props.groupAccountList,
                                     Number(id),
-                                    year,
-                                    customMonth
+                                    props.selectYear,
+                                    props.selectMonth
                                   )
                                 );
                                 return null;
@@ -159,8 +168,8 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                   editGroupAccount(
                                     props.groupAccountList,
                                     Number(id),
-                                    year,
-                                    customMonth
+                                    props.selectYear,
+                                    props.selectMonth
                                   )
                                 );
                                 return null;
@@ -180,8 +189,8 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                   editGroupAccount(
                                     props.groupAccountList,
                                     Number(id),
-                                    year,
-                                    customMonth
+                                    props.selectYear,
+                                    props.selectMonth
                                   )
                                 );
                               } else {
@@ -197,11 +206,17 @@ const PayOffBody = (props: PayOffBodyPros) => {
                 </div>
                 <div className="payoff__spacer-small" />
                 <li className="payoff__account-li payoff__sub-title payoff__sub-title__color-red">
-                  残支払金額 ￥ {groupAccount.payment_amount}
+                  残支払金額 ￥{' '}
+                  {groupAccount.payment_confirmation && groupAccount.receipt_confirmation
+                    ? 0
+                    : groupAccount.payment_amount}
                 </li>
               </div>
             );
           })}
+        {completeMonth === props.selectMonth && (
+          <p className="payoff__error-message">今月の支払・受取はありません。</p>
+        )}
       </div>
     </>
   );

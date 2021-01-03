@@ -15,7 +15,7 @@ export const groupTransactionsReducer = (
     case Actions.FAILED_FETCH_DATA:
       return {
         ...state,
-        ...action.payload,
+        groupTransactionsError: action.payload,
       };
     case Actions.UPDATE_GROUP_TRANSACTIONS:
       return {
@@ -57,6 +57,11 @@ export const groupTransactionsReducer = (
         ...state,
         ...action.payload,
       };
+    // case Actions.INFORM_ERROR_MESSAGE:
+    //   return {
+    //     ...state,
+    //     ...action.payload,
+    //   };
     default:
       return state;
   }

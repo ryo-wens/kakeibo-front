@@ -34,10 +34,41 @@ export const getSearchGroupTransactions = createSelector(
   (state) => state.groupSearchTransactionsList
 );
 
-export const getNotHistoryMessage = createSelector(
-  [groupTransactionsSelector],
-  (state) => state.notAccountMessage
-);
+const errorInfo = (state: State) => state.groupTransactions.groupTransactionsError;
+
+export const getStatusNotFoundMessage = createSelector([errorInfo], (errorInfo) => {
+  let errorMessage;
+
+  if (errorInfo.statusCode === 404) {
+    if (errorInfo.errorMessage) {
+      errorMessage = errorInfo.errorMessage;
+    }
+  }
+
+  return errorMessage;
+});
+
+const groupAccountList = (state: State) => state.groupTransactions.groupAccountList;
+
+export const getAccountCompleteJudgment = createSelector([groupAccountList], (groupAccountList) => {
+  const completeAccount = {
+    completeJudge: false,
+    completeMonth: '',
+  };
+
+  if (groupAccountList) {
+    if (groupAccountList.group_accounts_list) {
+      for (const account of groupAccountList.group_accounts_list) {
+        if (account.payer_user_id === null && account.recipient_user_id === null) {
+          completeAccount.completeJudge = true;
+          completeAccount.completeMonth = account.month;
+        }
+      }
+    }
+  }
+
+  return completeAccount;
+});
 
 const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
 

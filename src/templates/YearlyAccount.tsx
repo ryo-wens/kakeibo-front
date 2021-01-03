@@ -1,13 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { push } from 'connected-react-router';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchGroupYearlyAccountList } from '../reducks/groupTransactions/operations';
 import { getGroupYearlyAccountList } from '../reducks/groupTransactions/selectors';
 import { GroupYearlyAccountList } from '../reducks/groupTransactions/types';
 import axios, { CancelTokenSource } from 'axios';
-import { year } from '../lib/constant';
 import { Header } from '../components/header';
 import { SelectYears } from '../components/uikit';
 import '../components/account/yearly-account.scss';
@@ -16,8 +15,9 @@ const YearlyAccount = () => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const signal: CancelTokenSource = axios.CancelToken.source();
+  const selectYear = useLocation().pathname.split('/')[4];
   const yearlyAccountList = useSelector(getGroupYearlyAccountList);
-  const [selectedYear, setSelectedYear] = useState<number>(year);
+  const [selectedYear, setSelectedYear] = useState<number>(Number(selectYear));
   const [yearlyAccount, setYearlyAccount] = useState<GroupYearlyAccountList>({
     Year: '',
     yearly_accounting_status: [],

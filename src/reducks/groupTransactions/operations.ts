@@ -404,7 +404,17 @@ export const fetchGroupAccount = (
       const groupAccountList = result.data;
       dispatch(fetchGroupAccountAction(groupAccountList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        const groupTransactionsError = {
+          loading: false,
+          statusCode: error.response.status,
+          errorMessage: error.response.data.error.message,
+        };
+
+        dispatch(failedFetchDataAction(groupTransactionsError));
+      }
     }
   };
 };
@@ -430,7 +440,13 @@ export const fetchGroupYearlyAccountList = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.data.error.message));
+        const groupTransactionsError = {
+          loading: false,
+          statusCode: error.response.status,
+          errorMessage: error.response.data.error.message,
+        };
+
+        dispatch(failedFetchDataAction(groupTransactionsError));
 
         if (error.response.status === 401) {
           dispatch(push('/login'));
@@ -440,7 +456,7 @@ export const fetchGroupYearlyAccountList = (
   };
 };
 
-export const addGroupAccount = (groupId: number, year: number, customMonth: string) => {
+export const addGroupAccount = (groupId: number, year: string, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
       const result = await axios.post<GroupAccountList>(
@@ -457,7 +473,13 @@ export const addGroupAccount = (groupId: number, year: number, customMonth: stri
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.data.error.message));
+        const groupTransactionsError = {
+          loading: false,
+          statusCode: error.response.status,
+          errorMessage: error.response.data.error.message,
+        };
+
+        dispatch(failedFetchDataAction(groupTransactionsError));
         if (error.response.status === 401) {
           dispatch(push('/login'));
         }
@@ -469,7 +491,7 @@ export const addGroupAccount = (groupId: number, year: number, customMonth: stri
 export const editGroupAccount = (
   groupAccountList: GroupAccountList,
   groupId: number,
-  year: number,
+  year: string,
   customMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
@@ -493,7 +515,7 @@ export const editGroupAccount = (
   };
 };
 
-export const deleteGroupAccount = (groupId: number, year: number, customMonth: string) => {
+export const deleteGroupAccount = (groupId: number, year: string, customMonth: string) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
       const result = await axios.delete<deleteActionRes>(
@@ -506,7 +528,14 @@ export const deleteGroupAccount = (groupId: number, year: number, customMonth: s
       const prevGroupAccountList = getState().groupTransactions.groupAccountList;
 
       if (prevGroupAccountList.group_id === groupId) {
-        const emptyGroupAccountList = {} as GroupAccountList;
+        const emptyGroupAccountList: GroupAccountList = {
+          group_id: 0,
+          month: '',
+          group_total_payment_amount: 0,
+          group_average_payment_amount: 0,
+          group_remaining_amount: 0,
+          group_accounts_list: [],
+        };
 
         dispatch(deleteGroupAccountAction(emptyGroupAccountList, deletedMessage));
       } else {
