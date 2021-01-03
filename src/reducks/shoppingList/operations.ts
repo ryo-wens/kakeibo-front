@@ -11,16 +11,27 @@ import {
   ShoppingListByCategories,
 } from './types';
 import {
-  failedFetchDataAction,
+  failedFetchExpiredShoppingListAction,
+  failedFetchMonthlyShoppingListAction,
+  failedFetchMonthlyShoppingListByCategoriesAction,
+  failedFetchTodayShoppingListAction,
+  failedFetchTodayShoppingListByCategoriesAction,
   fetchExpiredShoppingListAction,
   fetchMonthlyShoppingListAction,
   fetchMonthlyShoppingListByCategoriesAction,
   fetchTodayShoppingListAction,
   fetchTodayShoppingListByCategoriesAction,
+  startFetchExpiredShoppingListAction,
+  startFetchMonthlyShoppingListAction,
+  startFetchMonthlyShoppingListByCategoriesAction,
+  startFetchTodayShoppingListAction,
+  startFetchTodayShoppingListByCategoriesAction,
 } from './actions';
 
 export const fetchExpiredShoppingList = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchExpiredShoppingListAction());
+
     try {
       const result = await axios.get<FetchExpiredShoppingListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`,
@@ -36,7 +47,12 @@ export const fetchExpiredShoppingList = (signal: CancelTokenSource) => {
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
+        dispatch(
+          failedFetchExpiredShoppingListAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
@@ -49,6 +65,8 @@ export const fetchTodayShoppingList = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchTodayShoppingListAction());
+
     try {
       const result = await axios.get<FetchTodayShoppingListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
@@ -65,7 +83,12 @@ export const fetchTodayShoppingList = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
+        dispatch(
+          failedFetchTodayShoppingListAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
@@ -78,6 +101,8 @@ export const fetchTodayShoppingListByCategories = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchTodayShoppingListByCategoriesAction());
+
     try {
       const result = await axios.get<FetchTodayShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
@@ -97,7 +122,12 @@ export const fetchTodayShoppingListByCategories = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
+        dispatch(
+          failedFetchTodayShoppingListByCategoriesAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
@@ -109,6 +139,8 @@ export const fetchMonthlyShoppingList = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchMonthlyShoppingListAction());
+
     try {
       const result = await axios.get<FetchMonthlyShoppingListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`,
@@ -125,7 +157,12 @@ export const fetchMonthlyShoppingList = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
+        dispatch(
+          failedFetchMonthlyShoppingListAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
@@ -137,6 +174,8 @@ export const fetchMonthlyShoppingListByCategories = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchMonthlyShoppingListByCategoriesAction());
+
     try {
       const result = await axios.get<FetchMonthlyShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`,
@@ -159,7 +198,12 @@ export const fetchMonthlyShoppingListByCategories = (
       if (axios.isCancel(error)) {
         return;
       } else {
-        dispatch(failedFetchDataAction(error.response.status, error.response.data.error.message));
+        dispatch(
+          failedFetchMonthlyShoppingListByCategoriesAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };

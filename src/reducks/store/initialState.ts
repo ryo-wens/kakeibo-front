@@ -73,16 +73,46 @@ const initialState = {
     groupTasksList: [],
   },
   shoppingList: {
-    loading: false,
-    expiredShoppingList: [],
     regularShoppingList: [],
-    todayShoppingList: [],
-    todayShoppingListByCategories: [],
-    monthlyShoppingList: [],
-    monthlyShoppingListByCategories: [],
-    error: {
-      statusCode: 0,
-      message: '',
+    expiredShoppingList: {
+      loading: false,
+      expiredShoppingList: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    todayShoppingList: {
+      loading: false,
+      todayShoppingList: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    todayShoppingListByCategories: {
+      loading: false,
+      todayShoppingListByCategories: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    monthlyShoppingList: {
+      loading: false,
+      monthlyShoppingList: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    monthlyShoppingListByCategories: {
+      loading: false,
+      monthlyShoppingListByCategories: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
     },
   },
   todoList: {

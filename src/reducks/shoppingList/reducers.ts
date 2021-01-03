@@ -7,12 +7,22 @@ export const shoppingListReducers = (
   action: ShoppingListActions
 ) => {
   switch (action.type) {
-    case Actions.WAITING_FETCH_DATA:
+    case Actions.START_FETCH_EXPIRED_SHOPPING_LIST:
+      return {
+        ...state,
+        expiredShoppingList: { loading: action.payload },
+      };
+    case Actions.FETCH_EXPIRED_SHOPPING_LIST:
       return {
         ...state,
         ...action.payload,
       };
-    case Actions.FETCH_EXPIRED_SHOPPING_LIST:
+    case Actions.FAILED_FETCH_EXPIRED_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_TODAY_SHOPPING_LIST:
       return {
         ...state,
         ...action.payload,
@@ -22,7 +32,27 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.FAILED_FETCH_TODAY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_MONTHLY_SHOPPING_LIST:
       return {
         ...state,
         ...action.payload,
@@ -32,12 +62,22 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.FAILED_FETCH_MONTHLY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
       return {
         ...state,
         ...action.payload,
       };
-    case Actions.FAILED_FETCH_DATA:
+    case Actions.FAILED_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
       return {
         ...state,
         ...action.payload,
