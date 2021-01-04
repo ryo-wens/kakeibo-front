@@ -7,19 +7,27 @@ import CloseIcon from '@material-ui/icons/Close';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import '../../assets/modules/select-month.scss';
+import { useLocation } from 'react-router';
+import qs from 'qs';
+import { useHistory } from 'react-router-dom';
 
 interface SelectMonthProps {
   selectedMonth: number;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  setSubMonth: React.Dispatch<React.SetStateAction<string>>;
+  setSubMonth: React.Dispatch<React.SetStateAction<string | null>>;
 }
 
 const SelectMonth = (props: SelectMonthProps) => {
+  const history = useHistory();
+  const searchLocation = useLocation().search;
+  const queryParams = qs.parse(searchLocation);
   const [itemMonth, setItemMonth] = useState<number>(props.selectedMonth);
   const [openSelectMonth, setOpenSelectMonth] = useState<boolean>(false);
 
   const updatePrevMonth = () => {
     const prevMonth = prevSelectMonth(props.selectedMonth);
+    const newPrevMonthQuery = { ...queryParams, month: prevMonth.selectedMonth };
+    history.push({ search: decodeURIComponent(qs.stringify(newPrevMonthQuery)) });
 
     setItemMonth(Number(prevMonth.selectedMonth));
     props.setSelectedMonth(Number(prevMonth.selectedMonth));
@@ -28,6 +36,8 @@ const SelectMonth = (props: SelectMonthProps) => {
 
   const updateNextMonth = () => {
     const nextMonth = nextSelectMonth(props.selectedMonth);
+    const newNextMonthQuery = { ...queryParams, month: nextMonth.selectedMonth };
+    history.push({ search: decodeURIComponent(qs.stringify(newNextMonthQuery)) });
 
     setItemMonth(Number(nextMonth.selectedMonth));
     props.setSelectedMonth(Number(nextMonth.selectedMonth));

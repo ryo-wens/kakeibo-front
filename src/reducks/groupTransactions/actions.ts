@@ -18,10 +18,10 @@ export type groupTransactionsAction = ReturnType<
   | typeof searchGroupTransactionsAction
 >;
 
-export const WAITING_FETCH_DATA = 'WAITING_FETCH_DATA';
+export const START_FETCH_DATA = 'WAITING_FETCH_DATA';
 export const startFetchDataAction = () => {
   return {
-    type: WAITING_FETCH_DATA,
+    type: START_FETCH_DATA,
     payload: {
       loading: true,
     },

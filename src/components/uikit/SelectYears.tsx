@@ -1,4 +1,7 @@
 import React, { useState } from 'react';
+import { useLocation } from 'react-router';
+import { useHistory } from 'react-router-dom';
+import qs from 'qs';
 import { years, year } from '../../lib/constant';
 import CloseIcon from '@material-ui/icons/Close';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
@@ -12,6 +15,9 @@ interface SelectYearsProps {
 }
 
 const SelectYears = (props: SelectYearsProps) => {
+  const history = useHistory();
+  const searchLocation = useLocation().search;
+  const queryParams = qs.parse(searchLocation);
   const [itemYear, setItemYear] = useState<number>(props.selectedYear);
   const [selectOpen, setSelectOpen] = useState<boolean>(false);
   const prevDisable = props.selectedYear === year - 3;
@@ -19,6 +25,8 @@ const SelectYears = (props: SelectYearsProps) => {
 
   const updatePrevYear = () => {
     const prevYear = props.selectedYear - 1;
+    const newPrevYearQuery = { ...queryParams, '?year': prevYear };
+    history.push({ search: decodeURIComponent(qs.stringify(newPrevYearQuery)) });
 
     setItemYear(prevYear);
     props.setSelectedYear(prevYear);
@@ -26,6 +34,10 @@ const SelectYears = (props: SelectYearsProps) => {
 
   const updateNextYear = () => {
     const nextYear = props.selectedYear + 1;
+    const newNextYearQuery = { ...queryParams, '?year': nextYear };
+    history.push({
+      search: decodeURIComponent(qs.stringify(newNextYearQuery)),
+    });
 
     setItemYear(nextYear);
     props.setSelectedYear(nextYear);

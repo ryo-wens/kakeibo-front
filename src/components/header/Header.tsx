@@ -168,7 +168,7 @@ const Header = () => {
                 size="large"
                 className={classes.button}
                 startIcon={<MoneyIcon />}
-                onClick={() => existsGroupWhenRouting(`/accounting/${year}`)}
+                onClick={() => existsGroupWhenRouting(`/accounting?year=${year}`)}
               >
                 会計
               </Button>

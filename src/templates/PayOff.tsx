@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import { push } from 'connected-react-router';
+import { useHistory } from 'react-router-dom';
 import axios, { CancelTokenSource } from 'axios';
 import { fetchGroups } from '../reducks/groups/operations';
 import {
@@ -21,18 +21,28 @@ import { SelectMonth } from '../components/uikit/';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import '../assets/accounting/payoff.scss';
 
-const PayOff = () => {
+interface PayOffProps {
+  setCurrentItem: React.Dispatch<React.SetStateAction<boolean>>;
+  selectedYear: number;
+}
+
+const PayOff = (props: PayOffProps) => {
   const dispatch = useDispatch();
-  const signal: CancelTokenSource = axios.CancelToken.source();
   const { id } = useParams();
+  const history = useHistory();
+  const signal: CancelTokenSource = axios.CancelToken.source();
   const groupAccountList = useSelector(getGroupAccountList);
   const badRequestMessage = useSelector(getStatusNotFoundMessage);
   const completeJudge = useSelector(getAccountCompleteJudgment);
   const approvedGroup = useSelector(getApprovedGroups);
-  const selectYear = useLocation().pathname.split('/')[4];
-  const selectMonth = useLocation().pathname.split('/')[5];
+  const searchLocation = useLocation().search;
+  const getQuery = () => {
+    return new URLSearchParams(searchLocation);
+  };
+  const query = getQuery();
+  const selectMonth = query.get('month');
   const [selectedMonth, setSelectedMonth] = useState<number>(Number(selectMonth));
-  const [subMonth, setSubMonth] = useState<string>(selectMonth);
+  const [subMonth, setSubMonth] = useState<string | null>(selectMonth);
   const [message, setMessage] = useState<string | undefined>(badRequestMessage);
   const currentSelectMonth = groupAccountList.month.split('-')[1];
 
@@ -42,11 +52,15 @@ const PayOff = () => {
 
   useEffect(() => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupAccount(Number(id), Number(selectYear), subMonth, signal));
+    if (subMonth != null) {
+      dispatch(fetchGroupAccount(Number(id), props.selectedYear, subMonth, signal));
+    }
     const interval = setInterval(() => {
       dispatch(fetchGroups(signal));
       if (groupAccountList.group_accounts_list) {
-        dispatch(fetchGroupAccount(Number(id), Number(selectYear), subMonth, signal));
+        if (subMonth != null) {
+          dispatch(fetchGroupAccount(Number(id), props.selectedYear, subMonth, signal));
+        }
       }
     }, 3000);
     return () => {
@@ -70,8 +84,9 @@ const PayOff = () => {
             className="payoff__account-btn"
             onClick={() => {
               if (window.confirm(`${selectedMonth}月の精算を削除してもよろしいですか?`)) {
-                dispatch(deleteGroupAccount(Number(id), selectYear, subMonth));
-                dispatch(push(`/group/${id}/accounting/${selectYear}`));
+                dispatch(deleteGroupAccount(Number(id), String(props.selectedYear), subMonth));
+                props.setCurrentItem(false);
+                history.replace(`/group/${id}/accounting?year=${props.selectedYear}`);
               }
             }}
           >
@@ -92,8 +107,10 @@ const PayOff = () => {
                     `${selectedMonth}月の精算を完了してもよろしいですか？\n※${selectedMonth}月の家計簿追加は行えなくなります。`
                   )
                 ) {
-                  dispatch(addGroupAccount(Number(id), selectYear, subMonth));
-                  setMessage('');
+                  if (subMonth != null) {
+                    dispatch(addGroupAccount(Number(id), String(props.selectedYear), subMonth));
+                    setMessage('');
+                  }
                 }
               }}
             >
@@ -117,7 +134,10 @@ const PayOff = () => {
             <div className="payoff__background">
               <button
                 className="payoff__back-btn"
-                onClick={() => dispatch(push(`/group/${id}/accounting/${selectYear}`))}
+                onClick={() => {
+                  props.setCurrentItem(false);
+                  history.replace(`/group/${id}/accounting?year=${props.selectedYear}`);
+                }}
               >
                 <ChevronLeftIcon />
               </button>
@@ -163,7 +183,7 @@ const PayOff = () => {
                 groupAccountList={groupAccountList}
                 approvedGroup={approvedGroup}
                 selectMonth={subMonth}
-                selectYear={selectYear}
+                selectYear={String(props.selectedYear)}
                 completeJudge={completeJudge}
               />
             </div>

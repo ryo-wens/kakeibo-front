@@ -10,7 +10,7 @@ import '../../assets/accounting/payoff.scss';
 interface PayOffBodyPros {
   groupAccountList: GroupAccountList;
   approvedGroup: Groups;
-  selectMonth: string;
+  selectMonth: string | null;
   selectYear: string;
   completeJudge: { completeJudge: boolean; completeMonth: string };
 }
@@ -110,14 +110,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.payment_confirmation = true;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    Number(id),
-                                    props.selectYear,
-                                    props.selectMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                                 return null;
                               } else {
                                 return null;
@@ -131,14 +133,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.payment_confirmation = false;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    Number(id),
-                                    props.selectYear,
-                                    props.selectMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                                 return null;
                               } else {
                                 return null;
@@ -164,14 +168,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.receipt_confirmation = true;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    Number(id),
-                                    props.selectYear,
-                                    props.selectMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                                 return null;
                               } else {
                                 return null;
@@ -185,14 +191,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.receipt_confirmation = false;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    Number(id),
-                                    props.selectYear,
-                                    props.selectMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                               } else {
                                 return null;
                               }
