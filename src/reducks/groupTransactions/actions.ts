@@ -18,7 +18,7 @@ export type groupTransactionsAction = ReturnType<
   | typeof searchGroupTransactionsAction
 >;
 
-export const START_FETCH_DATA = 'WAITING_FETCH_DATA';
+export const START_FETCH_DATA = 'START_FETCH_DATA';
 export const startFetchDataAction = () => {
   return {
     type: START_FETCH_DATA,
