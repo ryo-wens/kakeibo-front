@@ -17,6 +17,11 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.CANCEL_FETCH_EXPIRED_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FAILED_FETCH_EXPIRED_SHOPPING_LIST:
       return {
         ...state,
@@ -28,6 +33,11 @@ export const shoppingListReducers = (
         ...action.payload,
       };
     case Actions.FETCH_TODAY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_TODAY_SHOPPING_LIST:
       return {
         ...state,
         ...action.payload,
@@ -47,6 +57,11 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.CANCEL_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FAILED_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES:
       return {
         ...state,
@@ -62,6 +77,11 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.CANCEL_FETCH_MONTHLY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FAILED_FETCH_MONTHLY_SHOPPING_LIST:
       return {
         ...state,
@@ -73,6 +93,11 @@ export const shoppingListReducers = (
         ...action.payload,
       };
     case Actions.FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
       return {
         ...state,
         ...action.payload,

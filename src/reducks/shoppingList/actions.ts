@@ -2,18 +2,23 @@ import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from './t
 export type ShoppingListActions = ReturnType<
   | typeof startFetchExpiredShoppingListAction
   | typeof fetchExpiredShoppingListAction
+  | typeof cancelFetchExpiredShoppingListAction
   | typeof failedFetchExpiredShoppingListAction
   | typeof startFetchTodayShoppingListAction
   | typeof fetchTodayShoppingListAction
+  | typeof cancelFetchTodayShoppingListAction
   | typeof failedFetchTodayShoppingListAction
   | typeof startFetchTodayShoppingListByCategoriesAction
   | typeof fetchTodayShoppingListByCategoriesAction
+  | typeof cancelFetchTodayShoppingListByCategoriesAction
   | typeof failedFetchTodayShoppingListByCategoriesAction
   | typeof startFetchMonthlyShoppingListAction
   | typeof fetchMonthlyShoppingListAction
+  | typeof cancelFetchMonthlyShoppingListAction
   | typeof failedFetchMonthlyShoppingListAction
   | typeof startFetchMonthlyShoppingListByCategoriesAction
   | typeof fetchMonthlyShoppingListByCategoriesAction
+  | typeof cancelFetchMonthlyShoppingListByCategoriesAction
   | typeof failedFetchMonthlyShoppingListByCategoriesAction
 >;
 
@@ -37,6 +42,18 @@ export const fetchExpiredShoppingListAction = (expiredShoppingList: ShoppingList
       expiredShoppingList: {
         loading: false,
         expiredShoppingList: expiredShoppingList,
+      },
+    },
+  };
+};
+
+export const CANCEL_FETCH_EXPIRED_SHOPPING_LIST = 'CANCEL_FETCH_EXPIRED_SHOPPING_LIST';
+export const cancelFetchExpiredShoppingListAction = () => {
+  return {
+    type: CANCEL_FETCH_EXPIRED_SHOPPING_LIST,
+    payload: {
+      expiredShoppingList: {
+        loading: false,
       },
     },
   };
@@ -87,6 +104,18 @@ export const fetchTodayShoppingListAction = (
   };
 };
 
+export const CANCEL_FETCH_TODAY_SHOPPING_LIST = 'CANCEL_FETCH_TODAY_SHOPPING_LIST';
+export const cancelFetchTodayShoppingListAction = () => {
+  return {
+    type: CANCEL_FETCH_TODAY_SHOPPING_LIST,
+    payload: {
+      todayShoppingList: {
+        loading: false,
+      },
+    },
+  };
+};
+
 export const FAILED_FETCH_TODAY_SHOPPING_LIST = 'FAILED_FETCH_TODAY_SHOPPING_LIST';
 export const failedFetchTodayShoppingListAction = (statusCode: number, errorMessage: string) => {
   return {
@@ -128,6 +157,19 @@ export const fetchTodayShoppingListByCategoriesAction = (
       todayShoppingListByCategories: {
         loading: false,
         todayShoppingListByCategories: todayShoppingListByCategories,
+      },
+    },
+  };
+};
+
+export const CANCEL_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES =
+  'CANCEL_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES';
+export const cancelFetchTodayShoppingListByCategoriesAction = () => {
+  return {
+    type: CANCEL_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      todayShoppingListByCategories: {
+        loading: false,
       },
     },
   };
@@ -182,6 +224,18 @@ export const fetchMonthlyShoppingListAction = (
   };
 };
 
+export const CANCEL_FETCH_MONTHLY_SHOPPING_LIST = 'CANCEL_FETCH_MONTHLY_SHOPPING_LIST';
+export const cancelFetchMonthlyShoppingListAction = () => {
+  return {
+    type: CANCEL_FETCH_MONTHLY_SHOPPING_LIST,
+    payload: {
+      monthlyShoppingList: {
+        loading: false,
+      },
+    },
+  };
+};
+
 export const FAILED_FETCH_MONTHLY_SHOPPING_LIST = 'FAILED_FETCH_MONTHLY_SHOPPING_LIST';
 export const failedFetchMonthlyShoppingListAction = (statusCode: number, errorMessage: string) => {
   return {
@@ -224,6 +278,19 @@ export const fetchMonthlyShoppingListByCategoriesAction = (
       monthlyShoppingListByCategories: {
         loading: false,
         monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+      },
+    },
+  };
+};
+
+export const CANCEL_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES =
+  'CANCEL_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES';
+export const cancelFetchMonthlyShoppingListByCategoriesAction = () => {
+  return {
+    type: CANCEL_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      monthlyShoppingListByCategories: {
+        loading: false,
       },
     },
   };

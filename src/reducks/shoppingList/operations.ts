@@ -11,6 +11,11 @@ import {
   ShoppingListByCategories,
 } from './types';
 import {
+  cancelFetchExpiredShoppingListAction,
+  cancelFetchMonthlyShoppingListAction,
+  cancelFetchMonthlyShoppingListByCategoriesAction,
+  cancelFetchTodayShoppingListAction,
+  cancelFetchTodayShoppingListByCategoriesAction,
   failedFetchExpiredShoppingListAction,
   failedFetchMonthlyShoppingListAction,
   failedFetchMonthlyShoppingListByCategoriesAction,
@@ -45,7 +50,7 @@ export const fetchExpiredShoppingList = (signal: CancelTokenSource) => {
       dispatch(fetchExpiredShoppingListAction(expiredShoppingList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchExpiredShoppingListAction());
       } else {
         dispatch(
           failedFetchExpiredShoppingListAction(
@@ -81,7 +86,7 @@ export const fetchTodayShoppingList = (
       dispatch(fetchTodayShoppingListAction(regularShoppingList, todayShoppingList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchTodayShoppingListAction());
       } else {
         dispatch(
           failedFetchTodayShoppingListAction(
@@ -120,7 +125,7 @@ export const fetchTodayShoppingListByCategories = (
       );
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchTodayShoppingListByCategoriesAction());
       } else {
         dispatch(
           failedFetchTodayShoppingListByCategoriesAction(
@@ -155,7 +160,7 @@ export const fetchMonthlyShoppingList = (
       dispatch(fetchMonthlyShoppingListAction(regularShoppingList, monthlyShoppingList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchMonthlyShoppingListAction());
       } else {
         dispatch(
           failedFetchMonthlyShoppingListAction(
@@ -196,7 +201,7 @@ export const fetchMonthlyShoppingListByCategories = (
       );
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchMonthlyShoppingListByCategoriesAction());
       } else {
         dispatch(
           failedFetchMonthlyShoppingListByCategoriesAction(
