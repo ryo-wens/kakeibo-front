@@ -13,6 +13,7 @@ import {
   getGroupAccountList,
   getStatusNotFoundMessage,
   getAccountCompleteJudgment,
+  getAccountListByPayer,
 } from '../reducks/groupTransactions/selectors';
 import { getApprovedGroups } from '../reducks/groups/selectors';
 import PayOffBody from '../components/account/PayOffBody';
@@ -34,6 +35,7 @@ const PayOff = (props: PayOffProps) => {
   const groupAccountList = useSelector(getGroupAccountList);
   const badRequestMessage = useSelector(getStatusNotFoundMessage);
   const completeJudge = useSelector(getAccountCompleteJudgment);
+  const accountListByPayer = useSelector(getAccountListByPayer);
   const approvedGroup = useSelector(getApprovedGroups);
   const searchLocation = useLocation().search;
   const getQuery = () => {
@@ -44,7 +46,8 @@ const PayOff = (props: PayOffProps) => {
   const [selectedMonth, setSelectedMonth] = useState<number>(Number(selectMonth));
   const [subMonth, setSubMonth] = useState<string | null>(selectMonth);
   const [message, setMessage] = useState<string | undefined>(badRequestMessage);
-  const currentSelectMonth = groupAccountList.month.split('-')[1];
+  const getMonthIndexNumber = 1;
+  const currentSelectMonth = groupAccountList.month.split('-')[getMonthIndexNumber];
 
   const displayAmount = (amount: number): boolean => {
     return amount !== undefined && currentSelectMonth === subMonth;
@@ -57,7 +60,7 @@ const PayOff = (props: PayOffProps) => {
     }
     const interval = setInterval(() => {
       dispatch(fetchGroups(signal));
-      if (groupAccountList.group_accounts_list) {
+      if (groupAccountList.group_accounts_list_by_payer) {
         if (subMonth != null) {
           dispatch(fetchGroupAccount(Number(id), props.selectedYear, subMonth, signal));
         }
@@ -185,6 +188,7 @@ const PayOff = (props: PayOffProps) => {
                 selectMonth={subMonth}
                 selectYear={String(props.selectedYear)}
                 completeJudge={completeJudge}
+                accountListByPayer={accountListByPayer}
               />
             </div>
           </div>

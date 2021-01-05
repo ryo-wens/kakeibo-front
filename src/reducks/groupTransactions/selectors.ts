@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { incomeTransactionType } from '../../lib/constant';
+import { GroupAccounts } from './types';
 
 const groupTransactionsSelector = (state: State) => state.groupTransactions;
 
@@ -70,6 +71,16 @@ export const getAccountCompleteJudgment = createSelector([groupAccountList], (gr
   }
 
   return completeAccount;
+});
+
+export const getAccountListByPayer = createSelector([groupAccountList], (groupAccountList) => {
+  const accounts: GroupAccounts = [];
+
+  groupAccountList.group_accounts_list_by_payer.map((account) => {
+    accounts.push(...account.group_accounts_list);
+  });
+
+  return accounts;
 });
 
 const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
