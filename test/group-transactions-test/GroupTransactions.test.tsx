@@ -33,7 +33,8 @@ import editedGroupLatestTransactions from './editedGroupLatestTransactions.json'
 import deleteResponse from './deleteResponse.json';
 import deletedGroupLatestTransaction from './deletedGroupLatestTransactions.json';
 import groupAccountList from './groupAccountList.json';
-import editGroupAccountList from './editGroupAccoountResponse.json';
+import editGroupAccountList from './editGroupAccoountPayload.json';
+import editGroupAccountResponse from './editGroupAccountResponse.json';
 import deleteAccountResponse from './deleteGroupAccountResponse.json';
 import searchGroupTransactionsRes from './fetchSearchGroupTransactionsResponse.json';
 import groupYearlyAccountListRes from './groupYearlyAccountList.json';
@@ -535,59 +536,21 @@ describe('async actions groupTransactions', () => {
     const groupId = 1;
     const year = 2020;
     const customMonth = '11';
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+    const editAccountId = 14;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account/${editAccountId}`;
 
     const requestData = {
+      id: 14,
       group_id: 1,
       month: '2020-11-01T00:00:00Z',
-      group_total_payment_amount: 156000,
-      group_average_payment_amount: 26000,
-      group_remaining_amount: 0,
-      group_accounts_list: [
-        {
-          id: 14,
-          group_id: 1,
-          month: '2020-11-01T00:00:00Z',
-          payer_user_id: 'test4',
-          recipient_user_id: 'anraku',
-          payment_amount: 19000,
-          payment_confirmation: true,
-          receipt_confirmation: false,
-        },
-        {
-          id: 15,
-          group_id: 1,
-          month: '2020-11-01T00:00:00Z',
-          payer_user_id: 'test5',
-          recipient_user_id: 'taira',
-          payment_amount: 20000,
-          payment_confirmation: true,
-          receipt_confirmation: false,
-        },
-        {
-          id: 16,
-          group_id: 1,
-          month: '2020-11-01T00:00:00Z',
-          payer_user_id: 'furusawa',
-          recipient_user_id: 'taira',
-          payment_amount: 14000,
-          payment_confirmation: true,
-          receipt_confirmation: false,
-        },
-        {
-          id: 17,
-          group_id: 1,
-          month: '2020-11-01T00:00:00Z',
-          payer_user_id: 'furusawa',
-          recipient_user_id: 'ito',
-          payment_amount: 4000,
-          payment_confirmation: true,
-          receipt_confirmation: false,
-        },
-      ],
+      payer_user_id: 'test4',
+      recipient_user_id: 'anraku',
+      payment_amount: 19000,
+      payment_confirmation: true,
+      receipt_confirmation: false,
     };
 
-    const mockResponse = editGroupAccountList;
+    const mockResponse = editGroupAccountResponse;
 
     const expectedActions = [
       {
@@ -637,7 +600,7 @@ describe('async actions groupTransactions', () => {
             group_total_payment_amount: 0,
             group_average_payment_amount: 0,
             group_remaining_amount: 0,
-            group_accounts_list: [],
+            group_accounts_list_by_payer: [],
           },
           deletedMessage: mockResponse.message,
         },

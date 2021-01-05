@@ -1,0 +1,10 @@
+{
+  "id": 14,
+  "group_id": 1,
+  "month": "2020-11-01T00:00:00Z",
+  "payer_user_id": "test4",
+  "recipient_user_id": "anraku",
+  "payment_amount": 19000,
+  "payment_confirmation": true,
+  "receipt_confirmation": false
+}

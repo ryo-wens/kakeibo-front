@@ -57,11 +57,13 @@ export const getAccountCompleteJudgment = createSelector([groupAccountList], (gr
   };
 
   if (groupAccountList) {
-    if (groupAccountList.group_accounts_list) {
-      for (const account of groupAccountList.group_accounts_list) {
-        if (account.payer_user_id === null && account.recipient_user_id === null) {
-          completeAccount.completeJudge = true;
-          completeAccount.completeMonth = account.month;
+    if (groupAccountList.group_accounts_list_by_payer) {
+      for (const account of groupAccountList.group_accounts_list_by_payer) {
+        for (const accountByPayer of account.group_accounts_list) {
+          if (accountByPayer.payer_user_id === null && accountByPayer.recipient_user_id === null) {
+            completeAccount.completeJudge = true;
+            completeAccount.completeMonth = accountByPayer.month;
+          }
         }
       }
     }
