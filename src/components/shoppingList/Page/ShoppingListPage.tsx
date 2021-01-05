@@ -1,6 +1,7 @@
 import React from 'react';
 import './shopping-list-page.scss';
 import SwitchTodayOrMonthlyTabs from './SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
+import AddShoppingListModal from './AddShoppingListModal/AddShoppingLIstModal';
 
 const ShoppingListPage = () => {
   return (
@@ -9,6 +10,7 @@ const ShoppingListPage = () => {
         <div className="shopping-list-page__left-content">
           {/* 仮実装として、divタグをpropsとして渡している。*/}
           <SwitchTodayOrMonthlyTabs leftItem={<div />} rightItem={<div />} />
+          <AddShoppingListModal />
         </div>
       </div>
       <div className="shopping-list-page__right">
