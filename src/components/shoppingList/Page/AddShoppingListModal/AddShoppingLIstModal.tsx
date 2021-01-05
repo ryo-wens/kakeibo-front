@@ -19,18 +19,18 @@ const useStyles = makeStyles((theme: Theme) =>
 
 const AddShoppingListModal = () => {
   const classes = useStyles();
-  const [open, setOpen] = useState<boolean>(false);
-  const [purchase, setPurchase] = useState<string>('');
+  const [open, setOpen] = useState(false);
+  const [purchase, setPurchase] = useState('');
   const [scheduledDate, setScheduledDate] = useState<Date | null>(date);
-  const [amount, setAmount] = useState<string>('');
-  const [bigCategoryId, setBigCategoryId] = useState<number>(0);
+  const [amount, setAmount] = useState('');
+  const [bigCategoryId, setBigCategoryId] = useState(0);
   const [bigCategory, setBigCategory] = useState<string | null>('');
-  const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
+  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
-  const [associatedCategory, setAssociatedCategory] = useState<string>('');
+  const [associatedCategory, setAssociatedCategory] = useState('');
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const [shop, setShop] = useState<string>('');
-  const [autoAddTransaction, setAutoAddTransaction] = useState<boolean>(false);
+  const [shop, setShop] = useState('');
+  const [autoAddTransaction, setAutoAddTransaction] = useState(false);
 
   const openModal = () => {
     setOpen(true);
@@ -55,7 +55,7 @@ const AddShoppingListModal = () => {
   };
 
   const handleDateChange = (scheduledDate: Date | null) => {
-    setScheduledDate(scheduledDate as Date);
+    setScheduledDate(scheduledDate);
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
