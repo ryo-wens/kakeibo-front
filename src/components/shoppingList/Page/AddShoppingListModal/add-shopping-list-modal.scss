@@ -1,0 +1,28 @@
+@import "../../../../assets/variable";
+
+.add-shopping-list-modal {
+
+  &__button {
+    display: flex;
+    align-items: center;
+    border: none;
+    background: none;
+    color: $task-main_color;
+    font-size: 0.9rem;
+    font-weight: bolder;
+    padding: 0 15px 0 10px;
+    margin: 0 0 0 10px;
+    cursor: pointer;
+
+    &:hover {
+      background-color: $task-sub_color;
+      color: white;
+      border-radius: 0.8rem;
+      padding: 0 15px 0 10px;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}
