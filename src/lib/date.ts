@@ -180,6 +180,45 @@ export const nextSelectYears = (selectedYear: number, selectedMonth: number): Se
   }
 };
 
+interface SelectMonth {
+  selectedMonth: string;
+}
+export const prevSelectMonth = (selectedMonth: number): SelectMonth => {
+  const nextMonth = selectedMonth - 1;
+
+  if (nextMonth === 0) {
+    return {
+      selectedMonth: '12',
+    };
+  } else if (nextMonth <= 9) {
+    return {
+      selectedMonth: '0' + nextMonth,
+    };
+  } else {
+    return {
+      selectedMonth: String(nextMonth),
+    };
+  }
+};
+
+export const nextSelectMonth = (selectedMonth: number): SelectMonth => {
+  const nextMonth = selectedMonth + 1;
+
+  if (nextMonth === 13) {
+    return {
+      selectedMonth: '01',
+    };
+  } else if (nextMonth <= 9) {
+    return {
+      selectedMonth: '0' + nextMonth,
+    };
+  } else {
+    return {
+      selectedMonth: String(nextMonth),
+    };
+  }
+};
+
 export interface BaseYear {
   selectedYear: boolean;
   selectedMonth: boolean;

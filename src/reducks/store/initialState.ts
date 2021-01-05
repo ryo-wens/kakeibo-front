@@ -36,7 +36,6 @@ const initialState = {
     groupSearchTransactionsList: [],
     notHistoryMessage: '',
     deletedMessage: '',
-    notAccountMessage: '',
     groupAccountList: {
       group_id: 0,
       month: '',
@@ -48,6 +47,11 @@ const initialState = {
     groupYearlyAccountList: {
       year: '',
       yearly_accounting_status: [],
+    },
+    groupTransactionsError: {
+      loading: false,
+      statusCode: 0,
+      errorMessage: '',
     },
   },
   budgets: {
@@ -73,16 +77,46 @@ const initialState = {
     groupTasksList: [],
   },
   shoppingList: {
-    loading: false,
-    expiredShoppingList: [],
     regularShoppingList: [],
-    todayShoppingList: [],
-    todayShoppingListByCategories: [],
-    monthlyShoppingList: [],
-    monthlyShoppingListByCategories: [],
-    error: {
-      statusCode: 0,
-      message: '',
+    expiredShoppingList: {
+      loading: false,
+      expiredShoppingList: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    todayShoppingList: {
+      loading: false,
+      todayShoppingList: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    todayShoppingListByCategories: {
+      loading: false,
+      todayShoppingListByCategories: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    monthlyShoppingList: {
+      loading: false,
+      monthlyShoppingList: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
+    },
+    monthlyShoppingListByCategories: {
+      loading: false,
+      monthlyShoppingListByCategories: [],
+      error: {
+        message: '',
+        statusCode: 0,
+      },
     },
   },
   todoList: {

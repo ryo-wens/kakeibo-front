@@ -6,6 +6,7 @@ import {
   GroupTransactionsList,
   GroupAccountList,
   GroupYearlyAccountList,
+  ErrorInfo,
 } from '../groupTransactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import {
@@ -55,9 +56,9 @@ export interface State {
     groupSearchTransactionsList: GroupTransactionsList;
     groupAccountList: GroupAccountList;
     groupYearlyAccountList: GroupYearlyAccountList;
-    loading: boolean;
     notAccountMessage: string;
     deletedMessage: string;
+    groupTransactionsError: ErrorInfo;
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;
@@ -74,16 +75,46 @@ export interface State {
     groupTasksList: GroupTasksList;
   };
   shoppingList: {
-    loading: boolean;
     regularShoppingList: RegularShoppingList;
-    todayShoppingList: ShoppingList;
-    todayShoppingListByCategories: ShoppingListByCategories;
-    monthlyShoppingList: ShoppingList;
-    monthlyShoppingListByCategories: ShoppingListByCategories;
-    expiredShoppingList: ShoppingList;
-    error: {
-      statusCode: number;
-      message: string;
+    expiredShoppingList: {
+      loading: boolean;
+      expiredShoppingList: ShoppingList;
+      error: {
+        message: string;
+        statusCode: number;
+      };
+    };
+    todayShoppingList: {
+      loading: boolean;
+      todayShoppingList: ShoppingList;
+      error: {
+        message: string;
+        statusCode: number;
+      };
+    };
+    todayShoppingListByCategories: {
+      loading: boolean;
+      todayShoppingListByCategories: ShoppingListByCategories;
+      error: {
+        message: string;
+        statusCode: number;
+      };
+    };
+    monthlyShoppingList: {
+      loading: boolean;
+      monthlyShoppingList: ShoppingList;
+      error: {
+        message: string;
+        statusCode: number;
+      };
+    };
+    monthlyShoppingListByCategories: {
+      loading: boolean;
+      monthlyShoppingListByCategories: ShoppingListByCategories;
+      error: {
+        message: string;
+        statusCode: number;
+      };
     };
   };
   todoList: {
