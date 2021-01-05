@@ -25,3 +25,5 @@ export { default as SelectBigCategory } from './SelectBigCategroy';
 export { default as SelectLimit } from './SelectLimit';
 export { default as TextArea } from './TextArea';
 export { default as ErrorIndication } from './ErrorIndication';
+export { default as SelectYears } from './SelectYears';
+export { default as SelectMonth } from './SelectMonth';

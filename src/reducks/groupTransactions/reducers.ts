@@ -7,7 +7,7 @@ export const groupTransactionsReducer = (
   action: groupTransactionsAction
 ) => {
   switch (action.type) {
-    case Actions.WAITING_FETCH_DATA:
+    case Actions.START_FETCH_DATA:
       return {
         ...state,
         ...action.payload,
@@ -15,7 +15,7 @@ export const groupTransactionsReducer = (
     case Actions.FAILED_FETCH_DATA:
       return {
         ...state,
-        ...action.payload,
+        groupTransactionsError: action.payload,
       };
     case Actions.UPDATE_GROUP_TRANSACTIONS:
       return {

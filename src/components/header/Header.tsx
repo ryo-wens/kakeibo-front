@@ -24,6 +24,7 @@ import { getUserName } from '../../reducks/users/selectors';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { State } from '../../reducks/store/types';
 import axios, { CancelTokenSource } from 'axios';
+import { year } from '../../lib/constant';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -167,7 +168,7 @@ const Header = () => {
                 size="large"
                 className={classes.button}
                 startIcon={<MoneyIcon />}
-                onClick={() => existsGroupWhenRouting('/accounting')}
+                onClick={() => existsGroupWhenRouting(`/accounting?year=${year}`)}
               >
                 会計
               </Button>

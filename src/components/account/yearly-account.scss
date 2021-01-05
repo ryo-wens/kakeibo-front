@@ -1,0 +1,82 @@
+@import "src/assets/variable";
+
+.yearly-account {
+
+  &__spacer {
+    display: block;
+    width: 100%;
+
+    &--medium {
+      height: 20px;
+    }
+
+    &--large {
+      height: 40px;
+    }
+  }
+
+  &__backGround {
+    background-color: #fff;
+    border-radius: 0.6rem;
+    padding: 20px;
+    height: auto;
+    margin: 0 auto;
+    width: 65%;
+  }
+
+  &__year-position {
+    text-align: center;
+  }
+
+  &__yearly-table {
+    box-shadow: 0 2px 6px rgba(0,0,0,0.2);
+    border: $task-border_color solid 1px;
+    border-radius: 0.3rem;
+    margin: 0 auto;
+    height: 85%;
+    width: 100%;
+
+    &--top {
+      background-color: $main_background_color;
+    }
+  }
+
+  &__tr {
+    text-align: center;
+  }
+
+  &__th {
+    width: 20%;
+  }
+
+  &__td {
+    padding-bottom: 10px;
+  }
+
+  &__payoff-link {
+    border-bottom: 1px solid $main_color;
+    color: $main_color;
+    cursor: pointer;
+    //padding: 0.1em 0.3em;
+    //position: relative;
+    //display: inline-block;
+    //transition: .3s;
+    //
+    //&:hover {
+    //  color: $main_color;
+    //}
+  }
+  //&__payoff-link::after {
+  //  content: '';
+  //  position: absolute;
+  //  bottom: 0;
+  //  left: 0;
+  //  width: 0;
+  //  height: 1px;
+  //  background-color: $main_color;
+  //  transition: .3s;
+  //}
+  //&__payoff-link:hover::after {
+  //    width: 100%;
+  // }
+}

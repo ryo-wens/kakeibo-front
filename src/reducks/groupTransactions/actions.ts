@@ -1,4 +1,9 @@
-import { GroupTransactionsList, GroupAccountList, GroupYearlyAccountList } from './types';
+import {
+  GroupTransactionsList,
+  GroupAccountList,
+  GroupYearlyAccountList,
+  ErrorInfo,
+} from './types';
 
 export type groupTransactionsAction = ReturnType<
   | typeof startFetchDataAction
@@ -13,10 +18,10 @@ export type groupTransactionsAction = ReturnType<
   | typeof searchGroupTransactionsAction
 >;
 
-export const WAITING_FETCH_DATA = 'WAITING_FETCH_DATA';
+export const START_FETCH_DATA = 'START_FETCH_DATA';
 export const startFetchDataAction = () => {
   return {
-    type: WAITING_FETCH_DATA,
+    type: START_FETCH_DATA,
     payload: {
       loading: true,
     },
@@ -24,13 +29,10 @@ export const startFetchDataAction = () => {
 };
 
 export const FAILED_FETCH_DATA = 'FAILED_FETCH_DATA';
-export const failedFetchDataAction = (errorMessage: string) => {
+export const failedFetchDataAction = (groupTransactionsError: ErrorInfo) => {
   return {
     type: FAILED_FETCH_DATA,
-    payload: {
-      loading: false,
-      errorMessage: errorMessage,
-    },
+    payload: groupTransactionsError,
   };
 };
 

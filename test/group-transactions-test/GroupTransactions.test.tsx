@@ -4,7 +4,7 @@ import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { GroupTransactionsReq } from '../../src/reducks/groupTransactions/types';
+import { GroupAccounts, GroupTransactionsReq } from '../../src/reducks/groupTransactions/types';
 import { SelectYears } from '../../src/lib/date';
 import {
   addGroupTransactions,
@@ -495,7 +495,7 @@ describe('async actions groupTransactions', () => {
     };
 
     const groupId = 1;
-    const year = 2020;
+    const year = '2020';
     const customMonth = '11';
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
 
@@ -621,7 +621,7 @@ describe('async actions groupTransactions', () => {
     };
 
     const groupId = 1;
-    const year = 2020;
+    const year = '2020';
     const customMonth = '11';
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
 
@@ -631,7 +631,14 @@ describe('async actions groupTransactions', () => {
       {
         type: actionTypes.DELETE_GROUP_ACCOUNT,
         payload: {
-          groupAccountList: {},
+          groupAccountList: {
+            group_id: 0,
+            month: '',
+            group_total_payment_amount: 0,
+            group_average_payment_amount: 0,
+            group_remaining_amount: 0,
+            group_accounts_list: [],
+          },
           deletedMessage: mockResponse.message,
         },
       },

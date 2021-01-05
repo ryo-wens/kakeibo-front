@@ -1,32 +1,49 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import { GroupAccountList } from '../../reducks/groupTransactions/types';
 import { Groups } from '../../reducks/groups/types';
-import '../../assets/accounting/payoff.scss';
-import { getPathGroupId } from '../../lib/path';
-import {
-  addGroupAccount,
-  editGroupAccount,
-  deleteGroupAccount,
-} from '../../reducks/groupTransactions/operations';
-import { customMonth, year } from '../../lib/constant';
+import { editGroupAccount } from '../../reducks/groupTransactions/operations';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
+import '../../assets/accounting/payoff.scss';
 
 interface PayOffBodyPros {
   groupAccountList: GroupAccountList;
   approvedGroup: Groups;
+  selectMonth: string | null;
+  selectYear: string;
+  completeJudge: { completeJudge: boolean; completeMonth: string };
 }
 
 const PayOffBody = (props: PayOffBodyPros) => {
   const dispatch = useDispatch();
-  const groupId = getPathGroupId(window.location.pathname);
+  const { id } = useParams();
+  const [accountList, setAccountList] = useState<GroupAccountList>({
+    group_accounts_list: [],
+    group_average_payment_amount: 0,
+    group_id: 0,
+    group_remaining_amount: 0,
+    group_total_payment_amount: 0,
+    month: '',
+  });
+  const currentSelectMonth = accountList.month.split('-')[1];
+  const completeMonth = props.completeJudge.completeMonth.split('-')[1];
+
+  const displayAccountList =
+    currentSelectMonth === props.selectMonth &&
+    props.groupAccountList.group_accounts_list !== undefined &&
+    !props.completeJudge.completeJudge;
+
+  useEffect(() => {
+    setAccountList(props.groupAccountList);
+  }, [props.groupAccountList]);
 
   const groupUserInfo = () => {
     let groupUser = { userId: '', userName: '' };
     const groupUserList: { userId: string; userName: string }[] = [];
     for (const group of props.approvedGroup) {
       for (const user of group.approved_users_list) {
-        if (user.group_id === groupId) {
+        if (user.group_id === Number(id)) {
           groupUser = {
             userId: user.user_id,
             userName: user.user_name,
@@ -42,28 +59,8 @@ const PayOffBody = (props: PayOffBodyPros) => {
   return (
     <>
       <div>
-        <button
-          onClick={() => {
-            dispatch(addGroupAccount(groupId, year, customMonth));
-          }}
-          type={'button'}
-          className="payoff__account-btn"
-        >
-          会計する
-        </button>
-        <button
-          onClick={() => {
-            if (window.confirm(`${customMonth}月の精算データを削除してもよろしいですか？`))
-              dispatch(deleteGroupAccount(groupId, year, customMonth));
-          }}
-          type={'button'}
-          className="payoff__account-btn"
-        >
-          会計削除
-        </button>
-
-        <div>
-          {props.groupAccountList.group_accounts_list.map((groupAccount) => {
+        {displayAccountList &&
+          accountList.group_accounts_list.map((groupAccount) => {
             const transactionUserName = () => {
               const userName = {
                 payerUserName: '',
@@ -83,7 +80,6 @@ const PayOffBody = (props: PayOffBodyPros) => {
             };
 
             const userName = transactionUserName();
-
             return (
               <div className="payoff__background" key={groupAccount.id}>
                 <li className="payoff__account-li payoff__sub-title">支払人</li>
@@ -98,7 +94,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                     {userName.receiptUserName}
                   </li>
                   <li className="payoff__account-li payoff__text-position">
-                    ￥{groupAccount.payment_amount.toLocaleString()}
+                    ￥{groupAccount.payment_amount}
                   </li>
                   <li className="payoff__account-li ">
                     <FormControlLabel
@@ -114,14 +110,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.payment_confirmation = true;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    groupId,
-                                    year,
-                                    customMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                                 return null;
                               } else {
                                 return null;
@@ -135,14 +133,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.payment_confirmation = false;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    groupId,
-                                    year,
-                                    customMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                                 return null;
                               } else {
                                 return null;
@@ -168,14 +168,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.receipt_confirmation = true;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    groupId,
-                                    year,
-                                    customMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                                 return null;
                               } else {
                                 return null;
@@ -189,14 +191,16 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 )
                               ) {
                                 groupAccount.receipt_confirmation = false;
-                                dispatch(
-                                  editGroupAccount(
-                                    props.groupAccountList,
-                                    groupId,
-                                    year,
-                                    customMonth
-                                  )
-                                );
+                                if (props.selectMonth != null) {
+                                  dispatch(
+                                    editGroupAccount(
+                                      props.groupAccountList,
+                                      Number(id),
+                                      props.selectYear,
+                                      props.selectMonth
+                                    )
+                                  );
+                                }
                               } else {
                                 return null;
                               }
@@ -210,12 +214,17 @@ const PayOffBody = (props: PayOffBodyPros) => {
                 </div>
                 <div className="payoff__spacer-small" />
                 <li className="payoff__account-li payoff__sub-title payoff__sub-title__color-red">
-                  残支払金額 ￥ {groupAccount.payment_amount}
+                  残支払金額 ￥{' '}
+                  {groupAccount.payment_confirmation && groupAccount.receipt_confirmation
+                    ? 0
+                    : groupAccount.payment_amount}
                 </li>
               </div>
             );
           })}
-        </div>
+        {completeMonth === props.selectMonth && (
+          <p className="payoff__error-message">今月の支払・受取はありません。</p>
+        )}
       </div>
     </>
   );
