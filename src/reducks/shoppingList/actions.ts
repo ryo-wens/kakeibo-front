@@ -20,6 +20,10 @@ export type ShoppingListActions = ReturnType<
   | typeof fetchMonthlyShoppingListByCategoriesAction
   | typeof cancelFetchMonthlyShoppingListByCategoriesAction
   | typeof failedFetchMonthlyShoppingListByCategoriesAction
+  | typeof startAddShoppingListItemAction
+  | typeof addShoppingListItemAction
+  | typeof cancelAddShoppingListItemAction
+  | typeof failedAddShoppingListItemAction
 >;
 
 export const START_FETCH_EXPIRED_SHOPPING_LIST = 'START_FETCH_EXPIRED_SHOPPING_LIST';
@@ -27,9 +31,7 @@ export const startFetchExpiredShoppingListAction = () => {
   return {
     type: START_FETCH_EXPIRED_SHOPPING_LIST,
     payload: {
-      expiredShoppingList: {
-        loading: true,
-      },
+      expiredShoppingListLoading: true,
     },
   };
 };
@@ -39,10 +41,8 @@ export const fetchExpiredShoppingListAction = (expiredShoppingList: ShoppingList
   return {
     type: FETCH_EXPIRED_SHOPPING_LIST,
     payload: {
-      expiredShoppingList: {
-        loading: false,
-        expiredShoppingList: expiredShoppingList,
-      },
+      expiredShoppingListLoading: false,
+      expiredShoppingList: expiredShoppingList,
     },
   };
 };
@@ -52,9 +52,7 @@ export const cancelFetchExpiredShoppingListAction = () => {
   return {
     type: CANCEL_FETCH_EXPIRED_SHOPPING_LIST,
     payload: {
-      expiredShoppingList: {
-        loading: false,
-      },
+      expiredShoppingListLoading: false,
     },
   };
 };
@@ -64,12 +62,10 @@ export const failedFetchExpiredShoppingListAction = (statusCode: number, errorMe
   return {
     type: FAILED_FETCH_EXPIRED_SHOPPING_LIST,
     payload: {
-      expiredShoppingList: {
-        loading: false,
-        error: {
-          statusCode: statusCode,
-          message: errorMessage,
-        },
+      expiredShoppingListLoading: false,
+      expiredShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
       },
     },
   };
@@ -80,9 +76,7 @@ export const startFetchTodayShoppingListAction = () => {
   return {
     type: START_FETCH_TODAY_SHOPPING_LIST,
     payload: {
-      todayShoppingList: {
-        loading: true,
-      },
+      todayShoppingListLoading: true,
     },
   };
 };
@@ -96,10 +90,8 @@ export const fetchTodayShoppingListAction = (
     type: FETCH_TODAY_SHOPPING_LIST,
     payload: {
       regularShoppingList: regularShoppingList,
-      todayShoppingList: {
-        loading: false,
-        todayShoppingList: todayShoppingList,
-      },
+      todayShoppingListLoading: false,
+      todayShoppingList: todayShoppingList,
     },
   };
 };
@@ -109,9 +101,7 @@ export const cancelFetchTodayShoppingListAction = () => {
   return {
     type: CANCEL_FETCH_TODAY_SHOPPING_LIST,
     payload: {
-      todayShoppingList: {
-        loading: false,
-      },
+      todayShoppingListLoading: false,
     },
   };
 };
@@ -121,12 +111,10 @@ export const failedFetchTodayShoppingListAction = (statusCode: number, errorMess
   return {
     type: FAILED_FETCH_TODAY_SHOPPING_LIST,
     payload: {
-      todayShoppingList: {
-        loading: false,
-        error: {
-          statusCode: statusCode,
-          message: errorMessage,
-        },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
       },
     },
   };
@@ -138,9 +126,7 @@ export const startFetchTodayShoppingListByCategoriesAction = () => {
   return {
     type: START_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
-      todayShoppingListByCategories: {
-        loading: true,
-      },
+      todayShoppingListByCategoriesLoading: true,
     },
   };
 };
@@ -154,10 +140,8 @@ export const fetchTodayShoppingListByCategoriesAction = (
     type: FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
       regularShoppingList: regularShoppingList,
-      todayShoppingListByCategories: {
-        loading: false,
-        todayShoppingListByCategories: todayShoppingListByCategories,
-      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategories: todayShoppingListByCategories,
     },
   };
 };
@@ -168,9 +152,7 @@ export const cancelFetchTodayShoppingListByCategoriesAction = () => {
   return {
     type: CANCEL_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
-      todayShoppingListByCategories: {
-        loading: false,
-      },
+      todayShoppingListByCategoriesLoading: false,
     },
   };
 };
@@ -184,12 +166,10 @@ export const failedFetchTodayShoppingListByCategoriesAction = (
   return {
     type: FAILED_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
-      todayShoppingListByCategories: {
-        loading: false,
-        error: {
-          statusCode: statusCode,
-          message: errorMessage,
-        },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
       },
     },
   };
@@ -200,9 +180,7 @@ export const startFetchMonthlyShoppingListAction = () => {
   return {
     type: START_FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
-      monthlyShoppingList: {
-        loading: true,
-      },
+      monthlyShoppingListLoading: true,
     },
   };
 };
@@ -216,10 +194,8 @@ export const fetchMonthlyShoppingListAction = (
     type: FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
       regularShoppingList: regularShoppingList,
-      monthlyShoppingList: {
-        loading: false,
-        monthlyShoppingList: monthlyShoppingList,
-      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingList: monthlyShoppingList,
     },
   };
 };
@@ -229,9 +205,7 @@ export const cancelFetchMonthlyShoppingListAction = () => {
   return {
     type: CANCEL_FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
-      monthlyShoppingList: {
-        loading: false,
-      },
+      monthlyShoppingListLoading: false,
     },
   };
 };
@@ -241,12 +215,10 @@ export const failedFetchMonthlyShoppingListAction = (statusCode: number, errorMe
   return {
     type: FAILED_FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
-      monthlyShoppingList: {
-        loading: false,
-        error: {
-          statusCode: statusCode,
-          message: errorMessage,
-        },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
       },
     },
   };
@@ -258,9 +230,7 @@ export const startFetchMonthlyShoppingListByCategoriesAction = () => {
   return {
     type: START_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
-      monthlyShoppingListByCategories: {
-        loading: true,
-      },
+      monthlyShoppingListByCategoriesLoading: true,
     },
   };
 };
@@ -275,10 +245,8 @@ export const fetchMonthlyShoppingListByCategoriesAction = (
     type: FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
       regularShoppingList: regularShoppingList,
-      monthlyShoppingListByCategories: {
-        loading: false,
-        monthlyShoppingListByCategories: monthlyShoppingListByCategories,
-      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
     },
   };
 };
@@ -289,9 +257,7 @@ export const cancelFetchMonthlyShoppingListByCategoriesAction = () => {
   return {
     type: CANCEL_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
-      monthlyShoppingListByCategories: {
-        loading: false,
-      },
+      monthlyShoppingListByCategoriesLoading: false,
     },
   };
 };
@@ -305,12 +271,97 @@ export const failedFetchMonthlyShoppingListByCategoriesAction = (
   return {
     type: FAILED_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
-      monthlyShoppingListByCategories: {
-        loading: false,
-        error: {
-          statusCode: statusCode,
-          message: errorMessage,
-        },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_ADD_SHOPPING_LIST_ITEM = 'START_ADD_SHOPPING_LIST_ITEM';
+export const startAddShoppingListItemAction = () => {
+  return {
+    type: START_ADD_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: true,
+      todayShoppingListLoading: true,
+      todayShoppingListByCategoriesLoading: true,
+      monthlyShoppingListLoading: true,
+      monthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const ADD_SHOPPING_LIST_ITEM = 'ADD_SHOPPING_LIST_ITEM';
+export const addShoppingListItemAction = (
+  expiredShoppingList: ShoppingList,
+  todayShoppingList: ShoppingList,
+  todayShoppingListByCategories: ShoppingListByCategories,
+  monthlyShoppingList: ShoppingList,
+  monthlyShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: ADD_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      expiredShoppingList: expiredShoppingList,
+      todayShoppingListLoading: false,
+      todayShoppingList: todayShoppingList,
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategories: todayShoppingListByCategories,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingList: monthlyShoppingList,
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_ADD_SHOPPING_LIST_ITEM = 'CANCEL_ADD_SHOPPING_LIST_ITEM';
+export const cancelAddShoppingListItemAction = () => {
+  return {
+    type: CANCEL_ADD_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_ADD_SHOPPING_LIST_ITEM = 'FAILED_ADD_SHOPPING_LIST_ITEM';
+export const failedAddShoppingListItemAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_ADD_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      expiredShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
       },
     },
   };

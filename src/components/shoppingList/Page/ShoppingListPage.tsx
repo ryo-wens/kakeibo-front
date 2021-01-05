@@ -1,7 +1,7 @@
 import React from 'react';
 import './shopping-list-page.scss';
 import SwitchTodayOrMonthlyTabs from './SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
-import AddShoppingListModal from './AddShoppingListModal/AddShoppingLIstModal';
+import AddShoppingListModal from './AddShoppingListModal/AddShoppingListModal';
 
 const ShoppingListPage = () => {
   return (

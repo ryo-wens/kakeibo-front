@@ -78,45 +78,35 @@ const initialState = {
   },
   shoppingList: {
     regularShoppingList: [],
-    expiredShoppingList: {
-      loading: false,
-      expiredShoppingList: [],
-      error: {
-        message: '',
-        statusCode: 0,
-      },
+    expiredShoppingListLoading: false,
+    expiredShoppingList: [],
+    expiredShoppingListError: {
+      message: '',
+      statusCode: 0,
     },
-    todayShoppingList: {
-      loading: false,
-      todayShoppingList: [],
-      error: {
-        message: '',
-        statusCode: 0,
-      },
+    todayShoppingListLoading: false,
+    todayShoppingList: [],
+    todayShoppingListError: {
+      message: '',
+      statusCode: 0,
     },
-    todayShoppingListByCategories: {
-      loading: false,
-      todayShoppingListByCategories: [],
-      error: {
-        message: '',
-        statusCode: 0,
-      },
+    todayShoppingListByCategoriesLoading: false,
+    todayShoppingListByCategories: [],
+    todayShoppingListByCategoriesError: {
+      message: '',
+      statusCode: 0,
     },
-    monthlyShoppingList: {
-      loading: false,
-      monthlyShoppingList: [],
-      error: {
-        message: '',
-        statusCode: 0,
-      },
+    monthlyShoppingListLoading: false,
+    monthlyShoppingList: [],
+    monthlyShoppingListError: {
+      message: '',
+      statusCode: 0,
     },
-    monthlyShoppingListByCategories: {
-      loading: false,
-      monthlyShoppingListByCategories: [],
-      error: {
-        message: '',
-        statusCode: 0,
-      },
+    monthlyShoppingListByCategoriesLoading: false,
+    monthlyShoppingListByCategories: [],
+    monthlyShoppingListByCategoriesError: {
+      message: '',
+      statusCode: 0,
     },
   },
   todoList: {

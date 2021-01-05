@@ -89,4 +89,35 @@ export interface FetchMonthlyShoppingListByCategoriesRes {
   shopping_list_by_categories: ShoppingListByCategories;
 }
 
+export interface addShoppingListItemReq {
+  expected_purchase_date: Date;
+  purchase: string;
+  shop: string;
+  amount: number;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+  transaction_auto_add: boolean;
+}
+
+export interface AddShoppingListItemRes {
+  id: number;
+  posted_date: Date;
+  updated_date: Date;
+  expected_purchase_date: string;
+  complete_flag: boolean;
+  purchase: string;
+  shop: string | null;
+  amount: number | null;
+  big_category_id: number;
+  big_category_name: string;
+  medium_category_id: number | null;
+  medium_category_name: string | null;
+  custom_category_id: number | null;
+  custom_category_name: string | null;
+  regular_shopping_list_id: number | null;
+  transaction_auto_add: boolean;
+  related_transaction_data: RelatedTransactionData | null;
+}
+
 export type TodayOrMonthly = 'today' | 'monthly';
