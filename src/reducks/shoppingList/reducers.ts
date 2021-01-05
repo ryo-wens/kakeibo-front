@@ -107,6 +107,26 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.START_ADD_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.ADD_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_ADD_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_ADD_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

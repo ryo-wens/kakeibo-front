@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { CategoryInput, TextInput } from '../../../uikit';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getExpenseCategories,
   getIncomeCategories,
@@ -10,6 +10,8 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import './shopping-list-form.scss';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
+import { Action, Dispatch } from 'redux';
+import { State } from '../../../../reducks/store/types';
 
 interface ShoppingListFormProps {
   scheduledDate: Date | null;
@@ -21,7 +23,7 @@ interface ShoppingListFormProps {
   bigCategoryIndex: number;
   mediumCategoryId: number | null;
   customCategoryId: number | null;
-  autoAddTransaction: boolean;
+  transactionAutoAdd: boolean;
   associatedCategory: string;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
@@ -37,9 +39,11 @@ interface ShoppingListFormProps {
   buttonLabel: string;
   closeModal: () => void;
   unInput: boolean;
+  dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
 }
 
 const ShoppingListForm = (props: ShoppingListFormProps) => {
+  const dispatch = useDispatch();
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
 
@@ -142,14 +146,21 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
       <label className="shopping-list-form__add-transaction">
         <input
           type="checkbox"
-          checked={props.autoAddTransaction}
+          checked={props.transactionAutoAdd}
           onChange={props.handleAutoAddTransitionChange}
         />
         <span />
         取引履歴に自動追加
       </label>
       <div className="set-task-list-item__operation-btn">
-        <button className="shopping-list-form__operation-btn--add" disabled={props.unInput}>
+        <button
+          className="shopping-list-form__operation-btn--add"
+          disabled={props.unInput}
+          onClick={() => {
+            dispatch(props.dispatchOperation);
+            props.closeModal();
+          }}
+        >
           {props.buttonLabel}
         </button>
       </div>

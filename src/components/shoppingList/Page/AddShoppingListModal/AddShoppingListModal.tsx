@@ -6,6 +6,8 @@ import AddIcon from '@material-ui/icons/Add';
 import './add-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { date } from '../../../../lib/constant';
+import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -30,7 +32,8 @@ const AddShoppingListModal = () => {
   const [associatedCategory, setAssociatedCategory] = useState('');
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [shop, setShop] = useState('');
-  const [autoAddTransaction, setAutoAddTransaction] = useState(false);
+  const [transactionAutoAdd, setTransactionAutoAdd] = useState(false);
+  const signal = axios.CancelToken.source();
 
   const openModal = () => {
     setOpen(true);
@@ -47,7 +50,7 @@ const AddShoppingListModal = () => {
     setAssociatedCategory('');
     setCustomCategoryId(null);
     setShop('');
-    setAutoAddTransaction(false);
+    setTransactionAutoAdd(false);
   };
 
   const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -67,7 +70,7 @@ const AddShoppingListModal = () => {
   };
 
   const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAutoAddTransaction(event.target.checked);
+    setTransactionAutoAdd(event.target.checked);
   };
 
   const selectCategory = (
@@ -109,7 +112,7 @@ const AddShoppingListModal = () => {
         bigCategoryIndex={bigCategoryIndex}
         mediumCategoryId={mediumCategoryId}
         customCategoryId={customCategoryId}
-        autoAddTransaction={autoAddTransaction}
+        transactionAutoAdd={transactionAutoAdd}
         associatedCategory={associatedCategory}
         handlePurchaseChange={handlePurchaseChange}
         handleDateChange={handleDateChange}
@@ -121,6 +124,18 @@ const AddShoppingListModal = () => {
         buttonLabel={'追加'}
         closeModal={closeModal}
         unInput={unInput}
+        dispatchOperation={addShoppingListItem(
+          date,
+          scheduledDate,
+          purchase,
+          shop,
+          Number(amount),
+          bigCategoryId,
+          mediumCategoryId,
+          customCategoryId,
+          transactionAutoAdd,
+          signal
+        )}
       />
     </div>
   );

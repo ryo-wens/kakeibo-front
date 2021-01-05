@@ -76,45 +76,35 @@ export interface State {
   };
   shoppingList: {
     regularShoppingList: RegularShoppingList;
-    expiredShoppingList: {
-      loading: boolean;
-      expiredShoppingList: ShoppingList;
-      error: {
-        message: string;
-        statusCode: number;
-      };
+    expiredShoppingListLoading: boolean;
+    expiredShoppingList: ShoppingList;
+    expiredShoppingListError: {
+      message: string;
+      statusCode: number;
     };
-    todayShoppingList: {
-      loading: boolean;
-      todayShoppingList: ShoppingList;
-      error: {
-        message: string;
-        statusCode: number;
-      };
+    todayShoppingListLoading: boolean;
+    todayShoppingList: ShoppingList;
+    todayShoppingListError: {
+      message: string;
+      statusCode: number;
     };
-    todayShoppingListByCategories: {
-      loading: boolean;
-      todayShoppingListByCategories: ShoppingListByCategories;
-      error: {
-        message: string;
-        statusCode: number;
-      };
+    todayShoppingListByCategoriesLoading: boolean;
+    todayShoppingListByCategories: ShoppingListByCategories;
+    todayShoppingListByCategoriesError: {
+      message: string;
+      statusCode: number;
     };
-    monthlyShoppingList: {
-      loading: boolean;
-      monthlyShoppingList: ShoppingList;
-      error: {
-        message: string;
-        statusCode: number;
-      };
+    monthlyShoppingListLoading: boolean;
+    monthlyShoppingList: ShoppingList;
+    monthlyShoppingListError: {
+      message: string;
+      statusCode: number;
     };
-    monthlyShoppingListByCategories: {
-      loading: boolean;
-      monthlyShoppingListByCategories: ShoppingListByCategories;
-      error: {
-        message: string;
-        statusCode: number;
-      };
+    monthlyShoppingListByCategoriesLoading: boolean;
+    monthlyShoppingListByCategories: ShoppingListByCategories;
+    monthlyShoppingListByCategoriesError: {
+      message: string;
+      statusCode: number;
     };
   };
   todoList: {
