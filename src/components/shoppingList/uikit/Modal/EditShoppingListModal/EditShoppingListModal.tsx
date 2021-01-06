@@ -5,7 +5,10 @@ import ShoppingListForm from '../../Form/ShoppingListForm/ShoppingListForm';
 import './edit-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
-import { addShoppingListItem } from '../../../../../reducks/shoppingList/operations';
+import {
+  addShoppingListItem,
+  deleteShoppingListItem,
+} from '../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import EditIcon from '@material-ui/icons/Edit';
@@ -151,6 +154,11 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
           purchase={props.listItem.purchase}
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
+          dispatchOperation={deleteShoppingListItem(
+            props.listItem.id,
+            props.listItem.big_category_name,
+            signal
+          )}
         />
       ) : (
         <ShoppingListForm

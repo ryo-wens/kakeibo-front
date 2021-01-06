@@ -24,6 +24,10 @@ export type ShoppingListActions = ReturnType<
   | typeof addShoppingListItemAction
   | typeof cancelAddShoppingListItemAction
   | typeof failedAddShoppingListItemAction
+  | typeof startDeleteShoppingListItemAction
+  | typeof deleteShoppingListItemAction
+  | typeof cancelDeleteShoppingListItemAction
+  | typeof failedDeleteShoppingListItemAction
 >;
 
 export const START_FETCH_EXPIRED_SHOPPING_LIST = 'START_FETCH_EXPIRED_SHOPPING_LIST';
@@ -337,6 +341,93 @@ export const FAILED_ADD_SHOPPING_LIST_ITEM = 'FAILED_ADD_SHOPPING_LIST_ITEM';
 export const failedAddShoppingListItemAction = (statusCode: number, errorMessage: string) => {
   return {
     type: FAILED_ADD_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      expiredShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_DELETE_SHOPPING_LIST_ITEM = 'START_DELETE_SHOPPING_LIST_ITEM';
+export const startDeleteShoppingListItemAction = () => {
+  return {
+    type: START_DELETE_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: true,
+      todayShoppingListLoading: true,
+      todayShoppingListByCategoriesLoading: true,
+      monthlyShoppingListLoading: true,
+      monthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const DELETE_SHOPPING_LIST_ITEM = 'DELETE_SHOPPING_LIST_ITEM';
+export const deleteShoppingListItemAction = (
+  expiredShoppingList: ShoppingList,
+  todayShoppingList: ShoppingList,
+  todayShoppingListByCategories: ShoppingListByCategories,
+  monthlyShoppingList: ShoppingList,
+  monthlyShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: DELETE_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      expiredShoppingList: expiredShoppingList,
+      todayShoppingListLoading: false,
+      todayShoppingList: todayShoppingList,
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategories: todayShoppingListByCategories,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingList: monthlyShoppingList,
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_DELETE_SHOPPING_LIST_ITEM = 'CANCEL_DELETE_SHOPPING_LIST_ITEM';
+export const cancelDeleteShoppingListItemAction = () => {
+  return {
+    type: CANCEL_DELETE_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_DELETE_SHOPPING_LIST_ITEM = 'FAILED_DELETE_SHOPPING_LIST_ITEM';
+export const failedDeleteShoppingListItemAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_DELETE_SHOPPING_LIST_ITEM,
     payload: {
       expiredShoppingListLoading: false,
       expiredShoppingListError: {
