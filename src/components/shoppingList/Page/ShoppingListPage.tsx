@@ -1,16 +1,18 @@
 import React from 'react';
 import './shopping-list-page.scss';
 import SwitchTodayOrMonthlyTabs from './SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
-import AddShoppingListModal from './AddShoppingListModal/AddShoppingListModal';
+import TodayShoppingArea from './TodayShoppingArea/TodayShoppingArea';
+import MonthlyShoppingArea from './MonthlyShoppingArea/MonthlyShoppingArea';
 
 const ShoppingListPage = () => {
   return (
     <div className="shopping-list-page">
       <div className="shopping-list-page__left">
         <div className="shopping-list-page__left-content">
-          {/* 仮実装として、divタグをpropsとして渡している。*/}
-          <SwitchTodayOrMonthlyTabs leftItem={<div />} rightItem={<div />} />
-          <AddShoppingListModal />
+          <SwitchTodayOrMonthlyTabs
+            leftItem={<TodayShoppingArea />}
+            rightItem={<MonthlyShoppingArea />}
+          />
         </div>
       </div>
       <div className="shopping-list-page__right">
