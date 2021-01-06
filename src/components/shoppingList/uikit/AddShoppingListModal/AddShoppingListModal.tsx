@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import ShoppingListForm from '../../uikit/ShoppingListForm/ShoppingListForm';
+import ShoppingListForm from '../ShoppingListForm/ShoppingListForm';
 import AddIcon from '@material-ui/icons/Add';
 import './add-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
