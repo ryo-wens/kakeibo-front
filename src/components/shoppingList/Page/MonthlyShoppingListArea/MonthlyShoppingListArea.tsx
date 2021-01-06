@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   fetchMonthlyShoppingList,
   fetchMonthlyShoppingListByCategories,
@@ -8,20 +8,23 @@ import {
 import { month, year } from '../../../../lib/constant';
 import axios from 'axios';
 import { useLocation } from 'react-router';
-import AddShoppingListModal from '../AddShoppingListModal/AddShoppingListModal';
-import './monthly-shopping-area.scss';
+import AddShoppingListModal from '../../uikit/AddShoppingListModal/AddShoppingListModal';
+import './monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
 import { fetchGroups } from '../../../../reducks/groups/operations';
+import ShoppingListByDate from '../../uikit/ShoppingListByDate/ShoppingListByDate';
+import { getMonthlyShoppingList } from '../../../../reducks/shoppingList/selectors';
 
-const MonthlyShoppingArea = () => {
+const MonthlyShoppingListArea = () => {
   const dispatch = useDispatch();
+  const monthlyShoppingList = useSelector(getMonthlyShoppingList);
   const pathName = useLocation().pathname.split('/')[1];
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    if (pathName === 'group') {
+    if (pathName !== 'group') {
       dispatch(
         fetchMonthlyShoppingList(String(selectedYear), ('0' + selectedMonth).slice(-2), signal)
       );
@@ -51,12 +54,12 @@ const MonthlyShoppingArea = () => {
 
   return (
     <>
-      <div className="monthly-shopping-area__add-button">
+      <div className="monthly-shopping-list-area__add-button">
         <AddShoppingListModal />
       </div>
-      <div className="monthly-shopping-area__switch-item">
-        <div className="monthly-shopping-area__switch-item--width">
-          <div className="monthly-shopping-area__input-years">
+      <div className="monthly-shopping-list-area__switch-item">
+        <div className="monthly-shopping-list-area__switch-item--width">
+          <div className="monthly-shopping-list-area__input-years">
             <InputYears
               selectedYear={selectedYear}
               selectedMonth={selectedMonth}
@@ -68,7 +71,12 @@ const MonthlyShoppingArea = () => {
           <SwitchItemTabs
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
-            leftItem={<div />}
+            leftItem={
+              <ShoppingListByDate
+                shoppingListByDate={monthlyShoppingList}
+                message={`${selectedMonth}月の買い物リストは登録されていません。`}
+              />
+            }
             rightItem={<div />}
           />
         </div>
@@ -77,4 +85,4 @@ const MonthlyShoppingArea = () => {
   );
 };
 
-export default MonthlyShoppingArea;
+export default MonthlyShoppingListArea;

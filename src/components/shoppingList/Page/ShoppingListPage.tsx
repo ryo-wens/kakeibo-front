@@ -1,8 +1,9 @@
 import React from 'react';
 import './shopping-list-page.scss';
 import SwitchTodayOrMonthlyTabs from './SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
-import TodayShoppingArea from './TodayShoppingArea/TodayShoppingArea';
-import MonthlyShoppingArea from './MonthlyShoppingArea/MonthlyShoppingArea';
+import TodayShoppingListArea from './TodayShoppingListArea/TodayShoppingListArea';
+import MonthlyShoppingListArea from './MonthlyShoppingListArea/MonthlyShoppingListArea';
+import ExpiredShoppingListArea from './ExpiredShoppingArea/ExpiredShoppingListArea';
 
 const ShoppingListPage = () => {
   return (
@@ -10,8 +11,8 @@ const ShoppingListPage = () => {
       <div className="shopping-list-page__left">
         <div className="shopping-list-page__left-content">
           <SwitchTodayOrMonthlyTabs
-            leftItem={<TodayShoppingArea />}
-            rightItem={<MonthlyShoppingArea />}
+            leftItem={<TodayShoppingListArea />}
+            rightItem={<MonthlyShoppingListArea />}
           />
         </div>
       </div>
@@ -21,6 +22,7 @@ const ShoppingListPage = () => {
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
+          <ExpiredShoppingListArea />
         </div>
       </div>
     </div>

@@ -12,11 +12,12 @@ import {
 import { date } from '../../../../lib/constant';
 import axios from 'axios';
 import { useLocation } from 'react-router';
-import AddShoppingListModal from '../AddShoppingListModal/AddShoppingListModal';
-import './today-shopping-area.scss';
+import AddShoppingListModal from '../../uikit/AddShoppingListModal/AddShoppingListModal';
+import './today-shopping-list-area.scss';
 import { fetchGroups } from '../../../../reducks/groups/operations';
+import ShoppingListByDate from '../../uikit/ShoppingListByDate/ShoppingListByDate';
 
-const TodayShoppingArea = () => {
+const TodayShoppingListArea = () => {
   const dispatch = useDispatch();
   const todayShoppingList = useSelector(getTodayShoppingList);
   const todayShoppingListByCategories = useSelector(getTodayShoppingListByCategories);
@@ -39,7 +40,11 @@ const TodayShoppingArea = () => {
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    if (pathName === 'group' && !todayShoppingList.length && !todayShoppingListByCategories) {
+    if (
+      pathName !== 'group' &&
+      !todayShoppingList.length &&
+      !todayShoppingListByCategories.length
+    ) {
       dispatch(fetchTodayShoppingList(todayYear, todayMonth, todayDate, signal));
       dispatch(fetchTodayShoppingListByCategories(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();
@@ -48,16 +53,21 @@ const TodayShoppingArea = () => {
 
   return (
     <>
-      <div className="today-shopping-area__add-button">
+      <div className="today-shopping-list-area__add-button">
         <AddShoppingListModal />
       </div>
-      <div className="today-shopping-area__switch-item">
-        <div className="today-shopping-area__switch-item--width">
+      <div className="today-shopping-list-area__switch-item">
+        <div className="today-shopping-list-area__switch-item--width">
           {/* 仮実装として、divタグをpropsとして渡している。*/}
           <SwitchItemTabs
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
-            leftItem={<div />}
+            leftItem={
+              <ShoppingListByDate
+                shoppingListByDate={todayShoppingList}
+                message={'今日の買い物リストは、登録されていません。'}
+              />
+            }
             rightItem={<div />}
           />
         </div>
@@ -66,4 +76,4 @@ const TodayShoppingArea = () => {
   );
 };
 
-export default TodayShoppingArea;
+export default TodayShoppingListArea;
