@@ -1,18 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getRegularShoppingList } from '../../../../reducks/shoppingList/selectors';
-import { ShoppingListItem } from '../../../../reducks/shoppingList/types';
+import {
+  RegularShoppingList,
+  RegularShoppingListItem,
+} from '../../../../reducks/shoppingList/types';
 import RegularShoppingListItemComponent from '../../uikit/ListItem/RegularShoppingListItemComponent/RegularShoppingListItemComponent';
 import './regular-shopping-list-area.scss';
 
 const RegularShoppingListArea = () => {
-  const regularShoppingList = useSelector(getRegularShoppingList);
+  const regularShoppingList: RegularShoppingList = useSelector(getRegularShoppingList);
 
   return (
     <div>
       <div className="regular-shopping-list-area">
-        {regularShoppingList ? (
-          regularShoppingList.map((listItem: ShoppingListItem) => {
+        {regularShoppingList.length ? (
+          regularShoppingList.map((listItem: RegularShoppingListItem) => {
             return (
               <div key={listItem.id}>
                 <RegularShoppingListItemComponent listItem={listItem} />

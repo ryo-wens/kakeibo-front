@@ -5,6 +5,7 @@ import TodayShoppingListArea from './TodayShoppingListArea/TodayShoppingListArea
 import MonthlyShoppingListArea from './MonthlyShoppingListArea/MonthlyShoppingListArea';
 import ExpiredShoppingListArea from './ExpiredShoppingListArea/ExpiredShoppingListArea';
 import RegularShoppingListArea from './RegularShoppingListArea/RegularShoppingListArea';
+import AddRegularShoppingListModal from '../uikit/Modal/AddRegularShoppingListModal/AddRegularShoppingListModal';
 
 const ShoppingListPage = () => {
   return (
@@ -20,6 +21,7 @@ const ShoppingListPage = () => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
+          <AddRegularShoppingListModal />
           <RegularShoppingListArea />
         </div>
         <div className="shopping-list-page__right-content">

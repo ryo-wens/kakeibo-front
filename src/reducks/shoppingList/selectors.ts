@@ -5,7 +5,7 @@ const shoppingListSelector = (state: State) => state.shoppingList;
 
 export const getRegularShoppingList = createSelector(
   [shoppingListSelector],
-  (state) => state.todayShoppingList
+  (state) => state.regularShoppingList
 );
 
 export const getExpiredShoppingList = createSelector(

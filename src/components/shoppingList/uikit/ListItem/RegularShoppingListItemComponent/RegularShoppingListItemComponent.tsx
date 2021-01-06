@@ -1,10 +1,10 @@
 import React from 'react';
 import EditIcon from '@material-ui/icons/Edit';
 import './regular-shopping-list-item-component.scss';
-import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
+import { RegularShoppingListItem } from '../../../../../reducks/shoppingList/types';
 
 interface RegularShoppingListItemComponentProps {
-  listItem: ShoppingListItem;
+  listItem: RegularShoppingListItem;
 }
 
 const RegularShoppingListItemComponent = (props: RegularShoppingListItemComponentProps) => {
