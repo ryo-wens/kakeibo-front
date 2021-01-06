@@ -3,7 +3,8 @@ import './shopping-list-page.scss';
 import SwitchTodayOrMonthlyTabs from './SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
 import TodayShoppingListArea from './TodayShoppingListArea/TodayShoppingListArea';
 import MonthlyShoppingListArea from './MonthlyShoppingListArea/MonthlyShoppingListArea';
-import ExpiredShoppingListArea from './ExpiredShoppingArea/ExpiredShoppingListArea';
+import ExpiredShoppingListArea from './ExpiredShoppingListArea/ExpiredShoppingListArea';
+import RegularShoppingListArea from './RegularShoppingListArea/RegularShoppingListArea';
 
 const ShoppingListPage = () => {
   return (
@@ -19,6 +20,7 @@ const ShoppingListPage = () => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
+          <RegularShoppingListArea />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>

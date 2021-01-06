@@ -12,12 +12,17 @@ import AddShoppingListModal from '../../uikit/AddShoppingListModal/AddShoppingLi
 import './monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
 import { fetchGroups } from '../../../../reducks/groups/operations';
-import ShoppingListByDate from '../../uikit/ShoppingListByDate/ShoppingListByDate';
-import { getMonthlyShoppingList } from '../../../../reducks/shoppingList/selectors';
+import ShoppingListByDate from '../../uikit/List/ShoppingListByDate/ShoppingListByDate';
+import {
+  getMonthlyShoppingList,
+  getMonthlyShoppingListByCategories,
+} from '../../../../reducks/shoppingList/selectors';
+import ShoppingListByCategoriesComponent from '../../uikit/List/ShoppingListByCategoriesComponent/ShoppingListByCategoriesComponent';
 
 const MonthlyShoppingListArea = () => {
   const dispatch = useDispatch();
   const monthlyShoppingList = useSelector(getMonthlyShoppingList);
+  const monthlyShoppingListByCategories = useSelector(getMonthlyShoppingListByCategories);
   const pathName = useLocation().pathname.split('/')[1];
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
@@ -67,7 +72,6 @@ const MonthlyShoppingListArea = () => {
               setSelectedYear={setSelectedYear}
             />
           </div>
-          {/* 仮実装として、divタグをpropsとして渡している。*/}
           <SwitchItemTabs
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
@@ -77,7 +81,12 @@ const MonthlyShoppingListArea = () => {
                 message={`${selectedMonth}月の買い物リストは登録されていません。`}
               />
             }
-            rightItem={<div />}
+            rightItem={
+              <ShoppingListByCategoriesComponent
+                shoppingListByCategories={monthlyShoppingListByCategories}
+                message={`${selectedMonth}月の買い物リストは登録されていません。`}
+              />
+            }
           />
         </div>
       </div>

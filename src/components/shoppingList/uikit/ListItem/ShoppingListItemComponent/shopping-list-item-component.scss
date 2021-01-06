@@ -1,5 +1,5 @@
-@import "../../../../assets/variable";
-@import "../../../../assets/mixin/icon-btn";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/icon-btn";
 
 .shopping-list-item-component {
 
@@ -7,7 +7,7 @@
     color: $task-main_color;
     font-size: 1.0rem;
     font-weight: bold;
-    margin: 0 0 20px 0;
+    margin: 20px 0;
   }
 
   &__content {

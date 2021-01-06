@@ -5,7 +5,7 @@ import './expired-shopping-list-area.scss';
 import axios from 'axios';
 import { useLocation } from 'react-router';
 import { fetchExpiredShoppingList } from '../../../../reducks/shoppingList/operations';
-import ShoppingListItemComponent from '../../uikit/ShoppingListItemComponent/ShoppingListItemComponent';
+import ShoppingListItemComponent from '../../uikit/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
 
 const ExpiredShoppingListArea = () => {
   const dispatch = useDispatch();
