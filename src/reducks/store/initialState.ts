@@ -42,7 +42,7 @@ const initialState = {
       group_total_payment_amount: 0,
       group_average_payment_amount: 0,
       group_remaining_amount: 0,
-      group_accounts_list: [],
+      group_accounts_list_by_payer: [],
     },
     groupYearlyAccountList: {
       year: '',

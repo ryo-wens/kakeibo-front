@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { incomeTransactionType } from '../../lib/constant';
+import { GroupAccounts } from './types';
 
 const groupTransactionsSelector = (state: State) => state.groupTransactions;
 
@@ -57,17 +58,29 @@ export const getAccountCompleteJudgment = createSelector([groupAccountList], (gr
   };
 
   if (groupAccountList) {
-    if (groupAccountList.group_accounts_list) {
-      for (const account of groupAccountList.group_accounts_list) {
-        if (account.payer_user_id === null && account.recipient_user_id === null) {
-          completeAccount.completeJudge = true;
-          completeAccount.completeMonth = account.month;
+    if (groupAccountList.group_accounts_list_by_payer) {
+      for (const account of groupAccountList.group_accounts_list_by_payer) {
+        for (const accountByPayer of account.group_accounts_list) {
+          if (accountByPayer.payer_user_id === null && accountByPayer.recipient_user_id === null) {
+            completeAccount.completeJudge = true;
+            completeAccount.completeMonth = accountByPayer.month;
+          }
         }
       }
     }
   }
 
   return completeAccount;
+});
+
+export const getAccountListByPayer = createSelector([groupAccountList], (groupAccountList) => {
+  const accounts: GroupAccounts = [];
+
+  groupAccountList.group_accounts_list_by_payer.map((account) => {
+    accounts.push(...account.group_accounts_list);
+  });
+
+  return accounts;
 });
 
 const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
