@@ -1,6 +1,6 @@
-@import "../../../../assets/variable";
-@import "../../../../assets/mixin/icon-btn";
-@import "../../../../assets/mixin/operation-btn";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/icon-btn";
+@import "../../../../../assets/mixin/operation-btn";
 
 .shopping-list-form {
   width: 100%;
@@ -92,6 +92,10 @@
 
     &--add {
       @include operation-btn($task-add-color, white, $task-add-color);
+    }
+
+    &--delete {
+      @include operation-btn($danger-color, white, $danger-color);
     }
   }
 }

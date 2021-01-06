@@ -12,10 +12,11 @@ import {
 import { date } from '../../../../lib/constant';
 import axios from 'axios';
 import { useLocation } from 'react-router';
-import AddShoppingListModal from '../../uikit/AddShoppingListModal/AddShoppingListModal';
+import AddShoppingListModal from '../../uikit/Modal/AddShoppingListModal/AddShoppingListModal';
 import './today-shopping-list-area.scss';
 import { fetchGroups } from '../../../../reducks/groups/operations';
-import ShoppingListByDate from '../../uikit/ShoppingListByDate/ShoppingListByDate';
+import ShoppingListByDate from '../../uikit/List/ShoppingListByDate/ShoppingListByDate';
+import ShoppingListByCategoriesComponent from '../../uikit/List/ShoppingListByCategoriesComponent/ShoppingListByCategoriesComponent';
 
 const TodayShoppingListArea = () => {
   const dispatch = useDispatch();
@@ -58,7 +59,6 @@ const TodayShoppingListArea = () => {
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">
-          {/* 仮実装として、divタグをpropsとして渡している。*/}
           <SwitchItemTabs
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
@@ -68,7 +68,12 @@ const TodayShoppingListArea = () => {
                 message={'今日の買い物リストは、登録されていません。'}
               />
             }
-            rightItem={<div />}
+            rightItem={
+              <ShoppingListByCategoriesComponent
+                shoppingListByCategories={todayShoppingListByCategories}
+                message={'今日の買い物リストは、登録されていません。'}
+              />
+            }
           />
         </div>
       </div>

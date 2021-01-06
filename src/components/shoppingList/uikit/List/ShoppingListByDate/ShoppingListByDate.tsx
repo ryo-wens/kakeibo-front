@@ -1,6 +1,6 @@
 import React from 'react';
-import { ShoppingList } from '../../../../reducks/shoppingList/types';
-import ShoppingListItemComponent from '../ShoppingListItemComponent/ShoppingListItemComponent';
+import { ShoppingList } from '../../../../../reducks/shoppingList/types';
+import ShoppingListItemComponent from '../../ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
 import './shopping-list-by-date.scss';
 
 interface ShoppingListByDate {
