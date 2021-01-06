@@ -15,7 +15,7 @@
           "payer_user_id": "test4",
           "recipient_user_id": "anraku",
           "payment_amount": 19000,
-          "payment_confirmation": false,
+          "payment_confirmation": true,
           "receipt_confirmation": false
         }
       ]
@@ -37,7 +37,7 @@
     },
     {
       "payer_user_id": "furusawa",
-      "group_accounts_list":  [
+      "group_accounts_list": [
         {
           "id": 16,
           "group_id": 1,

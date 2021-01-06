@@ -64,13 +64,20 @@ export interface GroupAccount {
 
 export interface GroupAccounts extends Array<GroupAccount> {}
 
+export interface GroupAccountByPayer {
+  payer_user_id: number;
+  group_accounts_list: GroupAccounts;
+}
+
+export interface GroupAccountByPayerList extends Array<GroupAccountByPayer> {}
+
 export interface GroupAccountList {
   group_id: number;
   month: string;
   group_total_payment_amount: number;
   group_average_payment_amount: number;
   group_remaining_amount: number;
-  group_accounts_list: GroupAccounts;
+  group_accounts_list_by_payer: GroupAccountByPayerList;
 }
 
 export interface YearlyAccount {
@@ -94,5 +101,5 @@ export interface GroupAccountListRes {
   group_total_payment_amount: number;
   group_average_payment_amount: number;
   group_remaining_amount: number;
-  group_accounts_list: GroupAccounts;
+  group_accounts_list_by_payer: GroupAccountByPayerList;
 }

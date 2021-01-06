@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import { GroupAccountList } from '../../reducks/groupTransactions/types';
+import { GroupAccountList, GroupAccounts } from '../../reducks/groupTransactions/types';
 import { Groups } from '../../reducks/groups/types';
 import { editGroupAccount } from '../../reducks/groupTransactions/operations';
 import { Checkbox, FormControlLabel } from '@material-ui/core';
@@ -9,6 +9,7 @@ import '../../assets/accounting/payoff.scss';
 
 interface PayOffBodyPros {
   groupAccountList: GroupAccountList;
+  accountListByPayer: GroupAccounts;
   approvedGroup: Groups;
   selectMonth: string | null;
   selectYear: string;
@@ -18,25 +19,20 @@ interface PayOffBodyPros {
 const PayOffBody = (props: PayOffBodyPros) => {
   const dispatch = useDispatch();
   const { id } = useParams();
-  const [accountList, setAccountList] = useState<GroupAccountList>({
-    group_accounts_list: [],
-    group_average_payment_amount: 0,
-    group_id: 0,
-    group_remaining_amount: 0,
-    group_total_payment_amount: 0,
-    month: '',
-  });
-  const currentSelectMonth = accountList.month.split('-')[1];
-  const completeMonth = props.completeJudge.completeMonth.split('-')[1];
+  const getMonthIndexNumber = 1;
+  const [accountList, setAccountList] = useState<GroupAccounts>(props.accountListByPayer);
+
+  const currentSelectMonth = props.groupAccountList.month.split('-')[getMonthIndexNumber];
+  const completeMonth = props.completeJudge.completeMonth.split('-')[getMonthIndexNumber];
 
   const displayAccountList =
     currentSelectMonth === props.selectMonth &&
-    props.groupAccountList.group_accounts_list !== undefined &&
+    props.groupAccountList.group_accounts_list_by_payer !== undefined &&
     !props.completeJudge.completeJudge;
 
   useEffect(() => {
-    setAccountList(props.groupAccountList);
-  }, [props.groupAccountList]);
+    setAccountList(props.accountListByPayer);
+  }, [props.accountListByPayer]);
 
   const groupUserInfo = () => {
     let groupUser = { userId: '', userName: '' };
@@ -60,7 +56,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
     <>
       <div>
         {displayAccountList &&
-          accountList.group_accounts_list.map((groupAccount) => {
+          accountList.map((groupAccount) => {
             const transactionUserName = () => {
               const userName = {
                 payerUserName: '',
@@ -113,7 +109,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 if (props.selectMonth != null) {
                                   dispatch(
                                     editGroupAccount(
-                                      props.groupAccountList,
+                                      groupAccount,
                                       Number(id),
                                       props.selectYear,
                                       props.selectMonth
@@ -136,7 +132,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 if (props.selectMonth != null) {
                                   dispatch(
                                     editGroupAccount(
-                                      props.groupAccountList,
+                                      groupAccount,
                                       Number(id),
                                       props.selectYear,
                                       props.selectMonth
@@ -171,7 +167,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 if (props.selectMonth != null) {
                                   dispatch(
                                     editGroupAccount(
-                                      props.groupAccountList,
+                                      groupAccount,
                                       Number(id),
                                       props.selectYear,
                                       props.selectMonth
@@ -194,7 +190,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                 if (props.selectMonth != null) {
                                   dispatch(
                                     editGroupAccount(
-                                      props.groupAccountList,
+                                      groupAccount,
                                       Number(id),
                                       props.selectYear,
                                       props.selectMonth

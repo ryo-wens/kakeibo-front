@@ -1,29 +1,30 @@
 import {
-  updateGroupTransactionsAction,
-  updateGroupLatestTransactionsAction,
+  addGroupAccountAction,
+  deleteGroupAccountAction,
+  editGroupAccountAction,
+  failedFetchDataAction,
   fetchGroupAccountAction,
   fetchGroupYearlyAccountListAction,
-  addGroupAccountAction,
-  editGroupAccountAction,
-  deleteGroupAccountAction,
   searchGroupTransactionsAction,
-  failedFetchDataAction,
+  updateGroupLatestTransactionsAction,
+  updateGroupTransactionsAction,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
-import { Dispatch, Action } from 'redux';
+import { Action, Dispatch } from 'redux';
 import {
+  deleteActionRes,
+  FetchGroupTransactionsRes,
+  GroupAccount,
+  GroupAccountList,
+  GroupAccountListRes,
+  GroupLatestTransactionsListRes,
   GroupTransactions,
   GroupTransactionsList,
   GroupYearlyAccountList,
-  FetchGroupTransactionsRes,
-  GroupLatestTransactionsListRes,
-  deleteActionRes,
-  GroupAccountList,
-  GroupAccountListRes,
 } from './types';
 import { State } from '../store/types';
 import { push } from 'connected-react-router';
-import { isValidAmountFormat, errorHandling } from '../../lib/validation';
+import { errorHandling, isValidAmountFormat } from '../../lib/validation';
 import moment from 'moment';
 
 export const fetchGroupTransactionsList = (
@@ -489,26 +490,40 @@ export const addGroupAccount = (groupId: number, year: string, customMonth: stri
 };
 
 export const editGroupAccount = (
-  groupAccountList: GroupAccountList,
+  groupAccount: GroupAccount,
   groupId: number,
   year: string,
   customMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
-      const result = await axios.put<GroupAccountList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
-        JSON.stringify(groupAccountList),
+      const result = await axios.put<GroupAccount>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account/${groupAccount.id}`,
+        JSON.stringify(groupAccount),
         { withCredentials: true }
       );
-      const editedGroupAccountList = result.data;
+      const editedGroupAccount = result.data;
       const prevGroupAccountList = getState().groupTransactions.groupAccountList;
 
-      if (editedGroupAccountList.group_id === prevGroupAccountList.group_id) {
-        dispatch(editGroupAccountAction(editedGroupAccountList));
-      } else {
-        return prevGroupAccountList;
-      }
+      prevGroupAccountList.group_accounts_list_by_payer = prevGroupAccountList.group_accounts_list_by_payer.map(
+        (accountByPayer) => {
+          if (prevGroupAccountList.group_id === editedGroupAccount.group_id) {
+            accountByPayer.group_accounts_list = accountByPayer.group_accounts_list.map(
+              (account) => {
+                if (account.payer_user_id === editedGroupAccount.payer_user_id) {
+                  return editedGroupAccount;
+                }
+
+                return account;
+              }
+            );
+          }
+
+          return accountByPayer;
+        }
+      );
+
+      dispatch(editGroupAccountAction(prevGroupAccountList));
     } catch (error) {
       errorHandling(dispatch, error);
     }
@@ -534,7 +549,7 @@ export const deleteGroupAccount = (groupId: number, year: string, customMonth: s
           group_total_payment_amount: 0,
           group_average_payment_amount: 0,
           group_remaining_amount: 0,
-          group_accounts_list: [],
+          group_accounts_list_by_payer: [],
         };
 
         dispatch(deleteGroupAccountAction(emptyGroupAccountList, deletedMessage));
