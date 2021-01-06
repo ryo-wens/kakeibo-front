@@ -1,22 +1,22 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { CategoryInput, TextInput } from '../../../uikit';
+import { CategoryInput, TextInput } from '../../../../uikit';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getExpenseCategories,
   getIncomeCategories,
-} from '../../../../reducks/categories/selectors';
+} from '../../../../../reducks/categories/selectors';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import './shopping-list-form.scss';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
+import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { Action, Dispatch } from 'redux';
-import { State } from '../../../../reducks/store/types';
+import { State } from '../../../../../reducks/store/types';
 
 interface ShoppingListFormProps {
-  scheduledDate: Date | null;
+  expectedPurchaseDate: Date | null;
   purchase: string;
-  shop: string;
+  shop: string | null;
   amount: string;
   bigCategoryId: number;
   bigCategory: string | null;
@@ -40,6 +40,7 @@ interface ShoppingListFormProps {
   closeModal: () => void;
   unInput: boolean;
   dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  openDeleteForm?: () => void;
 }
 
 const ShoppingListForm = (props: ShoppingListFormProps) => {
@@ -71,7 +72,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             id="date-picker-dialog"
             label="購入予定日"
             format="yyyy年 MM月dd日"
-            value={props.scheduledDate}
+            value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
             minDate={new Date()}
             required={true}
@@ -163,6 +164,16 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
         >
           {props.buttonLabel}
         </button>
+        {props.titleLabel === '買い物リストを編集' && (
+          <button
+            className="shopping-list-form__operation-btn--delete"
+            onClick={() => {
+              if (props.openDeleteForm) props.openDeleteForm();
+            }}
+          >
+            削除
+          </button>
+        )}
       </div>
     </div>
   );

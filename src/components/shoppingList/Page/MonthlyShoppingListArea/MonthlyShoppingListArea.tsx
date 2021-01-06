@@ -8,7 +8,7 @@ import {
 import { month, year } from '../../../../lib/constant';
 import axios from 'axios';
 import { useLocation } from 'react-router';
-import AddShoppingListModal from '../../uikit/AddShoppingListModal/AddShoppingListModal';
+import AddShoppingListModal from '../../uikit/Modal/AddShoppingListModal/AddShoppingListModal';
 import './monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
 import { fetchGroups } from '../../../../reducks/groups/operations';

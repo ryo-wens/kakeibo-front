@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import ShoppingListForm from '../ShoppingListForm/ShoppingListForm';
+import ShoppingListForm from '../../Form/ShoppingListForm/ShoppingListForm';
 import AddIcon from '@material-ui/icons/Add';
 import './add-shopping-list-modal.scss';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
-import { date } from '../../../../lib/constant';
-import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';
+import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
+import { date } from '../../../../../lib/constant';
+import { addShoppingListItem } from '../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -23,7 +23,7 @@ const AddShoppingListModal = () => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [purchase, setPurchase] = useState('');
-  const [scheduledDate, setScheduledDate] = useState<Date | null>(date);
+  const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(date);
   const [amount, setAmount] = useState('');
   const [bigCategoryId, setBigCategoryId] = useState(0);
   const [bigCategory, setBigCategory] = useState<string | null>('');
@@ -42,7 +42,7 @@ const AddShoppingListModal = () => {
   const closeModal = () => {
     setOpen(false);
     setPurchase('');
-    setScheduledDate(date);
+    setExpectedPurchaseDate(date);
     setAmount('');
     setBigCategoryId(0);
     setBigCategory('');
@@ -57,8 +57,8 @@ const AddShoppingListModal = () => {
     setPurchase(event.target.value);
   };
 
-  const handleDateChange = (scheduledDate: Date | null) => {
-    setScheduledDate(scheduledDate);
+  const handleDateChange = (expectedPurchaseDate: Date | null) => {
+    setExpectedPurchaseDate(expectedPurchaseDate);
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -98,12 +98,13 @@ const AddShoppingListModal = () => {
     }
   };
 
-  const unInput = purchase === '' || amount === '' || scheduledDate === null || bigCategoryId === 0;
+  const unInput =
+    purchase === '' || amount === '' || expectedPurchaseDate === null || bigCategoryId === 0;
 
   const body = (
     <div className={classes.paper}>
       <ShoppingListForm
-        scheduledDate={scheduledDate}
+        expectedPurchaseDate={expectedPurchaseDate}
         purchase={purchase}
         shop={shop}
         amount={amount}
@@ -126,7 +127,7 @@ const AddShoppingListModal = () => {
         unInput={unInput}
         dispatchOperation={addShoppingListItem(
           date,
-          scheduledDate,
+          expectedPurchaseDate,
           purchase,
           shop,
           Number(amount),

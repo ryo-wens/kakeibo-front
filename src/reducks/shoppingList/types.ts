@@ -92,7 +92,7 @@ export interface FetchMonthlyShoppingListByCategoriesRes {
 export interface addShoppingListItemReq {
   expected_purchase_date: Date;
   purchase: string;
-  shop: string;
+  shop: string | null;
   amount: number;
   big_category_id: number;
   medium_category_id: number | null;

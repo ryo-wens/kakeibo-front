@@ -1,0 +1,42 @@
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/icon-btn";
+@import "../../../../../assets/mixin/operation-btn";
+
+.shopping-list-delete-form {
+  width: 100%;
+  padding: 15px 0;
+
+  &__position {
+    display: flex;
+    border-bottom: $task-border_color solid 1px;
+    justify-content: space-between;
+    padding: 0 0 10px 0;
+    margin: 0 0 25px 0;
+
+    > h3 {
+      color: $task-main_color;
+      font-size: $task-title-font_size;
+      margin: 0;
+    }
+  }
+
+  &__back-btn {
+    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    margin-left: 10px;
+  }
+
+  &__close-btn {
+    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    margin-right: 10px;
+  }
+
+  &__message {
+    color: $task-main_color;
+    text-align: center;
+  }
+
+  &__delete-btn {
+    @include operation-btn($danger-color, white, $danger-color);
+    margin-left: 20px;
+  }
+}

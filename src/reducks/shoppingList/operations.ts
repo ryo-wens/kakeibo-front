@@ -228,7 +228,7 @@ export const addShoppingListItem = (
   today: Date | null,
   expectedPurchaseDate: Date | null,
   purchase: string,
-  shop: string,
+  shop: string | null,
   amount: number,
   bigCategoryId: number,
   mediumCategoryId: number | null,
