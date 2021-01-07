@@ -17,7 +17,12 @@ import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operatio
 import SwitchItemTabs from '../../uikit/tabs/SwitchItemTabs';
 import TodayTodoList from '../../todo/Page/TodayTodoArea/TodayTodoList/TodayTodoList';
 
-const CurrentSchedule = () => {
+interface CurrentScheduleProps {
+  todoEditing: boolean;
+  setTodoEditing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const CurrentSchedule = (props: CurrentScheduleProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
@@ -34,7 +39,7 @@ const CurrentSchedule = () => {
   };
 
   useEffect(() => {
-    if (pathName === 'group') {
+    if (pathName === 'group' && !props.todoEditing) {
       const signal = axios.CancelToken.source();
       fetchGroupData(signal);
       const interval = setInterval(() => {
@@ -45,7 +50,7 @@ const CurrentSchedule = () => {
         clearInterval(interval);
       };
     }
-  }, [todayYear, todayMonth, todayDate, pathName]);
+  }, [todayYear, todayMonth, todayDate, props.todoEditing, pathName]);
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -78,6 +83,7 @@ const CurrentSchedule = () => {
                     : todayImplementationTodoList
                 }
                 dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+                setEditing={props.setTodoEditing}
               />
             }
             rightItem={
@@ -90,6 +96,7 @@ const CurrentSchedule = () => {
                     : todayImplementationTodoList
                 }
                 dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+                setEditing={props.setTodoEditing}
               />
             }
           />
