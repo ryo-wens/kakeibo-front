@@ -1,22 +1,25 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { CategoryInput, TextInput } from '../../../uikit';
-import { useDispatch, useSelector } from 'react-redux';
+import { CategoryInput, TextInput } from '../../../../uikit';
+import { useSelector } from 'react-redux';
 import {
   getExpenseCategories,
   getIncomeCategories,
-} from '../../../../reducks/categories/selectors';
+} from '../../../../../reducks/categories/selectors';
+import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import './shopping-list-form.scss';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { Action, Dispatch } from 'redux';
-import { State } from '../../../../reducks/store/types';
+import { State } from '../../../../../reducks/store/types';
+import './regular-shopping-list-form.scss';
+import CycleTypeSelector from '../../Selector/CycleTypeSelector/CycleTypeSelector';
 
-interface ShoppingListFormProps {
-  scheduledDate: Date | null;
+interface RegularShoppingListFormProps {
+  expectedPurchaseDate: Date | null;
+  cycleType: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle: string | null;
   purchase: string;
-  shop: string;
+  shop: string | null;
   amount: string;
   bigCategoryId: number;
   bigCategory: string | null;
@@ -25,8 +28,10 @@ interface ShoppingListFormProps {
   customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
+  handleDateChange: (expectedPurchaseDate: Date | null) => void;
+  handleCycleTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   selectCategory: (
     bigCategoryIndex: number,
@@ -40,10 +45,10 @@ interface ShoppingListFormProps {
   closeModal: () => void;
   unInput: boolean;
   dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  openDeleteForm?: () => void;
 }
 
-const ShoppingListForm = (props: ShoppingListFormProps) => {
-  const dispatch = useDispatch();
+const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
 
@@ -71,12 +76,32 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             id="date-picker-dialog"
             label="購入予定日"
             format="yyyy年 MM月dd日"
-            value={props.scheduledDate}
+            value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
             minDate={new Date()}
             required={true}
           />
         </MuiPickersUtilsProvider>
+      ),
+    },
+    {
+      key: '周期',
+      value: (
+        <CycleTypeSelector value={props.cycleType} selectChange={props.handleCycleTypeChange} />
+      ),
+    },
+    {
+      key: '周期日数',
+      value: (
+        <TextInput
+          value={props.cycle}
+          type={'tel'}
+          id={'cycle'}
+          label={'周期日数'}
+          onChange={props.handleCycleChange}
+          required={false}
+          fullWidth={false}
+        />
       ),
     },
     {
@@ -126,8 +151,8 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
   ];
 
   return (
-    <div className="shopping-list-form">
-      <div className="shopping-list-form__position">
+    <div className="regular-shopping-list-form">
+      <div className="regular-shopping-list-form__position">
         <h3>{props.titleLabel}</h3>
         <button onClick={() => props.closeModal()}>
           <CloseIcon />
@@ -136,14 +161,14 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
       <div>
         {inputItems.map((item) => {
           return (
-            <div className="shopping-list-form__select-contents" key={item.key}>
-              <span className="shopping-list-form__select-contents--key">{item.key}</span>
+            <div className="regular-shopping-list-form__select-contents" key={item.key}>
+              <span className="regular-shopping-list-form__select-contents--key">{item.key}</span>
               <span>{item.value}</span>
             </div>
           );
         })}
       </div>
-      <label className="shopping-list-form__add-transaction">
+      <label className="regular-shopping-list-form__add-transaction">
         <input
           type="checkbox"
           checked={props.transactionAutoAdd}
@@ -153,19 +178,15 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
         取引履歴に自動追加
       </label>
       <div className="set-task-list-item__operation-btn">
-        <button
-          className="shopping-list-form__operation-btn--add"
-          disabled={props.unInput}
-          onClick={() => {
-            dispatch(props.dispatchOperation);
-            props.closeModal();
-          }}
-        >
+        <button className="regular-shopping-list-form__operation-btn--add" disabled={props.unInput}>
           {props.buttonLabel}
         </button>
+        {props.titleLabel === '定期買い物リストを編集' && (
+          <button className="regular-shopping-list-form__operation-btn--delete">削除</button>
+        )}
       </div>
     </div>
   );
 };
 
-export default ShoppingListForm;
+export default RegularShoppingListForm;
