@@ -25,7 +25,7 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
     setOpenId(undefined);
   };
 
-  const payerColor = (payerUserId: string): React.CSSProperties | undefined => {
+  const payerColor = (payerUserId: string): React.CSSProperties => {
     let color = '';
 
     if (props.currentGroup) {

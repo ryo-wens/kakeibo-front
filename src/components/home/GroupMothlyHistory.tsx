@@ -63,12 +63,16 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
     }
   };
 
-  const payerUnderLineColor = (payerUserId: string): React.CSSProperties | undefined => {
+  const payerUnderLineColor = (payerUserId: string): React.CSSProperties => {
     let color = '';
 
-    for (const groupUser of currentGroup.approved_users_list) {
-      if (groupUser.user_id === payerUserId) {
-        color = groupUser.color_code;
+    if (currentGroup && currentGroup.approved_users_list) {
+      const approvedUser = currentGroup.approved_users_list.find(
+        (user) => user.user_id === payerUserId
+      );
+
+      if (approvedUser) {
+        color = approvedUser.color_code;
       }
     }
 
