@@ -507,17 +507,13 @@ export const editGroupAccount = (
 
       prevGroupAccountList.group_accounts_list_by_payer = prevGroupAccountList.group_accounts_list_by_payer.map(
         (accountByPayer) => {
-          if (prevGroupAccountList.group_id === editedGroupAccount.group_id) {
-            accountByPayer.group_accounts_list = accountByPayer.group_accounts_list.map(
-              (account) => {
-                if (account.payer_user_id === editedGroupAccount.payer_user_id) {
-                  return editedGroupAccount;
-                }
+          accountByPayer.group_accounts_list = accountByPayer.group_accounts_list.map((account) => {
+            if (account.id === editedGroupAccount.id) {
+              return editedGroupAccount;
+            }
 
-                return account;
-              }
-            );
-          }
+            return account;
+          });
 
           return accountByPayer;
         }

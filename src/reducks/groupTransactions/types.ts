@@ -57,6 +57,7 @@ export interface GroupAccount {
   month: string;
   payer_user_id: string;
   recipient_user_id: string;
+  recipient_user_name: string;
   payment_amount: number;
   payment_confirmation: boolean;
   receipt_confirmation: boolean;
@@ -65,7 +66,8 @@ export interface GroupAccount {
 export interface GroupAccounts extends Array<GroupAccount> {}
 
 export interface GroupAccountByPayer {
-  payer_user_id: number;
+  payer_user_id: string;
+  payer_user_name: string;
   group_accounts_list: GroupAccounts;
 }
 

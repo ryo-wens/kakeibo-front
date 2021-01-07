@@ -1,7 +1,6 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { incomeTransactionType } from '../../lib/constant';
-import { GroupAccounts } from './types';
 
 const groupTransactionsSelector = (state: State) => state.groupTransactions;
 
@@ -15,14 +14,14 @@ export const getGroupLatestTransactions = createSelector(
   (state) => state.groupLatestTransactionsList
 );
 
-export const getGroupAccountList = createSelector(
-  [groupTransactionsSelector],
-  (state) => state.groupAccountList
-);
-
 export const getGroupYearlyAccountList = createSelector(
   [groupTransactionsSelector],
   (state) => state.groupYearlyAccountList
+);
+
+export const getGroupAccountList = createSelector(
+  [groupTransactionsSelector],
+  (state) => state.groupAccountList
 );
 
 export const getDeleteAccountMessage = createSelector(
@@ -73,14 +72,24 @@ export const getAccountCompleteJudgment = createSelector([groupAccountList], (gr
   return completeAccount;
 });
 
-export const getAccountListByPayer = createSelector([groupAccountList], (groupAccountList) => {
-  const accounts: GroupAccounts = [];
+export const getRemainingTotalAmount = createSelector([groupAccountList], (groupAccountList) => {
+  const remainingAmountList: number[] = [];
 
-  groupAccountList.group_accounts_list_by_payer.map((account) => {
-    accounts.push(...account.group_accounts_list);
-  });
+  for (const groupAccountListByPayer of groupAccountList.group_accounts_list_by_payer) {
+    let remainingAmount = 0;
 
-  return accounts;
+    for (const account of groupAccountListByPayer.group_accounts_list) {
+      if (account.receipt_confirmation) {
+        continue;
+      }
+
+      remainingAmount += account.payment_amount;
+    }
+
+    remainingAmountList.push(remainingAmount);
+  }
+
+  return remainingAmountList;
 });
 
 const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
