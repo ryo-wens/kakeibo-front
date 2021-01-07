@@ -69,6 +69,10 @@ const Task = () => {
     setTaskList(groupTasksList);
   }, [groupTasksList]);
 
+  if (groups.length === 0) {
+    return null;
+  }
+
   const idx = groups.findIndex((group) => group.group_id === groupId);
   const approvedGroup = groups[idx];
 
