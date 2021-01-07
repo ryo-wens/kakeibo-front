@@ -12,6 +12,7 @@ import { useLocation, useParams } from 'react-router';
 import { month, year } from '../../../../lib/constant';
 import axios, { CancelTokenSource } from 'axios';
 import {
+  fetchGroupExpiredTodoList,
   fetchGroupMonthTodoList,
   fetchGroupTodayTodoList,
 } from '../../../../reducks/groupTodoList/operations';
@@ -22,7 +23,12 @@ import MonthlyTodoList from './MonthlyTodoList/MonthlyTodoList';
 import './monthly-todo-area.scss';
 import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
 
-const MonthlyTodoArea = () => {
+interface MonthlyTodoAreaProps {
+  editing: boolean;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
   const dispatch = useDispatch();
   const monthImplementationTodoList = useSelector(getMonthImplementationTodoList);
   const monthDueTodoList = useSelector(getMonthDueTodoList);
@@ -40,6 +46,8 @@ const MonthlyTodoArea = () => {
   }, [selectedYear, selectedMonth]);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
+    dispatch(fetchGroups(signal));
+    dispatch(fetchGroupExpiredTodoList(Number(id), signal));
     dispatch(
       fetchGroupTodayTodoList(
         Number(id),
@@ -60,7 +68,7 @@ const MonthlyTodoArea = () => {
   };
 
   useEffect(() => {
-    if (pathName === 'group') {
+    if (pathName === 'group' && !props.editing) {
       const signal = axios.CancelToken.source();
       fetchGroupTodoList(signal);
       const interval = setInterval(() => {
@@ -71,20 +79,7 @@ const MonthlyTodoArea = () => {
         clearInterval(interval);
       };
     }
-  }, [selectedYear, selectedMonth, selectedDate]);
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-    dispatch(fetchGroups(signal));
-    const interval = setInterval(() => {
-      dispatch(fetchGroups(signal));
-    }, 3000);
-
-    return () => {
-      signal.cancel();
-      clearInterval(interval);
-    };
-  }, [selectedYear, selectedMonth]);
+  }, [selectedYear, selectedMonth, selectedDate, props.editing]);
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -117,6 +112,7 @@ const MonthlyTodoArea = () => {
             }
             monthDueTodoList={pathName === 'group' ? groupMonthDueTodoList : monthDueTodoList}
             selectedDate={selectedDate}
+            setEditing={props.setEditing}
           />
         }
         rightItem={
@@ -128,6 +124,7 @@ const MonthlyTodoArea = () => {
             }
             monthDueTodoList={pathName === 'group' ? groupMonthDueTodoList : monthDueTodoList}
             selectedDate={selectedDate}
+            setEditing={props.setEditing}
           />
         }
       />
