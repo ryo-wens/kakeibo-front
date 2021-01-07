@@ -26,6 +26,7 @@
 
   &__year-position {
     text-align: center;
+    width: 100%;
   }
 
   &__yearly-table {
@@ -54,29 +55,12 @@
   }
 
   &__payoff-link {
-    border-bottom: 1px solid $main_color;
-    color: $main_color;
+    border-bottom: 1px solid $link-color;
+    color: $link-color;
     cursor: pointer;
-    //padding: 0.1em 0.3em;
-    //position: relative;
-    //display: inline-block;
-    //transition: .3s;
-    //
-    //&:hover {
-    //  color: $main_color;
-    //}
+
+    &:hover {
+      opacity: 0.6;
+    }
   }
-  //&__payoff-link::after {
-  //  content: '';
-  //  position: absolute;
-  //  bottom: 0;
-  //  left: 0;
-  //  width: 0;
-  //  height: 1px;
-  //  background-color: $main_color;
-  //  transition: .3s;
-  //}
-  //&__payoff-link:hover::after {
-  //    width: 100%;
-  // }
 }

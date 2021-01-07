@@ -13,8 +13,9 @@ import {
   getGroupAccountList,
   getStatusNotFoundMessage,
   getAccountCompleteJudgment,
-  getAccountListByPayer,
+  getRemainingTotalAmount,
 } from '../reducks/groupTransactions/selectors';
+import { getUserId } from '../reducks/users/selectors';
 import { getApprovedGroups } from '../reducks/groups/selectors';
 import PayOffBody from '../components/account/PayOffBody';
 import { Header } from '../components/header';
@@ -35,8 +36,9 @@ const PayOff = (props: PayOffProps) => {
   const groupAccountList = useSelector(getGroupAccountList);
   const badRequestMessage = useSelector(getStatusNotFoundMessage);
   const completeJudge = useSelector(getAccountCompleteJudgment);
-  const accountListByPayer = useSelector(getAccountListByPayer);
   const approvedGroup = useSelector(getApprovedGroups);
+  const remainingTotalAmount = useSelector(getRemainingTotalAmount);
+  const currentUserId = useSelector(getUserId);
   const searchLocation = useLocation().search;
   const getQuery = () => {
     return new URLSearchParams(searchLocation);
@@ -152,32 +154,34 @@ const PayOff = (props: PayOffProps) => {
                 />
               </div>
               <div className="payoff__spacer-small" />
-              <div className="payoff__amount-list">
-                <div className="payoff__account-form">
-                  合計支払金額
-                  <div className="payoff__amount-position">
-                    {displayAmount(groupAccountList.group_total_payment_amount)
-                      ? groupAccountList.group_total_payment_amount.toLocaleString()
-                      : 0}
+              {currentSelectMonth === subMonth && (
+                <div className="payoff__amount-list">
+                  <div className="payoff__account-form">
+                    合計支払金額
+                    <div className="payoff__amount-position">
+                      {displayAmount(groupAccountList.group_total_payment_amount)
+                        ? groupAccountList.group_total_payment_amount.toLocaleString()
+                        : 0}
+                    </div>
+                  </div>
+                  <div className="payoff__account-form">
+                    1人あたり平均支払金額
+                    <div className="payoff__amount-position">
+                      {displayAmount(groupAccountList.group_average_payment_amount)
+                        ? groupAccountList.group_average_payment_amount.toLocaleString()
+                        : 0}
+                    </div>
+                  </div>
+                  <div className="payoff__account-form">
+                    会計後支払残額
+                    <div className="payoff__amount-position">
+                      {displayAmount(groupAccountList.group_remaining_amount)
+                        ? groupAccountList.group_remaining_amount.toLocaleString()
+                        : 0}
+                    </div>
                   </div>
                 </div>
-                <div className="payoff__account-form">
-                  1人あたり平均支払金額
-                  <div className="payoff__amount-position">
-                    {displayAmount(groupAccountList.group_average_payment_amount)
-                      ? groupAccountList.group_average_payment_amount.toLocaleString()
-                      : 0}
-                  </div>
-                </div>
-                <div className="payoff__account-form">
-                  会計後支払残額
-                  <div className="payoff__amount-position">
-                    {displayAmount(groupAccountList.group_remaining_amount)
-                      ? groupAccountList.group_remaining_amount.toLocaleString()
-                      : 0}
-                  </div>
-                </div>
-              </div>
+              )}
               <p className="payoff__error-message">
                 {currentSelectMonth === subMonth ? '' : message}
               </p>
@@ -188,7 +192,8 @@ const PayOff = (props: PayOffProps) => {
                 selectMonth={subMonth}
                 selectYear={String(props.selectedYear)}
                 completeJudge={completeJudge}
-                accountListByPayer={accountListByPayer}
+                remainingTotalAmount={remainingTotalAmount}
+                currentUserId={currentUserId}
               />
             </div>
           </div>

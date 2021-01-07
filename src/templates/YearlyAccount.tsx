@@ -71,10 +71,10 @@ const YearlyAccount = () => {
         {!currentItem && searchLocation.length === queryParamsLength ? (
           <>
             <div className="yearly-account__spacer yearly-account__spacer--large" />
+            <div className="yearly-account__year-position">
+              <SelectYears selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
+            </div>
             <div className="yearly-account__backGround">
-              <div className="yearly-account__year-position">
-                <SelectYears selectedYear={selectedYear} setSelectedYear={setSelectedYear} />
-              </div>
               <div className="yearly-account__spacer--medium" />
               <table className="yearly-account__yearly-table">
                 <tbody>

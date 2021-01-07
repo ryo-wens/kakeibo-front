@@ -534,7 +534,7 @@ describe('async actions groupTransactions', () => {
     };
 
     const groupId = 1;
-    const year = 2020;
+    const year = '2020';
     const customMonth = '11';
     const editAccountId = 14;
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account/${editAccountId}`;

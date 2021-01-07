@@ -5,7 +5,7 @@
   margin: 0 auto;
 
   &__box-size {
-  width: 50%;
+    width: 50%;
   }
 
   &__background {
@@ -103,7 +103,7 @@
 
   &__account-li {
     list-style: none;
-    margin-left: 35px;
+    margin-left: 25px;
   }
 
   &__sub-title {
@@ -112,5 +112,17 @@
     &__color-red {
       color: $danger-color;
     }
+  }
+
+  &__recipient-field {
+    width: 100%;
+  }
+
+  &__check-box {
+    width: calc((100% - 106px) * 0.2);
+  }
+
+  &__user-name {
+    width: calc((100% - 50px) * 0.4);
   }
 }

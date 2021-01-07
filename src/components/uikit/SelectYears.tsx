@@ -80,7 +80,13 @@ const SelectYears = (props: SelectYearsProps) => {
       {props.selectedYear !== year && (
         <button
           className="select-years__display-btn select-years__display-btn--small"
-          onClick={() => props.setSelectedYear(year)}
+          onClick={() => {
+            const currentYearQuery = { ...queryParams, '?year': year };
+            history.push({ search: decodeURIComponent(qs.stringify(currentYearQuery)) });
+
+            setItemYear(year);
+            props.setSelectedYear(year);
+          }}
         >
           今年を表示
         </button>
