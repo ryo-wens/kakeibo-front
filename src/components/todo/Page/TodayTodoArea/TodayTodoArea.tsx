@@ -1,6 +1,7 @@
 import React, { useEffect } from 'react';
 import axios, { CancelTokenSource } from 'axios';
 import {
+  fetchGroupExpiredTodoList,
   fetchGroupMonthTodoList,
   fetchGroupTodayTodoList,
 } from '../../../../reducks/groupTodoList/operations';
@@ -22,7 +23,12 @@ import TodayTodoList from './TodayTodoList/TodayTodoList';
 import { AddTodo } from '../../index';
 import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
 
-const TodayTodoArea = () => {
+interface TodayTodoAreaProps {
+  editing: boolean;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const TodayTodoArea = (props: TodayTodoAreaProps) => {
   const dispatch = useDispatch();
   const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
   const todayDueTodoList = useSelector(getTodayDueTodoList);
@@ -36,12 +42,14 @@ const TodayTodoArea = () => {
   const todayDate: string = ('0' + date.getDate()).slice(-2);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
+    dispatch(fetchGroups(signal));
+    dispatch(fetchGroupExpiredTodoList(Number(id), signal));
     dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
     dispatch(fetchGroupMonthTodoList(Number(id), todayYear, todayMonth, signal));
   };
 
   useEffect(() => {
-    if (pathName === 'group') {
+    if (pathName === 'group' && !props.editing) {
       const signal = axios.CancelToken.source();
       fetchGroupTodoList(signal);
       const interval = setInterval(() => {
@@ -52,19 +60,7 @@ const TodayTodoArea = () => {
         clearInterval(interval);
       };
     }
-  }, [todayYear, todayMonth, todayDate]);
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-    dispatch(fetchGroups(signal));
-    const interval = setInterval(() => {
-      dispatch(fetchGroups(signal));
-    }, 3000);
-    return () => {
-      signal.cancel();
-      clearInterval(interval);
-    };
-  }, [todayYear, todayMonth, todayDate]);
+  }, [todayYear, todayMonth, todayDate, props.editing]);
 
   useEffect(() => {
     if (
@@ -94,6 +90,7 @@ const TodayTodoArea = () => {
               pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
             }
             dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+            setEditing={props.setEditing}
           />
         }
         rightItem={
@@ -104,6 +101,7 @@ const TodayTodoArea = () => {
               pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
             }
             dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+            setEditing={props.setEditing}
           />
         }
       />

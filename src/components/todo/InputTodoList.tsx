@@ -92,7 +92,6 @@ const InputTodoList = React.forwardRef(
               format="yyyy年 MM月dd日"
               value={props.selectedImplementationDate}
               onChange={props.inputImplementationDate}
-              minDate={new Date()}
               required={true}
               onOpen={() => document.removeEventListener('click', props.onClickCloseInputTodoList)}
               onClose={() => document.addEventListener('click', props.onClickCloseInputTodoList)}

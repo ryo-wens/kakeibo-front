@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
@@ -30,6 +30,7 @@ const Home = () => {
   const thisMonthGroupTotalExpense = useSelector(getTotalGroupExpense);
   const currentMonthBudgetStatus = useSelector(getCurrentMonthBudgets);
   const currentMonthGroupBudgetStatus = useSelector(getCurrentMonthGroupBudget);
+  const [todoEditing, setTodoEditing] = useState(false);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -38,7 +39,7 @@ const Home = () => {
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    if (pathName === 'group') {
+    if (pathName === 'group' && !todoEditing) {
       const years: SelectYears = {
         selectedYear: String(year),
         selectedMonth: month <= 9 ? '0' + month : String(month),
@@ -55,7 +56,7 @@ const Home = () => {
         clearInterval(interval);
       };
     }
-  }, [pathName, id]);
+  }, [pathName, id, todoEditing]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -103,7 +104,7 @@ const Home = () => {
           <MonthlyHistory month={month} year={year} />
         </div>
         <div className="home__right">
-          <CurrentSchedule />
+          <CurrentSchedule todoEditing={todoEditing} setTodoEditing={setTodoEditing} />
         </div>
       </main>
     </>
