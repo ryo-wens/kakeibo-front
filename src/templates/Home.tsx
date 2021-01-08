@@ -33,9 +33,14 @@ const Home = () => {
   const [todoEditing, setTodoEditing] = useState(false);
 
   useEffect(() => {
-    const signal = axios.CancelToken.source();
-    dispatch(fetchYearlyBudgets(year, signal));
-  }, []);
+    if (pathName !== 'group') {
+      const signal = axios.CancelToken.source();
+      dispatch(fetchYearlyBudgets(year, signal));
+      return () => {
+        signal.cancel();
+      };
+    }
+  }, [pathName]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
