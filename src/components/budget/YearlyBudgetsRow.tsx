@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation } from 'react-router';
 import { fetchYearlyBudgets, deleteCustomBudgets } from '../../reducks/budgets/operations';
 import axios from 'axios';
 import { YearlyBudgetsList } from '../../reducks/budgets/types';
@@ -9,7 +10,6 @@ import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { standardBudgetType } from '../../lib/constant';
 import { getYearlyBudgets } from '../../reducks/budgets/selectors';
-import { getPathTemplateName } from '../../lib/path';
 
 interface YearlyBudgetsRowProps {
   years: number;
@@ -18,7 +18,8 @@ interface YearlyBudgetsRowProps {
 const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   const dispatch = useDispatch();
   const year = props.years;
-  const pathName = getPathTemplateName(window.location.pathname);
+  const pathName = useLocation().pathname.split('/')[1];
+  const signal = axios.CancelToken.source();
   const yearlyBudgets = useSelector(getYearlyBudgets);
   const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
     year: '',
@@ -28,7 +29,6 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
 
   useEffect(() => {
     if (pathName !== 'group') {
-      const signal = axios.CancelToken.source();
       dispatch(fetchYearlyBudgets(year, signal));
       return () => signal.cancel();
     }
@@ -37,6 +37,14 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   useEffect(() => {
     setYearBudget(yearlyBudgets);
   }, [yearlyBudgets]);
+
+  const deleteCustom = (selectYear: string, selectMonth: string) => {
+    async function deleteBudgets() {
+      await dispatch(deleteCustomBudgets(selectYear, selectMonth));
+      dispatch(fetchYearlyBudgets(Number(selectYear), signal));
+    }
+    deleteBudgets();
+  };
 
   const customBudgetsTable = (): JSX.Element[] => {
     return yearBudget.monthly_budgets.map((budget, index) => {
@@ -77,7 +85,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
                 size={'small'}
                 onClick={() => {
                   if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
-                    dispatch(deleteCustomBudgets(selectYear, selectMonth));
+                    deleteCustom(selectYear, selectMonth);
                   }
                 }}
               >

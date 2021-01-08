@@ -17,6 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import GenericButton from '../uikit/GenericButton';
 import { getGroupPathYear, getGroupPathMonth } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 const EditGroupStandardBudgets = () => {
   const dispatch = useDispatch();
@@ -61,6 +62,14 @@ const EditGroupStandardBudgets = () => {
     <>
       <div className="budget__spacer budget__spacer--medium" />
       <div className="budget budget__background budget__background__table">
+        <div className="budget__back-btn--position">
+          <button
+            className="budget__back-btn"
+            onClick={() => dispatch(push(`/group/${id}/yearly/budgets`))}
+          >
+            <ChevronLeftIcon />
+          </button>
+        </div>
         <div className="budget__spacer budget__spacer--medium" />
         <div className="budget__total-budget budget__total-budget__position">カスタム予算追加</div>
         <div className="budget__total-budget budget__total-budget__space">{yearsInGroup}</div>

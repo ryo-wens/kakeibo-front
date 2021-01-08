@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import { push } from 'connected-react-router';
 import axios from 'axios';
-import { fetchStandardBudgets } from '../reducks/budgets/operations';
+import { fetchStandardBudgets, fetchYearlyBudgets } from '../reducks/budgets/operations';
 import { getYearlyBudgets } from '../reducks/budgets/selectors';
 import { getGroupYearlyBudgets } from '../reducks/groupBudgets/selectors';
 import YearlyBudgetsRow from '../components/budget/YearlyBudgetsRow';
@@ -40,6 +40,7 @@ const YearlyBudgets = () => {
   useEffect(() => {
     const signal = axios.CancelToken.source();
     dispatch(fetchStandardBudgets(signal));
+    dispatch(fetchYearlyBudgets(years, signal));
     return () => signal.cancel();
   }, []);
 

@@ -17,6 +17,7 @@ import TextField from '@material-ui/core/TextField';
 import GenericButton from '../uikit/GenericButton';
 import { getGroupPathYear, getGroupPathMonth } from '../../lib/path';
 import './budget.scss';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 const GroupCustomBudgets = () => {
   const dispatch = useDispatch();
@@ -57,11 +58,19 @@ const GroupCustomBudgets = () => {
     <>
       <div className="budget__spacer budget__spacer--medium" />
       <div className="budget budget__background budget__background__table">
+        <div className="budget__back-btn--position">
+          <button
+            className="budget__back-btn"
+            onClick={() => dispatch(push(`/group/${id}/yearly/budgets`))}
+          >
+            <ChevronLeftIcon />
+          </button>
+        </div>
         <div className="budget__spacer budget__spacer--medium" />
-        <div className="budget__total-budget budget__total-budget__position">標準予算設定</div>
+        <div className="budget__total-budget budget__total-budget__position">カスタム予算編集</div>
         <div className="budget__total-budget budget__total-budget__space">{yearsInGroup}</div>
         <div className="budget__total-budget budget__total-budget__space">
-          総予算 ¥ {groupTotalCustomBudget}
+          総予算 ¥ {groupTotalCustomBudget.toLocaleString()}
         </div>
         <div className="budget__spacer budget__spacer--medium" />
         <table className="budget budget__background__table">
