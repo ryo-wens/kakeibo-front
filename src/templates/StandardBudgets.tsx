@@ -7,8 +7,6 @@ import { getStandardBudgets, getTotalStandardBudget } from '../reducks/budgets/s
 import { fetchStandardBudgets, editStandardBudgets } from '../reducks/budgets/operations';
 import { fetchGroups } from '../reducks/groups/operations';
 import { StandardBudgetsList } from '../reducks/budgets/types';
-import Button from '@material-ui/core/Button';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
 import TextField from '@material-ui/core/TextField';
 import GenericButton from '../components/uikit/GenericButton';
 import GroupStandardBudgets from '../components/budget/GroupStandardBudgets';
@@ -53,7 +51,10 @@ const StandardBudgets = () => {
 
   const currentPageColor = () => {
     if (path === '/standard/budgets' || path === `/group/${id}/standard/budgets`) {
-      return { backgroundColor: '#ff6600', color: '#fff' };
+      return {
+        background: 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)',
+        color: '#fff',
+      };
     }
   };
 
@@ -61,32 +62,29 @@ const StandardBudgets = () => {
     <>
       <Header />
       <main className="section__container">
-        <div className="budget__switching-btn">
-          <ButtonGroup className="budget__switch-btn--color" size="large" aria-label="budgets-kind">
-            <Button
-              style={currentPageColor()}
-              className="budget__switch-btn budget__switch-btn"
-              onClick={() => {
-                {
-                  pathName !== 'group'
-                    ? dispatch(push('/standard/budgets'))
-                    : dispatch(push(`/group/${id}/standard/budgets`));
-                }
-              }}
-            >
-              標準予算
-            </Button>
-            <Button
-              className="budget__switch-btn budget__switch-btn"
-              onClick={() => {
+        <div className="budget__spacer budget__spacer--medium" />
+        <div className="switch-item-tabs__buttons budget__switch-type" aria-label="budgets-kind">
+          <button
+            style={currentPageColor()}
+            onClick={() => {
+              {
                 pathName !== 'group'
-                  ? dispatch(push('/yearly/budgets'))
-                  : dispatch(push(`/group/${id}/yearly/budgets`));
-              }}
-            >
-              月別カスタム予算
-            </Button>
-          </ButtonGroup>
+                  ? dispatch(push('/standard/budgets'))
+                  : dispatch(push(`/group/${id}/standard/budgets`));
+              }
+            }}
+          >
+            標準予算
+          </button>
+          <button
+            onClick={() => {
+              pathName !== 'group'
+                ? dispatch(push('/yearly/budgets'))
+                : dispatch(push(`/group/${id}/yearly/budgets`));
+            }}
+          >
+            月別カスタム予算
+          </button>
         </div>
         {pathName !== 'group' ? (
           <>
@@ -97,7 +95,7 @@ const StandardBudgets = () => {
                 標準予算設定
               </div>
               <div className="budget__total-budget budget__total-budget__space">
-                総予算 ¥ {totalStandardBudget}
+                総予算 ¥ {totalStandardBudget.toLocaleString()}
               </div>
               <div className="budget__spacer budget__spacer--medium" />
               <table className="budget budget__background__table">
@@ -118,7 +116,9 @@ const StandardBudgets = () => {
                         <td className="budget__td" scope="row">
                           {budget.big_category_name}
                         </td>
-                        <td className="budget__td">￥ {budget.last_month_expenses}</td>
+                        <td className="budget__td">
+                          ￥ {budget.last_month_expenses.toLocaleString()}
+                        </td>
                         <td className="budget__td" align="center">
                           <TextField
                             size={'small'}
@@ -151,6 +151,7 @@ const StandardBudgets = () => {
                         })
                       )
                     );
+                    window.scrollTo(0, 0);
                   }}
                 />
               </div>

@@ -1,4 +1,5 @@
 @import "src/assets/variable";
+@import "../uikit/tabs/switch-item-tabs";
 
 .budget {
   border-collapse: collapse;
@@ -28,11 +29,10 @@
 
   }
 
-  &__year-selector {
-    background-color: #fff;
-    display: flex;
+  &__switch-type {
+    width: 30%;
     margin: 0 auto;
-    width: 40%;
+
   }
 
   &__spacer {
@@ -43,7 +43,7 @@
       height: 30px;
     }
 
-    &__small {
+    &--small {
       height: 10px;
     }
   }
@@ -101,4 +101,27 @@
     margin: 0 auto;
   }
 
+  &__back-btn {
+    background: linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%);
+    border-radius: 0.2rem;
+    border: none;
+    color: white;
+    cursor: pointer;
+    font-size: 1.8rem;
+    flex-shrink: 0;
+    left: 0;
+    height: 1.8rem;
+
+    &:hover {
+      border-radius: 1.2rem;
+    }
+
+    &:focus {
+      outline: none;
+    }
+
+    &--position {
+      padding: 8px;
+    }
+  }
 }

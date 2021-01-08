@@ -1,0 +1,37 @@
+@import "../../assets/variable";
+@import "./budget";
+
+.yearly-budgets {
+
+  &__yearly-table-position {
+    align-items: center;
+    flex-direction: column;
+    margin: 0 auto;
+  }
+
+  &__background {
+    background-color: white;
+    border: 1px solid rgba(0, 0, 0, 0.3);
+    border-radius: 5px;
+    box-sizing: border-box;
+    height: auto;
+    margin: 40px auto;
+    width: 100%;
+    padding: 20px;
+
+    &__table {
+      border: 1px solid $border_color;
+      margin: 0 auto;
+    }
+
+  }
+
+  &__select-year {
+    text-align: center;
+  }
+
+  &__switch-tabs {
+    width: 30%;
+  }
+
+}
