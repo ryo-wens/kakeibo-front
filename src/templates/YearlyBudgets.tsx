@@ -39,8 +39,11 @@ const YearlyBudgets = () => {
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    dispatch(fetchStandardBudgets(signal));
-    dispatch(fetchYearlyBudgets(years, signal));
+    if (pathName !== 'group') {
+      dispatch(fetchStandardBudgets(signal));
+      dispatch(fetchYearlyBudgets(years, signal));
+    }
+
     return () => signal.cancel();
   }, []);
 
