@@ -16,15 +16,14 @@ import EventAvailableIcon from '@material-ui/icons/EventAvailable';
 import { logOut } from '../../reducks/users/operations';
 import { MobileDrawer, InvitationNotifications } from './index';
 import { SwitchEntity } from './group';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { fetchUserInfo } from '../../reducks/users/operations';
 import { fetchGroups } from '../../reducks/groups/operations';
 import { Groups } from '../../reducks/groups/types';
 import { getUserName } from '../../reducks/users/selectors';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { State } from '../../reducks/store/types';
-import axios, { CancelTokenSource } from 'axios';
+import axios from 'axios';
 import { year } from '../../lib/constant';
+import { useLocation, useParams } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,52 +68,57 @@ const useStyles = makeStyles((theme: Theme) =>
 const Header = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const userName: string = getUserName(selector);
-  const approvedGroups: Groups = getApprovedGroups(selector);
-  const entityType: string = getPathTemplateName(window.location.pathname);
-  const groupId: number = getPathGroupId(window.location.pathname);
+  const userName: string = useSelector(getUserName);
+  const approvedGroups: Groups = useSelector(getApprovedGroups);
+  const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
   const [name, setName] = useState<string>('');
 
-  const fetchApprovedGroups = (signal: CancelTokenSource) => {
-    if (!approvedGroups.length) {
-      dispatch(fetchGroups(signal));
-    }
-  };
-
   useEffect(() => {
-    if (userName === '') {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchUserInfo(signal));
-      return () => signal.cancel();
-    }
-  }, []);
-
-  useEffect(() => {
-    const initialName = async () => {
-      if (entityType === 'group') {
-        const signal = axios.CancelToken.source();
-        await fetchApprovedGroups(signal);
-        let groupName = '';
-        for (const approvedGroup of approvedGroups) {
-          if (approvedGroup.group_id === groupId) {
-            groupName = approvedGroup.group_name;
-          }
-        }
-        setName(groupName);
-        return () => signal.cancel();
-      } else if (entityType !== 'group') {
+    let unmount = false;
+    const signal = axios.CancelToken.source();
+    const setUserName = async () => {
+      await dispatch(fetchUserInfo(signal));
+      if (pathName !== 'group' && name === '' && !unmount) {
         setName(userName);
       }
     };
-    initialName();
-  }, [approvedGroups, entityType, groupId]);
+    setUserName();
+    return () => {
+      unmount = true;
+      signal.cancel();
+    };
+  }, [userName, pathName]);
+
+  useEffect(() => {
+    let unmount = false;
+    const signal = axios.CancelToken.source();
+    const setGroupName = async () => {
+      if (pathName === 'group' && name === '') {
+        await dispatch(fetchGroups(signal));
+        let groupName = '';
+        for (const group of approvedGroups) {
+          if (group.group_id === Number(id)) {
+            groupName = group.group_name;
+          }
+        }
+        if (!unmount) {
+          setName(groupName);
+        }
+      }
+    };
+    setGroupName();
+    return () => {
+      unmount = true;
+      signal.cancel();
+    };
+  }, [approvedGroups, pathName, Number(id)]);
 
   const existsGroupWhenRouting = (path: string) => {
-    if (entityType !== 'group') {
+    if (pathName !== 'group') {
       return dispatch(push(`${path}`));
-    } else if (entityType === 'group') {
-      return dispatch(push(`/group/${groupId}${path}`));
+    } else if (pathName === 'group') {
+      return dispatch(push(`/group/${Number(id)}${path}`));
     }
   };
 
@@ -163,7 +167,7 @@ const Header = () => {
             >
               予算
             </Button>
-            {entityType === 'group' && (
+            {pathName === 'group' && (
               <Button
                 size="large"
                 className={classes.button}
@@ -184,7 +188,7 @@ const Header = () => {
             >
               Todo
             </Button>
-            {entityType === 'group' && (
+            {pathName === 'group' && (
               <Button
                 size="large"
                 className={classes.button}
@@ -199,7 +203,7 @@ const Header = () => {
           <SwitchEntity
             approvedGroups={approvedGroups}
             userName={userName}
-            entityType={entityType}
+            entityType={pathName}
             name={name}
             setName={setName}
           />
