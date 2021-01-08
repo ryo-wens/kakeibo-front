@@ -1,4 +1,5 @@
 @import "src/assets/variable";
+@import "../uikit/tabs/switch-item-tabs";
 
 .budget {
   border-collapse: collapse;
@@ -28,11 +29,10 @@
 
   }
 
-  &__year-selector {
-    background-color: #fff;
-    display: flex;
+  &__switch-type {
+    width: 30%;
     margin: 0 auto;
-    width: 40%;
+
   }
 
   &__spacer {
@@ -43,7 +43,7 @@
       height: 30px;
     }
 
-    &__small {
+    &--small {
       height: 10px;
     }
   }

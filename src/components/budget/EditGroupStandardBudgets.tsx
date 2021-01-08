@@ -1,5 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
+import { push } from 'connected-react-router';
+import axios, { CancelTokenSource } from 'axios';
 import {
   fetchGroupStandardBudgets,
   addGroupCustomBudgets,
@@ -11,12 +14,9 @@ import {
   getGroupTotalStandardBudget,
 } from '../../reducks/groupBudgets/selectors';
 import TextField from '@material-ui/core/TextField';
-import { push } from 'connected-react-router';
 import GenericButton from '../uikit/GenericButton';
 import { getGroupPathYear, getGroupPathMonth } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
-import axios, { CancelTokenSource } from 'axios';
-import { useParams } from 'react-router';
 
 const EditGroupStandardBudgets = () => {
   const dispatch = useDispatch();
@@ -27,8 +27,8 @@ const EditGroupStandardBudgets = () => {
   const groupCustomBudgetsList = useSelector(getGroupCustomBudgets);
   const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
   const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
-  const unAddCustomBudgets = groupCustomBudgets === groupCustomBudgetsList;
   const [editing, setEditing] = useState<boolean>(false);
+  const unAddCustomBudgets = groupCustomBudgets === groupCustomBudgetsList;
 
   const fetchEditGroupStandardBudgetsData = (signal: CancelTokenSource) => {
     async function fetchGroupBudgets(signal: CancelTokenSource) {
@@ -62,10 +62,10 @@ const EditGroupStandardBudgets = () => {
       <div className="budget__spacer budget__spacer--medium" />
       <div className="budget budget__background budget__background__table">
         <div className="budget__spacer budget__spacer--medium" />
-        <div className="budget__total-budget budget__total-budget__position">標準予算設定</div>
+        <div className="budget__total-budget budget__total-budget__position">カスタム予算追加</div>
         <div className="budget__total-budget budget__total-budget__space">{yearsInGroup}</div>
         <div className="budget__total-budget budget__total-budget__space">
-          総予算 ¥ {groupTotalStandardBudget}
+          総予算 ¥ {groupTotalStandardBudget.toLocaleString()}
         </div>
         <div className="budget__spacer budget__spacer--medium" />
         <table className="budget budget__background__table">

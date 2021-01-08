@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
 import {
   fetchStandardBudgets,
@@ -14,7 +14,7 @@ import ButtonGroup from '@material-ui/core/ButtonGroup';
 import Button from '@material-ui/core/Button';
 import { push } from 'connected-react-router';
 import GenericButton from '../components/uikit/GenericButton';
-import { getPathTemplateName, getPathYear, getPathMonth } from '../lib/path';
+import { getPathYear, getPathMonth } from '../lib/path';
 import EditGroupStandardBudgets from '../components/budget/EditGroupStandardBudgets';
 import { fetchGroups } from '../reducks/groups/operations';
 import { Header } from '../components/header';
@@ -22,10 +22,10 @@ import '../components/budget/budget.scss';
 
 const EditStandardBudgets = () => {
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const pathName = useLocation().pathname.split('/')[1];
   const selectYear = getPathYear(window.location.pathname);
   const selectMonth = getPathMonth(window.location.pathname);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const { id } = useParams();
   const customBudgetsList = useSelector(getCustomBudgets);
   const totalStandardBudget = useSelector(getTotalStandardBudget);
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
@@ -68,6 +68,7 @@ const EditStandardBudgets = () => {
       <Header />
       <main className="section__container">
         <div className="budget__switching-btn">
+          <div className="budget__spacer budget__spacer--medium" />
           <ButtonGroup className="budget__switch-btn--color" size="large" aria-label="budgets-kind">
             <Button
               className="budget__switch-btn budget__switch-btn"
@@ -105,7 +106,7 @@ const EditStandardBudgets = () => {
                 {yearsInPersonal}
               </div>
               <div className="budget__total-budget budget__total-budget__space">
-                総予算 ¥ {totalStandardBudget}
+                総予算 ¥ {totalStandardBudget.toLocaleString()}
               </div>
               <div className="budget__spacer budget__spacer--medium" />
               <table className="budget budget__background__table">

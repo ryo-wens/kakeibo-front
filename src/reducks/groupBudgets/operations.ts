@@ -46,7 +46,7 @@ export const fetchGroupStandardBudgets = (groupId: number, signal: CancelTokenSo
   };
 };
 
-export const editGroupStandardBudgets = (groupBudgets: GroupBudgetsReq) => {
+export const editGroupStandardBudgets = (groupId: number, groupBudgets: GroupBudgetsReq) => {
   const data = { standard_budgets: groupBudgets };
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     const validBudgets = groupBudgets.every((groupBudget) =>
@@ -60,7 +60,7 @@ export const editGroupStandardBudgets = (groupBudgets: GroupBudgetsReq) => {
 
     try {
       const result = await axios.put<GroupStandardBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/1/standard-budgets`,
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`,
         JSON.stringify(data),
         {
           withCredentials: true,
