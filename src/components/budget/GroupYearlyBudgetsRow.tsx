@@ -1,44 +1,29 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { push } from 'connected-react-router';
+import { useParams } from 'react-router';
+import axios, { CancelTokenSource } from 'axios';
 import {
   fetchGroupYearlyBudgets,
   deleteGroupCustomBudgets,
 } from '../../reducks/groupBudgets/operations';
 import { GroupYearlyBudgetsList } from '../../reducks/groupBudgets/types';
-import { State } from '../../reducks/store/types';
-import TableRow from '@material-ui/core/TableRow';
-import TableCell from '@material-ui/core/TableCell';
 import IconButton from '@material-ui/core/IconButton';
-import { push } from 'connected-react-router';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
 import { standardBudgetType } from '../../lib/constant';
 import { getGroupYearlyBudgets } from '../../reducks/groupBudgets/selectors';
-import { getPathGroupId } from '../../lib/path';
 import { fetchGroups } from '../../reducks/groups/operations';
-import axios, { CancelTokenSource } from 'axios';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    tableSize: {
-      width: 250,
-      textAlign: 'center',
-    },
-  })
-);
 
 interface GroupYearlyBudgetsRowProps {
   years: number;
 }
 
 const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
-  const classes = useStyles();
   const dispatch = useDispatch();
   const year = props.years;
-  const groupId = getPathGroupId(window.location.pathname);
-  const selector = useSelector((state: State) => state);
-  const groupYearlyBudgetsList = getGroupYearlyBudgets(selector);
+  const { id } = useParams();
+  const groupYearlyBudgetsList = useSelector(getGroupYearlyBudgets);
   const [groupYearlyBudgets, setGroupYearlyBudgets] = useState<GroupYearlyBudgetsList>({
     year: '',
     yearly_total_budget: 0,
@@ -47,7 +32,7 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
 
   const fetchGroupYearlyBudgetsData = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupYearlyBudgets(groupId, year, signal));
+    dispatch(fetchGroupYearlyBudgets(Number(id), year, signal));
   };
 
   useEffect(() => {
@@ -80,48 +65,42 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
       const selectMonth = groupYearlyBudget.month.slice(5, 7);
       const lastDate = new Date(year, Number(selectMonth), 0).getDate();
       return (
-        <TableRow key={index}>
-          <TableCell className={classes.tableSize} component="th" scope="row">
+        <tr key={index}>
+          <td className="budget__td" scope="row">
             {selectMonth}月
-          </TableCell>
-          <TableCell className={classes.tableSize}>{budgetsType()}</TableCell>
-          <TableCell className={classes.tableSize} align="center">
+          </td>
+          <td className="budget__td">{budgetsType()}</td>
+          <td className="budget__td" align="center">
             {groupYearlyBudget.month}
             {'01'}日〜{groupYearlyBudget.month}
             {lastDate}日
-          </TableCell>
-          <TableCell className={classes.tableSize} align="center">
-            ¥{groupYearlyBudget.monthly_total_budget}
-          </TableCell>
-          <TableCell className={classes.tableSize} align="center">
+          </td>
+          <td className="budget__td" align="center">
+            ¥{groupYearlyBudget.monthly_total_budget.toLocaleString()}
+          </td>
+          <td className="budget__td" align="center">
             <IconButton
               size={'small'}
               onClick={() => {
-                dispatch(
-                  push(`/group/${groupId}${transitingBasePath}/${selectYear}/${selectMonth}`)
-                );
+                dispatch(push(`/group/${id}${transitingBasePath}/${selectYear}/${selectMonth}`));
               }}
             >
               <CreateIcon color={'primary'} />
             </IconButton>
-            {(() => {
-              if (budgetsType() === 'カスタム') {
-                return (
-                  <IconButton
-                    size={'small'}
-                    onClick={() => {
-                      if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
-                        dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, groupId));
-                      }
-                    }}
-                  >
-                    <DeleteIcon color={'primary'} />
-                  </IconButton>
-                );
-              }
-            })()}
-          </TableCell>
-        </TableRow>
+            {budgetsType() === 'カスタム' && (
+              <IconButton
+                size={'small'}
+                onClick={() => {
+                  if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
+                    dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(id)));
+                  }
+                }}
+              >
+                <DeleteIcon color={'primary'} />
+              </IconButton>
+            )}
+          </td>
+        </tr>
       );
     });
   };

@@ -1,27 +1,25 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import axios from 'axios';
 import { fetchCustomBudgets, editCustomBudgets } from '../reducks/budgets/operations';
 import { getCustomBudgets, getTotalCustomBudget } from '../reducks/budgets/selectors';
 import { CustomBudgetsList } from '../reducks/budgets/types';
 import TextField from '@material-ui/core/TextField';
 import GenericButton from '../components/uikit/GenericButton';
-import ButtonGroup from '@material-ui/core/ButtonGroup';
-import Button from '@material-ui/core/Button';
 import { push } from 'connected-react-router';
-import { getPathYear, getPathMonth, getPathTemplateName } from '../lib/path';
+import { getPathYear, getPathMonth } from '../lib/path';
 import { fetchGroups } from '../reducks/groups/operations';
 import { Header } from '../components/header';
 import GroupCustomBudgets from '../components/budget/GroupCustomBudgets';
 import '../components/budget/budget.scss';
+import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 const CustomBudgets = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
   const selectYear = getPathYear(window.location.pathname);
   const selectMonth = getPathMonth(window.location.pathname);
-  const pathName = getPathTemplateName(window.location.pathname);
+  const pathName = useLocation().pathname.split('/')[1];
   const yearsInPersonal = `${selectYear}年${selectMonth}月`;
   const customBudgetsList = useSelector(getCustomBudgets);
   const totalCustomBudget = useSelector(getTotalCustomBudget);
@@ -58,36 +56,18 @@ const CustomBudgets = () => {
     <>
       <Header />
       <main className="section__container">
-        <div className="budget__switching-btn">
-          <ButtonGroup className="budget__switch-btn--color" size="large" aria-label="budgets-kind">
-            <Button
-              className="budget__switch-btn budget__switch-btn"
-              onClick={() => {
-                {
-                  pathName !== 'group'
-                    ? dispatch(push('/standard/budgets'))
-                    : dispatch(push(`/group/${id}/standard/budgets`));
-                }
-              }}
-            >
-              標準予算
-            </Button>
-            <Button
-              className="budget__switch-btn budget__switch-btn"
-              onClick={() => {
-                pathName !== 'group'
-                  ? dispatch(push('/yearly/budgets'))
-                  : dispatch(push(`/group/${id}/yearly/budgets`));
-              }}
-            >
-              月別カスタム予算
-            </Button>
-          </ButtonGroup>
-        </div>
         {pathName !== 'group' ? (
           <>
             <div className="budget__spacer budget__spacer--medium" />
             <div className="budget budget__background budget__background__table">
+              <div className="budget__back-btn--position">
+                <button
+                  className="budget__back-btn"
+                  onClick={() => dispatch(push('/yearly/budgets'))}
+                >
+                  <ChevronLeftIcon />
+                </button>
+              </div>
               <div className="budget__spacer budget__spacer--medium" />
               <div className="budget__total-budget budget__total-budget__position">
                 カスタム予算編集
@@ -97,7 +77,7 @@ const CustomBudgets = () => {
               </div>
               <div className="budget__spacer budget__spacer--medium" />
               <div className="budget__total-budget budget__total-budget__space">
-                総予算 ¥ {totalCustomBudget}
+                総予算 ¥ {totalCustomBudget.toLocaleString()}
               </div>
               <div className="budget__spacer budget__spacer--medium" />
               <table className="budget budget__background__table">

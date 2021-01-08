@@ -152,7 +152,7 @@ describe('async actions editGroupStandardBudgets', () => {
 
     axiosMock.onPut(url, mockRequest).reply(200, mockResponse);
 
-    await editGroupStandardBudgets(mockRequest.standard_budgets)(
+    await editGroupStandardBudgets(groupId, mockRequest.standard_budgets)(
       store.dispatch,
       // @ts-ignore
       getState

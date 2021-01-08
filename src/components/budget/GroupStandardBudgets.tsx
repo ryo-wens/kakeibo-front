@@ -55,7 +55,7 @@ const GroupStandardBudgets = () => {
         <div className="budget__spacer budget__spacer--medium" />
         <div className="budget__total-budget budget__total-budget__position">標準予算設定</div>
         <div className="budget__total-budget budget__total-budget__space">
-          総予算 ¥ {groupTotalStandardBudget}
+          総予算 ¥ {groupTotalStandardBudget.toLocaleString()}
         </div>
         <div className="budget__spacer budget__spacer--medium" />
         <table className="budget budget__background__table">
@@ -77,7 +77,9 @@ const GroupStandardBudgets = () => {
                   <td className="budget__td" scope="row">
                     {groupBudget.big_category_name}
                   </td>
-                  <td className="budget__td">￥ {groupBudget.last_month_expenses}</td>
+                  <td className="budget__td">
+                    ￥ {groupBudget.last_month_expenses.toLocaleString()}
+                  </td>
                   <td className="budget__td" align="center">
                     <TextField
                       size={'small'}
@@ -101,6 +103,7 @@ const GroupStandardBudgets = () => {
             onClick={() => {
               dispatch(
                 editGroupStandardBudgets(
+                  Number(id),
                   groupStandardBudgets.map((groupBudget) => {
                     const { big_category_name, last_month_expenses, ...rest } = groupBudget; // eslint-disable-line
                     return {
@@ -111,6 +114,7 @@ const GroupStandardBudgets = () => {
                 )
               );
               setEditing(false);
+              window.scrollTo(0, 0);
             }}
           />
         </div>
