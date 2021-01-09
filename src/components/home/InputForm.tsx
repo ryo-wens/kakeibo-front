@@ -1,12 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import {
-  GenericButton,
-  DatePicker,
-  CategoryInput,
-  TextInput,
-  KindSelectBox,
-  SelectPayer,
-} from '../uikit/index';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../uikit/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
@@ -31,6 +24,7 @@ import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
 import axios from 'axios';
+import { BigCategoryInput, MediumCategoryInput } from '../uikit';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -57,6 +51,10 @@ const InputForm = (): JSX.Element => {
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
+  const bigCategoryRef = useRef<HTMLDivElement>(null);
+  const mediumMenuRef = useRef<HTMLDivElement>(null);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
   const signal = axios.CancelToken.source();
 
   useEffect(() => {
@@ -137,13 +135,14 @@ const InputForm = (): JSX.Element => {
     [setTransactionDate]
   );
 
-  const resetInputForm = useCallback(() => {
-    setAmount('');
-    setTransactionType('expense');
-    setBigCategory('');
+  const resetInputForm = () => {
     setShop('');
     setMemo('');
-  }, [setAmount, setTransactionType, setBigCategory, setShop, setMemo]);
+    setAmount('');
+    setBigCategory('');
+    setAssociatedCategory('');
+    setTransactionType('expense');
+  };
 
   const selectCategory = useCallback(
     (
@@ -179,6 +178,18 @@ const InputForm = (): JSX.Element => {
       setCustomCategoryId,
     ]
   );
+
+  const onClickCloseBigCategoryMenu = (event: Event) => {
+    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
+      setBigCategoryMenuOpen(false);
+    }
+  };
+
+  const onClickCloseMediumCategoryMenu = (event: Event) => {
+    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
+      setMediumCategoryMenuOpen(false);
+    }
+  };
 
   const unInput =
     amount === '' ||
@@ -263,16 +274,30 @@ const InputForm = (): JSX.Element => {
           pathName={pathName}
         />
       )}
-      <CategoryInput
-        bigCategory={bigCategory}
-        associatedCategory={associatedCategory}
-        onClick={selectCategory}
-        required={true}
+      <BigCategoryInput
+        ref={bigCategoryRef}
         kind={transactionsType}
-        bigCategoryIndex={bigCategoryIndex}
-        bigCategoryId={bigCategoryId}
+        bigCategory={bigCategory}
+        bigCategoryMenuOpen={bigCategoryMenuOpen}
         expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
         incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+        onClick={selectCategory}
+        onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
+        setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      />
+      <MediumCategoryInput
+        ref={mediumMenuRef}
+        kind={transactionsType}
+        bigCategoryId={bigCategoryId}
+        bigCategoryIndex={bigCategoryIndex}
+        bigCategory={bigCategory}
+        associatedCategory={associatedCategory}
+        expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+        incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+        mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+        onClick={selectCategory}
+        onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+        setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       />
       <TextInput
         value={shop}

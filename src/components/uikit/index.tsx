@@ -27,3 +27,5 @@ export { default as TextArea } from './TextArea';
 export { default as ErrorIndication } from './ErrorIndication';
 export { default as SelectYears } from './SelectYears';
 export { default as SelectMonth } from './SelectMonth';
+export { default as BigCategoryInput } from './BigCategroyInput';
+export { default as MediumCategoryInput } from './MediumCategoryInput';
