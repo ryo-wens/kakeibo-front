@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
-import { addShoppingListItem } from '../../../../../reducks/shoppingList/operations';
+import { addRegularShoppingListItem } from '../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import RegularShoppingListForm from '../../Form/RegularShoppingListForm/RegularShoppingListForm';
 import './add-regular-shopping-list-modal.scss';
@@ -12,22 +12,27 @@ import './add-regular-shopping-list-modal.scss';
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      width: 450,
+      width: 550,
       margin: '20px auto auto auto',
       backgroundColor: theme.palette.background.paper,
     },
   })
 );
 
-const AddRegularShoppingListModal = () => {
+interface AddRegularShoppingListModalProps {
+  selectedYear: number;
+  selectedMonth: number;
+}
+
+const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(new Date());
   const [cycleType, setCycleType] = useState<'daily' | 'weekly' | 'monthly' | 'custom'>('weekly');
-  const [cycle, setCycle] = useState<string | null>('');
+  const [cycle, setCycle] = useState<string | null>(null);
   const [purchase, setPurchase] = useState<string>('');
   const [shop, setShop] = useState<string>('');
-  const [amount, setAmount] = useState<string>('');
+  const [amount, setAmount] = useState<string | null>(null);
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [bigCategory, setBigCategory] = useState<string | null>('');
   const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
@@ -36,6 +41,8 @@ const AddRegularShoppingListModal = () => {
   const [transactionAutoAdd, setTransactionAutoAdd] = useState(false);
   const [associatedCategory, setAssociatedCategory] = useState<string>('');
   const signal = axios.CancelToken.source();
+  const currentMonth = `0` + `${props.selectedMonth}`.slice(-2);
+  const currentYearMonth = `${props.selectedYear}/${currentMonth}`;
 
   const openModal = () => {
     setOpen(true);
@@ -43,9 +50,11 @@ const AddRegularShoppingListModal = () => {
 
   const closeModal = () => {
     setOpen(false);
-    setPurchase('');
     setExpectedPurchaseDate(date);
-    setAmount('');
+    setCycleType('weekly');
+    setCycle(null);
+    setPurchase('');
+    setAmount(null);
     setBigCategoryId(0);
     setBigCategory('');
     setMediumCategoryId(null);
@@ -68,6 +77,9 @@ const AddRegularShoppingListModal = () => {
   };
 
   const handleCycleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (cycleType !== 'custom') {
+      setCycle(null);
+    }
     setCycle(event.target.value);
   };
 
@@ -108,8 +120,14 @@ const AddRegularShoppingListModal = () => {
     }
   };
 
-  const unInput =
-    purchase === '' || amount === '' || expectedPurchaseDate === null || bigCategoryId === 0;
+  const unInput = purchase === '' || expectedPurchaseDate === null || bigCategoryId === 0;
+
+  const unInputCycle = () => {
+    if (cycleType === 'custom') {
+      return cycle === null || cycle === '';
+    }
+    return false;
+  };
 
   const body = (
     <div className={classes.paper}>
@@ -138,13 +156,17 @@ const AddRegularShoppingListModal = () => {
         titleLabel={'定期買い物リストに追加'}
         buttonLabel={'追加'}
         closeModal={closeModal}
-        unInput={unInput}
-        dispatchOperation={addShoppingListItem(
+        unInput={unInput || unInputCycle()}
+        minDate={date}
+        dispatchOperation={addRegularShoppingListItem(
           date,
+          currentYearMonth,
           expectedPurchaseDate,
+          cycleType,
+          typeof cycle === 'string' ? Number(cycle) : cycle,
           purchase,
           shop,
-          Number(amount),
+          typeof amount === 'string' ? Number(amount) : amount,
           bigCategoryId,
           mediumCategoryId,
           customCategoryId,

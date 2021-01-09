@@ -40,6 +40,7 @@ interface ShoppingListFormProps {
   closeModal: () => void;
   unInput: boolean;
   dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  minDate: Date;
   openDeleteForm?: () => void;
 }
 
@@ -64,6 +65,22 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
       ),
     },
     {
+      key: 'カテゴリー',
+      value: (
+        <CategoryInput
+          bigCategory={props.bigCategory}
+          associatedCategory={props.associatedCategory}
+          onClick={props.selectCategory}
+          required={true}
+          kind={'expense'}
+          bigCategoryIndex={props.bigCategoryIndex}
+          bigCategoryId={props.bigCategoryId}
+          expenseCategories={expenseCategories}
+          incomeCategories={incomeCategories}
+        />
+      ),
+    },
+    {
       key: '購入予定日',
       value: (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -74,7 +91,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             format="yyyy年 MM月dd日"
             value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
-            minDate={new Date()}
+            minDate={props.minDate}
             required={true}
           />
         </MuiPickersUtilsProvider>
@@ -91,22 +108,6 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
-        />
-      ),
-    },
-    {
-      key: 'カテゴリー',
-      value: (
-        <CategoryInput
-          bigCategory={props.bigCategory}
-          associatedCategory={props.associatedCategory}
-          onClick={props.selectCategory}
-          required={true}
-          kind={'expense'}
-          bigCategoryIndex={props.bigCategoryIndex}
-          bigCategoryId={props.bigCategoryId}
-          expenseCategories={expenseCategories}
-          incomeCategories={incomeCategories}
         />
       ),
     },

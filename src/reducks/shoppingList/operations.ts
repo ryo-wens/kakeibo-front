@@ -1,7 +1,9 @@
 import { Action, Dispatch } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
 import {
-  addShoppingListItemReq,
+  AddRegularShoppingListItemReq,
+  AddRegularShoppingListItemRes,
+  AddShoppingListItemReq,
   AddShoppingListItemRes,
   FetchExpiredShoppingListRes,
   FetchMonthlyShoppingListByCategoriesRes,
@@ -9,13 +11,17 @@ import {
   FetchTodayShoppingListByCategoriesRes,
   FetchTodayShoppingListRes,
   RegularShoppingList,
+  RegularShoppingListItem,
   ShoppingList,
   ShoppingListByCategories,
   ShoppingListItem,
   ShoppingListItemByCategories,
 } from './types';
 import {
+  addRegularShoppingListItemAction,
   addShoppingListItemAction,
+  cancelAddRegularShoppingListItemAction,
+  cancelAddShoppingListItemAction,
   cancelDeleteShoppingListItemAction,
   cancelFetchExpiredShoppingListAction,
   cancelFetchMonthlyShoppingListAction,
@@ -23,6 +29,7 @@ import {
   cancelFetchTodayShoppingListAction,
   cancelFetchTodayShoppingListByCategoriesAction,
   deleteShoppingListItemAction,
+  failedAddRegularShoppingListItemAction,
   failedAddShoppingListItemAction,
   failedDeleteShoppingListItemAction,
   failedFetchExpiredShoppingListAction,
@@ -35,6 +42,7 @@ import {
   fetchMonthlyShoppingListByCategoriesAction,
   fetchTodayShoppingListAction,
   fetchTodayShoppingListByCategoriesAction,
+  startAddRegularShoppingListItemAction,
   startAddShoppingListItemAction,
   startDeleteShoppingListItemAction,
   startFetchExpiredShoppingListAction,
@@ -251,7 +259,7 @@ export const addShoppingListItem = (
     }
     dispatch(startAddShoppingListItemAction());
 
-    const data: addShoppingListItemReq = {
+    const data: AddShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       purchase: purchase,
       shop: shop,
@@ -441,7 +449,7 @@ export const addShoppingListItem = (
       );
     } catch (error) {
       if (axios.isCancel(error)) {
-        dispatch(cancelFetchMonthlyShoppingListByCategoriesAction());
+        dispatch(cancelAddShoppingListItemAction());
       } else {
         dispatch(
           failedAddShoppingListItemAction(error.response.status, error.response.data.error.message)
@@ -532,6 +540,255 @@ export const deleteShoppingListItem = (
       } else {
         dispatch(
           failedDeleteShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const addRegularShoppingListItem = (
+  today: Date | null,
+  currentYearMonth: string,
+  expectedPurchaseDate: Date | null,
+  cycleType: 'daily' | 'weekly' | 'monthly' | 'custom',
+  cycle: number | null,
+  purchase: string,
+  shop: string | null,
+  amount: number | null,
+  bigCategoryId: number,
+  mediumCategoryId: number | null,
+  customCategoryId: number | null,
+  transactionAutoAdd: boolean,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (today === null) {
+      return;
+    }
+    if (expectedPurchaseDate === null) {
+      return;
+    }
+    if (cycle === 0) {
+      return;
+    }
+    dispatch(startAddRegularShoppingListItemAction());
+
+    const data: AddRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    try {
+      const result = await axios.post<AddRegularShoppingListItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular`,
+        JSON.stringify(data, function (key, value) {
+          if (key === 'expected_purchase_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const newRegularShoppingListItem: RegularShoppingListItem = result.data.regular_shopping_item;
+      const newShoppingList: ShoppingList = result.data.shopping_list;
+
+      const prevRegularShoppingList: RegularShoppingList = getState().shoppingList
+        .regularShoppingList;
+      const prevExpiredShoppingList: ShoppingList = getState().shoppingList.expiredShoppingList;
+      const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
+      const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
+        .todayShoppingListByCategories;
+      const prevMonthlyShoppingList: ShoppingList = getState().shoppingList.monthlyShoppingList;
+      const prevMonthlyShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
+        .monthlyShoppingListByCategories;
+
+      const NOT_FOUND = -1;
+      const NOT_EXIST_ARRAY_LENGTH = 0;
+      const INCLUDES_TODAY_ITEM = 2;
+
+      const addResponseShoppingListItem = (
+        idx: number,
+        prevShoppingList: ShoppingList,
+        nextShoppingListItem: ShoppingListItem
+      ) => {
+        if (idx === NOT_FOUND) {
+          return prevShoppingList.concat(nextShoppingListItem);
+        }
+        prevShoppingList.splice(idx, 0, nextShoppingListItem);
+        return prevShoppingList.concat();
+      };
+
+      const addResponseShoppingList = (prevShoppingList: ShoppingList) => {
+        for (const newItem of newShoppingList) {
+          if (currentYearMonth === dateStringToMonthString(newItem.expected_purchase_date)) {
+            const idx = prevShoppingList.findIndex(
+              (prevItem) => prevItem.expected_purchase_date >= newItem.expected_purchase_date
+            );
+            return addResponseShoppingListItem(idx, prevShoppingList, newItem);
+          }
+        }
+        return prevShoppingList.concat();
+      };
+
+      const addResponseShoppingListItemByCategories = (
+        pushCategoryIdx: number,
+        prevShoppingListByCategories: ShoppingListByCategories,
+        newShoppingListItemByCategories: ShoppingListItemByCategories
+      ) => {
+        if (pushCategoryIdx === NOT_FOUND) {
+          return [newShoppingListItemByCategories];
+        }
+        prevShoppingListByCategories.splice(pushCategoryIdx, 0, newShoppingListItemByCategories);
+        return prevShoppingListByCategories.concat();
+      };
+
+      const todayShoppingList = () => {
+        if (newShoppingList.length === INCLUDES_TODAY_ITEM) {
+          return [newShoppingList[0]].concat(prevTodayShoppingList);
+        }
+        return prevTodayShoppingList;
+      };
+
+      const todayShoppingListByCategories = () => {
+        if (newShoppingList.length === INCLUDES_TODAY_ITEM) {
+          const newShoppingListItem = newShoppingList[0];
+          const prevCategoriesIdx = prevTodayShoppingListByCategories.findIndex(
+            (item) => item.big_category_name === newShoppingListItem.big_category_name
+          );
+          const pushCategoryIdx = prevMonthlyShoppingListByCategories.findIndex(
+            (item) => item.shopping_list[0].big_category_id >= newShoppingListItem.big_category_id
+          );
+
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+              big_category_name: newShoppingListItem.big_category_name,
+              shopping_list: [newShoppingListItem],
+            };
+
+            return addResponseShoppingListItemByCategories(
+              pushCategoryIdx,
+              prevTodayShoppingListByCategories,
+              newShoppingListItemByCategories
+            );
+          }
+          const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+            big_category_name:
+              prevTodayShoppingListByCategories[prevCategoriesIdx].big_category_name,
+            shopping_list: [newShoppingListItem].concat(
+              prevTodayShoppingListByCategories[prevCategoriesIdx].shopping_list
+            ),
+          };
+
+          prevTodayShoppingListByCategories.splice(
+            prevCategoriesIdx,
+            1,
+            newShoppingListItemByCategories
+          );
+
+          return prevTodayShoppingListByCategories.concat();
+        }
+        return prevTodayShoppingListByCategories;
+      };
+
+      const monthlyShoppingList = () => {
+        if (prevMonthlyShoppingList.length === NOT_EXIST_ARRAY_LENGTH) {
+          return newShoppingList.filter((newItem) => {
+            if (dateStringToMonthString(newItem.expected_purchase_date) === currentYearMonth) {
+              return newItem;
+            }
+          });
+        }
+        return addResponseShoppingList(prevMonthlyShoppingList);
+      };
+
+      const monthlyShoppingListByCategories = () => {
+        const prevCategoriesIdx = prevMonthlyShoppingListByCategories.findIndex(
+          (item) => item.big_category_name === newRegularShoppingListItem.big_category_name
+        );
+
+        const pushCategoryItemIdx = prevMonthlyShoppingListByCategories.findIndex(
+          (item) =>
+            item.shopping_list[0].big_category_id >= newRegularShoppingListItem.big_category_id
+        );
+
+        if (prevCategoriesIdx === NOT_FOUND) {
+          const nextShoppingList: ShoppingList = newShoppingList.filter((newItem) => {
+            if (dateStringToMonthString(newItem.expected_purchase_date) === currentYearMonth) {
+              return newItem;
+            }
+          });
+
+          if (nextShoppingList.length === NOT_EXIST_ARRAY_LENGTH) {
+            return prevMonthlyShoppingListByCategories;
+          }
+
+          const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+            big_category_name: newRegularShoppingListItem.big_category_name,
+            shopping_list: nextShoppingList,
+          };
+
+          addResponseShoppingListItemByCategories(
+            pushCategoryItemIdx,
+            prevMonthlyShoppingListByCategories,
+            newShoppingListItemByCategories
+          );
+          return prevMonthlyShoppingListByCategories;
+        }
+
+        const nextShoppingList = addResponseShoppingList(
+          prevMonthlyShoppingListByCategories[prevCategoriesIdx].shopping_list
+        );
+        const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+          big_category_name:
+            prevMonthlyShoppingListByCategories[prevCategoriesIdx].big_category_name,
+          shopping_list: nextShoppingList,
+        };
+        prevMonthlyShoppingListByCategories.splice(
+          prevCategoriesIdx,
+          1,
+          newShoppingListItemByCategories
+        );
+        return prevMonthlyShoppingListByCategories;
+      };
+
+      const nextRegularShoppingList: RegularShoppingList = prevRegularShoppingList.concat(
+        newRegularShoppingListItem
+      );
+      const nextTodayShoppingList: ShoppingList = todayShoppingList();
+      const nextTodayShoppingListByCategories: ShoppingListByCategories = todayShoppingListByCategories();
+      const nextMonthlyShoppingList: ShoppingList = monthlyShoppingList();
+      const nextMonthlyShoppingListByCategories: ShoppingListByCategories = monthlyShoppingListByCategories();
+
+      dispatch(
+        addRegularShoppingListItemAction(
+          nextRegularShoppingList,
+          prevExpiredShoppingList,
+          nextTodayShoppingList,
+          nextTodayShoppingListByCategories,
+          nextMonthlyShoppingList,
+          nextMonthlyShoppingListByCategories
+        )
+      );
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelAddRegularShoppingListItemAction());
+      } else {
+        dispatch(
+          failedAddRegularShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )

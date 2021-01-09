@@ -183,6 +183,7 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
           buttonLabel={'保存'}
           closeModal={closeModal}
           unInput={disabledButton()}
+          minDate={new Date('1900-01-01')}
           dispatchOperation={addShoppingListItem(
             date,
             expectedPurchaseDate,
