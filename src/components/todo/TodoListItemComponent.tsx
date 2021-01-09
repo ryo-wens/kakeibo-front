@@ -33,6 +33,7 @@ interface TodoListItemComponentProps {
   todoListItem: TodoListItem | GroupTodoListItem;
   selectedDate: Date | null;
   displayDueDate?: () => void;
+  setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
@@ -74,6 +75,12 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
     setTodoContent(props.todoListItem.todo_content);
   }, []);
 
+  useEffect(() => {
+    if (props.setEditing && !openEditTodoList) {
+      props.setEditing(false);
+    }
+  }, [openEditTodoList]);
+
   const inputTodoContent = (event: React.ChangeEvent<{ value: string }>) => {
     setTodoContent(event.target.value);
   };
@@ -92,6 +99,9 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
     setTodoContent(props.todoListItem.todo_content);
     setSelectedImplementationDate(prevImplementationDate);
     setSelectedDueDate(prevDueDate);
+    if (props.setEditing) {
+      props.setEditing(true);
+    }
   };
 
   const closeInputTodoList = () => {

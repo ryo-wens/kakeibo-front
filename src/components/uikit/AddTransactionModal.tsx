@@ -1,12 +1,13 @@
-import React, { useCallback, useState, useEffect } from 'react';
+import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   GenericButton,
   DatePicker,
-  CategoryInput,
   TextInput,
   KindSelectBox,
   SelectPayer,
+  BigCategoryInput,
+  MediumCategoryInput,
 } from '../uikit/index';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
@@ -43,10 +44,9 @@ const useStyles = makeStyles((theme: Theme) =>
     paper: {
       backgroundColor: '#fff',
       boxShadow: 'none',
-      overflow: 'hidden',
       margin: '0 auto',
-      marginTop: '10%',
-      maxWidth: 500,
+      marginTop: '2%',
+      width: 480,
       height: 'auto',
       border: '1px solid #000',
       padding: theme.spacing(1, 2, 2),
@@ -62,6 +62,9 @@ const useStyles = makeStyles((theme: Theme) =>
     },
     delimiterLine: {
       borderBottom: '1px solid',
+    },
+    modalPosition: {
+      top: '20%',
     },
   })
 );
@@ -103,8 +106,12 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const [associatedCategory, setAssociatedCategory] = useState<string>('');
   const years = {
     selectedYear: String(props.year),
-    selectedMonth: String(props.month),
+    selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
   };
+  const bigCategoryRef = useRef<HTMLDivElement>(null);
+  const mediumMenuRef = useRef<HTMLDivElement>(null);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setTransactionDate(props.selectDate);
@@ -197,6 +204,18 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     },
     [setPaymentUserId]
   );
+
+  const onClickCloseBigCategoryMenu = (event: Event) => {
+    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
+      setBigCategoryMenuOpen(false);
+    }
+  };
+
+  const onClickCloseMediumCategoryMenu = (event: Event) => {
+    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
+      setMediumCategoryMenuOpen(false);
+    }
+  };
 
   const unInput =
     amount === '' ||
@@ -314,16 +333,28 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
             value={paymentUserId}
           />
         )}
-        <CategoryInput
+        <BigCategoryInput
+          bigCategory={bigCategory}
+          bigCategoryMenuOpen={bigCategoryMenuOpen}
+          expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+          incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+          kind={transactionsType}
+          onClick={selectCategory}
+          onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
+          setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+        />
+        <MediumCategoryInput
           associatedCategory={associatedCategory}
           bigCategory={bigCategory}
           bigCategoryId={bigCategoryId}
           bigCategoryIndex={bigCategoryIndex}
-          kind={transactionsType}
-          onClick={selectCategory}
-          required={true}
           expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
           incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+          kind={transactionsType}
+          mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+          onClick={selectCategory}
+          onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+          setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
         />
         <TextInput
           value={shop}

@@ -9,6 +9,7 @@ interface TodayTodoListProps {
   planTodoList: TodoList | GroupTodoList;
   implementationTodoList: TodoList | GroupTodoList;
   dueTodoList: TodoList | GroupTodoList;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TodayTodoList = (props: TodayTodoListProps) => {
@@ -22,7 +23,11 @@ const TodayTodoList = (props: TodayTodoListProps) => {
           {todoLists.map((todoList: TodoListItem | GroupTodoListItem) => {
             return (
               <div key={todoList.id}>
-                <TodoListItemComponent todoListItem={todoList} selectedDate={date} />
+                <TodoListItemComponent
+                  todoListItem={todoList}
+                  selectedDate={date}
+                  setEditing={props.setEditing}
+                />
               </div>
             );
           })}

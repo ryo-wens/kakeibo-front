@@ -25,12 +25,18 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
     setOpenId(undefined);
   };
 
-  const payerColor = (payerUserId: string): React.CSSProperties | undefined => {
+  const payerColor = (payerUserId: string): React.CSSProperties => {
     let color = '';
 
-    for (const groupUser of props.currentGroup.approved_users_list) {
-      if (groupUser.user_id === payerUserId) {
-        color = groupUser.color_code;
+    if (props.currentGroup) {
+      if (props.currentGroup.approved_users_list) {
+        const approvedUser = props.currentGroup.approved_users_list.find(
+          (user) => user.user_id === payerUserId
+        );
+
+        if (approvedUser) {
+          color = approvedUser.color_code;
+        }
       }
     }
 

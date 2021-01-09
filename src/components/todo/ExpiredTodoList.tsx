@@ -30,6 +30,7 @@ const useStyles = makeStyles(() =>
 
 interface ExpiredTodoListProps {
   expiredTodoList: TodoList;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ExpiredTodoList = (props: ExpiredTodoListProps) => {
@@ -54,6 +55,7 @@ const ExpiredTodoList = (props: ExpiredTodoListProps) => {
         todoListItem={todoListItem}
         selectedDate={date}
         displayDueDate={displayDueDate}
+        setEditing={props.setEditing}
       />
     );
   });

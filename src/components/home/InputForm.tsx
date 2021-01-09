@@ -1,12 +1,5 @@
-import React, { useState, useCallback, useEffect } from 'react';
-import {
-  GenericButton,
-  DatePicker,
-  CategoryInput,
-  TextInput,
-  KindSelectBox,
-  SelectPayer,
-} from '../uikit/index';
+import React, { useState, useCallback, useEffect, useRef } from 'react';
+import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../uikit/index';
 import { useDispatch, useSelector } from 'react-redux';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
@@ -27,15 +20,17 @@ import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { State } from '../../reducks/store/types';
 import { Category, AssociatedCategory } from '../../reducks/categories/types';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { getPathTemplateName } from '../../lib/path';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
 import axios from 'axios';
+import { BigCategoryInput, MediumCategoryInput } from '../uikit';
+import { useParams } from 'react-router';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const groupId = getPathGroupId(window.location.pathname);
+  const { id } = useParams();
   const pathName = getPathTemplateName(window.location.pathname);
   const approvedGroups = getApprovedGroups(selector);
   const userId = getUserId(selector);
@@ -57,7 +52,11 @@ const InputForm = (): JSX.Element => {
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
-  const signal = axios.CancelToken.source();
+
+  const bigCategoryRef = useRef<HTMLDivElement>(null);
+  const mediumMenuRef = useRef<HTMLDivElement>(null);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
 
   useEffect(() => {
     setPaymentUserId(userId);
@@ -77,23 +76,25 @@ const InputForm = (): JSX.Element => {
 
   useEffect(() => {
     if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+      const signal = axios.CancelToken.source();
       dispatch(fetchCategories(signal));
+      return () => signal.cancel();
     }
-    return () => signal.cancel();
   }, [pathName]);
 
   useEffect(() => {
     if (pathName === 'group') {
-      dispatch(fetchGroupCategories(groupId, signal));
+      const signal = axios.CancelToken.source();
+      dispatch(fetchGroupCategories(Number(id), signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroupCategories(groupId, signal));
+        dispatch(fetchGroupCategories(Number(id), signal));
       }, 3000);
       return () => {
         signal.cancel();
         clearInterval(interval);
       };
     }
-  }, [pathName]);
+  }, [pathName, id]);
 
   const handlePayerChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -137,13 +138,14 @@ const InputForm = (): JSX.Element => {
     [setTransactionDate]
   );
 
-  const resetInputForm = useCallback(() => {
-    setAmount('');
-    setTransactionType('expense');
-    setBigCategory('');
+  const resetInputForm = () => {
     setShop('');
     setMemo('');
-  }, [setAmount, setTransactionType, setBigCategory, setShop, setMemo]);
+    setAmount('');
+    setBigCategory('');
+    setAssociatedCategory('');
+    setTransactionType('expense');
+  };
 
   const selectCategory = useCallback(
     (
@@ -179,6 +181,18 @@ const InputForm = (): JSX.Element => {
       setCustomCategoryId,
     ]
   );
+
+  const onClickCloseBigCategoryMenu = (event: Event) => {
+    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
+      setBigCategoryMenuOpen(false);
+    }
+  };
+
+  const onClickCloseMediumCategoryMenu = (event: Event) => {
+    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
+      setMediumCategoryMenuOpen(false);
+    }
+  };
 
   const unInput =
     amount === '' ||
@@ -221,7 +235,7 @@ const InputForm = (): JSX.Element => {
 
   const addGroupTransaction = () => {
     async function addedGroupTransaction() {
-      await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
+      await dispatch(addGroupLatestTransactions(Number(id), groupAddRequestData));
       dispatch(addGroupTransactions(customMonth));
       resetInputForm();
     }
@@ -259,20 +273,34 @@ const InputForm = (): JSX.Element => {
           required={true}
           value={paymentUserId}
           approvedGroups={approvedGroups}
-          groupId={groupId}
+          groupId={Number(id)}
           pathName={pathName}
         />
       )}
-      <CategoryInput
-        bigCategory={bigCategory}
-        associatedCategory={associatedCategory}
-        onClick={selectCategory}
-        required={true}
+      <BigCategoryInput
+        ref={bigCategoryRef}
         kind={transactionsType}
-        bigCategoryIndex={bigCategoryIndex}
-        bigCategoryId={bigCategoryId}
+        bigCategory={bigCategory}
+        bigCategoryMenuOpen={bigCategoryMenuOpen}
         expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
         incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+        onClick={selectCategory}
+        onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
+        setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      />
+      <MediumCategoryInput
+        ref={mediumMenuRef}
+        kind={transactionsType}
+        bigCategoryId={bigCategoryId}
+        bigCategoryIndex={bigCategoryIndex}
+        bigCategory={bigCategory}
+        associatedCategory={associatedCategory}
+        expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+        incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+        mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+        onClick={selectCategory}
+        onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+        setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       />
       <TextInput
         value={shop}

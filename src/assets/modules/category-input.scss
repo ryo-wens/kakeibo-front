@@ -16,7 +16,6 @@
     font-size: 1rem;
     text-align: center;
     margin:10px 0 10px 0;
-    //margin-bottom: 10px;
     top: 0;
     width: 13rem;
 
@@ -35,10 +34,10 @@
     background-clip: padding-box;
     border: 1px solid #ccc;
     border-radius: $task-border_radius;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: block;
     padding: 2px;
-    top: 30%;
+    top: 60%;
     list-style: none;
     float: left;
     position: absolute;
@@ -52,10 +51,10 @@
     background-clip: padding-box;
     border: 1px solid #ccc;
     border-radius: $task-border_radius;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
     display: block;
     padding: 0 2px;
-    top: 90%;
+    top: 60%;
     list-style: none;
     position: absolute;
     width: 100%;
@@ -85,6 +84,7 @@
     padding-top: 5px;
     white-space: nowrap;
     outline: none;
+    width: 100%;
 
     &:hover {
       background-color: #08c;
@@ -93,6 +93,19 @@
 
     &:hover #medium-category  {
       display: block;
+    }
+
+    &--custom {
+      width: 70%;
+
+      &:hover {
+        background-color: #08c;
+        color: white;
+      }
+
+      &:hover #medium-category  {
+        display: block;
+      }
     }
   }
 
@@ -148,11 +161,31 @@
     display: flex;
   }
 
-  &_spacer {
+  &__add-icon-btn {
+    border: none;
+    right: 0;
+    position: absolute;
+    width: 20px;
     height: 20px;
-  }
+    background:  #4db5fa;
+    border-radius: 50%;
 
-  &__link {
-    color: #000000;
+    &:before,&--plus-icon::after{
+      position: absolute;
+      top: 9px;
+      left: 50%;
+      content: '';
+      display: inline-block;
+      width: 13px;
+      height: 13px;
+      border-top: 2px solid #fff;
+      transform: translateX(-50%);
+    }
+
+    &--plus-icon:after{
+      top: 3px;
+      left: -3px;
+      transform: rotate(90deg);
+    }
   }
 }
