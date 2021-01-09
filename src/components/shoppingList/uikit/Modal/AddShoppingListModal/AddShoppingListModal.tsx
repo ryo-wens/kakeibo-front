@@ -125,6 +125,7 @@ const AddShoppingListModal = () => {
         buttonLabel={'追加'}
         closeModal={closeModal}
         unInput={unInput}
+        minDate={date}
         dispatchOperation={addShoppingListItem(
           date,
           expectedPurchaseDate,

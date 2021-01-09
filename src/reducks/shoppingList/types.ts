@@ -7,7 +7,7 @@ export interface RegularShoppingListItem {
   cycle: number | null;
   purchase: string;
   shop: string | null;
-  amount: number;
+  amount: number | null;
   big_category_id: number;
   big_category_name: string;
   medium_category_id: number | null;
@@ -44,7 +44,7 @@ export interface RelatedTransactionData {
   transaction_type: string;
   posted_date: Date;
   updated_date: Date;
-  transaction_date: Date;
+  transaction_date: string;
   shop: string | null;
   memo: string | null;
   amount: number;
@@ -89,7 +89,7 @@ export interface FetchMonthlyShoppingListByCategoriesRes {
   shopping_list_by_categories: ShoppingListByCategories;
 }
 
-export interface addShoppingListItemReq {
+export interface AddShoppingListItemReq {
   expected_purchase_date: Date;
   purchase: string;
   shop: string | null;
@@ -118,6 +118,24 @@ export interface AddShoppingListItemRes {
   regular_shopping_list_id: number | null;
   transaction_auto_add: boolean;
   related_transaction_data: RelatedTransactionData | null;
+}
+
+export interface AddRegularShoppingListItemReq {
+  expected_purchase_date: Date;
+  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle: number | null;
+  purchase: string;
+  shop: string | null;
+  amount: number | null;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+  transaction_auto_add: boolean;
+}
+
+export interface AddRegularShoppingListItemRes {
+  regular_shopping_item: RegularShoppingListItem;
+  shopping_list: ShoppingList;
 }
 
 export type TodayOrMonthly = 'today' | 'monthly';

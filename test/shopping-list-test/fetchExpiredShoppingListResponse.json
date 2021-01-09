@@ -16,7 +16,9 @@
       "medium_category_name": "携帯電話",
       "custom_category_id": null,
       "custom_category_name": null,
-      "transaction_auto_add": true
+      "regular_shopping_list_id": null,
+      "transaction_auto_add": true,
+      "related_transaction_data": null
     }
   ]
 }

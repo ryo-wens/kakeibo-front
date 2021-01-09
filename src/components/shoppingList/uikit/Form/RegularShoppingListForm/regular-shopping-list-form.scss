@@ -31,14 +31,28 @@
 
   &__select-contents {
     display: flex;
-    margin: 0 0 15px 0;
+    margin: 0 0 16px 0;
 
-    &--key {
-      width: 180px;
-      color: $task-main_color;
-      font-size: $task-title-font_size;
-      font-weight: bold;
-      margin: 0 0 0 20px;
+  }
+
+  &__select-content-key {
+    width: 180px;
+    color: $task-main_color;
+    font-size: $task-title-font_size;
+    font-weight: bold;
+    margin: 0 0 0 20px;
+  }
+
+  &__select-content-value{
+
+    &--flex {
+      display: flex;
+      > div {
+        margin-left: 16px;
+        &:first-child {
+          margin-left: 0;
+        }
+      }
     }
   }
 
