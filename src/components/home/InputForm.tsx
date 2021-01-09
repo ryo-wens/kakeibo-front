@@ -20,16 +20,17 @@ import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { State } from '../../reducks/store/types';
 import { Category, AssociatedCategory } from '../../reducks/categories/types';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
+import { getPathTemplateName } from '../../lib/path';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
 import axios from 'axios';
 import { BigCategoryInput, MediumCategoryInput } from '../uikit';
+import { useParams } from 'react-router';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
-  const groupId = getPathGroupId(window.location.pathname);
+  const { id } = useParams();
   const pathName = getPathTemplateName(window.location.pathname);
   const approvedGroups = getApprovedGroups(selector);
   const userId = getUserId(selector);
@@ -51,11 +52,11 @@ const InputForm = (): JSX.Element => {
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
+
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
   const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
   const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
-  const signal = axios.CancelToken.source();
 
   useEffect(() => {
     setPaymentUserId(userId);
@@ -75,23 +76,25 @@ const InputForm = (): JSX.Element => {
 
   useEffect(() => {
     if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+      const signal = axios.CancelToken.source();
       dispatch(fetchCategories(signal));
+      return () => signal.cancel();
     }
-    return () => signal.cancel();
   }, [pathName]);
 
   useEffect(() => {
     if (pathName === 'group') {
-      dispatch(fetchGroupCategories(groupId, signal));
+      const signal = axios.CancelToken.source();
+      dispatch(fetchGroupCategories(Number(id), signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroupCategories(groupId, signal));
+        dispatch(fetchGroupCategories(Number(id), signal));
       }, 3000);
       return () => {
         signal.cancel();
         clearInterval(interval);
       };
     }
-  }, [pathName]);
+  }, [pathName, id]);
 
   const handlePayerChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -232,7 +235,7 @@ const InputForm = (): JSX.Element => {
 
   const addGroupTransaction = () => {
     async function addedGroupTransaction() {
-      await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
+      await dispatch(addGroupLatestTransactions(Number(id), groupAddRequestData));
       dispatch(addGroupTransactions(customMonth));
       resetInputForm();
     }
@@ -270,7 +273,7 @@ const InputForm = (): JSX.Element => {
           required={true}
           value={paymentUserId}
           approvedGroups={approvedGroups}
-          groupId={groupId}
+          groupId={Number(id)}
           pathName={pathName}
         />
       )}

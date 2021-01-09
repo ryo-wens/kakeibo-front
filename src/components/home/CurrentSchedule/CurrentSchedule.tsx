@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import axios, { CancelTokenSource } from 'axios';
+import axios from 'axios';
 import { fetchDateTodoList } from '../../../reducks/todoList/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { date } from '../../../lib/constant';
@@ -34,23 +34,19 @@ const CurrentSchedule = (props: CurrentScheduleProps) => {
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
 
-  const fetchGroupData = (signal: CancelTokenSource) => {
-    dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
-  };
-
   useEffect(() => {
     if (pathName === 'group' && !props.todoEditing) {
       const signal = axios.CancelToken.source();
-      fetchGroupData(signal);
+      dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
       const interval = setInterval(() => {
-        fetchGroupData(signal);
+        dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
       }, 3000);
       return () => {
         signal.cancel();
         clearInterval(interval);
       };
     }
-  }, [todayYear, todayMonth, todayDate, props.todoEditing, pathName]);
+  }, [todayYear, todayMonth, todayDate, props.todoEditing, pathName, id]);
 
   useEffect(() => {
     if (pathName !== 'group') {
