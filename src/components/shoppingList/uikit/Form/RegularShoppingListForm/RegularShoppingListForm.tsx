@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { CategoryInput, TextInput } from '../../../../uikit';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getExpenseCategories,
   getIncomeCategories,
@@ -20,7 +20,7 @@ interface RegularShoppingListFormProps {
   cycle: string | null;
   purchase: string;
   shop: string | null;
-  amount: string;
+  amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
@@ -45,10 +45,12 @@ interface RegularShoppingListFormProps {
   closeModal: () => void;
   unInput: boolean;
   dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  minDate: Date;
   openDeleteForm?: () => void;
 }
 
 const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
+  const dispatch = useDispatch();
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
 
@@ -68,6 +70,22 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
       ),
     },
     {
+      key: 'カテゴリ',
+      value: (
+        <CategoryInput
+          bigCategory={props.bigCategory}
+          associatedCategory={props.associatedCategory}
+          onClick={props.selectCategory}
+          required={true}
+          kind={'expense'}
+          bigCategoryIndex={props.bigCategoryIndex}
+          bigCategoryId={props.bigCategoryId}
+          expenseCategories={expenseCategories}
+          incomeCategories={incomeCategories}
+        />
+      ),
+    },
+    {
       key: '購入予定日',
       value: (
         <MuiPickersUtilsProvider utils={DateFnsUtils}>
@@ -78,7 +96,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
             format="yyyy年 MM月dd日"
             value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
-            minDate={new Date()}
+            minDate={props.minDate}
             required={true}
           />
         </MuiPickersUtilsProvider>
@@ -87,21 +105,22 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
     {
       key: '周期',
       value: (
-        <CycleTypeSelector value={props.cycleType} selectChange={props.handleCycleTypeChange} />
-      ),
-    },
-    {
-      key: '周期日数',
-      value: (
-        <TextInput
-          value={props.cycle}
-          type={'tel'}
-          id={'cycle'}
-          label={'周期日数'}
-          onChange={props.handleCycleChange}
-          required={false}
-          fullWidth={false}
-        />
+        <>
+          <div className="regular-shopping-list-form__select-content-value--flex">
+            <CycleTypeSelector value={props.cycleType} selectChange={props.handleCycleTypeChange} />
+            {props.cycleType === 'custom' && (
+              <TextInput
+                value={props.cycle}
+                type={'tel'}
+                id={'cycle'}
+                label={'周期日数 (必須)'}
+                onChange={props.handleCycleChange}
+                required={false}
+                fullWidth={false}
+              />
+            )}
+          </div>
+        </>
       ),
     },
     {
@@ -115,22 +134,6 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
-        />
-      ),
-    },
-    {
-      key: 'カテゴリー',
-      value: (
-        <CategoryInput
-          bigCategory={props.bigCategory}
-          associatedCategory={props.associatedCategory}
-          onClick={props.selectCategory}
-          required={true}
-          kind={'expense'}
-          bigCategoryIndex={props.bigCategoryIndex}
-          bigCategoryId={props.bigCategoryId}
-          expenseCategories={expenseCategories}
-          incomeCategories={incomeCategories}
         />
       ),
     },
@@ -162,7 +165,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
         {inputItems.map((item) => {
           return (
             <div className="regular-shopping-list-form__select-contents" key={item.key}>
-              <span className="regular-shopping-list-form__select-contents--key">{item.key}</span>
+              <span className="regular-shopping-list-form__select-content-key">{item.key}</span>
               <span>{item.value}</span>
             </div>
           );
@@ -178,7 +181,14 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
         取引履歴に自動追加
       </label>
       <div className="set-task-list-item__operation-btn">
-        <button className="regular-shopping-list-form__operation-btn--add" disabled={props.unInput}>
+        <button
+          className="regular-shopping-list-form__operation-btn--add"
+          disabled={props.unInput}
+          onClick={() => {
+            dispatch(props.dispatchOperation);
+            props.closeModal();
+          }}
+        >
           {props.buttonLabel}
         </button>
         {props.titleLabel === '定期買い物リストを編集' && (

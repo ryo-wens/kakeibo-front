@@ -9,6 +9,7 @@ import {
   fetchExpiredShoppingList,
   addShoppingListItem,
   deleteShoppingListItem,
+  addRegularShoppingListItem,
 } from '../../src/reducks/shoppingList/operations';
 import axios from 'axios';
 import * as ShoppingListActions from '../../src/reducks/shoppingList/actions';
@@ -19,6 +20,7 @@ import fetchMonthlyShoppingListResponse from './fetchMonthlyShoppingListResponse
 import fetchMonthlyShoppingListByCategoriesResponse from './fetchMonthlyShoppingListByCategoriesResponse.json';
 import addShoppingListItemResponse from './addShoppingListItemResponse.json';
 import deleteShoppingListItemResponse from './deleteShoppingListItemResponse.json';
+import addRegularShoppingListItemResponse from './addRegularShoppingListItemResponse.json';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
 const middlewares = [thunk];
@@ -31,26 +33,7 @@ const store = mockStore({ shoppingList: [], modal: [], router: [] });
 const getState = () => {
   return {
     shoppingList: {
-      regularShoppingList: [
-        {
-          id: 1,
-          posted_date: '2020-12-20T10:00:00Z',
-          updated_date: '2020-12-20T10:00:00Z',
-          expected_purchase_date: '2020/12/24(木)',
-          cycle_type: 'monthly',
-          cycle: null,
-          purchase: '携帯料金',
-          shop: 'auショップ',
-          amount: 5000,
-          big_category_id: 9,
-          big_category_name: '通信費',
-          medium_category_id: 51,
-          medium_category_name: '携帯電話',
-          custom_category_id: null,
-          custom_category_name: null,
-          transaction_auto_add: true,
-        },
-      ],
+      regularShoppingList: [],
       expiredShoppingListLoading: false,
       expiredShoppingList: [],
       expiredShoppingListError: {
@@ -74,7 +57,7 @@ const getState = () => {
           medium_category_name: '携帯電話',
           custom_category_id: null,
           custom_category_name: null,
-          regular_shopping_list_id: 2,
+          regular_shopping_list_id: null,
           transaction_auto_add: true,
           related_transaction_data: null,
         },
@@ -103,7 +86,7 @@ const getState = () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: 2,
+              regular_shopping_list_id: null,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -131,7 +114,7 @@ const getState = () => {
           medium_category_name: '携帯電話',
           custom_category_id: null,
           custom_category_name: null,
-          regular_shopping_list_id: 2,
+          regular_shopping_list_id: null,
           transaction_auto_add: true,
           related_transaction_data: null,
         },
@@ -160,7 +143,7 @@ const getState = () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: 2,
+              regular_shopping_list_id: null,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -248,7 +231,9 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
+              regular_shopping_list_id: null,
               transaction_auto_add: true,
+              related_transaction_data: null,
             },
           ],
         },
@@ -281,26 +266,7 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.FETCH_TODAY_SHOPPING_LIST,
         payload: {
-          regularShoppingList: [
-            {
-              id: 1,
-              posted_date: '2020-12-23T17:10:11Z',
-              updated_date: '2020-12-23T17:10:11Z',
-              expected_purchase_date: '2020/12/24(木)',
-              cycle_type: 'monthly',
-              cycle: null,
-              purchase: '携帯料金',
-              shop: 'auショップ',
-              amount: 5000,
-              big_category_id: 9,
-              big_category_name: '通信費',
-              medium_category_id: 51,
-              medium_category_name: '携帯電話',
-              custom_category_id: null,
-              custom_category_name: null,
-              transaction_auto_add: true,
-            },
-          ],
+          regularShoppingList: [],
           todayShoppingListLoading: false,
           todayShoppingList: [
             {
@@ -318,7 +284,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: 2,
+              regular_shopping_list_id: null,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -353,26 +319,7 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
         payload: {
-          regularShoppingList: [
-            {
-              id: 1,
-              posted_date: '2020-12-23T17:10:11Z',
-              updated_date: '2020-12-23T17:10:11Z',
-              expected_purchase_date: '2020/12/24(木)',
-              cycle_type: 'monthly',
-              cycle: null,
-              purchase: '携帯料金',
-              shop: 'auショップ',
-              amount: 5000,
-              big_category_id: 9,
-              big_category_name: '通信費',
-              medium_category_id: 51,
-              medium_category_name: '携帯電話',
-              custom_category_id: null,
-              custom_category_name: null,
-              transaction_auto_add: true,
-            },
-          ],
+          regularShoppingList: [],
           todayShoppingListByCategoriesLoading: false,
           todayShoppingListByCategories: [
             {
@@ -393,7 +340,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: 2,
+                  regular_shopping_list_id: null,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -429,26 +376,7 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.FETCH_MONTHLY_SHOPPING_LIST,
         payload: {
-          regularShoppingList: [
-            {
-              id: 1,
-              posted_date: '2020-12-23T17:10:11Z',
-              updated_date: '2020-12-23T17:10:11Z',
-              expected_purchase_date: '2020/12/24(木)',
-              cycle_type: 'monthly',
-              cycle: null,
-              purchase: '携帯料金',
-              shop: 'auショップ',
-              amount: 5000,
-              big_category_id: 9,
-              big_category_name: '通信費',
-              medium_category_id: 51,
-              medium_category_name: '携帯電話',
-              custom_category_id: null,
-              custom_category_name: null,
-              transaction_auto_add: true,
-            },
-          ],
+          regularShoppingList: [],
           monthlyShoppingListLoading: false,
           monthlyShoppingList: [
             {
@@ -466,7 +394,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: 2,
+              regular_shopping_list_id: null,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -500,26 +428,7 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
         payload: {
-          regularShoppingList: [
-            {
-              id: 1,
-              posted_date: '2020-12-23T17:10:11Z',
-              updated_date: '2020-12-23T17:10:11Z',
-              expected_purchase_date: '2020/12/24(木)',
-              cycle_type: 'monthly',
-              cycle: null,
-              purchase: '携帯料金',
-              shop: 'auショップ',
-              amount: 5000,
-              big_category_id: 9,
-              big_category_name: '通信費',
-              medium_category_id: 51,
-              medium_category_name: '携帯電話',
-              custom_category_id: null,
-              custom_category_name: null,
-              transaction_auto_add: true,
-            },
-          ],
+          regularShoppingList: [],
           monthlyShoppingListByCategoriesLoading: false,
           monthlyShoppingListByCategories: [
             {
@@ -540,7 +449,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: 2,
+                  regular_shopping_list_id: null,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -606,7 +515,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: 2,
+              regular_shopping_list_id: null,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -631,7 +540,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: 2,
+                  regular_shopping_list_id: null,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -655,7 +564,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: 2,
+              regular_shopping_list_id: null,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -723,7 +632,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: 2,
+                  regular_shopping_list_id: null,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -800,6 +709,226 @@ describe('async actions shoppingList', () => {
     await deleteShoppingListItem(
       shoppingListItemId,
       bigCategoryName,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('add regularShoppingListItem and shoppingList if fetch succeeds', async () => {
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular`;
+    const today = new Date();
+    const expectedPurchaseDate = new Date('2020-12-26T10:00:00');
+    const cycleType = 'weekly';
+    const cycle = null;
+    const purchase = '鶏肉3kg';
+    const shop = 'コストコ';
+    const amount = 1000;
+    const bigCategoryId = 2;
+    const mediumCategoryId = 6;
+    const customCategoryId = null;
+    const transactionAutoAdd = true;
+    const currentYearMonth = '2020/12';
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(addRegularShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: ShoppingListActions.START_ADD_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          expiredShoppingListLoading: true,
+          todayShoppingListLoading: true,
+          todayShoppingListByCategoriesLoading: true,
+          monthlyShoppingListLoading: true,
+          monthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: ShoppingListActions.ADD_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          regularShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-24T10:00:00Z',
+              updated_date: '2020-12-24T10:00:00Z',
+              expected_purchase_date: '2020/12/26(土)',
+              cycle_type: 'weekly',
+              cycle: null,
+              purchase: '鶏肉3kg',
+              shop: 'コストコ',
+              amount: 1000,
+              big_category_id: 2,
+              big_category_name: '食費',
+              medium_category_id: 6,
+              medium_category_name: '食料品',
+              custom_category_id: null,
+              custom_category_name: null,
+              transaction_auto_add: true,
+            },
+          ],
+          expiredShoppingListLoading: false,
+          expiredShoppingList: [],
+          todayShoppingListLoading: false,
+          todayShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-20T10:00:00Z',
+              updated_date: '2020-12-20T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: false,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: null,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          todayShoppingListByCategoriesLoading: false,
+          todayShoppingListByCategories: [
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-20T10:00:00Z',
+                  updated_date: '2020-12-20T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: false,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: null,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+          monthlyShoppingListLoading: false,
+          monthlyShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-20T10:00:00Z',
+              updated_date: '2020-12-20T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: false,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: null,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+            {
+              id: 3,
+              posted_date: '2020-12-24T10:00:00Z',
+              updated_date: '2020-12-24T10:00:00Z',
+              expected_purchase_date: '2020/12/26(土)',
+              complete_flag: false,
+              purchase: '鶏肉3kg',
+              shop: 'コストコ',
+              amount: 1000,
+              big_category_id: 2,
+              big_category_name: '食費',
+              medium_category_id: 6,
+              medium_category_name: '食料品',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: null,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          monthlyShoppingListByCategoriesLoading: false,
+          monthlyShoppingListByCategories: [
+            {
+              big_category_name: '食費',
+              shopping_list: [
+                {
+                  id: 3,
+                  posted_date: '2020-12-24T10:00:00Z',
+                  updated_date: '2020-12-24T10:00:00Z',
+                  expected_purchase_date: '2020/12/26(土)',
+                  complete_flag: false,
+                  purchase: '鶏肉3kg',
+                  shop: 'コストコ',
+                  amount: 1000,
+                  big_category_id: 2,
+                  big_category_name: '食費',
+                  medium_category_id: 6,
+                  medium_category_name: '食料品',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: null,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-20T10:00:00Z',
+                  updated_date: '2020-12-20T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: false,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: null,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPost(url).reply(200, mockResponse);
+
+    await addRegularShoppingListItem(
+      today,
+      currentYearMonth,
+      expectedPurchaseDate,
+      cycleType,
+      cycle,
+      purchase,
+      shop,
+      amount,
+      bigCategoryId,
+      mediumCategoryId,
+      customCategoryId,
+      transactionAutoAdd,
       signal
       // @ts-ignore
     )(store.dispatch, getState);
