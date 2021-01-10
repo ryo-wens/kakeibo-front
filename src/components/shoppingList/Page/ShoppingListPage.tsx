@@ -20,7 +20,7 @@ const ShoppingListPage = () => {
   const expenseCategories = useSelector(getExpenseCategories);
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
-  const currentMonth = `0` + `${selectedMonth}`.slice(-2);
+  const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
   const currentYearMonth = `${selectedYear}/${currentMonth}`;
 
   useEffect(() => {

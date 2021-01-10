@@ -14,6 +14,7 @@ interface MonthlyTodoListProps {
   planTodoList: TodoList | GroupTodoList;
   monthImplementationTodoList: TodoList | GroupTodoList;
   monthDueTodoList: TodoList | GroupTodoList;
+  currentYearMonth: string;
   selectedDate: Date;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -43,6 +44,7 @@ const MonthlyTodoList = (props: MonthlyTodoListProps) => {
               todoListItem={listItem}
               key={listItem.id}
               selectedDate={selectedDate}
+              currentYearMonth={props.currentYearMonth}
               setEditing={props.setEditing}
             />
           );

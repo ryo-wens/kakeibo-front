@@ -7,7 +7,7 @@ import { getWeekDay } from '../../../lib/date';
 import { fetchExpiredTodoList } from '../../../reducks/todoList/operations';
 import { GroupTodoList } from '../../../reducks/groupTodoList/types';
 import { TodoList } from '../../../reducks/todoList/types';
-import { date } from '../../../lib/constant';
+import { customMonth, date, month, year } from '../../../lib/constant';
 import axios from 'axios';
 import { useLocation } from 'react-router';
 import './todo-page.scss';
@@ -23,8 +23,12 @@ const TodoPage = () => {
   const pathName = useLocation().pathname.split('/')[1];
   const [openSearchTodoList, setOpenSearchTodoList] = useState<boolean>(false);
   const [openSearchResultTodoList, setOpenSearchResultTodoList] = useState<boolean>(false);
-  const [currentTodayOrMonthly, setCurrentTodayOrMonthly] = useState<number>(0);
+  const [currentTodayOrMonthly, setCurrentTodayOrMonthly] = useState<'today' | 'monthly'>('today');
   const [editing, setEditing] = useState(false);
+  const [selectedYear, setSelectedYear] = useState<number>(year);
+  const [selectedMonth, setSelectedMonth] = useState<number>(month);
+  const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
+  const currentYearMonth = `${selectedYear}/${currentMonth}`;
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -51,7 +55,15 @@ const TodoPage = () => {
 
   const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
     if (todoList.length !== 0) {
-      return <ExpiredTodoList expiredTodoList={todoList} setEditing={setEditing} />;
+      return (
+        <ExpiredTodoList
+          currentYearMonth={
+            currentTodayOrMonthly === 'today' ? `${year}/${customMonth}` : currentYearMonth
+          }
+          expiredTodoList={todoList}
+          setEditing={setEditing}
+        />
+      );
     }
   };
 
@@ -79,7 +91,7 @@ const TodoPage = () => {
                   検索
                 </button>
               </div>
-              {currentTodayOrMonthly === 0 && (
+              {currentTodayOrMonthly === 'today' && (
                 <span className="todo-page__today-date">
                   今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
                 </span>
@@ -87,10 +99,18 @@ const TodoPage = () => {
 
               <div className="todo-page__switch-schedule-todo-list">
                 <div className="todo-page__switch-schedule-todo-list--width">
-                  {currentTodayOrMonthly === 0 ? (
+                  {currentTodayOrMonthly === 'today' ? (
                     <TodayTodoArea editing={editing} setEditing={setEditing} />
                   ) : (
-                    <MonthlyTodoArea editing={editing} setEditing={setEditing} />
+                    <MonthlyTodoArea
+                      selectedYear={selectedYear}
+                      selectedMonth={selectedMonth}
+                      setSelectedYear={setSelectedYear}
+                      setSelectedMonth={setSelectedMonth}
+                      currentYearMonth={currentYearMonth}
+                      editing={editing}
+                      setEditing={setEditing}
+                    />
                   )}
                 </div>
               </div>

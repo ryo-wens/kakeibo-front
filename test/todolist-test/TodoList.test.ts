@@ -1,4 +1,3 @@
-import React from 'react';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
@@ -6,7 +5,7 @@ import axios from 'axios';
 import * as TodoListsActions from '../../src/reducks/todoList/actions';
 import * as ModalActions from '../../src/reducks/modal/actions';
 import {
-  createTodoListItem,
+  addTodoListItem,
   deleteTodoListItem,
   editTodoListItem,
   fetchDateTodoList,
@@ -14,7 +13,7 @@ import {
   fetchMonthTodoList,
   searchTodoList,
 } from '../../src/reducks/todoList/operations';
-import createTodoListItemResponse from './createTodoListItemResponse.json';
+import addTodoListItemResponse from './addTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
 import fetchDateTodoListResponse from './fetchDateTodoListResponse.json';
 import fetchMonthTodoListResponse from './fetchMonthTodoListResponse.json';
@@ -160,11 +159,11 @@ describe('async actions todoLists', () => {
     const dueDate = new Date('2020-09-29T00:00:00Z');
     const todoContent = '買い物へゆく';
 
-    const mockResponse = JSON.stringify(createTodoListItemResponse);
+    const mockResponse = JSON.stringify(addTodoListItemResponse);
 
     const expectedAction = [
       {
-        type: TodoListsActions.CREATE_TODO_LIST_ITEM,
+        type: TodoListsActions.ADD_TODO_LIST_ITEM,
         payload: {
           expiredTodoList: [
             {
@@ -253,7 +252,7 @@ describe('async actions todoLists', () => {
 
     axiosMock.onPost(url).reply(200, mockResponse);
 
-    await createTodoListItem(
+    await addTodoListItem(
       today,
       selectedDate,
       implementationDate,
@@ -265,9 +264,10 @@ describe('async actions todoLists', () => {
   });
 
   it('Updated todoListItem will be reflected in todayImplementationTodoList and todayDueTodoLists if EDIT_TODO_LIST_ITEM is successful.', async () => {
+    const today = new Date();
+    const currentYearMonth = `2020/09`;
     const todoListItemId = 2;
     const completeFlag = true;
-    const today = new Date();
     const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
@@ -362,8 +362,9 @@ describe('async actions todoLists', () => {
     axiosMock.onPut(url).reply(200, mockResponse);
 
     await editTodoListItem(
-      todoListItemId,
       today,
+      currentYearMonth,
+      todoListItemId,
       selectedDate,
       implementationDate,
       dueDate,

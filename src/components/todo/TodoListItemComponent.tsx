@@ -32,6 +32,7 @@ const useStyles = makeStyles(() =>
 interface TodoListItemComponentProps {
   todoListItem: TodoListItem | GroupTodoListItem;
   selectedDate: Date | null;
+  currentYearMonth: string;
   displayDueDate?: () => void;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -121,8 +122,9 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
     if (pathName !== 'group') {
       dispatch(
         editTodoListItem(
-          props.todoListItem.id,
           date,
+          props.currentYearMonth,
+          props.todoListItem.id,
           props.selectedDate,
           selectedImplementationDate,
           selectedDueDate,
@@ -206,8 +208,9 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
                     checked
                   )
                 : editTodoListItem(
-                    props.todoListItem.id,
                     date,
+                    props.currentYearMonth,
+                    props.todoListItem.id,
                     props.selectedDate,
                     selectedImplementationDate,
                     selectedDueDate,
