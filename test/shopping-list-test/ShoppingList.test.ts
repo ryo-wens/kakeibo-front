@@ -33,7 +33,12 @@ const store = mockStore({ shoppingList: [], modal: [], router: [] });
 const getState = () => {
   return {
     shoppingList: {
+      regularShoppingListLoading: false,
       regularShoppingList: [],
+      regularShoppingListError: {
+        message: '',
+        statusCode: 0,
+      },
       expiredShoppingListLoading: false,
       expiredShoppingList: [],
       expiredShoppingListError: {
@@ -260,12 +265,14 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.START_FETCH_TODAY_SHOPPING_LIST,
         payload: {
+          regularShoppingListLoading: true,
           todayShoppingListLoading: true,
         },
       },
       {
         type: ShoppingListActions.FETCH_TODAY_SHOPPING_LIST,
         payload: {
+          regularShoppingListLoading: false,
           regularShoppingList: [],
           todayShoppingListLoading: false,
           todayShoppingList: [
@@ -313,12 +320,14 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.START_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
         payload: {
+          regularShoppingListLoading: true,
           todayShoppingListByCategoriesLoading: true,
         },
       },
       {
         type: ShoppingListActions.FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
         payload: {
+          regularShoppingListLoading: false,
           regularShoppingList: [],
           todayShoppingListByCategoriesLoading: false,
           todayShoppingListByCategories: [
@@ -370,12 +379,14 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.START_FETCH_MONTHLY_SHOPPING_LIST,
         payload: {
+          regularShoppingListLoading: true,
           monthlyShoppingListLoading: true,
         },
       },
       {
         type: ShoppingListActions.FETCH_MONTHLY_SHOPPING_LIST,
         payload: {
+          regularShoppingListLoading: false,
           regularShoppingList: [],
           monthlyShoppingListLoading: false,
           monthlyShoppingList: [
@@ -422,12 +433,14 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.START_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
         payload: {
+          regularShoppingListLoading: true,
           monthlyShoppingListByCategoriesLoading: true,
         },
       },
       {
         type: ShoppingListActions.FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
         payload: {
+          regularShoppingListLoading: false,
           regularShoppingList: [],
           monthlyShoppingListByCategoriesLoading: false,
           monthlyShoppingListByCategories: [
@@ -486,7 +499,6 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.START_ADD_SHOPPING_LIST_ITEM,
         payload: {
-          expiredShoppingListLoading: true,
           todayShoppingListLoading: true,
           todayShoppingListByCategoriesLoading: true,
           monthlyShoppingListLoading: true,
@@ -496,8 +508,6 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.ADD_SHOPPING_LIST_ITEM,
         payload: {
-          expiredShoppingListLoading: false,
-          expiredShoppingList: [],
           todayShoppingListLoading: false,
           todayShoppingList: [
             {
@@ -737,7 +747,7 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.START_ADD_REGULAR_SHOPPING_LIST_ITEM,
         payload: {
-          expiredShoppingListLoading: true,
+          regularShoppingListLoading: true,
           todayShoppingListLoading: true,
           todayShoppingListByCategoriesLoading: true,
           monthlyShoppingListLoading: true,
@@ -747,6 +757,7 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.ADD_REGULAR_SHOPPING_LIST_ITEM,
         payload: {
+          regularShoppingListLoading: false,
           regularShoppingList: [
             {
               id: 1,
@@ -767,8 +778,6 @@ describe('async actions shoppingList', () => {
               transaction_auto_add: true,
             },
           ],
-          expiredShoppingListLoading: false,
-          expiredShoppingList: [],
           todayShoppingListLoading: false,
           todayShoppingList: [
             {

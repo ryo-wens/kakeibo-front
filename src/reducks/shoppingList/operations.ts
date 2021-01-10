@@ -286,7 +286,6 @@ export const addShoppingListItem = (
       );
 
       const newShoppingListItem: ShoppingListItem = result.data;
-      const prevExpiredShoppingList: ShoppingList = getState().shoppingList.expiredShoppingList;
       const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
       const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
         .todayShoppingListByCategories;
@@ -322,16 +321,6 @@ export const addShoppingListItem = (
         }
         prevShoppingListByCategories.splice(prevCategoryIdx, 0, newShoppingListItemByCategories);
         return prevShoppingListByCategories.concat();
-      };
-
-      const expiredShoppingList = () => {
-        if (dateToDateString(today) > responseExpectedPurchaseDate) {
-          const idx = prevExpiredShoppingList.findIndex(
-            (listItem) => listItem.expected_purchase_date >= responseExpectedPurchaseDate
-          );
-          return pushResponseShoppingListItem(idx, prevExpiredShoppingList, result.data);
-        }
-        return prevExpiredShoppingList;
       };
 
       const todayShoppingList = () => {
@@ -432,7 +421,6 @@ export const addShoppingListItem = (
         return prevMonthlyShoppingListByCategories;
       };
 
-      const nextExpiredShoppingList: ShoppingList = expiredShoppingList();
       const nextTodayShoppingList: ShoppingList = todayShoppingList();
       const nextTodayShoppingListByCategories: ShoppingListByCategories = todayShoppingListByCategories();
       const nextMonthlyShoppingList: ShoppingList = monthlyShoppingList();
@@ -440,7 +428,6 @@ export const addShoppingListItem = (
 
       dispatch(
         addShoppingListItemAction(
-          nextExpiredShoppingList,
           nextTodayShoppingList,
           nextTodayShoppingListByCategories,
           nextMonthlyShoppingList,
@@ -608,7 +595,6 @@ export const addRegularShoppingListItem = (
 
       const prevRegularShoppingList: RegularShoppingList = getState().shoppingList
         .regularShoppingList;
-      const prevExpiredShoppingList: ShoppingList = getState().shoppingList.expiredShoppingList;
       const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
       const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
         .todayShoppingListByCategories;
@@ -776,7 +762,6 @@ export const addRegularShoppingListItem = (
       dispatch(
         addRegularShoppingListItemAction(
           nextRegularShoppingList,
-          prevExpiredShoppingList,
           nextTodayShoppingList,
           nextTodayShoppingListByCategories,
           nextMonthlyShoppingList,

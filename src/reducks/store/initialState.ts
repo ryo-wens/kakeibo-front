@@ -77,7 +77,12 @@ const initialState = {
     groupTasksList: [],
   },
   shoppingList: {
+    regularShoppingListLoading: false,
     regularShoppingList: [],
+    regularShoppingListError: {
+      message: '',
+      statusCode: 0,
+    },
     expiredShoppingListLoading: false,
     expiredShoppingList: [],
     expiredShoppingListError: {
