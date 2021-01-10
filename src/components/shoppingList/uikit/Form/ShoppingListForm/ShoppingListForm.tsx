@@ -17,7 +17,7 @@ interface ShoppingListFormProps {
   expectedPurchaseDate: Date | null;
   purchase: string;
   shop: string | null;
-  amount: string;
+  amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
@@ -104,7 +104,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           value={props.amount}
           type={'tel'}
           id={'amount'}
-          label={'金額(必須)'}
+          label={'金額(任意)'}
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
@@ -165,11 +165,13 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
         >
           {props.buttonLabel}
         </button>
-        {props.titleLabel === '買い物リストを編集' && (
+        {props.titleLabel === '買い物リストアイテムを編集' && (
           <button
             className="shopping-list-form__operation-btn--delete"
             onClick={() => {
-              if (props.openDeleteForm) props.openDeleteForm();
+              if (props.openDeleteForm) {
+                props.openDeleteForm();
+              }
             }}
           >
             削除
