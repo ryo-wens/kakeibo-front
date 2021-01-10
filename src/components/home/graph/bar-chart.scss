@@ -4,8 +4,6 @@
 
   &__remaining-budget{
     text-align: center;
-    display: flex;
-    flex-direction: column;
 
     &__over-budget-color {
       color: #E74C3C;
@@ -24,5 +22,90 @@
     background-color: white;
     border: 1px solid #ccc;
     border-radius: $task-border_radius;
+  }
+
+  &__tooltip {
+    background-color: white;
+    border: 1px solid;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+
+    &--empty-pie {
+      font-size: 0.8rem;
+    }
+  }
+
+  &__bar-chart-position {
+    display: flex;
+    flex-flow: column;
+  }
+
+  &__label {
+
+    &--month {
+      color: $month-bar-color;
+    }
+
+    &--week {
+      color: $week-bar-color;
+    }
+
+    &--day {
+      color: $day-bar-color;
+    }
+  }
+
+  &__pie {
+    margin: auto 0 0 auto;
+    padding-right: 10%;
+    width: 20%;
+  }
+
+  &__amount-available {
+    align-items: center;
+    align-content: center;
+    background-color: #ff9740;
+    border: 1px solid;
+    border-radius: $task-border_radius;
+    color: white;
+    text-align: center;
+    padding: 4px;
+    margin-bottom: 20px;
+    width: 100%;
+
+    &--amount {
+      font-size: 1.3rem;
+    }
+
+    &--arrow::after {
+      top: 33px;
+      left: -80px
+    }
+
+    &--arrow:after{
+      content: "";
+      position: relative;
+      top: 30px;
+      left: -65px;
+      height: 0;
+      width: 0;
+      border: 8px solid transparent;
+      border-top: 8px solid #ff9740;
+    }
+
+    &--empty-arrow::after {
+      top: 33px;
+      left: -80px
+    }
+
+    &--empty-arrow:after {
+      content: "";
+      position: relative;
+      top: 23px;
+      left: -45px;
+      height: 0;
+      width: 0;
+      border: 8px solid transparent;
+      border-top: 8px solid #ff9740;
+    }
   }
 }

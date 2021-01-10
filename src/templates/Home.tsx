@@ -14,8 +14,11 @@ import {
   getSortCategoryGroupTransactions,
   getTotalGroupExpense,
 } from '../reducks/groupTransactions/selectors';
-import { getCurrentMonthBudgets } from '../reducks/budgets/selectors';
-import { getCurrentMonthGroupBudget } from '../reducks/groupBudgets/selectors';
+import { getCurrentMonthBudgets, getAmountPerDay } from '../reducks/budgets/selectors';
+import {
+  getCurrentMonthGroupBudget,
+  getGroupAmountPerDay,
+} from '../reducks/groupBudgets/selectors';
 import { fetchYearlyBudgets } from '../reducks/budgets/operations';
 import { fetchGroupYearlyBudgets } from '../reducks/groupBudgets/operations';
 import CurrentSchedule from '../components/home/CurrentSchedule/CurrentSchedule';
@@ -30,6 +33,8 @@ const Home = () => {
   const thisMonthGroupTotalExpense = useSelector(getTotalGroupExpense);
   const currentMonthBudgetStatus = useSelector(getCurrentMonthBudgets);
   const currentMonthGroupBudgetStatus = useSelector(getCurrentMonthGroupBudget);
+  const amountPerDay = useSelector(getAmountPerDay);
+  const groupAmountPerDay = useSelector(getGroupAmountPerDay);
   const [todoEditing, setTodoEditing] = useState(false);
 
   useEffect(() => {
@@ -103,6 +108,10 @@ const Home = () => {
                 thisMonthTotalExpense={
                   pathName !== 'group' ? thisMonthTotalExpense : thisMonthGroupTotalExpense
                 }
+                currentMonthBudgetsStatusList={
+                  pathName !== 'group' ? currentMonthBudgetStatus : currentMonthGroupBudgetStatus
+                }
+                amountPerDay={pathName !== 'group' ? amountPerDay : groupAmountPerDay}
               />
             </div>
           </div>
