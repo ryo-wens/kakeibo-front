@@ -2,11 +2,11 @@ import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { CurrentMonthBudgetStatusList } from './types';
 import {
-  todayDate,
-  thisMonthEndDate,
-  todayOfWeek,
   incomeTransactionType,
   month,
+  thisMonthEndDate,
+  todayDate,
+  todayOfWeek,
 } from '../../lib/constant';
 
 const budgetsSelector = (state: State) => state.budgets;
@@ -69,31 +69,22 @@ export const getCurrentMonthBudgets = createSelector(
 
     const currentMonthBudgetStatus = {
       label: '今月',
-      totalExpense: `今月の支出は ¥${currentMonthTotalExpense.toLocaleString()}です。`,
+      totalExpense: currentMonthTotalExpense,
       remainingBudget: currentMonthBudgets - currentMonthTotalExpense,
-      remainingBudgetMessage: `今月の使える残金は¥${
-        currentMonthBudgets - currentMonthTotalExpense
-      }です。`,
       percentage: Math.round((currentMonthTotalExpense / currentMonthBudgets) * 100),
     };
 
     const currentWeekBudgetStatus = {
       label: '今週',
-      totalExpense: `今週の支出は ¥${currentWeekTotalExpense.toLocaleString()}です。`,
+      totalExpense: currentWeekTotalExpense,
       remainingBudget: currentWeekBudgets - currentWeekTotalExpense,
-      remainingBudgetMessage: `今週の使える残金は¥${
-        currentWeekBudgets - currentWeekTotalExpense
-      }です。`,
       percentage: Math.round((currentWeekTotalExpense / currentWeekBudgets) * 100),
     };
 
     const currentDayBudgetStatus = {
       label: '今日',
-      totalExpense: `今日の支出は ¥${currentDayTotalExpense.toLocaleString()}です。`,
+      totalExpense: currentDayTotalExpense,
       remainingBudget: currentDayBudget - currentDayTotalExpense,
-      remainingBudgetMessage: `今日の使える残金は¥${
-        currentDayBudget - currentDayTotalExpense
-      }です。`,
       percentage: Math.round((currentDayTotalExpense / currentDayBudget) * 100),
     };
 
@@ -104,6 +95,28 @@ export const getCurrentMonthBudgets = createSelector(
     ];
 
     return currentBudgetStatusList;
+  }
+);
+
+export const getAmountPerDay = createSelector(
+  [yearlyBudgets, transactionsList],
+  (yearlyBudgets, transactionsList) => {
+    const remainingDays = thisMonthEndDate - todayDate;
+    let currentMonthTotalExpense = 0;
+
+    for (const transaction of transactionsList) {
+      if (transaction.transaction_type !== incomeTransactionType) {
+        currentMonthTotalExpense += transaction.amount;
+      }
+    }
+
+    const currentMonthBudgets = yearlyBudgets.monthly_budgets.length
+      ? yearlyBudgets.monthly_budgets[month - 1].monthly_total_budget
+      : 0;
+
+    const remainingBudget = currentMonthBudgets - currentMonthTotalExpense;
+
+    return Math.round(remainingBudget / remainingDays);
   }
 );
 

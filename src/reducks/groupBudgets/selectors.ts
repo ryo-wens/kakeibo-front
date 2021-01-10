@@ -71,31 +71,22 @@ export const getCurrentMonthGroupBudget = createSelector(
 
     const currentMonthGroupBudgetStatus = {
       label: '今月',
-      totalExpense: `今月の支出は ¥${currentMonthTotalExpense.toLocaleString()}です。`,
+      totalExpense: currentMonthTotalExpense,
       remainingBudget: currentMonthBudgets - currentMonthTotalExpense,
-      remainingBudgetMessage: `今月の使える残金は¥${
-        currentMonthBudgets - currentMonthTotalExpense
-      }です。`,
       percentage: Math.round((currentMonthTotalExpense / currentMonthBudgets) * 100),
     };
 
     const currentWeekGroupBudgetStatus = {
       label: '今週',
-      totalExpense: `今週の支出は ¥${currentWeekTotalExpense.toLocaleString()}です。`,
+      totalExpense: currentWeekTotalExpense,
       remainingBudget: currentWeekBudgets - currentWeekTotalExpense,
-      remainingBudgetMessage: `今週の使える残金は¥${
-        currentWeekBudgets - currentWeekTotalExpense
-      }です。`,
       percentage: Math.round((currentWeekTotalExpense / currentWeekBudgets) * 100),
     };
 
     const currentDayGroupBudgetStatus = {
       label: '今日',
-      totalExpense: `今日の支出は ¥${currentDayTotalExpense.toLocaleString()}です。`,
+      totalExpense: currentDayTotalExpense,
       remainingBudget: currentDayBudget - currentDayTotalExpense,
-      remainingBudgetMessage: `今日の使える残金は¥${
-        currentDayBudget - currentDayTotalExpense
-      }です。`,
       percentage: Math.round((currentDayTotalExpense / currentDayBudget) * 100),
     };
 
@@ -106,6 +97,28 @@ export const getCurrentMonthGroupBudget = createSelector(
     ];
 
     return currentBudgetStatusList;
+  }
+);
+
+export const getGroupAmountPerDay = createSelector(
+  [groupYearlyBudgets, groupTransactionsList],
+  (groupYearlyBudgets, groupTransactionsList) => {
+    const remainingDays = thisMonthEndDate - todayDate;
+    let currentMonthTotalExpense = 0;
+
+    for (const transaction of groupTransactionsList) {
+      if (transaction.transaction_type !== incomeTransactionType) {
+        currentMonthTotalExpense += transaction.amount;
+      }
+    }
+
+    const currentMonthBudgets = groupYearlyBudgets.monthly_budgets.length
+      ? groupYearlyBudgets.monthly_budgets[month - 1].monthly_total_budget
+      : 0;
+
+    const remainingBudget = currentMonthBudgets - currentMonthTotalExpense;
+
+    return Math.round(remainingBudget / remainingDays);
   }
 );
 
