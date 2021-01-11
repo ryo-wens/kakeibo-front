@@ -16,6 +16,7 @@ import {
   DeleteTransactionRes,
 } from './types';
 import moment from 'moment';
+import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat, errorHandling } from '../../lib/validation';
 
 export const fetchTransactionsList = (
@@ -157,7 +158,7 @@ export const addTransactions = (customMonth: string) => {
       let addedTransactionsList: TransactionsList = [];
 
       if (addedTransaction.transaction_date.slice(5, 7) === String(customMonth)) {
-        addedTransactionsList = [addedTransaction, ...prevTransactionsList].sort(
+        addedTransactionsList = [...prevTransactionsList, addedTransaction].sort(
           (a, b) =>
             Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
         );
@@ -205,21 +206,35 @@ export const editTransactions = (
         }
       );
       const editedTransaction = result.data;
-
       const transactionsList: TransactionsList = getState().transactions.transactionsList;
+      const editedTransactionMonth = editedTransaction.transaction_date.slice(5, 7);
+      const canEditMonth = customMonth === editedTransactionMonth;
 
-      const editedTransactionsList = transactionsList.map((transaction) => {
-        if (transaction.id === editedTransaction.id) {
-          return editedTransaction;
+      const changeTransactionIndex = transactionsList.findIndex(
+        (item) => item.id === editedTransaction.id
+      );
+
+      const existTransaction = changeTransactionIndex !== -1;
+
+      if (existTransaction) {
+        if (canEditMonth) {
+          transactionsList[changeTransactionIndex] = editedTransaction;
+        } else if (!canEditMonth) {
+          transactionsList.splice(changeTransactionIndex, 1);
         }
-        return transaction;
-      });
+      } else if (!existTransaction) {
+        if (canEditMonth) {
+          transactionsList.push(editedTransaction);
+        }
+      }
 
-      const aligningTransactionsList = editedTransactionsList.sort(
+      transactionsList.sort((a, b) => a.id - b.id);
+
+      transactionsList.sort(
         (a, b) => Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
       );
 
-      dispatch(updateTransactionsAction(aligningTransactionsList));
+      dispatch(updateTransactionsAction(transactionsList));
     } catch (error) {
       if (error.response.status === 400) {
         alert(error.response.data.error.message.join('\n'));
@@ -281,19 +296,21 @@ export const editLatestTransactions = (
       const latestTransactionsList: TransactionsList = getState().transactions
         .latestTransactionsList;
 
-      const editedLatestTransactionsList = latestTransactionsList.map((transaction) => {
-        if (transaction.id === editedTransaction.id) {
-          return editedTransaction;
-        }
-
-        return transaction;
-      });
-
-      const aligningLatestTransactionsList = editedLatestTransactionsList.sort((a, b) =>
-        a.updated_date < b.updated_date ? 1 : -1
+      const editTransactionIndex = latestTransactionsList.findIndex(
+        (item) => item.id === editedTransaction.id
       );
 
-      dispatch(updateLatestTransactionsActions(aligningLatestTransactionsList));
+      const existTransaction = editTransactionIndex !== -1;
+
+      if (existTransaction) {
+        latestTransactionsList.splice(editTransactionIndex, 1);
+        latestTransactionsList.unshift(editedTransaction);
+      } else if (!existTransaction) {
+        latestTransactionsList.pop();
+        latestTransactionsList.unshift(editedTransaction);
+      }
+
+      dispatch(updateLatestTransactionsActions(latestTransactionsList));
     } catch (error) {
       if (error.response.status === 400) {
         alert(error.response.data.error.message.join('\n'));

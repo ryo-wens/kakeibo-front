@@ -126,6 +126,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const mediumMenuRef = useRef<HTMLDivElement>(null);
   const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
   const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+  const expenseBigCategoryIndex = props.bigCategoryId - 2;
   const signal = axios.CancelToken.source();
 
   useEffect(() => {
@@ -160,6 +161,10 @@ const EditTransactionModal = (props: InputModalProps) => {
   }, [props.bigCategoryId]);
 
   useEffect(() => {
+    setBigCategoryIndex(expenseBigCategoryIndex);
+  }, [props.bigCategoryId]);
+
+  useEffect(() => {
     setMediumCategoryId(props.mediumCategoryId);
   }, [props.mediumCategoryId]);
 
@@ -169,7 +174,7 @@ const EditTransactionModal = (props: InputModalProps) => {
 
   useEffect(() => {
     setTransactionDate(changeTypeTransactionDate);
-  }, [props.transactionDate]);
+  }, [props.open]);
 
   useEffect(() => {
     setPaymentUserId(String(props.paymentUserId));

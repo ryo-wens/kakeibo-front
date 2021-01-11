@@ -26,6 +26,7 @@ import { State } from '../store/types';
 import { push } from 'connected-react-router';
 import { errorHandling, isValidAmountFormat } from '../../lib/validation';
 import moment from 'moment';
+import { customMonth } from '../../lib/constant';
 
 export const fetchGroupTransactionsList = (
   groupId: number,
@@ -168,7 +169,7 @@ export const addGroupTransactions = (customMonth: string) => {
       let addedTransactionsList: GroupTransactionsList = [];
 
       if (addedTransaction.transaction_date.slice(5, 7) === String(customMonth)) {
-        addedTransactionsList = [addedTransaction, ...prevGroupTransactionsList].sort(
+        addedTransactionsList = [...prevGroupTransactionsList, addedTransaction].sort(
           (a, b) =>
             Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
         );
@@ -218,21 +219,36 @@ export const editGroupTransactions = (
       );
 
       const editedGroupTransaction = result.data;
+      const groupTransactionsList: GroupTransactionsList = getState().groupTransactions
+        .groupTransactionsList;
+      const editedTransactionMonth = editedGroupTransaction.transaction_date.slice(5, 7);
+      const canEditMonth = customMonth === editedTransactionMonth;
 
-      const groupTransactionsList = getState().groupTransactions.groupTransactionsList;
+      const changeTransactionIndex = groupTransactionsList.findIndex(
+        (item) => item.id === editedGroupTransaction.id
+      );
 
-      const nextGroupTransactionsList = groupTransactionsList.map((groupTransaction) => {
-        if (groupTransaction.id === editedGroupTransaction.id) {
-          return editedGroupTransaction;
+      const existTransaction = changeTransactionIndex !== -1;
+
+      if (existTransaction) {
+        if (canEditMonth) {
+          groupTransactionsList[changeTransactionIndex] = editedGroupTransaction;
+        } else if (!canEditMonth) {
+          groupTransactionsList.splice(changeTransactionIndex, 1);
         }
-        return groupTransaction;
-      });
+      } else if (!existTransaction) {
+        if (canEditMonth) {
+          groupTransactionsList.push(editedGroupTransaction);
+        }
+      }
 
-      const aligningGroupTransactionsList = nextGroupTransactionsList.sort(
+      groupTransactionsList.sort((a, b) => a.id - b.id);
+
+      groupTransactionsList.sort(
         (a, b) => Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
       );
 
-      dispatch(updateGroupTransactionsAction(aligningGroupTransactionsList));
+      dispatch(updateGroupTransactionsAction(groupTransactionsList));
     } catch (error) {
       if (error && error.response) {
         if (error.response.status === 400) {
@@ -299,21 +315,21 @@ export const editGroupLatestTransactionsList = (
 
       const groupLatestTransactionsList = getState().groupTransactions.groupLatestTransactionsList;
 
-      const editedGroupLatestTransactionsList = groupLatestTransactionsList.map(
-        (groupTransaction) => {
-          if (groupTransaction.id === editedTransaction.id) {
-            return editedTransaction;
-          }
-
-          return groupTransaction;
-        }
+      const editTransactionIndex = groupLatestTransactionsList.findIndex(
+        (item) => item.id === editedTransaction.id
       );
 
-      const aligningGroupLatestTransactionsList = editedGroupLatestTransactionsList.sort((a, b) =>
-        a.updated_date < b.updated_date ? 1 : -1
-      );
+      const existTransaction = editTransactionIndex !== -1;
 
-      dispatch(updateGroupLatestTransactionsAction(aligningGroupLatestTransactionsList));
+      if (existTransaction) {
+        groupLatestTransactionsList.splice(editTransactionIndex, 1);
+        groupLatestTransactionsList.unshift(editedTransaction);
+      } else if (!existTransaction) {
+        groupLatestTransactionsList.pop();
+        groupLatestTransactionsList.unshift(editedTransaction);
+      }
+
+      dispatch(updateGroupLatestTransactionsAction(groupLatestTransactionsList));
     } catch (error) {
       if (error.response.status === 400) {
         alert(error.response.data.error.message.join('\n'));
