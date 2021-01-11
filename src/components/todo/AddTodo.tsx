@@ -9,7 +9,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { addTodoListItem } from '../../reducks/todoList/operations';
-import { createGroupTodoListItem } from '../../reducks/groupTodoList/operations';
+import { addGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathTemplateName } from '../../lib/path';
 import { date } from '../../lib/constant';
 import { useParams } from 'react-router';
@@ -85,7 +85,7 @@ const AddTodo = (props: AddTodoProps) => {
       );
     } else if (entityType === 'group') {
       return dispatch(
-        createGroupTodoListItem(
+        addGroupTodoListItem(
           Number(id),
           today,
           props.date,

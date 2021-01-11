@@ -1,10 +1,9 @@
-import React from 'react';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import * as GroupTodoListActions from '../../src/reducks/groupTodoList/actions';
-import createGroupTodoListItemResponse from './createGroupTodoListItemResponse.json';
+import addGroupTodoListItemResponse from './addGroupTodoListItemResponse.json';
 import editGroupTodoListItemResponse from './editGroupTodoListItemResponse.json';
 import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse.json';
 import fetchGroupMonthTodoListResponse from './fetchGroupMonthTodoListResponse.json';
@@ -12,7 +11,7 @@ import fetchGroupExpiredTodoListResponse from './fetchGroupExpiredTodoListRespon
 import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
 import searchGroupTodoListResponse from './searchGroupTodoListResponse.json';
 import {
-  createGroupTodoListItem,
+  addGroupTodoListItem,
   deleteGroupTodoListItem,
   editGroupTodoListItem,
   fetchGroupTodayTodoList,
@@ -164,11 +163,11 @@ describe('async actions groupTodoLists', () => {
     const todoContent = 'お掃除';
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list`;
 
-    const mockResponse = JSON.stringify(createGroupTodoListItemResponse);
+    const mockResponse = JSON.stringify(addGroupTodoListItemResponse);
 
     const expectedAction = [
       {
-        type: GroupTodoListActions.CREATE_GROUP_TODO_LIST_ITEM,
+        type: GroupTodoListActions.ADD_GROUP_TODO_LIST_ITEM,
         payload: {
           groupExpiredTodoList: [
             {
@@ -184,22 +183,22 @@ describe('async actions groupTodoLists', () => {
           ],
           groupTodayImplementationTodoList: [
             {
-              id: 3,
-              posted_date: '2020-09-27T10:57:46Z',
-              updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '2020/09/27(日)',
-              due_date: '2020/09/29(火)',
-              todo_content: 'お掃除',
-              complete_flag: false,
-              user_id: 'furusawa',
-            },
-            {
               id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 3,
+              posted_date: '2020-09-27T10:57:46Z',
+              updated_date: '2020-09-27T10:57:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
+              todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
             },
@@ -217,22 +216,22 @@ describe('async actions groupTodoLists', () => {
               user_id: 'furusawa',
             },
             {
-              id: 3,
-              posted_date: '2020-09-27T10:57:46Z',
-              updated_date: '2020-09-27T10:57:46Z',
-              implementation_date: '2020/09/27(日)',
-              due_date: '2020/09/29(火)',
-              todo_content: 'お掃除',
-              complete_flag: false,
-              user_id: 'furusawa',
-            },
-            {
               id: 2,
               posted_date: '2020-09-27T10:54:46Z',
               updated_date: '2020-09-27T10:54:46Z',
               implementation_date: '2020/09/27(日)',
               due_date: '2020/09/28(月)',
               todo_content: '食器用洗剤2つ購入',
+              complete_flag: false,
+              user_id: 'furusawa',
+            },
+            {
+              id: 3,
+              posted_date: '2020-09-27T10:57:46Z',
+              updated_date: '2020-09-27T10:57:46Z',
+              implementation_date: '2020/09/27(日)',
+              due_date: '2020/09/29(火)',
+              todo_content: 'お掃除',
               complete_flag: false,
               user_id: 'furusawa',
             },
@@ -276,7 +275,7 @@ describe('async actions groupTodoLists', () => {
     axiosMock.onPost(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await createGroupTodoListItem(
+    await addGroupTodoListItem(
       groupId,
       today,
       selectedDate,
@@ -295,6 +294,7 @@ describe('async actions groupTodoLists', () => {
     const groupId = 1;
     const todoListItemId = 2;
     const today = new Date();
+    const currentYearMonth = `2020/09`;
     const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
@@ -397,9 +397,10 @@ describe('async actions groupTodoLists', () => {
     axiosMock.onPut(url).reply(200, mockResponse);
 
     await editGroupTodoListItem(
+      today,
+      currentYearMonth,
       groupId,
       todoListItemId,
-      today,
       selectedDate,
       implementationDate,
       dueDate,

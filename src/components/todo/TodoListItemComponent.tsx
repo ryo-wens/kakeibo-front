@@ -135,9 +135,10 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
     } else if (pathName === 'group') {
       dispatch(
         editGroupTodoListItem(
+          date,
+          props.currentYearMonth,
           Number(id),
           props.todoListItem.id,
-          date,
           props.selectedDate,
           selectedImplementationDate,
           selectedDueDate,
@@ -198,9 +199,10 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
             onClickSave={
               pathName === 'group'
                 ? editGroupTodoListItem(
+                    date,
+                    props.currentYearMonth,
                     Number(id),
                     props.todoListItem.id,
-                    date,
                     props.selectedDate,
                     selectedImplementationDate,
                     selectedDueDate,
