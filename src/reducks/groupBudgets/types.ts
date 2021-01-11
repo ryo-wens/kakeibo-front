@@ -21,8 +21,7 @@ export interface CurrentMonthGroupBudgetStatus {
   label: string;
   percentage: number;
   remainingBudget: number;
-  remainingBudgetMessage: string;
-  totalExpense: string;
+  totalExpense: number;
 }
 
 export interface CurrentMonthBudgetGroupStatusList extends Array<CurrentMonthGroupBudgetStatus> {}

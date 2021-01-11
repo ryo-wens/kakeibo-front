@@ -7,7 +7,7 @@ export const groupTodoListsReducer = (
   action: groupTodoListsActions
 ) => {
   switch (action.type) {
-    case Actions.CREATE_GROUP_TODO_LIST_ITEM:
+    case Actions.ADD_GROUP_TODO_LIST_ITEM:
       return {
         ...state,
         ...action.payload,

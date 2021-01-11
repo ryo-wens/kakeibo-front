@@ -1,6 +1,6 @@
 import { TodoList } from './types';
 export type todoListsActions = ReturnType<
-  | typeof createTodoListItemAction
+  | typeof addTodoListItemAction
   | typeof editTodoListItemAction
   | typeof fetchDateTodoListAction
   | typeof fetchMonthTodoListAction
@@ -8,8 +8,8 @@ export type todoListsActions = ReturnType<
   | typeof searchTodoListAction
 >;
 
-export const CREATE_TODO_LIST_ITEM = 'CREATE_TODO_LIST_ITEM';
-export const createTodoListItemAction = (
+export const ADD_TODO_LIST_ITEM = 'ADD_TODO_LIST_ITEM';
+export const addTodoListItemAction = (
   expiredTodoList: TodoList,
   todayImplementationTodoList: TodoList,
   todayDueTodoList: TodoList,
@@ -17,7 +17,7 @@ export const createTodoListItemAction = (
   monthDueTodoList: TodoList
 ) => {
   return {
-    type: CREATE_TODO_LIST_ITEM,
+    type: ADD_TODO_LIST_ITEM,
     payload: {
       expiredTodoList: expiredTodoList,
       todayImplementationTodoList: todayImplementationTodoList,

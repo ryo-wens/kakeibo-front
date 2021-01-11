@@ -1,10 +1,11 @@
 import React from 'react';
-import EditIcon from '@material-ui/icons/Edit';
 import './regular-shopping-list-item-component.scss';
 import { RegularShoppingListItem } from '../../../../../reducks/shoppingList/types';
+import EditRegularShoppingListModal from '../../Modal/EditRegularShoppingListModal/EditRegularShoppingListModal';
 
 interface RegularShoppingListItemComponentProps {
   listItem: RegularShoppingListItem;
+  currentYearMonth: string;
 }
 
 const RegularShoppingListItemComponent = (props: RegularShoppingListItemComponentProps) => {
@@ -16,7 +17,10 @@ const RegularShoppingListItemComponent = (props: RegularShoppingListItemComponen
       <span className="regular-shopping-list-item-component__amount">
         {props.listItem.amount}円
       </span>
-      <EditIcon className="regular-shopping-list-item-component__edit-icon" />
+      <EditRegularShoppingListModal
+        listItem={props.listItem}
+        currentYearMonth={props.currentYearMonth}
+      />
     </div>
   );
 };

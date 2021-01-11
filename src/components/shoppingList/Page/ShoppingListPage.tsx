@@ -20,6 +20,8 @@ const ShoppingListPage = () => {
   const expenseCategories = useSelector(getExpenseCategories);
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
+  const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
+  const currentYearMonth = `${selectedYear}/${currentMonth}`;
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -50,7 +52,7 @@ const ShoppingListPage = () => {
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
           <AddRegularShoppingListModal selectedYear={selectedYear} selectedMonth={selectedMonth} />
-          <RegularShoppingListArea />
+          <RegularShoppingListArea currentYearMonth={currentYearMonth} />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>

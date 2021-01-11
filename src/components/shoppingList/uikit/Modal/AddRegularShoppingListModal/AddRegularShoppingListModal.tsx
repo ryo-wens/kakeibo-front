@@ -31,7 +31,7 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
   const [cycleType, setCycleType] = useState<'daily' | 'weekly' | 'monthly' | 'custom'>('weekly');
   const [cycle, setCycle] = useState<string | null>(null);
   const [purchase, setPurchase] = useState<string>('');
-  const [shop, setShop] = useState<string>('');
+  const [shop, setShop] = useState<string | null>(null);
   const [amount, setAmount] = useState<string | null>(null);
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [bigCategory, setBigCategory] = useState<string | null>('');
@@ -55,12 +55,12 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
     setCycle(null);
     setPurchase('');
     setAmount(null);
+    setShop(null);
     setBigCategoryId(0);
     setBigCategory('');
     setMediumCategoryId(null);
     setAssociatedCategory('');
     setCustomCategoryId(null);
-    setShop('');
     setTransactionAutoAdd(false);
   };
 
