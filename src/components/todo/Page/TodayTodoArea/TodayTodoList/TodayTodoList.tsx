@@ -2,7 +2,7 @@ import React from 'react';
 import { TodoListItem, TodoList } from '../../../../../reducks/todoList/types';
 import { TodoListItemComponent } from '../../../index';
 import { GroupTodoListItem, GroupTodoList } from '../../../../../reducks/groupTodoList/types';
-import { date } from '../../../../../lib/constant';
+import { customMonth, date, year } from '../../../../../lib/constant';
 
 interface TodayTodoListProps {
   planName: string;
@@ -13,6 +13,8 @@ interface TodayTodoListProps {
 }
 
 const TodayTodoList = (props: TodayTodoListProps) => {
+  const currentYearMonth = `${year}/${customMonth}`;
+
   const existsPlanTodoLists = (
     todoLists: (TodoListItem | GroupTodoListItem)[],
     planName: string
@@ -25,6 +27,7 @@ const TodayTodoList = (props: TodayTodoListProps) => {
               <div key={todoList.id}>
                 <TodoListItemComponent
                   todoListItem={todoList}
+                  currentYearMonth={currentYearMonth}
                   selectedDate={date}
                   setEditing={props.setEditing}
                 />
