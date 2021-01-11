@@ -13,12 +13,11 @@
     border-radius: 5px;
     cursor: pointer;
     padding: 3px;
+    width: 240px;
   }
 
   &__recent-text {
     font-size: $medium-font_size;
-    width: 190px;
-    max-width: 250px;
   }
 
   &__category-icon {
