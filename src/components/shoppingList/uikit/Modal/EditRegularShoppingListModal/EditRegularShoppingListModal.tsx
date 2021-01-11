@@ -1,40 +1,43 @@
 import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import ShoppingListForm from '../../Form/ShoppingListForm/ShoppingListForm';
-import './edit-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
 import {
-  addShoppingListItem,
-  deleteShoppingListItem,
+  addRegularShoppingListItem,
+  deleteRegularShoppingListItem,
 } from '../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
-import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
-import EditIcon from '@material-ui/icons/Edit';
-import { dateStringToDate } from '../../../../../lib/date';
+import RegularShoppingListForm from '../../Form/RegularShoppingListForm/RegularShoppingListForm';
 import ShoppingListDeleteForm from '../../Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
+import { RegularShoppingListItem } from '../../../../../reducks/shoppingList/types';
+import EditIcon from '@material-ui/icons/Edit';
+import './edit-regular-shopping-list-modal.scss';
+import { dateStringToDate } from '../../../../../lib/date';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
     paper: {
-      width: 450,
+      width: 550,
       margin: '20px auto auto auto',
       backgroundColor: theme.palette.background.paper,
     },
   })
 );
 
-interface EditShoppingListModalProps {
-  listItem: ShoppingListItem;
+interface EditRegularShoppingListModalProps {
+  listItem: RegularShoppingListItem;
+  currentYearMonth: string;
 }
 
-const EditShoppingListModal = (props: EditShoppingListModalProps) => {
+const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
 
   const initialExpectedPurchaseDate: Date = dateStringToDate(props.listItem.expected_purchase_date);
+  const initialCycleType = props.listItem.cycle_type;
+  const initialCycle = props.listItem.cycle === null ? null : String(props.listItem.cycle);
   const initialPurchase = props.listItem.purchase;
   const initialShop = props.listItem.shop;
   const initialAmount = props.listItem.amount === null ? null : String(props.listItem.amount);
@@ -47,6 +50,10 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
     initialExpectedPurchaseDate
   );
+  const [cycleType, setCycleType] = useState<'daily' | 'weekly' | 'monthly' | 'custom'>(
+    initialCycleType
+  );
+  const [cycle, setCycle] = useState<string | null>(initialCycle);
   const [purchase, setPurchase] = useState<string>(initialPurchase);
   const [shop, setShop] = useState<string | null>(initialShop);
   const [amount, setAmount] = useState<string | null>(initialAmount);
@@ -59,12 +66,21 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
   const [associatedCategory, setAssociatedCategory] = useState('');
   const signal = axios.CancelToken.source();
 
+  const unInputCycle = () => {
+    if (cycleType === 'custom') {
+      return cycle === null || cycle === '';
+    }
+    return false;
+  };
+
   const disabledButton = () => {
-    const unInput =
-      purchase === '' || amount === '' || expectedPurchaseDate === null || bigCategoryId === 0;
+    const unInput = purchase === '' || expectedPurchaseDate === null || bigCategoryId === 0;
+
     if (
       expectedPurchaseDate !== null &&
       initialExpectedPurchaseDate.getTime() === expectedPurchaseDate.getTime() &&
+      initialCycleType === cycleType &&
+      initialCycle === cycle &&
       initialPurchase === purchase &&
       initialShop === shop &&
       initialAmount === amount &&
@@ -75,7 +91,7 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
       initialTransactionAutoAdd === transactionAutoAdd
     ) {
       return true;
-    } else return unInput;
+    } else return unInput || unInputCycle();
   };
 
   const openModal = () => {
@@ -92,6 +108,8 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
     setOpen(false);
     setDeleteForm(false);
     setExpectedPurchaseDate(initialExpectedPurchaseDate);
+    setCycleType(initialCycleType);
+    setCycle(initialCycle);
     setPurchase(initialPurchase);
     setShop(initialShop);
     setAmount(initialAmount);
@@ -116,6 +134,17 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
 
   const handleDateChange = (expectedPurchaseDate: Date | null) => {
     setExpectedPurchaseDate(expectedPurchaseDate);
+  };
+
+  const handleCycleTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setCycleType(event.target.value as 'daily' | 'weekly' | 'monthly' | 'custom');
+  };
+
+  const handleCycleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (cycleType !== 'custom') {
+      setCycle(null);
+    }
+    setCycle(event.target.value);
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -159,19 +188,21 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
     <div className={classes.paper}>
       {deleteForm ? (
         <ShoppingListDeleteForm
-          titleLabel={'買い物リストアイテムを削除'}
+          titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.listItem.purchase}
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
-          dispatchOperation={deleteShoppingListItem(
+          dispatchOperation={deleteRegularShoppingListItem(
             props.listItem.id,
             props.listItem.big_category_name,
             signal
           )}
         />
       ) : (
-        <ShoppingListForm
+        <RegularShoppingListForm
           expectedPurchaseDate={expectedPurchaseDate}
+          cycleType={cycleType}
+          cycle={cycle}
           purchase={purchase}
           shop={shop}
           amount={amount}
@@ -182,24 +213,29 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
           customCategoryId={customCategoryId}
           transactionAutoAdd={transactionAutoAdd}
           associatedCategory={associatedCategory}
-          handlePurchaseChange={handlePurchaseChange}
           handleDateChange={handleDateChange}
+          handleCycleTypeChange={handleCycleTypeChange}
+          handleCycleChange={handleCycleChange}
+          handlePurchaseChange={handlePurchaseChange}
           handleAmountChange={handleAmountChange}
           selectCategory={selectCategory}
           handleShopChange={handleShopChange}
           handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-          titleLabel={'買い物リストアイテムを編集'}
+          titleLabel={'定期買い物リストアイテムを編集'}
           buttonLabel={'保存'}
           closeModal={closeModal}
           unInput={disabledButton()}
           minDate={new Date('1900-01-01')}
-          // 仮実装として addShoppingListItem() を記述
-          dispatchOperation={addShoppingListItem(
+          // 仮実装として addRegularShoppingListItem() を記述
+          dispatchOperation={addRegularShoppingListItem(
             date,
+            props.currentYearMonth,
             expectedPurchaseDate,
+            cycleType,
+            typeof cycle === 'string' ? Number(cycle) : cycle,
             purchase,
             shop,
-            Number(amount),
+            typeof amount === 'string' ? Number(amount) : amount,
             bigCategoryId,
             mediumCategoryId,
             customCategoryId,
@@ -214,7 +250,10 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
 
   return (
     <>
-      <EditIcon className="edit-shopping-list-modal__edit-icon" onClick={() => openModal()} />
+      <EditIcon
+        className="edit-regular-shopping-list-modal__edit-icon"
+        onClick={() => openModal()}
+      />
       <Modal
         open={open}
         onClose={closeModal}
@@ -227,4 +266,4 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
   );
 };
 
-export default EditShoppingListModal;
+export default EditRegularShoppingListModal;

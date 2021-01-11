@@ -8,7 +8,11 @@ import {
 import RegularShoppingListItemComponent from '../../uikit/ListItem/RegularShoppingListItemComponent/RegularShoppingListItemComponent';
 import './regular-shopping-list-area.scss';
 
-const RegularShoppingListArea = () => {
+interface RegularShoppingListAreaProps {
+  currentYearMonth: string;
+}
+
+const RegularShoppingListArea = (props: RegularShoppingListAreaProps) => {
   const regularShoppingList: RegularShoppingList = useSelector(getRegularShoppingList);
 
   return (
@@ -18,7 +22,10 @@ const RegularShoppingListArea = () => {
           regularShoppingList.map((listItem: RegularShoppingListItem) => {
             return (
               <div key={listItem.id}>
-                <RegularShoppingListItemComponent listItem={listItem} />
+                <RegularShoppingListItemComponent
+                  listItem={listItem}
+                  currentYearMonth={props.currentYearMonth}
+                />
               </div>
             );
           })

@@ -8,8 +8,8 @@ import TextField from '@material-ui/core/TextField';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
-import { createTodoListItem } from '../../reducks/todoList/operations';
-import { createGroupTodoListItem } from '../../reducks/groupTodoList/operations';
+import { addTodoListItem } from '../../reducks/todoList/operations';
+import { addGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import { getPathTemplateName } from '../../lib/path';
 import { date } from '../../lib/constant';
 import { useParams } from 'react-router';
@@ -81,17 +81,11 @@ const AddTodo = (props: AddTodoProps) => {
   const addTodo = () => {
     if (entityType === 'todo') {
       return dispatch(
-        createTodoListItem(
-          today,
-          props.date,
-          selectedImplementationDate,
-          selectedDueDate,
-          todoContent
-        )
+        addTodoListItem(today, props.date, selectedImplementationDate, selectedDueDate, todoContent)
       );
     } else if (entityType === 'group') {
       return dispatch(
-        createGroupTodoListItem(
+        addGroupTodoListItem(
           Number(id),
           today,
           props.date,

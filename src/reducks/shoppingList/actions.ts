@@ -32,6 +32,10 @@ export type ShoppingListActions = ReturnType<
   | typeof addRegularShoppingListItemAction
   | typeof cancelAddRegularShoppingListItemAction
   | typeof failedAddRegularShoppingListItemAction
+  | typeof startDeleteRegularShoppingListItemAction
+  | typeof deleteRegularShoppingListItemAction
+  | typeof cancelDeleteRegularShoppingListItemAction
+  | typeof failedDeleteRegularShoppingListItemAction
 >;
 
 export const START_FETCH_EXPIRED_SHOPPING_LIST = 'START_FETCH_EXPIRED_SHOPPING_LIST';
@@ -84,6 +88,7 @@ export const startFetchTodayShoppingListAction = () => {
   return {
     type: START_FETCH_TODAY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: true,
       todayShoppingListLoading: true,
     },
   };
@@ -97,6 +102,7 @@ export const fetchTodayShoppingListAction = (
   return {
     type: FETCH_TODAY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: false,
       regularShoppingList: regularShoppingList,
       todayShoppingListLoading: false,
       todayShoppingList: todayShoppingList,
@@ -109,6 +115,7 @@ export const cancelFetchTodayShoppingListAction = () => {
   return {
     type: CANCEL_FETCH_TODAY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: false,
       todayShoppingListLoading: false,
     },
   };
@@ -119,6 +126,7 @@ export const failedFetchTodayShoppingListAction = (statusCode: number, errorMess
   return {
     type: FAILED_FETCH_TODAY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: false,
       todayShoppingListLoading: false,
       todayShoppingListError: {
         statusCode: statusCode,
@@ -134,6 +142,7 @@ export const startFetchTodayShoppingListByCategoriesAction = () => {
   return {
     type: START_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: true,
       todayShoppingListByCategoriesLoading: true,
     },
   };
@@ -147,6 +156,7 @@ export const fetchTodayShoppingListByCategoriesAction = (
   return {
     type: FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: false,
       regularShoppingList: regularShoppingList,
       todayShoppingListByCategoriesLoading: false,
       todayShoppingListByCategories: todayShoppingListByCategories,
@@ -160,6 +170,7 @@ export const cancelFetchTodayShoppingListByCategoriesAction = () => {
   return {
     type: CANCEL_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: false,
       todayShoppingListByCategoriesLoading: false,
     },
   };
@@ -174,6 +185,7 @@ export const failedFetchTodayShoppingListByCategoriesAction = (
   return {
     type: FAILED_FETCH_TODAY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: false,
       todayShoppingListByCategoriesLoading: false,
       todayShoppingListByCategoriesError: {
         statusCode: statusCode,
@@ -188,6 +200,7 @@ export const startFetchMonthlyShoppingListAction = () => {
   return {
     type: START_FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: true,
       monthlyShoppingListLoading: true,
     },
   };
@@ -201,6 +214,7 @@ export const fetchMonthlyShoppingListAction = (
   return {
     type: FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: false,
       regularShoppingList: regularShoppingList,
       monthlyShoppingListLoading: false,
       monthlyShoppingList: monthlyShoppingList,
@@ -213,6 +227,7 @@ export const cancelFetchMonthlyShoppingListAction = () => {
   return {
     type: CANCEL_FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: false,
       monthlyShoppingListLoading: false,
     },
   };
@@ -223,6 +238,7 @@ export const failedFetchMonthlyShoppingListAction = (statusCode: number, errorMe
   return {
     type: FAILED_FETCH_MONTHLY_SHOPPING_LIST,
     payload: {
+      regularShoppingListLoading: false,
       monthlyShoppingListLoading: false,
       monthlyShoppingListError: {
         statusCode: statusCode,
@@ -238,6 +254,7 @@ export const startFetchMonthlyShoppingListByCategoriesAction = () => {
   return {
     type: START_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: true,
       monthlyShoppingListByCategoriesLoading: true,
     },
   };
@@ -252,6 +269,7 @@ export const fetchMonthlyShoppingListByCategoriesAction = (
   return {
     type: FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: false,
       regularShoppingList: regularShoppingList,
       monthlyShoppingListByCategoriesLoading: false,
       monthlyShoppingListByCategories: monthlyShoppingListByCategories,
@@ -265,6 +283,7 @@ export const cancelFetchMonthlyShoppingListByCategoriesAction = () => {
   return {
     type: CANCEL_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: false,
       monthlyShoppingListByCategoriesLoading: false,
     },
   };
@@ -279,6 +298,7 @@ export const failedFetchMonthlyShoppingListByCategoriesAction = (
   return {
     type: FAILED_FETCH_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
     payload: {
+      regularShoppingListLoading: false,
       monthlyShoppingListByCategoriesLoading: false,
       monthlyShoppingListByCategoriesError: {
         statusCode: statusCode,
@@ -293,7 +313,6 @@ export const startAddShoppingListItemAction = () => {
   return {
     type: START_ADD_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: true,
       todayShoppingListLoading: true,
       todayShoppingListByCategoriesLoading: true,
       monthlyShoppingListLoading: true,
@@ -304,7 +323,6 @@ export const startAddShoppingListItemAction = () => {
 
 export const ADD_SHOPPING_LIST_ITEM = 'ADD_SHOPPING_LIST_ITEM';
 export const addShoppingListItemAction = (
-  expiredShoppingList: ShoppingList,
   todayShoppingList: ShoppingList,
   todayShoppingListByCategories: ShoppingListByCategories,
   monthlyShoppingList: ShoppingList,
@@ -313,8 +331,6 @@ export const addShoppingListItemAction = (
   return {
     type: ADD_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: false,
-      expiredShoppingList: expiredShoppingList,
       todayShoppingListLoading: false,
       todayShoppingList: todayShoppingList,
       todayShoppingListByCategoriesLoading: false,
@@ -332,7 +348,6 @@ export const cancelAddShoppingListItemAction = () => {
   return {
     type: CANCEL_ADD_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: false,
       todayShoppingListLoading: false,
       todayShoppingListByCategoriesLoading: false,
       monthlyShoppingListLoading: false,
@@ -346,11 +361,6 @@ export const failedAddShoppingListItemAction = (statusCode: number, errorMessage
   return {
     type: FAILED_ADD_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: false,
-      expiredShoppingListError: {
-        statusCode: statusCode,
-        message: errorMessage,
-      },
       todayShoppingListLoading: false,
       todayShoppingListError: {
         statusCode: statusCode,
@@ -467,7 +477,7 @@ export const startAddRegularShoppingListItemAction = () => {
   return {
     type: START_ADD_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: true,
+      regularShoppingListLoading: true,
       todayShoppingListLoading: true,
       todayShoppingListByCategoriesLoading: true,
       monthlyShoppingListLoading: true,
@@ -479,7 +489,6 @@ export const startAddRegularShoppingListItemAction = () => {
 export const ADD_REGULAR_SHOPPING_LIST_ITEM = 'ADD_REGULAR_SHOPPING_LIST_ITEM';
 export const addRegularShoppingListItemAction = (
   regularShoppingList: RegularShoppingList,
-  expiredShoppingList: ShoppingList,
   todayShoppingList: ShoppingList,
   todayShoppingListByCategories: ShoppingListByCategories,
   monthlyShoppingList: ShoppingList,
@@ -488,9 +497,8 @@ export const addRegularShoppingListItemAction = (
   return {
     type: ADD_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
+      regularShoppingListLoading: false,
       regularShoppingList: regularShoppingList,
-      expiredShoppingListLoading: false,
-      expiredShoppingList: expiredShoppingList,
       todayShoppingListLoading: false,
       todayShoppingList: todayShoppingList,
       todayShoppingListByCategoriesLoading: false,
@@ -508,7 +516,7 @@ export const cancelAddRegularShoppingListItemAction = () => {
   return {
     type: CANCEL_ADD_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: false,
+      regularShoppingListLoading: false,
       todayShoppingListLoading: false,
       todayShoppingListByCategoriesLoading: false,
       monthlyShoppingListLoading: false,
@@ -525,6 +533,106 @@ export const failedAddRegularShoppingListItemAction = (
   return {
     type: FAILED_ADD_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
+      regularShoppingListLoading: false,
+      regularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_DELETE_REGULAR_SHOPPING_LIST_ITEM = 'START_DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const startDeleteRegularShoppingListItemAction = () => {
+  return {
+    type: START_DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: true,
+      expiredShoppingListLoading: true,
+      todayShoppingListLoading: true,
+      todayShoppingListByCategoriesLoading: true,
+      monthlyShoppingListLoading: true,
+      monthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const DELETE_REGULAR_SHOPPING_LIST_ITEM = 'DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const deleteRegularShoppingListItemAction = (
+  regularShoppingList: RegularShoppingList,
+  expiredShoppingList: ShoppingList,
+  todayShoppingList: ShoppingList,
+  todayShoppingListByCategories: ShoppingListByCategories,
+  monthlyShoppingList: ShoppingList,
+  monthlyShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      regularShoppingList: regularShoppingList,
+      expiredShoppingListLoading: false,
+      expiredShoppingList: expiredShoppingList,
+      todayShoppingListLoading: false,
+      todayShoppingList: todayShoppingList,
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategories: todayShoppingListByCategories,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingList: monthlyShoppingList,
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_DELETE_REGULAR_SHOPPING_LIST_ITEM = 'CANCEL_DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const cancelDeleteRegularShoppingListItemAction = () => {
+  return {
+    type: CANCEL_DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      expiredShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_DELETE_REGULAR_SHOPPING_LIST_ITEM = 'FAILED_DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const failedDeleteRegularShoppingListItemAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      regularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
       expiredShoppingListLoading: false,
       expiredShoppingListError: {
         statusCode: statusCode,

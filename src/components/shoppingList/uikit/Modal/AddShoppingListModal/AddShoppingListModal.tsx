@@ -98,8 +98,7 @@ const AddShoppingListModal = () => {
     }
   };
 
-  const unInput =
-    purchase === '' || amount === '' || expectedPurchaseDate === null || bigCategoryId === 0;
+  const unInput = purchase === '' || expectedPurchaseDate === null || bigCategoryId === 0;
 
   const body = (
     <div className={classes.paper}>

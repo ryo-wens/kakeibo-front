@@ -5,6 +5,8 @@ import {
   AddRegularShoppingListItemRes,
   AddShoppingListItemReq,
   AddShoppingListItemRes,
+  DeleteRegularShoppingListItemRes,
+  DeleteShoppingListItemRes,
   FetchExpiredShoppingListRes,
   FetchMonthlyShoppingListByCategoriesRes,
   FetchMonthlyShoppingListRes,
@@ -22,15 +24,18 @@ import {
   addShoppingListItemAction,
   cancelAddRegularShoppingListItemAction,
   cancelAddShoppingListItemAction,
+  cancelDeleteRegularShoppingListItemAction,
   cancelDeleteShoppingListItemAction,
   cancelFetchExpiredShoppingListAction,
   cancelFetchMonthlyShoppingListAction,
   cancelFetchMonthlyShoppingListByCategoriesAction,
   cancelFetchTodayShoppingListAction,
   cancelFetchTodayShoppingListByCategoriesAction,
+  deleteRegularShoppingListItemAction,
   deleteShoppingListItemAction,
   failedAddRegularShoppingListItemAction,
   failedAddShoppingListItemAction,
+  failedDeleteRegularShoppingListItemAction,
   failedDeleteShoppingListItemAction,
   failedFetchExpiredShoppingListAction,
   failedFetchMonthlyShoppingListAction,
@@ -44,6 +49,7 @@ import {
   fetchTodayShoppingListByCategoriesAction,
   startAddRegularShoppingListItemAction,
   startAddShoppingListItemAction,
+  startDeleteRegularShoppingListItemAction,
   startDeleteShoppingListItemAction,
   startFetchExpiredShoppingListAction,
   startFetchMonthlyShoppingListAction,
@@ -54,7 +60,6 @@ import {
 import { State } from '../store/types';
 import { dateStringToMonthString, dateToDateString } from '../../lib/date';
 import moment from 'moment';
-import { deleteTodoListItemRes } from '../todoList/types';
 import { openTextModalAction } from '../modal/actions';
 
 export const fetchExpiredShoppingList = (signal: CancelTokenSource) => {
@@ -286,7 +291,6 @@ export const addShoppingListItem = (
       );
 
       const newShoppingListItem: ShoppingListItem = result.data;
-      const prevExpiredShoppingList: ShoppingList = getState().shoppingList.expiredShoppingList;
       const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
       const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
         .todayShoppingListByCategories;
@@ -322,16 +326,6 @@ export const addShoppingListItem = (
         }
         prevShoppingListByCategories.splice(prevCategoryIdx, 0, newShoppingListItemByCategories);
         return prevShoppingListByCategories.concat();
-      };
-
-      const expiredShoppingList = () => {
-        if (dateToDateString(today) > responseExpectedPurchaseDate) {
-          const idx = prevExpiredShoppingList.findIndex(
-            (listItem) => listItem.expected_purchase_date >= responseExpectedPurchaseDate
-          );
-          return pushResponseShoppingListItem(idx, prevExpiredShoppingList, result.data);
-        }
-        return prevExpiredShoppingList;
       };
 
       const todayShoppingList = () => {
@@ -432,7 +426,6 @@ export const addShoppingListItem = (
         return prevMonthlyShoppingListByCategories;
       };
 
-      const nextExpiredShoppingList: ShoppingList = expiredShoppingList();
       const nextTodayShoppingList: ShoppingList = todayShoppingList();
       const nextTodayShoppingListByCategories: ShoppingListByCategories = todayShoppingListByCategories();
       const nextMonthlyShoppingList: ShoppingList = monthlyShoppingList();
@@ -440,7 +433,6 @@ export const addShoppingListItem = (
 
       dispatch(
         addShoppingListItemAction(
-          nextExpiredShoppingList,
           nextTodayShoppingList,
           nextTodayShoppingListByCategories,
           nextMonthlyShoppingList,
@@ -468,7 +460,7 @@ export const deleteShoppingListItem = (
     dispatch(startDeleteShoppingListItemAction());
 
     try {
-      const result = await axios.delete<deleteTodoListItemRes>(
+      const result = await axios.delete<DeleteShoppingListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`,
         {
           cancelToken: signal.token,
@@ -608,7 +600,6 @@ export const addRegularShoppingListItem = (
 
       const prevRegularShoppingList: RegularShoppingList = getState().shoppingList
         .regularShoppingList;
-      const prevExpiredShoppingList: ShoppingList = getState().shoppingList.expiredShoppingList;
       const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
       const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
         .todayShoppingListByCategories;
@@ -633,15 +624,20 @@ export const addRegularShoppingListItem = (
       };
 
       const addResponseShoppingList = (prevShoppingList: ShoppingList) => {
+        let nextShoppingList: ShoppingList = [];
         for (const newItem of newShoppingList) {
           if (currentYearMonth === dateStringToMonthString(newItem.expected_purchase_date)) {
-            const idx = prevShoppingList.findIndex(
-              (prevItem) => prevItem.expected_purchase_date >= newItem.expected_purchase_date
-            );
-            return addResponseShoppingListItem(idx, prevShoppingList, newItem);
+            const idx = prevShoppingList.findIndex((prevItem) => {
+              if (prevItem.expected_purchase_date === newItem.expected_purchase_date) {
+                return prevItem.id > newItem.id;
+              }
+              return prevItem.expected_purchase_date > newItem.expected_purchase_date;
+            });
+
+            nextShoppingList = addResponseShoppingListItem(idx, prevShoppingList, newItem);
           }
         }
-        return prevShoppingList.concat();
+        return nextShoppingList;
       };
 
       const addResponseShoppingListItemByCategories = (
@@ -650,7 +646,7 @@ export const addRegularShoppingListItem = (
         newShoppingListItemByCategories: ShoppingListItemByCategories
       ) => {
         if (pushCategoryIdx === NOT_FOUND) {
-          return [newShoppingListItemByCategories];
+          return prevShoppingListByCategories.concat(newShoppingListItemByCategories);
         }
         prevShoppingListByCategories.splice(pushCategoryIdx, 0, newShoppingListItemByCategories);
         return prevShoppingListByCategories.concat();
@@ -669,8 +665,8 @@ export const addRegularShoppingListItem = (
           const prevCategoriesIdx = prevTodayShoppingListByCategories.findIndex(
             (item) => item.big_category_name === newShoppingListItem.big_category_name
           );
-          const pushCategoryIdx = prevMonthlyShoppingListByCategories.findIndex(
-            (item) => item.shopping_list[0].big_category_id >= newShoppingListItem.big_category_id
+          const pushCategoryIdx = prevTodayShoppingListByCategories.findIndex(
+            (item) => item.shopping_list[0].big_category_id > newShoppingListItem.big_category_id
           );
 
           if (prevCategoriesIdx === NOT_FOUND) {
@@ -722,7 +718,7 @@ export const addRegularShoppingListItem = (
 
         const pushCategoryItemIdx = prevMonthlyShoppingListByCategories.findIndex(
           (item) =>
-            item.shopping_list[0].big_category_id >= newRegularShoppingListItem.big_category_id
+            item.shopping_list[0].big_category_id > newRegularShoppingListItem.big_category_id
         );
 
         if (prevCategoriesIdx === NOT_FOUND) {
@@ -741,12 +737,11 @@ export const addRegularShoppingListItem = (
             shopping_list: nextShoppingList,
           };
 
-          addResponseShoppingListItemByCategories(
+          return addResponseShoppingListItemByCategories(
             pushCategoryItemIdx,
             prevMonthlyShoppingListByCategories,
             newShoppingListItemByCategories
           );
-          return prevMonthlyShoppingListByCategories;
         }
 
         const nextShoppingList = addResponseShoppingList(
@@ -776,7 +771,6 @@ export const addRegularShoppingListItem = (
       dispatch(
         addRegularShoppingListItemAction(
           nextRegularShoppingList,
-          prevExpiredShoppingList,
           nextTodayShoppingList,
           nextTodayShoppingListByCategories,
           nextMonthlyShoppingList,
@@ -789,6 +783,113 @@ export const addRegularShoppingListItem = (
       } else {
         dispatch(
           failedAddRegularShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const deleteRegularShoppingListItem = (
+  regularShoppingListItemId: number,
+  bigCategoryName: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    dispatch(startDeleteRegularShoppingListItemAction());
+
+    try {
+      const result = await axios.delete<DeleteRegularShoppingListItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const prevRegularShoppingList: RegularShoppingList = getState().shoppingList
+        .regularShoppingList;
+      const prevExpiredShoppingList: ShoppingList = getState().shoppingList.expiredShoppingList;
+      const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
+      const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
+        .todayShoppingListByCategories;
+      const prevMonthlyShoppingList: ShoppingList = getState().shoppingList.monthlyShoppingList;
+      const prevMonthlyShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
+        .monthlyShoppingListByCategories;
+
+      const nextRegularShoppingList: RegularShoppingList = prevRegularShoppingList.filter(
+        (listItem) => listItem.id !== regularShoppingListItemId
+      );
+
+      const nextExpiredShoppingList: ShoppingList = prevExpiredShoppingList.filter(
+        (listItem) => listItem.regular_shopping_list_id !== regularShoppingListItemId
+      );
+
+      const nextShoppingList = (prevShoppingList: ShoppingList) => {
+        return prevShoppingList.filter((listItem) => {
+          return (
+            listItem.regular_shopping_list_id !== regularShoppingListItemId ||
+            (listItem.regular_shopping_list_id === regularShoppingListItemId &&
+              listItem.complete_flag)
+          );
+        });
+      };
+
+      const nextShoppingListByCategories = (
+        prevShoppingListByCategories: ShoppingListByCategories
+      ) => {
+        const NOT_FOUND = -1;
+        const NOT_EXIST_ARRAY_LENGTH = 0;
+        const idx = prevShoppingListByCategories.findIndex(
+          (listItem) => listItem.big_category_name === bigCategoryName
+        );
+
+        if (idx === NOT_FOUND) {
+          return prevShoppingListByCategories;
+        }
+
+        const newShoppingList = nextShoppingList(prevShoppingListByCategories[idx].shopping_list);
+
+        if (newShoppingList.length === NOT_EXIST_ARRAY_LENGTH) {
+          prevShoppingListByCategories.splice(idx, 1);
+          return prevShoppingListByCategories.concat();
+        }
+
+        const nextShoppingListItemByCategories: ShoppingListItemByCategories = {
+          big_category_name: bigCategoryName,
+          shopping_list: newShoppingList,
+        };
+        prevShoppingListByCategories.splice(idx, 1, nextShoppingListItemByCategories);
+        return prevShoppingListByCategories.concat();
+      };
+
+      const nextTodayShoppingList = nextShoppingList(prevTodayShoppingList);
+      const nextTodayShoppingListByCategories = nextShoppingListByCategories(
+        prevTodayShoppingListByCategories
+      );
+      const nextMonthlyShoppingList = nextShoppingList(prevMonthlyShoppingList);
+      const nextMonthlyShoppingListByCategories = nextShoppingListByCategories(
+        prevMonthlyShoppingListByCategories
+      );
+
+      dispatch(
+        deleteRegularShoppingListItemAction(
+          nextRegularShoppingList,
+          nextExpiredShoppingList,
+          nextTodayShoppingList,
+          nextTodayShoppingListByCategories,
+          nextMonthlyShoppingList,
+          nextMonthlyShoppingListByCategories
+        )
+      );
+      dispatch(openTextModalAction(result.data.message));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelDeleteRegularShoppingListItemAction());
+      } else {
+        dispatch(
+          failedDeleteRegularShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )

@@ -75,7 +75,12 @@ export interface State {
     groupTasksList: GroupTasksList;
   };
   shoppingList: {
+    regularShoppingListLoading: boolean;
     regularShoppingList: RegularShoppingList;
+    regularShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
     expiredShoppingListLoading: boolean;
     expiredShoppingList: ShoppingList;
     expiredShoppingListError: {

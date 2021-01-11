@@ -32,6 +32,7 @@ const useStyles = makeStyles(() =>
 interface TodoListItemComponentProps {
   todoListItem: TodoListItem | GroupTodoListItem;
   selectedDate: Date | null;
+  currentYearMonth: string;
   displayDueDate?: () => void;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -121,8 +122,9 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
     if (pathName !== 'group') {
       dispatch(
         editTodoListItem(
-          props.todoListItem.id,
           date,
+          props.currentYearMonth,
+          props.todoListItem.id,
           props.selectedDate,
           selectedImplementationDate,
           selectedDueDate,
@@ -133,9 +135,10 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
     } else if (pathName === 'group') {
       dispatch(
         editGroupTodoListItem(
+          date,
+          props.currentYearMonth,
           Number(id),
           props.todoListItem.id,
-          date,
           props.selectedDate,
           selectedImplementationDate,
           selectedDueDate,
@@ -196,9 +199,10 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
             onClickSave={
               pathName === 'group'
                 ? editGroupTodoListItem(
+                    date,
+                    props.currentYearMonth,
                     Number(id),
                     props.todoListItem.id,
-                    date,
                     props.selectedDate,
                     selectedImplementationDate,
                     selectedDueDate,
@@ -206,8 +210,9 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
                     checked
                   )
                 : editTodoListItem(
-                    props.todoListItem.id,
                     date,
+                    props.currentYearMonth,
+                    props.todoListItem.id,
                     props.selectedDate,
                     selectedImplementationDate,
                     selectedDueDate,

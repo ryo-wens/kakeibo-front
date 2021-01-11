@@ -4,7 +4,7 @@ import initialState from '../store/initialState';
 
 export const todoListReducer = (state = initialState.todoList, action: todoListsActions) => {
   switch (action.type) {
-    case Actions.CREATE_TODO_LIST_ITEM:
+    case Actions.ADD_TODO_LIST_ITEM:
       return {
         ...state,
         ...action.payload,

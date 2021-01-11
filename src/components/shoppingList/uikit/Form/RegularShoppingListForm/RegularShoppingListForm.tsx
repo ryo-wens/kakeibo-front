@@ -130,7 +130,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.amount}
           type={'tel'}
           id={'amount'}
-          label={'金額(必須)'}
+          label={'金額 (任意)'}
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
@@ -144,7 +144,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.shop}
           type={'text'}
           id={'shop'}
-          label={'店名(任意)'}
+          label={'店名 (任意)'}
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
@@ -191,8 +191,17 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
         >
           {props.buttonLabel}
         </button>
-        {props.titleLabel === '定期買い物リストを編集' && (
-          <button className="regular-shopping-list-form__operation-btn--delete">削除</button>
+        {props.titleLabel === '定期買い物リストアイテムを編集' && (
+          <button
+            className="regular-shopping-list-form__operation-btn--delete"
+            onClick={() => {
+              if (props.openDeleteForm) {
+                props.openDeleteForm();
+              }
+            }}
+          >
+            削除
+          </button>
         )}
       </div>
     </div>

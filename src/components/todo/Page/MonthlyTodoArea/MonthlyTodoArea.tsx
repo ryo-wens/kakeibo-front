@@ -9,7 +9,6 @@ import {
   getGroupMonthImplementationTodoList,
 } from '../../../../reducks/groupTodoList/selectors';
 import { useLocation, useParams } from 'react-router';
-import { month, year } from '../../../../lib/constant';
 import axios, { CancelTokenSource } from 'axios';
 import {
   fetchGroupExpiredTodoList,
@@ -24,6 +23,11 @@ import './monthly-todo-area.scss';
 import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
 
 interface MonthlyTodoAreaProps {
+  selectedYear: number;
+  selectedMonth: number;
+  setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentYearMonth: string;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -37,13 +41,11 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
 
-  const [selectedYear, setSelectedYear] = useState<number>(year);
-  const [selectedMonth, setSelectedMonth] = useState<number>(month);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
   useEffect(() => {
-    setSelectedDate(new Date(selectedYear, selectedMonth - 1));
-  }, [selectedYear, selectedMonth]);
+    setSelectedDate(new Date(props.selectedYear, props.selectedMonth - 1));
+  }, [props.selectedYear, props.selectedMonth]);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
@@ -51,8 +53,8 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
     dispatch(
       fetchGroupTodayTodoList(
         Number(id),
-        String(selectedYear),
-        ('0' + selectedMonth).slice(-2),
+        String(props.selectedYear),
+        ('0' + props.selectedMonth).slice(-2),
         ('0' + selectedDate.getDate()).slice(-2),
         signal
       )
@@ -60,8 +62,8 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
     dispatch(
       fetchGroupMonthTodoList(
         Number(id),
-        String(selectedYear),
-        ('0' + selectedMonth).slice(-2),
+        String(props.selectedYear),
+        ('0' + props.selectedMonth).slice(-2),
         signal
       )
     );
@@ -79,23 +81,29 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
         clearInterval(interval);
       };
     }
-  }, [selectedYear, selectedMonth, selectedDate, props.editing]);
+  }, [props.selectedYear, props.selectedMonth, selectedDate, props.editing]);
 
   useEffect(() => {
     if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
-      dispatch(fetchMonthTodoList(String(selectedYear), ('0' + selectedMonth).slice(-2), signal));
+      dispatch(
+        fetchMonthTodoList(
+          String(props.selectedYear),
+          ('0' + props.selectedMonth).slice(-2),
+          signal
+        )
+      );
       return () => signal.cancel();
     }
-  }, [selectedYear, selectedMonth]);
+  }, [props.selectedYear, props.selectedMonth]);
 
   return (
     <>
       <InputYears
-        selectedYear={selectedYear}
-        selectedMonth={selectedMonth}
-        setSelectedMonth={setSelectedMonth}
-        setSelectedYear={setSelectedYear}
+        selectedYear={props.selectedYear}
+        selectedMonth={props.selectedMonth}
+        setSelectedMonth={props.setSelectedMonth}
+        setSelectedYear={props.setSelectedYear}
       />
       <div className="monthly-todo-area__spacer" />
       <SwitchItemTabs
@@ -111,6 +119,7 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
               pathName === 'group' ? groupMonthImplementationTodoList : monthImplementationTodoList
             }
             monthDueTodoList={pathName === 'group' ? groupMonthDueTodoList : monthDueTodoList}
+            currentYearMonth={props.currentYearMonth}
             selectedDate={selectedDate}
             setEditing={props.setEditing}
           />
@@ -123,6 +132,7 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
               pathName === 'group' ? groupMonthImplementationTodoList : monthImplementationTodoList
             }
             monthDueTodoList={pathName === 'group' ? groupMonthDueTodoList : monthDueTodoList}
+            currentYearMonth={props.currentYearMonth}
             selectedDate={selectedDate}
             setEditing={props.setEditing}
           />
