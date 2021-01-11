@@ -10,6 +10,7 @@ import {
   addShoppingListItem,
   deleteShoppingListItem,
   addRegularShoppingListItem,
+  deleteRegularShoppingListItem,
 } from '../../src/reducks/shoppingList/operations';
 import axios from 'axios';
 import * as ShoppingListActions from '../../src/reducks/shoppingList/actions';
@@ -21,6 +22,7 @@ import fetchMonthlyShoppingListByCategoriesResponse from './fetchMonthlyShopping
 import addShoppingListItemResponse from './addShoppingListItemResponse.json';
 import deleteShoppingListItemResponse from './deleteShoppingListItemResponse.json';
 import addRegularShoppingListItemResponse from './addRegularShoppingListItemResponse.json';
+import deleteRegularShoppingListItemResponse from './deleteRegularShoppingListItemResponse.json';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
 const middlewares = [thunk];
@@ -34,7 +36,26 @@ const getState = () => {
   return {
     shoppingList: {
       regularShoppingListLoading: false,
-      regularShoppingList: [],
+      regularShoppingList: [
+        {
+          id: 1,
+          posted_date: '2020-12-20T10:00:00Z',
+          updated_date: '2020-12-20T10:00:00Z',
+          expected_purchase_date: '2020/12/24(木)',
+          cycle_type: 'weekly',
+          cycle: null,
+          purchase: '携帯料金',
+          shop: 'auショップ',
+          amount: 5000,
+          big_category_id: 9,
+          big_category_name: '通信費',
+          medium_category_id: 51,
+          medium_category_name: '携帯電話',
+          custom_category_id: null,
+          custom_category_name: null,
+          transaction_auto_add: true,
+        },
+      ],
       regularShoppingListError: {
         message: '',
         statusCode: 0,
@@ -62,7 +83,7 @@ const getState = () => {
           medium_category_name: '携帯電話',
           custom_category_id: null,
           custom_category_name: null,
-          regular_shopping_list_id: null,
+          regular_shopping_list_id: 1,
           transaction_auto_add: true,
           related_transaction_data: null,
         },
@@ -91,7 +112,7 @@ const getState = () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: null,
+              regular_shopping_list_id: 1,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -119,7 +140,7 @@ const getState = () => {
           medium_category_name: '携帯電話',
           custom_category_id: null,
           custom_category_name: null,
-          regular_shopping_list_id: null,
+          regular_shopping_list_id: 1,
           transaction_auto_add: true,
           related_transaction_data: null,
         },
@@ -148,7 +169,7 @@ const getState = () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: null,
+              regular_shopping_list_id: 1,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -525,7 +546,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: null,
+              regular_shopping_list_id: 1,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -550,7 +571,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: null,
+                  regular_shopping_list_id: 1,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -574,7 +595,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: null,
+              regular_shopping_list_id: 1,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -642,7 +663,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: null,
+                  regular_shopping_list_id: 1,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -761,6 +782,24 @@ describe('async actions shoppingList', () => {
           regularShoppingList: [
             {
               id: 1,
+              posted_date: '2020-12-20T10:00:00Z',
+              updated_date: '2020-12-20T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              cycle_type: 'weekly',
+              cycle: null,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              transaction_auto_add: true,
+            },
+            {
+              id: 2,
               posted_date: '2020-12-24T10:00:00Z',
               updated_date: '2020-12-24T10:00:00Z',
               expected_purchase_date: '2020/12/26(土)',
@@ -795,7 +834,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: null,
+              regular_shopping_list_id: 1,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -820,7 +859,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: null,
+                  regular_shopping_list_id: 1,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -844,7 +883,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '携帯電話',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: null,
+              regular_shopping_list_id: 1,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -863,7 +902,7 @@ describe('async actions shoppingList', () => {
               medium_category_name: '食料品',
               custom_category_id: null,
               custom_category_name: null,
-              regular_shopping_list_id: null,
+              regular_shopping_list_id: 2,
               transaction_auto_add: true,
               related_transaction_data: null,
             },
@@ -888,7 +927,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '食料品',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: null,
+                  regular_shopping_list_id: 2,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -912,7 +951,7 @@ describe('async actions shoppingList', () => {
                   medium_category_name: '携帯電話',
                   custom_category_id: null,
                   custom_category_name: null,
-                  regular_shopping_list_id: null,
+                  regular_shopping_list_id: 1,
                   transaction_auto_add: true,
                   related_transaction_data: null,
                 },
@@ -938,6 +977,63 @@ describe('async actions shoppingList', () => {
       mediumCategoryId,
       customCategoryId,
       transactionAutoAdd,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('delete regularShoppingListItem if fetch succeeds', async () => {
+    const shoppingListItemId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${shoppingListItemId}`;
+    const bigCategoryName = '通信費';
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(deleteRegularShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: ShoppingListActions.START_DELETE_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          regularShoppingListLoading: true,
+          expiredShoppingListLoading: true,
+          todayShoppingListLoading: true,
+          todayShoppingListByCategoriesLoading: true,
+          monthlyShoppingListLoading: true,
+          monthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: ShoppingListActions.DELETE_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          regularShoppingListLoading: false,
+          regularShoppingList: [],
+          expiredShoppingListLoading: false,
+          expiredShoppingList: [],
+          todayShoppingListLoading: false,
+          todayShoppingList: [],
+          todayShoppingListByCategoriesLoading: false,
+          todayShoppingListByCategories: [],
+          monthlyShoppingListLoading: false,
+          monthlyShoppingList: [],
+          monthlyShoppingListByCategoriesLoading: false,
+          monthlyShoppingListByCategories: [],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: '定期ショッピングアイテムを削除しました。',
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    await deleteRegularShoppingListItem(
+      shoppingListItemId,
+      bigCategoryName,
       signal
       // @ts-ignore
     )(store.dispatch, getState);

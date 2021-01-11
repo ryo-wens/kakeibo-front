@@ -32,6 +32,10 @@ export type ShoppingListActions = ReturnType<
   | typeof addRegularShoppingListItemAction
   | typeof cancelAddRegularShoppingListItemAction
   | typeof failedAddRegularShoppingListItemAction
+  | typeof startDeleteRegularShoppingListItemAction
+  | typeof deleteRegularShoppingListItemAction
+  | typeof cancelDeleteRegularShoppingListItemAction
+  | typeof failedDeleteRegularShoppingListItemAction
 >;
 
 export const START_FETCH_EXPIRED_SHOPPING_LIST = 'START_FETCH_EXPIRED_SHOPPING_LIST';
@@ -531,6 +535,106 @@ export const failedAddRegularShoppingListItemAction = (
     payload: {
       regularShoppingListLoading: false,
       regularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_DELETE_REGULAR_SHOPPING_LIST_ITEM = 'START_DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const startDeleteRegularShoppingListItemAction = () => {
+  return {
+    type: START_DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: true,
+      expiredShoppingListLoading: true,
+      todayShoppingListLoading: true,
+      todayShoppingListByCategoriesLoading: true,
+      monthlyShoppingListLoading: true,
+      monthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const DELETE_REGULAR_SHOPPING_LIST_ITEM = 'DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const deleteRegularShoppingListItemAction = (
+  regularShoppingList: RegularShoppingList,
+  expiredShoppingList: ShoppingList,
+  todayShoppingList: ShoppingList,
+  todayShoppingListByCategories: ShoppingListByCategories,
+  monthlyShoppingList: ShoppingList,
+  monthlyShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      regularShoppingList: regularShoppingList,
+      expiredShoppingListLoading: false,
+      expiredShoppingList: expiredShoppingList,
+      todayShoppingListLoading: false,
+      todayShoppingList: todayShoppingList,
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategories: todayShoppingListByCategories,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingList: monthlyShoppingList,
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_DELETE_REGULAR_SHOPPING_LIST_ITEM = 'CANCEL_DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const cancelDeleteRegularShoppingListItemAction = () => {
+  return {
+    type: CANCEL_DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      expiredShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_DELETE_REGULAR_SHOPPING_LIST_ITEM = 'FAILED_DELETE_REGULAR_SHOPPING_LIST_ITEM';
+export const failedDeleteRegularShoppingListItemAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_DELETE_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      regularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      expiredShoppingListLoading: false,
+      expiredShoppingListError: {
         statusCode: statusCode,
         message: errorMessage,
       },

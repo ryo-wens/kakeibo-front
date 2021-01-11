@@ -5,7 +5,7 @@ import { AssociatedCategory, Category } from '../../../../../reducks/categories/
 import { date } from '../../../../../lib/constant';
 import {
   addRegularShoppingListItem,
-  deleteShoppingListItem,
+  deleteRegularShoppingListItem,
 } from '../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import RegularShoppingListForm from '../../Form/RegularShoppingListForm/RegularShoppingListForm';
@@ -192,7 +192,7 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
           purchase={props.listItem.purchase}
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
-          dispatchOperation={deleteShoppingListItem(
+          dispatchOperation={deleteRegularShoppingListItem(
             props.listItem.id,
             props.listItem.big_category_name,
             signal
