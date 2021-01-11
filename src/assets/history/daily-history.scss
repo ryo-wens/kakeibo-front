@@ -25,7 +25,7 @@
 
   &__th {
     align-self: center;
-    background-color: $main_color;
+    background-color: $main_background_color;
     border: solid 1px $border_color;
     font-weight: $large-font_weight;
     font-size: $medium-font_size;
@@ -78,6 +78,7 @@
   }
 
   &__search-btn {
-    @include search-btn($main_color);
+    @include search-btn($display-btn-main_color);
+    color: white;
   }
 }
