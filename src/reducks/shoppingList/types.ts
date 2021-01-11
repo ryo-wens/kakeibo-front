@@ -120,6 +120,10 @@ export interface AddShoppingListItemRes {
   related_transaction_data: RelatedTransactionData | null;
 }
 
+export interface DeleteShoppingListItemRes {
+  message: string;
+}
+
 export interface AddRegularShoppingListItemReq {
   expected_purchase_date: Date;
   cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
@@ -136,6 +140,10 @@ export interface AddRegularShoppingListItemReq {
 export interface AddRegularShoppingListItemRes {
   regular_shopping_item: RegularShoppingListItem;
   shopping_list: ShoppingList;
+}
+
+export interface DeleteRegularShoppingListItemRes {
+  message: string;
 }
 
 export type TodayOrMonthly = 'today' | 'monthly';
