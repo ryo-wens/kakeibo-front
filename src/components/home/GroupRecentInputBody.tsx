@@ -81,18 +81,26 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
               <span style={payerColor(payment_user_id)}>￥ {amount.toLocaleString()}</span>
             </dt>
             <dt>
-              {shop !== null && (
+              {shop !== null ? (
                 <>
                   <span className="recent-input__item-font">店名: </span>
                   {shop}
                 </>
+              ) : (
+                <>
+                  <span className="recent-input__item-font">店名: </span> -
+                </>
               )}
             </dt>
             <dt>
-              {memo !== null && (
+              {memo !== null ? (
                 <>
                   <span className="recent-input__item-font">メモ :</span>
                   {memo}
+                </>
+              ) : (
+                <>
+                  <span className="recent-input__item-font">メモ :</span> -
                 </>
               )}
             </dt>

@@ -51,7 +51,7 @@ const SelectPayer = (props: SelectPayerProps) => {
           ? paymentUsers().map((paymentUser) => {
               return (
                 <MenuItem key={paymentUser.user_id} value={paymentUser.user_id}>
-                  {paymentUser.user_id}
+                  {paymentUser.user_name}
                 </MenuItem>
               );
             })

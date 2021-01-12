@@ -1,74 +1,27 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { push } from 'connected-react-router';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
-import AppBar from '@material-ui/core/AppBar';
-import Button from '@material-ui/core/Button';
-import MoneyIcon from '@material-ui/icons/Money';
-import CreditCardIcon from '@material-ui/icons/CreditCard';
-import ExitToAppIcon from '@material-ui/icons/ExitToApp';
-import HistoryIcon from '@material-ui/icons/History';
-import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
-import SettingsIcon from '@material-ui/icons/Settings';
-import Toolbar from '@material-ui/core/Toolbar';
-import Typography from '@material-ui/core/Typography';
-import EventAvailableIcon from '@material-ui/icons/EventAvailable';
-import { logOut } from '../../reducks/users/operations';
-import { MobileDrawer, InvitationNotifications } from './index';
-import { SwitchEntity } from './group';
-import { fetchUserInfo } from '../../reducks/users/operations';
-import { fetchGroups } from '../../reducks/groups/operations';
-import { Groups } from '../../reducks/groups/types';
-import { getUserName } from '../../reducks/users/selectors';
-import { getApprovedGroups } from '../../reducks/groups/selectors';
-import axios from 'axios';
-import { year } from '../../lib/constant';
 import { useLocation, useParams } from 'react-router';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    grow: {
-      flexGrow: 1,
-    },
-    header: {
-      position: 'fixed',
-      top: 0,
-      backgroundColor: '#3086f0',
-    },
-    button: {
-      fontWeight: 500,
-      fontSize: 16,
-      color: '#fff',
-      width: 128,
-      height: 40,
-    },
-    title: {
-      textTransform: 'none',
-      fontSize: 24,
-      display: 'none',
-      [theme.breakpoints.up('xs')]: {
-        display: 'block',
-      },
-    },
-    sectionDesktop: {
-      display: 'none',
-      [theme.breakpoints.up('md')]: {
-        display: 'flex',
-      },
-    },
-    sectionMobile: {
-      display: 'flex',
-      [theme.breakpoints.up('md')]: {
-        display: 'none',
-      },
-    },
-  })
-);
+import { push } from 'connected-react-router';
+import axios from 'axios';
+import { logOut } from '../../reducks/users/operations';
+import { fetchGroups } from '../../reducks/groups/operations';
+import { fetchUserInfo } from '../../reducks/users/operations';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { Groups } from '../../reducks/groups/types';
+import MoneyIcon from '@material-ui/icons/Money';
+import HomeIcon from '@material-ui/icons/Home';
+import HistoryIcon from '@material-ui/icons/History';
+import ExitToAppIcon from '@material-ui/icons/ExitToApp';
+import CreditCardIcon from '@material-ui/icons/CreditCard';
+import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
+import { InvitationNotifications } from './index';
+import { SwitchEntity } from './group';
+import { year } from '../../lib/constant';
+import './header.scss';
 
 const Header = () => {
-  const classes = useStyles();
   const dispatch = useDispatch();
-  const userName: string = useSelector(getUserName);
+  const currentPath = useLocation().pathname;
   const approvedGroups: Groups = useSelector(getApprovedGroups);
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
@@ -80,7 +33,7 @@ const Header = () => {
     const setUserName = async () => {
       await dispatch(fetchUserInfo(signal));
       if (pathName !== 'group' && name === '' && !unmount) {
-        setName(userName);
+        setName('グループ選択なし');
       }
     };
     setUserName();
@@ -88,7 +41,7 @@ const Header = () => {
       unmount = true;
       signal.cancel();
     };
-  }, [userName, pathName]);
+  }, [pathName]);
 
   useEffect(() => {
     let unmount = false;
@@ -128,8 +81,6 @@ const Header = () => {
     }
   };
 
-  const menuId = 'primary-search-account-menu';
-
   const homeButtonClick = () => {
     async function click() {
       await existsGroupWhenRouting(``);
@@ -138,99 +89,105 @@ const Header = () => {
     click();
   };
 
+  const currentPage = (path: string) => {
+    if (path === currentPath) {
+      if (path === '/todo' || path === `/group/${id}/todo`) {
+        return { borderBottom: '4px solid #e2750f', color: '#e2750f', paddingBottom: '13px' };
+      }
+      return { borderBottom: '4px solid #e2750f', color: '#e2750f' };
+    }
+  };
+
   return (
-    <div className={classes.grow}>
-      <AppBar className={classes.header} position="static">
-        <Toolbar>
-          <div className={classes.sectionMobile}>
-            <MobileDrawer />
-          </div>
-          <Typography variant="h6" noWrap>
-            <Button color="inherit" className={classes.title} onClick={() => homeButtonClick()}>
-              家計簿App
-            </Button>
-          </Typography>
-          <div className={classes.sectionDesktop}>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<HistoryIcon />}
+    <div className="header__header--position">
+      <header className="header__header">
+        <div className="header__upper-content">
+          <h1>
+            <a className="header__title" href="/" onClick={() => homeButtonClick()}>
+              Tukecholl
+            </a>
+          </h1>
+        </div>
+        <div>
+          <ul className="header__global-menu">
+            <li
+              className="header__global-menu--item"
+              style={currentPage(pathName !== 'group' ? '/' : `/group/${id}`)}
+              onClick={() => existsGroupWhenRouting('/')}
+            >
+              <a>
+                <HomeIcon className="header__icon" />
+                ホーム
+              </a>
+            </li>
+            <li
+              className="header__global-menu--item"
+              style={currentPage(
+                pathName !== 'group' ? '/daily/history' : `/group/${id}/daily/history`
+              )}
               onClick={() => existsGroupWhenRouting('/daily/history')}
             >
-              履歴
-            </Button>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<MoneyIcon />}
+              <a>
+                <HistoryIcon className="header__icon" />
+                家計
+              </a>
+            </li>
+            <li
+              className="header__global-menu--item"
+              style={currentPage(
+                pathName !== 'group' ? '/standard/budgets' : `/group/${id}/standard/budgets`
+              )}
               onClick={() => existsGroupWhenRouting('/standard/budgets')}
             >
-              予算
-            </Button>
+              <a>
+                <MoneyIcon className="header__icon" />
+                予算
+              </a>
+            </li>
             {pathName === 'group' && (
-              <Button
-                size="large"
-                className={classes.button}
-                startIcon={<MoneyIcon />}
+              <li
+                className="header__global-menu--item"
+                style={currentPage(`/group/${id}/accounting`)}
                 onClick={() => existsGroupWhenRouting(`/accounting?year=${year}`)}
               >
-                会計
-              </Button>
+                <a>
+                  <CreditCardIcon className="header__icon" />
+                  会計
+                </a>
+              </li>
             )}
-            <Button size="large" className={classes.button} startIcon={<CreditCardIcon />}>
-              集計
-            </Button>
-            <Button
-              size="large"
-              className={classes.button}
-              startIcon={<PlaylistAddCheckIcon />}
+            <li
+              className="header__global-menu--item"
+              style={currentPage(pathName !== 'group' ? '/todo' : `/group/${id}/todo`)}
               onClick={() => existsGroupWhenRouting('/todo')}
             >
-              Todo
-            </Button>
-            {pathName === 'group' && (
-              <Button
-                size="large"
-                className={classes.button}
-                startIcon={<EventAvailableIcon />}
-                onClick={() => existsGroupWhenRouting('/task')}
+              <a>
+                <PlaylistAddCheckIcon className="header__icon" />
+                TODO
+              </a>
+            </li>
+            <div className="header__global-menu--sub-menu">
+              <SwitchEntity
+                approvedGroups={approvedGroups}
+                entityType={pathName}
+                name={name}
+                setName={setName}
+              />
+              <InvitationNotifications />
+              <li
+                className="header__upper-content--nav-item header__upper-content--nav-item--logout"
+                onClick={() => logOutCheck()}
               >
-                タスク
-              </Button>
-            )}
-          </div>
-          <div className={classes.grow} />
-          <SwitchEntity
-            approvedGroups={approvedGroups}
-            userName={userName}
-            entityType={pathName}
-            name={name}
-            setName={setName}
-          />
-          <InvitationNotifications />
-          <div className={classes.sectionDesktop}>
-            <Button
-              startIcon={<ExitToAppIcon />}
-              className={classes.button}
-              aria-label="logout"
-              aria-controls={menuId}
-              aria-haspopup="true"
-              onClick={() => logOutCheck()}
-            >
-              ログアウト
-            </Button>
-            <Button
-              startIcon={<SettingsIcon />}
-              className={classes.button}
-              aria-label="settings"
-              aria-controls={menuId}
-              aria-haspopup="true"
-            >
-              設定
-            </Button>
-          </div>
-        </Toolbar>
-      </AppBar>
+                <a className="header__upper-content--nav-item">
+                  <ExitToAppIcon className="header__icon" />
+                  ログアウト
+                </a>
+              </li>
+            </div>
+          </ul>
+        </div>
+      </header>
+      <div className="header__header--delimitation-line" />
     </div>
   );
 };
