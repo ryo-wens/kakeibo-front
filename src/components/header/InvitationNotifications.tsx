@@ -37,7 +37,9 @@ const useStyles = makeStyles((theme: Theme) =>
       margin: '5px 0px',
     },
     notificationsIcon: {
+      padding: 0,
       marginRight: 20,
+      margin: '0 25px',
       [theme.breakpoints.down('xs')]: {
         marginRight: 10,
       },
