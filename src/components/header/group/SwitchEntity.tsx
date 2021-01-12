@@ -1,12 +1,14 @@
 import React, { useState } from 'react';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { CreateGroups, GroupMenuButton } from './index';
-import { Button, Divider, ListItem, Menu } from '@material-ui/core';
+import { Button, ListItem, Menu } from '@material-ui/core';
 import { Groups } from '../../../reducks/groups/types';
 import { push } from 'connected-react-router';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { useDispatch } from 'react-redux';
 import axios from 'axios';
+import GroupIcon from '@material-ui/icons/Group';
+import CheckIcon from '@material-ui/icons/Check';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -24,8 +26,13 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 'auto',
       height: '30px',
       padding: '5px 25px 5px 25px',
-      color: '#666',
+      border: '2px solid #e2750f',
       backgroundColor: '#fff',
+      textTransform: 'none',
+    },
+    icon: {
+      paddingRight: 4,
+      verticalAlign: '-10px',
     },
     group: {
       display: 'inline-block',
@@ -36,15 +43,33 @@ const useStyles = makeStyles((theme: Theme) =>
       fontSize: '12px',
     },
     groupListItem: {
+      alignItems: 'center',
       display: 'flex',
+      flexDirection: 'column',
       justifyContent: 'space-between',
+      width: '220px',
+    },
+    personalItem: {
+      cursor: 'pointer',
+      width: '180px',
+    },
+    position: {
+      display: 'flex',
+    },
+    checkIcon: {
+      paddingRight: '0px',
+      paddingTop: '15px',
+    },
+    transparencyIcon: {
+      paddingRight: '0px',
+      paddingTop: '15px',
+      opacity: 0,
     },
   })
 );
 
 interface SwitchEntityProps {
   approvedGroups: Groups;
-  userName: string;
   entityType: string;
   name: string;
   setName: React.Dispatch<React.SetStateAction<string>>;
@@ -82,6 +107,7 @@ const SwitchEntity = (props: SwitchEntityProps) => {
 
   return (
     <div>
+      <GroupIcon className={classes.icon} />
       <Button className={classes.button} onClick={openMenu}>
         {props.name}
       </Button>
@@ -91,26 +117,45 @@ const SwitchEntity = (props: SwitchEntityProps) => {
         keepMounted
         open={Boolean(anchorEl)}
         onClose={closeMenu}
+        style={{ top: '45px' }}
       >
-        <ListItem value={'UserName'} onClick={() => switchToIndividual(props.userName)}>
-          {props.userName}
-        </ListItem>
-        <Divider />
         <span className={classes.group}>グループ</span>
-        {props.approvedGroups.map((approvedGroup) => {
-          return (
-            <div key={approvedGroup.group_id} className={classes.groupListItem}>
-              <ListItem
-                button={true}
-                key={approvedGroup.group_id}
-                onClick={() => switchToGroup(approvedGroup.group_id, approvedGroup.group_name)}
-              >
-                {approvedGroup.group_name}
-              </ListItem>
-              <GroupMenuButton approvedGroup={approvedGroup} closeMenu={closeMenu} />
-            </div>
-          );
-        })}
+
+        <div className={classes.groupListItem}>
+          {props.approvedGroups.map((approvedGroup) => {
+            return (
+              <div key={approvedGroup.group_id} className={classes.position}>
+                {props.name === approvedGroup.group_name ? (
+                  <CheckIcon className={classes.checkIcon} fontSize="inherit" />
+                ) : (
+                  <CheckIcon className={classes.transparencyIcon} fontSize="inherit" />
+                )}
+                <ListItem
+                  button={true}
+                  key={approvedGroup.group_id}
+                  onClick={() => switchToGroup(approvedGroup.group_id, approvedGroup.group_name)}
+                >
+                  {approvedGroup.group_name}
+                </ListItem>
+                <GroupMenuButton approvedGroup={approvedGroup} closeMenu={closeMenu} />
+              </div>
+            );
+          })}
+          <div className={classes.position}>
+            {props.name === 'グループ選択なし' ? (
+              <CheckIcon className={classes.checkIcon} fontSize="inherit" />
+            ) : (
+              <CheckIcon className={classes.transparencyIcon} fontSize="inherit" />
+            )}
+            <ListItem
+              className={classes.personalItem}
+              value={'UserName'}
+              onClick={() => switchToIndividual('グループ選択なし')}
+            >
+              グループ選択なし
+            </ListItem>
+          </div>
+        </div>
 
         <CreateGroups
           modalTitleLabel={'グループ作成'}
