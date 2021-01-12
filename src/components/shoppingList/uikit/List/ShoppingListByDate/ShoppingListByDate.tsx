@@ -5,6 +5,7 @@ import './shopping-list-by-date.scss';
 
 interface ShoppingListByDate {
   shoppingListByDate: ShoppingList;
+  currentYearMonth: string;
   message: string;
 }
 
@@ -27,6 +28,7 @@ const ShoppingListByDate = (props: ShoppingListByDate) => {
             <div key={listItem.id}>
               <ShoppingListItemComponent
                 listItem={listItem}
+                currentYearMonth={props.currentYearMonth}
                 displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
               />
             </div>

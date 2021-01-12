@@ -23,6 +23,7 @@ interface MonthlyShoppingListAreaProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentYearMonth: string;
 }
 
 const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
@@ -86,12 +87,14 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
             leftItem={
               <ShoppingListByDate
                 shoppingListByDate={monthlyShoppingList}
+                currentYearMonth={props.currentYearMonth}
                 message={`${props.selectedMonth}月の買い物リストは登録されていません。`}
               />
             }
             rightItem={
               <ShoppingListByCategoriesComponent
                 shoppingListByCategories={monthlyShoppingListByCategories}
+                currentYearMonth={props.currentYearMonth}
                 message={`${props.selectedMonth}月の買い物リストは登録されていません。`}
               />
             }

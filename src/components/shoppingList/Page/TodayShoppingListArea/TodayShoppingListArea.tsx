@@ -18,7 +18,11 @@ import { fetchGroups } from '../../../../reducks/groups/operations';
 import ShoppingListByDate from '../../uikit/List/ShoppingListByDate/ShoppingListByDate';
 import ShoppingListByCategoriesComponent from '../../uikit/List/ShoppingListByCategoriesComponent/ShoppingListByCategoriesComponent';
 
-const TodayShoppingListArea = () => {
+interface TodayShoppingListAreaProps {
+  currentYearMonth: string;
+}
+
+const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
   const dispatch = useDispatch();
   const todayShoppingList = useSelector(getTodayShoppingList);
   const todayShoppingListByCategories = useSelector(getTodayShoppingListByCategories);
@@ -65,12 +69,14 @@ const TodayShoppingListArea = () => {
             leftItem={
               <ShoppingListByDate
                 shoppingListByDate={todayShoppingList}
+                currentYearMonth={props.currentYearMonth}
                 message={'今日の買い物リストは、登録されていません。'}
               />
             }
             rightItem={
               <ShoppingListByCategoriesComponent
                 shoppingListByCategories={todayShoppingListByCategories}
+                currentYearMonth={props.currentYearMonth}
                 message={'今日の買い物リストは、登録されていません。'}
               />
             }
