@@ -7,7 +7,11 @@ import { useLocation } from 'react-router';
 import { fetchExpiredShoppingList } from '../../../../reducks/shoppingList/operations';
 import ShoppingListItemComponent from '../../uikit/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
 
-const ExpiredShoppingListArea = () => {
+interface ExpiredShoppingListAreaProps {
+  currentYearMonth: string;
+}
+
+const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
   const dispatch = useDispatch();
   const expiredShoppingList = useSelector(getExpiredShoppingList);
   const pathName = useLocation().pathname.split('/')[1];
@@ -40,6 +44,7 @@ const ExpiredShoppingListArea = () => {
                   <ShoppingListItemComponent
                     listItem={listItem}
                     displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
+                    currentYearMonth={props.currentYearMonth}
                   />
                 </div>
               );

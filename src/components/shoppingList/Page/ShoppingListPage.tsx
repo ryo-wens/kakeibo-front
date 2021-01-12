@@ -36,13 +36,14 @@ const ShoppingListPage = () => {
       <div className="shopping-list-page__left">
         <div className="shopping-list-page__left-content">
           <SwitchTodayOrMonthlyTabs
-            leftItem={<TodayShoppingListArea />}
+            leftItem={<TodayShoppingListArea currentYearMonth={currentYearMonth} />}
             rightItem={
               <MonthlyShoppingListArea
                 selectedYear={selectedYear}
                 selectedMonth={selectedMonth}
                 setSelectedYear={setSelectedYear}
                 setSelectedMonth={setSelectedMonth}
+                currentYearMonth={currentYearMonth}
               />
             }
           />
@@ -56,7 +57,7 @@ const ShoppingListPage = () => {
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <ExpiredShoppingListArea />
+          <ExpiredShoppingListArea currentYearMonth={currentYearMonth} />
         </div>
       </div>
     </div>
