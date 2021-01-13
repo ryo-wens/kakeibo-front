@@ -2,6 +2,7 @@
 @import "../modules/input-years";
 @import "../task/skip-date";
 @import "../mixin/switching-btn";
+@import "../../components/uikit/tabs/switch-item-tabs";
 
 .history{
   display: flex;
@@ -17,25 +18,7 @@
   }
 
   &__top-button {
-    @include switching-btn(white, $task-border_color);
-    border-collapse: collapse;
-    height: 45px;
     width: 220px;
-
-    &:first-child {
-      border-top-left-radius: $task-border_radius;
-      border-bottom-left-radius: $task-border_radius;
-    }
-
-    &:last-child {
-      border-top-right-radius: $task-border_radius;
-      border-bottom-right-radius: $task-border_radius;
-    }
-
-    &:hover {
-      background-color: $main_color;
-      color: white;
-    }
   }
 
   &__selector {

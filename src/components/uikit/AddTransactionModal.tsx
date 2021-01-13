@@ -45,9 +45,8 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#fff',
       boxShadow: 'none',
       margin: '0 auto',
-      marginTop: '2%',
+      marginTop: 15,
       width: 480,
-      height: 'auto',
       border: '1px solid #000',
       padding: theme.spacing(1, 2, 2),
     },
@@ -55,16 +54,13 @@ const useStyles = makeStyles((theme: Theme) =>
       textAlign: 'center',
     },
     smallSpaceTop: {
-      marginTop: 50,
+      marginTop: 20,
     },
     textPosition: {
       textAlign: 'center',
     },
     delimiterLine: {
       borderBottom: '1px solid',
-    },
-    modalPosition: {
-      top: '20%',
     },
   })
 );
@@ -282,6 +278,8 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     setBigCategoryId(0);
     setMediumCategoryId(null);
     setCustomCategoryId(null);
+    setBigCategoryMenuOpen(false);
+    setMediumCategoryMenuOpen(false);
     setPaymentUserId(userId);
   };
 
@@ -334,6 +332,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           />
         )}
         <BigCategoryInput
+          ref={bigCategoryRef}
           bigCategory={bigCategory}
           bigCategoryMenuOpen={bigCategoryMenuOpen}
           expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
@@ -344,6 +343,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           setBigCategoryMenuOpen={setBigCategoryMenuOpen}
         />
         <MediumCategoryInput
+          ref={mediumMenuRef}
           associatedCategory={associatedCategory}
           bigCategory={bigCategory}
           bigCategoryId={bigCategoryId}

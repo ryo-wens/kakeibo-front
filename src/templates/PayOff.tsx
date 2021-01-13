@@ -18,7 +18,6 @@ import {
 import { getUserId } from '../reducks/users/selectors';
 import { getApprovedGroups } from '../reducks/groups/selectors';
 import PayOffBody from '../components/account/PayOffBody';
-import { Header } from '../components/header';
 import { SelectMonth } from '../components/uikit/';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import '../assets/accounting/payoff.scss';
@@ -131,74 +130,71 @@ const PayOff = (props: PayOffProps) => {
 
   return (
     <>
-      <Header />
-      <main className="section__container">
-        <>
-          <div className="payoff payoff__box-size">
-            <div className="payoff__spacer-big" />
-            <div className="payoff__background">
-              <button
-                className="payoff__back-btn"
-                onClick={() => {
-                  props.setCurrentItem(false);
-                  history.replace(`/group/${id}/accounting?year=${props.selectedYear}`);
-                }}
-              >
-                <ChevronLeftIcon />
-              </button>
-              <div className="payoff__account-btn--position">
-                <SelectMonth
-                  selectedMonth={Number(selectedMonth)}
-                  setSelectedMonth={setSelectedMonth}
-                  setSubMonth={setSubMonth}
-                />
-              </div>
-              <div className="payoff__spacer-small" />
-              {currentSelectMonth === subMonth && (
-                <div className="payoff__amount-list">
-                  <div className="payoff__account-form">
-                    合計支払金額
-                    <div className="payoff__amount-position">
-                      {displayAmount(groupAccountList.group_total_payment_amount)
-                        ? groupAccountList.group_total_payment_amount.toLocaleString()
-                        : 0}
-                    </div>
-                  </div>
-                  <div className="payoff__account-form">
-                    1人あたり平均支払金額
-                    <div className="payoff__amount-position">
-                      {displayAmount(groupAccountList.group_average_payment_amount)
-                        ? groupAccountList.group_average_payment_amount.toLocaleString()
-                        : 0}
-                    </div>
-                  </div>
-                  <div className="payoff__account-form">
-                    会計後支払残額
-                    <div className="payoff__amount-position">
-                      {displayAmount(groupAccountList.group_remaining_amount)
-                        ? groupAccountList.group_remaining_amount.toLocaleString()
-                        : 0}
-                    </div>
-                  </div>
-                </div>
-              )}
-              <p className="payoff__error-message">
-                {currentSelectMonth === subMonth ? '' : message}
-              </p>
-              {displayAccountButton()}
-              <PayOffBody
-                groupAccountList={groupAccountList}
-                approvedGroup={approvedGroup}
-                selectMonth={subMonth}
-                selectYear={String(props.selectedYear)}
-                completeJudge={completeJudge}
-                remainingTotalAmount={remainingTotalAmount}
-                currentUserId={currentUserId}
+      <>
+        <div className="payoff payoff__box-size">
+          <div className="payoff__spacer-big" />
+          <div className="payoff__background">
+            <button
+              className="payoff__back-btn"
+              onClick={() => {
+                props.setCurrentItem(false);
+                history.replace(`/group/${id}/accounting?year=${props.selectedYear}`);
+              }}
+            >
+              <ChevronLeftIcon />
+            </button>
+            <div className="payoff__account-btn--position">
+              <SelectMonth
+                selectedMonth={Number(selectedMonth)}
+                setSelectedMonth={setSelectedMonth}
+                setSubMonth={setSubMonth}
               />
             </div>
+            <div className="payoff__spacer-small" />
+            {currentSelectMonth === subMonth && (
+              <div className="payoff__amount-list">
+                <div className="payoff__account-form">
+                  合計支払金額
+                  <div className="payoff__amount-position">
+                    {displayAmount(groupAccountList.group_total_payment_amount)
+                      ? groupAccountList.group_total_payment_amount.toLocaleString()
+                      : 0}
+                  </div>
+                </div>
+                <div className="payoff__account-form">
+                  1人あたり平均支払金額
+                  <div className="payoff__amount-position">
+                    {displayAmount(groupAccountList.group_average_payment_amount)
+                      ? groupAccountList.group_average_payment_amount.toLocaleString()
+                      : 0}
+                  </div>
+                </div>
+                <div className="payoff__account-form">
+                  会計後支払残額
+                  <div className="payoff__amount-position">
+                    {displayAmount(groupAccountList.group_remaining_amount)
+                      ? groupAccountList.group_remaining_amount.toLocaleString()
+                      : 0}
+                  </div>
+                </div>
+              </div>
+            )}
+            <p className="payoff__error-message">
+              {currentSelectMonth === subMonth ? '' : message}
+            </p>
+            {displayAccountButton()}
+            <PayOffBody
+              groupAccountList={groupAccountList}
+              approvedGroup={approvedGroup}
+              selectMonth={subMonth}
+              selectYear={String(props.selectedYear)}
+              completeJudge={completeJudge}
+              remainingTotalAmount={remainingTotalAmount}
+              currentUserId={currentUserId}
+            />
           </div>
-        </>
-      </main>
+        </div>
+      </>
     </>
   );
 };
