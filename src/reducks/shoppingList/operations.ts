@@ -7,6 +7,8 @@ import {
   AddShoppingListItemRes,
   DeleteRegularShoppingListItemRes,
   DeleteShoppingListItemRes,
+  EditRegularShoppingListItemReq,
+  EditRegularShoppingListItemRes,
   EditShoppingListReq,
   FetchExpiredShoppingListRes,
   FetchMonthlyShoppingListByCategoriesRes,
@@ -28,6 +30,7 @@ import {
   cancelAddShoppingListItemAction,
   cancelDeleteRegularShoppingListItemAction,
   cancelDeleteShoppingListItemAction,
+  cancelEditRegularShoppingListItemAction,
   cancelEditShoppingListItemAction,
   cancelFetchExpiredShoppingListAction,
   cancelFetchMonthlyShoppingListAction,
@@ -36,11 +39,13 @@ import {
   cancelFetchTodayShoppingListByCategoriesAction,
   deleteRegularShoppingListItemAction,
   deleteShoppingListItemAction,
+  editRegularShoppingListItemAction,
   editShoppingListItemAction,
   failedAddRegularShoppingListItemAction,
   failedAddShoppingListItemAction,
   failedDeleteRegularShoppingListItemAction,
   failedDeleteShoppingListItemAction,
+  failedEditRegularShoppingListItemAction,
   failedEditShoppingListItemAction,
   failedFetchExpiredShoppingListAction,
   failedFetchMonthlyShoppingListAction,
@@ -56,6 +61,7 @@ import {
   startAddShoppingListItemAction,
   startDeleteRegularShoppingListItemAction,
   startDeleteShoppingListItemAction,
+  startEditRegularShoppingListItemAction,
   startEditShoppingListItemAction,
   startFetchExpiredShoppingListAction,
   startFetchMonthlyShoppingListAction,
@@ -1163,6 +1169,75 @@ export const addRegularShoppingListItem = (
       } else {
         dispatch(
           failedAddRegularShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const editRegularShoppingListItem = (
+  regularShoppingListItemId: number,
+  expectedPurchaseDate: Date | null,
+  cycleType: 'daily' | 'weekly' | 'monthly' | 'custom',
+  cycle: number | null,
+  purchase: string,
+  shop: string | null,
+  amount: number | null,
+  bigCategoryId: number,
+  mediumCategoryId: number | null,
+  customCategoryId: number | null,
+  transactionAutoAdd: boolean,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    if (expectedPurchaseDate === null) {
+      return;
+    }
+    if (cycle === 0) {
+      return;
+    }
+    dispatch(startEditRegularShoppingListItemAction());
+
+    const data: EditRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    try {
+      const result = await axios.put<EditRegularShoppingListItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`,
+        JSON.stringify(data, function (key, value) {
+          if (key === 'expected_purchase_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      if (result) {
+        dispatch(editRegularShoppingListItemAction());
+      }
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelEditRegularShoppingListItemAction());
+      } else {
+        dispatch(
+          failedEditRegularShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )

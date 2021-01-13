@@ -8,6 +8,7 @@ import { addRegularShoppingListItem } from '../../../../../reducks/shoppingList/
 import axios from 'axios';
 import RegularShoppingListForm from '../../Form/RegularShoppingListForm/RegularShoppingListForm';
 import './add-regular-shopping-list-modal.scss';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -26,6 +27,7 @@ interface AddRegularShoppingListModalProps {
 
 const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(new Date());
   const [cycleType, setCycleType] = useState<'daily' | 'weekly' | 'monthly' | 'custom'>('weekly');
@@ -158,21 +160,25 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
         closeModal={closeModal}
         unInput={unInput || unInputCycle()}
         minDate={date}
-        dispatchOperation={addRegularShoppingListItem(
-          date,
-          currentYearMonth,
-          expectedPurchaseDate,
-          cycleType,
-          typeof cycle === 'string' ? Number(cycle) : cycle,
-          purchase,
-          shop,
-          typeof amount === 'string' ? Number(amount) : amount,
-          bigCategoryId,
-          mediumCategoryId,
-          customCategoryId,
-          transactionAutoAdd,
-          signal
-        )}
+        dispatchOperation={() =>
+          dispatch(
+            addRegularShoppingListItem(
+              date,
+              currentYearMonth,
+              expectedPurchaseDate,
+              cycleType,
+              typeof cycle === 'string' ? Number(cycle) : cycle,
+              purchase,
+              shop,
+              typeof amount === 'string' ? Number(amount) : amount,
+              bigCategoryId,
+              mediumCategoryId,
+              customCategoryId,
+              transactionAutoAdd,
+              signal
+            )
+          )
+        }
       />
     </div>
   );

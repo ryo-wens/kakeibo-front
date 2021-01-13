@@ -12,14 +12,18 @@ import axios from 'axios';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import { getExpenseCategories, getIncomeCategories } from '../../../reducks/categories/selectors';
+import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 
 const ShoppingListPage = () => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
+
+  const [currentItems, setCurrentItems] = useState<TodayOrMonthly>('today');
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
+
   const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
   const currentYearMonth = `${selectedYear}/${currentMonth}`;
 
@@ -36,6 +40,8 @@ const ShoppingListPage = () => {
       <div className="shopping-list-page__left">
         <div className="shopping-list-page__left-content">
           <SwitchTodayOrMonthlyTabs
+            currentItems={currentItems}
+            setCurrentItems={setCurrentItems}
             leftItem={<TodayShoppingListArea currentYearMonth={currentYearMonth} />}
             rightItem={
               <MonthlyShoppingListArea
@@ -53,7 +59,10 @@ const ShoppingListPage = () => {
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
           <AddRegularShoppingListModal selectedYear={selectedYear} selectedMonth={selectedMonth} />
-          <RegularShoppingListArea currentYearMonth={currentYearMonth} />
+          <RegularShoppingListArea
+            currentYearMonth={currentYearMonth}
+            currentTodayOrMonthly={currentItems}
+          />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>

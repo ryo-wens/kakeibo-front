@@ -187,6 +187,26 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.START_EDIT_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.EDIT_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.START_DELETE_REGULAR_SHOPPING_LIST_ITEM:
       return {
         ...state,

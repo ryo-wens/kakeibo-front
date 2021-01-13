@@ -28,8 +28,8 @@ const ShoppingListByDate = (props: ShoppingListByDate) => {
             <div key={listItem.id}>
               <ShoppingListItemComponent
                 listItem={listItem}
-                currentYearMonth={props.currentYearMonth}
                 displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
+                currentYearMonth={props.currentYearMonth}
               />
             </div>
           );

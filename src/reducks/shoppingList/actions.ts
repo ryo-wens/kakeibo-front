@@ -36,6 +36,10 @@ export type ShoppingListActions = ReturnType<
   | typeof addRegularShoppingListItemAction
   | typeof cancelAddRegularShoppingListItemAction
   | typeof failedAddRegularShoppingListItemAction
+  | typeof startEditRegularShoppingListItemAction
+  | typeof editRegularShoppingListItemAction
+  | typeof cancelEditRegularShoppingListItemAction
+  | typeof failedEditRegularShoppingListItemAction
   | typeof startDeleteRegularShoppingListItemAction
   | typeof deleteRegularShoppingListItemAction
   | typeof cancelDeleteRegularShoppingListItemAction
@@ -623,6 +627,85 @@ export const failedAddRegularShoppingListItemAction = (
 ) => {
   return {
     type: FAILED_ADD_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      regularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_EDIT_REGULAR_SHOPPING_LIST_ITEM = 'START_EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const startEditRegularShoppingListItemAction = () => {
+  return {
+    type: START_EDIT_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: true,
+      todayShoppingListLoading: true,
+      todayShoppingListByCategoriesLoading: true,
+      monthlyShoppingListLoading: true,
+      monthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const EDIT_REGULAR_SHOPPING_LIST_ITEM = 'EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const editRegularShoppingListItemAction = () => {
+  return {
+    type: EDIT_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM = 'CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const cancelEditRegularShoppingListItemAction = () => {
+  return {
+    type: CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM = 'FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const failedEditRegularShoppingListItemAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
       regularShoppingListLoading: false,
       regularShoppingListError: {

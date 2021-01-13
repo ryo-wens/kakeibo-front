@@ -12,6 +12,7 @@ import {
   addRegularShoppingListItem,
   deleteRegularShoppingListItem,
   editShoppingListItem,
+  editRegularShoppingListItem,
 } from '../../src/reducks/shoppingList/operations';
 import axios from 'axios';
 import * as ShoppingListActions from '../../src/reducks/shoppingList/actions';
@@ -24,6 +25,7 @@ import addShoppingListItemResponse from './addShoppingListItemResponse.json';
 import editShoppingListItemResponse from './editShoppingListItemResponse.json';
 import deleteShoppingListItemResponse from './deleteShoppingListItemResponse.json';
 import addRegularShoppingListItemResponse from './addRegularShoppingListItemResponse.json';
+import editRegularShoppingListItemResponse from './editRegularShoppingListItemResponse.json';
 import deleteRegularShoppingListItemResponse from './deleteRegularShoppingListItemResponse.json';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
@@ -1130,6 +1132,66 @@ describe('async actions shoppingList', () => {
     await addRegularShoppingListItem(
       today,
       currentYearMonth,
+      expectedPurchaseDate,
+      cycleType,
+      cycle,
+      purchase,
+      shop,
+      amount,
+      bigCategoryId,
+      mediumCategoryId,
+      customCategoryId,
+      transactionAutoAdd,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('add regularShoppingListItem and shoppingList if fetch succeeds', async () => {
+    const regularShoppingListItemId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`;
+    const expectedPurchaseDate = new Date('2020-12-25T10:00:00');
+    const cycleType = 'monthly';
+    const cycle = null;
+    const purchase = '携帯料金';
+    const shop = 'auショップ';
+    const amount = 5000;
+    const bigCategoryId = 9;
+    const mediumCategoryId = 51;
+    const customCategoryId = null;
+    const transactionAutoAdd = true;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(editRegularShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: ShoppingListActions.START_EDIT_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          regularShoppingListLoading: true,
+          todayShoppingListLoading: true,
+          todayShoppingListByCategoriesLoading: true,
+          monthlyShoppingListLoading: true,
+          monthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: ShoppingListActions.EDIT_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          regularShoppingListLoading: false,
+          todayShoppingListLoading: false,
+          todayShoppingListByCategoriesLoading: false,
+          monthlyShoppingListLoading: false,
+          monthlyShoppingListByCategoriesLoading: false,
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editRegularShoppingListItem(
+      regularShoppingListItemId,
       expectedPurchaseDate,
       cycleType,
       cycle,
