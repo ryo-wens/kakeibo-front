@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { CategoryInput, TextInput } from '../../../../uikit';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import {
   getExpenseCategories,
   getIncomeCategories,
@@ -9,8 +9,6 @@ import {
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
-import { Action, Dispatch } from 'redux';
-import { State } from '../../../../../reducks/store/types';
 import './regular-shopping-list-form.scss';
 import CycleTypeSelector from '../../Selector/CycleTypeSelector/CycleTypeSelector';
 
@@ -44,13 +42,12 @@ interface RegularShoppingListFormProps {
   buttonLabel: string;
   closeModal: () => void;
   unInput: boolean;
-  dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  dispatchOperation: () => void;
   minDate: Date;
   openDeleteForm?: () => void;
 }
 
 const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
-  const dispatch = useDispatch();
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
 
@@ -185,7 +182,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           className="regular-shopping-list-form__operation-btn--add"
           disabled={props.unInput}
           onClick={() => {
-            dispatch(props.dispatchOperation);
+            props.dispatchOperation();
             props.closeModal();
           }}
         >

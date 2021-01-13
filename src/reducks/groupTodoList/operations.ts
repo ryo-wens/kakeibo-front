@@ -260,30 +260,33 @@ export const editGroupTodoListItem = (
         return prevTodoList.concat();
       };
 
-      const updateGroupExpiredTodoList = () => {
-        const prevItemIdx = prevGroupExpiredTodoList.findIndex(
-          (listItem: GroupTodoListItem) => listItem.id === nextTodoListItem.id
+      const updateGroupExpiredTodoList = (
+        prevTodoList: GroupTodoList,
+        resTodoListItem: GroupTodoListItem
+      ) => {
+        const prevItemIdx = prevTodoList.findIndex(
+          (listItem: GroupTodoListItem) => listItem.id === resTodoListItem.id
         );
 
-        if (dateToDateString(today) > nextTodoListItem.due_date) {
+        if (dateToDateString(today) > resTodoListItem.due_date && !resTodoListItem.complete_flag) {
           if (prevItemIdx !== NOT_FOUND) {
-            prevGroupExpiredTodoList.splice(prevItemIdx, 1);
+            prevTodoList.splice(prevItemIdx, 1);
           }
 
-          const idx = prevGroupExpiredTodoList.findIndex((listItem) => {
-            if (listItem.due_date === nextTodoListItem.due_date) {
-              return listItem.id > nextTodoListItem.id;
+          const idx = prevTodoList.findIndex((listItem) => {
+            if (listItem.due_date === resTodoListItem.due_date) {
+              return listItem.id > resTodoListItem.id;
             }
-            return listItem.due_date > nextTodoListItem.due_date;
+            return listItem.due_date > resTodoListItem.due_date;
           });
 
-          return pushResponseTodoListItem(idx, prevGroupExpiredTodoList, nextTodoListItem);
+          return pushResponseTodoListItem(idx, prevTodoList, resTodoListItem);
         }
         if (prevItemIdx === NOT_FOUND) {
-          return prevGroupExpiredTodoList;
+          return prevTodoList;
         }
-        prevGroupExpiredTodoList.splice(prevItemIdx, 1);
-        return prevGroupExpiredTodoList.concat();
+        prevTodoList.splice(prevItemIdx, 1);
+        return prevTodoList.concat();
       };
 
       const updateGroupTodayTodoList = (prevTodoList: GroupTodoList, responseDate: string) => {
@@ -349,7 +352,10 @@ export const editGroupTodoListItem = (
       prevGroupSearchTodoList[searchTodoListItemIdx] = result.data;
       const nextGroupSearchTodoList: GroupTodoList = [...prevGroupSearchTodoList];
 
-      const nextGroupExpiredTodoList: GroupTodoList = updateGroupExpiredTodoList();
+      const nextGroupExpiredTodoList: GroupTodoList = updateGroupExpiredTodoList(
+        prevGroupExpiredTodoList,
+        nextTodoListItem
+      );
 
       const nextGroupTodayImplementationTodoList: GroupTodoList = updateGroupTodayTodoList(
         prevGroupTodayImplementationTodoList,

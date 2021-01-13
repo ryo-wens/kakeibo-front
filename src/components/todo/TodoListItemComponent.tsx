@@ -74,7 +74,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   useEffect(() => {
     setChecked(props.todoListItem.complete_flag);
     setTodoContent(props.todoListItem.todo_content);
-  }, []);
+  }, [props.todoListItem.complete_flag]);
 
   useEffect(() => {
     if (props.setEditing && !openEditTodoList) {
