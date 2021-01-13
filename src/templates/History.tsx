@@ -73,37 +73,47 @@ const History = () => {
     };
   }, [pathName, selectedYear, selectedMonth]);
 
+  const currentPageColor = (currentPath: string) => {
+    if (path === currentPath) {
+      return {
+        background: 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)',
+        color: '#fff',
+      };
+    }
+  };
+
   return (
     <>
       <Header />
       <main className="section__container">
         <div className="history__position">
-          <div className=" history" aria-label="small outlined button group">
+          <div className="switch-item-tabs__buttons " aria-label="small outlined button group">
             <button
               className="history__top-button"
+              style={currentPageColor(
+                pathName !== 'group' ? '/daily/history' : `/group/${Number(id)}/daily/history`
+              )}
               onClick={() => {
-                if (pathName !== 'group') {
-                  dispatch(push('/daily/history'));
-                } else {
-                  dispatch(push(`/group/${Number(id)}/daily/history`));
-                }
+                pathName !== 'group'
+                  ? dispatch(push('/daily/history'))
+                  : dispatch(push(`/group/${Number(id)}/daily/history`));
               }}
             >
               日ごと
             </button>
             <button
               className="history__top-button"
+              style={currentPageColor(
+                pathName !== 'group' ? '/weekly/history' : `/group/${Number(id)}/weekly/history`
+              )}
               onClick={() => {
-                if (pathName !== 'group') {
-                  dispatch(push('/weekly/history'));
-                } else {
-                  dispatch(push(`/group/${Number(id)}/weekly/history`));
-                }
+                pathName !== 'group'
+                  ? dispatch(push('/weekly/history'))
+                  : dispatch(push(`/group/${Number(id)}/weekly/history`));
               }}
             >
               週ごと
             </button>
-            <button className="history__top-button">月ごと</button>
           </div>
           <div className="history__spacer" />
           <InputYears

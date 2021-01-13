@@ -131,7 +131,7 @@ const MediumCategoryInput = React.forwardRef(
                         }
 
                         return (
-                          <div className="category-input__form-position">
+                          <div className="category-input__form-position category-input__menu-item--custom">
                             <li
                               className="category-input__menu-item"
                               value={incomeAssociated.name}
@@ -284,7 +284,7 @@ const MediumCategoryInput = React.forwardRef(
                         }
 
                         return (
-                          <div className="category-input__form-position">
+                          <div className="category-input__form-position category-input__menu-item--custom">
                             <li
                               className="category-input__menu-item"
                               value={expenseAssociated.name}

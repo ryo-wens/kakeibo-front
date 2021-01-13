@@ -48,9 +48,8 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#fff',
       boxShadow: 'none',
       margin: '0 auto',
-      marginTop: '3%',
+      marginTop: 15,
       width: 540,
-      height: 'auto',
       border: '1px solid #000',
       padding: theme.spacing(1, 2, 2),
     },
@@ -328,6 +327,8 @@ const EditTransactionModal = (props: InputModalProps) => {
     setCustomCategoryId(props.customCategoryId);
     setBigCategory(props.categoryName.bigCategory);
     setAssociatedCategory(props.categoryName.mediumCategory || props.categoryName.customCategory);
+    setBigCategoryMenuOpen(false);
+    setMediumCategoryMenuOpen(false);
     setPaymentUserId(String(props.paymentUserId));
   };
 
@@ -383,6 +384,7 @@ const EditTransactionModal = (props: InputModalProps) => {
           />
         )}
         <BigCategoryInput
+          ref={bigCategoryRef}
           bigCategory={bigCategory}
           bigCategoryMenuOpen={bigCategoryMenuOpen}
           expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
@@ -393,6 +395,7 @@ const EditTransactionModal = (props: InputModalProps) => {
           setBigCategoryMenuOpen={setBigCategoryMenuOpen}
         />
         <MediumCategoryInput
+          ref={mediumMenuRef}
           associatedCategory={associatedCategory}
           bigCategory={bigCategory}
           bigCategoryId={bigCategoryId}

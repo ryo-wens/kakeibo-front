@@ -15,6 +15,13 @@ export interface FetchTransactions {
   custom_category_name: string | null;
 }
 
+export interface PieChartData {
+  big_category_name: string;
+  amount: number;
+}
+
+export interface PieChartDataList extends Array<PieChartData> {}
+
 export interface FetchTransactionsRes {
   transactions_list: TransactionsList;
   message: string;

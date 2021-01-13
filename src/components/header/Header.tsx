@@ -102,10 +102,8 @@ const Header = () => {
     <div className="header__header--position">
       <header className="header__header">
         <div className="header__upper-content">
-          <h1>
-            <a className="header__title" href="/" onClick={() => homeButtonClick()}>
-              Tukecholl
-            </a>
+          <h1 className="header__title" onClick={() => homeButtonClick()}>
+            <a>Tukecholl</a>
           </h1>
         </div>
         <div>
@@ -113,7 +111,7 @@ const Header = () => {
             <li
               className="header__global-menu--item"
               style={currentPage(pathName !== 'group' ? '/' : `/group/${id}`)}
-              onClick={() => existsGroupWhenRouting('/')}
+              onClick={() => existsGroupWhenRouting('')}
             >
               <a>
                 <HomeIcon className="header__icon" />

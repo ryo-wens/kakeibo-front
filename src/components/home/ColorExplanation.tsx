@@ -28,8 +28,10 @@ const ColorExplanation = (props: ColorExplanationProps) => {
     <div>
       {props.approvedGroup !== undefined && (
         <>
-          <span className="color-explanation__group-text">{props.approvedGroup.group_name}</span>
-          メンバーカラー
+          <span className="color-explanation__group-text">
+            {props.approvedGroup.group_name} {''}
+          </span>
+          支払者カラー
           <div className="color-explanation__spacer--small" />
           <div className="color-explanation__icon-position">
             {props.approvedGroup.approved_users_list.map((group) => {
