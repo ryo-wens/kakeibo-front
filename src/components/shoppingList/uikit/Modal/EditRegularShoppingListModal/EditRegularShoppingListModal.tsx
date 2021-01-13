@@ -2,18 +2,18 @@ import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import { date } from '../../../../../lib/constant';
 import {
-  addRegularShoppingListItem,
   deleteRegularShoppingListItem,
+  editRegularShoppingListItem,
 } from '../../../../../reducks/shoppingList/operations';
-import axios from 'axios';
+import axios, { CancelTokenSource } from 'axios';
 import RegularShoppingListForm from '../../Form/RegularShoppingListForm/RegularShoppingListForm';
 import ShoppingListDeleteForm from '../../Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import { RegularShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import EditIcon from '@material-ui/icons/Edit';
 import './edit-regular-shopping-list-modal.scss';
 import { dateStringToDate } from '../../../../../lib/date';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -28,10 +28,12 @@ const useStyles = makeStyles((theme: Theme) =>
 interface EditRegularShoppingListModalProps {
   listItem: RegularShoppingListItem;
   currentYearMonth: string;
+  fetchTodayOrMonthlyShoppingList: (signal: CancelTokenSource) => void;
 }
 
 const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) => {
   const classes = useStyles();
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
 
@@ -96,17 +98,6 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
 
   const openModal = () => {
     setOpen(true);
-    if (props.listItem.medium_category_name) {
-      setAssociatedCategory(props.listItem.medium_category_name);
-    }
-    if (props.listItem.custom_category_name) {
-      setAssociatedCategory(props.listItem.custom_category_name);
-    }
-  };
-
-  const closeModal = () => {
-    setOpen(false);
-    setDeleteForm(false);
     setExpectedPurchaseDate(initialExpectedPurchaseDate);
     setCycleType(initialCycleType);
     setCycle(initialCycle);
@@ -118,6 +109,17 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
     setMediumCategoryId(initialMediumCategoryId);
     setCustomCategoryId(initialCustomCategoryId);
     setTransactionAutoAdd(initialTransactionAutoAdd);
+    if (props.listItem.medium_category_name) {
+      setAssociatedCategory(props.listItem.medium_category_name);
+    }
+    if (props.listItem.custom_category_name) {
+      setAssociatedCategory(props.listItem.custom_category_name);
+    }
+  };
+
+  const closeModal = () => {
+    setOpen(false);
+    setDeleteForm(false);
   };
 
   const openDeleteForm = () => {
@@ -184,6 +186,31 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
     }
   };
 
+  const editRegularShoppingList = () => {
+    const signal = axios.CancelToken.source();
+
+    const edit = async () => {
+      await dispatch(
+        editRegularShoppingListItem(
+          props.listItem.id,
+          expectedPurchaseDate,
+          cycleType,
+          typeof cycle === 'string' ? Number(cycle) : cycle,
+          purchase,
+          shop,
+          typeof amount === 'string' ? Number(amount) : amount,
+          bigCategoryId,
+          mediumCategoryId,
+          customCategoryId,
+          transactionAutoAdd,
+          signal
+        )
+      );
+      props.fetchTodayOrMonthlyShoppingList(signal);
+    };
+    edit();
+  };
+
   const body = (
     <div className={classes.paper}>
       {deleteForm ? (
@@ -226,22 +253,7 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
           closeModal={closeModal}
           unInput={disabledButton()}
           minDate={new Date('1900-01-01')}
-          // 仮実装として addRegularShoppingListItem() を記述
-          dispatchOperation={addRegularShoppingListItem(
-            date,
-            props.currentYearMonth,
-            expectedPurchaseDate,
-            cycleType,
-            typeof cycle === 'string' ? Number(cycle) : cycle,
-            purchase,
-            shop,
-            typeof amount === 'string' ? Number(amount) : amount,
-            bigCategoryId,
-            mediumCategoryId,
-            customCategoryId,
-            transactionAutoAdd,
-            signal
-          )}
+          dispatchOperation={editRegularShoppingList}
           openDeleteForm={openDeleteForm}
         />
       )}

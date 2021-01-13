@@ -24,6 +24,10 @@ export type ShoppingListActions = ReturnType<
   | typeof addShoppingListItemAction
   | typeof cancelAddShoppingListItemAction
   | typeof failedAddShoppingListItemAction
+  | typeof startEditShoppingListItemAction
+  | typeof editShoppingListItemAction
+  | typeof cancelEditShoppingListItemAction
+  | typeof failedEditShoppingListItemAction
   | typeof startDeleteShoppingListItemAction
   | typeof deleteShoppingListItemAction
   | typeof cancelDeleteShoppingListItemAction
@@ -32,6 +36,10 @@ export type ShoppingListActions = ReturnType<
   | typeof addRegularShoppingListItemAction
   | typeof cancelAddRegularShoppingListItemAction
   | typeof failedAddRegularShoppingListItemAction
+  | typeof startEditRegularShoppingListItemAction
+  | typeof editRegularShoppingListItemAction
+  | typeof cancelEditRegularShoppingListItemAction
+  | typeof failedEditRegularShoppingListItemAction
   | typeof startDeleteRegularShoppingListItemAction
   | typeof deleteRegularShoppingListItemAction
   | typeof cancelDeleteRegularShoppingListItemAction
@@ -385,6 +393,93 @@ export const failedAddShoppingListItemAction = (statusCode: number, errorMessage
   };
 };
 
+export const START_EDIT_SHOPPING_LIST_ITEM = 'START_EDIT_SHOPPING_LIST_ITEM';
+export const startEditShoppingListItemAction = () => {
+  return {
+    type: START_EDIT_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: true,
+      todayShoppingListLoading: true,
+      todayShoppingListByCategoriesLoading: true,
+      monthlyShoppingListLoading: true,
+      monthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const EDIT_SHOPPING_LIST_ITEM = 'EDIT_SHOPPING_LIST_ITEM';
+export const editShoppingListItemAction = (
+  expiredShoppingList: ShoppingList,
+  todayShoppingList: ShoppingList,
+  todayShoppingListByCategories: ShoppingListByCategories,
+  monthlyShoppingList: ShoppingList,
+  monthlyShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: EDIT_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      expiredShoppingList,
+      todayShoppingListLoading: false,
+      todayShoppingList: todayShoppingList,
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategories: todayShoppingListByCategories,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingList: monthlyShoppingList,
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_EDIT_SHOPPING_LIST_ITEM = 'CANCEL_EDIT_SHOPPING_LIST_ITEM';
+export const cancelEditShoppingListItemAction = () => {
+  return {
+    type: CANCEL_EDIT_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_EDIT_SHOPPING_LIST_ITEM = 'FAILED_EDIT_SHOPPING_LIST_ITEM';
+export const failedEditShoppingListItemAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_EDIT_SHOPPING_LIST_ITEM,
+    payload: {
+      expiredShoppingListLoading: false,
+      expiredShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
 export const START_DELETE_SHOPPING_LIST_ITEM = 'START_DELETE_SHOPPING_LIST_ITEM';
 export const startDeleteShoppingListItemAction = () => {
   return {
@@ -532,6 +627,85 @@ export const failedAddRegularShoppingListItemAction = (
 ) => {
   return {
     type: FAILED_ADD_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      regularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListLoading: false,
+      todayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      todayShoppingListByCategoriesLoading: false,
+      todayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      monthlyShoppingListByCategoriesLoading: false,
+      monthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_EDIT_REGULAR_SHOPPING_LIST_ITEM = 'START_EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const startEditRegularShoppingListItemAction = () => {
+  return {
+    type: START_EDIT_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: true,
+      todayShoppingListLoading: true,
+      todayShoppingListByCategoriesLoading: true,
+      monthlyShoppingListLoading: true,
+      monthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const EDIT_REGULAR_SHOPPING_LIST_ITEM = 'EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const editRegularShoppingListItemAction = () => {
+  return {
+    type: EDIT_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM = 'CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const cancelEditRegularShoppingListItemAction = () => {
+  return {
+    type: CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      regularShoppingListLoading: false,
+      todayShoppingListLoading: false,
+      todayShoppingListByCategoriesLoading: false,
+      monthlyShoppingListLoading: false,
+      monthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM = 'FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM';
+export const failedEditRegularShoppingListItemAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
       regularShoppingListLoading: false,
       regularShoppingListError: {

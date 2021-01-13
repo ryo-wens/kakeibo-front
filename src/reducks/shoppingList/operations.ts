@@ -7,6 +7,9 @@ import {
   AddShoppingListItemRes,
   DeleteRegularShoppingListItemRes,
   DeleteShoppingListItemRes,
+  EditRegularShoppingListItemReq,
+  EditRegularShoppingListItemRes,
+  EditShoppingListReq,
   FetchExpiredShoppingListRes,
   FetchMonthlyShoppingListByCategoriesRes,
   FetchMonthlyShoppingListRes,
@@ -14,6 +17,7 @@ import {
   FetchTodayShoppingListRes,
   RegularShoppingList,
   RegularShoppingListItem,
+  RelatedTransactionData,
   ShoppingList,
   ShoppingListByCategories,
   ShoppingListItem,
@@ -26,6 +30,8 @@ import {
   cancelAddShoppingListItemAction,
   cancelDeleteRegularShoppingListItemAction,
   cancelDeleteShoppingListItemAction,
+  cancelEditRegularShoppingListItemAction,
+  cancelEditShoppingListItemAction,
   cancelFetchExpiredShoppingListAction,
   cancelFetchMonthlyShoppingListAction,
   cancelFetchMonthlyShoppingListByCategoriesAction,
@@ -33,10 +39,14 @@ import {
   cancelFetchTodayShoppingListByCategoriesAction,
   deleteRegularShoppingListItemAction,
   deleteShoppingListItemAction,
+  editRegularShoppingListItemAction,
+  editShoppingListItemAction,
   failedAddRegularShoppingListItemAction,
   failedAddShoppingListItemAction,
   failedDeleteRegularShoppingListItemAction,
   failedDeleteShoppingListItemAction,
+  failedEditRegularShoppingListItemAction,
+  failedEditShoppingListItemAction,
   failedFetchExpiredShoppingListAction,
   failedFetchMonthlyShoppingListAction,
   failedFetchMonthlyShoppingListByCategoriesAction,
@@ -51,6 +61,8 @@ import {
   startAddShoppingListItemAction,
   startDeleteRegularShoppingListItemAction,
   startDeleteShoppingListItemAction,
+  startEditRegularShoppingListItemAction,
+  startEditShoppingListItemAction,
   startFetchExpiredShoppingListAction,
   startFetchMonthlyShoppingListAction,
   startFetchMonthlyShoppingListByCategoriesAction,
@@ -324,48 +336,51 @@ export const addShoppingListItem = (
         if (prevCategoryIdx === NOT_FOUND) {
           return prevShoppingListByCategories.concat(newShoppingListItemByCategories);
         }
-        prevShoppingListByCategories.splice(prevCategoryIdx, 0, newShoppingListItemByCategories);
+
+        prevShoppingListByCategories.splice(prevCategoryIdx, 1, newShoppingListItemByCategories);
         return prevShoppingListByCategories.concat();
       };
 
       const todayShoppingList = () => {
         if (dateToDateString(today) === responseExpectedPurchaseDate) {
-          return [newShoppingListItem].concat(prevTodayShoppingList);
+          return prevTodayShoppingList.concat(newShoppingListItem);
         }
         return prevTodayShoppingList;
       };
 
       const todayShoppingListByCategories = () => {
         if (dateToDateString(today) === responseExpectedPurchaseDate) {
-          const prevListIdx = prevTodayShoppingListByCategories.findIndex(
+          const prevCategoriesIdx = prevTodayShoppingListByCategories.findIndex(
             (item) => item.big_category_name === result.data.big_category_name
           );
 
-          const pushItemIdx = prevMonthlyShoppingListByCategories.findIndex(
-            (item) => item.shopping_list[0].big_category_id >= newShoppingListItem.big_category_id
-          );
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const addCategoryIdx = prevTodayShoppingListByCategories.findIndex(
+              (item) => item.shopping_list[0].big_category_id > newShoppingListItem.big_category_id
+            );
 
-          if (prevListIdx === NOT_FOUND) {
             const newShoppingListItemByCategories: ShoppingListItemByCategories = {
               big_category_name: newShoppingListItem.big_category_name,
               shopping_list: [newShoppingListItem],
             };
 
-            return pushResponseShoppingListItemByCategories(
-              pushItemIdx,
-              prevTodayShoppingListByCategories,
+            prevTodayShoppingListByCategories.splice(
+              addCategoryIdx,
+              0,
               newShoppingListItemByCategories
             );
+            return prevTodayShoppingListByCategories.concat();
           }
           const newShoppingListItemByCategories: ShoppingListItemByCategories = {
-            big_category_name: prevTodayShoppingListByCategories[prevListIdx].big_category_name,
-            shopping_list: [newShoppingListItem].concat(
-              prevTodayShoppingListByCategories[prevListIdx].shopping_list
-            ),
+            big_category_name:
+              prevTodayShoppingListByCategories[prevCategoriesIdx].big_category_name,
+            shopping_list: prevTodayShoppingListByCategories[
+              prevCategoriesIdx
+            ].shopping_list.concat(newShoppingListItem),
           };
 
           return pushResponseShoppingListItemByCategories(
-            pushItemIdx,
+            prevCategoriesIdx,
             prevTodayShoppingListByCategories,
             newShoppingListItemByCategories
           );
@@ -385,40 +400,44 @@ export const addShoppingListItem = (
 
       const monthlyShoppingListByCategories = () => {
         if (prevMonth === responseMonth || prevMonth === 'NOT_FOUND') {
-          const prevListIdx = prevMonthlyShoppingListByCategories.findIndex(
+          const prevCategoriesIdx = prevMonthlyShoppingListByCategories.findIndex(
             (item) => item.big_category_name === result.data.big_category_name
           );
 
-          const pushItemIdx = prevMonthlyShoppingListByCategories.findIndex(
-            (item) => item.shopping_list[0].big_category_id >= newShoppingListItem.big_category_id
-          );
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const addCategoryIdx = prevMonthlyShoppingListByCategories.findIndex(
+              (item) => item.shopping_list[0].big_category_id > newShoppingListItem.big_category_id
+            );
 
-          if (prevListIdx === NOT_FOUND) {
             const newShoppingListItemByCategories: ShoppingListItemByCategories = {
               big_category_name: newShoppingListItem.big_category_name,
               shopping_list: [newShoppingListItem],
             };
 
-            return pushResponseShoppingListItemByCategories(
-              pushItemIdx,
-              prevMonthlyShoppingListByCategories,
+            prevMonthlyShoppingListByCategories.splice(
+              addCategoryIdx,
+              0,
               newShoppingListItemByCategories
             );
+            return prevMonthlyShoppingListByCategories.concat();
           }
-          const idx = prevMonthlyShoppingListByCategories[prevListIdx].shopping_list.findIndex(
+          const idx = prevMonthlyShoppingListByCategories[
+            prevCategoriesIdx
+          ].shopping_list.findIndex(
             (item) => item.expected_purchase_date >= newShoppingListItem.expected_purchase_date
           );
 
           const newShoppingListItemByCategories: ShoppingListItemByCategories = {
-            big_category_name: prevMonthlyShoppingListByCategories[prevListIdx].big_category_name,
+            big_category_name:
+              prevMonthlyShoppingListByCategories[prevCategoriesIdx].big_category_name,
             shopping_list: pushResponseShoppingListItem(
               idx,
-              prevMonthlyShoppingListByCategories[prevListIdx].shopping_list,
+              prevMonthlyShoppingListByCategories[prevCategoriesIdx].shopping_list,
               newShoppingListItem
             ),
           };
           return pushResponseShoppingListItemByCategories(
-            pushItemIdx,
+            prevCategoriesIdx,
             prevMonthlyShoppingListByCategories,
             newShoppingListItemByCategories
           );
@@ -445,6 +464,373 @@ export const addShoppingListItem = (
       } else {
         dispatch(
           failedAddShoppingListItemAction(error.response.status, error.response.data.error.message)
+        );
+      }
+    }
+  };
+};
+
+export const editShoppingListItem = (
+  today: Date,
+  currentYearMonth: string,
+  shoppingListItemId: number,
+  expectedPurchaseDate: Date | null,
+  completeFlag: boolean,
+  purchase: string,
+  shop: string | null,
+  amount: number | null,
+  bigCategoryId: number,
+  mediumCategoryId: number | null,
+  customCategoryId: number | null,
+  regularShoppingListId: number | null,
+  transactionAutoAdd: boolean,
+  relatedTransactionDate: RelatedTransactionData | null,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (expectedPurchaseDate === null) {
+      return;
+    }
+    dispatch(startEditShoppingListItemAction());
+
+    const data: EditShoppingListReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      complete_flag: completeFlag,
+      purchase: purchase,
+      shop: shop,
+      amount: amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      regular_shopping_list_id: regularShoppingListId,
+      transaction_auto_add: transactionAutoAdd,
+      related_transaction_data: relatedTransactionDate,
+    };
+    try {
+      const result = await axios.put<ShoppingListItem>(
+        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`,
+        JSON.stringify(data, function (key, value) {
+          if (key === 'expected_purchase_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const prevExpiredShoppingList: ShoppingList = getState().shoppingList.expiredShoppingList;
+      const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
+      const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
+        .todayShoppingListByCategories;
+      const prevMonthlyShoppingList: ShoppingList = getState().shoppingList.monthlyShoppingList;
+      const prevMonthlyShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
+        .monthlyShoppingListByCategories;
+
+      const resShoppingListItem: ShoppingListItem = result.data;
+
+      const NOT_FOUND = -1;
+      const NOT_EXIST_ARRAY_LENGTH = 0;
+
+      const addResponseShoppingListItem = (
+        idx: number,
+        prevShoppingList: ShoppingList,
+        nextShoppingListItem: ShoppingListItem
+      ) => {
+        if (idx === NOT_FOUND) {
+          return prevShoppingList.concat(nextShoppingListItem);
+        }
+
+        prevShoppingList.splice(idx, 0, nextShoppingListItem);
+
+        return prevShoppingList;
+      };
+
+      const addResponseShoppingListItemByCategories = (
+        prevCategoryIdx: number,
+        prevShoppingListByCategories: ShoppingListByCategories,
+        newShoppingListItemByCategories: ShoppingListItemByCategories
+      ) => {
+        if (prevCategoryIdx === NOT_FOUND) {
+          return prevShoppingListByCategories.concat(newShoppingListItemByCategories);
+        }
+
+        prevShoppingListByCategories.splice(prevCategoryIdx, 1, newShoppingListItemByCategories);
+        return prevShoppingListByCategories;
+      };
+
+      const removePrevShoppingListItem = (prevShoppingList: ShoppingList) => {
+        return prevShoppingList.filter((listItem) => {
+          return listItem.id !== shoppingListItemId;
+        });
+      };
+
+      const removeShoppingListItemByCategories = (
+        prevShoppingListByCategories: ShoppingListByCategories,
+        shoppingListItem: ShoppingListItem
+      ) => {
+        for (let i = 0; i < prevShoppingListByCategories.length; i++) {
+          const prevItemIdx = prevShoppingListByCategories[i].shopping_list.findIndex(
+            (item) => item.id === shoppingListItem.id
+          );
+
+          if (prevItemIdx !== NOT_FOUND) {
+            const removeItemFromList = prevShoppingListByCategories[i].shopping_list.filter(
+              (item) => item.id !== shoppingListItem.id
+            );
+
+            prevShoppingListByCategories[i].shopping_list = removeItemFromList;
+
+            if (removeItemFromList.length === NOT_EXIST_ARRAY_LENGTH) {
+              prevShoppingListByCategories.splice(i, 1);
+            }
+
+            break;
+          }
+        }
+
+        return prevShoppingListByCategories;
+      };
+
+      const generateExpiredShoppingList = (
+        prevShoppingList: ShoppingList,
+        shoppingListItem: ShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: ShoppingList = removePrevShoppingListItem(
+          prevShoppingList
+        );
+
+        if (
+          dateToDateString(today) > resShoppingListItem.expected_purchase_date &&
+          !resShoppingListItem.complete_flag
+        ) {
+          const idx = removePrevItemFromPrevList.findIndex((listItem) => {
+            if (listItem.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+              return listItem.id > shoppingListItem.id;
+            }
+
+            return listItem.expected_purchase_date > shoppingListItem.expected_purchase_date;
+          });
+
+          return addResponseShoppingListItem(idx, removePrevItemFromPrevList, resShoppingListItem);
+        }
+
+        return removePrevItemFromPrevList;
+      };
+
+      const generateTodayShoppingList = (
+        prevShoppingList: ShoppingList,
+        shoppingListItem: ShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: ShoppingList = removePrevShoppingListItem(
+          prevShoppingList
+        );
+
+        if (dateToDateString(today) === shoppingListItem.expected_purchase_date) {
+          const idx = removePrevItemFromPrevList.findIndex(
+            (listItem) => listItem.id > shoppingListItem.id
+          );
+
+          return addResponseShoppingListItem(idx, removePrevItemFromPrevList, shoppingListItem);
+        }
+
+        return removePrevItemFromPrevList;
+      };
+
+      const generateMonthlyShoppingList = (
+        prevShoppingList: ShoppingList,
+        shoppingListItem: ShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: ShoppingList = removePrevShoppingListItem(
+          prevShoppingList
+        );
+
+        if (dateStringToMonthString(shoppingListItem.expected_purchase_date) === currentYearMonth) {
+          const idx = removePrevItemFromPrevList.findIndex((listItem) => {
+            if (listItem.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+              return listItem.id > shoppingListItem.id;
+            }
+
+            return listItem.expected_purchase_date > shoppingListItem.expected_purchase_date;
+          });
+
+          return addResponseShoppingListItem(idx, removePrevItemFromPrevList, shoppingListItem);
+        }
+
+        return removePrevItemFromPrevList;
+      };
+
+      const generateTodayShoppingListByCategories = (
+        prevShoppingListByCategories: ShoppingListByCategories,
+        bigCategoryId: number,
+        shoppingListItem: ShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: ShoppingListByCategories = removeShoppingListItemByCategories(
+          prevShoppingListByCategories,
+          shoppingListItem
+        );
+
+        const prevCategoriesIdx = removePrevItemFromPrevList.findIndex(
+          (item) => item.big_category_name === shoppingListItem.big_category_name
+        );
+
+        if (dateToDateString(today) === shoppingListItem.expected_purchase_date) {
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const addCategoryItemIdx = removePrevItemFromPrevList.findIndex(
+              (item) => item.shopping_list[0].big_category_id > shoppingListItem.big_category_id
+            );
+
+            const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+              big_category_name: shoppingListItem.big_category_name,
+              shopping_list: [shoppingListItem],
+            };
+
+            if (addCategoryItemIdx === NOT_FOUND) {
+              return removePrevItemFromPrevList.concat(newShoppingListItemByCategories);
+            }
+
+            removePrevItemFromPrevList.splice(
+              addCategoryItemIdx,
+              0,
+              newShoppingListItemByCategories
+            );
+
+            return removePrevItemFromPrevList;
+          }
+
+          const prevShoppingListItemIdx = removePrevItemFromPrevList[
+            prevCategoriesIdx
+          ].shopping_list.findIndex((item) => item.id > shoppingListItem.id);
+
+          const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+            big_category_name: removePrevItemFromPrevList[prevCategoriesIdx].big_category_name,
+            shopping_list: addResponseShoppingListItem(
+              prevShoppingListItemIdx,
+              removePrevItemFromPrevList[prevCategoriesIdx].shopping_list,
+              shoppingListItem
+            ),
+          };
+
+          const newShoppingListByCategories = addResponseShoppingListItemByCategories(
+            prevCategoriesIdx,
+            removePrevItemFromPrevList,
+            newShoppingListItemByCategories
+          );
+
+          return newShoppingListByCategories;
+        }
+        return removePrevItemFromPrevList;
+      };
+
+      const generateMonthlyShoppingListByCategories = (
+        prevShoppingListByCategories: ShoppingListByCategories,
+        bigCategoryId: number,
+        shoppingListItem: ShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: ShoppingListByCategories = removeShoppingListItemByCategories(
+          prevShoppingListByCategories,
+          shoppingListItem
+        );
+
+        const prevCategoriesIdx = removePrevItemFromPrevList.findIndex(
+          (item) => item.big_category_name === shoppingListItem.big_category_name
+        );
+
+        if (dateStringToMonthString(shoppingListItem.expected_purchase_date) === currentYearMonth) {
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const addCategoryItemIdx = removePrevItemFromPrevList.findIndex(
+              (item) => item.shopping_list[0].big_category_id > shoppingListItem.big_category_id
+            );
+
+            const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+              big_category_name: shoppingListItem.big_category_name,
+              shopping_list: [shoppingListItem],
+            };
+
+            if (addCategoryItemIdx === NOT_FOUND) {
+              return removePrevItemFromPrevList.concat(newShoppingListItemByCategories);
+            }
+
+            removePrevItemFromPrevList.splice(
+              addCategoryItemIdx,
+              0,
+              newShoppingListItemByCategories
+            );
+
+            return removePrevItemFromPrevList;
+          }
+
+          const idx = removePrevItemFromPrevList[prevCategoriesIdx].shopping_list.findIndex(
+            (listItem) => {
+              if (listItem.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+                return listItem.id > shoppingListItem.id;
+              }
+              return listItem.expected_purchase_date > shoppingListItem.expected_purchase_date;
+            }
+          );
+
+          const newShoppingListItemByCategories: ShoppingListItemByCategories = {
+            big_category_name: removePrevItemFromPrevList[prevCategoriesIdx].big_category_name,
+            shopping_list: addResponseShoppingListItem(
+              idx,
+              removePrevItemFromPrevList[prevCategoriesIdx].shopping_list,
+              shoppingListItem
+            ),
+          };
+
+          return addResponseShoppingListItemByCategories(
+            prevCategoriesIdx,
+            removePrevItemFromPrevList,
+            newShoppingListItemByCategories
+          );
+        }
+        return removePrevItemFromPrevList;
+      };
+
+      const nextExpiredShoppingList: ShoppingList = generateExpiredShoppingList(
+        prevExpiredShoppingList,
+        resShoppingListItem
+      ).concat();
+
+      const nextTodayShoppingList: ShoppingList = generateTodayShoppingList(
+        prevTodayShoppingList,
+        resShoppingListItem
+      ).concat();
+
+      const nextTodayShoppingListByCategories: ShoppingListByCategories = generateTodayShoppingListByCategories(
+        prevTodayShoppingListByCategories,
+        bigCategoryId,
+        resShoppingListItem
+      ).concat();
+
+      const nextMonthlyShoppingList: ShoppingList = generateMonthlyShoppingList(
+        prevMonthlyShoppingList,
+        resShoppingListItem
+      ).concat();
+
+      const nextMonthlyShoppingListByCategories: ShoppingListByCategories = generateMonthlyShoppingListByCategories(
+        prevMonthlyShoppingListByCategories,
+        bigCategoryId,
+        resShoppingListItem
+      ).concat();
+
+      dispatch(
+        editShoppingListItemAction(
+          nextExpiredShoppingList,
+          nextTodayShoppingList,
+          nextTodayShoppingListByCategories,
+          nextMonthlyShoppingList,
+          nextMonthlyShoppingListByCategories
+        )
+      );
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelEditShoppingListItemAction());
+      } else {
+        dispatch(
+          failedEditShoppingListItemAction(error.response.status, error.response.data.error.message)
         );
       }
     }
@@ -783,6 +1169,75 @@ export const addRegularShoppingListItem = (
       } else {
         dispatch(
           failedAddRegularShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const editRegularShoppingListItem = (
+  regularShoppingListItemId: number,
+  expectedPurchaseDate: Date | null,
+  cycleType: 'daily' | 'weekly' | 'monthly' | 'custom',
+  cycle: number | null,
+  purchase: string,
+  shop: string | null,
+  amount: number | null,
+  bigCategoryId: number,
+  mediumCategoryId: number | null,
+  customCategoryId: number | null,
+  transactionAutoAdd: boolean,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    if (expectedPurchaseDate === null) {
+      return;
+    }
+    if (cycle === 0) {
+      return;
+    }
+    dispatch(startEditRegularShoppingListItemAction());
+
+    const data: EditRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    try {
+      const result = await axios.put<EditRegularShoppingListItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`,
+        JSON.stringify(data, function (key, value) {
+          if (key === 'expected_purchase_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      if (result) {
+        dispatch(editRegularShoppingListItemAction());
+      }
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelEditRegularShoppingListItemAction());
+      } else {
+        dispatch(
+          failedEditRegularShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )

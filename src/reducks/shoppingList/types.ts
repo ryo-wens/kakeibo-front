@@ -120,6 +120,20 @@ export interface AddShoppingListItemRes {
   related_transaction_data: RelatedTransactionData | null;
 }
 
+export interface EditShoppingListReq {
+  expected_purchase_date: Date | null;
+  complete_flag: boolean;
+  purchase: string;
+  shop: string | null;
+  amount: number | null;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+  regular_shopping_list_id: number | null;
+  transaction_auto_add: boolean;
+  related_transaction_data: RelatedTransactionData | null;
+}
+
 export interface DeleteShoppingListItemRes {
   message: string;
 }
@@ -138,6 +152,24 @@ export interface AddRegularShoppingListItemReq {
 }
 
 export interface AddRegularShoppingListItemRes {
+  regular_shopping_item: RegularShoppingListItem;
+  shopping_list: ShoppingList;
+}
+
+export interface EditRegularShoppingListItemReq {
+  expected_purchase_date: Date;
+  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle: number | null;
+  purchase: string;
+  shop: string | null;
+  amount: number | null;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+  transaction_auto_add: boolean;
+}
+
+export interface EditRegularShoppingListItemRes {
   regular_shopping_item: RegularShoppingListItem;
   shopping_list: ShoppingList;
 }

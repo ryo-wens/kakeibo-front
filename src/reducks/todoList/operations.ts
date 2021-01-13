@@ -253,30 +253,32 @@ export const editTodoListItem = (
         return prevTodoList.concat();
       };
 
-      const updateExpiredTodoList = () => {
-        const prevItemIdx = prevExpiredTodoList.findIndex(
-          (listItem: TodoListItem) => listItem.id === nextTodoListItem.id
+      const updateExpiredTodoList = (prevTodoList: TodoList, resTodoListItem: TodoListItem) => {
+        const prevItemIdx = prevTodoList.findIndex(
+          (listItem: TodoListItem) => listItem.id === resTodoListItem.id
         );
 
-        if (dateToDateString(today) > nextTodoListItem.due_date) {
+        if (dateToDateString(today) > resTodoListItem.due_date && !resTodoListItem.complete_flag) {
           if (prevItemIdx !== NOT_FOUND) {
-            prevExpiredTodoList.splice(prevItemIdx, 1);
+            prevTodoList.splice(prevItemIdx, 1);
           }
 
-          const idx = prevExpiredTodoList.findIndex((listItem) => {
-            if (listItem.due_date === nextTodoListItem.due_date) {
-              return listItem.id > nextTodoListItem.id;
+          const idx = prevTodoList.findIndex((listItem) => {
+            if (listItem.due_date === resTodoListItem.due_date) {
+              return listItem.id > resTodoListItem.id;
             }
-            return listItem.due_date > nextTodoListItem.due_date;
+            return listItem.due_date > resTodoListItem.due_date;
           });
 
-          return pushResponseTodoListItem(idx, prevExpiredTodoList, nextTodoListItem);
+          return pushResponseTodoListItem(idx, prevTodoList, resTodoListItem);
         }
+
         if (prevItemIdx === NOT_FOUND) {
-          return prevExpiredTodoList;
+          return prevTodoList;
         }
-        prevExpiredTodoList.splice(prevItemIdx, 1);
-        return prevExpiredTodoList.concat();
+
+        prevTodoList.splice(prevItemIdx, 1);
+        return prevTodoList.concat();
       };
 
       const updateTodayTodoList = (prevTodoList: TodoList, responseDate: string) => {
@@ -342,7 +344,7 @@ export const editTodoListItem = (
       prevSearchTodoList[searchTodoListItemIdx] = nextTodoListItem;
       const nextSearchTodoList: TodoList = [...prevSearchTodoList];
 
-      const nextExpiredTodoList = updateExpiredTodoList();
+      const nextExpiredTodoList = updateExpiredTodoList(prevExpiredTodoList, nextTodoListItem);
 
       const nextTodayImplementationTodoLists: TodoList = updateTodayTodoList(
         prevTodayImplementationTodoList,

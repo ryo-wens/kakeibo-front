@@ -9,6 +9,7 @@ import './shopping-list-by-categories-component.scss';
 
 interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: ShoppingListByCategories;
+  currentYearMonth: string;
   message: string;
 }
 
@@ -42,6 +43,7 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                           displayPurchaseDate={equalsDisplayDate(
                             shoppingListItem.expected_purchase_date
                           )}
+                          currentYearMonth={props.currentYearMonth}
                         />
                       </div>
                     );

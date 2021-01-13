@@ -11,6 +11,8 @@ import {
   deleteShoppingListItem,
   addRegularShoppingListItem,
   deleteRegularShoppingListItem,
+  editShoppingListItem,
+  editRegularShoppingListItem,
 } from '../../src/reducks/shoppingList/operations';
 import axios from 'axios';
 import * as ShoppingListActions from '../../src/reducks/shoppingList/actions';
@@ -20,8 +22,10 @@ import fetchTodayShoppingListByCategoriesResponse from './fetchTodayShoppingList
 import fetchMonthlyShoppingListResponse from './fetchMonthlyShoppingListResponse.json';
 import fetchMonthlyShoppingListByCategoriesResponse from './fetchMonthlyShoppingListByCategoriesResponse.json';
 import addShoppingListItemResponse from './addShoppingListItemResponse.json';
+import editShoppingListItemResponse from './editShoppingListItemResponse.json';
 import deleteShoppingListItemResponse from './deleteShoppingListItemResponse.json';
 import addRegularShoppingListItemResponse from './addRegularShoppingListItemResponse.json';
+import editRegularShoppingListItemResponse from './editRegularShoppingListItemResponse.json';
 import deleteRegularShoppingListItemResponse from './deleteRegularShoppingListItemResponse.json';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
@@ -692,6 +696,167 @@ describe('async actions shoppingList', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
+  it('edit shoppingListItem if fetch succeeds', async () => {
+    const today = new Date();
+    const shoppingListItemId = 1;
+    const currentYearMonth = '2020/12';
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`;
+    const expectedPurchaseDate = new Date('2020-12-26T10:00:00');
+    const checked = true;
+    const purchase = '鶏肉3kg';
+    const shop = 'コストコ';
+    const amount = 1000;
+    const bigCategoryId = 2;
+    const mediumCategoryId = 6;
+    const customCategoryId = null;
+    const transactionAutoAdd = true;
+    const regularShoppingListId = 1;
+    const relatedTransactionData = null;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(editShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: ShoppingListActions.START_EDIT_SHOPPING_LIST_ITEM,
+        payload: {
+          expiredShoppingListLoading: true,
+          todayShoppingListLoading: true,
+          todayShoppingListByCategoriesLoading: true,
+          monthlyShoppingListLoading: true,
+          monthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: ShoppingListActions.EDIT_SHOPPING_LIST_ITEM,
+        payload: {
+          expiredShoppingListLoading: false,
+          expiredShoppingList: [],
+          todayShoppingListLoading: false,
+          todayShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-23T10:00:00Z',
+              updated_date: '2020-12-24T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: true,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: 1,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          todayShoppingListByCategoriesLoading: false,
+          todayShoppingListByCategories: [
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-23T10:00:00Z',
+                  updated_date: '2020-12-24T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: true,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: 1,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+          monthlyShoppingListLoading: false,
+          monthlyShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-23T10:00:00Z',
+              updated_date: '2020-12-24T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: true,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: 1,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          monthlyShoppingListByCategoriesLoading: false,
+          monthlyShoppingListByCategories: [
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-23T10:00:00Z',
+                  updated_date: '2020-12-24T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: true,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: 1,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editShoppingListItem(
+      today,
+      currentYearMonth,
+      shoppingListItemId,
+      expectedPurchaseDate,
+      checked,
+      purchase,
+      shop,
+      amount,
+      bigCategoryId,
+      mediumCategoryId,
+      customCategoryId,
+      regularShoppingListId,
+      transactionAutoAdd,
+      relatedTransactionData,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
   it('delete shoppingListItem if fetch succeeds', async () => {
     const shoppingListItemId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`;
@@ -967,6 +1132,66 @@ describe('async actions shoppingList', () => {
     await addRegularShoppingListItem(
       today,
       currentYearMonth,
+      expectedPurchaseDate,
+      cycleType,
+      cycle,
+      purchase,
+      shop,
+      amount,
+      bigCategoryId,
+      mediumCategoryId,
+      customCategoryId,
+      transactionAutoAdd,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('add regularShoppingListItem and shoppingList if fetch succeeds', async () => {
+    const regularShoppingListItemId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`;
+    const expectedPurchaseDate = new Date('2020-12-25T10:00:00');
+    const cycleType = 'monthly';
+    const cycle = null;
+    const purchase = '携帯料金';
+    const shop = 'auショップ';
+    const amount = 5000;
+    const bigCategoryId = 9;
+    const mediumCategoryId = 51;
+    const customCategoryId = null;
+    const transactionAutoAdd = true;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(editRegularShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: ShoppingListActions.START_EDIT_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          regularShoppingListLoading: true,
+          todayShoppingListLoading: true,
+          todayShoppingListByCategoriesLoading: true,
+          monthlyShoppingListLoading: true,
+          monthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: ShoppingListActions.EDIT_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          regularShoppingListLoading: false,
+          todayShoppingListLoading: false,
+          todayShoppingListByCategoriesLoading: false,
+          monthlyShoppingListLoading: false,
+          monthlyShoppingListByCategoriesLoading: false,
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editRegularShoppingListItem(
+      regularShoppingListItemId,
       expectedPurchaseDate,
       cycleType,
       cycle,

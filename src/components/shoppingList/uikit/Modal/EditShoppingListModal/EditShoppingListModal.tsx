@@ -4,16 +4,15 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import ShoppingListForm from '../../Form/ShoppingListForm/ShoppingListForm';
 import './edit-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import { date } from '../../../../../lib/constant';
 import {
-  addShoppingListItem,
   deleteShoppingListItem,
+  editShoppingListItem,
 } from '../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import EditIcon from '@material-ui/icons/Edit';
-import { dateStringToDate } from '../../../../../lib/date';
 import ShoppingListDeleteForm from '../../Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
+import { date } from '../../../../../lib/constant';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,52 +26,62 @@ const useStyles = makeStyles((theme: Theme) =>
 
 interface EditShoppingListModalProps {
   listItem: ShoppingListItem;
+  currentYearMonth: string;
+  initialExpectedPurchaseDate: Date;
+  initialPurchase: string;
+  initialShop: string | null;
+  initialAmount: string | null;
+  initialBigCategoryId: number;
+  initialBigCategoryName: string;
+  initialMediumCategoryId: number | null;
+  initialCustomCategoryId: number | null;
+  initialTransactionAutoAdd: boolean;
+  expectedPurchaseDate: Date | null;
+  checked: boolean;
+  purchase: string;
+  shop: string | null;
+  amount: string | null;
+  bigCategoryId: number;
+  bigCategory: string | null;
+  mediumCategoryId: number | null;
+  customCategoryId: number | null;
+  transactionAutoAdd: boolean;
+  setExpectedPurchaseDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  setPurchase: React.Dispatch<React.SetStateAction<string>>;
+  setShop: React.Dispatch<React.SetStateAction<string | null>>;
+  setAmount: React.Dispatch<React.SetStateAction<string | null>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EditShoppingListModal = (props: EditShoppingListModalProps) => {
   const classes = useStyles();
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
-
-  const initialExpectedPurchaseDate: Date = dateStringToDate(props.listItem.expected_purchase_date);
-  const initialPurchase = props.listItem.purchase;
-  const initialShop = props.listItem.shop;
-  const initialAmount = props.listItem.amount === null ? null : String(props.listItem.amount);
-  const initialBigCategoryId = props.listItem.big_category_id;
-  const initialBigCategoryName = props.listItem.big_category_name;
-  const initialMediumCategoryId = props.listItem.medium_category_id;
-  const initialCustomCategoryId = props.listItem.custom_category_id;
-  const initialTransactionAutoAdd = props.listItem.transaction_auto_add;
-
-  const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
-    initialExpectedPurchaseDate
-  );
-  const [purchase, setPurchase] = useState<string>(initialPurchase);
-  const [shop, setShop] = useState<string | null>(initialShop);
-  const [amount, setAmount] = useState<string | null>(initialAmount);
-  const [bigCategoryId, setBigCategoryId] = useState<number>(initialBigCategoryId);
-  const [bigCategory, setBigCategory] = useState<string | null>(initialBigCategoryName);
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
-  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(initialMediumCategoryId);
-  const [customCategoryId, setCustomCategoryId] = useState<number | null>(initialCustomCategoryId);
-  const [transactionAutoAdd, setTransactionAutoAdd] = useState<boolean>(initialTransactionAutoAdd);
   const [associatedCategory, setAssociatedCategory] = useState('');
   const signal = axios.CancelToken.source();
 
   const disabledButton = () => {
     const unInput =
-      purchase === '' || amount === '' || expectedPurchaseDate === null || bigCategoryId === 0;
+      props.purchase === '' ||
+      props.amount === '' ||
+      props.expectedPurchaseDate === null ||
+      props.bigCategoryId === 0;
     if (
-      expectedPurchaseDate !== null &&
-      initialExpectedPurchaseDate.getTime() === expectedPurchaseDate.getTime() &&
-      initialPurchase === purchase &&
-      initialShop === shop &&
-      initialAmount === amount &&
-      initialBigCategoryId === bigCategoryId &&
-      initialBigCategoryName === bigCategory &&
-      initialMediumCategoryId === mediumCategoryId &&
-      initialCustomCategoryId === customCategoryId &&
-      initialTransactionAutoAdd === transactionAutoAdd
+      props.expectedPurchaseDate !== null &&
+      props.initialExpectedPurchaseDate.getTime() === props.expectedPurchaseDate.getTime() &&
+      props.initialPurchase === props.purchase &&
+      props.initialShop === props.shop &&
+      props.initialAmount === props.amount &&
+      props.initialBigCategoryId === props.bigCategoryId &&
+      props.initialBigCategoryName === props.bigCategory &&
+      props.initialMediumCategoryId === props.mediumCategoryId &&
+      props.initialCustomCategoryId === props.customCategoryId &&
+      props.initialTransactionAutoAdd === props.transactionAutoAdd
     ) {
       return true;
     } else return unInput;
@@ -80,6 +89,15 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
 
   const openModal = () => {
     setOpen(true);
+    props.setExpectedPurchaseDate(props.initialExpectedPurchaseDate);
+    props.setPurchase(props.initialPurchase);
+    props.setShop(props.initialShop);
+    props.setAmount(props.initialAmount);
+    props.setBigCategoryId(props.initialBigCategoryId);
+    props.setBigCategory(props.initialBigCategoryName);
+    props.setMediumCategoryId(props.initialMediumCategoryId);
+    props.setCustomCategoryId(props.initialCustomCategoryId);
+    props.setTransactionAutoAdd(props.initialTransactionAutoAdd);
     if (props.listItem.medium_category_name) {
       setAssociatedCategory(props.listItem.medium_category_name);
     }
@@ -91,15 +109,6 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
   const closeModal = () => {
     setOpen(false);
     setDeleteForm(false);
-    setExpectedPurchaseDate(initialExpectedPurchaseDate);
-    setPurchase(initialPurchase);
-    setShop(initialShop);
-    setAmount(initialAmount);
-    setBigCategoryId(initialBigCategoryId);
-    setBigCategory(initialBigCategoryName);
-    setMediumCategoryId(initialMediumCategoryId);
-    setCustomCategoryId(initialCustomCategoryId);
-    setTransactionAutoAdd(initialTransactionAutoAdd);
   };
 
   const openDeleteForm = () => {
@@ -111,23 +120,23 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
   };
 
   const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPurchase(event.target.value);
+    props.setPurchase(event.target.value);
   };
 
   const handleDateChange = (expectedPurchaseDate: Date | null) => {
-    setExpectedPurchaseDate(expectedPurchaseDate);
+    props.setExpectedPurchaseDate(expectedPurchaseDate);
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value);
+    props.setAmount(event.target.value);
   };
 
   const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShop(event.target.value);
+    props.setShop(event.target.value);
   };
 
   const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTransactionAutoAdd(event.target.checked);
+    props.setTransactionAutoAdd(event.target.checked);
   };
 
   const selectCategory = (
@@ -139,18 +148,18 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
     setAssociatedCategory(associatedCategory.name);
 
     if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
+      props.setBigCategoryId(bigCategory.id);
+      props.setBigCategory(bigCategory.name);
     }
 
     switch (associatedCategory.category_type) {
       case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
+        props.setMediumCategoryId(associatedCategory.id);
+        props.setCustomCategoryId(null);
         break;
       case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
+        props.setMediumCategoryId(null);
+        props.setCustomCategoryId(associatedCategory.id);
         break;
     }
   };
@@ -171,16 +180,16 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
         />
       ) : (
         <ShoppingListForm
-          expectedPurchaseDate={expectedPurchaseDate}
-          purchase={purchase}
-          shop={shop}
-          amount={amount}
-          bigCategoryId={bigCategoryId}
-          bigCategory={bigCategory}
+          expectedPurchaseDate={props.expectedPurchaseDate}
+          purchase={props.purchase}
+          shop={props.shop}
+          amount={props.amount}
+          bigCategoryId={props.bigCategoryId}
+          bigCategory={props.bigCategory}
           bigCategoryIndex={bigCategoryIndex}
-          mediumCategoryId={mediumCategoryId}
-          customCategoryId={customCategoryId}
-          transactionAutoAdd={transactionAutoAdd}
+          mediumCategoryId={props.mediumCategoryId}
+          customCategoryId={props.customCategoryId}
+          transactionAutoAdd={props.transactionAutoAdd}
           associatedCategory={associatedCategory}
           handlePurchaseChange={handlePurchaseChange}
           handleDateChange={handleDateChange}
@@ -193,17 +202,21 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
           closeModal={closeModal}
           unInput={disabledButton()}
           minDate={new Date('1900-01-01')}
-          // 仮実装として addShoppingListItem() を記述
-          dispatchOperation={addShoppingListItem(
+          dispatchOperation={editShoppingListItem(
             date,
-            expectedPurchaseDate,
-            purchase,
-            shop,
-            Number(amount),
-            bigCategoryId,
-            mediumCategoryId,
-            customCategoryId,
-            transactionAutoAdd,
+            props.currentYearMonth,
+            props.listItem.id,
+            props.expectedPurchaseDate,
+            props.checked,
+            props.purchase,
+            props.shop,
+            Number(props.amount),
+            props.bigCategoryId,
+            props.mediumCategoryId,
+            props.customCategoryId,
+            props.listItem.regular_shopping_list_id,
+            props.transactionAutoAdd,
+            props.listItem.related_transaction_data,
             signal
           )}
           openDeleteForm={openDeleteForm}

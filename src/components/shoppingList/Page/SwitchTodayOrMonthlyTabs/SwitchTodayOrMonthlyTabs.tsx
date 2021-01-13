@@ -1,17 +1,17 @@
-import React, { useState } from 'react';
+import React from 'react';
 import './switch-today-or-monthly-tabs.scss';
 import { TodayOrMonthly } from '../../../../reducks/shoppingList/types';
 
 interface SwitchTodayOrMonthlyTabsProps {
+  currentItems: TodayOrMonthly;
+  setCurrentItems: React.Dispatch<React.SetStateAction<TodayOrMonthly>>;
   leftItem: JSX.Element;
   rightItem: JSX.Element;
 }
 
 const SwitchTodayOrMonthlyTabs = (props: SwitchTodayOrMonthlyTabsProps) => {
-  const [currentItems, setCurrentItems] = useState<TodayOrMonthly>('today');
-
   const currentButtonStyle = (value: TodayOrMonthly) => {
-    if (currentItems === value) {
+    if (props.currentItems === value) {
       return {
         color: '#fff',
         backgroundColor: '#5D6C89',
@@ -20,7 +20,7 @@ const SwitchTodayOrMonthlyTabs = (props: SwitchTodayOrMonthlyTabsProps) => {
   };
 
   const switchItem = (value: TodayOrMonthly) => {
-    setCurrentItems(value);
+    props.setCurrentItems(value);
   };
 
   return (
@@ -30,11 +30,11 @@ const SwitchTodayOrMonthlyTabs = (props: SwitchTodayOrMonthlyTabsProps) => {
           今日
         </button>
         <button onClick={() => switchItem('monthly')} style={currentButtonStyle('monthly')}>
-          月間予定
+          月間
         </button>
       </div>
-      {currentItems === 'today' && props.leftItem}
-      {currentItems === 'monthly' && props.rightItem}
+      {props.currentItems === 'today' && props.leftItem}
+      {props.currentItems === 'monthly' && props.rightItem}
     </div>
   );
 };
