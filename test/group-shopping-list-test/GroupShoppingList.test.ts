@@ -1,10 +1,16 @@
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
-import { fetchGroupExpiredShoppingList } from '../../src/reducks/groupShoppingList/operations';
+import {
+  fetchGroupExpiredShoppingList,
+  fetchGroupTodayShoppingList,
+  fetchGroupTodayShoppingListByCategories,
+} from '../../src/reducks/groupShoppingList/operations';
 import axios from 'axios';
 import * as GroupShoppingListActions from '../../src/reducks/groupShoppingList/actions';
 import fetchGroupExpiredShoppingListResponse from './fetchGroupExpiredShoppingListResponse.json';
+import fetchGroupTodayShoppingListResponse from './fetchGroupTodayShoppingListResponse.json';
+import fetchGroupTodayShoppingListByCategoriesResponse from './fetchGroupTodayShoppingListByCategoriesResponse.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -253,6 +259,130 @@ describe('async actions shoppingList', () => {
 
     // @ts-ignore
     await fetchGroupExpiredShoppingList(groupId, signal)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('get groupTodayShoppingList and groupRegularShoppingList if fetch succeeds', async () => {
+    const groupId = 1;
+    const year = '2020';
+    const month = '12';
+    const date = '24';
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`;
+
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(fetchGroupTodayShoppingListResponse);
+
+    const expectedAction = [
+      {
+        type: GroupShoppingListActions.START_FETCH_GROUP_TODAY_SHOPPING_LIST,
+        payload: {
+          groupRegularShoppingListLoading: true,
+          groupTodayShoppingListLoading: true,
+        },
+      },
+      {
+        type: GroupShoppingListActions.FETCH_GROUP_TODAY_SHOPPING_LIST,
+        payload: {
+          groupRegularShoppingListLoading: false,
+          groupRegularShoppingList: [],
+          groupTodayShoppingListLoading: false,
+          groupTodayShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-23T17:10:11Z',
+              updated_date: '2020-12-23T17:10:11Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: false,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: null,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await fetchGroupTodayShoppingList(groupId, year, month, date, signal)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('get groupTodayShoppingListByCategories and groupRegularShoppingList if fetch succeeds', async () => {
+    const groupId = 1;
+    const year = '2020';
+    const month = '12';
+    const date = '24';
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(fetchGroupTodayShoppingListByCategoriesResponse);
+
+    const expectedAction = [
+      {
+        type: GroupShoppingListActions.START_FETCH_GROUP_TODAY_SHOPPING_LIST_BY_CATEGORIES,
+        payload: {
+          groupRegularShoppingListLoading: true,
+          groupTodayShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: GroupShoppingListActions.FETCH_GROUP_TODAY_SHOPPING_LIST_BY_CATEGORIES,
+        payload: {
+          groupRegularShoppingListLoading: false,
+          groupRegularShoppingList: [],
+          groupTodayShoppingListByCategoriesLoading: false,
+          groupTodayShoppingListByCategories: [
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-23T17:10:11Z',
+                  updated_date: '2020-12-23T17:10:11Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: false,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: null,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    // @ts-ignore
+    await fetchGroupTodayShoppingListByCategories(
+      groupId,
+      year,
+      month,
+      date,
+      signal
+    )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });
