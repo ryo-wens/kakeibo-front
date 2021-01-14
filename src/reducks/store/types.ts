@@ -18,6 +18,11 @@ import { TodoList } from '../todoList/types';
 import { GroupTodoList } from '../groupTodoList/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
 import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
+import {
+  GroupRegularShoppingList,
+  GroupShoppingList,
+  GroupShoppingListByCategories,
+} from '../groupShoppingList/types';
 
 export interface State {
   users: {
@@ -114,37 +119,37 @@ export interface State {
   };
   groupShoppingList: {
     groupRegularShoppingListLoading: boolean;
-    groupRegularShoppingList: RegularShoppingList;
+    groupRegularShoppingList: GroupRegularShoppingList;
     groupRegularShoppingListError: {
       message: string;
       statusCode: number;
     };
     groupExpiredShoppingListLoading: boolean;
-    groupExpiredShoppingList: ShoppingList;
+    groupExpiredShoppingList: GroupShoppingList;
     groupExpiredShoppingListError: {
       message: string;
       statusCode: number;
     };
     groupTodayShoppingListLoading: boolean;
-    groupTodayShoppingList: ShoppingList;
+    groupTodayShoppingList: GroupShoppingList;
     groupTodayShoppingListError: {
       message: string;
       statusCode: number;
     };
     groupTodayShoppingListByCategoriesLoading: boolean;
-    groupTodayShoppingListByCategories: ShoppingListByCategories;
+    groupTodayShoppingListByCategories: GroupShoppingListByCategories;
     groupTodayShoppingListByCategoriesError: {
       message: string;
       statusCode: number;
     };
     groupMonthlyShoppingListLoading: boolean;
-    groupMonthlyShoppingList: ShoppingList;
+    groupMonthlyShoppingList: GroupShoppingList;
     groupMonthlyShoppingListError: {
       message: string;
       statusCode: number;
     };
     groupMonthlyShoppingListByCategoriesLoading: boolean;
-    groupMonthlyShoppingListByCategories: ShoppingListByCategories;
+    groupMonthlyShoppingListByCategories: GroupShoppingListByCategories;
     groupMonthlyShoppingListByCategoriesError: {
       message: string;
       statusCode: number;

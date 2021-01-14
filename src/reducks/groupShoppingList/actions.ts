@@ -1,4 +1,8 @@
-import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
+import {
+  GroupRegularShoppingList,
+  GroupShoppingList,
+  GroupShoppingListByCategories,
+} from './types';
 export type GroupShoppingListActions = ReturnType<
   | typeof startFetchGroupExpiredShoppingListAction
   | typeof fetchGroupExpiredShoppingListAction
@@ -33,7 +37,9 @@ export const startFetchGroupExpiredShoppingListAction = () => {
 };
 
 export const FETCH_GROUP_EXPIRED_SHOPPING_LIST = 'FETCH_GROUP_EXPIRED_SHOPPING_LIST';
-export const fetchGroupExpiredShoppingListAction = (groupExpiredShoppingList: ShoppingList) => {
+export const fetchGroupExpiredShoppingListAction = (
+  groupExpiredShoppingList: GroupShoppingList
+) => {
   return {
     type: FETCH_GROUP_EXPIRED_SHOPPING_LIST,
     payload: {
@@ -83,8 +89,8 @@ export const startFetchGroupTodayShoppingListAction = () => {
 
 export const FETCH_GROUP_TODAY_SHOPPING_LIST = 'FETCH_GROUP_TODAY_SHOPPING_LIST';
 export const fetchGroupTodayShoppingListAction = (
-  groupRegularShoppingList: RegularShoppingList,
-  groupTodayShoppingList: ShoppingList
+  groupRegularShoppingList: GroupRegularShoppingList,
+  groupTodayShoppingList: GroupShoppingList
 ) => {
   return {
     type: FETCH_GROUP_TODAY_SHOPPING_LIST,
@@ -141,8 +147,8 @@ export const startFetchGroupTodayShoppingListByCategoriesAction = () => {
 export const FETCH_GROUP_TODAY_SHOPPING_LIST_BY_CATEGORIES =
   'FETCH_GROUP_TODAY_SHOPPING_LIST_BY_CATEGORIES';
 export const fetchGroupTodayShoppingListByCategoriesAction = (
-  groupRegularShoppingList: RegularShoppingList,
-  groupTodayShoppingListByCategories: ShoppingListByCategories
+  groupRegularShoppingList: GroupRegularShoppingList,
+  groupTodayShoppingListByCategories: GroupShoppingListByCategories
 ) => {
   return {
     type: FETCH_GROUP_TODAY_SHOPPING_LIST_BY_CATEGORIES,
@@ -199,8 +205,8 @@ export const startFetchGroupMonthlyShoppingListAction = () => {
 
 export const FETCH_GROUP_MONTHLY_SHOPPING_LIST = 'FETCH_GROUP_MONTHLY_SHOPPING_LIST';
 export const fetchGroupMonthlyShoppingListAction = (
-  groupRegularShoppingList: RegularShoppingList,
-  groupMonthlyShoppingList: ShoppingList
+  groupRegularShoppingList: GroupRegularShoppingList,
+  groupMonthlyShoppingList: GroupShoppingList
 ) => {
   return {
     type: FETCH_GROUP_MONTHLY_SHOPPING_LIST,
@@ -257,8 +263,8 @@ export const startFetchGroupMonthlyShoppingListByCategoriesAction = () => {
 export const FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES =
   'FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES';
 export const fetchGroupMonthlyShoppingListByCategoriesAction = (
-  groupRegularShoppingList: RegularShoppingList,
-  groupMonthlyShoppingListByCategories: ShoppingListByCategories
+  groupRegularShoppingList: GroupRegularShoppingList,
+  groupMonthlyShoppingListByCategories: GroupShoppingListByCategories
 ) => {
   return {
     type: FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
