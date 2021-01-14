@@ -81,9 +81,9 @@ const GroupCustomBudgets = () => {
               <th align="center">予算</th>
             </tr>
             {groupCustomBudgets.map((groupCustomBudget, index) => {
-              const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
-                const newBudgets = groupCustomBudgets.concat();
-                newBudgets[index].budget = Number(event.target.value);
+              const onChangeBudget = (event: { target: { value: string } }) => {
+                const newBudgets = [...groupCustomBudgets];
+                newBudgets[index].budget = (event.target.value as unknown) as number;
                 setGroupCustomBudgets(newBudgets);
                 setEditing(true);
               };

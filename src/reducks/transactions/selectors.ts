@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
+import { PieChartData, PieChartDataList } from './types';
 import { incomeTransactionType } from '../../lib/constant';
 
 const transactionsSelector = (state: State) => state.transactions;
@@ -34,23 +35,35 @@ const transactionsList = (state: State) => state.transactions.transactionsList;
 export const getSortCategoryTransactions = createSelector(
   [transactionsList],
   (transactionsList) => {
-    return [
-      ...transactionsList
-        .reduce((acc, transaction) => {
-          const key = transaction.big_category_name + '-' + transaction.big_category_name;
+    const pieChartDataList: PieChartDataList = [];
+    const copyTransactionsList = transactionsList.concat();
+    copyTransactionsList.sort((a, b) => a.big_category_id - b.big_category_id);
 
-          const item =
-            acc.get(key) ||
-            Object.assign({}, transaction, {
-              amount: 0,
-            });
+    let prevBigCategoryName = '';
 
-          item.amount += transaction.amount;
+    for (const transaction of copyTransactionsList) {
+      if (transaction.transaction_type === 'income') {
+        continue;
+      }
 
-          return acc.set(key, item);
-        }, new Map())
-        .values(),
-    ];
+      if (transaction.big_category_name === prevBigCategoryName) {
+        const lastIndex = pieChartDataList.length - 1;
+        pieChartDataList[lastIndex].amount += transaction.amount;
+
+        continue;
+      }
+
+      const pieChartData: PieChartData = {
+        big_category_name: transaction.big_category_name,
+        amount: transaction.amount,
+      };
+
+      pieChartDataList.push(pieChartData);
+
+      prevBigCategoryName = transaction.big_category_name;
+    }
+
+    return pieChartDataList;
   }
 );
 

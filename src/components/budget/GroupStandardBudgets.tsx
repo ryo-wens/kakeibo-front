@@ -66,9 +66,9 @@ const GroupStandardBudgets = () => {
               <th align="center">予算</th>
             </tr>
             {groupStandardBudgets.map((groupBudget, index) => {
-              const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
-                const newBudgets = groupStandardBudgets.concat();
-                newBudgets[index].budget = Number(event.target.value);
+              const onChangeBudget = (event: { target: { value: string } }) => {
+                const newBudgets = [...groupStandardBudgets];
+                newBudgets[index].budget = (event.target.value as unknown) as number;
                 setGroupStandardBudgets(newBudgets);
                 setEditing(true);
               };

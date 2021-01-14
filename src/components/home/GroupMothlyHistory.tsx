@@ -194,7 +194,10 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                               <span className="monthly-history-table__item-font monthly-history-table__item-font--weight">
                                 {custom_category_name}
                               </span>
-                              <span className="monthly-history-table__item-font--position monthly-history-table__item-font">
+                              <span
+                                style={payerUnderLineColor(payment_user_id)}
+                                className="monthly-history-table__item-font--position monthly-history-table__item-font"
+                              >
                                 ¥ {amount.toLocaleString()}
                               </span>
                             </>

@@ -28,6 +28,10 @@
     background-color: white;
     border: 1px solid;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+    font-size: 0.85rem;
+    padding: 6px;
+    text-align: center;
+
 
     &--empty-pie {
       font-size: 0.8rem;
@@ -52,12 +56,15 @@
     &--day {
       color: $day-bar-color;
     }
+
+    &--expense {
+      background-color: $light-black;
+      color: white;
+    }
   }
 
-  &__pie {
-    margin: auto 0 0 auto;
-    padding-right: 10%;
-    width: 20%;
+  &__pie-chart {
+    margin: 0 auto;
   }
 
   &__amount-available {
@@ -68,9 +75,8 @@
     border-radius: $task-border_radius;
     color: white;
     text-align: center;
-    padding: 4px;
-    margin-bottom: 20px;
-    width: 100%;
+    padding: 3px;
+    width: 262px;
 
     &--amount {
       font-size: 1.3rem;
@@ -85,7 +91,7 @@
       content: "";
       position: relative;
       top: 30px;
-      left: -65px;
+      left: -72px;
       height: 0;
       width: 0;
       border: 8px solid transparent;
@@ -107,5 +113,9 @@
       border: 8px solid transparent;
       border-top: 8px solid #ff9740;
     }
+  }
+
+  &_spacer {
+    height: 20px;
   }
 }

@@ -26,7 +26,7 @@ const useStyles = makeStyles((theme: Theme) =>
       width: 'auto',
       height: '30px',
       padding: '5px 25px 5px 25px',
-      border: '2px solid #e2750f',
+      border: '2px solid',
       backgroundColor: '#fff',
       textTransform: 'none',
     },

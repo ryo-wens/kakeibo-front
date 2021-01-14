@@ -19,19 +19,19 @@ const HistoryBarChart = (props: HistoryBarChartProps) => {
 
   const MonthTooltip = () => {
     return (
-      <div className="bar-chart__tooltip bar-chart__label--month">{`今月の支出は¥ ${currentMonthBudget.totalExpense.toLocaleString()}です。`}</div>
+      <div className="bar-chart__tooltip bar-chart__label--expense">{`今月の支出は¥ ${currentMonthBudget.totalExpense.toLocaleString()}です。`}</div>
     );
   };
 
   const WeekTooltip = () => {
     return (
-      <div className="bar-chart__tooltip bar-chart__label--week">{`今週の支出は¥ ${currentWeekBudget.totalExpense.toLocaleString()}です。`}</div>
+      <div className="bar-chart__tooltip bar-chart__label--expense">{`今週の支出は¥ ${currentWeekBudget.totalExpense.toLocaleString()}です。`}</div>
     );
   };
 
   const DyTooltip = () => {
     return (
-      <div className="bar-chart__tooltip bar-chart__label--day">{`今日の支出は¥ ${currentDayBudget.totalExpense.toLocaleString()}です。`}</div>
+      <div className="bar-chart__tooltip bar-chart__label--expense">{`今日の支出は¥ ${currentDayBudget.totalExpense.toLocaleString()}です。`}</div>
     );
   };
 
@@ -45,7 +45,7 @@ const HistoryBarChart = (props: HistoryBarChartProps) => {
     <>
       <div className="bar-chart__bar-chart-position ">
         <div className="bar-chart__label--month">{'今月'}</div>
-        <BarChart data={[currentMonthBudget]} width={300} height={60} layout="vertical">
+        <BarChart data={[currentMonthBudget]} width={400} height={60} layout="vertical">
           <YAxis hide type="category" dataKey="totalExpense" reversed />
           <XAxis hide type="number" domain={[0, 100]} />
           <Tooltip contentStyle={{ border: 'none' }} content={<MonthTooltip />} />
@@ -59,7 +59,7 @@ const HistoryBarChart = (props: HistoryBarChartProps) => {
         </BarChart>
 
         <div className="bar-chart__label--week">{'今週'}</div>
-        <BarChart data={[currentWeekBudget]} width={300} height={60} layout="vertical">
+        <BarChart data={[currentWeekBudget]} width={400} height={60} layout="vertical">
           <YAxis hide type="category" dataKey="totalExpense" reversed />
           <XAxis hide type="number" domain={[0, 100]} />
           <Tooltip content={<WeekTooltip />} />
@@ -73,7 +73,7 @@ const HistoryBarChart = (props: HistoryBarChartProps) => {
         </BarChart>
 
         <div className="bar-chart__label--day">{'今日'}</div>
-        <BarChart data={[currentDayBudget]} width={300} height={60} layout="vertical">
+        <BarChart data={[currentDayBudget]} width={400} height={60} layout="vertical">
           <YAxis hide type="category" dataKey="totalExpense" reversed />
           <XAxis hide type="number" domain={[0, 100]} />
           <Tooltip content={<DyTooltip />} />
