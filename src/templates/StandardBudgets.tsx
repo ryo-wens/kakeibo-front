@@ -106,9 +106,9 @@ const StandardBudgets = () => {
                     <th align="center">予算</th>
                   </tr>
                   {budgets.map((budget, index) => {
-                    const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
-                      const newBudgets = budgets.concat();
-                      newBudgets[index].budget = Number(event.target.value);
+                    const onChangeBudget = (event: { target: { value: string } }) => {
+                      const newBudgets = [...budgets];
+                      newBudgets[index].budget = (event.target.value as unknown) as number;
                       setBudgets(newBudgets);
                     };
                     return (
