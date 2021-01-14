@@ -44,6 +44,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   const { id } = useParams();
   const prevImplementationDate: Date = dateStringToDate(props.todoListItem.implementation_date);
   const prevDueDate: Date = dateStringToDate(props.todoListItem.due_date);
+
   const [openEditTodoList, setOpenEditTodoList] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
   const [todoContent, setTodoContent] = useState<string>('');
@@ -97,9 +98,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
 
   const openInputTodoList = () => {
     setOpenEditTodoList(true);
-    setTodoContent(props.todoListItem.todo_content);
-    setSelectedImplementationDate(prevImplementationDate);
-    setSelectedDueDate(prevDueDate);
+
     if (props.setEditing) {
       props.setEditing(true);
     }
@@ -108,12 +107,16 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   const closeInputTodoList = () => {
     setOpenEditTodoList(false);
     setTodoContent(props.todoListItem.todo_content);
+    setSelectedImplementationDate(prevImplementationDate);
+    setSelectedDueDate(prevDueDate);
   };
 
   const onClickCloseInputTodoList = (event: Event) => {
     if (inputTodoRef.current && !inputTodoRef.current.contains(event.target as Node)) {
       setOpenEditTodoList(false);
       setTodoContent(props.todoListItem.todo_content);
+      setSelectedImplementationDate(prevImplementationDate);
+      setSelectedDueDate(prevDueDate);
     }
   };
 
@@ -220,7 +223,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
                     checked
                   )
             }
-            closeInputTodo={setOpenEditTodoList}
+            setOpenEditTodoList={setOpenEditTodoList}
             onClickCloseInputTodoList={onClickCloseInputTodoList}
             disabledSaveButton={disabledSaveButton()}
             ref={inputTodoRef}

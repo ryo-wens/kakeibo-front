@@ -38,9 +38,11 @@ interface ShoppingListFormProps {
   titleLabel: string;
   buttonLabel: string;
   closeModal: () => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   unInput: boolean;
   dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
   minDate: Date;
+  displayInputAmountMessage: boolean;
   openDeleteForm?: () => void;
 }
 
@@ -57,7 +59,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           value={props.purchase}
           type={'text'}
           id={'purchase'}
-          label={'(必須)'}
+          label={'必須'}
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
@@ -87,7 +89,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           <KeyboardDatePicker
             margin="normal"
             id="date-picker-dialog"
-            label="購入予定日"
+            label="必須"
             format="yyyy年 MM月dd日"
             value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
@@ -100,15 +102,28 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
     {
       key: '金額',
       value: (
-        <TextInput
-          value={props.amount}
-          type={'tel'}
-          id={'amount'}
-          label={'金額(任意)'}
-          onChange={props.handleAmountChange}
-          required={false}
-          fullWidth={false}
-        />
+        <>
+          <TextInput
+            value={props.amount}
+            type={'tel'}
+            id={'amount'}
+            label={props.displayInputAmountMessage && props.transactionAutoAdd ? '必須' : '任意'}
+            onChange={props.handleAmountChange}
+            required={false}
+            fullWidth={false}
+          />
+          {props.displayInputAmountMessage && (
+            <p
+              className={
+                props.transactionAutoAdd && props.amount === null
+                  ? 'shopping-list-form__input-amount-message'
+                  : 'shopping-list-form__input-amount-message--hide'
+              }
+            >
+              ※ 金額の入力が必要です。
+            </p>
+          )}
+        </>
       ),
     },
     {
@@ -118,7 +133,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           value={props.shop}
           type={'text'}
           id={'shop'}
-          label={'店名(任意)'}
+          label={'任意'}
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
@@ -160,18 +175,16 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           disabled={props.unInput}
           onClick={() => {
             dispatch(props.dispatchOperation);
-            props.closeModal();
+            props.setOpen(false);
           }}
         >
           {props.buttonLabel}
         </button>
-        {props.titleLabel === '買い物リストアイテムを編集' && (
+        {props.openDeleteForm && (
           <button
             className="shopping-list-form__operation-btn--delete"
             onClick={() => {
-              if (props.openDeleteForm) {
-                props.openDeleteForm();
-              }
+              props.openDeleteForm && props.openDeleteForm();
             }}
           >
             削除

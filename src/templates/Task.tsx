@@ -23,7 +23,6 @@ import {
   TaskUser,
   TaskUsers,
 } from '../reducks/groupTasks/types';
-import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
 
 const Task = () => {
@@ -96,61 +95,58 @@ const Task = () => {
 
   return (
     <>
-      <Header />
-      <main className="section__container">
-        <div className="task">
-          <div className="task__menu">
-            <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-            <EditTaskUser
-              approvedGroup={approvedGroup}
-              groupTasksListForEachUser={taskListForUser}
-              participatingTaskUsers={participatingTaskUsers(approvedGroup)}
-            />
-          </div>
-          <TaskList
-            groupId={groupId}
-            groupTasksList={taskList}
+      <div className="task">
+        <div className="task__menu">
+          <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+          <EditTaskUser
+            approvedGroup={approvedGroup}
             groupTasksListForEachUser={taskListForUser}
+            participatingTaskUsers={participatingTaskUsers(approvedGroup)}
           />
-          <table className="task__table">
-            <thead>
-              <WeekTables selectedDate={selectedDate} />
-            </thead>
-            <tbody>
-              {taskList.map((tasksListItem: TasksListItem) => {
-                if (
-                  tasksListItem.cycle_type !== null &&
-                  taskListForUser.length &&
-                  approvedGroup !== undefined &&
-                  tasksListItem.group_id === groupId
-                ) {
-                  return (
-                    <tr className="task__list-for-user" key={tasksListItem.id}>
-                      <TaskListForUser
-                        groupId={groupId}
-                        approvedGroup={approvedGroup}
-                        selectedDate={selectedDate}
-                        groupTaskList={taskList}
-                        groupTasksListForEachUser={taskListForUser}
-                        tasksListItem={tasksListItem}
-                      />
-                    </tr>
-                  );
-                }
-              })}
-            </tbody>
-            <tfoot>
-              <tr className="task__assign-task">
-                <OperateTaskListForUser
-                  approvedGroup={approvedGroup}
-                  groupId={groupId}
-                  label={'追加'}
-                />
-              </tr>
-            </tfoot>
-          </table>
         </div>
-      </main>
+        <TaskList
+          groupId={groupId}
+          groupTasksList={taskList}
+          groupTasksListForEachUser={taskListForUser}
+        />
+        <table className="task__table">
+          <thead>
+            <WeekTables selectedDate={selectedDate} />
+          </thead>
+          <tbody>
+            {taskList.map((tasksListItem: TasksListItem) => {
+              if (
+                tasksListItem.cycle_type !== null &&
+                taskListForUser.length &&
+                approvedGroup !== undefined &&
+                tasksListItem.group_id === groupId
+              ) {
+                return (
+                  <tr className="task__list-for-user" key={tasksListItem.id}>
+                    <TaskListForUser
+                      groupId={groupId}
+                      approvedGroup={approvedGroup}
+                      selectedDate={selectedDate}
+                      groupTaskList={taskList}
+                      groupTasksListForEachUser={taskListForUser}
+                      tasksListItem={tasksListItem}
+                    />
+                  </tr>
+                );
+              }
+            })}
+          </tbody>
+          <tfoot>
+            <tr className="task__assign-task">
+              <OperateTaskListForUser
+                approvedGroup={approvedGroup}
+                groupId={groupId}
+                label={'追加'}
+              />
+            </tr>
+          </tfoot>
+        </table>
+      </div>
     </>
   );
 };

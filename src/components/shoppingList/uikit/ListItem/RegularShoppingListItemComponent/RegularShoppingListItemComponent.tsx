@@ -40,9 +40,10 @@ const RegularShoppingListItemComponent = (props: RegularShoppingListItemComponen
       <span className="regular-shopping-list-item-component__purchase">
         {props.listItem.purchase}
       </span>
-      <span className="regular-shopping-list-item-component__amount">
-        {props.listItem.amount}円
+      <span className="regular-shopping-list-item-component__amount--value">
+        {props.listItem.amount === null ? '-' : props.listItem.amount}
       </span>
+      <span className="shopping-list-item-component__amount--unit">円</span>
       <EditRegularShoppingListModal
         listItem={props.listItem}
         currentYearMonth={props.currentYearMonth}

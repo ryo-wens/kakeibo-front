@@ -93,7 +93,7 @@ export interface AddShoppingListItemReq {
   expected_purchase_date: Date;
   purchase: string;
   shop: string | null;
-  amount: number;
+  amount: number | null;
   big_category_id: number;
   medium_category_id: number | null;
   custom_category_id: number | null;

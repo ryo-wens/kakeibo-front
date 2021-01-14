@@ -59,7 +59,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.purchase}
           type={'text'}
           id={'purchase'}
-          label={'(必須)'}
+          label={'必須'}
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
@@ -89,7 +89,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           <KeyboardDatePicker
             margin="normal"
             id="date-picker-dialog"
-            label="購入予定日"
+            label="必須"
             format="yyyy年 MM月dd日"
             value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
@@ -110,7 +110,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
                 value={props.cycle}
                 type={'tel'}
                 id={'cycle'}
-                label={'周期日数 (必須)'}
+                label={'必須'}
                 onChange={props.handleCycleChange}
                 required={false}
                 fullWidth={false}
@@ -127,7 +127,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.amount}
           type={'tel'}
           id={'amount'}
-          label={'金額 (任意)'}
+          label={'任意'}
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
@@ -141,7 +141,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.shop}
           type={'text'}
           id={'shop'}
-          label={'店名 (任意)'}
+          label={'任意'}
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}

@@ -38,7 +38,7 @@ interface InputTodoListProps {
   todoContent: string;
   completeFlag: boolean;
   onClickSave: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
-  closeInputTodo: React.Dispatch<React.SetStateAction<boolean>>;
+  setOpenEditTodoList: React.Dispatch<React.SetStateAction<boolean>>;
   disabledSaveButton: boolean;
   onClickCloseInputTodoList: (event: Event) => void;
 }
@@ -118,7 +118,7 @@ const InputTodoList = React.forwardRef(
               disabled={props.disabledSaveButton}
               onClick={() => {
                 dispatch(props.onClickSave);
-                props.closeInputTodo(false);
+                props.setOpenEditTodoList(false);
               }}
             >
               {props.buttonLabel}

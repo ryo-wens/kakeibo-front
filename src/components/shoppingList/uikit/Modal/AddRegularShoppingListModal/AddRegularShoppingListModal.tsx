@@ -81,16 +81,25 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
   const handleCycleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (cycleType !== 'custom') {
       setCycle(null);
+    } else {
+      setCycle(event.target.value);
     }
-    setCycle(event.target.value);
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value);
+    if (event.target.value === '') {
+      setAmount(null);
+    } else {
+      setAmount(event.target.value);
+    }
   };
 
   const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShop(event.target.value);
+    if (event.target.value === '') {
+      setShop(null);
+    } else {
+      setShop(event.target.value);
+    }
   };
 
   const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
