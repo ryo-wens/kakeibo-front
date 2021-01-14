@@ -88,9 +88,9 @@ const CustomBudgets = () => {
                     <th align="center">予算</th>
                   </tr>
                   {customBudgets.map((customBudget, index) => {
-                    const onChangeBudget = (event: React.ChangeEvent<HTMLInputElement>) => {
-                      const newBudgets = customBudgets.concat();
-                      newBudgets[index].budget = Number(event.target.value);
+                    const onChangeBudget = (event: { target: { value: string } }) => {
+                      const newBudgets = [...customBudgets];
+                      newBudgets[index].budget = (event.target.value as unknown) as number;
                       setCustomBudgets(newBudgets);
                     };
                     return (
