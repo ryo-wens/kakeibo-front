@@ -1,15 +1,23 @@
 import { Action, Dispatch } from 'redux';
 import {
   cancelFetchGroupExpiredShoppingListAction,
+  cancelFetchGroupMonthlyShoppingListAction,
+  cancelFetchGroupMonthlyShoppingListByCategoriesAction,
   cancelFetchGroupTodayShoppingListAction,
   cancelFetchGroupTodayShoppingListByCategoriesAction,
   failedFetchGroupExpiredShoppingListAction,
+  failedFetchGroupMonthlyShoppingListAction,
+  failedFetchGroupMonthlyShoppingListByCategoriesAction,
   failedFetchGroupTodayShoppingListAction,
   failedFetchGroupTodayShoppingListByCategoriesAction,
   fetchGroupExpiredShoppingListAction,
+  fetchGroupMonthlyShoppingListAction,
+  fetchGroupMonthlyShoppingListByCategoriesAction,
   fetchGroupTodayShoppingListAction,
   fetchGroupTodayShoppingListByCategoriesAction,
   startFetchGroupExpiredShoppingListAction,
+  startFetchGroupMonthlyShoppingListAction,
+  startFetchGroupMonthlyShoppingListByCategoriesAction,
   startFetchGroupTodayShoppingListAction,
   startFetchGroupTodayShoppingListByCategoriesAction,
 } from './actions';
@@ -17,6 +25,8 @@ import axios, { CancelTokenSource } from 'axios';
 import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
 import {
   FetchGroupExpiredShoppingListRes,
+  FetchGroupMonthlyShoppingListByCategoriesRes,
+  FetchGroupMonthlyShoppingListRes,
   FetchGroupTodayShoppingListByCategoriesRes,
   FetchGroupTodayShoppingListRes,
 } from './types';
@@ -127,6 +137,91 @@ export const fetchGroupTodayShoppingListByCategories = (
       } else {
         dispatch(
           failedFetchGroupTodayShoppingListByCategoriesAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const fetchGroupMonthlyShoppingList = (
+  groupId: number,
+  year: string,
+  month: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchGroupMonthlyShoppingListAction());
+
+    try {
+      const result = await axios.get<FetchGroupMonthlyShoppingListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}/daily`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const resGroupRegularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
+      const resGroupMonthlyShoppingList: ShoppingList = result.data.shopping_list;
+
+      dispatch(
+        fetchGroupMonthlyShoppingListAction(
+          resGroupRegularShoppingList,
+          resGroupMonthlyShoppingList
+        )
+      );
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelFetchGroupMonthlyShoppingListAction());
+      } else {
+        dispatch(
+          failedFetchGroupMonthlyShoppingListAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const fetchGroupMonthlyShoppingListByCategories = (
+  groupId: number,
+  year: string,
+  month: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchGroupMonthlyShoppingListByCategoriesAction());
+
+    try {
+      const result = await axios.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}/categories`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const resGroupRegularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
+      const resGroupMonthlyShoppingListByCategories: ShoppingListByCategories =
+        result.data.shopping_list_by_categories;
+
+      dispatch(
+        fetchGroupMonthlyShoppingListByCategoriesAction(
+          resGroupRegularShoppingList,
+          resGroupMonthlyShoppingListByCategories
+        )
+      );
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelFetchGroupMonthlyShoppingListByCategoriesAction());
+      } else {
+        dispatch(
+          failedFetchGroupMonthlyShoppingListByCategoriesAction(
             error.response.status,
             error.response.data.error.message
           )

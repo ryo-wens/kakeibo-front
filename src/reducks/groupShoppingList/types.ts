@@ -13,3 +13,13 @@ export interface FetchGroupTodayShoppingListByCategoriesRes {
   regular_shopping_list: RegularShoppingList;
   shopping_list_by_categories: ShoppingListByCategories;
 }
+
+export interface FetchGroupMonthlyShoppingListRes {
+  regular_shopping_list: RegularShoppingList;
+  shopping_list: ShoppingList;
+}
+
+export interface FetchGroupMonthlyShoppingListByCategoriesRes {
+  regular_shopping_list: RegularShoppingList;
+  shopping_list_by_categories: ShoppingListByCategories;
+}
