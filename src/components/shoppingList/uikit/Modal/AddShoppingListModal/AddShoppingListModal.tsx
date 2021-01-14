@@ -24,33 +24,33 @@ const AddShoppingListModal = () => {
   const [open, setOpen] = useState(false);
   const [purchase, setPurchase] = useState('');
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(date);
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState<string | null>(null);
   const [bigCategoryId, setBigCategoryId] = useState(0);
   const [bigCategory, setBigCategory] = useState<string | null>('');
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [associatedCategory, setAssociatedCategory] = useState('');
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const [shop, setShop] = useState('');
+  const [shop, setShop] = useState<string | null>(null);
   const [transactionAutoAdd, setTransactionAutoAdd] = useState(false);
   const signal = axios.CancelToken.source();
 
   const openModal = () => {
     setOpen(true);
-  };
-
-  const closeModal = () => {
-    setOpen(false);
-    setPurchase('');
     setExpectedPurchaseDate(date);
-    setAmount('');
+    setPurchase('');
+    setAmount(null);
     setBigCategoryId(0);
     setBigCategory('');
     setMediumCategoryId(null);
     setAssociatedCategory('');
     setCustomCategoryId(null);
-    setShop('');
+    setShop(null);
     setTransactionAutoAdd(false);
+  };
+
+  const closeModal = () => {
+    setOpen(false);
   };
 
   const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -62,11 +62,19 @@ const AddShoppingListModal = () => {
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value);
+    if (event.target.value === '') {
+      setAmount(null);
+    } else {
+      setAmount(event.target.value);
+    }
   };
 
   const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShop(event.target.value);
+    if (event.target.value === '') {
+      setShop(null);
+    } else {
+      setShop(event.target.value);
+    }
   };
 
   const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -122,6 +130,7 @@ const AddShoppingListModal = () => {
         handleAutoAddTransitionChange={handleAutoAddTransitionChange}
         titleLabel={'買い物リストに追加'}
         buttonLabel={'追加'}
+        setOpen={setOpen}
         closeModal={closeModal}
         unInput={unInput}
         minDate={date}
@@ -130,13 +139,14 @@ const AddShoppingListModal = () => {
           expectedPurchaseDate,
           purchase,
           shop,
-          Number(amount),
+          typeof amount === 'string' ? Number(amount) : amount,
           bigCategoryId,
           mediumCategoryId,
           customCategoryId,
           transactionAutoAdd,
           signal
         )}
+        displayInputAmountMessage={false}
       />
     </div>
   );

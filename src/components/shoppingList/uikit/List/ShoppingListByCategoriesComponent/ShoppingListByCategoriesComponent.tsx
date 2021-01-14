@@ -6,6 +6,7 @@ import {
 } from '../../../../../reducks/shoppingList/types';
 import ShoppingListItemComponent from '../../ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
 import './shopping-list-by-categories-component.scss';
+import { bigCategoryColor } from '../../../../../lib/function';
 
 interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: ShoppingListByCategories;
@@ -15,9 +16,14 @@ interface ShoppingListByCategoriesComponentProps {
 
 const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesComponentProps) => {
   let prevDate = '';
+  let prevCategoryId = 0;
 
-  const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevDate !== expectedPurchaseDate) {
+  const equalsDisplayDate = (expectedPurchaseDate: string, categoryId: number) => {
+    if (prevCategoryId !== categoryId) {
+      prevCategoryId = categoryId;
+      prevDate = expectedPurchaseDate;
+      return true;
+    } else if (prevDate !== expectedPurchaseDate) {
       prevDate = expectedPurchaseDate;
       return true;
     }
@@ -31,9 +37,15 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
           (shoppingListItemByCategories: ShoppingListItemByCategories) => {
             return (
               <div key={shoppingListItemByCategories.big_category_name}>
-                <h4 className="shopping-list-by-categories-component__category-name">
-                  {shoppingListItemByCategories.big_category_name}
-                </h4>
+                <div className="shopping-list-by-categories-component__category">
+                  <span
+                    className="shopping-list-by-categories-component__category-color"
+                    style={bigCategoryColor(shoppingListItemByCategories.big_category_name)}
+                  />
+                  <h4 className="shopping-list-by-categories-component__category-name">
+                    {shoppingListItemByCategories.big_category_name}
+                  </h4>
+                </div>
                 {shoppingListItemByCategories.shopping_list.map(
                   (shoppingListItem: ShoppingListItem) => {
                     return (
@@ -41,7 +53,8 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                         <ShoppingListItemComponent
                           listItem={shoppingListItem}
                           displayPurchaseDate={equalsDisplayDate(
-                            shoppingListItem.expected_purchase_date
+                            shoppingListItem.expected_purchase_date,
+                            shoppingListItem.big_category_id
                           )}
                           currentYearMonth={props.currentYearMonth}
                         />

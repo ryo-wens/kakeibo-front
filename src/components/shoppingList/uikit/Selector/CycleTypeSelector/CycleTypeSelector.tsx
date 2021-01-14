@@ -30,7 +30,7 @@ const CycleTypeSelector = (props: CycleTypeSelectorProps) => {
 
   return (
     <FormControl className={classes.formControl}>
-      <InputLabel id="shoppingListCycleType">周期</InputLabel>
+      <InputLabel id="shoppingListCycleType">必須</InputLabel>
       <Select id="shoppingListCycleType" value={props.value} onChange={props.selectChange}>
         {cycleTypes.map((item) => (
           <MenuItem value={item.value} key={item.key}>
