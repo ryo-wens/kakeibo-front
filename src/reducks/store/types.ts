@@ -112,6 +112,44 @@ export interface State {
       statusCode: number;
     };
   };
+  groupShoppingList: {
+    groupRegularShoppingListLoading: boolean;
+    groupRegularShoppingList: RegularShoppingList;
+    groupRegularShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupExpiredShoppingListLoading: boolean;
+    groupExpiredShoppingList: ShoppingList;
+    groupExpiredShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupTodayShoppingListLoading: boolean;
+    groupTodayShoppingList: ShoppingList;
+    groupTodayShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupTodayShoppingListByCategoriesLoading: boolean;
+    groupTodayShoppingListByCategories: ShoppingListByCategories;
+    groupTodayShoppingListByCategoriesError: {
+      message: string;
+      statusCode: number;
+    };
+    groupMonthlyShoppingListLoading: boolean;
+    groupMonthlyShoppingList: ShoppingList;
+    groupMonthlyShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupMonthlyShoppingListByCategoriesLoading: boolean;
+    groupMonthlyShoppingListByCategories: ShoppingListByCategories;
+    groupMonthlyShoppingListByCategoriesError: {
+      message: string;
+      statusCode: number;
+    };
+  };
   todoList: {
     expiredTodoList: TodoList;
     todayImplementationTodoList: TodoList;
