@@ -17,6 +17,7 @@
       "custom_category_id": null,
       "custom_category_name": null,
       "regular_shopping_list_id": null,
+      "payment_user_id": null,
       "transaction_auto_add": true,
       "related_transaction_data": null
     }

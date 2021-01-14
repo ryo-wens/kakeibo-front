@@ -22,13 +22,15 @@ import {
   startFetchGroupTodayShoppingListByCategoriesAction,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
-import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
 import {
   FetchGroupExpiredShoppingListRes,
   FetchGroupMonthlyShoppingListByCategoriesRes,
   FetchGroupMonthlyShoppingListRes,
   FetchGroupTodayShoppingListByCategoriesRes,
   FetchGroupTodayShoppingListRes,
+  GroupRegularShoppingList,
+  GroupShoppingList,
+  GroupShoppingListByCategories,
 } from './types';
 
 export const fetchGroupExpiredShoppingList = (groupId: number, signal: CancelTokenSource) => {
@@ -44,7 +46,7 @@ export const fetchGroupExpiredShoppingList = (groupId: number, signal: CancelTok
         }
       );
 
-      const resGroupExpiredShoppingList: ShoppingList = result.data.expired_shopping_list;
+      const resGroupExpiredShoppingList: GroupShoppingList = result.data.expired_shopping_list;
 
       dispatch(fetchGroupExpiredShoppingListAction(resGroupExpiredShoppingList));
     } catch (error) {
@@ -81,8 +83,9 @@ export const fetchGroupTodayShoppingList = (
         }
       );
 
-      const resGroupRegularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
-      const resGroupTodayShoppingList: ShoppingList = result.data.shopping_list;
+      const resGroupRegularShoppingList: GroupRegularShoppingList =
+        result.data.regular_shopping_list;
+      const resGroupTodayShoppingList: GroupShoppingList = result.data.shopping_list;
 
       dispatch(
         fetchGroupTodayShoppingListAction(resGroupRegularShoppingList, resGroupTodayShoppingList)
@@ -121,8 +124,9 @@ export const fetchGroupTodayShoppingListByCategories = (
         }
       );
 
-      const resGroupRegularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
-      const resGroupTodayShoppingListByCategories: ShoppingListByCategories =
+      const resGroupRegularShoppingList: GroupRegularShoppingList =
+        result.data.regular_shopping_list;
+      const resGroupTodayShoppingListByCategories: GroupShoppingListByCategories =
         result.data.shopping_list_by_categories;
 
       dispatch(
@@ -164,8 +168,9 @@ export const fetchGroupMonthlyShoppingList = (
         }
       );
 
-      const resGroupRegularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
-      const resGroupMonthlyShoppingList: ShoppingList = result.data.shopping_list;
+      const resGroupRegularShoppingList: GroupRegularShoppingList =
+        result.data.regular_shopping_list;
+      const resGroupMonthlyShoppingList: GroupShoppingList = result.data.shopping_list;
 
       dispatch(
         fetchGroupMonthlyShoppingListAction(
@@ -206,8 +211,9 @@ export const fetchGroupMonthlyShoppingListByCategories = (
         }
       );
 
-      const resGroupRegularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
-      const resGroupMonthlyShoppingListByCategories: ShoppingListByCategories =
+      const resGroupRegularShoppingList: GroupRegularShoppingList =
+        result.data.regular_shopping_list;
+      const resGroupMonthlyShoppingListByCategories: GroupShoppingListByCategories =
         result.data.shopping_list_by_categories;
 
       dispatch(
