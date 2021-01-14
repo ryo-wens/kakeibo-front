@@ -12,6 +12,14 @@ export type GroupShoppingListActions = ReturnType<
   | typeof fetchGroupTodayShoppingListByCategoriesAction
   | typeof cancelFetchGroupTodayShoppingListByCategoriesAction
   | typeof failedFetchGroupTodayShoppingListByCategoriesAction
+  | typeof startFetchGroupMonthlyShoppingListAction
+  | typeof fetchGroupMonthlyShoppingListAction
+  | typeof cancelFetchGroupMonthlyShoppingListAction
+  | typeof failedFetchGroupMonthlyShoppingListAction
+  | typeof startFetchGroupMonthlyShoppingListByCategoriesAction
+  | typeof fetchGroupMonthlyShoppingListByCategoriesAction
+  | typeof cancelFetchGroupMonthlyShoppingListByCategoriesAction
+  | typeof failedFetchGroupMonthlyShoppingListByCategoriesAction
 >;
 
 export const START_FETCH_GROUP_EXPIRED_SHOPPING_LIST = 'START_FETCH_GROUP_EXPIRED_SHOPPING_LIST';
@@ -171,6 +179,122 @@ export const failedFetchGroupTodayShoppingListByCategoriesAction = (
       groupRegularShoppingListLoading: false,
       groupTodayShoppingListByCategoriesLoading: false,
       groupTodayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_FETCH_GROUP_MONTHLY_SHOPPING_LIST = 'START_FETCH_GROUP_MONTHLY_SHOPPING_LIST';
+export const startFetchGroupMonthlyShoppingListAction = () => {
+  return {
+    type: START_FETCH_GROUP_MONTHLY_SHOPPING_LIST,
+    payload: {
+      groupRegularShoppingListLoading: true,
+      groupMonthlyShoppingListLoading: true,
+    },
+  };
+};
+
+export const FETCH_GROUP_MONTHLY_SHOPPING_LIST = 'FETCH_GROUP_MONTHLY_SHOPPING_LIST';
+export const fetchGroupMonthlyShoppingListAction = (
+  groupRegularShoppingList: RegularShoppingList,
+  groupMonthlyShoppingList: ShoppingList
+) => {
+  return {
+    type: FETCH_GROUP_MONTHLY_SHOPPING_LIST,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupRegularShoppingList: groupRegularShoppingList,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingList: groupMonthlyShoppingList,
+    },
+  };
+};
+
+export const CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST = 'CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST';
+export const cancelFetchGroupMonthlyShoppingListAction = () => {
+  return {
+    type: CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupMonthlyShoppingListLoading: false,
+    },
+  };
+};
+
+export const FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST = 'FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST';
+export const failedFetchGroupMonthlyShoppingListAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES =
+  'START_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES';
+export const startFetchGroupMonthlyShoppingListByCategoriesAction = () => {
+  return {
+    type: START_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      groupRegularShoppingListLoading: true,
+      groupMonthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES =
+  'FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES';
+export const fetchGroupMonthlyShoppingListByCategoriesAction = (
+  groupRegularShoppingList: RegularShoppingList,
+  groupMonthlyShoppingListByCategories: ShoppingListByCategories
+) => {
+  return {
+    type: FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupRegularShoppingList: groupRegularShoppingList,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListByCategories: groupMonthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES =
+  'CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES';
+export const cancelFetchGroupMonthlyShoppingListByCategoriesAction = () => {
+  return {
+    type: CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES =
+  'FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES';
+export const failedFetchGroupMonthlyShoppingListByCategoriesAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListByCategoriesError: {
         statusCode: statusCode,
         message: errorMessage,
       },

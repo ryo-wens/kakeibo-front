@@ -67,6 +67,46 @@ export const groupShoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.START_FETCH_GROUP_MONTHLY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_GROUP_MONTHLY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_GROUP_MONTHLY_SHOPPING_LIST_BY_CATEGORIES:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

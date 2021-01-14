@@ -6,7 +6,7 @@ import {
   fetchMonthlyShoppingListByCategories,
 } from '../../../../reducks/shoppingList/operations';
 import axios from 'axios';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import AddShoppingListModal from '../../uikit/Modal/AddShoppingListModal/AddShoppingListModal';
 import './monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
@@ -17,6 +17,10 @@ import {
   getMonthlyShoppingListByCategories,
 } from '../../../../reducks/shoppingList/selectors';
 import ShoppingListByCategoriesComponent from '../../uikit/List/ShoppingListByCategoriesComponent/ShoppingListByCategoriesComponent';
+import {
+  fetchGroupMonthlyShoppingList,
+  fetchGroupMonthlyShoppingListByCategories,
+} from '../../../../reducks/groupShoppingList/operations';
 
 interface MonthlyShoppingListAreaProps {
   selectedYear: number;
@@ -31,6 +35,51 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
   const monthlyShoppingList = useSelector(getMonthlyShoppingList);
   const monthlyShoppingListByCategories = useSelector(getMonthlyShoppingListByCategories);
   const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (pathName === 'group') {
+      const signal = axios.CancelToken.source();
+      dispatch(
+        fetchGroupMonthlyShoppingList(
+          Number(id),
+          String(props.selectedYear),
+          ('0' + props.selectedMonth).slice(-2),
+          signal
+        )
+      );
+      dispatch(
+        fetchGroupMonthlyShoppingListByCategories(
+          Number(id),
+          String(props.selectedYear),
+          ('0' + props.selectedMonth).slice(-2),
+          signal
+        )
+      );
+      const interval = setInterval(() => {
+        dispatch(
+          fetchGroupMonthlyShoppingList(
+            Number(id),
+            String(props.selectedYear),
+            ('0' + props.selectedMonth).slice(-2),
+            signal
+          )
+        );
+        dispatch(
+          fetchGroupMonthlyShoppingListByCategories(
+            Number(id),
+            String(props.selectedYear),
+            ('0' + props.selectedMonth).slice(-2),
+            signal
+          )
+        );
+      }, 3000);
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
+    }
+  }, [String(props.selectedYear), ('0' + props.selectedMonth).slice(-2), id]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
