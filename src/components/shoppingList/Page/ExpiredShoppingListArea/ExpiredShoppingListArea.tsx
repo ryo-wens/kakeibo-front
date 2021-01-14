@@ -3,9 +3,10 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getExpiredShoppingList } from '../../../../reducks/shoppingList/selectors';
 import './expired-shopping-list-area.scss';
 import axios from 'axios';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { fetchExpiredShoppingList } from '../../../../reducks/shoppingList/operations';
 import ShoppingListItemComponent from '../../uikit/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
+import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
 
 interface ExpiredShoppingListAreaProps {
   currentYearMonth: string;
@@ -15,6 +16,23 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
   const dispatch = useDispatch();
   const expiredShoppingList = useSelector(getExpiredShoppingList);
   const pathName = useLocation().pathname.split('/')[1];
+  const { id } = useParams();
+
+  useEffect(() => {
+    if (pathName === 'group') {
+      const signal = axios.CancelToken.source();
+      dispatch(fetchGroupExpiredShoppingList(Number(id), signal));
+
+      const interval = setInterval(() => {
+        dispatch(fetchGroupExpiredShoppingList(Number(id), signal));
+      }, 3000);
+
+      return () => {
+        signal.cancel();
+        clearInterval(interval);
+      };
+    }
+  }, []);
 
   useEffect(() => {
     if (pathName !== 'group' && !expiredShoppingList.length) {
