@@ -91,7 +91,7 @@ export const logOut = () => {
       });
       dispatch(logOutAction());
 
-      dispatch(push('/login'));
+      dispatch(push('/'));
     } catch (error) {
       if (error.response) {
         dispatch(informErrorAction(error.response.data.error.message));
