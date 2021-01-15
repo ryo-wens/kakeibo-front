@@ -83,7 +83,7 @@ const Header = () => {
 
   const homeButtonClick = () => {
     async function click() {
-      await existsGroupWhenRouting(``);
+      await existsGroupWhenRouting(`/home`);
       window.location.reload();
     }
     click();
@@ -110,8 +110,8 @@ const Header = () => {
           <ul className="header__global-menu">
             <li
               className="header__global-menu--item"
-              style={currentPage(pathName !== 'group' ? '/' : `/group/${id}`)}
-              onClick={() => existsGroupWhenRouting('')}
+              style={currentPage(pathName !== 'group' ? '/home' : `/group/${id}/home`)}
+              onClick={() => existsGroupWhenRouting('/home')}
             >
               <a>
                 <HomeIcon className="header__icon" />

@@ -70,7 +70,7 @@ export const logIn = (email: string, password: string) => {
       );
       dispatch(informErrorAction(''));
       dispatch(logInAction(email));
-      dispatch(push('/'));
+      dispatch(push('/home'));
     } catch (error) {
       if (error.response.status === 400) {
         dispatch(informErrorAction(error.response.data.error));
