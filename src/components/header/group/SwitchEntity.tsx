@@ -83,13 +83,13 @@ const SwitchEntity = (props: SwitchEntityProps) => {
   const switchToIndividual = (userName: string) => {
     setAnchorEl(null);
     props.setName(userName);
-    dispatch(push('/'));
+    dispatch(push('/home'));
   };
 
   const switchToGroup = (groupId: number, groupName: string) => {
     setAnchorEl(null);
     props.setName(groupName);
-    dispatch(push(`/group/${groupId}`));
+    dispatch(push(`/group/${groupId}/home`));
   };
 
   const openMenu = (event: React.MouseEvent<HTMLButtonElement>) => {
