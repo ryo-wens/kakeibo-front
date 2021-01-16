@@ -1,23 +1,20 @@
 import React, { useEffect, useState } from 'react';
 import '../../shoppingList/Page/shopping-list-page.scss';
 import { month, year } from '../../../lib/constant';
-import { fetchCategories } from '../../../reducks/categories/operations';
 import axios from 'axios';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
-import { getExpenseCategories, getIncomeCategories } from '../../../reducks/categories/selectors';
+import { useDispatch } from 'react-redux';
+import { useParams } from 'react-router';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import SwitchTodayOrMonthlyTabs from '../../shoppingList/Page/SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
 import GroupTodayShoppingListArea from './GroupTodayShoppingListArea/GroupTodayShoppingListArea';
 import GroupMonthlyShoppingListArea from './GroupMonthlyShoppingListArea/GroupMonthlyShoppingListArea';
 import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
 import GroupRegularShoppingListArea from './GroupRegularShoppingListArea/GroupRegularShoppingListArea';
+import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
 
 const GroupShoppingListPage = () => {
   const dispatch = useDispatch();
-  const pathName = useLocation().pathname.split('/')[1];
-  const incomeCategories = useSelector(getIncomeCategories);
-  const expenseCategories = useSelector(getExpenseCategories);
+  const { id } = useParams();
 
   const [currentItems, setCurrentItems] = useState<TodayOrMonthly>('today');
   const [selectedYear, setSelectedYear] = useState<number>(year);
@@ -28,9 +25,7 @@ const GroupShoppingListPage = () => {
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
-      dispatch(fetchCategories(signal));
-    }
+    dispatch(fetchGroupCategories(Number(id), signal));
     return () => signal.cancel();
   }, []);
 

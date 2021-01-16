@@ -10,6 +10,7 @@ import {
   fetchGroupTodayShoppingList,
   fetchGroupTodayShoppingListByCategories,
 } from '../../../../reducks/groupShoppingList/operations';
+import AddGroupShoppingListModal from './AddGroupShoppingListModal/AddGroupShoppingListModal';
 
 const GroupTodayShoppingListArea = () => {
   const dispatch = useDispatch();
@@ -46,7 +47,9 @@ const GroupTodayShoppingListArea = () => {
 
   return (
     <>
-      <div className="today-shopping-list-area__add-button"></div>
+      <div className="today-shopping-list-area__add-button">
+        <AddGroupShoppingListModal />
+      </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">
           {/*仮実装として、div タグを props として、渡しています。*/}
