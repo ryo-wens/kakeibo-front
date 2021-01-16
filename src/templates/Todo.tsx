@@ -5,6 +5,7 @@ import '../assets/todo/todo.scss';
 import ShoppingListPage from '../components/shoppingList/Page/ShoppingListPage';
 import Task from './Task';
 import { useLocation } from 'react-router';
+import GroupShoppingListPage from '../components/groupShoppingList/Page/GroupShoppingListPage';
 
 const Todo = () => {
   const pathName = useLocation().pathname.split('/')[1];
@@ -42,7 +43,11 @@ const Todo = () => {
           </div>
           {currentPage === 0 && <TodoPage />}
           {currentPage === 1 && <Task />}
-          {currentPage === 2 && <ShoppingListPage />}
+          {currentPage === 2 && pathName === 'group' ? (
+            <GroupShoppingListPage />
+          ) : (
+            currentPage === 2 && pathName !== 'group' && <ShoppingListPage />
+          )}
         </div>
       </main>
     </>
