@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { CategoryInput, TextInput } from '../../../../uikit';
+import { BigCategoryInput, MediumCategoryInput, TextInput } from '../../../../uikit';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getExpenseCategories,
@@ -51,6 +51,23 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
 
+  const bigCategoryRef = useRef<HTMLDivElement>(null);
+  const mediumMenuRef = useRef<HTMLDivElement>(null);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+
+  const onClickCloseBigCategoryMenu = (event: Event) => {
+    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
+      setBigCategoryMenuOpen(false);
+    }
+  };
+
+  const onClickCloseMediumCategoryMenu = (event: Event) => {
+    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
+      setMediumCategoryMenuOpen(false);
+    }
+  };
+
   const inputItems = [
     {
       key: '購入するもの',
@@ -69,17 +86,33 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
     {
       key: 'カテゴリー',
       value: (
-        <CategoryInput
-          bigCategory={props.bigCategory}
-          associatedCategory={props.associatedCategory}
-          onClick={props.selectCategory}
-          required={true}
-          kind={'expense'}
-          bigCategoryIndex={props.bigCategoryIndex}
-          bigCategoryId={props.bigCategoryId}
-          expenseCategories={expenseCategories}
-          incomeCategories={incomeCategories}
-        />
+        <>
+          <BigCategoryInput
+            ref={bigCategoryRef}
+            kind={'expense'}
+            bigCategory={props.bigCategory}
+            bigCategoryMenuOpen={bigCategoryMenuOpen}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            onClick={props.selectCategory}
+            onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
+            setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+          />
+          <MediumCategoryInput
+            ref={mediumMenuRef}
+            kind={'expense'}
+            bigCategoryId={props.bigCategoryId}
+            bigCategoryIndex={props.bigCategoryIndex}
+            bigCategory={props.bigCategory}
+            associatedCategory={props.associatedCategory}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+            onClick={props.selectCategory}
+            onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+            setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+          />
+        </>
       ),
     },
     {
