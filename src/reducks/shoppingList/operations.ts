@@ -1057,7 +1057,7 @@ export const addRegularShoppingListItem = (
 
       const todayShoppingList = () => {
         if (newShoppingList.length === INCLUDES_TODAY_ITEM) {
-          return [newShoppingList[0]].concat(prevTodayShoppingList);
+          return prevTodayShoppingList.concat(newShoppingList[0]);
         }
         return prevTodayShoppingList;
       };

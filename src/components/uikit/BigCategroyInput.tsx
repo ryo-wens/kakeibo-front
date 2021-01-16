@@ -26,6 +26,7 @@ import {
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import '../../assets/modules/category-input.scss';
 
 interface BigCategoryInputProps {
   kind: string;

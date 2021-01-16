@@ -167,6 +167,7 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
         titleLabel={'定期買い物リストに追加'}
         buttonLabel={'追加'}
         closeModal={closeModal}
+        setOpen={setOpen}
         unInput={unInput || unInputCycle()}
         minDate={date}
         dispatchOperation={() =>

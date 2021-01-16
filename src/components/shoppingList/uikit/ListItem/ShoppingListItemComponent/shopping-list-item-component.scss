@@ -2,6 +2,10 @@
 @import "../../../../../assets/mixin/icon-btn";
 
 .shopping-list-item-component {
+  background-color: #fcfdff;
+  border-radius: 0.6rem;
+  padding: 15px;
+  margin-bottom: 20px;
 
   &__date {
     color: $task-main_color;
@@ -13,35 +17,68 @@
     display: flex;
     width: 100%;
     align-items: center;
-    margin-bottom: 20px;
-  }
-
-  &__test {
-    width: 100%;
+    color: #253b66;
   }
 
   &__purchase {
-    width: calc((100% - 88px) * 0.85);
-    color: #333;
-    margin-left: 5px;
+    width: calc((100% - 198px));
+    margin-left: 10px;
   }
 
   &__amount {
 
     &--value {
-      width: calc((100% - 88px) * 0.15);
-      color: #333;
-      text-align: center;
-    }
-
-    &--unit {
-      color: #333;
+      width: 90px;
+      text-align: right;
+      padding-right: 10px;
     }
   }
 
-  &__edit-icon {
-    @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
-    padding: 3px;
-    margin-left: 20px;
+  &__tag {
+    display: flex;
+    font-size: 0.7rem;
+    color: white;
+    margin: 8px 0 0 38px;
+
+    > span {
+      padding: 2px 10px;
+      border-radius: 0.6rem;
+      margin-left: 10px;
+
+      &:first-child {
+        margin-left: 0;
+      }
+    }
+
+    &--regular {
+      background-color: #EBA3A3;
+    }
+
+    &--transaction-auto-add {
+      background-color: #ABB4F7;
+    }
+
+
   }
+
+  &__related-transaction-data {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    color: $task-main_color;
+    font-size: 0.9rem;
+    border: $task-border_color solid 1.5px;
+    border-radius: 0.6rem;
+    padding: 2px 5px 2px 15px;
+    margin: 15px 0 0 38px;
+    cursor: pointer;
+    outline: none;
+
+    &:hover {
+      background-color: #718abc;
+      color: white;
+      border-color: #718abc;
+    }
+  }
+
 }
