@@ -11,7 +11,7 @@ import GroupMonthlyShoppingListArea from './GroupMonthlyShoppingListArea/GroupMo
 import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
 import GroupRegularShoppingListArea from './GroupRegularShoppingListArea/GroupRegularShoppingListArea';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
-import AddGroupRegularShoppingListModal from './GroupRegularShoppingListArea/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
+import AddGroupRegularShoppingListModal from '../uikit/Modal/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
 
 const GroupShoppingListPage = () => {
   const dispatch = useDispatch();

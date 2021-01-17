@@ -36,6 +36,10 @@ export type GroupShoppingListActions = ReturnType<
   | typeof deleteGroupShoppingListItemAction
   | typeof cancelDeleteGroupShoppingListItemAction
   | typeof failedDeleteGroupShoppingListItemAction
+  | typeof startAddGroupRegularShoppingListItemAction
+  | typeof addGroupRegularShoppingListItemAction
+  | typeof cancelAddGroupRegularShoppingListItemAction
+  | typeof failedAddGroupRegularShoppingListItemAction
 >;
 
 export const START_FETCH_GROUP_EXPIRED_SHOPPING_LIST = 'START_FETCH_GROUP_EXPIRED_SHOPPING_LIST';
@@ -547,6 +551,99 @@ export const failedDeleteGroupShoppingListItemAction = (
     payload: {
       groupExpiredShoppingListLoading: false,
       groupExpiredShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupTodayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupMonthlyShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM =
+  'START_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const startAddGroupRegularShoppingListItemAction = () => {
+  return {
+    type: START_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: true,
+      groupTodayShoppingListLoading: true,
+      groupTodayShoppingListByCategoriesLoading: true,
+      groupMonthlyShoppingListLoading: true,
+      groupMonthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM = 'ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const addGroupRegularShoppingListItemAction = (
+  groupRegularShoppingList: GroupRegularShoppingList,
+  groupTodayShoppingList: GroupShoppingList,
+  groupTodayShoppingListByCategories: GroupShoppingListByCategories,
+  groupMonthlyShoppingList: GroupShoppingList,
+  groupMonthlyShoppingListByCategories: GroupShoppingListByCategories
+) => {
+  return {
+    type: ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupRegularShoppingList: groupRegularShoppingList,
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingList: groupTodayShoppingList,
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupTodayShoppingListByCategories: groupTodayShoppingListByCategories,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingList: groupMonthlyShoppingList,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListByCategories: groupMonthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM =
+  'CANCEL_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const cancelAddGroupRegularShoppingListItemAction = () => {
+  return {
+    type: CANCEL_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM =
+  'FAILED_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const failedAddGroupRegularShoppingListItemAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupRegularShoppingListError: {
         statusCode: statusCode,
         message: errorMessage,
       },
