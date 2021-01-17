@@ -1,5 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router';
+import axios from 'axios';
 import {
   GenericButton,
   DatePicker,
@@ -31,13 +33,13 @@ import {
 } from '../../reducks/groupTransactions/operations';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
-import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
-import { State } from '../../reducks/store/types';
 import { AssociatedCategory, Category } from '../../reducks/categories/types';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
-import axios from 'axios';
+import { fetchGroupYearlyAccountListForModal } from '../../reducks/groupTransactions/operations';
+import { getYearlyAccountListStatusModals } from '../../reducks/groupTransactions/selectors';
+import '../../assets/modules/input-form .scss';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,42 +78,108 @@ interface AddTransactionModalProps {
 const AddTransactionModal = (props: AddTransactionModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
+  const { id } = useParams();
+  const pathName = useLocation().pathname.split('/')[1];
   const signal = axios.CancelToken.source();
-  const approvedGroup = getApprovedGroups(selector);
-  const userId = getUserId(selector);
-  const incomeCategories = getIncomeCategories(selector);
-  const expenseCategories = getExpenseCategories(selector);
-  const groupIncomeCategories = getGroupIncomeCategories(selector);
-  const groupExpenseCategories = getGroupExpenseCategories(selector);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
-  const [amount, setAmount] = useState<string>('');
-  const [memo, setMemo] = useState<string>('');
+  const approvedGroup = useSelector(getApprovedGroups);
+  const userId = useSelector(getUserId);
+  const incomeCategories = useSelector(getIncomeCategories);
+  const expenseCategories = useSelector(getExpenseCategories);
+  const groupIncomeCategories = useSelector(getGroupIncomeCategories);
+  const groupExpenseCategories = useSelector(getGroupExpenseCategories);
+  const accountingStatus = useSelector(getYearlyAccountListStatusModals);
+  const [amount, setAmount] = useState('');
+  const [memo, setMemo] = useState('');
   const emptyMemo = memo === '' ? null : memo;
-  const [shop, setShop] = useState<string>('');
+  const [shop, setShop] = useState('');
   const emptyShop = shop === '' ? null : shop;
   const [transactionDate, setTransactionDate] = useState<Date | null>(props.selectDate);
-  const [transactionsType, setTransactionType] = useState<string>('expense');
+  const [transactionsType, setTransactionType] = useState('expense');
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
   const [bigCategory, setBigCategory] = useState<string | null>('');
-  const [bigCategoryId, setBigCategoryId] = useState<number>(0);
+  const [bigCategoryId, setBigCategoryId] = useState(0);
   const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const [associatedCategory, setAssociatedCategory] = useState<string>('');
+  const [associatedCategory, setAssociatedCategory] = useState('');
   const years = {
     selectedYear: String(props.year),
     selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
   };
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [firstTransactionDate, setFirstTransactionDate] = useState<Date | null>(transactionDate);
+
+  let addTransactionYear = 0;
+  let addTransactionMonth = 0;
+
+  if (transactionDate) {
+    addTransactionYear = transactionDate.getFullYear();
+    addTransactionMonth = transactionDate.getMonth() + 1;
+  }
+
+  let firstTransactionMonth = 0;
+  if (firstTransactionDate) {
+    firstTransactionMonth = firstTransactionDate.getMonth() + 1;
+  }
+
+  let addDisabled = false;
+  let unEditInputForm = false;
+
+  if (pathName === 'group') {
+    if (accountingStatus.year === addTransactionYear + '年') {
+      for (const account of accountingStatus.accountedMonth) {
+        if (account === addTransactionMonth + '月') {
+          addDisabled = true;
+        }
+
+        if (account === firstTransactionMonth + '月') {
+          unEditInputForm = true;
+        }
+      }
+    }
+  }
 
   useEffect(() => {
-    setTransactionDate(props.selectDate);
+    if (pathName === 'group') {
+      if (props.open) {
+        const signal = axios.CancelToken.source();
+        dispatch(fetchGroupYearlyAccountListForModal(Number(id), addTransactionYear, signal));
+
+        const interval = setInterval(() => {
+          dispatch(fetchGroupYearlyAccountListForModal(Number(id), addTransactionYear, signal));
+        }, 3000);
+
+        return () => {
+          signal.cancel();
+          clearInterval(interval);
+        };
+      }
+    }
+  }, [props.open]);
+
+  useEffect(() => {
+    if (props.open) {
+      setEditing(true);
+
+      return () => {
+        setEditing(false);
+      };
+    }
+  }, [props.open]);
+
+  useEffect(() => {
+    if (!editing) {
+      setTransactionDate(props.selectDate);
+    }
   }, [props.selectDate]);
+
+  useEffect(() => {
+    setFirstTransactionDate(transactionDate);
+  }, [props.open]);
 
   useEffect(() => {
     setPaymentUserId(userId);
@@ -257,7 +325,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
 
     const groupAddTransaction = () => {
       async function groupTransaction() {
-        await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
+        await dispatch(addGroupLatestTransactions(Number(id), groupAddRequestData));
         dispatch(addGroupTransactions(customMonth));
         props.onClose();
         resetForm();
@@ -295,22 +363,29 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
         <CloseIcon />
       </button>
       <h3 className={classes.textPosition}>家計簿の追加</h3>
+      {addDisabled && pathName === 'group' && (
+        <div className="input-form__message">
+          {addTransactionMonth + '月'}は会計済みのため追加できません。
+        </div>
+      )}
       <div className={classes.delimiterLine} />
       <div className={classes.smallSpaceTop} />
 
-      <form className="grid__column">
+      <form className="input-form__column">
         <DatePicker
           id={'date-picker-dialog'}
           label={'日付'}
           value={transactionDate}
           onChange={handleDateChange}
           required={true}
+          disabled={unEditInputForm}
         />
         <KindSelectBox
           onChange={handleSelect}
           required={true}
           value={transactionsType}
           label={'支出or収入'}
+          disabled={unEditInputForm}
         />
         <TextInput
           value={amount}
@@ -320,15 +395,17 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onChange={handleAmountChange}
           required={true}
           fullWidth={false}
+          disabled={unEditInputForm}
         />
         {pathName === 'group' && (
           <SelectPayer
             approvedGroups={approvedGroup}
-            groupId={groupId}
+            groupId={Number(id)}
             onChange={handlePayerChange}
             pathName={pathName}
             required={true}
             value={paymentUserId}
+            disabled={unEditInputForm}
           />
         )}
         <BigCategoryInput
@@ -341,6 +418,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onClick={selectCategory}
           onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
           setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+          disabled={unEditInputForm}
         />
         <MediumCategoryInput
           ref={mediumMenuRef}
@@ -355,6 +433,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onClick={selectCategory}
           onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
           setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+          disabled={unEditInputForm}
         />
         <TextInput
           value={shop}
@@ -364,6 +443,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onChange={handleShop}
           required={false}
           fullWidth={false}
+          disabled={unEditInputForm}
         />
         <TextInput
           value={memo}
@@ -373,16 +453,17 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onChange={handleMemo}
           required={false}
           fullWidth={false}
+          disabled={unEditInputForm}
         />
       </form>
       <div className={classes.buttonPosition}>
         <GenericButton
+          label={'追加する'}
+          disabled={unInput || addDisabled}
           startIcon={<AddCircleOutlineIcon />}
           onClick={() => {
             switchingAddTransaction();
           }}
-          label={'追加する'}
-          disabled={unInput}
         />
       </div>
     </div>

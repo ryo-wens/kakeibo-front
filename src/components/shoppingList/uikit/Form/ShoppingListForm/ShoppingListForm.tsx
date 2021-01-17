@@ -80,6 +80,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -97,6 +98,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             onClick={props.selectCategory}
             onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
             setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+            disabled={false}
           />
           <MediumCategoryInput
             ref={mediumMenuRef}
@@ -111,6 +113,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             onClick={props.selectCategory}
             onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
             setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+            disabled={false}
           />
         </>
       ),
@@ -144,6 +147,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             onChange={props.handleAmountChange}
             required={false}
             fullWidth={false}
+            disabled={false}
           />
           {props.displayInputAmountMessage && (
             <p
@@ -170,6 +174,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },

@@ -81,6 +81,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -148,6 +149,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
                 onChange={props.handleCycleChange}
                 required={false}
                 fullWidth={false}
+                disabled={false}
               />
             )}
           </div>
@@ -165,6 +167,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -179,6 +182,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },

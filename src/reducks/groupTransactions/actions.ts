@@ -12,6 +12,7 @@ export type groupTransactionsAction = ReturnType<
   | typeof updateGroupLatestTransactionsAction
   | typeof fetchGroupAccountAction
   | typeof fetchGroupYearlyAccountListAction
+  | typeof fetchYearlyAccountListForModalAction
   | typeof addGroupAccountAction
   | typeof editGroupAccountAction
   | typeof deleteGroupAccountAction
@@ -71,6 +72,19 @@ export const fetchGroupYearlyAccountListAction = (
     payload: {
       loading: false,
       groupYearlyAccountList: groupYearlyAccountList,
+    },
+  };
+};
+
+export const FETCH_YEARLY_ACCOUNT_MODAL = 'FETCH_YEARLY_ACCOUNT_MODAL';
+export const fetchYearlyAccountListForModalAction = (
+  groupYearlyAccountListForModal: GroupYearlyAccountList
+) => {
+  return {
+    type: FETCH_YEARLY_ACCOUNT_MODAL,
+    payload: {
+      loading: false,
+      groupYearlyAccountListForModal: groupYearlyAccountListForModal,
     },
   };
 };

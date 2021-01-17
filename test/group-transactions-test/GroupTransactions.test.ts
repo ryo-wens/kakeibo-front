@@ -1,10 +1,9 @@
-import React from 'react';
 import * as actionTypes from '../../src/reducks/groupTransactions/actions';
 import axios from 'axios';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
-import { GroupAccounts, GroupTransactionsReq } from '../../src/reducks/groupTransactions/types';
+import { GroupTransactionsReq } from '../../src/reducks/groupTransactions/types';
 import { SelectYears } from '../../src/lib/date';
 import {
   addGroupTransactions,
@@ -17,6 +16,7 @@ import {
   deleteGroupLatestTransactions,
   fetchGroupAccount,
   fetchGroupYearlyAccountList,
+  fetchGroupYearlyAccountListForModal,
   addGroupAccount,
   editGroupAccount,
   deleteGroupAccount,
@@ -38,6 +38,7 @@ import editGroupAccountResponse from './editGroupAccountResponse.json';
 import deleteAccountResponse from './deleteGroupAccountResponse.json';
 import searchGroupTransactionsRes from './fetchSearchGroupTransactionsResponse.json';
 import groupYearlyAccountListRes from './groupYearlyAccountList.json';
+import groupYearlyAccountListForModalRes from './groupYearlyAccountListForModal.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -676,6 +677,36 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     await fetchGroupYearlyAccountList(groupId, year, signal)(store.dispatch);
+    expect(store.getActions()).toEqual(expectActions);
+  });
+
+  it('Get groupYearlyAccountList for Modal if fetch succeeds', async () => {
+    const store = mockStore({ groupTransactions: { groupYearlyAccountListForModal: {} } });
+
+    beforeEach(() => {
+      store.clearActions();
+    });
+
+    const groupId = 1;
+    const year = 2021;
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = groupYearlyAccountListForModalRes;
+
+    const expectActions = [
+      {
+        type: actionTypes.FETCH_YEARLY_ACCOUNT_MODAL,
+        payload: {
+          loading: false,
+          groupYearlyAccountListForModal: mockResponse,
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, mockResponse);
+
+    await fetchGroupYearlyAccountListForModal(groupId, year, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectActions);
   });
 });

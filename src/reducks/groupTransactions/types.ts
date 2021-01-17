@@ -24,6 +24,11 @@ export interface ErrorInfo {
   errorMessage: string;
 }
 
+export interface YearlyAccountStatus {
+  year: string;
+  accountedMonth: string[];
+}
+
 export interface GroupTransactionsList extends Array<GroupTransactions> {}
 
 export interface GroupLatestTransactionsListRes {

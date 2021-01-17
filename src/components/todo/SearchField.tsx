@@ -54,6 +54,7 @@ const SearchField = (props: SearchFieldProps) => {
             onChange={props.selectStartDateChange}
             required={false}
             value={props.selectStartDate}
+            disabled={false}
           />
           <span>〜</span>
           <DatePicker
@@ -62,6 +63,7 @@ const SearchField = (props: SearchFieldProps) => {
             onChange={props.selectEndDateChange}
             required={false}
             value={props.selectEndDate}
+            disabled={false}
           />
         </div>
       ),

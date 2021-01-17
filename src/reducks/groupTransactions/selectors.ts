@@ -1,6 +1,7 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { PieChartData, PieChartDataList } from '../transactions/types';
+import { YearlyAccountStatus } from './types';
 import { incomeTransactionType } from '../../lib/constant';
 
 const groupTransactionsSelector = (state: State) => state.groupTransactions;
@@ -48,6 +49,51 @@ export const getStatusNotFoundMessage = createSelector([errorInfo], (errorInfo) 
 
   return errorMessage;
 });
+
+const yearlyAccountList = (state: State) => state.groupTransactions.groupYearlyAccountList;
+
+export const getYearlyAccountListStatus = createSelector(
+  [yearlyAccountList],
+  (yearlyAccountList) => {
+    const yearlyAccountStatus: YearlyAccountStatus = {
+      year: '',
+      accountedMonth: [],
+    };
+
+    for (const yearlyAccount of yearlyAccountList.yearly_accounting_status) {
+      // 精算済みの場合は、家計簿の追加, 編集, 削除は行えないようにするため精算済みの月を取得する。
+      if (yearlyAccount.calculation_status === '精算済') {
+        yearlyAccountStatus.accountedMonth.push(yearlyAccount.month);
+        yearlyAccountStatus.year = yearlyAccountList.Year;
+      }
+    }
+
+    return yearlyAccountStatus;
+  }
+);
+
+const yearlyAccountListForModal = (state: State) =>
+  state.groupTransactions.groupYearlyAccountListForModal;
+
+export const getYearlyAccountListStatusModals = createSelector(
+  [yearlyAccountListForModal],
+  (yearlyAccountListForModal) => {
+    const yearlyAccountStatusForModal: YearlyAccountStatus = {
+      year: '',
+      accountedMonth: [],
+    };
+
+    for (const yearlyAccount of yearlyAccountListForModal.yearly_accounting_status) {
+      // 精算済みの場合は、家計簿の追加, 編集, 削除は行えないようにするため精算済みの月を取得する。
+      if (yearlyAccount.calculation_status === '精算済') {
+        yearlyAccountStatusForModal.year = yearlyAccountListForModal.Year;
+        yearlyAccountStatusForModal.accountedMonth.push(yearlyAccount.month);
+      }
+    }
+
+    return yearlyAccountStatusForModal;
+  }
+);
 
 const groupAccountList = (state: State) => state.groupTransactions.groupAccountList;
 

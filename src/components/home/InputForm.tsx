@@ -1,12 +1,14 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../uikit/index';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
   addGroupTransactions,
+  fetchGroupYearlyAccountList,
 } from '../../reducks/groupTransactions/operations';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { getUserId } from '../../reducks/users/selectors';
@@ -15,48 +17,66 @@ import {
   getGroupIncomeCategories,
   getGroupExpenseCategories,
 } from '../../reducks/groupCategories/selectors';
+import { getYearlyAccountListStatus } from '../../reducks/groupTransactions/selectors';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
-import { State } from '../../reducks/store/types';
 import { Category, AssociatedCategory } from '../../reducks/categories/types';
-import { getPathTemplateName } from '../../lib/path';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
 import axios from 'axios';
 import { BigCategoryInput, MediumCategoryInput } from '../uikit';
-import { useParams } from 'react-router';
+import '../../assets/modules/input-form .scss';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
   const { id } = useParams();
-  const pathName = getPathTemplateName(window.location.pathname);
-  const approvedGroups = getApprovedGroups(selector);
-  const userId = getUserId(selector);
-  const incomeCategories = getIncomeCategories(selector);
-  const expenseCategories = getExpenseCategories(selector);
-  const groupIncomeCategories = getGroupIncomeCategories(selector);
-  const groupExpenseCategories = getGroupExpenseCategories(selector);
+  const pathName = useLocation().pathname.split('/')[1];
+  const approvedGroups = useSelector(getApprovedGroups);
+  const userId = useSelector(getUserId);
+  const incomeCategories = useSelector(getIncomeCategories);
+  const expenseCategories = useSelector(getExpenseCategories);
+  const groupIncomeCategories = useSelector(getGroupIncomeCategories);
+  const groupExpenseCategories = useSelector(getGroupExpenseCategories);
+  const accountingStatus = useSelector(getYearlyAccountListStatus);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string>('');
   const emptyShop = shop === '' ? null : shop;
   const [transactionDate, setTransactionDate] = useState<Date | null>(new Date());
-  const [transactionsType, setTransactionType] = useState<string>('expense');
-  const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
+  const [transactionsType, setTransactionType] = useState('expense');
+  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [bigCategory, setBigCategory] = useState<string | null>('');
   const [associatedCategory, setAssociatedCategory] = useState<string>('');
   const [bigCategoryId, setBigCategoryId] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
-
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
+
+  let addTransactionYear = 0;
+  let addTransactionMonth = 0;
+
+  if (transactionDate) {
+    addTransactionYear = transactionDate.getFullYear();
+    addTransactionMonth = transactionDate.getMonth() + 1;
+  }
+
+  let canDisplayMessage = false;
+
+  if (pathName === 'group') {
+    if (accountingStatus.year === addTransactionYear + '年') {
+      for (const account of accountingStatus.accountedMonth) {
+        if (account === addTransactionMonth + '月') {
+          canDisplayMessage = true;
+        }
+      }
+    }
+  }
 
   useEffect(() => {
     setPaymentUserId(userId);
@@ -86,15 +106,19 @@ const InputForm = (): JSX.Element => {
     if (pathName === 'group') {
       const signal = axios.CancelToken.source();
       dispatch(fetchGroupCategories(Number(id), signal));
+      dispatch(fetchGroupYearlyAccountList(Number(id), addTransactionYear, signal));
+
       const interval = setInterval(() => {
         dispatch(fetchGroupCategories(Number(id), signal));
+        dispatch(fetchGroupYearlyAccountList(Number(id), addTransactionYear, signal));
       }, 3000);
+
       return () => {
         signal.cancel();
         clearInterval(interval);
       };
     }
-  }, [pathName, id]);
+  }, [pathName, id, transactionDate]);
 
   const handlePayerChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -243,20 +267,27 @@ const InputForm = (): JSX.Element => {
   };
 
   return (
-    <form className="grid__column box__input" autoComplete="on">
-      <h3>家計簿入力フォーム</h3>
+    <form className="input-form input-form__column" autoComplete="on">
+      <div className="input-form__sub-heading">家計簿入力フォーム</div>
+      {canDisplayMessage && (
+        <div className="input-form__message input-form__message--small">
+          {addTransactionMonth}月は会計済みのため追加できません。
+        </div>
+      )}
       <DatePicker
         id={'date-picker-dialog'}
         label={'日付(必須)'}
         value={transactionDate}
         onChange={handleDateChange}
         required={true}
+        disabled={false}
       />
       <KindSelectBox
         onChange={handleSelect}
         required={true}
         value={transactionsType}
         label={'収入or支出(必須)'}
+        disabled={false}
       />
       <TextInput
         value={amount}
@@ -266,6 +297,7 @@ const InputForm = (): JSX.Element => {
         onChange={handleAmountChange}
         required={false}
         fullWidth={false}
+        disabled={false}
       />
       {pathName === 'group' && (
         <SelectPayer
@@ -275,6 +307,7 @@ const InputForm = (): JSX.Element => {
           approvedGroups={approvedGroups}
           groupId={Number(id)}
           pathName={pathName}
+          disabled={false}
         />
       )}
       <BigCategoryInput
@@ -287,6 +320,7 @@ const InputForm = (): JSX.Element => {
         onClick={selectCategory}
         onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
         setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+        disabled={false}
       />
       <MediumCategoryInput
         ref={mediumMenuRef}
@@ -301,6 +335,7 @@ const InputForm = (): JSX.Element => {
         onClick={selectCategory}
         onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
         setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+        disabled={false}
       />
       <TextInput
         value={shop}
@@ -310,6 +345,7 @@ const InputForm = (): JSX.Element => {
         onChange={handleShop}
         required={false}
         fullWidth={false}
+        disabled={false}
       />
       <TextInput
         value={memo}
@@ -319,6 +355,7 @@ const InputForm = (): JSX.Element => {
         onChange={handleMemo}
         required={false}
         fullWidth={false}
+        disabled={false}
       />
       <GenericButton
         startIcon={<AddCircleOutlineIcon />}

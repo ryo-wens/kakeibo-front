@@ -5,6 +5,7 @@ import {
   failedFetchDataAction,
   fetchGroupAccountAction,
   fetchGroupYearlyAccountListAction,
+  fetchYearlyAccountListForModalAction,
   searchGroupTransactionsAction,
   updateGroupLatestTransactionsAction,
   updateGroupTransactionsAction,
@@ -453,6 +454,43 @@ export const fetchGroupYearlyAccountList = (
       const groupYearlyAccountList = result.data;
 
       dispatch(fetchGroupYearlyAccountListAction(groupYearlyAccountList));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        const groupTransactionsError = {
+          loading: false,
+          statusCode: error.response.status,
+          errorMessage: error.response.data.error.message,
+        };
+
+        dispatch(failedFetchDataAction(groupTransactionsError));
+
+        if (error.response.status === 401) {
+          dispatch(push('/login'));
+        }
+      }
+    }
+  };
+};
+
+export const fetchGroupYearlyAccountListForModal = (
+  groupId: number,
+  year: number,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    try {
+      const result = await axios.get<GroupYearlyAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const groupYearlyAccountList = result.data;
+
+      dispatch(fetchYearlyAccountListForModalAction(groupYearlyAccountList));
     } catch (error) {
       if (axios.isCancel(error)) {
         return;

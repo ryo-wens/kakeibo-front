@@ -59,6 +59,7 @@ const Home = () => {
       dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
         dispatch(fetchGroupTransactionsList(Number(id), years, signal));
+        dispatch(fetchGroupYearlyBudgets(Number(id), year, signal));
         dispatch(fetchGroups(signal));
       }, 3000);
       return () => {

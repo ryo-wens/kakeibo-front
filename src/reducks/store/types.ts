@@ -61,6 +61,7 @@ export interface State {
     groupSearchTransactionsList: GroupTransactionsList;
     groupAccountList: GroupAccountList;
     groupYearlyAccountList: GroupYearlyAccountList;
+    groupYearlyAccountListForModal: GroupYearlyAccountList;
     notAccountMessage: string;
     deletedMessage: string;
     groupTransactionsError: ErrorInfo;

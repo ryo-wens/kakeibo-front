@@ -48,6 +48,10 @@ const initialState = {
       year: '',
       yearly_accounting_status: [],
     },
+    groupYearlyAccountListForModal: {
+      year: '',
+      yearly_accounting_status: [],
+    },
     groupTransactionsError: {
       loading: false,
       statusCode: 0,
