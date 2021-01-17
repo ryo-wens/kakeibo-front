@@ -36,7 +36,7 @@ const GroupShoppingListPage = () => {
           <SwitchTodayOrMonthlyTabs
             currentItems={currentItems}
             setCurrentItems={setCurrentItems}
-            leftItem={<GroupTodayShoppingListArea />}
+            leftItem={<GroupTodayShoppingListArea currentYearMonth={currentYearMonth} />}
             rightItem={
               <GroupMonthlyShoppingListArea
                 selectedYear={selectedYear}

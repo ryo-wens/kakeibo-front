@@ -2,6 +2,7 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import {
+  addGroupShoppingListItem,
   fetchGroupExpiredShoppingList,
   fetchGroupMonthlyShoppingList,
   fetchGroupMonthlyShoppingListByCategories,
@@ -15,13 +16,14 @@ import fetchGroupTodayShoppingListResponse from './fetchGroupTodayShoppingListRe
 import fetchGroupTodayShoppingListByCategoriesResponse from './fetchGroupTodayShoppingListByCategoriesResponse.json';
 import fetchGroupMonthlyShoppingListResponse from './fetchGroupMonthlyShoppingListResponse.json';
 import fetchGroupMonthlyShoppingListByCategoriesResponse from './fetchGroupMonthlyShoppingListByCategoriesResponse.json';
+import addGroupShoppingListItemResponse from './addGroupShoppingListItemResponse.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
 const axiosMock = new MockAdapter(axios);
 
-const store = mockStore({ shoppingList: [], modal: [], router: [] });
+const store = mockStore({ groupShoppingList: [], modal: [], router: [] });
 
 const getState = () => {
   return {
@@ -513,6 +515,209 @@ describe('async actions shoppingList', () => {
 
     // @ts-ignore
     await fetchGroupMonthlyShoppingListByCategories(groupId, year, month, signal)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('add groupShoppingListItem if fetch succeeds', async () => {
+    const groupId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list`;
+    const today = new Date();
+    const currentYearMonth = '2020/12';
+    const expectedPurchaseDate = new Date('2020-12-26T10:00:00');
+    const purchase = '鶏肉3kg';
+    const shop = 'コストコ';
+    const amount = 1000;
+    const bigCategoryId = 2;
+    const mediumCategoryId = 6;
+    const customCategoryId = null;
+    const transactionAutoAdd = true;
+    const paymentUser = null;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(addGroupShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupShoppingListActions.START_ADD_GROUP_SHOPPING_LIST_ITEM,
+        payload: {
+          groupTodayShoppingListLoading: true,
+          groupTodayShoppingListByCategoriesLoading: true,
+          groupMonthlyShoppingListLoading: true,
+          groupMonthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: GroupShoppingListActions.ADD_GROUP_SHOPPING_LIST_ITEM,
+        payload: {
+          groupTodayShoppingListLoading: false,
+          groupTodayShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-20T10:00:00Z',
+              updated_date: '2020-12-20T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: false,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: 1,
+              payment_user_id: null,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          groupTodayShoppingListByCategoriesLoading: false,
+          groupTodayShoppingListByCategories: [
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-20T10:00:00Z',
+                  updated_date: '2020-12-20T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: false,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: 1,
+                  payment_user_id: null,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+          groupMonthlyShoppingListLoading: false,
+          groupMonthlyShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-20T10:00:00Z',
+              updated_date: '2020-12-20T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: false,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: 1,
+              payment_user_id: null,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+            {
+              id: 2,
+              posted_date: '2020-12-24T10:00:00Z',
+              updated_date: '2020-12-24T10:00:00Z',
+              expected_purchase_date: '2020/12/26(土)',
+              complete_flag: false,
+              purchase: '鶏肉3kg',
+              shop: 'コストコ',
+              amount: 1000,
+              big_category_id: 2,
+              big_category_name: '食費',
+              medium_category_id: 6,
+              medium_category_name: '食料品',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: null,
+              payment_user_id: null,
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          groupMonthlyShoppingListByCategoriesLoading: false,
+          groupMonthlyShoppingListByCategories: [
+            {
+              big_category_name: '食費',
+              shopping_list: [
+                {
+                  id: 2,
+                  posted_date: '2020-12-24T10:00:00Z',
+                  updated_date: '2020-12-24T10:00:00Z',
+                  expected_purchase_date: '2020/12/26(土)',
+                  complete_flag: false,
+                  purchase: '鶏肉3kg',
+                  shop: 'コストコ',
+                  amount: 1000,
+                  big_category_id: 2,
+                  big_category_name: '食費',
+                  medium_category_id: 6,
+                  medium_category_name: '食料品',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: null,
+                  payment_user_id: null,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-20T10:00:00Z',
+                  updated_date: '2020-12-20T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: false,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: 1,
+                  payment_user_id: null,
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPost(url).reply(200, mockResponse);
+
+    await addGroupShoppingListItem(
+      groupId,
+      today,
+      currentYearMonth,
+      expectedPurchaseDate,
+      purchase,
+      shop,
+      amount,
+      bigCategoryId,
+      mediumCategoryId,
+      customCategoryId,
+      paymentUser,
+      transactionAutoAdd,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

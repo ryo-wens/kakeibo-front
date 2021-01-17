@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { BigCategoryInput, MediumCategoryInput, TextInput } from '../../../../uikit';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
 import DateFnsUtils from '@date-io/date-fns';
 import '../../../../shoppingList/uikit/Form/ShoppingListForm/shopping-list-form.scss';
@@ -13,6 +13,8 @@ import {
   getGroupExpenseCategories,
   getGroupIncomeCategories,
 } from '../../../../../reducks/groupCategories/selectors';
+import { Action, Dispatch } from 'redux';
+import { State } from '../../../../../reducks/store/types';
 
 interface GroupShoppingListFormProps {
   expectedPurchaseDate: Date | null;
@@ -43,12 +45,14 @@ interface GroupShoppingListFormProps {
   closeModal: () => void;
   setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   unInput: boolean;
+  dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
   minDate: Date;
   displayInputAmountMessage: boolean;
   openDeleteForm?: () => void;
 }
 
 const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
+  const dispatch = useDispatch();
   const approvedGroups = useSelector(getApprovedGroups);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
@@ -222,6 +226,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           className="shopping-list-form__operation-btn--add"
           disabled={props.unInput}
           onClick={() => {
+            dispatch(props.dispatchOperation);
             props.setOpen(false);
           }}
         >
