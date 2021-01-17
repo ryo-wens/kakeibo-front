@@ -40,6 +40,10 @@ export type GroupShoppingListActions = ReturnType<
   | typeof addGroupRegularShoppingListItemAction
   | typeof cancelAddGroupRegularShoppingListItemAction
   | typeof failedAddGroupRegularShoppingListItemAction
+  | typeof startEditGroupRegularShoppingListItemAction
+  | typeof editGroupRegularShoppingListItemAction
+  | typeof cancelEditGroupRegularShoppingListItemAction
+  | typeof failedEditGroupRegularShoppingListItemAction
 >;
 
 export const START_FETCH_GROUP_EXPIRED_SHOPPING_LIST = 'START_FETCH_GROUP_EXPIRED_SHOPPING_LIST';
@@ -641,6 +645,88 @@ export const failedAddGroupRegularShoppingListItemAction = (
 ) => {
   return {
     type: FAILED_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupRegularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupTodayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupMonthlyShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM =
+  'START_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const startEditGroupRegularShoppingListItemAction = () => {
+  return {
+    type: START_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: true,
+      groupTodayShoppingListLoading: true,
+      groupTodayShoppingListByCategoriesLoading: true,
+      groupMonthlyShoppingListLoading: true,
+      groupMonthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM = 'EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const editGroupRegularShoppingListItemAction = () => {
+  return {
+    type: EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const CANCEL_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM =
+  'CANCEL_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const cancelEditGroupRegularShoppingListItemAction = () => {
+  return {
+    type: CANCEL_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+    payload: {
+      groupRegularShoppingListLoading: false,
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM =
+  'FAILED_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM';
+export const failedEditGroupRegularShoppingListItemAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
       groupRegularShoppingListLoading: false,
       groupRegularShoppingListError: {

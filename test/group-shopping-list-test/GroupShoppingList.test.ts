@@ -5,6 +5,7 @@ import {
   addGroupRegularShoppingListItem,
   addGroupShoppingListItem,
   deleteGroupShoppingListItem,
+  editGroupRegularShoppingListItem,
   editGroupShoppingListItem,
   fetchGroupExpiredShoppingList,
   fetchGroupMonthlyShoppingList,
@@ -23,6 +24,7 @@ import addGroupShoppingListItemResponse from './addGroupShoppingListItemResponse
 import editGroupShoppingListItemResponse from './editGroupShoppingListItemResponse.json';
 import deleteGroupShoppingListItemResponse from './deleteGroupShoppingListItemResponse.json';
 import addGroupRegularShoppingListItemResponse from './addGroupRegularShoppingListItemResponse.json';
+import editGroupRegularShoppingListItemResponse from './editGroupRegularShoppingListItemResponse.json';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
 const middlewares = [thunk];
@@ -953,7 +955,7 @@ describe('async actions shoppingList', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('add regularShoppingListItem and shoppingList if fetch succeeds', async () => {
+  it('add groupRegularShoppingListItem and groupShoppingList if fetch succeeds', async () => {
     const groupId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular`;
     const today = new Date();
@@ -1185,6 +1187,70 @@ describe('async actions shoppingList', () => {
       groupId,
       today,
       currentYearMonth,
+      expectedPurchaseDate,
+      cycleType,
+      cycle,
+      purchase,
+      shop,
+      amount,
+      bigCategoryId,
+      mediumCategoryId,
+      customCategoryId,
+      paymentUser,
+      transactionAutoAdd,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('edit groupRegularShoppingListItem and groupShoppingList if fetch succeeds', async () => {
+    const groupId = 1;
+    const regularShoppingListItemId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular/${regularShoppingListItemId}`;
+    const expectedPurchaseDate = new Date('2020-12-25T10:00:00');
+    const cycleType = 'monthly';
+    const cycle = null;
+    const purchase = '携帯料金';
+    const shop = 'auショップ';
+    const amount = 5000;
+    const bigCategoryId = 9;
+    const mediumCategoryId = 51;
+    const customCategoryId = null;
+    const paymentUser = null;
+    const transactionAutoAdd = true;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(editGroupRegularShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupShoppingListActions.START_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          groupRegularShoppingListLoading: true,
+          groupTodayShoppingListLoading: true,
+          groupTodayShoppingListByCategoriesLoading: true,
+          groupMonthlyShoppingListLoading: true,
+          groupMonthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: GroupShoppingListActions.EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          groupRegularShoppingListLoading: false,
+          groupTodayShoppingListLoading: false,
+          groupTodayShoppingListByCategoriesLoading: false,
+          groupMonthlyShoppingListLoading: false,
+          groupMonthlyShoppingListByCategoriesLoading: false,
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editGroupRegularShoppingListItem(
+      groupId,
+      regularShoppingListItemId,
       expectedPurchaseDate,
       cycleType,
       cycle,
