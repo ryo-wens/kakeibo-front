@@ -6,38 +6,43 @@
 
   &__switch-page {
     display: flex;
-    width: 100%;
-    background-color: white;
+    width: 40%;
     text-align: center;
-    margin-bottom: 40px;
+    margin: 15px auto 70px 15%;
   }
 
   &__switch-page-button {
-    width: 50%;
-    background-color: white;
+    background-color: $main_background_color;
     border: none;
     color: #5D6B89;
     font-size: 0.9rem;
-    padding: 10px 18px 5px 18px;
+    margin-left: 70px;
     cursor: pointer;
 
     &:focus {
       outline: none;
     }
+
+    &:first-child {
+      margin-left: 0;
+    }
   }
 
   &__current-page-button {
-    width: 50%;
     border: none;
-    background-color: #E6E8ED;
+    background-color: $main_background_color;
     color: #515C77;
     font-size: 0.9rem;
     font-weight: bold;
-    padding: 10px 18px 5px 18px;
+    margin-left: 70px;
     cursor: pointer;
 
     &:focus {
       outline: none;
+    }
+
+    &:first-child {
+      margin-left: 0;
     }
 
     > span {

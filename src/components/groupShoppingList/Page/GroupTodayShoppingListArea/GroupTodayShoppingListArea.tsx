@@ -1,0 +1,65 @@
+import React from 'react';
+import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
+import { useSelector } from 'react-redux';
+import { date } from '../../../../lib/constant';
+import { useParams } from 'react-router';
+import '../../../shoppingList/Page/TodayShoppingListArea/today-shopping-list-area.scss';
+import AddGroupShoppingListModal from '../../uikit/Modal/AddGroupShoppingListModal/AddGroupShoppingListModal';
+import GroupTodayShoppingListComponent from './GroupTodayShoppingListComponent/GroupTodayShoppingListComponent';
+import {
+  getGroupTodayShoppingList,
+  getGroupTodayShoppingListByCategories,
+} from '../../../../reducks/groupShoppingList/selectors';
+import GroupTodayShoppingListByCategoriesComponent from './GroupTodayShoppingListByCategoriesComponent/GroupTodayShoppingListByCategoriesComponent';
+
+interface GroupTodayShoppingListAreaProps {
+  currentYearMonth: string;
+}
+
+const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
+  const groupTodayShoppingList = useSelector(getGroupTodayShoppingList);
+  const groupTodayShoppingListByCategories = useSelector(getGroupTodayShoppingListByCategories);
+
+  const { id } = useParams();
+  const todayYear = String(date.getFullYear());
+  const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
+  const todayDate: string = ('0' + date.getDate()).slice(-2);
+
+  return (
+    <>
+      <div className="today-shopping-list-area__add-button">
+        <AddGroupShoppingListModal currentYearMonth={props.currentYearMonth} />
+      </div>
+      <div className="today-shopping-list-area__switch-item">
+        <div className="today-shopping-list-area__switch-item--width">
+          <SwitchItemTabs
+            leftButtonLabel={'日別'}
+            rightButtonLabel={'カテゴリ別'}
+            leftItem={
+              <GroupTodayShoppingListComponent
+                shoppingList={groupTodayShoppingList}
+                currentYearMonth={props.currentYearMonth}
+                groupId={Number(id)}
+                year={todayYear}
+                month={todayMonth}
+                date={todayDate}
+              />
+            }
+            rightItem={
+              <GroupTodayShoppingListByCategoriesComponent
+                shoppingListByCategories={groupTodayShoppingListByCategories}
+                currentYearMonth={props.currentYearMonth}
+                groupId={Number(id)}
+                year={todayYear}
+                month={todayMonth}
+                date={todayDate}
+              />
+            }
+          />
+        </div>
+      </div>
+    </>
+  );
+};
+
+export default GroupTodayShoppingListArea;

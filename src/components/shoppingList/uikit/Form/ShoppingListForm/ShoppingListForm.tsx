@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { CategoryInput, TextInput } from '../../../../uikit';
+import { BigCategoryInput, MediumCategoryInput, TextInput } from '../../../../uikit';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getExpenseCategories,
@@ -38,9 +38,11 @@ interface ShoppingListFormProps {
   titleLabel: string;
   buttonLabel: string;
   closeModal: () => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   unInput: boolean;
   dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
   minDate: Date;
+  displayInputAmountMessage: boolean;
   openDeleteForm?: () => void;
 }
 
@@ -48,6 +50,23 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
   const dispatch = useDispatch();
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
+
+  const bigCategoryRef = useRef<HTMLDivElement>(null);
+  const mediumMenuRef = useRef<HTMLDivElement>(null);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+
+  const onClickCloseBigCategoryMenu = (event: Event) => {
+    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
+      setBigCategoryMenuOpen(false);
+    }
+  };
+
+  const onClickCloseMediumCategoryMenu = (event: Event) => {
+    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
+      setMediumCategoryMenuOpen(false);
+    }
+  };
 
   const inputItems = [
     {
@@ -57,7 +76,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           value={props.purchase}
           type={'text'}
           id={'purchase'}
-          label={'(必須)'}
+          label={'必須'}
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
@@ -68,17 +87,35 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
     {
       key: 'カテゴリー',
       value: (
-        <CategoryInput
-          bigCategory={props.bigCategory}
-          associatedCategory={props.associatedCategory}
-          onClick={props.selectCategory}
-          required={true}
-          kind={'expense'}
-          bigCategoryIndex={props.bigCategoryIndex}
-          bigCategoryId={props.bigCategoryId}
-          expenseCategories={expenseCategories}
-          incomeCategories={incomeCategories}
-        />
+        <>
+          <BigCategoryInput
+            ref={bigCategoryRef}
+            kind={'expense'}
+            bigCategory={props.bigCategory}
+            bigCategoryMenuOpen={bigCategoryMenuOpen}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            onClick={props.selectCategory}
+            onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
+            setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+            disabled={false}
+          />
+          <MediumCategoryInput
+            ref={mediumMenuRef}
+            kind={'expense'}
+            bigCategoryId={props.bigCategoryId}
+            bigCategoryIndex={props.bigCategoryIndex}
+            bigCategory={props.bigCategory}
+            associatedCategory={props.associatedCategory}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+            onClick={props.selectCategory}
+            onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+            setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+            disabled={false}
+          />
+        </>
       ),
     },
     {
@@ -88,7 +125,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           <KeyboardDatePicker
             margin="normal"
             id="date-picker-dialog"
-            label="購入予定日"
+            label="必須"
             format="yyyy年 MM月dd日"
             value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
@@ -101,16 +138,29 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
     {
       key: '金額',
       value: (
-        <TextInput
-          value={props.amount}
-          type={'tel'}
-          id={'amount'}
-          label={'金額(任意)'}
-          onChange={props.handleAmountChange}
-          required={false}
-          fullWidth={false}
-          disabled={false}
-        />
+        <>
+          <TextInput
+            value={props.amount}
+            type={'tel'}
+            id={'amount'}
+            label={props.displayInputAmountMessage && props.transactionAutoAdd ? '必須' : '任意'}
+            onChange={props.handleAmountChange}
+            required={false}
+            fullWidth={false}
+            disabled={false}
+          />
+          {props.displayInputAmountMessage && (
+            <p
+              className={
+                props.transactionAutoAdd && props.amount === null
+                  ? 'shopping-list-form__required-input-item-message'
+                  : 'shopping-list-form__required-input-item-message--hide'
+              }
+            >
+              ※ 金額の入力が必要です。
+            </p>
+          )}
+        </>
       ),
     },
     {
@@ -120,7 +170,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           value={props.shop}
           type={'text'}
           id={'shop'}
-          label={'店名(任意)'}
+          label={'任意'}
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
@@ -158,23 +208,30 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
         取引履歴に自動追加
       </label>
       <div className="set-task-list-item__operation-btn">
-        <button
-          className="shopping-list-form__operation-btn--add"
-          disabled={props.unInput}
-          onClick={() => {
-            dispatch(props.dispatchOperation);
-            props.closeModal();
-          }}
-        >
-          {props.buttonLabel}
-        </button>
-        {props.titleLabel === '買い物リストアイテムを編集' && (
+        <div>
+          <button
+            className="shopping-list-form__operation-btn--add"
+            disabled={props.unInput}
+            onClick={() => {
+              dispatch(props.dispatchOperation);
+              props.setOpen(false);
+            }}
+          >
+            {props.buttonLabel}
+          </button>
+          <button
+            className="shopping-list-form__operation-btn--cancel"
+            disabled={false}
+            onClick={() => props.closeModal()}
+          >
+            キャンセル
+          </button>
+        </div>
+        {props.openDeleteForm && (
           <button
             className="shopping-list-form__operation-btn--delete"
             onClick={() => {
-              if (props.openDeleteForm) {
-                props.openDeleteForm();
-              }
+              props.openDeleteForm && props.openDeleteForm();
             }}
           >
             削除

@@ -118,6 +118,44 @@ const initialState = {
       statusCode: 0,
     },
   },
+  groupShoppingList: {
+    groupRegularShoppingListLoading: false,
+    groupRegularShoppingList: [],
+    groupRegularShoppingListError: {
+      message: '',
+      statusCode: 0,
+    },
+    groupExpiredShoppingListLoading: false,
+    groupExpiredShoppingList: [],
+    groupExpiredShoppingListError: {
+      message: '',
+      statusCode: 0,
+    },
+    groupTodayShoppingListLoading: false,
+    groupTodayShoppingList: [],
+    groupTodayShoppingListError: {
+      message: '',
+      statusCode: 0,
+    },
+    groupTodayShoppingListByCategoriesLoading: false,
+    groupTodayShoppingListByCategories: [],
+    groupTodayShoppingListByCategoriesError: {
+      message: '',
+      statusCode: 0,
+    },
+    groupMonthlyShoppingListLoading: false,
+    groupMonthlyShoppingList: [],
+    groupMonthlyShoppingListError: {
+      message: '',
+      statusCode: 0,
+    },
+    groupMonthlyShoppingListByCategoriesLoading: false,
+    groupMonthlyShoppingListByCategories: [],
+    groupMonthlyShoppingListByCategoriesError: {
+      message: '',
+      statusCode: 0,
+    },
+  },
   todoList: {
     expiredTodoList: [],
     todayImplementationTodoList: [],

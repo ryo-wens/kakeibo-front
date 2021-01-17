@@ -17,6 +17,7 @@ import { groupTodoListsReducer } from '../groupTodoList/reducers';
 import { groupTasksReducers } from '../groupTasks/reducers';
 import { userActions } from '../users/actions';
 import { shoppingListReducers } from '../shoppingList/reducers';
+import { groupShoppingListReducers } from '../groupShoppingList/reducers';
 
 interface ExtendedWindow extends Window {
   __REDUX_DEVTOOLS_EXTENSION_COMPOSE__?: typeof compose;
@@ -44,6 +45,7 @@ export default function createStore(history: History) {
     groupBudgets: groupBudgetsReducer,
     groupTasks: groupTasksReducers,
     shoppingList: shoppingListReducers,
+    groupShoppingList: groupShoppingListReducers,
     todoList: todoListReducer,
     groupTodoList: groupTodoListsReducer,
     modal: modalReducer,

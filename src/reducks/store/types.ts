@@ -18,6 +18,11 @@ import { TodoList } from '../todoList/types';
 import { GroupTodoList } from '../groupTodoList/types';
 import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
 import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
+import {
+  GroupRegularShoppingList,
+  GroupShoppingList,
+  GroupShoppingListByCategories,
+} from '../groupShoppingList/types';
 
 export interface State {
   users: {
@@ -109,6 +114,44 @@ export interface State {
     monthlyShoppingListByCategoriesLoading: boolean;
     monthlyShoppingListByCategories: ShoppingListByCategories;
     monthlyShoppingListByCategoriesError: {
+      message: string;
+      statusCode: number;
+    };
+  };
+  groupShoppingList: {
+    groupRegularShoppingListLoading: boolean;
+    groupRegularShoppingList: GroupRegularShoppingList;
+    groupRegularShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupExpiredShoppingListLoading: boolean;
+    groupExpiredShoppingList: GroupShoppingList;
+    groupExpiredShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupTodayShoppingListLoading: boolean;
+    groupTodayShoppingList: GroupShoppingList;
+    groupTodayShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupTodayShoppingListByCategoriesLoading: boolean;
+    groupTodayShoppingListByCategories: GroupShoppingListByCategories;
+    groupTodayShoppingListByCategoriesError: {
+      message: string;
+      statusCode: number;
+    };
+    groupMonthlyShoppingListLoading: boolean;
+    groupMonthlyShoppingList: GroupShoppingList;
+    groupMonthlyShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupMonthlyShoppingListByCategoriesLoading: boolean;
+    groupMonthlyShoppingListByCategories: GroupShoppingListByCategories;
+    groupMonthlyShoppingListByCategoriesError: {
       message: string;
       statusCode: number;
     };

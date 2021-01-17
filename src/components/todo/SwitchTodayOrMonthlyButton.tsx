@@ -30,7 +30,7 @@ const SwitchTodayOrMonthlyButton = (props: SwitchTodayOrMonthlyButtonProps) => {
         onClick={() => props.setCurrentTodayOrMonthly('monthly')}
         style={currentTemplateButtonStyle('monthly')}
       >
-        月間予定
+        月間
       </button>
     </div>
   );

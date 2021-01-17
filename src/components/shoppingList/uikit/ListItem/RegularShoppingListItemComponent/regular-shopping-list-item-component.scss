@@ -18,19 +18,21 @@
   }
 
   &__purchase {
-    width: calc((100% - 72px) * 0.8);
+    width: calc((100% - 72px) * 0.85);
     color: #333;
     margin-left: 5px;
   }
 
   &__amount {
-    width: calc((100% - 72px) * 0.2);
-    color: #333;
-  }
 
-  &__edit-icon {
-    @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
-    padding: 3px;
-    margin-left: 15px;
+    &--value {
+      width: calc((100% - 72px) * 0.15);
+      color: #333;
+      text-align: center;
+    }
+
+    &--unit {
+      color: #333;
+    }
   }
 }

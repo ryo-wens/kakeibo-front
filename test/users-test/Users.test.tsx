@@ -96,7 +96,7 @@ describe('async actions users', () => {
       },
       {
         payload: {
-          args: ['/'],
+          args: ['/home'],
           method: 'push',
         },
         type: '@@router/CALL_HISTORY_METHOD',
@@ -125,7 +125,7 @@ describe('async actions users', () => {
       },
       {
         payload: {
-          args: ['/login'],
+          args: ['/'],
           method: 'push',
         },
         type: '@@router/CALL_HISTORY_METHOD',

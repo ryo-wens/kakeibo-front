@@ -98,17 +98,6 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
 
   const openModal = () => {
     setOpen(true);
-    setExpectedPurchaseDate(initialExpectedPurchaseDate);
-    setCycleType(initialCycleType);
-    setCycle(initialCycle);
-    setPurchase(initialPurchase);
-    setShop(initialShop);
-    setAmount(initialAmount);
-    setBigCategoryId(initialBigCategoryId);
-    setBigCategory(initialBigCategoryName);
-    setMediumCategoryId(initialMediumCategoryId);
-    setCustomCategoryId(initialCustomCategoryId);
-    setTransactionAutoAdd(initialTransactionAutoAdd);
     if (props.listItem.medium_category_name) {
       setAssociatedCategory(props.listItem.medium_category_name);
     }
@@ -120,6 +109,17 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
   const closeModal = () => {
     setOpen(false);
     setDeleteForm(false);
+    setExpectedPurchaseDate(initialExpectedPurchaseDate);
+    setCycleType(initialCycleType);
+    setCycle(initialCycle);
+    setPurchase(initialPurchase);
+    setShop(initialShop);
+    setAmount(initialAmount);
+    setBigCategoryId(initialBigCategoryId);
+    setBigCategory(initialBigCategoryName);
+    setMediumCategoryId(initialMediumCategoryId);
+    setCustomCategoryId(initialCustomCategoryId);
+    setTransactionAutoAdd(initialTransactionAutoAdd);
   };
 
   const openDeleteForm = () => {
@@ -150,11 +150,19 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setAmount(event.target.value);
+    if (event.target.value === '') {
+      setAmount(null);
+    } else {
+      setAmount(event.target.value);
+    }
   };
 
   const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setShop(event.target.value);
+    if (event.target.value === '') {
+      setShop(null);
+    } else {
+      setShop(event.target.value);
+    }
   };
 
   const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -251,6 +259,7 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
           titleLabel={'定期買い物リストアイテムを編集'}
           buttonLabel={'保存'}
           closeModal={closeModal}
+          setOpen={setOpen}
           unInput={disabledButton()}
           minDate={new Date('1900-01-01')}
           dispatchOperation={editRegularShoppingList}

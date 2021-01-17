@@ -1,0 +1,85 @@
+@import "../../../../../../assets/variable";
+
+.related-transaction-data-button {
+
+  &__is-close {
+    display: flex;
+    align-items: center;
+    background-color: white;
+    color: $task-main_color;
+    font-size: 0.9rem;
+    border: $task-border_color solid 1.5px;
+    border-radius: 0.6rem;
+    padding: 2px 5px 2px 15px;
+    margin: 15px 0 0 38px;
+    cursor: pointer;
+    outline: none;
+
+      &:hover {
+        background-color: #718abc;
+        color: white;
+        border-color: #718abc;
+      }
+    }
+
+  &__is-open {
+    display: flex;
+    align-items: center;
+    background-color: #718abc;
+    color: white;
+    font-size: 0.9rem;
+    border: #718abc solid 1.5px;
+    border-bottom: none;
+    border-radius: 0.6rem 0.6rem 0 0;
+    padding: 2px 5px 2px 15px;
+    margin: 15px 0 0 38px;
+    cursor: pointer;
+    outline: none;
+  }
+
+  &__form {
+    background-color: #F8F9FC;
+    border: #718abc solid 1.5px;
+    border-radius: 0 0.6rem 0.6rem 0.6rem;
+    padding: 15px;
+    margin-left: 38px;
+  }
+
+  &__item {
+    display: flex;
+    margin-bottom: 10px;
+    align-items: center;
+
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+
+    &--key {
+      width: 20%;
+      color: $task-main_color;
+      font-size: 1.0rem;
+      font-weight: bold;
+    }
+
+    &--value {
+      display: flex;
+      color: #253b66;
+      font-size: 1.0rem;
+    }
+  }
+
+  &__item-value-category {
+    display: flex;
+    align-items: center;
+  }
+
+  &__item-value-category-color {
+    display: inline-block;
+    width: 10px;
+    height: 1.0rem;
+    border-radius: 0.7rem;
+    margin-right: 5px;
+    opacity: 0.8;
+  }
+}

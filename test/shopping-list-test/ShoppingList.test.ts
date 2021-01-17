@@ -1148,7 +1148,7 @@ describe('async actions shoppingList', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('add regularShoppingListItem and shoppingList if fetch succeeds', async () => {
+  it('edit regularShoppingListItem and shoppingList if fetch succeeds', async () => {
     const regularShoppingListItemId = 1;
     const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`;
     const expectedPurchaseDate = new Date('2020-12-25T10:00:00');

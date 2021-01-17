@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './shopping-list-item-component.scss';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
-import EditShoppingListModal from '../../Modal/EditShoppingListModal/EditShoppingListModal';
-import { useDispatch } from 'react-redux';
-import { editShoppingListItem } from '../../../../../reducks/shoppingList/operations';
-import { date } from '../../../../../lib/constant';
-import axios from 'axios';
+import EditShoppingListModal from './EditShoppingListModal/EditShoppingListModal';
 import { dateStringToDate } from '../../../../../lib/date';
+import CheckedShoppingListItemModal from './CheckedShoppingListItemModal/CheckedShoppingListItemModal';
+import RelatedTransactionDataButton from './RelatedTransactionDataButton/RelatedTransactionDataButton';
 
 interface ShoppingListItemComponentProps {
   listItem: ShoppingListItem;
@@ -15,8 +13,6 @@ interface ShoppingListItemComponentProps {
 }
 
 const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
-  const dispatch = useDispatch();
-
   const initialExpectedPurchaseDate: Date = dateStringToDate(props.listItem.expected_purchase_date);
   const initialPurchase = props.listItem.purchase;
   const initialShop = props.listItem.shop;
@@ -39,38 +35,14 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(initialMediumCategoryId);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(initialCustomCategoryId);
   const [transactionAutoAdd, setTransactionAutoAdd] = useState<boolean>(initialTransactionAutoAdd);
-  const signal = axios.CancelToken.source();
 
   useEffect(() => {
     setChecked(props.listItem.complete_flag);
   }, [props.listItem.complete_flag]);
 
-  const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-    dispatch(
-      editShoppingListItem(
-        date,
-        props.currentYearMonth,
-        props.listItem.id,
-        expectedPurchaseDate,
-        event.target.checked,
-        purchase,
-        shop,
-        Number(amount),
-        bigCategoryId,
-        mediumCategoryId,
-        customCategoryId,
-        props.listItem.regular_shopping_list_id,
-        transactionAutoAdd,
-        props.listItem.related_transaction_data,
-        signal
-      )
-    );
-  };
-
   const currentPurchaseTextStyle = () => {
     if (checked) {
-      return { textDecoration: 'line-through' };
+      return { opacity: 0.3 };
     }
   };
 
@@ -81,47 +53,100 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           {props.listItem.expected_purchase_date}
         </p>
       )}
-      <div className="shopping-list-item-component__content">
-        <label className="shopping-list-item-component__check">
-          <input type="checkbox" checked={checked} onChange={handleCheckedChange} />
-          <span />
-        </label>
-        <span className="shopping-list-item-component__purchase" style={currentPurchaseTextStyle()}>
-          {props.listItem.purchase}
-        </span>
-        <span className="shopping-list-item-component__amount">{props.listItem.amount}円</span>
-        <EditShoppingListModal
-          listItem={props.listItem}
-          currentYearMonth={props.currentYearMonth}
-          initialExpectedPurchaseDate={initialExpectedPurchaseDate}
-          initialPurchase={initialPurchase}
-          initialShop={initialShop}
-          initialAmount={initialAmount}
-          initialBigCategoryId={initialBigCategoryId}
-          initialBigCategoryName={initialBigCategoryName}
-          initialMediumCategoryId={initialMediumCategoryId}
-          initialCustomCategoryId={initialCustomCategoryId}
-          initialTransactionAutoAdd={initialTransactionAutoAdd}
-          expectedPurchaseDate={expectedPurchaseDate}
-          checked={checked}
-          purchase={purchase}
-          shop={shop}
-          amount={amount}
-          bigCategoryId={bigCategoryId}
-          bigCategory={bigCategory}
-          mediumCategoryId={mediumCategoryId}
-          customCategoryId={customCategoryId}
-          transactionAutoAdd={transactionAutoAdd}
-          setExpectedPurchaseDate={setExpectedPurchaseDate}
-          setPurchase={setPurchase}
-          setShop={setShop}
-          setAmount={setAmount}
-          setBigCategoryId={setBigCategoryId}
-          setBigCategory={setBigCategory}
-          setMediumCategoryId={setMediumCategoryId}
-          setCustomCategoryId={setCustomCategoryId}
-          setTransactionAutoAdd={setTransactionAutoAdd}
-        />
+      <div className="shopping-list-item-component">
+        <div className="shopping-list-item-component__content">
+          <CheckedShoppingListItemModal
+            listItem={props.listItem}
+            currentYearMonth={props.currentYearMonth}
+            initialExpectedPurchaseDate={initialExpectedPurchaseDate}
+            initialPurchase={initialPurchase}
+            initialShop={initialShop}
+            initialAmount={initialAmount}
+            initialBigCategoryId={initialBigCategoryId}
+            initialBigCategoryName={initialBigCategoryName}
+            initialMediumCategoryId={initialMediumCategoryId}
+            initialCustomCategoryId={initialCustomCategoryId}
+            initialTransactionAutoAdd={initialTransactionAutoAdd}
+            expectedPurchaseDate={expectedPurchaseDate}
+            checked={checked}
+            purchase={purchase}
+            shop={shop}
+            amount={amount}
+            bigCategoryId={bigCategoryId}
+            bigCategory={bigCategory}
+            mediumCategoryId={mediumCategoryId}
+            customCategoryId={customCategoryId}
+            transactionAutoAdd={transactionAutoAdd}
+            setExpectedPurchaseDate={setExpectedPurchaseDate}
+            setChecked={setChecked}
+            setPurchase={setPurchase}
+            setShop={setShop}
+            setAmount={setAmount}
+            setBigCategoryId={setBigCategoryId}
+            setBigCategory={setBigCategory}
+            setMediumCategoryId={setMediumCategoryId}
+            setCustomCategoryId={setCustomCategoryId}
+            setTransactionAutoAdd={setTransactionAutoAdd}
+          />
+          <span
+            className="shopping-list-item-component__purchase"
+            style={currentPurchaseTextStyle()}
+          >
+            {props.listItem.purchase}
+          </span>
+          <span
+            className="shopping-list-item-component__amount--value"
+            style={currentPurchaseTextStyle()}
+          >
+            {props.listItem.amount === null ? '-' : props.listItem.amount}
+          </span>
+          <span style={currentPurchaseTextStyle()}>円</span>
+
+          <EditShoppingListModal
+            listItem={props.listItem}
+            currentYearMonth={props.currentYearMonth}
+            initialExpectedPurchaseDate={initialExpectedPurchaseDate}
+            initialPurchase={initialPurchase}
+            initialShop={initialShop}
+            initialAmount={initialAmount}
+            initialBigCategoryId={initialBigCategoryId}
+            initialBigCategoryName={initialBigCategoryName}
+            initialMediumCategoryId={initialMediumCategoryId}
+            initialCustomCategoryId={initialCustomCategoryId}
+            initialTransactionAutoAdd={initialTransactionAutoAdd}
+            expectedPurchaseDate={expectedPurchaseDate}
+            purchase={purchase}
+            shop={shop}
+            amount={amount}
+            bigCategoryId={bigCategoryId}
+            bigCategory={bigCategory}
+            mediumCategoryId={mediumCategoryId}
+            customCategoryId={customCategoryId}
+            transactionAutoAdd={transactionAutoAdd}
+            setExpectedPurchaseDate={setExpectedPurchaseDate}
+            setPurchase={setPurchase}
+            setShop={setShop}
+            setAmount={setAmount}
+            setBigCategoryId={setBigCategoryId}
+            setBigCategory={setBigCategory}
+            setMediumCategoryId={setMediumCategoryId}
+            setCustomCategoryId={setCustomCategoryId}
+            setTransactionAutoAdd={setTransactionAutoAdd}
+          />
+        </div>
+        <div className="shopping-list-item-component__tag">
+          {props.listItem.regular_shopping_list_id !== null && (
+            <span className="shopping-list-item-component__tag--regular">定期</span>
+          )}
+          {props.listItem.transaction_auto_add && (
+            <span className="shopping-list-item-component__tag--transaction-auto-add">
+              取引アイテムへ自動追加
+            </span>
+          )}
+        </div>
+        {props.listItem.related_transaction_data !== null && (
+          <RelatedTransactionDataButton transactionData={props.listItem.related_transaction_data} />
+        )}
       </div>
     </>
   );

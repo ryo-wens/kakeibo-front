@@ -260,7 +260,7 @@ export const addShoppingListItem = (
   expectedPurchaseDate: Date | null,
   purchase: string,
   shop: string | null,
-  amount: number,
+  amount: number | null,
   bigCategoryId: number,
   mediumCategoryId: number | null,
   customCategoryId: number | null,
@@ -302,7 +302,7 @@ export const addShoppingListItem = (
         }
       );
 
-      const newShoppingListItem: ShoppingListItem = result.data;
+      const resShoppingListItem: ShoppingListItem = result.data;
       const prevTodayShoppingList: ShoppingList = getState().shoppingList.todayShoppingList;
       const prevTodayShoppingListByCategories: ShoppingListByCategories = getState().shoppingList
         .todayShoppingListByCategories;
@@ -343,7 +343,7 @@ export const addShoppingListItem = (
 
       const todayShoppingList = () => {
         if (dateToDateString(today) === responseExpectedPurchaseDate) {
-          return prevTodayShoppingList.concat(newShoppingListItem);
+          return prevTodayShoppingList.concat(resShoppingListItem);
         }
         return prevTodayShoppingList;
       };
@@ -356,12 +356,12 @@ export const addShoppingListItem = (
 
           if (prevCategoriesIdx === NOT_FOUND) {
             const addCategoryIdx = prevTodayShoppingListByCategories.findIndex(
-              (item) => item.shopping_list[0].big_category_id > newShoppingListItem.big_category_id
+              (item) => item.shopping_list[0].big_category_id > resShoppingListItem.big_category_id
             );
 
             const newShoppingListItemByCategories: ShoppingListItemByCategories = {
-              big_category_name: newShoppingListItem.big_category_name,
-              shopping_list: [newShoppingListItem],
+              big_category_name: resShoppingListItem.big_category_name,
+              shopping_list: [resShoppingListItem],
             };
 
             prevTodayShoppingListByCategories.splice(
@@ -376,7 +376,7 @@ export const addShoppingListItem = (
               prevTodayShoppingListByCategories[prevCategoriesIdx].big_category_name,
             shopping_list: prevTodayShoppingListByCategories[
               prevCategoriesIdx
-            ].shopping_list.concat(newShoppingListItem),
+            ].shopping_list.concat(resShoppingListItem),
           };
 
           return pushResponseShoppingListItemByCategories(
@@ -388,67 +388,85 @@ export const addShoppingListItem = (
         return prevTodayShoppingListByCategories;
       };
 
-      const monthlyShoppingList = () => {
+      const monthlyShoppingList = (
+        prevShoppingList: ShoppingList,
+        shoppingListItem: ShoppingListItem
+      ) => {
         if (prevMonth === responseMonth || prevMonth === 'NOT_FOUND') {
-          const idx = prevMonthlyShoppingList.findIndex(
-            (listItem) => listItem.expected_purchase_date >= responseExpectedPurchaseDate
-          );
-          return pushResponseShoppingListItem(idx, prevMonthlyShoppingList, result.data);
+          const idx = prevShoppingList.findIndex((item) => {
+            if (item.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+              return item.id > shoppingListItem.id;
+            }
+            return item.expected_purchase_date > resShoppingListItem.expected_purchase_date;
+          });
+
+          return pushResponseShoppingListItem(idx, prevShoppingList, result.data);
         }
-        return prevMonthlyShoppingList;
+        return prevShoppingList;
       };
 
-      const monthlyShoppingListByCategories = () => {
+      const monthlyShoppingListByCategories = (
+        prevShoppingListByCategories: ShoppingListByCategories,
+        shoppingListItem: ShoppingListItem
+      ) => {
         if (prevMonth === responseMonth || prevMonth === 'NOT_FOUND') {
-          const prevCategoriesIdx = prevMonthlyShoppingListByCategories.findIndex(
+          const prevCategoriesIdx = prevShoppingListByCategories.findIndex(
             (item) => item.big_category_name === result.data.big_category_name
           );
 
           if (prevCategoriesIdx === NOT_FOUND) {
-            const addCategoryIdx = prevMonthlyShoppingListByCategories.findIndex(
-              (item) => item.shopping_list[0].big_category_id > newShoppingListItem.big_category_id
+            const addCategoryIdx = prevShoppingListByCategories.findIndex(
+              (item) => item.shopping_list[0].big_category_id > shoppingListItem.big_category_id
             );
 
             const newShoppingListItemByCategories: ShoppingListItemByCategories = {
-              big_category_name: newShoppingListItem.big_category_name,
-              shopping_list: [newShoppingListItem],
+              big_category_name: shoppingListItem.big_category_name,
+              shopping_list: [shoppingListItem],
             };
 
-            prevMonthlyShoppingListByCategories.splice(
-              addCategoryIdx,
-              0,
-              newShoppingListItemByCategories
-            );
-            return prevMonthlyShoppingListByCategories.concat();
+            prevShoppingListByCategories.splice(addCategoryIdx, 0, newShoppingListItemByCategories);
+            return prevShoppingListByCategories.concat();
           }
-          const idx = prevMonthlyShoppingListByCategories[
-            prevCategoriesIdx
-          ].shopping_list.findIndex(
-            (item) => item.expected_purchase_date >= newShoppingListItem.expected_purchase_date
+
+          const idx = prevShoppingListByCategories[prevCategoriesIdx].shopping_list.findIndex(
+            (item) => {
+              if (item.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+                return item.id > shoppingListItem.id;
+              }
+              return item.expected_purchase_date > resShoppingListItem.expected_purchase_date;
+            }
           );
 
           const newShoppingListItemByCategories: ShoppingListItemByCategories = {
-            big_category_name:
-              prevMonthlyShoppingListByCategories[prevCategoriesIdx].big_category_name,
+            big_category_name: prevShoppingListByCategories[prevCategoriesIdx].big_category_name,
             shopping_list: pushResponseShoppingListItem(
               idx,
-              prevMonthlyShoppingListByCategories[prevCategoriesIdx].shopping_list,
-              newShoppingListItem
+              prevShoppingListByCategories[prevCategoriesIdx].shopping_list,
+              shoppingListItem
             ),
           };
+
           return pushResponseShoppingListItemByCategories(
             prevCategoriesIdx,
-            prevMonthlyShoppingListByCategories,
+            prevShoppingListByCategories,
             newShoppingListItemByCategories
           );
         }
-        return prevMonthlyShoppingListByCategories;
+        return prevShoppingListByCategories;
       };
 
       const nextTodayShoppingList: ShoppingList = todayShoppingList();
       const nextTodayShoppingListByCategories: ShoppingListByCategories = todayShoppingListByCategories();
-      const nextMonthlyShoppingList: ShoppingList = monthlyShoppingList();
-      const nextMonthlyShoppingListByCategories: ShoppingListByCategories = monthlyShoppingListByCategories();
+
+      const nextMonthlyShoppingList: ShoppingList = monthlyShoppingList(
+        prevMonthlyShoppingList,
+        resShoppingListItem
+      );
+
+      const nextMonthlyShoppingListByCategories: ShoppingListByCategories = monthlyShoppingListByCategories(
+        prevMonthlyShoppingListByCategories,
+        resShoppingListItem
+      );
 
       dispatch(
         addShoppingListItemAction(
@@ -484,7 +502,7 @@ export const editShoppingListItem = (
   customCategoryId: number | null,
   regularShoppingListId: number | null,
   transactionAutoAdd: boolean,
-  relatedTransactionDate: RelatedTransactionData | null,
+  relatedTransactionData: RelatedTransactionData | null,
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
@@ -492,7 +510,6 @@ export const editShoppingListItem = (
       return;
     }
     dispatch(startEditShoppingListItemAction());
-
     const data: EditShoppingListReq = {
       expected_purchase_date: expectedPurchaseDate,
       complete_flag: completeFlag,
@@ -504,7 +521,7 @@ export const editShoppingListItem = (
       custom_category_id: customCategoryId,
       regular_shopping_list_id: regularShoppingListId,
       transaction_auto_add: transactionAutoAdd,
-      related_transaction_data: relatedTransactionDate,
+      related_transaction_data: relatedTransactionData,
     };
     try {
       const result = await axios.put<ShoppingListItem>(
@@ -1040,7 +1057,7 @@ export const addRegularShoppingListItem = (
 
       const todayShoppingList = () => {
         if (newShoppingList.length === INCLUDES_TODAY_ITEM) {
-          return [newShoppingList[0]].concat(prevTodayShoppingList);
+          return prevTodayShoppingList.concat(newShoppingList[0]);
         }
         return prevTodayShoppingList;
       };

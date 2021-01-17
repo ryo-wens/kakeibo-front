@@ -12,12 +12,14 @@ import {
   History,
   Task,
   YearlyAccount,
+  InitialScreen
 } from './templates';
 
 const Router = (): JSX.Element => {
   return (
     <Switch>
-      <Route exact path={'/'} component={Home} />
+      <Route exact path={'/'} component={InitialScreen} />
+      <Route exact path={'/home'} component={Home} />
       <Route exact path={'/custom/budgets/:year/:month'} component={CustomBudgets} />
       <Route exact path={'/daily/history'} component={History} />
       <Route exact path={'/weekly/history'} component={History} />
@@ -27,7 +29,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/standard/budgets/:year/:month'} component={EditStandardBudgets} />
       <Route exact path={'/todo'} component={Todo} />
       <Route exact path={'/yearly/budgets'} component={YearlyBudgets} />
-      <Route exact path={'/group/:id'} component={Home} />
+      <Route exact path={'/group/:id/home'} component={Home} />
       <Route exact path={'/group/:id/daily/history'} component={History} />
       <Route exact path={'/group/:id/weekly/history'} component={History} />
       <Route exact path={'/group/:id/accounting'} component={YearlyAccount} />

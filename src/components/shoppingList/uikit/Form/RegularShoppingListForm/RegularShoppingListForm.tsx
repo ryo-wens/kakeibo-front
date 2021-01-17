@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useRef, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { CategoryInput, TextInput } from '../../../../uikit';
+import { BigCategoryInput, MediumCategoryInput, TextInput } from '../../../../uikit';
 import { useSelector } from 'react-redux';
 import {
   getExpenseCategories,
@@ -41,6 +41,7 @@ interface RegularShoppingListFormProps {
   titleLabel: string;
   buttonLabel: string;
   closeModal: () => void;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   unInput: boolean;
   dispatchOperation: () => void;
   minDate: Date;
@@ -51,6 +52,23 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
 
+  const bigCategoryRef = useRef<HTMLDivElement>(null);
+  const mediumMenuRef = useRef<HTMLDivElement>(null);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+
+  const onClickCloseBigCategoryMenu = (event: Event) => {
+    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
+      setBigCategoryMenuOpen(false);
+    }
+  };
+
+  const onClickCloseMediumCategoryMenu = (event: Event) => {
+    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
+      setMediumCategoryMenuOpen(false);
+    }
+  };
+
   const inputItems = [
     {
       key: '購入するもの',
@@ -59,7 +77,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.purchase}
           type={'text'}
           id={'purchase'}
-          label={'(必須)'}
+          label={'必須'}
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
@@ -70,17 +88,33 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
     {
       key: 'カテゴリ',
       value: (
-        <CategoryInput
-          bigCategory={props.bigCategory}
-          associatedCategory={props.associatedCategory}
-          onClick={props.selectCategory}
-          required={true}
-          kind={'expense'}
-          bigCategoryIndex={props.bigCategoryIndex}
-          bigCategoryId={props.bigCategoryId}
-          expenseCategories={expenseCategories}
-          incomeCategories={incomeCategories}
-        />
+        <>
+          <BigCategoryInput
+            ref={bigCategoryRef}
+            kind={'expense'}
+            bigCategory={props.bigCategory}
+            bigCategoryMenuOpen={bigCategoryMenuOpen}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            onClick={props.selectCategory}
+            onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
+            setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+          />
+          <MediumCategoryInput
+            ref={mediumMenuRef}
+            kind={'expense'}
+            bigCategoryId={props.bigCategoryId}
+            bigCategoryIndex={props.bigCategoryIndex}
+            bigCategory={props.bigCategory}
+            associatedCategory={props.associatedCategory}
+            expenseCategories={expenseCategories}
+            incomeCategories={incomeCategories}
+            mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+            onClick={props.selectCategory}
+            onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+            setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+          />
+        </>
       ),
     },
     {
@@ -90,7 +124,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           <KeyboardDatePicker
             margin="normal"
             id="date-picker-dialog"
-            label="購入予定日"
+            label="必須"
             format="yyyy年 MM月dd日"
             value={props.expectedPurchaseDate}
             onChange={props.handleDateChange}
@@ -111,7 +145,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
                 value={props.cycle}
                 type={'tel'}
                 id={'cycle'}
-                label={'周期日数 (必須)'}
+                label={'必須'}
                 onChange={props.handleCycleChange}
                 required={false}
                 fullWidth={false}
@@ -129,7 +163,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.amount}
           type={'tel'}
           id={'amount'}
-          label={'金額 (任意)'}
+          label={'任意'}
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
@@ -144,7 +178,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           value={props.shop}
           type={'text'}
           id={'shop'}
-          label={'店名 (任意)'}
+          label={'任意'}
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
@@ -187,7 +221,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           disabled={props.unInput}
           onClick={() => {
             props.dispatchOperation();
-            props.closeModal();
+            props.setOpen(false);
           }}
         >
           {props.buttonLabel}
