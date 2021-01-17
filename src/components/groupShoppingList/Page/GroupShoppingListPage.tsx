@@ -11,6 +11,7 @@ import GroupMonthlyShoppingListArea from './GroupMonthlyShoppingListArea/GroupMo
 import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
 import GroupRegularShoppingListArea from './GroupRegularShoppingListArea/GroupRegularShoppingListArea';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
+import AddGroupRegularShoppingListModal from './GroupRegularShoppingListArea/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
 
 const GroupShoppingListPage = () => {
   const dispatch = useDispatch();
@@ -51,6 +52,7 @@ const GroupShoppingListPage = () => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
+          <AddGroupRegularShoppingListModal currentYearMonth={currentYearMonth} />
           <GroupRegularShoppingListArea />
         </div>
         <div className="shopping-list-page__right-content">

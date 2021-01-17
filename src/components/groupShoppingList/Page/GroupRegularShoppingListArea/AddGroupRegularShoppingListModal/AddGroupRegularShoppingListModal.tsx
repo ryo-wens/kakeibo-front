@@ -5,10 +5,10 @@ import AddIcon from '@material-ui/icons/Add';
 import '../../../../shoppingList/uikit/Modal/AddShoppingListModal/add-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
-import GroupShoppingListForm from '../../Form/GroupShoppingListForm/GroupShoppingListForm';
-import { addGroupShoppingListItem } from '../../../../../reducks/groupShoppingList/operations';
-import { useParams } from 'react-router';
 import axios from 'axios';
+import GroupRegularShoppingListForm from '../../../uikit/Form/GroupRegularShoppingListForm/GroupRegularShoppingListForm';
+import { addRegularShoppingListItem } from '../../../../../reducks/shoppingList/operations';
+import { useDispatch } from 'react-redux';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -20,18 +20,20 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-interface AddGroupShoppingListModalProps {
+interface AddGroupRegularShoppingListModalProps {
   currentYearMonth: string;
 }
 
-const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
+const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModalProps) => {
   const classes = useStyles();
-  const { id } = useParams();
+  const dispatch = useDispatch();
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
-  const [purchase, setPurchase] = useState('');
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(date);
+  const [cycleType, setCycleType] = useState<'daily' | 'weekly' | 'monthly' | 'custom'>('weekly');
+  const [cycle, setCycle] = useState<string | null>(null);
+  const [purchase, setPurchase] = useState('');
   const [amount, setAmount] = useState<string | null>(null);
   const [bigCategoryId, setBigCategoryId] = useState(0);
   const [bigCategory, setBigCategory] = useState<string | null>('');
@@ -62,12 +64,24 @@ const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
     setOpen(false);
   };
 
-  const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPurchase(event.target.value);
-  };
-
   const handleDateChange = (expectedPurchaseDate: Date | null) => {
     setExpectedPurchaseDate(expectedPurchaseDate);
+  };
+
+  const handleCycleTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setCycleType(event.target.value as 'daily' | 'weekly' | 'monthly' | 'custom');
+  };
+
+  const handleCycleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    if (cycleType !== 'custom') {
+      setCycle(null);
+    } else {
+      setCycle(event.target.value);
+    }
+  };
+
+  const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPurchase(event.target.value);
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -126,8 +140,10 @@ const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
 
   const body = (
     <div className={classes.paper}>
-      <GroupShoppingListForm
+      <GroupRegularShoppingListForm
         expectedPurchaseDate={expectedPurchaseDate}
+        cycleType={cycleType}
+        cycle={cycle}
         purchase={purchase}
         shop={shop}
         amount={amount}
@@ -139,8 +155,10 @@ const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
         paymentUser={paymentUser}
         transactionAutoAdd={transactionAutoAdd}
         associatedCategory={associatedCategory}
-        handlePurchaseChange={handlePurchaseChange}
         handleDateChange={handleDateChange}
+        handleCycleTypeChange={handleCycleTypeChange}
+        handleCycleChange={handleCycleChange}
+        handlePurchaseChange={handlePurchaseChange}
         handleAmountChange={handleAmountChange}
         selectCategory={selectCategory}
         handleShopChange={handleShopChange}
@@ -151,23 +169,26 @@ const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
         setOpen={setOpen}
         closeModal={closeModal}
         unInput={unInput}
-        dispatchOperation={addGroupShoppingListItem(
-          Number(id),
-          date,
-          props.currentYearMonth,
-          expectedPurchaseDate,
-          purchase,
-          shop,
-          typeof amount === 'string' ? Number(amount) : amount,
-          bigCategoryId,
-          mediumCategoryId,
-          customCategoryId,
-          paymentUser,
-          transactionAutoAdd,
-          signal
-        )}
+        dispatchOperation={() =>
+          dispatch(
+            addRegularShoppingListItem(
+              date,
+              props.currentYearMonth,
+              expectedPurchaseDate,
+              cycleType,
+              typeof cycle === 'string' ? Number(cycle) : cycle,
+              purchase,
+              shop,
+              typeof amount === 'string' ? Number(amount) : amount,
+              bigCategoryId,
+              mediumCategoryId,
+              customCategoryId,
+              transactionAutoAdd,
+              signal
+            )
+          )
+        }
         minDate={date}
-        displayRequiredInputItemMessage={false}
       />
     </div>
   );
@@ -180,7 +201,7 @@ const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
         onClick={() => openModal()}
       >
         <AddIcon />
-        買い物リストに追加
+        定期買い物リストに追加
       </button>
       <Modal
         open={open}
@@ -194,4 +215,4 @@ const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
   );
 };
 
-export default AddGroupShoppingListModal;
+export default AddGroupRegularShoppingListModal;
