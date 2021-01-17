@@ -53,7 +53,10 @@ const GroupShoppingListPage = () => {
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
           <AddGroupRegularShoppingListModal currentYearMonth={currentYearMonth} />
-          <GroupRegularShoppingListArea />
+          <GroupRegularShoppingListArea
+            currentYearMonth={currentYearMonth}
+            currentTodayOrMonthly={currentItems}
+          />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>

@@ -1,3 +1,5 @@
+import { RegularShoppingListItem, ShoppingList } from '../shoppingList/types';
+
 export interface GroupRegularShoppingListItem {
   id: number;
   posted_date: Date;
@@ -142,4 +144,23 @@ export interface AddGroupRegularShoppingListItemReq {
 export interface AddGroupRegularShoppingListItemRes {
   regular_shopping_item: GroupRegularShoppingListItem;
   shopping_list: GroupShoppingList;
+}
+
+export interface EditGroupRegularShoppingListItemReq {
+  expected_purchase_date: Date;
+  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle: number | null;
+  purchase: string;
+  shop: string | null;
+  amount: number | null;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+  payment_user_id: string | null;
+  transaction_auto_add: boolean;
+}
+
+export interface EditGroupRegularShoppingListItemRes {
+  regular_shopping_item: RegularShoppingListItem;
+  shopping_list: ShoppingList;
 }

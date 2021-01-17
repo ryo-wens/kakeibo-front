@@ -14,21 +14,21 @@
     display: flex;
     width: 100%;
     align-items: center;
+    color: #253b66;
     margin-bottom: 20px;
   }
 
   &__purchase {
     width: calc((100% - 72px) * 0.85);
-    color: #333;
     margin-left: 5px;
   }
 
   &__amount {
 
     &--value {
-      width: calc((100% - 72px) * 0.15);
-      color: #333;
-      text-align: center;
+      width: 90px;
+      text-align: right;
+      padding-right: 10px;
     }
 
     &--unit {
