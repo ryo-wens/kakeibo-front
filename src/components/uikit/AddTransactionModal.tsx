@@ -1,5 +1,7 @@
 import React, { useCallback, useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router';
+import axios from 'axios';
 import {
   GenericButton,
   DatePicker,
@@ -31,13 +33,13 @@ import {
 } from '../../reducks/groupTransactions/operations';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
-import { getPathTemplateName, getPathGroupId } from '../../lib/path';
 import CloseIcon from '@material-ui/icons/Close';
-import { State } from '../../reducks/store/types';
 import { AssociatedCategory, Category } from '../../reducks/categories/types';
 import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
-import axios from 'axios';
+import { fetchGroupYearlyAccountListForModal } from '../../reducks/groupTransactions/operations';
+import { getYearlyAccountListStatusModals } from '../../reducks/groupTransactions/selectors';
+import '../../assets/modules/input-form .scss';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -76,16 +78,16 @@ interface AddTransactionModalProps {
 const AddTransactionModal = (props: AddTransactionModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
+  const { id } = useParams();
+  const pathName = useLocation().pathname.split('/')[1];
   const signal = axios.CancelToken.source();
-  const approvedGroup = getApprovedGroups(selector);
-  const userId = getUserId(selector);
-  const incomeCategories = getIncomeCategories(selector);
-  const expenseCategories = getExpenseCategories(selector);
-  const groupIncomeCategories = getGroupIncomeCategories(selector);
-  const groupExpenseCategories = getGroupExpenseCategories(selector);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
+  const approvedGroup = useSelector(getApprovedGroups);
+  const userId = useSelector(getUserId);
+  const incomeCategories = useSelector(getIncomeCategories);
+  const expenseCategories = useSelector(getExpenseCategories);
+  const groupIncomeCategories = useSelector(getGroupIncomeCategories);
+  const groupExpenseCategories = useSelector(getGroupExpenseCategories);
+  const accountingStatus = useSelector(getYearlyAccountListStatusModals);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const emptyMemo = memo === '' ? null : memo;
@@ -108,6 +110,42 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const mediumMenuRef = useRef<HTMLDivElement>(null);
   const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
   const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+
+  let addTransactionYear = 0;
+  let addTransactionMonth = 0;
+
+  if (transactionDate) {
+    addTransactionYear = transactionDate.getFullYear();
+    addTransactionMonth = transactionDate.getMonth() + 1;
+  }
+
+  let addDisabled = false;
+
+  if (accountingStatus.year === addTransactionYear + '年') {
+    for (const account of accountingStatus.accountedMonth) {
+      if (account === addTransactionMonth + '月') {
+        addDisabled = true;
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (pathName === 'group') {
+      if (props.open) {
+        const signal = axios.CancelToken.source();
+        dispatch(fetchGroupYearlyAccountListForModal(Number(id), addTransactionYear, signal));
+
+        const interval = setInterval(() => {
+          dispatch(fetchGroupYearlyAccountListForModal(Number(id), addTransactionYear, signal));
+        }, 3000);
+
+        return () => {
+          signal.cancel();
+          clearInterval(interval);
+        };
+      }
+    }
+  }, [props.open, pathName, id]);
 
   useEffect(() => {
     setTransactionDate(props.selectDate);
@@ -257,7 +295,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
 
     const groupAddTransaction = () => {
       async function groupTransaction() {
-        await dispatch(addGroupLatestTransactions(groupId, groupAddRequestData));
+        await dispatch(addGroupLatestTransactions(Number(id), groupAddRequestData));
         dispatch(addGroupTransactions(customMonth));
         props.onClose();
         resetForm();
@@ -295,10 +333,15 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
         <CloseIcon />
       </button>
       <h3 className={classes.textPosition}>家計簿の追加</h3>
+      {addDisabled && (
+        <div className="input-form__message">
+          {addTransactionMonth + '月'}は会計済みのため追加できません。
+        </div>
+      )}
       <div className={classes.delimiterLine} />
       <div className={classes.smallSpaceTop} />
 
-      <form className="grid__column">
+      <form className="input-form__column">
         <DatePicker
           id={'date-picker-dialog'}
           label={'日付'}
@@ -324,7 +367,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
         {pathName === 'group' && (
           <SelectPayer
             approvedGroups={approvedGroup}
-            groupId={groupId}
+            groupId={Number(id)}
             onChange={handlePayerChange}
             pathName={pathName}
             required={true}
@@ -377,12 +420,12 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       </form>
       <div className={classes.buttonPosition}>
         <GenericButton
+          label={'追加する'}
+          disabled={unInput || addDisabled}
           startIcon={<AddCircleOutlineIcon />}
           onClick={() => {
             switchingAddTransaction();
           }}
-          label={'追加する'}
-          disabled={unInput}
         />
       </div>
     </div>

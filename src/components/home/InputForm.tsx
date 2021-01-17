@@ -1,6 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../uikit/index';
 import { useDispatch, useSelector } from 'react-redux';
+import { useParams } from 'react-router';
 import { fetchCategories } from '../../reducks/categories/operations';
 import { fetchGroupCategories } from '../../reducks/groupCategories/operations';
 import { addTransactions, addLatestTransactions } from '../../reducks/transactions/operations';
@@ -15,6 +16,7 @@ import {
   getGroupIncomeCategories,
   getGroupExpenseCategories,
 } from '../../reducks/groupCategories/selectors';
+import { getYearlyAccountListStatus } from '../../reducks/groupTransactions/selectors';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
@@ -25,7 +27,7 @@ import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
 import axios from 'axios';
 import { BigCategoryInput, MediumCategoryInput } from '../uikit';
-import { useParams } from 'react-router';
+import '../../assets/modules/input-form .scss';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
@@ -38,6 +40,7 @@ const InputForm = (): JSX.Element => {
   const expenseCategories = getExpenseCategories(selector);
   const groupIncomeCategories = getGroupIncomeCategories(selector);
   const groupExpenseCategories = getGroupExpenseCategories(selector);
+  const accountingStatus = useSelector(getYearlyAccountListStatus);
   const [amount, setAmount] = useState<string>('');
   const [memo, setMemo] = useState<string>('');
   const emptyMemo = memo === '' ? null : memo;
@@ -52,11 +55,27 @@ const InputForm = (): JSX.Element => {
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
-
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
   const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
   const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+  let addTransactionYear = 0;
+  let addTransactionMonth = 0;
+
+  if (transactionDate) {
+    addTransactionYear = transactionDate.getFullYear();
+    addTransactionMonth = transactionDate.getMonth() + 1;
+  }
+
+  let canDisplayMessage = false;
+
+  if (accountingStatus.year === addTransactionYear + '年') {
+    for (const account of accountingStatus.accountedMonth) {
+      if (account === addTransactionMonth + '月') {
+        canDisplayMessage = true;
+      }
+    }
+  }
 
   useEffect(() => {
     setPaymentUserId(userId);
@@ -243,8 +262,13 @@ const InputForm = (): JSX.Element => {
   };
 
   return (
-    <form className="grid__column box__input" autoComplete="on">
-      <h3>家計簿入力フォーム</h3>
+    <form className="input-form input-form__column" autoComplete="on">
+      <div className="input-form__sub-heading">家計簿入力フォーム</div>
+      {canDisplayMessage && (
+        <div className="input-form__message input-form__message--small">
+          {addTransactionMonth}月は会計済みのため追加できません。
+        </div>
+      )}
       <DatePicker
         id={'date-picker-dialog'}
         label={'日付(必須)'}

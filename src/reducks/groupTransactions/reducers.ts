@@ -37,6 +37,11 @@ export const groupTransactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.FETCH_YEARLY_ACCOUNT_MODAL:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.ADD_GROUP_ACCOUNT:
       return {
         ...state,

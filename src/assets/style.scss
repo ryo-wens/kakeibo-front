@@ -59,16 +59,6 @@
   transform: translate(-50%, -50%);
 }
 
-.box__input {
-  background: white;
-  border: 1px solid rgba(0, 0, 0, 0.3);
-  border-radius: 5px;
-  box-sizing: border-box;
-  height: auto;
-  padding: 1rem;
-  width: 100%;
-}
-
 .box__monthly {
   background-color: white;
   border: 1px solid rgba(0, 0, 0, 0.3);
@@ -105,11 +95,4 @@
   margin-top: 15px;
   padding: 1rem;
   width: 100%;
-}
-
-.grid__column {
-  align-items: center;
-  display: flex;
-  flex-flow: column;
-  justify-content: center;
 }

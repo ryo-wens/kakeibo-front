@@ -1,5 +1,7 @@
 import React, { useState, useCallback, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
+import { useLocation, useParams } from 'react-router';
+import axios from 'axios';
 import {
   editTransactions,
   editLatestTransactions,
@@ -30,17 +32,17 @@ import {
   getGroupIncomeCategories,
   getGroupExpenseCategories,
 } from '../../reducks/groupCategories/selectors';
-import { State } from '../../reducks/store/types';
+import { getYearlyAccountListStatusModals } from '../../reducks/groupTransactions/selectors';
+import { fetchGroupYearlyAccountListForModal } from '../../reducks/groupTransactions/operations';
 import { AssociatedCategory, Category } from '../../reducks/categories/types';
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { TransactionsReq } from '../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../reducks/groupTransactions/types';
 import { Groups } from '../../reducks/groups/types';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 import { isValidAmountFormat } from '../../lib/validation';
 import CloseIcon from '@material-ui/icons/Close';
-import axios from 'axios';
+import '../../assets/modules/input-form .scss';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -95,15 +97,15 @@ interface InputModalProps {
 const EditTransactionModal = (props: InputModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const id = props.id;
-  const groupId = getPathGroupId(window.location.pathname);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const selector = useSelector((state: State) => state);
-  const incomeCategories = getIncomeCategories(selector);
-  const expenseCategories = getExpenseCategories(selector);
-  const groupIncomeCategories = getGroupIncomeCategories(selector);
-  const groupExpenseCategories = getGroupExpenseCategories(selector);
-  const [amount, setAmount] = useState<string>(String(props.amount));
+  const transactionId = props.id;
+  const { id } = useParams();
+  const pathName = useLocation().pathname.split('/')[1];
+  const incomeCategories = useSelector(getIncomeCategories);
+  const expenseCategories = useSelector(getExpenseCategories);
+  const groupIncomeCategories = useSelector(getGroupIncomeCategories);
+  const groupExpenseCategories = useSelector(getGroupExpenseCategories);
+  const accountingStatus = useSelector(getYearlyAccountListStatusModals);
+  const [amount, setAmount] = useState(String(props.amount));
   const [memo, setMemo] = useState<string | null>(props.memo);
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string | null>(props.shop);
@@ -114,7 +116,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const [associatedCategory, setAssociatedCategory] = useState<string>(
     props.categoryName.mediumCategory || props.categoryName.customCategory
   );
-  const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
+  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [bigCategoryId, setBigCategoryId] = useState<number>(props.bigCategoryId);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(props.mediumCategoryId);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(props.customCategoryId);
@@ -127,6 +129,40 @@ const EditTransactionModal = (props: InputModalProps) => {
   const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
   const expenseBigCategoryIndex = props.bigCategoryId - 2;
   const signal = axios.CancelToken.source();
+  let editTransactionYear = 0;
+  let editTransactionMonth = 0;
+
+  if (transactionDate) {
+    editTransactionYear = transactionDate.getFullYear();
+    editTransactionMonth = transactionDate.getMonth() + 1;
+  }
+
+  let editDisabled = false;
+
+  if (accountingStatus.year === editTransactionYear + '年') {
+    for (const account of accountingStatus.accountedMonth) {
+      if (account === editTransactionMonth + '月') {
+        editDisabled = true;
+      }
+    }
+  }
+
+  useEffect(() => {
+    if (pathName === 'group') {
+      if (props.open) {
+        dispatch(fetchGroupYearlyAccountListForModal(Number(id), editTransactionYear, signal));
+
+        const interval = setInterval(() => {
+          dispatch(fetchGroupYearlyAccountListForModal(Number(id), editTransactionYear, signal));
+        }, 3000);
+
+        return () => {
+          signal.cancel();
+          clearInterval(interval);
+        };
+      }
+    }
+  }, [props.open]);
 
   useEffect(() => {
     if (props.open) {
@@ -290,29 +326,29 @@ const EditTransactionModal = (props: InputModalProps) => {
 
   const personalDeleteTransaction = (): void => {
     async function personalTransaction() {
-      await dispatch(deleteLatestTransactions(id));
+      await dispatch(deleteLatestTransactions(transactionId));
       dispatch(fetchLatestTransactionsList(signal));
-      dispatch(deleteTransactions(id));
+      dispatch(deleteTransactions(transactionId));
     }
     personalTransaction();
   };
   const personalEditTransaction = (): void => {
-    dispatch(editTransactions(id, personalEditRequestData));
-    dispatch(editLatestTransactions(id, personalEditRequestData));
+    dispatch(editTransactions(transactionId, personalEditRequestData));
+    dispatch(editLatestTransactions(transactionId, personalEditRequestData));
     props.onClose();
   };
 
   const groupDeleteTransaction = (): void => {
     async function groupTransaction() {
-      dispatch(deleteGroupLatestTransactions(id, groupId));
-      dispatch(fetchLatestGroupTransactionsList(groupId, signal));
-      dispatch(deleteGroupTransactions(id, groupId));
+      dispatch(deleteGroupLatestTransactions(transactionId, Number(id)));
+      dispatch(fetchLatestGroupTransactionsList(Number(id), signal));
+      dispatch(deleteGroupTransactions(transactionId, Number(id)));
     }
     groupTransaction();
   };
   const groupEditTransaction = (): void => {
-    dispatch(editGroupTransactions(id, groupId, groupEditRequestData));
-    dispatch(editGroupLatestTransactionsList(id, groupId, groupEditRequestData));
+    dispatch(editGroupTransactions(transactionId, Number(id), groupEditRequestData));
+    dispatch(editGroupLatestTransactionsList(transactionId, Number(id), groupEditRequestData));
     props.onClose();
   };
 
@@ -348,9 +384,14 @@ const EditTransactionModal = (props: InputModalProps) => {
       <h3 className={classes.textPosition} id="simple-modal-title">
         家計簿の編集
       </h3>
+      {editDisabled && (
+        <div className="input-form__message">
+          {editTransactionMonth + '月'}は会計済みのため編集できません。
+        </div>
+      )}
       <div className={classes.delimiterLine} />
       <div className={classes.smallSpaceTop} />
-      <form className="grid__column">
+      <form className="input-form__column">
         <DatePicker
           id={'date'}
           label={'日付'}
@@ -376,7 +417,7 @@ const EditTransactionModal = (props: InputModalProps) => {
         {pathName === 'group' && (
           <SelectPayer
             approvedGroups={props.approvedGroups as Groups}
-            groupId={groupId}
+            groupId={Number(id)}
             onChange={handlePayerChange}
             pathName={pathName}
             required={true}
@@ -432,9 +473,10 @@ const EditTransactionModal = (props: InputModalProps) => {
         <GenericButton
           label={'更新する'}
           onClick={pathName !== 'group' ? personalEditTransaction : groupEditTransaction}
-          disabled={unInput}
+          disabled={unInput || editDisabled}
         />
         <IconButton
+          disabled={editDisabled}
           className={classes.deleteButtonPosition}
           color={'inherit'}
           onClick={() => {
