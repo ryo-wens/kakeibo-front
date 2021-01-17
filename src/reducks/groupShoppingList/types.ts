@@ -93,3 +93,15 @@ export interface FetchGroupMonthlyShoppingListByCategoriesRes {
   regular_shopping_list: GroupRegularShoppingList;
   shopping_list_by_categories: GroupShoppingListByCategories;
 }
+
+export interface AddGroupShoppingListItemReq {
+  expected_purchase_date: Date;
+  purchase: string;
+  shop: string | null;
+  amount: number | null;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+  payment_user_id: string | null;
+  transaction_auto_add: boolean;
+}

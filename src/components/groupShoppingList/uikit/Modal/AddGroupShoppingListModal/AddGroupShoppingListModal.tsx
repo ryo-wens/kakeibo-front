@@ -5,7 +5,10 @@ import AddIcon from '@material-ui/icons/Add';
 import '../../../../shoppingList/uikit/Modal/AddShoppingListModal/add-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
-import GroupShoppingListForm from '../../../uikit/Form/GroupShoppingListForm/GroupShoppingListForm';
+import GroupShoppingListForm from '../../Form/GroupShoppingListForm/GroupShoppingListForm';
+import { addGroupShoppingListItem } from '../../../../../reducks/groupShoppingList/operations';
+import { useParams } from 'react-router';
+import axios from 'axios';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -17,8 +20,15 @@ const useStyles = makeStyles((theme: Theme) =>
   })
 );
 
-const AddGroupShoppingListModal = () => {
+interface GroupTodayShoppingListAreaProps {
+  currentYearMonth: string;
+}
+
+const AddGroupShoppingListModal = (props: GroupTodayShoppingListAreaProps) => {
   const classes = useStyles();
+  const { id } = useParams();
+  const signal = axios.CancelToken.source();
+
   const [open, setOpen] = useState(false);
   const [purchase, setPurchase] = useState('');
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(date);
@@ -141,6 +151,21 @@ const AddGroupShoppingListModal = () => {
         setOpen={setOpen}
         closeModal={closeModal}
         unInput={unInput}
+        dispatchOperation={addGroupShoppingListItem(
+          Number(id),
+          date,
+          props.currentYearMonth,
+          expectedPurchaseDate,
+          purchase,
+          shop,
+          typeof amount === 'string' ? Number(amount) : amount,
+          bigCategoryId,
+          mediumCategoryId,
+          customCategoryId,
+          paymentUser,
+          transactionAutoAdd,
+          signal
+        )}
         minDate={date}
         displayInputAmountMessage={false}
       />

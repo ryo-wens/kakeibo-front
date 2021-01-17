@@ -10,9 +10,13 @@ import {
   fetchGroupTodayShoppingList,
   fetchGroupTodayShoppingListByCategories,
 } from '../../../../reducks/groupShoppingList/operations';
-import AddGroupShoppingListModal from './AddGroupShoppingListModal/AddGroupShoppingListModal';
+import AddGroupShoppingListModal from '../../uikit/Modal/AddGroupShoppingListModal/AddGroupShoppingListModal';
 
-const GroupTodayShoppingListArea = () => {
+interface GroupTodayShoppingListAreaProps {
+  currentYearMonth: string;
+}
+
+const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
   const dispatch = useDispatch();
   const { id } = useParams();
   const todayYear = String(date.getFullYear());
@@ -48,7 +52,7 @@ const GroupTodayShoppingListArea = () => {
   return (
     <>
       <div className="today-shopping-list-area__add-button">
-        <AddGroupShoppingListModal />
+        <AddGroupShoppingListModal currentYearMonth={props.currentYearMonth} />
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">
