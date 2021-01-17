@@ -1,53 +1,29 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { date } from '../../../../lib/constant';
-import axios, { CancelTokenSource } from 'axios';
 import { useParams } from 'react-router';
 import '../../../shoppingList/Page/TodayShoppingListArea/today-shopping-list-area.scss';
-import { fetchGroups } from '../../../../reducks/groups/operations';
-import { fetchGroupTodayShoppingListByCategories } from '../../../../reducks/groupShoppingList/operations';
 import AddGroupShoppingListModal from '../../uikit/Modal/AddGroupShoppingListModal/AddGroupShoppingListModal';
 import GroupTodayShoppingListComponent from './GroupTodayShoppingListComponent/GroupTodayShoppingListComponent';
-import { getGroupTodayShoppingList } from '../../../../reducks/groupShoppingList/selectors';
+import {
+  getGroupTodayShoppingList,
+  getGroupTodayShoppingListByCategories,
+} from '../../../../reducks/groupShoppingList/selectors';
+import GroupTodayShoppingListByCategoriesComponent from './GroupTodayShoppingListByCategoriesComponent/GroupTodayShoppingListByCategoriesComponent';
 
 interface GroupTodayShoppingListAreaProps {
   currentYearMonth: string;
 }
 
 const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
-  const dispatch = useDispatch();
   const groupTodayShoppingList = useSelector(getGroupTodayShoppingList);
+  const groupTodayShoppingListByCategories = useSelector(getGroupTodayShoppingListByCategories);
 
   const { id } = useParams();
   const todayYear = String(date.getFullYear());
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
-
-  const fetchData = (
-    groupId: number,
-    year: string,
-    month: string,
-    date: string,
-    signal: CancelTokenSource
-  ) => {
-    dispatch(fetchGroups(signal));
-    dispatch(
-      fetchGroupTodayShoppingListByCategories(groupId, todayYear, todayMonth, todayDate, signal)
-    );
-  };
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-    fetchData(Number(id), todayYear, todayMonth, todayDate, signal);
-    const interval = setInterval(() => {
-      fetchData(Number(id), todayYear, todayMonth, todayDate, signal);
-    }, 3000);
-    return () => {
-      signal.cancel();
-      clearInterval(interval);
-    };
-  }, [todayYear, todayMonth, todayDate, id]);
 
   return (
     <>
@@ -56,7 +32,6 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">
-          {/*仮実装として、div タグを props として、渡しています。*/}
           <SwitchItemTabs
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
@@ -70,7 +45,16 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
                 date={todayDate}
               />
             }
-            rightItem={<div />}
+            rightItem={
+              <GroupTodayShoppingListByCategoriesComponent
+                shoppingListByCategories={groupTodayShoppingListByCategories}
+                currentYearMonth={props.currentYearMonth}
+                groupId={Number(id)}
+                year={todayYear}
+                month={todayMonth}
+                date={todayDate}
+              />
+            }
           />
         </div>
       </div>

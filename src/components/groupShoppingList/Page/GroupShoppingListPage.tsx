@@ -43,7 +43,6 @@ const GroupShoppingListPage = () => {
                 selectedMonth={selectedMonth}
                 setSelectedYear={setSelectedYear}
                 setSelectedMonth={setSelectedMonth}
-                currentYearMonth={currentYearMonth}
               />
             }
           />

@@ -3,14 +3,16 @@ import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import '../../../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/EditShoppingListModal/edit-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
-import { deleteShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import EditIcon from '@material-ui/icons/Edit';
 import ShoppingListDeleteForm from '../../../../../shoppingList/uikit/Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import { date } from '../../../../../../lib/constant';
 import GroupShoppingListForm from '../../../Form/GroupShoppingListForm/GroupShoppingListForm';
 import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
-import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
+import {
+  deleteGroupShoppingListItem,
+  editGroupShoppingListItem,
+} from '../../../../../../reducks/groupShoppingList/operations';
 import { useParams } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
@@ -186,14 +188,14 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
 
   const body = (
     <div className={classes.paper}>
-      {/*仮実装として、deleteShoppingListItem() を定義*/}
       {deleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
           purchase={props.listItem.purchase}
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
-          dispatchOperation={deleteShoppingListItem(
+          dispatchOperation={deleteGroupShoppingListItem(
+            Number(id),
             props.listItem.id,
             props.listItem.big_category_name,
             signal
