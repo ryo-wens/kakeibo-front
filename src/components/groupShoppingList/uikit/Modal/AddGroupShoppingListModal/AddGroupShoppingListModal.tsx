@@ -167,7 +167,7 @@ const AddGroupShoppingListModal = (props: GroupTodayShoppingListAreaProps) => {
           signal
         )}
         minDate={date}
-        displayInputAmountMessage={false}
+        displayRequiredInputItemMessage={false}
       />
     </div>
   );

@@ -149,8 +149,8 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             <p
               className={
                 props.transactionAutoAdd && props.amount === null
-                  ? 'shopping-list-form__input-amount-message'
-                  : 'shopping-list-form__input-amount-message--hide'
+                  ? 'shopping-list-form__required-input-item-message'
+                  : 'shopping-list-form__required-input-item-message--hide'
               }
             >
               ※ 金額の入力が必要です。
@@ -203,16 +203,25 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
         取引履歴に自動追加
       </label>
       <div className="set-task-list-item__operation-btn">
-        <button
-          className="shopping-list-form__operation-btn--add"
-          disabled={props.unInput}
-          onClick={() => {
-            dispatch(props.dispatchOperation);
-            props.setOpen(false);
-          }}
-        >
-          {props.buttonLabel}
-        </button>
+        <div>
+          <button
+            className="shopping-list-form__operation-btn--add"
+            disabled={props.unInput}
+            onClick={() => {
+              dispatch(props.dispatchOperation);
+              props.setOpen(false);
+            }}
+          >
+            {props.buttonLabel}
+          </button>
+          <button
+            className="shopping-list-form__operation-btn--cancel"
+            disabled={false}
+            onClick={() => props.closeModal()}
+          >
+            キャンセル
+          </button>
+        </div>
         {props.openDeleteForm && (
           <button
             className="shopping-list-form__operation-btn--delete"

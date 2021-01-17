@@ -42,7 +42,7 @@
     }
   }
 
-  &__input-amount-message {
+  &__required-input-item-message {
     color: $danger-color;
     font-size: 0.85rem;
     margin: 0;
@@ -104,6 +104,11 @@
 
     &--add {
       @include operation-btn($task-add-color, white, $task-add-color);
+    }
+
+    &--cancel {
+      @include operation-btn(white, $task-main_color,$task-border_color);
+      margin: 0 0 0 10px;
     }
 
     &--delete {

@@ -2,12 +2,15 @@ import { Action, Dispatch } from 'redux';
 import {
   addGroupShoppingListItemAction,
   cancelAddGroupShoppingListItemAction,
+  cancelEditGroupShoppingListItemAction,
   cancelFetchGroupExpiredShoppingListAction,
   cancelFetchGroupMonthlyShoppingListAction,
   cancelFetchGroupMonthlyShoppingListByCategoriesAction,
   cancelFetchGroupTodayShoppingListAction,
   cancelFetchGroupTodayShoppingListByCategoriesAction,
+  editGroupShoppingListItemAction,
   failedAddGroupShoppingListItemAction,
+  failedEditGroupShoppingListItemAction,
   failedFetchGroupExpiredShoppingListAction,
   failedFetchGroupMonthlyShoppingListAction,
   failedFetchGroupMonthlyShoppingListByCategoriesAction,
@@ -19,6 +22,7 @@ import {
   fetchGroupTodayShoppingListAction,
   fetchGroupTodayShoppingListByCategoriesAction,
   startAddGroupShoppingListItemAction,
+  startEditGroupShoppingListItemAction,
   startFetchGroupExpiredShoppingListAction,
   startFetchGroupMonthlyShoppingListAction,
   startFetchGroupMonthlyShoppingListByCategoriesAction,
@@ -28,12 +32,14 @@ import {
 import axios, { CancelTokenSource } from 'axios';
 import {
   AddGroupShoppingListItemReq,
+  EditGroupShoppingListItemReq,
   FetchGroupExpiredShoppingListRes,
   FetchGroupMonthlyShoppingListByCategoriesRes,
   FetchGroupMonthlyShoppingListRes,
   FetchGroupTodayShoppingListByCategoriesRes,
   FetchGroupTodayShoppingListRes,
   GroupRegularShoppingList,
+  GroupRelatedTransactionData,
   GroupShoppingList,
   GroupShoppingListByCategories,
   GroupShoppingListItem,
@@ -485,6 +491,382 @@ export const addGroupShoppingListItem = (
       } else {
         dispatch(
           failedAddGroupShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const editGroupShoppingListItem = (
+  groupId: number,
+  today: Date,
+  currentYearMonth: string,
+  shoppingListItemId: number,
+  expectedPurchaseDate: Date | null,
+  completeFlag: boolean,
+  purchase: string,
+  shop: string | null,
+  amount: number | null,
+  bigCategoryId: number,
+  mediumCategoryId: number | null,
+  customCategoryId: number | null,
+  regularShoppingListId: number | null,
+  paymentUserId: string | null,
+  transactionAutoAdd: boolean,
+  relatedTransactionData: GroupRelatedTransactionData | null,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (expectedPurchaseDate === null) {
+      return;
+    }
+    dispatch(startEditGroupShoppingListItemAction());
+
+    const data: EditGroupShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      complete_flag: completeFlag,
+      purchase: purchase,
+      shop: shop,
+      amount: amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      regular_shopping_list_id: regularShoppingListId,
+      payment_user_id: paymentUserId,
+      transaction_auto_add: transactionAutoAdd,
+      related_transaction_data: relatedTransactionData,
+    };
+    try {
+      const result = await axios.put<GroupShoppingListItem>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${shoppingListItemId}`,
+        JSON.stringify(data, function (key, value) {
+          if (key === 'expected_purchase_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const prevExpiredShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupExpiredShoppingList;
+      const prevTodayShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupTodayShoppingList;
+      const prevTodayShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupTodayShoppingListByCategories;
+      const prevMonthlyShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupMonthlyShoppingList;
+      const prevMonthlyShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupMonthlyShoppingListByCategories;
+
+      const resShoppingListItem: GroupShoppingListItem = result.data;
+
+      const NOT_FOUND = -1;
+      const NOT_EXIST_ARRAY_LENGTH = 0;
+
+      const addResponseShoppingListItem = (
+        idx: number,
+        prevShoppingList: GroupShoppingList,
+        nextShoppingListItem: GroupShoppingListItem
+      ) => {
+        if (idx === NOT_FOUND) {
+          return prevShoppingList.concat(nextShoppingListItem);
+        }
+
+        prevShoppingList.splice(idx, 0, nextShoppingListItem);
+
+        return prevShoppingList;
+      };
+
+      const addResponseShoppingListItemByCategories = (
+        prevCategoryIdx: number,
+        prevShoppingListByCategories: GroupShoppingListByCategories,
+        newShoppingListItemByCategories: GroupShoppingListItemByCategories
+      ) => {
+        if (prevCategoryIdx === NOT_FOUND) {
+          return prevShoppingListByCategories.concat(newShoppingListItemByCategories);
+        }
+
+        prevShoppingListByCategories.splice(prevCategoryIdx, 1, newShoppingListItemByCategories);
+        return prevShoppingListByCategories;
+      };
+
+      const removePrevShoppingListItem = (prevShoppingList: GroupShoppingList) => {
+        return prevShoppingList.filter((listItem) => {
+          return listItem.id !== shoppingListItemId;
+        });
+      };
+
+      const removeShoppingListItemByCategories = (
+        prevShoppingListByCategories: GroupShoppingListByCategories,
+        shoppingListItem: GroupShoppingListItem
+      ) => {
+        for (let i = 0; i < prevShoppingListByCategories.length; i++) {
+          const prevItemIdx = prevShoppingListByCategories[i].shopping_list.findIndex(
+            (item) => item.id === shoppingListItem.id
+          );
+
+          if (prevItemIdx !== NOT_FOUND) {
+            const removeItemFromList = prevShoppingListByCategories[i].shopping_list.filter(
+              (item) => item.id !== shoppingListItem.id
+            );
+
+            prevShoppingListByCategories[i].shopping_list = removeItemFromList;
+
+            if (removeItemFromList.length === NOT_EXIST_ARRAY_LENGTH) {
+              prevShoppingListByCategories.splice(i, 1);
+            }
+
+            break;
+          }
+        }
+
+        return prevShoppingListByCategories;
+      };
+
+      const generateExpiredShoppingList = (
+        prevShoppingList: GroupShoppingList,
+        shoppingListItem: GroupShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: GroupShoppingList = removePrevShoppingListItem(
+          prevShoppingList
+        );
+
+        if (
+          dateToDateString(today) > resShoppingListItem.expected_purchase_date &&
+          !resShoppingListItem.complete_flag
+        ) {
+          const idx = removePrevItemFromPrevList.findIndex((listItem) => {
+            if (listItem.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+              return listItem.id > shoppingListItem.id;
+            }
+
+            return listItem.expected_purchase_date > shoppingListItem.expected_purchase_date;
+          });
+
+          return addResponseShoppingListItem(idx, removePrevItemFromPrevList, resShoppingListItem);
+        }
+
+        return removePrevItemFromPrevList;
+      };
+
+      const generateTodayShoppingList = (
+        prevShoppingList: GroupShoppingList,
+        shoppingListItem: GroupShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: GroupShoppingList = removePrevShoppingListItem(
+          prevShoppingList
+        );
+
+        if (dateToDateString(today) === shoppingListItem.expected_purchase_date) {
+          const idx = removePrevItemFromPrevList.findIndex(
+            (listItem) => listItem.id > shoppingListItem.id
+          );
+
+          return addResponseShoppingListItem(idx, removePrevItemFromPrevList, shoppingListItem);
+        }
+
+        return removePrevItemFromPrevList;
+      };
+
+      const generateMonthlyShoppingList = (
+        prevShoppingList: GroupShoppingList,
+        shoppingListItem: GroupShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: GroupShoppingList = removePrevShoppingListItem(
+          prevShoppingList
+        );
+
+        if (dateStringToMonthString(shoppingListItem.expected_purchase_date) === currentYearMonth) {
+          const idx = removePrevItemFromPrevList.findIndex((listItem) => {
+            if (listItem.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+              return listItem.id > shoppingListItem.id;
+            }
+
+            return listItem.expected_purchase_date > shoppingListItem.expected_purchase_date;
+          });
+
+          return addResponseShoppingListItem(idx, removePrevItemFromPrevList, shoppingListItem);
+        }
+
+        return removePrevItemFromPrevList;
+      };
+
+      const generateTodayShoppingListByCategories = (
+        prevShoppingListByCategories: GroupShoppingListByCategories,
+        bigCategoryId: number,
+        shoppingListItem: GroupShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: GroupShoppingListByCategories = removeShoppingListItemByCategories(
+          prevShoppingListByCategories,
+          shoppingListItem
+        );
+
+        const prevCategoriesIdx = removePrevItemFromPrevList.findIndex(
+          (item) => item.big_category_name === shoppingListItem.big_category_name
+        );
+
+        if (dateToDateString(today) === shoppingListItem.expected_purchase_date) {
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const addCategoryItemIdx = removePrevItemFromPrevList.findIndex(
+              (item) => item.shopping_list[0].big_category_id > shoppingListItem.big_category_id
+            );
+
+            const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+              big_category_name: shoppingListItem.big_category_name,
+              shopping_list: [shoppingListItem],
+            };
+
+            if (addCategoryItemIdx === NOT_FOUND) {
+              return removePrevItemFromPrevList.concat(newShoppingListItemByCategories);
+            }
+
+            removePrevItemFromPrevList.splice(
+              addCategoryItemIdx,
+              0,
+              newShoppingListItemByCategories
+            );
+
+            return removePrevItemFromPrevList;
+          }
+
+          const prevShoppingListItemIdx = removePrevItemFromPrevList[
+            prevCategoriesIdx
+          ].shopping_list.findIndex((item) => item.id > shoppingListItem.id);
+
+          const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+            big_category_name: removePrevItemFromPrevList[prevCategoriesIdx].big_category_name,
+            shopping_list: addResponseShoppingListItem(
+              prevShoppingListItemIdx,
+              removePrevItemFromPrevList[prevCategoriesIdx].shopping_list,
+              shoppingListItem
+            ),
+          };
+
+          const newShoppingListByCategories = addResponseShoppingListItemByCategories(
+            prevCategoriesIdx,
+            removePrevItemFromPrevList,
+            newShoppingListItemByCategories
+          );
+
+          return newShoppingListByCategories;
+        }
+        return removePrevItemFromPrevList;
+      };
+
+      const generateMonthlyShoppingListByCategories = (
+        prevShoppingListByCategories: GroupShoppingListByCategories,
+        bigCategoryId: number,
+        shoppingListItem: GroupShoppingListItem
+      ) => {
+        const removePrevItemFromPrevList: GroupShoppingListByCategories = removeShoppingListItemByCategories(
+          prevShoppingListByCategories,
+          shoppingListItem
+        );
+
+        const prevCategoriesIdx = removePrevItemFromPrevList.findIndex(
+          (item) => item.big_category_name === shoppingListItem.big_category_name
+        );
+
+        if (dateStringToMonthString(shoppingListItem.expected_purchase_date) === currentYearMonth) {
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const addCategoryItemIdx = removePrevItemFromPrevList.findIndex(
+              (item) => item.shopping_list[0].big_category_id > shoppingListItem.big_category_id
+            );
+
+            const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+              big_category_name: shoppingListItem.big_category_name,
+              shopping_list: [shoppingListItem],
+            };
+
+            if (addCategoryItemIdx === NOT_FOUND) {
+              return removePrevItemFromPrevList.concat(newShoppingListItemByCategories);
+            }
+
+            removePrevItemFromPrevList.splice(
+              addCategoryItemIdx,
+              0,
+              newShoppingListItemByCategories
+            );
+
+            return removePrevItemFromPrevList;
+          }
+
+          const idx = removePrevItemFromPrevList[prevCategoriesIdx].shopping_list.findIndex(
+            (listItem) => {
+              if (listItem.expected_purchase_date === shoppingListItem.expected_purchase_date) {
+                return listItem.id > shoppingListItem.id;
+              }
+              return listItem.expected_purchase_date > shoppingListItem.expected_purchase_date;
+            }
+          );
+
+          const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+            big_category_name: removePrevItemFromPrevList[prevCategoriesIdx].big_category_name,
+            shopping_list: addResponseShoppingListItem(
+              idx,
+              removePrevItemFromPrevList[prevCategoriesIdx].shopping_list,
+              shoppingListItem
+            ),
+          };
+
+          return addResponseShoppingListItemByCategories(
+            prevCategoriesIdx,
+            removePrevItemFromPrevList,
+            newShoppingListItemByCategories
+          );
+        }
+        return removePrevItemFromPrevList;
+      };
+
+      const nextExpiredShoppingList: GroupShoppingList = generateExpiredShoppingList(
+        prevExpiredShoppingList,
+        resShoppingListItem
+      ).concat();
+
+      const nextTodayShoppingList: GroupShoppingList = generateTodayShoppingList(
+        prevTodayShoppingList,
+        resShoppingListItem
+      ).concat();
+
+      const nextTodayShoppingListByCategories: GroupShoppingListByCategories = generateTodayShoppingListByCategories(
+        prevTodayShoppingListByCategories,
+        bigCategoryId,
+        resShoppingListItem
+      ).concat();
+
+      const nextMonthlyShoppingList: GroupShoppingList = generateMonthlyShoppingList(
+        prevMonthlyShoppingList,
+        resShoppingListItem
+      ).concat();
+
+      const nextMonthlyShoppingListByCategories: GroupShoppingListByCategories = generateMonthlyShoppingListByCategories(
+        prevMonthlyShoppingListByCategories,
+        bigCategoryId,
+        resShoppingListItem
+      ).concat();
+
+      dispatch(
+        editGroupShoppingListItemAction(
+          nextExpiredShoppingList,
+          nextTodayShoppingList,
+          nextTodayShoppingListByCategories,
+          nextMonthlyShoppingList,
+          nextMonthlyShoppingListByCategories
+        )
+      );
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelEditGroupShoppingListItemAction());
+      } else {
+        dispatch(
+          failedEditGroupShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )

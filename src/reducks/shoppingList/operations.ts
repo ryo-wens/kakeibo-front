@@ -502,7 +502,7 @@ export const editShoppingListItem = (
   customCategoryId: number | null,
   regularShoppingListId: number | null,
   transactionAutoAdd: boolean,
-  relatedTransactionDate: RelatedTransactionData | null,
+  relatedTransactionData: RelatedTransactionData | null,
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
@@ -521,7 +521,7 @@ export const editShoppingListItem = (
       custom_category_id: customCategoryId,
       regular_shopping_list_id: regularShoppingListId,
       transaction_auto_add: transactionAutoAdd,
-      related_transaction_data: relatedTransactionDate,
+      related_transaction_data: relatedTransactionData,
     };
     try {
       const result = await axios.put<ShoppingListItem>(

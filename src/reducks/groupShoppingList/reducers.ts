@@ -127,6 +127,26 @@ export const groupShoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.START_EDIT_GROUP_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.EDIT_GROUP_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_EDIT_GROUP_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_EDIT_GROUP_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
