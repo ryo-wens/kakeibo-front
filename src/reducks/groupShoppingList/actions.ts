@@ -32,6 +32,10 @@ export type GroupShoppingListActions = ReturnType<
   | typeof editGroupShoppingListItemAction
   | typeof cancelEditGroupShoppingListItemAction
   | typeof failedEditGroupShoppingListItemAction
+  | typeof startDeleteGroupShoppingListItemAction
+  | typeof deleteGroupShoppingListItemAction
+  | typeof cancelDeleteGroupShoppingListItemAction
+  | typeof failedDeleteGroupShoppingListItemAction
 >;
 
 export const START_FETCH_GROUP_EXPIRED_SHOPPING_LIST = 'START_FETCH_GROUP_EXPIRED_SHOPPING_LIST';
@@ -450,6 +454,96 @@ export const FAILED_EDIT_GROUP_SHOPPING_LIST_ITEM = 'FAILED_EDIT_GROUP_SHOPPING_
 export const failedEditGroupShoppingListItemAction = (statusCode: number, errorMessage: string) => {
   return {
     type: FAILED_EDIT_GROUP_SHOPPING_LIST_ITEM,
+    payload: {
+      groupExpiredShoppingListLoading: false,
+      groupExpiredShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupTodayShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      groupMonthlyShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListByCategoriesError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_DELETE_GROUP_SHOPPING_LIST_ITEM = 'START_DELETE_GROUP_SHOPPING_LIST_ITEM';
+export const startDeleteGroupShoppingListItemAction = () => {
+  return {
+    type: START_DELETE_GROUP_SHOPPING_LIST_ITEM,
+    payload: {
+      groupExpiredShoppingListLoading: true,
+      groupTodayShoppingListLoading: true,
+      groupTodayShoppingListByCategoriesLoading: true,
+      groupMonthlyShoppingListLoading: true,
+      groupMonthlyShoppingListByCategoriesLoading: true,
+    },
+  };
+};
+
+export const DELETE_GROUP_SHOPPING_LIST_ITEM = 'DELETE_GROUP_SHOPPING_LIST_ITEM';
+export const deleteGroupShoppingListItemAction = (
+  groupExpiredShoppingList: GroupShoppingList,
+  groupTodayShoppingList: GroupShoppingList,
+  groupTodayShoppingListByCategories: GroupShoppingListByCategories,
+  groupMonthlyShoppingList: GroupShoppingList,
+  groupMonthlyShoppingListByCategories: GroupShoppingListByCategories
+) => {
+  return {
+    type: DELETE_GROUP_SHOPPING_LIST_ITEM,
+    payload: {
+      groupExpiredShoppingListLoading: false,
+      groupExpiredShoppingList: groupExpiredShoppingList,
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingList: groupTodayShoppingList,
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupTodayShoppingListByCategories: groupTodayShoppingListByCategories,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingList: groupMonthlyShoppingList,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListByCategories: groupMonthlyShoppingListByCategories,
+    },
+  };
+};
+
+export const CANCEL_DELETE_GROUP_SHOPPING_LIST_ITEM = 'CANCEL_DELETE_GROUP_SHOPPING_LIST_ITEM';
+export const cancelDeleteGroupShoppingListItemAction = () => {
+  return {
+    type: CANCEL_DELETE_GROUP_SHOPPING_LIST_ITEM,
+    payload: {
+      groupExpiredShoppingListLoading: false,
+      groupTodayShoppingListLoading: false,
+      groupTodayShoppingListByCategoriesLoading: false,
+      groupMonthlyShoppingListLoading: false,
+      groupMonthlyShoppingListByCategoriesLoading: false,
+    },
+  };
+};
+
+export const FAILED_DELETE_GROUP_SHOPPING_LIST_ITEM = 'FAILED_DELETE_GROUP_SHOPPING_LIST_ITEM';
+export const failedDeleteGroupShoppingListItemAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_DELETE_GROUP_SHOPPING_LIST_ITEM,
     payload: {
       groupExpiredShoppingListLoading: false,
       groupExpiredShoppingListError: {

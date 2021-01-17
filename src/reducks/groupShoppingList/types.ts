@@ -120,3 +120,7 @@ export interface EditGroupShoppingListItemReq {
   transaction_auto_add: boolean;
   related_transaction_data: GroupRelatedTransactionData | null;
 }
+
+export interface DeleteGroupShoppingListItemRes {
+  message: string;
+}

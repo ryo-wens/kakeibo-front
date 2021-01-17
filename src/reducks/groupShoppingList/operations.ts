@@ -2,14 +2,17 @@ import { Action, Dispatch } from 'redux';
 import {
   addGroupShoppingListItemAction,
   cancelAddGroupShoppingListItemAction,
+  cancelDeleteGroupShoppingListItemAction,
   cancelEditGroupShoppingListItemAction,
   cancelFetchGroupExpiredShoppingListAction,
   cancelFetchGroupMonthlyShoppingListAction,
   cancelFetchGroupMonthlyShoppingListByCategoriesAction,
   cancelFetchGroupTodayShoppingListAction,
   cancelFetchGroupTodayShoppingListByCategoriesAction,
+  deleteGroupShoppingListItemAction,
   editGroupShoppingListItemAction,
   failedAddGroupShoppingListItemAction,
+  failedDeleteGroupShoppingListItemAction,
   failedEditGroupShoppingListItemAction,
   failedFetchGroupExpiredShoppingListAction,
   failedFetchGroupMonthlyShoppingListAction,
@@ -22,6 +25,7 @@ import {
   fetchGroupTodayShoppingListAction,
   fetchGroupTodayShoppingListByCategoriesAction,
   startAddGroupShoppingListItemAction,
+  startDeleteGroupShoppingListItemAction,
   startEditGroupShoppingListItemAction,
   startFetchGroupExpiredShoppingListAction,
   startFetchGroupMonthlyShoppingListAction,
@@ -32,6 +36,7 @@ import {
 import axios, { CancelTokenSource } from 'axios';
 import {
   AddGroupShoppingListItemReq,
+  DeleteGroupShoppingListItemRes,
   EditGroupShoppingListItemReq,
   FetchGroupExpiredShoppingListRes,
   FetchGroupMonthlyShoppingListByCategoriesRes,
@@ -48,6 +53,7 @@ import {
 import { State } from '../store/types';
 import moment from 'moment';
 import { dateStringToMonthString, dateToDateString } from '../../lib/date';
+import { openTextModalAction } from '../modal/actions';
 
 export const fetchGroupExpiredShoppingList = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -867,6 +873,101 @@ export const editGroupShoppingListItem = (
       } else {
         dispatch(
           failedEditGroupShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const deleteGroupShoppingListItem = (
+  groupId: number,
+  shoppingListItemId: number,
+  bigCategoryName: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    dispatch(startDeleteGroupShoppingListItemAction());
+
+    try {
+      const result = await axios.delete<DeleteGroupShoppingListItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${shoppingListItemId}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const prevExpiredShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupExpiredShoppingList;
+      const prevTodayShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupTodayShoppingList;
+      const prevTodayShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupTodayShoppingListByCategories;
+      const prevMonthlyShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupMonthlyShoppingList;
+      const prevMonthlyShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupMonthlyShoppingListByCategories;
+
+      const message = result.data.message;
+
+      const generateShoppingList = (prevShoppingList: GroupShoppingList) => {
+        return prevShoppingList.filter((listItem) => {
+          return listItem.id !== shoppingListItemId;
+        });
+      };
+
+      const generateShoppingListByCategories = (
+        prevShoppingListByCategories: GroupShoppingListByCategories
+      ) => {
+        const NOT_FOUND = -1;
+        const idx = prevShoppingListByCategories.findIndex(
+          (listItem) => listItem.big_category_name === bigCategoryName
+        );
+
+        if (idx === NOT_FOUND) {
+          return prevShoppingListByCategories;
+        }
+        const nextShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+          big_category_name: bigCategoryName,
+          shopping_list: generateShoppingList(prevShoppingListByCategories[idx].shopping_list),
+        };
+
+        if (!nextShoppingListItemByCategories.shopping_list.length) {
+          prevShoppingListByCategories.splice(idx, 1);
+          return prevShoppingListByCategories;
+        }
+        prevShoppingListByCategories.splice(idx, 1, nextShoppingListItemByCategories);
+        return prevShoppingListByCategories;
+      };
+
+      const nextExpiredShoppingList = generateShoppingList(prevExpiredShoppingList).concat();
+      const nextTodayShoppingList = generateShoppingList(prevTodayShoppingList).concat();
+      const nextTodayShoppingListByCategories = generateShoppingListByCategories(
+        prevTodayShoppingListByCategories
+      ).concat();
+      const nextMonthlyShoppingList = generateShoppingList(prevMonthlyShoppingList).concat();
+      const nextMonthlyShoppingListByCategories = generateShoppingListByCategories(
+        prevMonthlyShoppingListByCategories
+      ).concat();
+
+      dispatch(
+        deleteGroupShoppingListItemAction(
+          nextExpiredShoppingList,
+          nextTodayShoppingList,
+          nextTodayShoppingListByCategories,
+          nextMonthlyShoppingList,
+          nextMonthlyShoppingListByCategories
+        )
+      );
+      dispatch(openTextModalAction(message));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelDeleteGroupShoppingListItemAction());
+      } else {
+        dispatch(
+          failedDeleteGroupShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )

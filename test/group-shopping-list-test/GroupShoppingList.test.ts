@@ -3,6 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import {
   addGroupShoppingListItem,
+  deleteGroupShoppingListItem,
   editGroupShoppingListItem,
   fetchGroupExpiredShoppingList,
   fetchGroupMonthlyShoppingList,
@@ -19,6 +20,8 @@ import fetchGroupMonthlyShoppingListResponse from './fetchGroupMonthlyShoppingLi
 import fetchGroupMonthlyShoppingListByCategoriesResponse from './fetchGroupMonthlyShoppingListByCategoriesResponse.json';
 import addGroupShoppingListItemResponse from './addGroupShoppingListItemResponse.json';
 import editGroupShoppingListItemResponse from './editGroupShoppingListItemResponse.json';
+import deleteGroupShoppingListItemResponse from './deleteGroupShoppingListItemResponse.json';
+import * as ModalActions from '../../src/reducks/modal/actions';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -723,7 +726,7 @@ describe('async actions shoppingList', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('edit shoppingListItem if fetch succeeds', async () => {
+  it('edit groupShoppingListItem if fetch succeeds', async () => {
     const groupId = 1;
     const today = new Date();
     const shoppingListItemId = 1;
@@ -886,6 +889,62 @@ describe('async actions shoppingList', () => {
       paymentUserId,
       transactionAutoAdd,
       relatedTransactionData,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('delete groupShoppingListItem if fetch succeeds', async () => {
+    const groupId = 1;
+    const shoppingListItemId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${shoppingListItemId}`;
+    const bigCategoryName = '通信費';
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(deleteGroupShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupShoppingListActions.START_DELETE_GROUP_SHOPPING_LIST_ITEM,
+        payload: {
+          groupExpiredShoppingListLoading: true,
+          groupTodayShoppingListLoading: true,
+          groupTodayShoppingListByCategoriesLoading: true,
+          groupMonthlyShoppingListLoading: true,
+          groupMonthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: GroupShoppingListActions.DELETE_GROUP_SHOPPING_LIST_ITEM,
+        payload: {
+          groupExpiredShoppingListLoading: false,
+          groupExpiredShoppingList: [],
+          groupTodayShoppingListLoading: false,
+          groupTodayShoppingList: [],
+          groupTodayShoppingListByCategoriesLoading: false,
+          groupTodayShoppingListByCategories: [],
+          groupMonthlyShoppingListLoading: false,
+          groupMonthlyShoppingList: [],
+          groupMonthlyShoppingListByCategoriesLoading: false,
+          groupMonthlyShoppingListByCategories: [],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: 'ショッピングアイテムを削除しました。',
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    await deleteGroupShoppingListItem(
+      groupId,
+      shoppingListItemId,
+      bigCategoryName,
       signal
       // @ts-ignore
     )(store.dispatch, getState);
