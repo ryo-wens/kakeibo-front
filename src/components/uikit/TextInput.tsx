@@ -24,6 +24,7 @@ type TextInputProps = {
   type: string;
   required: boolean;
   fullWidth: boolean;
+  disabled: boolean;
   onChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
 };
 
@@ -40,6 +41,7 @@ const TextInput = (props: TextInputProps) => {
       required={props.required}
       fullWidth={props.fullWidth}
       onChange={props.onChange}
+      disabled={props.disabled}
     />
   );
 };

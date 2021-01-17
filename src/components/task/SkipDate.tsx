@@ -73,6 +73,7 @@ const SkipDate = (props: SkipDateProps) => {
           id={'date-picker-dialog'}
           label={''}
           required={false}
+          disabled={false}
         />
       </div>
       <div className="skip-date__display-week">

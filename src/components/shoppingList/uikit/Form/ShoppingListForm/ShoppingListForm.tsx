@@ -61,6 +61,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -108,6 +109,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -122,6 +124,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },

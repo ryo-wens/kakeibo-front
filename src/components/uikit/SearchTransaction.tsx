@@ -106,6 +106,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 onChange={props.selectStartDateChange}
                 required={false}
                 value={props.selectStartDate}
+                disabled={false}
               />
             </div>
             <div>
@@ -115,6 +116,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 onChange={props.selectEndDateChange}
                 required={false}
                 value={props.selectEndDate}
+                disabled={false}
               />
             </div>
             <div>
@@ -123,6 +125,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 required={false}
                 value={props.transactionType}
                 label={'支出 or 収入'}
+                disabled={false}
               />
             </div>
             <div className="daily-history__input-form">
@@ -134,6 +137,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 onChange={props.inputMemo}
                 required={false}
                 type={'text'}
+                disabled={false}
               />
             </div>
             <div className="daily-history__input-form">
@@ -145,6 +149,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 onChange={props.inputShop}
                 required={false}
                 type={'text'}
+                disabled={false}
               />
             </div>
             <div className="daily-history__input-form">
@@ -156,6 +161,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 onChange={props.inputLowAmount}
                 required={false}
                 type={'text'}
+                disabled={false}
               />
             </div>
             <div className="daily-history__input-form">
@@ -167,6 +173,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                 onChange={props.inputHighAmount}
                 required={false}
                 type={'text'}
+                disabled={false}
               />
             </div>
             <div className="daily-history__input-form">
@@ -195,6 +202,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
                   groupId={props.groupId}
                   pathName={props.pathName}
                   onChange={props.changePayer}
+                  disabled={false}
                 />
               )}
             </div>

@@ -24,6 +24,7 @@ interface SelectPayerProps {
   approvedGroups: Groups;
   groupId: number;
   pathName: string;
+  disabled: boolean;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
@@ -46,7 +47,12 @@ const SelectPayer = (props: SelectPayerProps) => {
       <InputLabel id="paymentUserId" required={props.required}>
         支払人
       </InputLabel>
-      <Select id="paymentUserId" value={props.value} onChange={props.onChange}>
+      <Select
+        id="paymentUserId"
+        value={props.value}
+        onChange={props.onChange}
+        disabled={props.disabled}
+      >
         {paymentUsers() !== undefined
           ? paymentUsers().map((paymentUser) => {
               return (

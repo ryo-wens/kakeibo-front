@@ -79,6 +79,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           id={'date-picker-dialog'}
           label={''}
           required={false}
+          disabled={false}
         />
       ),
     },

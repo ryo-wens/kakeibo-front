@@ -88,28 +88,30 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
   const accountingStatus = useSelector(getYearlyAccountListStatusModals);
-  const [amount, setAmount] = useState<string>('');
-  const [memo, setMemo] = useState<string>('');
+  const [amount, setAmount] = useState('');
+  const [memo, setMemo] = useState('');
   const emptyMemo = memo === '' ? null : memo;
-  const [shop, setShop] = useState<string>('');
+  const [shop, setShop] = useState('');
   const emptyShop = shop === '' ? null : shop;
   const [transactionDate, setTransactionDate] = useState<Date | null>(props.selectDate);
-  const [transactionsType, setTransactionType] = useState<string>('expense');
+  const [transactionsType, setTransactionType] = useState('expense');
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
   const [bigCategory, setBigCategory] = useState<string | null>('');
-  const [bigCategoryId, setBigCategoryId] = useState<number>(0);
+  const [bigCategoryId, setBigCategoryId] = useState(0);
   const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const [associatedCategory, setAssociatedCategory] = useState<string>('');
+  const [associatedCategory, setAssociatedCategory] = useState('');
   const years = {
     selectedYear: String(props.year),
     selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
   };
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
+  const [editing, setEditing] = useState(false);
+  const [firstTransactionDate, setFirstTransactionDate] = useState<Date | null>(transactionDate);
 
   let addTransactionYear = 0;
   let addTransactionMonth = 0;
@@ -119,12 +121,24 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     addTransactionMonth = transactionDate.getMonth() + 1;
   }
 
-  let addDisabled = false;
+  let firstTransactionMonth = 0;
+  if (firstTransactionDate) {
+    firstTransactionMonth = firstTransactionDate.getMonth() + 1;
+  }
 
-  if (accountingStatus.year === addTransactionYear + '年') {
-    for (const account of accountingStatus.accountedMonth) {
-      if (account === addTransactionMonth + '月') {
-        addDisabled = true;
+  let addDisabled = false;
+  let unEditInputForm = false;
+
+  if (pathName === 'group') {
+    if (accountingStatus.year === addTransactionYear + '年') {
+      for (const account of accountingStatus.accountedMonth) {
+        if (account === addTransactionMonth + '月') {
+          addDisabled = true;
+        }
+
+        if (account === firstTransactionMonth + '月') {
+          unEditInputForm = true;
+        }
       }
     }
   }
@@ -145,11 +159,27 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
         };
       }
     }
-  }, [props.open, pathName, id]);
+  }, [props.open]);
 
   useEffect(() => {
-    setTransactionDate(props.selectDate);
+    if (props.open) {
+      setEditing(true);
+
+      return () => {
+        setEditing(false);
+      };
+    }
+  }, [props.open]);
+
+  useEffect(() => {
+    if (!editing) {
+      setTransactionDate(props.selectDate);
+    }
   }, [props.selectDate]);
+
+  useEffect(() => {
+    setFirstTransactionDate(transactionDate);
+  }, [props.open]);
 
   useEffect(() => {
     setPaymentUserId(userId);
@@ -333,7 +363,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
         <CloseIcon />
       </button>
       <h3 className={classes.textPosition}>家計簿の追加</h3>
-      {addDisabled && (
+      {addDisabled && pathName === 'group' && (
         <div className="input-form__message">
           {addTransactionMonth + '月'}は会計済みのため追加できません。
         </div>
@@ -348,12 +378,14 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           value={transactionDate}
           onChange={handleDateChange}
           required={true}
+          disabled={unEditInputForm}
         />
         <KindSelectBox
           onChange={handleSelect}
           required={true}
           value={transactionsType}
           label={'支出or収入'}
+          disabled={unEditInputForm}
         />
         <TextInput
           value={amount}
@@ -363,6 +395,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onChange={handleAmountChange}
           required={true}
           fullWidth={false}
+          disabled={unEditInputForm}
         />
         {pathName === 'group' && (
           <SelectPayer
@@ -372,6 +405,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
             pathName={pathName}
             required={true}
             value={paymentUserId}
+            disabled={unEditInputForm}
           />
         )}
         <BigCategoryInput
@@ -384,6 +418,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onClick={selectCategory}
           onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
           setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+          disabled={unEditInputForm}
         />
         <MediumCategoryInput
           ref={mediumMenuRef}
@@ -398,6 +433,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onClick={selectCategory}
           onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
           setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+          disabled={unEditInputForm}
         />
         <TextInput
           value={shop}
@@ -407,6 +443,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onChange={handleShop}
           required={false}
           fullWidth={false}
+          disabled={unEditInputForm}
         />
         <TextInput
           value={memo}
@@ -416,6 +453,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           onChange={handleMemo}
           required={false}
           fullWidth={false}
+          disabled={unEditInputForm}
         />
       </form>
       <div className={classes.buttonPosition}>

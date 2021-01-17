@@ -37,6 +37,7 @@ interface MediumCategoryInputProps {
   ) => void;
   onClickCloseMediumCategoryMenu: (event: Event) => void;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  disabled: boolean;
 }
 
 const MediumCategoryInput = React.forwardRef(
@@ -401,7 +402,7 @@ const MediumCategoryInput = React.forwardRef(
         <div>
           <button
             type="button"
-            disabled={props.bigCategory === ''}
+            disabled={props.bigCategory === '' || props.disabled}
             className="category-input__button-display"
             onClick={() => {
               !props.mediumCategoryMenuOpen

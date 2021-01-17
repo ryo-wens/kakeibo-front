@@ -40,6 +40,7 @@ interface BigCategoryInputProps {
   ) => void;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   onClickCloseBigCategoryMenu: (event: Event) => void;
+  disabled: boolean;
 }
 
 const BigCategoryInput = React.forwardRef(
@@ -500,6 +501,7 @@ const BigCategoryInput = React.forwardRef(
         <div>
           <button
             type="button"
+            disabled={props.disabled}
             className="category-input__button-display"
             onClick={() => {
               !props.bigCategoryMenuOpen

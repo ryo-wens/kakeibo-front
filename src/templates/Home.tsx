@@ -8,10 +8,7 @@ import { Header } from '../components/header';
 import { InputForm, RecentInput, MonthlyHistory } from '../components/home';
 import { HistoryPieChart, HistoryBarChart } from '../components/home/graph';
 import { fetchGroups } from '../reducks/groups/operations';
-import {
-  fetchGroupTransactionsList,
-  fetchGroupYearlyAccountList,
-} from '../reducks/groupTransactions/operations';
+import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
 import { getSortCategoryTransactions, getTotalExpense } from '../reducks/transactions/selectors';
 import {
   getSortCategoryGroupTransactions,
@@ -59,12 +56,10 @@ const Home = () => {
       };
       dispatch(fetchGroupTransactionsList(Number(id), years, signal));
       dispatch(fetchGroupYearlyBudgets(Number(id), year, signal));
-      dispatch(fetchGroupYearlyAccountList(Number(id), year, signal));
       dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
         dispatch(fetchGroupTransactionsList(Number(id), years, signal));
         dispatch(fetchGroupYearlyBudgets(Number(id), year, signal));
-        dispatch(fetchGroupYearlyAccountList(Number(id), year, signal));
         dispatch(fetchGroups(signal));
       }, 3000);
       return () => {

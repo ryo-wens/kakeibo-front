@@ -29,6 +29,7 @@ type DatePickerProps = {
   value: Date | null;
   onChange: (date: Date | null) => void;
   required: boolean;
+  disabled: boolean;
 };
 
 const DatePicker = (props: DatePickerProps) => {
@@ -40,6 +41,7 @@ const DatePicker = (props: DatePickerProps) => {
         <KeyboardDatePicker
           className={classes.root}
           id={props.id}
+          disabled={props.disabled}
           label={props.label}
           format="yyyy/MM/dd"
           value={props.value}
