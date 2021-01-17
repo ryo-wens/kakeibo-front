@@ -6,9 +6,10 @@ import '../../../../shoppingList/uikit/Modal/AddShoppingListModal/add-shopping-l
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
 import axios from 'axios';
-import GroupRegularShoppingListForm from '../../../uikit/Form/GroupRegularShoppingListForm/GroupRegularShoppingListForm';
-import { addRegularShoppingListItem } from '../../../../../reducks/shoppingList/operations';
+import GroupRegularShoppingListForm from '../../Form/GroupRegularShoppingListForm/GroupRegularShoppingListForm';
 import { useDispatch } from 'react-redux';
+import { addGroupRegularShoppingListItem } from '../../../../../reducks/groupShoppingList/operations';
+import { useParams } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,6 +28,7 @@ interface AddGroupRegularShoppingListModalProps {
 const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { id } = useParams();
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
@@ -171,7 +173,8 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         unInput={unInput}
         dispatchOperation={() =>
           dispatch(
-            addRegularShoppingListItem(
+            addGroupRegularShoppingListItem(
+              Number(id),
               date,
               props.currentYearMonth,
               expectedPurchaseDate,
@@ -183,6 +186,7 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
               bigCategoryId,
               mediumCategoryId,
               customCategoryId,
+              paymentUser,
               transactionAutoAdd,
               signal
             )

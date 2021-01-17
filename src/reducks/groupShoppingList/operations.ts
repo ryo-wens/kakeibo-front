@@ -1,6 +1,8 @@
 import { Action, Dispatch } from 'redux';
 import {
+  addGroupRegularShoppingListItemAction,
   addGroupShoppingListItemAction,
+  cancelAddGroupRegularShoppingListItemAction,
   cancelAddGroupShoppingListItemAction,
   cancelDeleteGroupShoppingListItemAction,
   cancelEditGroupShoppingListItemAction,
@@ -11,6 +13,7 @@ import {
   cancelFetchGroupTodayShoppingListByCategoriesAction,
   deleteGroupShoppingListItemAction,
   editGroupShoppingListItemAction,
+  failedAddGroupRegularShoppingListItemAction,
   failedAddGroupShoppingListItemAction,
   failedDeleteGroupShoppingListItemAction,
   failedEditGroupShoppingListItemAction,
@@ -24,6 +27,7 @@ import {
   fetchGroupMonthlyShoppingListByCategoriesAction,
   fetchGroupTodayShoppingListAction,
   fetchGroupTodayShoppingListByCategoriesAction,
+  startAddGroupRegularShoppingListItemAction,
   startAddGroupShoppingListItemAction,
   startDeleteGroupShoppingListItemAction,
   startEditGroupShoppingListItemAction,
@@ -35,6 +39,8 @@ import {
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import {
+  AddGroupRegularShoppingListItemReq,
+  AddGroupRegularShoppingListItemRes,
   AddGroupShoppingListItemReq,
   DeleteGroupShoppingListItemRes,
   EditGroupShoppingListItemReq,
@@ -44,6 +50,7 @@ import {
   FetchGroupTodayShoppingListByCategoriesRes,
   FetchGroupTodayShoppingListRes,
   GroupRegularShoppingList,
+  GroupRegularShoppingListItem,
   GroupRelatedTransactionData,
   GroupShoppingList,
   GroupShoppingListByCategories,
@@ -968,6 +975,290 @@ export const deleteGroupShoppingListItem = (
       } else {
         dispatch(
           failedDeleteGroupShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const addGroupRegularShoppingListItem = (
+  groupId: number,
+  today: Date | null,
+  currentYearMonth: string,
+  expectedPurchaseDate: Date | null,
+  cycleType: 'daily' | 'weekly' | 'monthly' | 'custom',
+  cycle: number | null,
+  purchase: string,
+  shop: string | null,
+  amount: number | null,
+  bigCategoryId: number,
+  mediumCategoryId: number | null,
+  customCategoryId: number | null,
+  paymentUserId: string | null,
+  transactionAutoAdd: boolean,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    if (today === null) {
+      return;
+    }
+    if (expectedPurchaseDate === null) {
+      return;
+    }
+    if (cycle === 0) {
+      return;
+    }
+    dispatch(startAddGroupRegularShoppingListItemAction());
+
+    const data: AddGroupRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      payment_user_id: paymentUserId,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    try {
+      const result = await axios.post<AddGroupRegularShoppingListItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular`,
+        JSON.stringify(data, function (key, value) {
+          if (key === 'expected_purchase_date') {
+            return moment(new Date(value)).format();
+          }
+          return value;
+        }),
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const prevRegularShoppingList: GroupRegularShoppingList = getState().groupShoppingList
+        .groupRegularShoppingList;
+      const prevTodayShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupTodayShoppingList;
+      const prevTodayShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupTodayShoppingListByCategories;
+      const prevMonthlyShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupMonthlyShoppingList;
+      const prevMonthlyShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupMonthlyShoppingListByCategories;
+
+      const resRegularShoppingListItem: GroupRegularShoppingListItem =
+        result.data.regular_shopping_item;
+      const resShoppingList: GroupShoppingList = result.data.shopping_list;
+
+      const NOT_FOUND = -1;
+      const NOT_EXIST_ARRAY_LENGTH = 0;
+      const INCLUDES_TODAY_ITEM = 2;
+
+      const addResponseShoppingListItem = (
+        idx: number,
+        prevShoppingList: GroupShoppingList,
+        nextShoppingListItem: GroupShoppingListItem
+      ) => {
+        if (idx === NOT_FOUND) {
+          return prevShoppingList.concat(nextShoppingListItem);
+        }
+        prevShoppingList.splice(idx, 0, nextShoppingListItem);
+        return prevShoppingList;
+      };
+
+      const addResponseShoppingList = (
+        prevShoppingList: GroupShoppingList,
+        shoppingList: GroupShoppingList
+      ) => {
+        let nextShoppingList: GroupShoppingList = [];
+        for (const listItem of shoppingList) {
+          if (currentYearMonth === dateStringToMonthString(listItem.expected_purchase_date)) {
+            const idx = prevShoppingList.findIndex((prevItem) => {
+              if (prevItem.expected_purchase_date === listItem.expected_purchase_date) {
+                return prevItem.id > listItem.id;
+              }
+              return prevItem.expected_purchase_date > listItem.expected_purchase_date;
+            });
+
+            nextShoppingList = addResponseShoppingListItem(idx, prevShoppingList, listItem);
+          }
+        }
+        return nextShoppingList;
+      };
+
+      const addResponseShoppingListItemByCategories = (
+        addCategoryIdx: number,
+        prevShoppingListByCategories: GroupShoppingListByCategories,
+        newShoppingListItemByCategories: GroupShoppingListItemByCategories
+      ) => {
+        if (addCategoryIdx === NOT_FOUND) {
+          return prevShoppingListByCategories.concat(newShoppingListItemByCategories);
+        }
+        prevShoppingListByCategories.splice(addCategoryIdx, 0, newShoppingListItemByCategories);
+        return prevShoppingListByCategories;
+      };
+
+      const generateTodayShoppingList = (
+        prevShoppingList: GroupShoppingList,
+        shoppingList: GroupShoppingList
+      ) => {
+        if (shoppingList.length === INCLUDES_TODAY_ITEM) {
+          return prevShoppingList.concat(shoppingList[0]);
+        }
+        return prevShoppingList;
+      };
+
+      const generateTodayShoppingListByCategories = (
+        prevShoppingListByCategories: GroupShoppingListByCategories,
+        shoppingList: GroupShoppingList
+      ) => {
+        if (shoppingList.length === INCLUDES_TODAY_ITEM) {
+          const shoppingListItem = shoppingList[0];
+
+          const prevCategoriesIdx = prevShoppingListByCategories.findIndex(
+            (item) => item.big_category_name === shoppingListItem.big_category_name
+          );
+          const addCategoryIdx = prevShoppingListByCategories.findIndex(
+            (item) => item.shopping_list[0].big_category_id > shoppingListItem.big_category_id
+          );
+
+          if (prevCategoriesIdx === NOT_FOUND) {
+            const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+              big_category_name: shoppingListItem.big_category_name,
+              shopping_list: [shoppingListItem],
+            };
+
+            return addResponseShoppingListItemByCategories(
+              addCategoryIdx,
+              prevShoppingListByCategories,
+              newShoppingListItemByCategories
+            );
+          }
+
+          const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+            big_category_name: prevShoppingListByCategories[prevCategoriesIdx].big_category_name,
+            shopping_list: prevShoppingListByCategories[prevCategoriesIdx].shopping_list.concat(
+              shoppingListItem
+            ),
+          };
+
+          prevShoppingListByCategories.splice(
+            prevCategoriesIdx,
+            1,
+            newShoppingListItemByCategories
+          );
+
+          return prevShoppingListByCategories;
+        }
+        return prevShoppingListByCategories;
+      };
+
+      const generateMonthlyShoppingList = (
+        prevShoppingList: GroupShoppingList,
+        shoppingList: GroupShoppingList
+      ) => {
+        if (prevShoppingList.length === NOT_EXIST_ARRAY_LENGTH) {
+          return shoppingList.filter((listItem) => {
+            if (dateStringToMonthString(listItem.expected_purchase_date) === currentYearMonth) {
+              return listItem;
+            }
+          });
+        }
+        return addResponseShoppingList(prevShoppingList, shoppingList);
+      };
+
+      const generateMonthlyShoppingListByCategories = (
+        prevShoppingListByCategories: GroupShoppingListByCategories,
+        shoppingList: GroupShoppingList,
+        regularShoppingListItem: GroupRegularShoppingListItem
+      ) => {
+        const prevCategoriesIdx = prevShoppingListByCategories.findIndex(
+          (item) => item.big_category_name === regularShoppingListItem.big_category_name
+        );
+
+        const pushCategoryItemIdx = prevShoppingListByCategories.findIndex(
+          (item) => item.shopping_list[0].big_category_id > regularShoppingListItem.big_category_id
+        );
+
+        if (prevCategoriesIdx === NOT_FOUND) {
+          const nextShoppingList: GroupShoppingList = shoppingList.filter((listItem) => {
+            if (dateStringToMonthString(listItem.expected_purchase_date) === currentYearMonth) {
+              return listItem;
+            }
+          });
+
+          if (nextShoppingList.length === NOT_EXIST_ARRAY_LENGTH) {
+            return prevShoppingListByCategories;
+          }
+
+          const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+            big_category_name: regularShoppingListItem.big_category_name,
+            shopping_list: nextShoppingList,
+          };
+
+          return addResponseShoppingListItemByCategories(
+            pushCategoryItemIdx,
+            prevShoppingListByCategories,
+            newShoppingListItemByCategories
+          );
+        }
+
+        const nextShoppingList = addResponseShoppingList(
+          prevShoppingListByCategories[prevCategoriesIdx].shopping_list,
+          shoppingList
+        );
+
+        const newShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+          big_category_name: prevShoppingListByCategories[prevCategoriesIdx].big_category_name,
+          shopping_list: nextShoppingList,
+        };
+        prevShoppingListByCategories.splice(prevCategoriesIdx, 1, newShoppingListItemByCategories);
+        return prevShoppingListByCategories;
+      };
+
+      const nextRegularShoppingList: GroupRegularShoppingList = prevRegularShoppingList.concat(
+        resRegularShoppingListItem
+      );
+      const nextTodayShoppingList: GroupShoppingList = generateTodayShoppingList(
+        prevTodayShoppingList,
+        resShoppingList
+      ).concat();
+      const nextTodayShoppingListByCategories: GroupShoppingListByCategories = generateTodayShoppingListByCategories(
+        prevTodayShoppingListByCategories,
+        resShoppingList
+      ).concat();
+      const nextMonthlyShoppingList: GroupShoppingList = generateMonthlyShoppingList(
+        prevMonthlyShoppingList,
+        resShoppingList
+      ).concat();
+      const nextMonthlyShoppingListByCategories: GroupShoppingListByCategories = generateMonthlyShoppingListByCategories(
+        prevMonthlyShoppingListByCategories,
+        resShoppingList,
+        resRegularShoppingListItem
+      ).concat();
+
+      dispatch(
+        addGroupRegularShoppingListItemAction(
+          nextRegularShoppingList,
+          nextTodayShoppingList,
+          nextTodayShoppingListByCategories,
+          nextMonthlyShoppingList,
+          nextMonthlyShoppingListByCategories
+        )
+      );
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelAddGroupRegularShoppingListItemAction());
+      } else {
+        dispatch(
+          failedAddGroupRegularShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )
