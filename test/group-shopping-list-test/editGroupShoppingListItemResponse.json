@@ -14,6 +14,7 @@
   "custom_category_id": null,
   "custom_category_name": null,
   "regular_shopping_list_id": 1,
+  "payment_user_id": "furusawa",
   "transaction_auto_add": true,
   "related_transaction_data": null
 }

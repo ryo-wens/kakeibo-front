@@ -3,16 +3,15 @@ import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import '../../../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/EditShoppingListModal/edit-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
-import {
-  deleteShoppingListItem,
-  editShoppingListItem,
-} from '../../../../../../reducks/shoppingList/operations';
+import { deleteShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import EditIcon from '@material-ui/icons/Edit';
 import ShoppingListDeleteForm from '../../../../../shoppingList/uikit/Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import { date } from '../../../../../../lib/constant';
 import GroupShoppingListForm from '../../../Form/GroupShoppingListForm/GroupShoppingListForm';
 import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
+import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
+import { useParams } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -61,11 +60,13 @@ interface EditGroupShoppingListItemModalProps {
 
 const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalProps) => {
   const classes = useStyles();
+  const { id } = useParams();
+  const signal = axios.CancelToken.source();
+
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
-  const signal = axios.CancelToken.source();
 
   const disabledButton = () => {
     const unInput =
@@ -185,7 +186,7 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
 
   const body = (
     <div className={classes.paper}>
-      {/*仮実装として、deleteShoppingListItem() と editShoppingListItem() を定義*/}
+      {/*仮実装として、deleteShoppingListItem() を定義*/}
       {deleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
@@ -225,7 +226,8 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
           closeModal={closeModal}
           unInput={disabledButton()}
           minDate={new Date('1900-01-01')}
-          dispatchOperation={editShoppingListItem(
+          dispatchOperation={editGroupShoppingListItem(
+            Number(id),
             date,
             props.currentYearMonth,
             props.listItem.id,
@@ -238,11 +240,12 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
             props.mediumCategoryId,
             props.customCategoryId,
             props.listItem.regular_shopping_list_id,
+            props.paymentUser,
             props.transactionAutoAdd,
             props.listItem.related_transaction_data,
             signal
           )}
-          displayInputAmountMessage={false}
+          displayRequiredInputItemMessage={false}
           openDeleteForm={openDeleteForm}
         />
       )}

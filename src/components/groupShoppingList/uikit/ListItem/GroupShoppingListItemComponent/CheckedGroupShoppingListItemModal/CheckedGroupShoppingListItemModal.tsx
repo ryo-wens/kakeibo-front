@@ -2,13 +2,14 @@ import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
-import { editShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import { date } from '../../../../../../lib/constant';
 import '../../../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/CheckedShoppingListItemModal/checked-shopping-list-item-modal.scss';
 import { useDispatch } from 'react-redux';
 import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
 import GroupShoppingListForm from '../../../Form/GroupShoppingListForm/GroupShoppingListForm';
+import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
+import { useParams } from 'react-router';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -60,11 +61,12 @@ interface CheckedGroupShoppingListItemModalProps {
 const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
+  const { id } = useParams();
+  const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
-  const signal = axios.CancelToken.source();
 
   const selectCategory = (
     bigCategoryIndex: number,
@@ -95,7 +97,7 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
     const unInput =
       props.purchase === '' || props.expectedPurchaseDate === null || props.bigCategoryId === 0;
 
-    if (props.transactionAutoAdd && props.amount === null) {
+    if (props.transactionAutoAdd && (props.amount === null || props.paymentUser === null)) {
       return true;
     } else if (
       props.expectedPurchaseDate !== null &&
@@ -176,12 +178,17 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
   };
 
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked && props.transactionAutoAdd && props.amount === null) {
+    if (
+      event.target.checked &&
+      props.transactionAutoAdd &&
+      (props.amount === null || props.paymentUser === null)
+    ) {
       return openModal();
     }
     props.setChecked(event.target.checked);
     dispatch(
-      editShoppingListItem(
+      editGroupShoppingListItem(
+        Number(id),
         date,
         props.currentYearMonth,
         props.listItem.id,
@@ -194,6 +201,7 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
         props.mediumCategoryId,
         props.customCategoryId,
         props.listItem.regular_shopping_list_id,
+        props.paymentUser,
         props.transactionAutoAdd,
         props.listItem.related_transaction_data,
         signal
@@ -203,8 +211,6 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
 
   const body = (
     <div className={classes.paper}>
-      {/*仮実装として、editShoppingListItem() を定義*/}
-
       <GroupShoppingListForm
         expectedPurchaseDate={props.expectedPurchaseDate}
         purchase={props.purchase}
@@ -231,7 +237,8 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
         closeModal={closeModal}
         unInput={disabledButton()}
         minDate={new Date('1900-01-01')}
-        dispatchOperation={editShoppingListItem(
+        dispatchOperation={editGroupShoppingListItem(
+          Number(id),
           date,
           props.currentYearMonth,
           props.listItem.id,
@@ -244,11 +251,12 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
           props.mediumCategoryId,
           props.customCategoryId,
           props.listItem.regular_shopping_list_id,
+          props.paymentUser,
           props.transactionAutoAdd,
           props.listItem.related_transaction_data,
           signal
         )}
-        displayInputAmountMessage={true}
+        displayRequiredInputItemMessage={true}
       />
     </div>
   );

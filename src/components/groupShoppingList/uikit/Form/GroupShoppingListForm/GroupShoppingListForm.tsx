@@ -47,7 +47,7 @@ interface GroupShoppingListFormProps {
   unInput: boolean;
   dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
   minDate: Date;
-  displayInputAmountMessage: boolean;
+  displayRequiredInputItemMessage: boolean;
   openDeleteForm?: () => void;
 }
 
@@ -148,17 +148,19 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
             value={props.amount}
             type={'tel'}
             id={'amount'}
-            label={props.displayInputAmountMessage && props.transactionAutoAdd ? '必須' : '任意'}
+            label={
+              props.displayRequiredInputItemMessage && props.transactionAutoAdd ? '必須' : '任意'
+            }
             onChange={props.handleAmountChange}
             required={false}
             fullWidth={false}
           />
-          {props.displayInputAmountMessage && (
+          {props.displayRequiredInputItemMessage && (
             <p
               className={
                 props.transactionAutoAdd && props.amount === null
-                  ? 'shopping-list-form__input-amount-message'
-                  : 'shopping-list-form__input-amount-message--hide'
+                  ? 'shopping-list-form__required-input-item-message'
+                  : 'shopping-list-form__required-input-item-message--hide'
               }
             >
               ※ 金額の入力が必要です。
@@ -184,12 +186,25 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
     {
       key: '支払人',
       value: (
-        <ShoppingListPayerSelect
-          value={props.paymentUser === null ? '' : props.paymentUser}
-          approvedGroups={approvedGroups}
-          groupId={Number(id)}
-          onChange={props.handlePaymentUserChange}
-        />
+        <>
+          <ShoppingListPayerSelect
+            value={props.paymentUser === null ? '' : props.paymentUser}
+            approvedGroups={approvedGroups}
+            groupId={Number(id)}
+            onChange={props.handlePaymentUserChange}
+          />
+          {props.displayRequiredInputItemMessage && (
+            <p
+              className={
+                props.transactionAutoAdd && props.paymentUser === null
+                  ? 'shopping-list-form__required-input-item-message'
+                  : 'shopping-list-form__required-input-item-message--hide'
+              }
+            >
+              ※ 支払人の選択が必要です。
+            </p>
+          )}
+        </>
       ),
     },
   ];
@@ -222,16 +237,25 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
         取引履歴に自動追加
       </label>
       <div className="set-task-list-item__operation-btn">
-        <button
-          className="shopping-list-form__operation-btn--add"
-          disabled={props.unInput}
-          onClick={() => {
-            dispatch(props.dispatchOperation);
-            props.setOpen(false);
-          }}
-        >
-          {props.buttonLabel}
-        </button>
+        <div>
+          <button
+            className="shopping-list-form__operation-btn--add"
+            disabled={props.unInput}
+            onClick={() => {
+              dispatch(props.dispatchOperation);
+              props.setOpen(false);
+            }}
+          >
+            {props.buttonLabel}
+          </button>
+          <button
+            className="shopping-list-form__operation-btn--cancel"
+            disabled={false}
+            onClick={() => props.closeModal()}
+          >
+            キャンセル
+          </button>
+        </div>
         {props.openDeleteForm && (
           <button
             className="shopping-list-form__operation-btn--delete"

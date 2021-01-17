@@ -3,6 +3,7 @@ import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import {
   addGroupShoppingListItem,
+  editGroupShoppingListItem,
   fetchGroupExpiredShoppingList,
   fetchGroupMonthlyShoppingList,
   fetchGroupMonthlyShoppingListByCategories,
@@ -17,6 +18,7 @@ import fetchGroupTodayShoppingListByCategoriesResponse from './fetchGroupTodaySh
 import fetchGroupMonthlyShoppingListResponse from './fetchGroupMonthlyShoppingListResponse.json';
 import fetchGroupMonthlyShoppingListByCategoriesResponse from './fetchGroupMonthlyShoppingListByCategoriesResponse.json';
 import addGroupShoppingListItemResponse from './addGroupShoppingListItemResponse.json';
+import editGroupShoppingListItemResponse from './editGroupShoppingListItemResponse.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -715,6 +717,175 @@ describe('async actions shoppingList', () => {
       customCategoryId,
       paymentUser,
       transactionAutoAdd,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('edit shoppingListItem if fetch succeeds', async () => {
+    const groupId = 1;
+    const today = new Date();
+    const shoppingListItemId = 1;
+    const currentYearMonth = '2020/12';
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${shoppingListItemId}`;
+    const expectedPurchaseDate = new Date('2020-12-26T10:00:00');
+    const checked = true;
+    const purchase = '鶏肉3kg';
+    const shop = 'コストコ';
+    const amount = 1000;
+    const bigCategoryId = 2;
+    const mediumCategoryId = 6;
+    const customCategoryId = null;
+    const paymentUserId = 'furusawa';
+    const transactionAutoAdd = true;
+    const regularShoppingListId = 1;
+    const relatedTransactionData = null;
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(editGroupShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupShoppingListActions.START_EDIT_GROUP_SHOPPING_LIST_ITEM,
+        payload: {
+          groupExpiredShoppingListLoading: true,
+          groupTodayShoppingListLoading: true,
+          groupTodayShoppingListByCategoriesLoading: true,
+          groupMonthlyShoppingListLoading: true,
+          groupMonthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: GroupShoppingListActions.EDIT_GROUP_SHOPPING_LIST_ITEM,
+        payload: {
+          groupExpiredShoppingListLoading: false,
+          groupExpiredShoppingList: [],
+          groupTodayShoppingListLoading: false,
+          groupTodayShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-23T10:00:00Z',
+              updated_date: '2020-12-24T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: true,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: 1,
+              payment_user_id: 'furusawa',
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          groupTodayShoppingListByCategoriesLoading: false,
+          groupTodayShoppingListByCategories: [
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-23T10:00:00Z',
+                  updated_date: '2020-12-24T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: true,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: 1,
+                  payment_user_id: 'furusawa',
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+          groupMonthlyShoppingListLoading: false,
+          groupMonthlyShoppingList: [
+            {
+              id: 1,
+              posted_date: '2020-12-23T10:00:00Z',
+              updated_date: '2020-12-24T10:00:00Z',
+              expected_purchase_date: '2020/12/24(木)',
+              complete_flag: true,
+              purchase: '携帯料金',
+              shop: 'auショップ',
+              amount: 5000,
+              big_category_id: 9,
+              big_category_name: '通信費',
+              medium_category_id: 51,
+              medium_category_name: '携帯電話',
+              custom_category_id: null,
+              custom_category_name: null,
+              regular_shopping_list_id: 1,
+              payment_user_id: 'furusawa',
+              transaction_auto_add: true,
+              related_transaction_data: null,
+            },
+          ],
+          groupMonthlyShoppingListByCategoriesLoading: false,
+          groupMonthlyShoppingListByCategories: [
+            {
+              big_category_name: '通信費',
+              shopping_list: [
+                {
+                  id: 1,
+                  posted_date: '2020-12-23T10:00:00Z',
+                  updated_date: '2020-12-24T10:00:00Z',
+                  expected_purchase_date: '2020/12/24(木)',
+                  complete_flag: true,
+                  purchase: '携帯料金',
+                  shop: 'auショップ',
+                  amount: 5000,
+                  big_category_id: 9,
+                  big_category_name: '通信費',
+                  medium_category_id: 51,
+                  medium_category_name: '携帯電話',
+                  custom_category_id: null,
+                  custom_category_name: null,
+                  regular_shopping_list_id: 1,
+                  payment_user_id: 'furusawa',
+                  transaction_auto_add: true,
+                  related_transaction_data: null,
+                },
+              ],
+            },
+          ],
+        },
+      },
+    ];
+
+    axiosMock.onPut(url).reply(200, mockResponse);
+
+    await editGroupShoppingListItem(
+      groupId,
+      today,
+      currentYearMonth,
+      shoppingListItemId,
+      expectedPurchaseDate,
+      checked,
+      purchase,
+      shop,
+      amount,
+      bigCategoryId,
+      mediumCategoryId,
+      customCategoryId,
+      regularShoppingListId,
+      paymentUserId,
+      transactionAutoAdd,
+      relatedTransactionData,
       signal
       // @ts-ignore
     )(store.dispatch, getState);

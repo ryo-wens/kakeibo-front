@@ -38,10 +38,10 @@ export interface GroupShoppingListItem {
   regular_shopping_list_id: number | null;
   payment_user_id: string | null;
   transaction_auto_add: boolean;
-  related_transaction_data: RelatedTransactionData | null;
+  related_transaction_data: GroupRelatedTransactionData | null;
 }
 
-export interface RelatedTransactionData {
+export interface GroupRelatedTransactionData {
   id: number;
   transaction_type: string;
   posted_date: Date;
@@ -104,4 +104,19 @@ export interface AddGroupShoppingListItemReq {
   custom_category_id: number | null;
   payment_user_id: string | null;
   transaction_auto_add: boolean;
+}
+
+export interface EditGroupShoppingListItemReq {
+  expected_purchase_date: Date;
+  complete_flag: boolean;
+  purchase: string;
+  shop: string | null;
+  amount: number | null;
+  big_category_id: number;
+  medium_category_id: number | null;
+  custom_category_id: number | null;
+  regular_shopping_list_id: number | null;
+  payment_user_id: string | null;
+  transaction_auto_add: boolean;
+  related_transaction_data: GroupRelatedTransactionData | null;
 }
