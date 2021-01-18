@@ -99,6 +99,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
             onClick={props.selectCategory}
             onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
             setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+            disabled={false}
           />
           <MediumCategoryInput
             ref={mediumMenuRef}
@@ -113,6 +114,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
             onClick={props.selectCategory}
             onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
             setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+            disabled={false}
           />
         </>
       ),
