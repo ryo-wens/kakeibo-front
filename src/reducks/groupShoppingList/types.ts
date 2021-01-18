@@ -164,3 +164,7 @@ export interface EditGroupRegularShoppingListItemRes {
   regular_shopping_item: RegularShoppingListItem;
   shopping_list: ShoppingList;
 }
+
+export interface DeleteGroupRegularShoppingListItemRes {
+  message: string;
+}

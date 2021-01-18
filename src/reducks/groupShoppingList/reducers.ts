@@ -207,6 +207,26 @@ export const groupShoppingListReducers = (
         ...state,
         ...action.payload,
       };
+    case Actions.START_DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

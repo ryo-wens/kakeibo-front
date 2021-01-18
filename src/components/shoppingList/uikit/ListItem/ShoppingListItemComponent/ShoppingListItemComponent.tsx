@@ -140,7 +140,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           )}
           {props.listItem.transaction_auto_add && (
             <span className="shopping-list-item-component__tag--transaction-auto-add">
-              取引アイテムへ自動追加
+              家計簿へ自動追加
             </span>
           )}
         </div>

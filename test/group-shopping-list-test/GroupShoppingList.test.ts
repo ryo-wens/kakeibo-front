@@ -4,6 +4,7 @@ import MockAdapter from 'axios-mock-adapter';
 import {
   addGroupRegularShoppingListItem,
   addGroupShoppingListItem,
+  deleteGroupRegularShoppingListItem,
   deleteGroupShoppingListItem,
   editGroupRegularShoppingListItem,
   editGroupShoppingListItem,
@@ -25,7 +26,10 @@ import editGroupShoppingListItemResponse from './editGroupShoppingListItemRespon
 import deleteGroupShoppingListItemResponse from './deleteGroupShoppingListItemResponse.json';
 import addGroupRegularShoppingListItemResponse from './addGroupRegularShoppingListItemResponse.json';
 import editGroupRegularShoppingListItemResponse from './editGroupRegularShoppingListItemResponse.json';
+import deleteGroupRegularShoppingListItemResponse from './deleteGroupRegularShoppingListItemResponse.json';
 import * as ModalActions from '../../src/reducks/modal/actions';
+import * as ShoppingListActions from '../../src/reducks/shoppingList/actions';
+import { deleteRegularShoppingListItem } from '../../src/reducks/shoppingList/operations';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -1228,6 +1232,7 @@ describe('async actions shoppingList', () => {
         type: GroupShoppingListActions.START_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
         payload: {
           groupRegularShoppingListLoading: true,
+          groupExpiredShoppingListLoading: true,
           groupTodayShoppingListLoading: true,
           groupTodayShoppingListByCategoriesLoading: true,
           groupMonthlyShoppingListLoading: true,
@@ -1238,6 +1243,7 @@ describe('async actions shoppingList', () => {
         type: GroupShoppingListActions.EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
         payload: {
           groupRegularShoppingListLoading: false,
+          groupExpiredShoppingListLoading: false,
           groupTodayShoppingListLoading: false,
           groupTodayShoppingListByCategoriesLoading: false,
           groupMonthlyShoppingListLoading: false,
@@ -1262,6 +1268,65 @@ describe('async actions shoppingList', () => {
       customCategoryId,
       paymentUser,
       transactionAutoAdd,
+      signal
+      // @ts-ignore
+    )(store.dispatch, getState);
+    expect(store.getActions()).toEqual(expectedAction);
+  });
+
+  it('delete regularShoppingListItem if fetch succeeds', async () => {
+    const groupId = 1;
+    const shoppingListItemId = 1;
+    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular/${shoppingListItemId}`;
+    const bigCategoryName = '通信費';
+    const signal = axios.CancelToken.source();
+
+    const mockResponse = JSON.stringify(deleteGroupRegularShoppingListItemResponse);
+
+    const expectedAction = [
+      {
+        type: GroupShoppingListActions.START_DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          groupRegularShoppingListLoading: true,
+          groupExpiredShoppingListLoading: true,
+          groupTodayShoppingListLoading: true,
+          groupTodayShoppingListByCategoriesLoading: true,
+          groupMonthlyShoppingListLoading: true,
+          groupMonthlyShoppingListByCategoriesLoading: true,
+        },
+      },
+      {
+        type: GroupShoppingListActions.DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM,
+        payload: {
+          groupRegularShoppingListLoading: false,
+          groupRegularShoppingList: [],
+          groupExpiredShoppingListLoading: false,
+          groupExpiredShoppingList: [],
+          groupTodayShoppingListLoading: false,
+          groupTodayShoppingList: [],
+          groupTodayShoppingListByCategoriesLoading: false,
+          groupTodayShoppingListByCategories: [],
+          groupMonthlyShoppingListLoading: false,
+          groupMonthlyShoppingList: [],
+          groupMonthlyShoppingListByCategoriesLoading: false,
+          groupMonthlyShoppingListByCategories: [],
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: '定期ショッピングアイテムを削除しました。',
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, mockResponse);
+
+    await deleteGroupRegularShoppingListItem(
+      groupId,
+      shoppingListItemId,
+      bigCategoryName,
       signal
       // @ts-ignore
     )(store.dispatch, getState);
