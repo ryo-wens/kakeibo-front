@@ -1,7 +1,7 @@
 @import "src/assets/variable";
 
 @mixin display-btn($display-btn-bg-color) {
-  background-color: $display-btn-bg-color;
+  background:$display-btn-bg-color;
   border-radius: $task-border_radius;
   cursor: pointer;
   font-size: 1.0rem;

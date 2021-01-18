@@ -87,9 +87,11 @@ const History = () => {
       <Header />
       <main className="section__container">
         <div className="history__position">
-          <div className="switch-item-tabs__buttons " aria-label="small outlined button group">
+          <div
+            className="switch-item-tabs__buttons  history__top-button"
+            aria-label="small outlined button group"
+          >
             <button
-              className="history__top-button"
               style={currentPageColor(
                 pathName !== 'group' ? '/daily/history' : `/group/${Number(id)}/daily/history`
               )}
@@ -102,7 +104,6 @@ const History = () => {
               日ごと
             </button>
             <button
-              className="history__top-button"
               style={currentPageColor(
                 pathName !== 'group' ? '/weekly/history' : `/group/${Number(id)}/weekly/history`
               )}
