@@ -47,7 +47,7 @@ const useStyles = makeStyles((theme: Theme) =>
       backgroundColor: '#fff',
       boxShadow: 'none',
       margin: '0 auto',
-      marginTop: 15,
+      marginTop: 10,
       width: 480,
       border: '1px solid #000',
       padding: theme.spacing(1, 2, 2),

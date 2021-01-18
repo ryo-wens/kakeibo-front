@@ -71,7 +71,7 @@ const InputYears = (props: InputYearsProps) => {
       {(() => {
         if (!openSelectYears) {
           return (
-            <div className="history">
+            <div className="history history__top-button">
               <button
                 className="skip-date__prev-btn history__prev-btn"
                 onClick={() => updatePrevYears()}
