@@ -88,6 +88,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -105,6 +106,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
             onClick={props.selectCategory}
             onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
             setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+            disabled={false}
           />
           <MediumCategoryInput
             ref={mediumMenuRef}
@@ -119,6 +121,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
             onClick={props.selectCategory}
             onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
             setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+            disabled={false}
           />
         </>
       ),
@@ -154,6 +157,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
             onChange={props.handleAmountChange}
             required={false}
             fullWidth={false}
+            disabled={false}
           />
           {props.displayRequiredInputItemMessage && (
             <p
@@ -180,6 +184,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },

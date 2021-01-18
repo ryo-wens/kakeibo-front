@@ -4,6 +4,7 @@ import {
   addGroupShoppingListItemAction,
   cancelAddGroupRegularShoppingListItemAction,
   cancelAddGroupShoppingListItemAction,
+  cancelDeleteGroupRegularShoppingListItemAction,
   cancelDeleteGroupShoppingListItemAction,
   cancelEditGroupRegularShoppingListItemAction,
   cancelEditGroupShoppingListItemAction,
@@ -12,11 +13,13 @@ import {
   cancelFetchGroupMonthlyShoppingListByCategoriesAction,
   cancelFetchGroupTodayShoppingListAction,
   cancelFetchGroupTodayShoppingListByCategoriesAction,
+  deleteGroupRegularShoppingListItemAction,
   deleteGroupShoppingListItemAction,
   editGroupRegularShoppingListItemAction,
   editGroupShoppingListItemAction,
   failedAddGroupRegularShoppingListItemAction,
   failedAddGroupShoppingListItemAction,
+  failedDeleteGroupRegularShoppingListItemAction,
   failedDeleteGroupShoppingListItemAction,
   failedEditGroupRegularShoppingListItemAction,
   failedEditGroupShoppingListItemAction,
@@ -32,6 +35,7 @@ import {
   fetchGroupTodayShoppingListByCategoriesAction,
   startAddGroupRegularShoppingListItemAction,
   startAddGroupShoppingListItemAction,
+  startDeleteGroupRegularShoppingListItemAction,
   startDeleteGroupShoppingListItemAction,
   startEditGroupRegularShoppingListItemAction,
   startEditGroupShoppingListItemAction,
@@ -46,6 +50,7 @@ import {
   AddGroupRegularShoppingListItemReq,
   AddGroupRegularShoppingListItemRes,
   AddGroupShoppingListItemReq,
+  DeleteGroupRegularShoppingListItemRes,
   DeleteGroupShoppingListItemRes,
   EditGroupRegularShoppingListItemReq,
   EditGroupRegularShoppingListItemRes,
@@ -1337,6 +1342,119 @@ export const editGroupRegularShoppingListItem = (
       } else {
         dispatch(
           failedEditGroupRegularShoppingListItemAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
+      }
+    }
+  };
+};
+
+export const deleteGroupRegularShoppingListItem = (
+  groupId: number,
+  regularShoppingListItemId: number,
+  bigCategoryName: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+    dispatch(startDeleteGroupRegularShoppingListItemAction());
+
+    try {
+      const result = await axios.delete<DeleteGroupRegularShoppingListItemRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular/${regularShoppingListItemId}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+      const prevRegularShoppingList: GroupRegularShoppingList = getState().groupShoppingList
+        .groupRegularShoppingList;
+      const prevExpiredShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupExpiredShoppingList;
+      const prevTodayShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupTodayShoppingList;
+      const prevTodayShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupTodayShoppingListByCategories;
+      const prevMonthlyShoppingList: GroupShoppingList = getState().groupShoppingList
+        .groupMonthlyShoppingList;
+      const prevMonthlyShoppingListByCategories: GroupShoppingListByCategories = getState()
+        .groupShoppingList.groupMonthlyShoppingListByCategories;
+
+      const nextRegularShoppingList: GroupRegularShoppingList = prevRegularShoppingList.filter(
+        (listItem) => listItem.id !== regularShoppingListItemId
+      );
+
+      const nextExpiredShoppingList: GroupShoppingList = prevExpiredShoppingList.filter(
+        (listItem) => listItem.regular_shopping_list_id !== regularShoppingListItemId
+      );
+
+      const generateShoppingList = (prevShoppingList: GroupShoppingList) => {
+        return prevShoppingList.filter((listItem) => {
+          return (
+            listItem.regular_shopping_list_id !== regularShoppingListItemId ||
+            (listItem.regular_shopping_list_id === regularShoppingListItemId &&
+              listItem.complete_flag)
+          );
+        });
+      };
+
+      const generateShoppingListByCategories = (
+        prevShoppingListByCategories: GroupShoppingListByCategories
+      ) => {
+        const NOT_FOUND = -1;
+        const NOT_EXIST_ARRAY_LENGTH = 0;
+        const idx = prevShoppingListByCategories.findIndex(
+          (listItem) => listItem.big_category_name === bigCategoryName
+        );
+
+        if (idx === NOT_FOUND) {
+          return prevShoppingListByCategories;
+        }
+
+        const newShoppingList = generateShoppingList(
+          prevShoppingListByCategories[idx].shopping_list
+        );
+
+        if (newShoppingList.length === NOT_EXIST_ARRAY_LENGTH) {
+          prevShoppingListByCategories.splice(idx, 1);
+          return prevShoppingListByCategories;
+        }
+
+        const nextShoppingListItemByCategories: GroupShoppingListItemByCategories = {
+          big_category_name: bigCategoryName,
+          shopping_list: newShoppingList,
+        };
+        prevShoppingListByCategories.splice(idx, 1, nextShoppingListItemByCategories);
+        return prevShoppingListByCategories;
+      };
+
+      const nextTodayShoppingList = generateShoppingList(prevTodayShoppingList).concat();
+      const nextTodayShoppingListByCategories = generateShoppingListByCategories(
+        prevTodayShoppingListByCategories
+      ).concat();
+      const nextMonthlyShoppingList = generateShoppingList(prevMonthlyShoppingList).concat();
+      const nextMonthlyShoppingListByCategories = generateShoppingListByCategories(
+        prevMonthlyShoppingListByCategories
+      ).concat();
+
+      dispatch(
+        deleteGroupRegularShoppingListItemAction(
+          nextRegularShoppingList,
+          nextExpiredShoppingList,
+          nextTodayShoppingList,
+          nextTodayShoppingListByCategories,
+          nextMonthlyShoppingList,
+          nextMonthlyShoppingListByCategories
+        )
+      );
+      dispatch(openTextModalAction(result.data.message));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelDeleteGroupRegularShoppingListItemAction());
+      } else {
+        dispatch(
+          failedDeleteGroupRegularShoppingListItemAction(
             error.response.status,
             error.response.data.error.message
           )

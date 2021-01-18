@@ -89,6 +89,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
           onChange={props.handlePurchaseChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -106,6 +107,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
             onClick={props.selectCategory}
             onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
             setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+            disabled={false}
           />
           <MediumCategoryInput
             ref={mediumMenuRef}
@@ -120,6 +122,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
             onClick={props.selectCategory}
             onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
             setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+            disabled={false}
           />
         </>
       ),
@@ -156,6 +159,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
                 onChange={props.handleCycleChange}
                 required={false}
                 fullWidth={false}
+                disabled={false}
               />
             )}
           </div>
@@ -173,6 +177,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
           onChange={props.handleAmountChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },
@@ -187,6 +192,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
           onChange={props.handleShopChange}
           required={false}
           fullWidth={false}
+          disabled={false}
         />
       ),
     },

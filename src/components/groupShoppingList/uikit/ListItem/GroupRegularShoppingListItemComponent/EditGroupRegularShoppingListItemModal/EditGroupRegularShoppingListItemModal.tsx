@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
-import { deleteRegularShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import axios, { CancelTokenSource } from 'axios';
 import ShoppingListDeleteForm from '../../../../../shoppingList/uikit/Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import EditIcon from '@material-ui/icons/Edit';
@@ -12,7 +11,10 @@ import { useDispatch } from 'react-redux';
 import { GroupRegularShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
 import GroupRegularShoppingListForm from '../../../Form/GroupRegularShoppingListForm/GroupRegularShoppingListForm';
 import { useParams } from 'react-router';
-import { editGroupRegularShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
+import {
+  deleteGroupRegularShoppingListItem,
+  editGroupRegularShoppingListItem,
+} from '../../../../../../reducks/groupShoppingList/operations';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -212,7 +214,6 @@ const EditGroupRegularShoppingListItemModal = (
 
   const editRegularShoppingList = () => {
     const signal = axios.CancelToken.source();
-    // const { id } = useParams();
 
     const edit = async () => {
       await dispatch(
@@ -240,14 +241,14 @@ const EditGroupRegularShoppingListItemModal = (
 
   const body = (
     <div className={classes.paper}>
-      {/*仮実装として、deleteRegularShoppingListItem() を定義*/}
       {deleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.listItem.purchase}
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
-          dispatchOperation={deleteRegularShoppingListItem(
+          dispatchOperation={deleteGroupRegularShoppingListItem(
+            Number(id),
             props.listItem.id,
             props.listItem.big_category_name,
             signal

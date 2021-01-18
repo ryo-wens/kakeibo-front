@@ -6,6 +6,7 @@ import { useDispatch } from 'react-redux';
 import { CancelTokenSource } from 'axios';
 
 import {
+  fetchExpiredShoppingList,
   fetchMonthlyShoppingList,
   fetchMonthlyShoppingListByCategories,
   fetchTodayShoppingList,
@@ -27,9 +28,11 @@ const RegularShoppingListItemComponent = (props: RegularShoppingListItemComponen
 
   const fetchTodayOrMonthlyShoppingList = (signal: CancelTokenSource) => {
     if (props.currentTodayOrMonthly === 'today') {
+      dispatch(fetchExpiredShoppingList(signal));
       dispatch(fetchTodayShoppingList(String(year), customMonth, todayDate, signal));
       dispatch(fetchTodayShoppingListByCategories(String(year), customMonth, todayDate, signal));
     } else if (props.currentTodayOrMonthly === 'monthly') {
+      dispatch(fetchExpiredShoppingList(signal));
       dispatch(fetchMonthlyShoppingList(currentYear, currentMonth, signal));
       dispatch(fetchMonthlyShoppingListByCategories(currentYear, currentMonth, signal));
     }
