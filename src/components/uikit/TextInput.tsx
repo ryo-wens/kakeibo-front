@@ -4,15 +4,8 @@ import { createStyles, makeStyles } from '@material-ui/core/styles';
 
 const useStyles = makeStyles(() =>
   createStyles({
-    full: {
-      marginBottom: 16,
-    },
-    half: {
-      marginLeft: 8,
-      marginRight: 8,
-      marginBottom: 16,
-      minWidth: 130,
-      width: 'calc(83% - 16px)',
+    form: {
+      width: '100%',
     },
   })
 );
@@ -30,10 +23,9 @@ type TextInputProps = {
 
 const TextInput = (props: TextInputProps) => {
   const classes = useStyles();
-  const textStyle = props.fullWidth ? classes.full : classes.half;
   return (
     <TextField
-      className={textStyle}
+      className={classes.form}
       type={props.type}
       value={props.value}
       id={props.id}

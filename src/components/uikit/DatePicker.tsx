@@ -18,8 +18,7 @@ class ExtendedUtils extends DateFnsUtils {
 
 const useStyles = makeStyles({
   root: {
-    margin: '0px 8px 16px',
-    width: 'calc(83% - 16px)',
+    width: '100%',
   },
 });
 
@@ -34,10 +33,9 @@ type DatePickerProps = {
 
 const DatePicker = (props: DatePickerProps) => {
   const classes = useStyles();
-
   return (
     <MuiPickersUtilsProvider utils={ExtendedUtils} locale={jaLocale}>
-      <Grid container justify="space-around">
+      <Grid className={classes.root}>
         <KeyboardDatePicker
           className={classes.root}
           id={props.id}
