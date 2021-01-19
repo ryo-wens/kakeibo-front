@@ -11,7 +11,6 @@
     border: $task-border_color solid 1.5px;
     border-radius: 0.6rem;
     padding: 2px 5px 2px 15px;
-    margin: 15px 0 0 38px;
     cursor: pointer;
     outline: none;
 
@@ -32,7 +31,6 @@
     border-bottom: none;
     border-radius: 0.6rem 0.6rem 0 0;
     padding: 2px 5px 2px 15px;
-    margin: 15px 0 0 38px;
     cursor: pointer;
     outline: none;
   }
@@ -42,7 +40,6 @@
     border: #718abc solid 1.5px;
     border-radius: 0 0.6rem 0.6rem 0.6rem;
     padding: 15px;
-    margin-left: 38px;
   }
 
   &__item {
