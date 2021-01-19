@@ -15,6 +15,8 @@ import { fetchGroupCategories } from '../reducks/groupCategories/operations';
 import { Header } from '../components/header';
 import axios, { CancelTokenSource } from 'axios';
 import { useLocation, useParams } from 'react-router';
+import { fetchCategories } from '../reducks/categories/operations';
+import { getExpenseCategories, getIncomeCategories } from '../reducks/categories/selectors';
 
 const History = () => {
   const dispatch = useDispatch();
@@ -22,8 +24,11 @@ const History = () => {
   const pathName = useLocation().pathname.split('/')[1];
   const { id } = useParams();
   const groupTransactionsList = useSelector(getGroupTransactions);
+  const incomeCategories = useSelector(getIncomeCategories);
+  const expenseCategories = useSelector(getExpenseCategories);
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
+  const [openSearchField, setOpenSearchField] = useState(false);
 
   const fetchGroupHistoryData = (signal: CancelTokenSource) => {
     const years: SelectYears = {
@@ -38,9 +43,11 @@ const History = () => {
     if (pathName === 'group') {
       const signal = axios.CancelToken.source();
       fetchGroupHistoryData(signal);
+
       const interval = setInterval(() => {
         fetchGroupHistoryData(signal);
       }, 3000);
+
       return () => {
         signal.cancel();
         clearInterval(interval);
@@ -62,11 +69,21 @@ const History = () => {
   }, [selectedYear, selectedMonth]);
 
   useEffect(() => {
+    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+      const signal = axios.CancelToken.source();
+      dispatch(fetchCategories(signal));
+      return () => signal.cancel();
+    }
+  }, [pathName]);
+
+  useEffect(() => {
     const signal = axios.CancelToken.source();
     dispatch(fetchGroups(signal));
+
     const interval = setInterval(() => {
       dispatch(fetchGroups(signal));
     }, 3000);
+
     return () => {
       signal.cancel();
       clearInterval(interval);
@@ -76,7 +93,7 @@ const History = () => {
   const currentPageColor = (currentPath: string) => {
     if (path === currentPath) {
       return {
-        background: 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)',
+        backgroundColor: '#ff802b',
         color: '#fff',
       };
     }
@@ -117,18 +134,25 @@ const History = () => {
             </button>
           </div>
           <div className="history__spacer" />
-          <InputYears
-            selectedYear={selectedYear}
-            selectedMonth={selectedMonth}
-            setSelectedMonth={setSelectedMonth}
-            setSelectedYear={setSelectedYear}
-          />
+          {!openSearchField && (
+            <InputYears
+              selectedYear={selectedYear}
+              selectedMonth={selectedMonth}
+              setSelectedMonth={setSelectedMonth}
+              setSelectedYear={setSelectedYear}
+            />
+          )}
         </div>
         {(() => {
           if (path === '/daily/history' || path === `/group/${Number(id)}/daily/history`) {
             return (
               <div className="history__table-size">
-                <DailyHistory selectYear={selectedYear} selectMonth={selectedMonth} />
+                <DailyHistory
+                  selectYear={selectedYear}
+                  selectMonth={selectedMonth}
+                  openSearchField={openSearchField}
+                  setOpenSearchField={setOpenSearchField}
+                />
               </div>
             );
           } else if (path === '/weekly/history') {

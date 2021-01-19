@@ -48,7 +48,7 @@ const useStyles = makeStyles((theme: Theme) =>
       boxShadow: 'none',
       margin: '0 auto',
       marginTop: 10,
-      width: 480,
+      width: 470,
       border: '1px solid #000',
       padding: theme.spacing(1, 2, 2),
     },
@@ -372,100 +372,116 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
       <div className={classes.smallSpaceTop} />
 
       <form className="input-form__column">
-        <DatePicker
-          id={'date-picker-dialog'}
-          label={'日付'}
-          value={transactionDate}
-          onChange={handleDateChange}
-          required={true}
-          disabled={unEditInputForm}
-        />
-        <KindSelectBox
-          onChange={handleSelect}
-          required={true}
-          value={transactionsType}
-          label={'支出or収入'}
-          disabled={unEditInputForm}
-        />
-        <TextInput
-          value={amount}
-          type={'tel'}
-          id={'amount'}
-          label={'金額'}
-          onChange={handleAmountChange}
-          required={true}
-          fullWidth={false}
-          disabled={unEditInputForm}
-        />
-        {pathName === 'group' && (
-          <SelectPayer
-            approvedGroups={approvedGroup}
-            groupId={Number(id)}
-            onChange={handlePayerChange}
-            pathName={pathName}
+        <div className="input-form__form-content">
+          <DatePicker
+            id={'date-picker-dialog'}
+            label={'日付'}
+            value={transactionDate}
+            onChange={handleDateChange}
             required={true}
-            value={paymentUserId}
             disabled={unEditInputForm}
           />
-        )}
-        <BigCategoryInput
-          ref={bigCategoryRef}
-          bigCategory={bigCategory}
-          bigCategoryMenuOpen={bigCategoryMenuOpen}
-          expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
-          incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
-          kind={transactionsType}
-          onClick={selectCategory}
-          onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
-          setBigCategoryMenuOpen={setBigCategoryMenuOpen}
-          disabled={unEditInputForm}
-        />
-        <MediumCategoryInput
-          ref={mediumMenuRef}
-          associatedCategory={associatedCategory}
-          bigCategory={bigCategory}
-          bigCategoryId={bigCategoryId}
-          bigCategoryIndex={bigCategoryIndex}
-          expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
-          incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
-          kind={transactionsType}
-          mediumCategoryMenuOpen={mediumCategoryMenuOpen}
-          onClick={selectCategory}
-          onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
-          setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
-          disabled={unEditInputForm}
-        />
-        <TextInput
-          value={shop}
-          type={'text'}
-          id={'shop'}
-          label={'店名'}
-          onChange={handleShop}
-          required={false}
-          fullWidth={false}
-          disabled={unEditInputForm}
-        />
-        <TextInput
-          value={memo}
-          type={'text'}
-          id={'memo'}
-          label={'メモ'}
-          onChange={handleMemo}
-          required={false}
-          fullWidth={false}
-          disabled={unEditInputForm}
-        />
+          <div className="input-form__form-content--spacer-small" />
+          <KindSelectBox
+            onChange={handleSelect}
+            required={true}
+            value={transactionsType}
+            label={'支出or収入'}
+            disabled={unEditInputForm}
+          />
+          <div className="input-form__form-content--spacer-small" />
+          <TextInput
+            value={amount}
+            type={'tel'}
+            id={'amount'}
+            label={'金額'}
+            onChange={handleAmountChange}
+            required={true}
+            fullWidth={false}
+            disabled={unEditInputForm}
+          />
+          <div className="input-form__form-content--spacer-medium" />
+          {pathName === 'group' && (
+            <>
+              <SelectPayer
+                approvedGroups={approvedGroup}
+                groupId={Number(id)}
+                onChange={handlePayerChange}
+                pathName={pathName}
+                required={true}
+                value={paymentUserId}
+                disabled={unEditInputForm}
+              />
+              <div className="input-form__form-content--spacer-medium" />
+            </>
+          )}
+          <div className="input-form__select-category">
+            <BigCategoryInput
+              ref={bigCategoryRef}
+              bigCategory={bigCategory}
+              bigCategoryMenuOpen={bigCategoryMenuOpen}
+              expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+              incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+              kind={transactionsType}
+              onClick={selectCategory}
+              onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
+              setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+              disabled={unEditInputForm}
+            />
+          </div>
+          <div className="input-form__form-content--spacer-medium" />
+          <div className="input-form__select-category">
+            <MediumCategoryInput
+              ref={mediumMenuRef}
+              associatedCategory={associatedCategory}
+              bigCategory={bigCategory}
+              bigCategoryId={bigCategoryId}
+              bigCategoryIndex={bigCategoryIndex}
+              expenseCategories={pathName !== 'group' ? expenseCategories : groupExpenseCategories}
+              incomeCategories={pathName !== 'group' ? incomeCategories : groupIncomeCategories}
+              kind={transactionsType}
+              mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+              onClick={selectCategory}
+              onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+              setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+              disabled={unEditInputForm}
+            />
+          </div>
+          <div className="input-form__form-content--spacer-medium" />
+          <TextInput
+            value={shop}
+            type={'text'}
+            id={'shop'}
+            label={'店名'}
+            onChange={handleShop}
+            required={false}
+            fullWidth={false}
+            disabled={unEditInputForm}
+          />
+          <div className="input-form__form-content--spacer-small" />
+          <TextInput
+            value={memo}
+            type={'text'}
+            id={'memo'}
+            label={'メモ'}
+            onChange={handleMemo}
+            required={false}
+            fullWidth={false}
+            disabled={unEditInputForm}
+          />
+          <div className="input-form__form-content--spacer-medium" />
+          <div className={classes.buttonPosition}>
+            <GenericButton
+              label={'追加する'}
+              disabled={unInput || addDisabled}
+              startIcon={<AddCircleOutlineIcon />}
+              onClick={() => {
+                switchingAddTransaction();
+              }}
+            />
+          </div>
+        </div>
       </form>
-      <div className={classes.buttonPosition}>
-        <GenericButton
-          label={'追加する'}
-          disabled={unInput || addDisabled}
-          startIcon={<AddCircleOutlineIcon />}
-          onClick={() => {
-            switchingAddTransaction();
-          }}
-        />
-      </div>
     </div>
   );
 

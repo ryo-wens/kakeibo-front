@@ -16,7 +16,6 @@ export { default as TextInput } from './TextInput';
 export { default as AddTransactionModal } from './AddTransactionModal';
 export { default as SelectPayer } from './SelectPayer';
 export { default as GroupCategoryInput } from './GroupCategoryInput';
-export { default as SearchTransaction } from './SearchTransaction';
 export { default as SelectCompleteFlag } from './SelectCompleteFlag';
 export { default as SelectSort } from './SelectSort';
 export { default as SelectSortType } from './SelectSortType';

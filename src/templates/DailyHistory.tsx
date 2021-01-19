@@ -1,158 +1,111 @@
-import React, { useEffect, useCallback, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
+import React, { useState } from 'react';
+import { useSelector } from 'react-redux';
 import { getTransactions, getSearchTransactions } from '../reducks/transactions/selectors';
 import {
   getGroupTransactions,
   getSearchGroupTransactions,
 } from '../reducks/groupTransactions/selectors';
 import { getApprovedGroups } from '../reducks/groups/selectors';
-import { fetchTransactionsList } from '../reducks/transactions/operations';
-import { fetchCategories } from '../reducks/categories/operations';
-import { State } from '../reducks/store/types';
 import { noTransactionMessage, year, month } from '../lib/constant';
-import { getPathTemplateName } from '../lib/path';
-import { DailyHistoryBody, GroupDailyHistoryBody } from '../components/history/index';
-import SearchTransaction from '../components/uikit/SearchTransaction';
+import {
+  DailyHistoryBody,
+  GroupDailyHistoryBody,
+  SearchTransaction,
+} from '../components/history/index';
 import '../assets/history/daily-history.scss';
-import { getPathGroupId } from '../lib/path';
-import { SelectYears } from '../lib/date';
-import axios from 'axios';
+import { useLocation, useParams } from 'react-router';
 
 interface DailyHistoryProps {
   selectYear: number;
   selectMonth: number;
+  openSearchField: boolean;
+  setOpenSearchField: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const DailyHistory = (props: DailyHistoryProps) => {
-  const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const transactionsList = getTransactions(selector);
-  const searchTransactionsList = getSearchTransactions(selector);
-  const groupTransactionsList = getGroupTransactions(selector);
-  const groupSearchTransactionsList = getSearchGroupTransactions(selector);
-  const approvedGroup = getApprovedGroups(selector);
-  const pathName = getPathTemplateName(window.location.pathname);
-  const groupId = getPathGroupId(window.location.pathname);
-  const [openSearchField, setOpenSearchField] = useState<boolean>(false);
+  const { id } = useParams();
+  const pathName = useLocation().pathname.split('/')[1];
+  const transactionsList = useSelector(getTransactions);
+  const searchTransactionsList = useSelector(getSearchTransactions);
+  const groupTransactionsList = useSelector(getGroupTransactions);
+  const groupSearchTransactionsList = useSelector(getSearchGroupTransactions);
+  const approvedGroup = useSelector(getApprovedGroups);
   const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
   const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date(year, month, 0));
-  const [memo, setMemo] = useState<string>('');
-  const [shop, setShop] = useState<string>('');
-  const [lowAmount, setLowAmount] = useState<string>('');
-  const [highAmount, setHighAmount] = useState<string>('');
-  const [category, setCategory] = useState<string>('');
-  const [bigCategoryId, setBigCategoryId] = useState<number>(0);
-  const [transactionType, setTransactionType] = useState<string>('');
-  const [paymentUserId, setPaymentUserId] = useState<string>('');
-  const [sortItem, setSortItem] = useState<string>('');
-  const [sortType, setSortType] = useState<string>('');
-  const [limit, setLimit] = useState<string>('');
+  const [memo, setMemo] = useState('');
+  const [shop, setShop] = useState('');
+  const [lowAmount, setLowAmount] = useState('');
+  const [highAmount, setHighAmount] = useState('');
+  const [category, setCategory] = useState('');
+  const [bigCategoryId, setBigCategoryId] = useState(0);
+  const [transactionType, setTransactionType] = useState('');
+  const [paymentUserId, setPaymentUserId] = useState('');
+  const [sortItem, setSortItem] = useState('');
+  const [sortType, setSortType] = useState('');
+  const [limit, setLimit] = useState('');
+  const [submit, setSubmit] = useState(false);
+  const displayPersonalTransactions = !props.openSearchField && pathName !== 'group';
+  const displayGroupTransactions = !props.openSearchField && pathName === 'group';
 
-  useEffect(() => {
-    const selectYears: SelectYears = {
-      selectedYear: String(props.selectYear),
-      selectedMonth: props.selectMonth <= 9 ? '0' + props.selectMonth : String(props.selectMonth),
-    };
-    if (pathName !== 'group') {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchTransactionsList(selectYears, signal));
-      dispatch(fetchCategories(signal));
-      return () => signal.cancel();
-    }
-  }, [pathName]);
+  const openSearch = () => {
+    props.setOpenSearchField(true);
+  };
 
-  const openSearch = useCallback(() => {
-    setOpenSearchField(true);
-  }, [setOpenSearchField]);
+  const closeSearch = () => {
+    props.setOpenSearchField(false);
+  };
 
-  const closeSearch = useCallback(() => {
-    setOpenSearchField(false);
-  }, [setOpenSearchField]);
-
-  const selectStartDateChange = useCallback((selectStartDate: Date | null) => {
+  const selectStartDateChange = (selectStartDate: Date | null) => {
     setStartSelectDate(selectStartDate as Date);
-  }, []);
+  };
 
-  const selectEndDateChange = useCallback((selectEndDate: Date | null) => {
+  const selectEndDateChange = (selectEndDate: Date | null) => {
     setEndSelectDate(selectEndDate as Date);
-  }, []);
+  };
 
-  const inputMemo = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setMemo(event.target.value);
-    },
-    [setMemo]
-  );
+  const inputMemo = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setMemo(event.target.value);
+  };
 
-  const inputShop = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setShop(event.target.value);
-    },
-    [setShop]
-  );
+  const inputShop = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setShop(event.target.value);
+  };
 
-  const inputLowAmount = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setLowAmount(event.target.value);
-    },
-    [setLowAmount]
-  );
+  const inputLowAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setLowAmount(event.target.value);
+  };
 
-  const inputHighAmount = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setHighAmount(event.target.value);
-    },
-    [setHighAmount]
-  );
+  const inputHighAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setHighAmount(event.target.value);
+  };
 
-  const changeCategory = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setCategory(event.target.value as string);
-    },
-    [setCategory]
-  );
+  const changeCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setCategory(event.target.value as string);
+  };
 
-  const selectTransactionType = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setTransactionType(event.target.value as string);
-    },
-    [setTransactionType]
-  );
+  const selectTransactionType = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setTransactionType(event.target.value as string);
+  };
 
-  const changePayer = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setPaymentUserId(event.target.value as string);
-    },
-    [setPaymentUserId]
-  );
+  const changePayer = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setPaymentUserId(event.target.value as string);
+  };
 
-  const changeSortItem = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setSortItem(event.target.value as string);
-    },
-    [setSortItem]
-  );
+  const changeSortItem = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSortItem(event.target.value as string);
+  };
 
-  const changeSortType = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setSortType(event.target.value as string);
-    },
-    [setSortType]
-  );
+  const changeSortType = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setSortType(event.target.value as string);
+  };
 
-  const selectCategory = useCallback(
-    (bigCategoryId: number) => {
-      setBigCategoryId(bigCategoryId);
-    },
-    [setBigCategoryId]
-  );
+  const selectCategory = (bigCategoryId: number) => {
+    setBigCategoryId(bigCategoryId);
+  };
 
-  const selectLimit = useCallback(
-    (event: React.ChangeEvent<{ value: unknown }>) => {
-      setLimit(event.target.value as string);
-    },
-    [setLimit]
-  );
+  const selectLimit = (event: React.ChangeEvent<{ value: unknown }>) => {
+    setLimit(event.target.value as string);
+  };
 
   return (
     <>
@@ -160,7 +113,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
         <SearchTransaction
           closeSearch={closeSearch}
           openSearch={openSearch}
-          openSearchFiled={openSearchField}
+          openSearchFiled={props.openSearchField}
           pathName={pathName}
           inputMemo={inputMemo}
           inputShop={inputShop}
@@ -180,47 +133,43 @@ const DailyHistory = (props: DailyHistoryProps) => {
           selectEndDateChange={selectEndDateChange}
           inputHighAmount={inputHighAmount}
           inputLowAmount={inputLowAmount}
-          groupId={groupId}
+          groupId={Number(id)}
           approvedGroup={approvedGroup}
           paymentUserId={paymentUserId}
           changePayer={changePayer}
-          selectSortItem={changeSortItem}
-          selectSortType={changeSortType}
+          changeSortItem={changeSortItem}
+          changeSortType={changeSortType}
           sortItem={sortItem}
           sortType={sortType}
           limit={limit}
           selectLimit={selectLimit}
+          submit={submit}
+          setSearchSubmit={setSubmit}
         />
         <div className="daily-history__spacer" />
-        {(() => {
-          if (pathName !== 'group') {
-            if (!transactionsList.length) {
-              return <h3>{noTransactionMessage}</h3>;
-            } else if (transactionsList.length) {
-              return (
-                <DailyHistoryBody
-                  selectYears={props.selectYear}
-                  selectMonth={props.selectMonth}
-                  transactionsList={transactionsList}
-                  searchTransactionsList={searchTransactionsList}
-                />
-              );
-            }
-          } else {
-            if (!groupTransactionsList.length) {
-              return <h3>{noTransactionMessage}</h3>;
-            } else if (groupTransactionsList.length) {
-              return (
-                <GroupDailyHistoryBody
-                  selectYears={props.selectYear}
-                  selectMonth={props.selectMonth}
-                  groupTransactionsList={groupTransactionsList}
-                  groupSearchTransactionsList={groupSearchTransactionsList}
-                />
-              );
-            }
-          }
-        })()}
+        {displayPersonalTransactions && (
+          <>
+            {!transactionsList.length && <h3>{noTransactionMessage}</h3>}
+            <DailyHistoryBody
+              selectYears={props.selectYear}
+              selectMonth={props.selectMonth}
+              transactionsList={transactionsList}
+              searchTransactionsList={searchTransactionsList}
+            />
+          </>
+        )}
+
+        {displayGroupTransactions && (
+          <>
+            {!groupTransactionsList.length && <h3>{noTransactionMessage}</h3>}
+            <GroupDailyHistoryBody
+              selectYears={props.selectYear}
+              selectMonth={props.selectMonth}
+              groupTransactionsList={groupTransactionsList}
+              groupSearchTransactionsList={groupSearchTransactionsList}
+            />
+          </>
+        )}
       </div>
     </>
   );

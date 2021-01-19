@@ -31,4 +31,22 @@
       font-size: 0.9rem;
     }
   }
+
+  &__form-content{
+    width: 270px;
+
+    &--spacer-small {
+      margin-bottom: 12px;
+    }
+
+    &--spacer-medium {
+      margin-bottom: 18px;
+    }
+  }
+
+  &__select-category {
+    width: 240px;
+    margin: 0 auto;
+  }
+
 }
