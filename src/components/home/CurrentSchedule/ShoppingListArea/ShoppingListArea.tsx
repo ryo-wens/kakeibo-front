@@ -1,15 +1,15 @@
 import React from 'react';
-import { ShoppingList } from '../../../../../reducks/shoppingList/types';
-import ShoppingListItemComponent from '../../ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
-import './shopping-list-by-date.scss';
+import { ShoppingList } from '../../../../reducks/shoppingList/types';
+import ShoppingListItemComponent from '../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
+import '../../../shoppingList/uikit/List/ShoppingListByDate/shopping-list-by-date.scss';
 
-interface ShoppingListByDate {
+interface ShoppingListArea {
   shoppingListByDate: ShoppingList;
   currentYearMonth: string;
   message: string;
 }
 
-const ShoppingListByDate = (props: ShoppingListByDate) => {
+const ShoppingListArea = (props: ShoppingListArea) => {
   let prevDate = '';
 
   const equalsDisplayDate = (expectedPurchaseDate: string) => {
@@ -30,8 +30,8 @@ const ShoppingListByDate = (props: ShoppingListByDate) => {
                 listItem={listItem}
                 displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
                 currentYearMonth={props.currentYearMonth}
-                purchaseClassName={'shopping-list-item-component__item-purchase'}
-                amountClassName={'shopping-list-item-component__item-amount'}
+                purchaseClassName={'shopping-list-item-component__item-purchase--home-page'}
+                amountClassName={'shopping-list-item-component__item-amount--home-page'}
               />
             </div>
           );
@@ -43,4 +43,4 @@ const ShoppingListByDate = (props: ShoppingListByDate) => {
   );
 };
 
-export default ShoppingListByDate;
+export default ShoppingListArea;

@@ -11,6 +11,7 @@ import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/picker
 import DateFnsUtils from '@date-io/date-fns';
 import './regular-shopping-list-form.scss';
 import CycleTypeSelector from '../../Selector/CycleTypeSelector/CycleTypeSelector';
+import ToolTipIcon from '../../ToolTip/ToolTipIcon';
 
 interface RegularShoppingListFormProps {
   expectedPurchaseDate: Date | null;
@@ -208,15 +209,20 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           );
         })}
       </div>
-      <label className="regular-shopping-list-form__add-transaction">
-        <input
-          type="checkbox"
-          checked={props.transactionAutoAdd}
-          onChange={props.handleAutoAddTransitionChange}
-        />
-        <span />
-        取引履歴に自動追加
-      </label>
+      <div className="regular-shopping-list-form__add-transaction">
+        <label className="regular-shopping-list-form__add-transaction-check">
+          <input
+            type="checkbox"
+            checked={props.transactionAutoAdd}
+            onChange={props.handleAutoAddTransitionChange}
+          />
+          <span />
+          家計簿に自動追加
+        </label>
+        <span className="shopping-list-form__tool-tip">
+          <ToolTipIcon />
+        </span>
+      </div>
       <div className="set-task-list-item__operation-btn">
         <button
           className="regular-shopping-list-form__operation-btn--add"

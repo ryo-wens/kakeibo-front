@@ -16,6 +16,9 @@ import {
 import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operations';
 import SwitchItemTabs from '../../uikit/tabs/SwitchItemTabs';
 import TodayTodoList from '../../todo/Page/TodayTodoArea/TodayTodoList/TodayTodoList';
+import { getTodayShoppingList } from '../../../reducks/shoppingList/selectors';
+import { fetchTodayShoppingList } from '../../../reducks/shoppingList/operations';
+import ShoppingListArea from './ShoppingListArea/ShoppingListArea';
 
 interface CurrentScheduleProps {
   todoEditing: boolean;
@@ -30,9 +33,11 @@ const CurrentSchedule = (props: CurrentScheduleProps) => {
   const todayDueTodoList = useSelector(getTodayDueTodoList);
   const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
   const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
+  const todayShoppingList = useSelector(getTodayShoppingList);
   const todayYear = String(date.getFullYear());
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
+  const currentYearMonth = `${todayYear}/${todayMonth}`;
 
   useEffect(() => {
     if (pathName === 'group' && !props.todoEditing) {
@@ -52,6 +57,7 @@ const CurrentSchedule = (props: CurrentScheduleProps) => {
     if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
       dispatch(fetchDateTodoList(todayYear, todayMonth, todayDate, signal));
+      dispatch(fetchTodayShoppingList(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();
     }
   }, [todayYear, todayMonth, todayDate, pathName]);
@@ -100,6 +106,18 @@ const CurrentSchedule = (props: CurrentScheduleProps) => {
       </div>
       <div className="current-schedule__content">
         <h4>買い物リスト</h4>
+        <SwitchItemTabs
+          leftButtonLabel={'日別'}
+          rightButtonLabel={'カテゴリ別'}
+          leftItem={
+            <ShoppingListArea
+              shoppingListByDate={todayShoppingList}
+              currentYearMonth={currentYearMonth}
+              message={'今日の買い物リストは、登録されていません。'}
+            />
+          }
+          rightItem={<div />}
+        />
       </div>
       {pathName === 'group' && (
         <div className="current-schedule__content">
