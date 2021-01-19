@@ -1,12 +1,19 @@
 import React, { useEffect } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import '../../../shoppingList/Page/ExpiredShoppingListArea/expired-shopping-list-area.scss';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
+import { getGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/selectors';
+import GroupShoppingListItemComponent from '../../uikit/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
 
-const GroupExpiredShoppingListArea = () => {
+interface GroupExpiredShoppingListAreaProps {
+  currentYearMonth: string;
+}
+
+const GroupExpiredShoppingListArea = (props: GroupExpiredShoppingListAreaProps) => {
   const dispatch = useDispatch();
+  const groupExpiredShoppingList = useSelector(getGroupExpiredShoppingList);
   const { id } = useParams();
 
   useEffect(() => {
@@ -23,13 +30,36 @@ const GroupExpiredShoppingListArea = () => {
     };
   }, []);
 
+  let prevDate = '';
+  const equalsDisplayDate = (expectedPurchaseDate: string) => {
+    if (prevDate !== expectedPurchaseDate) {
+      prevDate = expectedPurchaseDate;
+      return true;
+    }
+    return false;
+  };
+
   return (
     <>
       <div>
         <div className="expired-shopping-list-area">
-          <p className="expired-shopping-list-area__message">
-            期限切れの買い物リストはありません。
-          </p>
+          {groupExpiredShoppingList.length ? (
+            groupExpiredShoppingList.map((listItem) => {
+              return (
+                <div key={listItem.id}>
+                  <GroupShoppingListItemComponent
+                    listItem={listItem}
+                    displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
+                    currentYearMonth={props.currentYearMonth}
+                  />
+                </div>
+              );
+            })
+          ) : (
+            <p className="expired-shopping-list-area__message">
+              期限切れの買い物リストはありません。
+            </p>
+          )}
         </div>
       </div>
     </>

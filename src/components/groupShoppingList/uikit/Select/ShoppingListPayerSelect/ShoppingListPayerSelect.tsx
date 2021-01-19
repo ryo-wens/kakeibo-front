@@ -27,11 +27,7 @@ interface ShoppingListPayerSelectProps {
 const ShoppingListPayerSelect = (props: ShoppingListPayerSelectProps) => {
   const classes = useStyles();
 
-  const group = props.approvedGroups.filter((group) => {
-    if (group.group_id === props.groupId) {
-      return group.approved_users_list;
-    }
-  });
+  const group = props.approvedGroups.filter((group) => group.group_id === props.groupId);
 
   return (
     <FormControl className={classes.formControl}>

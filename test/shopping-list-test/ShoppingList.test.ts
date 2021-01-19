@@ -1170,6 +1170,7 @@ describe('async actions shoppingList', () => {
         type: ShoppingListActions.START_EDIT_REGULAR_SHOPPING_LIST_ITEM,
         payload: {
           regularShoppingListLoading: true,
+          expiredShoppingListLoading: true,
           todayShoppingListLoading: true,
           todayShoppingListByCategoriesLoading: true,
           monthlyShoppingListLoading: true,
@@ -1180,6 +1181,7 @@ describe('async actions shoppingList', () => {
         type: ShoppingListActions.EDIT_REGULAR_SHOPPING_LIST_ITEM,
         payload: {
           regularShoppingListLoading: false,
+          expiredShoppingListLoading: false,
           todayShoppingListLoading: false,
           todayShoppingListByCategoriesLoading: false,
           monthlyShoppingListLoading: false,

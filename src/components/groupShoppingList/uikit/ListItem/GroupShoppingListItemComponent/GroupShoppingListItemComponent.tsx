@@ -1,12 +1,13 @@
 import React, { useEffect, useState } from 'react';
 import '../../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/shopping-list-item-component.scss';
-// import EditShoppingListModal from './EditShoppingListModal/EditShoppingListModal';
 import { dateStringToDate } from '../../../../../lib/date';
 import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import EditGroupShoppingListItemModal from './EditGroupShoppingListItemModal/EditGroupShoppingListItemModal';
 import CheckedGroupShoppingListItemModal from './CheckedGroupShoppingListItemModal/CheckedGroupShoppingListItemModal';
-// import CheckedShoppingListItemModal from './CheckedShoppingListItemModal/CheckedShoppingListItemModal';
-// import RelatedTransactionDataButton from './RelatedTransactionDataButton/RelatedTransactionDataButton';
+import RelatedGroupTransactionDataButton from './RelatedGroupTransactionDataButton/RelatedGroupTransactionDataButton';
+import { useSelector } from 'react-redux';
+import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
+import { useParams } from 'react-router';
 
 interface GroupShoppingListItemComponentProps {
   listItem: GroupShoppingListItem;
@@ -15,6 +16,9 @@ interface GroupShoppingListItemComponentProps {
 }
 
 const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentProps) => {
+  const approvedGroups = useSelector(getApprovedGroups);
+  const { id } = useParams();
+
   const initialExpectedPurchaseDate: Date = dateStringToDate(props.listItem.expected_purchase_date);
   const initialPurchase = props.listItem.purchase;
   const initialShop = props.listItem.shop;
@@ -149,10 +153,17 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
           )}
           {props.listItem.transaction_auto_add && (
             <span className="shopping-list-item-component__tag--transaction-auto-add">
-              取引アイテムへ自動追加
+              家計簿へ自動追加
             </span>
           )}
         </div>
+        {props.listItem.related_transaction_data !== null && (
+          <RelatedGroupTransactionDataButton
+            transactionData={props.listItem.related_transaction_data}
+            approvedGroups={approvedGroups}
+            groupId={Number(id)}
+          />
+        )}
       </div>
     </>
   );

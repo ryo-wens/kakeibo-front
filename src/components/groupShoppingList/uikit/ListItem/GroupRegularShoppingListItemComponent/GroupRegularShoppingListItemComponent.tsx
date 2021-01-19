@@ -7,6 +7,7 @@ import { customMonth, date, year } from '../../../../../lib/constant';
 import { GroupRegularShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import EditGroupRegularShoppingListItemModal from './EditGroupRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
 import {
+  fetchGroupExpiredShoppingList,
   fetchGroupMonthlyShoppingList,
   fetchGroupMonthlyShoppingListByCategories,
   fetchGroupTodayShoppingList,
@@ -29,6 +30,7 @@ const GroupRegularShoppingListItemComponent = (
 
   const fetchGroupTodayOrMonthlyShoppingList = (groupId: number, signal: CancelTokenSource) => {
     if (props.currentTodayOrMonthly === 'today') {
+      dispatch(fetchGroupExpiredShoppingList(groupId, signal));
       dispatch(fetchGroupTodayShoppingList(groupId, String(year), customMonth, todayDate, signal));
       dispatch(
         fetchGroupTodayShoppingListByCategories(
@@ -40,6 +42,7 @@ const GroupRegularShoppingListItemComponent = (
         )
       );
     } else if (props.currentTodayOrMonthly === 'monthly') {
+      dispatch(fetchGroupExpiredShoppingList(groupId, signal));
       dispatch(fetchGroupMonthlyShoppingList(groupId, currentYear, currentMonth, signal));
       dispatch(
         fetchGroupMonthlyShoppingListByCategories(groupId, currentYear, currentMonth, signal)

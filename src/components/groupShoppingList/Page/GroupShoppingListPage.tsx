@@ -60,7 +60,7 @@ const GroupShoppingListPage = () => {
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <GroupExpiredShoppingListArea />
+          <GroupExpiredShoppingListArea currentYearMonth={currentYearMonth} />
         </div>
       </div>
     </div>

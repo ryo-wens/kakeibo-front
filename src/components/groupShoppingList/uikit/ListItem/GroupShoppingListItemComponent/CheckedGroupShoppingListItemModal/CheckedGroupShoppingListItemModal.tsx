@@ -243,7 +243,7 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
           props.currentYearMonth,
           props.listItem.id,
           props.expectedPurchaseDate,
-          props.listItem.complete_flag,
+          true,
           props.purchase,
           props.shop,
           typeof props.amount === 'string' ? Number(props.amount) : props.amount,

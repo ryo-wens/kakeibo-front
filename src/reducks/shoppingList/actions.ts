@@ -663,6 +663,7 @@ export const startEditRegularShoppingListItemAction = () => {
     type: START_EDIT_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
       regularShoppingListLoading: true,
+      expiredShoppingListLoading: true,
       todayShoppingListLoading: true,
       todayShoppingListByCategoriesLoading: true,
       monthlyShoppingListLoading: true,
@@ -677,6 +678,7 @@ export const editRegularShoppingListItemAction = () => {
     type: EDIT_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
       regularShoppingListLoading: false,
+      expiredShoppingListLoading: false,
       todayShoppingListLoading: false,
       todayShoppingListByCategoriesLoading: false,
       monthlyShoppingListLoading: false,
@@ -691,6 +693,7 @@ export const cancelEditRegularShoppingListItemAction = () => {
     type: CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
       regularShoppingListLoading: false,
+      expiredShoppingListLoading: false,
       todayShoppingListLoading: false,
       todayShoppingListByCategoriesLoading: false,
       monthlyShoppingListLoading: false,
@@ -709,6 +712,11 @@ export const failedEditRegularShoppingListItemAction = (
     payload: {
       regularShoppingListLoading: false,
       regularShoppingListError: {
+        statusCode: statusCode,
+        message: errorMessage,
+      },
+      expiredShoppingListLoading: false,
+      expiredShoppingListError: {
         statusCode: statusCode,
         message: errorMessage,
       },
