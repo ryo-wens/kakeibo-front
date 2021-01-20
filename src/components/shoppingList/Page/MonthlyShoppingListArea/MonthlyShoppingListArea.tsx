@@ -7,7 +7,6 @@ import {
 } from '../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import { useLocation, useParams } from 'react-router';
-import AddShoppingListModal from '../../uikit/Modal/AddShoppingListModal/AddShoppingListModal';
 import './monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
 import { fetchGroups } from '../../../../reducks/groups/operations';
@@ -21,6 +20,7 @@ import {
   fetchGroupMonthlyShoppingList,
   fetchGroupMonthlyShoppingListByCategories,
 } from '../../../../reducks/groupShoppingList/operations';
+import AddShoppingListModalContainer from '../../../../containers/shoppingList/uikit/Modal/AddShoppingListModalContainer';
 
 interface MonthlyShoppingListAreaProps {
   selectedYear: number;
@@ -118,7 +118,7 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
   return (
     <>
       <div className="monthly-shopping-list-area__add-button">
-        <AddShoppingListModal />
+        <AddShoppingListModalContainer />
       </div>
       <div className="monthly-shopping-list-area__switch-item">
         <div className="monthly-shopping-list-area__switch-item--width">
