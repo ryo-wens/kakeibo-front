@@ -1,6 +1,10 @@
 @import "../../../../../assets/variable";
 
 .add-shopping-list-modal {
+  width: 450px;
+  background-color: white;
+  margin: 20px auto auto auto;
+  outline: none;
 
   &__button {
     display: flex;

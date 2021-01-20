@@ -12,11 +12,11 @@ import {
 import { date } from '../../../../lib/constant';
 import axios from 'axios';
 import { useLocation } from 'react-router';
-import AddShoppingListModal from '../../uikit/Modal/AddShoppingListModal/AddShoppingListModal';
 import './today-shopping-list-area.scss';
 import { fetchGroups } from '../../../../reducks/groups/operations';
 import ShoppingListByDate from '../../uikit/List/ShoppingListByDate/ShoppingListByDate';
 import ShoppingListByCategoriesComponent from '../../uikit/List/ShoppingListByCategoriesComponent/ShoppingListByCategoriesComponent';
+import AddShoppingListModalContainer from '../../../../containers/shoppingList/uikit/Modal/AddShoppingListModalContainer';
 
 interface TodayShoppingListAreaProps {
   currentYearMonth: string;
@@ -59,7 +59,7 @@ const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
   return (
     <>
       <div className="today-shopping-list-area__add-button">
-        <AddShoppingListModal />
+        <AddShoppingListModalContainer />
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">

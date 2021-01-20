@@ -94,18 +94,10 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
         <div className="shopping-list-item-component__content">
           <div className="shopping-list-item-component__items">
             <div className="shopping-list-item-component__item">
-              <span
-                className={props.purchaseClassName}
-                // className="shopping-list-item-component__item-purchase"
-                style={currentPurchaseTextStyle()}
-              >
+              <span className={props.purchaseClassName} style={currentPurchaseTextStyle()}>
                 {props.listItem.purchase}
               </span>
-              <span
-                className={props.amountClassName}
-                // className="shopping-list-item-component__item-amount"
-                style={currentPurchaseTextStyle()}
-              >
+              <span className={props.amountClassName} style={currentPurchaseTextStyle()}>
                 {props.listItem.amount === null ? '-' : props.listItem.amount}
               </span>
               <span style={currentPurchaseTextStyle()}>円</span>
