@@ -114,25 +114,31 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           </div>
         </div>
 
+        <div className="search-transaction__spacer--top" />
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">収支</div>
-          <KindSelectBox
-            onChange={props.selectTransactionsType}
-            required={false}
-            value={props.transactionType}
-            label={'支出 or 収入'}
-            disabled={false}
-          />
+          <div className="search-transaction__selector">
+            <KindSelectBox
+              onChange={props.selectTransactionsType}
+              required={false}
+              value={props.transactionType}
+              disabled={false}
+              currentPage={'search'}
+            />
+          </div>
         </div>
 
+        <div className="search-transaction__spacer--top" />
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">カテゴリー</div>
-          <SelectBigCategory
-            category={props.category}
-            onChange={props.changeCategory}
-            onClick={props.selectCategory}
-            pathName={props.pathName}
-          />
+          <div className="search-transaction__selector">
+            <SelectBigCategory
+              category={props.category}
+              onChange={props.changeCategory}
+              onClick={props.selectCategory}
+              pathName={props.pathName}
+            />
+          </div>
         </div>
 
         <div className="search-transaction__select-contents--value">
@@ -207,19 +213,28 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           </>
         )}
 
+        <div className="search-transaction__spacer--top" />
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">並び替え項目</div>
-          <SelectSort selectSortItem={props.changeSortItem} value={props.sortItem} />
+          <div className="search-transaction__selector">
+            <SelectSort selectSortItem={props.changeSortItem} value={props.sortItem} />
+          </div>
         </div>
 
+        <div className="search-transaction__spacer--top" />
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">並び順</div>
-          <SelectSortType selectSortType={props.changeSortType} value={props.sortType} />
+          <div className="search-transaction__selector">
+            <SelectSortType selectSortType={props.changeSortType} value={props.sortType} />
+          </div>
         </div>
 
+        <div className="search-transaction__spacer--top" />
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">取得件数</div>
-          <SelectLimit value={props.limit} selectLimit={props.selectLimit} />
+          <div className="search-transaction__selector">
+            <SelectLimit value={props.limit} selectLimit={props.selectLimit} />
+          </div>
         </div>
       </div>
       <div className="daily-history__spacer" />

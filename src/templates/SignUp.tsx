@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { push } from 'connected-react-router';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -45,6 +45,10 @@ const useStyles = makeStyles((theme) => ({
   },
   submit: {
     margin: theme.spacing(3, 0, 2),
+  },
+  submitButton: {
+    margin: '0 auto',
+    width: '250px',
   },
   link: {
     cursor: 'pointer',
@@ -114,45 +118,30 @@ const SignUp = (): JSX.Element => {
     }
   }, [email]);
 
-  const inputUserId = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUserId(event.target.value);
-      setSubmit(false);
-    },
-    [setUserId]
-  );
+  const inputUserId = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserId(event.target.value);
+    setSubmit(false);
+  };
 
-  const inputUserName = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setUserName(event.target.value);
-      setSubmit(false);
-    },
-    [setUserName]
-  );
+  const inputUserName = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setUserName(event.target.value);
+    setSubmit(false);
+  };
 
-  const inputEmail = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(event.target.value);
-      setSubmit(false);
-    },
-    [setEmail]
-  );
+  const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+    setSubmit(false);
+  };
 
-  const inputPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value);
-      setSubmit(false);
-    },
-    [setPassword]
-  );
+  const inputPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+    setSubmit(false);
+  };
 
-  const inputConfirmPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setConfirmPassword(event.target.value);
-      setSubmit(false);
-    },
-    [setConfirmPassword]
-  );
+  const inputConfirmPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setConfirmPassword(event.target.value);
+    setSubmit(false);
+  };
 
   const unSignUp =
     userId === '' ||
@@ -271,7 +260,7 @@ const SignUp = (): JSX.Element => {
               <InvalidMessage message={confirmPasswordMessage} />
             </div>
             <div className="module-spacer--small" />
-            <div className="center">
+            <div className={classes.submitButton}>
               <GenericButton
                 label={'アカウントを登録する'}
                 disabled={unSignUp}

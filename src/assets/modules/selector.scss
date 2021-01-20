@@ -1,0 +1,29 @@
+@import "../variable";
+
+.selector {
+
+  &__box {
+    background-color: white;
+    border: $task-border_color solid 1px;
+    border-radius: 0.3rem;
+    padding: 8px;
+    width: 100%;
+
+    background-image:
+            linear-gradient(45deg, transparent 50%, $task-main_color 50%),
+            linear-gradient(135deg, $task-main_color 50%, transparent 50%);
+    background-position:
+            calc(100% - 20px) calc(1em + 2px),
+            calc(100% - 15px) calc(1em + 2px),
+            calc(100% - 2.5em) 0.5em;
+    background-size:
+            5px 5px,
+            5px 5px,
+            1px 1.5em;
+    background-repeat: no-repeat;
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

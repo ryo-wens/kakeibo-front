@@ -427,8 +427,8 @@ const EditTransactionModal = (props: InputModalProps) => {
             value={transactionsType}
             onChange={handleSelect}
             required={false}
-            label={'支出or収入'}
             disabled={unEditInputForm}
+            currentPage={''}
           />
           <div className="input-form__form-content--spacer-small" />
           <TextInput

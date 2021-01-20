@@ -19,7 +19,6 @@ import {
 } from '../../reducks/groupCategories/operations';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import '../../assets/modules/category-input.scss';
 
 interface MediumCategoryInputProps {
@@ -412,7 +411,6 @@ const MediumCategoryInput = React.forwardRef(
             }}
           >
             {props.associatedCategory === '' ? '中カテゴリー(必須)' : props.associatedCategory}
-            <ExpandMoreIcon className="input-years__icon" />
           </button>
           {props.mediumCategoryMenuOpen && mediumCategoriesList()}
         </div>

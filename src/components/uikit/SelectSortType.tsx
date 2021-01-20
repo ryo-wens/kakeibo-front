@@ -1,17 +1,5 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import FormControl from '@material-ui/core/FormControl';
-import InputLabel from '@material-ui/core/InputLabel';
-import Select from '@material-ui/core/Select';
-import MenuItem from '@material-ui/core/MenuItem';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    formControl: {
-      width: '100%',
-    },
-  })
-);
+import '../../assets/modules/selector.scss';
 
 interface SelectSortTypeProps {
   value: string;
@@ -19,16 +7,13 @@ interface SelectSortTypeProps {
 }
 
 const SelectSortType = (props: SelectSortTypeProps) => {
-  const classes = useStyles();
-
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="sortType">並び順</InputLabel>
-      <Select id="sortType" value={props.value} onChange={props.selectSortType}>
-        <MenuItem value={'asc'}>昇順</MenuItem>
-        <MenuItem value={'desc'}>降順</MenuItem>
-      </Select>
-    </FormControl>
+    <form>
+      <select className="selector__box" defaultValue="desc" onChange={props.selectSortType}>
+        <option value={'desc'}>降順</option>
+        <option value={'asc'}>昇順</option>
+      </select>
+    </form>
   );
 };
 export default SelectSortType;
