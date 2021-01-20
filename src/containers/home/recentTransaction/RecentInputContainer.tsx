@@ -2,11 +2,11 @@ import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
-import { getLatestTransactions } from '../../reducks/transactions/selectors';
-import { getGroupLatestTransactions } from '../../reducks/groupTransactions/selectors';
-import { fetchLatestTransactionsList } from '../../reducks/transactions/operations';
-import { fetchLatestGroupTransactionsList } from '../../reducks/groupTransactions/operations';
-import RecentInput from './recentTransaction/RecentInput';
+import { getLatestTransactions } from '../../../reducks/transactions/selectors';
+import { getGroupLatestTransactions } from '../../../reducks/groupTransactions/selectors';
+import { fetchLatestTransactionsList } from '../../../reducks/transactions/operations';
+import { fetchLatestGroupTransactionsList } from '../../../reducks/groupTransactions/operations';
+import RecentInput from '../../../components/home/recentTransaction/RecentInput';
 
 const RecentInputContainer = () => {
   const dispatch = useDispatch();

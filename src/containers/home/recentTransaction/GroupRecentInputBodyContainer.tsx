@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { getGroupLatestTransactions } from '../../reducks/groupTransactions/selectors';
-import GroupRecentInputBody from './recentTransaction/GroupRecentInputBody';
+import { getApprovedGroups } from '../../../reducks/groups/selectors';
+import { getGroupLatestTransactions } from '../../../reducks/groupTransactions/selectors';
+import GroupRecentInputBody from '../../../components/home/recentTransaction/GroupRecentInputBody';
 
 const GroupRecentInputBodyContainer = () => {
   const { group_id } = useParams();

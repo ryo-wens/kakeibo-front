@@ -6,7 +6,7 @@ import { SelectYears } from '../lib/date';
 import { year, month } from '../lib/constant';
 import { Header } from '../components/header';
 import { InputForm, MonthlyHistory } from '../components/home';
-import RecentInputContainer from '../components/home/RecentInputContainer';
+import RecentInputContainer from '../containers/home/recentTransaction/RecentInputContainer';
 import { HistoryPieChart, HistoryBarChart } from '../components/home/graph';
 import { fetchGroups } from '../reducks/groups/operations';
 import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';

@@ -1,8 +1,8 @@
 import React from 'react';
 import { TransactionsList } from '../../../reducks/transactions/types';
 import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
-import RecentInputBodyContainer from '../RecentInputBodyContainer';
-import GroupRecentInputBodyContainer from '../GroupRecentInputBodyContainer';
+import RecentInputBodyContainer from '../../../containers/home/recentTransaction/RecentInputBodyContainer';
+import GroupRecentInputBodyContainer from '../../../containers/home/recentTransaction/GroupRecentInputBodyContainer';
 import { guidanceMessage } from '../../../lib/constant';
 import '../../../assets/home/recent-input.scss';
 

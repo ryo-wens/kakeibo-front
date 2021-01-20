@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getLatestTransactions } from '../../reducks/transactions/selectors';
-import RecentInputBody from './recentTransaction/RecentInputBody';
+import { getLatestTransactions } from '../../../reducks/transactions/selectors';
+import RecentInputBody from '../../../components/home/recentTransaction/RecentInputBody';
 
 const RecentInputBodyContainer = () => {
   const [open, setOpen] = useState<boolean>(false);
