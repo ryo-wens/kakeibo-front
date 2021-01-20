@@ -1,6 +1,5 @@
 import React, { ReactElement } from 'react';
 import { useSelector } from 'react-redux';
-import { State } from '../../reducks/store/types';
 import { getIncomeCategories, getExpenseCategories } from '../../reducks/categories/selectors';
 import {
   getGroupIncomeCategories,
@@ -42,11 +41,10 @@ interface SelectBigCategoryProps {
 
 const SelectBigCategory = (props: SelectBigCategoryProps) => {
   const classes = useStyles();
-  const selector = useSelector((state: State) => state);
-  const incomeCategories = getIncomeCategories(selector);
-  const expenseCategories = getExpenseCategories(selector);
-  const groupIncomeCategories = getGroupIncomeCategories(selector);
-  const groupExpenseCategories = getGroupExpenseCategories(selector);
+  const incomeCategories = useSelector(getIncomeCategories);
+  const expenseCategories = useSelector(getExpenseCategories);
+  const groupIncomeCategories = useSelector(getGroupIncomeCategories);
+  const groupExpenseCategories = useSelector(getGroupExpenseCategories);
 
   const bigCategoriesList = (): ReactElement<Categories>[] => {
     let categories: ReactElement<Categories>[] = [];
@@ -113,18 +111,20 @@ const SelectBigCategory = (props: SelectBigCategoryProps) => {
   };
 
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="category">カテゴリー</InputLabel>
-      {props.pathName !== 'group' ? (
-        <Select MenuProps={MenuProps} value={props.category} onChange={props.onChange}>
-          {bigCategoriesList()}
-        </Select>
-      ) : (
-        <Select MenuProps={MenuProps} value={props.category} onChange={props.onChange}>
-          {groupCategoriesList()}
-        </Select>
-      )}
-    </FormControl>
+    <>
+      <FormControl className={classes.formControl}>
+        <InputLabel id="category">カテゴリー</InputLabel>
+        {props.pathName !== 'group' ? (
+          <Select MenuProps={MenuProps} value={props.category} onChange={props.onChange}>
+            {bigCategoriesList()}
+          </Select>
+        ) : (
+          <Select MenuProps={MenuProps} value={props.category} onChange={props.onChange}>
+            {groupCategoriesList()}
+          </Select>
+        )}
+      </FormControl>
+    </>
   );
 };
 export default SelectBigCategory;

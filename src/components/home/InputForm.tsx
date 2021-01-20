@@ -30,7 +30,7 @@ import '../../assets/modules/input-form .scss';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
   const approvedGroups = useSelector(getApprovedGroups);
   const userId = useSelector(getUserId);
@@ -105,12 +105,12 @@ const InputForm = (): JSX.Element => {
   useEffect(() => {
     if (pathName === 'group') {
       const signal = axios.CancelToken.source();
-      dispatch(fetchGroupCategories(Number(id), signal));
-      dispatch(fetchGroupYearlyAccountList(Number(id), addTransactionYear, signal));
+      dispatch(fetchGroupCategories(Number(group_id), signal));
+      dispatch(fetchGroupYearlyAccountList(Number(group_id), addTransactionYear, signal));
 
       const interval = setInterval(() => {
-        dispatch(fetchGroupCategories(Number(id), signal));
-        dispatch(fetchGroupYearlyAccountList(Number(id), addTransactionYear, signal));
+        dispatch(fetchGroupCategories(Number(group_id), signal));
+        dispatch(fetchGroupYearlyAccountList(Number(group_id), addTransactionYear, signal));
       }, 3000);
 
       return () => {
@@ -118,7 +118,7 @@ const InputForm = (): JSX.Element => {
         clearInterval(interval);
       };
     }
-  }, [pathName, id, transactionDate]);
+  }, [pathName, group_id, transactionDate]);
 
   const handlePayerChange = useCallback(
     (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -259,7 +259,7 @@ const InputForm = (): JSX.Element => {
 
   const addGroupTransaction = () => {
     async function addedGroupTransaction() {
-      await dispatch(addGroupLatestTransactions(Number(id), groupAddRequestData));
+      await dispatch(addGroupLatestTransactions(Number(group_id), groupAddRequestData));
       dispatch(addGroupTransactions(customMonth));
       resetInputForm();
     }
@@ -288,8 +288,8 @@ const InputForm = (): JSX.Element => {
           onChange={handleSelect}
           required={true}
           value={transactionsType}
-          label={'収入or支出(必須)'}
           disabled={false}
+          currentPage={''}
         />
         <div className="input-form__form-content--spacer-small" />
         <TextInput
@@ -310,7 +310,7 @@ const InputForm = (): JSX.Element => {
               required={true}
               value={paymentUserId}
               approvedGroups={approvedGroups}
-              groupId={Number(id)}
+              groupId={Number(group_id)}
               pathName={pathName}
               disabled={false}
             />

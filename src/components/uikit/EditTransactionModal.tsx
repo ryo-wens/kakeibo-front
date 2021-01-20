@@ -98,7 +98,7 @@ const EditTransactionModal = (props: InputModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const transactionId = props.id;
-  const { id } = useParams();
+  const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
@@ -171,10 +171,14 @@ const EditTransactionModal = (props: InputModalProps) => {
   useEffect(() => {
     if (pathName === 'group') {
       if (props.open) {
-        dispatch(fetchGroupYearlyAccountListForModal(Number(id), editTransactionYear, signal));
+        dispatch(
+          fetchGroupYearlyAccountListForModal(Number(group_id), editTransactionYear, signal)
+        );
 
         const interval = setInterval(() => {
-          dispatch(fetchGroupYearlyAccountListForModal(Number(id), editTransactionYear, signal));
+          dispatch(
+            fetchGroupYearlyAccountListForModal(Number(group_id), editTransactionYear, signal)
+          );
         }, 3000);
 
         return () => {
@@ -361,15 +365,17 @@ const EditTransactionModal = (props: InputModalProps) => {
 
   const groupDeleteTransaction = (): void => {
     async function groupTransaction() {
-      dispatch(deleteGroupLatestTransactions(transactionId, Number(id)));
-      dispatch(fetchLatestGroupTransactionsList(Number(id), signal));
-      dispatch(deleteGroupTransactions(transactionId, Number(id)));
+      dispatch(deleteGroupLatestTransactions(transactionId, Number(group_id)));
+      dispatch(fetchLatestGroupTransactionsList(Number(group_id), signal));
+      dispatch(deleteGroupTransactions(transactionId, Number(group_id)));
     }
     groupTransaction();
   };
   const groupEditTransaction = (): void => {
-    dispatch(editGroupTransactions(transactionId, Number(id), groupEditRequestData));
-    dispatch(editGroupLatestTransactionsList(transactionId, Number(id), groupEditRequestData));
+    dispatch(editGroupTransactions(transactionId, Number(group_id), groupEditRequestData));
+    dispatch(
+      editGroupLatestTransactionsList(transactionId, Number(group_id), groupEditRequestData)
+    );
     props.onClose();
   };
 
@@ -427,8 +433,8 @@ const EditTransactionModal = (props: InputModalProps) => {
             value={transactionsType}
             onChange={handleSelect}
             required={false}
-            label={'支出or収入'}
             disabled={unEditInputForm}
+            currentPage={''}
           />
           <div className="input-form__form-content--spacer-small" />
           <TextInput
@@ -446,7 +452,7 @@ const EditTransactionModal = (props: InputModalProps) => {
             <>
               <SelectPayer
                 approvedGroups={props.approvedGroups as Groups}
-                groupId={Number(id)}
+                groupId={Number(group_id)}
                 onChange={handlePayerChange}
                 pathName={pathName}
                 required={true}

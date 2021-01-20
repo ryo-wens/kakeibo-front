@@ -1,39 +1,21 @@
 import React from 'react';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-import InputLabel from '@material-ui/core/InputLabel';
-import MenuItem from '@material-ui/core/MenuItem';
-import FormControl from '@material-ui/core/FormControl';
-import Select from '@material-ui/core/Select';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    formControl: {
-      width: '100%',
-    },
-  })
-);
+import '../../assets/modules/selector.scss';
 
 interface KindProps {
   value: string;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   required: boolean;
-  label: string;
   disabled: boolean;
+  currentPage: string;
 }
 
 const KindSelectBox = (props: KindProps) => {
-  const classes = useStyles();
-
   return (
-    <FormControl className={classes.formControl}>
-      <InputLabel id="kind" required={props.required}>
-        {props.label}
-      </InputLabel>
-      <Select id="kind" value={props.value} onChange={props.onChange} disabled={props.disabled}>
-        <MenuItem value={'income'}>収入</MenuItem>
-        <MenuItem value={'expense'}>支出</MenuItem>
-      </Select>
-    </FormControl>
+    <select className="selector__box" onChange={props.onChange} disabled={props.disabled}>
+      {props.currentPage === 'search' && <option value="">すべて</option>}
+      <option value={'expense'}>支出</option>
+      <option value={'income'}>収入</option>
+    </select>
   );
 };
 export default KindSelectBox;

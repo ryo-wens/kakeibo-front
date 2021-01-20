@@ -14,14 +14,14 @@ interface GroupExpiredShoppingListAreaProps {
 const GroupExpiredShoppingListArea = (props: GroupExpiredShoppingListAreaProps) => {
   const dispatch = useDispatch();
   const groupExpiredShoppingList = useSelector(getGroupExpiredShoppingList);
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    dispatch(fetchGroupExpiredShoppingList(Number(id), signal));
+    dispatch(fetchGroupExpiredShoppingList(Number(group_id), signal));
 
     const interval = setInterval(() => {
-      dispatch(fetchGroupExpiredShoppingList(Number(id), signal));
+      dispatch(fetchGroupExpiredShoppingList(Number(group_id), signal));
     }, 3000);
 
     return () => {

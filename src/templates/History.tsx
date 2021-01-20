@@ -22,7 +22,7 @@ const History = () => {
   const dispatch = useDispatch();
   const path = window.location.pathname;
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
   const groupTransactionsList = useSelector(getGroupTransactions);
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
@@ -35,8 +35,8 @@ const History = () => {
       selectedYear: String(selectedYear),
       selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
     };
-    dispatch(fetchGroupTransactionsList(Number(id), years, signal));
-    dispatch(fetchGroupCategories(Number(id), signal));
+    dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
+    dispatch(fetchGroupCategories(Number(group_id), signal));
   };
 
   useEffect(() => {
@@ -110,24 +110,24 @@ const History = () => {
           >
             <button
               style={currentPageColor(
-                pathName !== 'group' ? '/daily/history' : `/group/${Number(id)}/daily/history`
+                pathName !== 'group' ? '/daily/history' : `/group/${group_id}/daily/history`
               )}
               onClick={() => {
                 pathName !== 'group'
                   ? dispatch(push('/daily/history'))
-                  : dispatch(push(`/group/${Number(id)}/daily/history`));
+                  : dispatch(push(`/group/${group_id}/daily/history`));
               }}
             >
               日ごと
             </button>
             <button
               style={currentPageColor(
-                pathName !== 'group' ? '/weekly/history' : `/group/${Number(id)}/weekly/history`
+                pathName !== 'group' ? '/weekly/history' : `/group/${group_id}/weekly/history`
               )}
               onClick={() => {
                 pathName !== 'group'
                   ? dispatch(push('/weekly/history'))
-                  : dispatch(push(`/group/${Number(id)}/weekly/history`));
+                  : dispatch(push(`/group/${group_id}/weekly/history`));
               }}
             >
               週ごと
@@ -144,7 +144,7 @@ const History = () => {
           )}
         </div>
         {(() => {
-          if (path === '/daily/history' || path === `/group/${Number(id)}/daily/history`) {
+          if (path === '/daily/history' || path === `/group/${group_id}/daily/history`) {
             return (
               <div className="history__table-size">
                 <DailyHistory
@@ -161,7 +161,7 @@ const History = () => {
                 <MonthlyHistory month={selectedMonth} year={selectedYear} />
               </div>
             );
-          } else if (`/group/${Number(id)}/weekly/history`) {
+          } else if (`/group/${group_id}/weekly/history`) {
             return (
               <div className="history__table-size">
                 <GroupMonthlyHistory

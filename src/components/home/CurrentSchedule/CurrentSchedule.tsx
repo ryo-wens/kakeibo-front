@@ -28,7 +28,7 @@ interface CurrentScheduleProps {
 const CurrentSchedule = (props: CurrentScheduleProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
   const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
   const todayDueTodoList = useSelector(getTodayDueTodoList);
   const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
@@ -42,16 +42,18 @@ const CurrentSchedule = (props: CurrentScheduleProps) => {
   useEffect(() => {
     if (pathName === 'group' && !props.todoEditing) {
       const signal = axios.CancelToken.source();
-      dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
+      dispatch(fetchGroupTodayTodoList(Number(group_id), todayYear, todayMonth, todayDate, signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
+        dispatch(
+          fetchGroupTodayTodoList(Number(group_id), todayYear, todayMonth, todayDate, signal)
+        );
       }, 3000);
       return () => {
         signal.cancel();
         clearInterval(interval);
       };
     }
-  }, [todayYear, todayMonth, todayDate, props.todoEditing, pathName, id]);
+  }, [todayYear, todayMonth, todayDate, props.todoEditing, pathName, group_id]);
 
   useEffect(() => {
     if (pathName !== 'group') {

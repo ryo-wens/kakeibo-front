@@ -15,7 +15,7 @@ import qs from 'qs';
 
 const YearlyAccount = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const monthIndex = 0;
   const singleDigitMonth = 9;
   const queryParamsLength = 10;
@@ -36,16 +36,16 @@ const YearlyAccount = () => {
   useEffect(() => {
     const interval = setInterval(() => {
       dispatch(fetchGroups(signal));
-      dispatch(fetchGroupYearlyAccountList(Number(id), Number(queryYear), signal));
+      dispatch(fetchGroupYearlyAccountList(Number(group_id), Number(queryYear), signal));
     }, 3000);
     return () => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, [id, selectedYear, queryParamsLength]);
+  }, [group_id, selectedYear, queryParamsLength]);
 
   useEffect(() => {
-    dispatch(fetchGroupYearlyAccountList(Number(id), Number(queryYear), signal));
+    dispatch(fetchGroupYearlyAccountList(Number(group_id), Number(queryYear), signal));
   }, [selectedYear]);
 
   useEffect(() => {

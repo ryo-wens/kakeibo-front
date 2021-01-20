@@ -46,7 +46,7 @@ const AddTodo = (props: AddTodoProps) => {
   );
   const [selectedDueDate, setSelectedDueDate] = useState<Date | null>(props.date);
   const entityType = getPathTemplateName(window.location.pathname);
-  const { id } = useParams();
+  const { group_id } = useParams();
   const today = date;
 
   const handleOpen = () => {
@@ -86,7 +86,7 @@ const AddTodo = (props: AddTodoProps) => {
     } else if (entityType === 'group') {
       return dispatch(
         addGroupTodoListItem(
-          Number(id),
+          Number(group_id),
           today,
           props.date,
           selectedImplementationDate,

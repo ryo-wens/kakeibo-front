@@ -23,7 +23,7 @@ interface DailyHistoryProps {
 }
 
 const DailyHistory = (props: DailyHistoryProps) => {
-  const { id } = useParams();
+  const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
   const transactionsList = useSelector(getTransactions);
   const searchTransactionsList = useSelector(getSearchTransactions);
@@ -133,7 +133,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
           selectEndDateChange={selectEndDateChange}
           inputHighAmount={inputHighAmount}
           inputLowAmount={inputLowAmount}
-          groupId={Number(id)}
+          groupId={Number(group_id)}
           approvedGroup={approvedGroup}
           paymentUserId={paymentUserId}
           changePayer={changePayer}

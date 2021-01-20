@@ -29,7 +29,7 @@ interface PayOffProps {
 
 const PayOff = (props: PayOffProps) => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const history = useHistory();
   const signal: CancelTokenSource = axios.CancelToken.source();
   const groupAccountList = useSelector(getGroupAccountList);
@@ -57,13 +57,13 @@ const PayOff = (props: PayOffProps) => {
   useEffect(() => {
     dispatch(fetchGroups(signal));
     if (subMonth != null) {
-      dispatch(fetchGroupAccount(Number(id), props.selectedYear, subMonth, signal));
+      dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, subMonth, signal));
     }
     const interval = setInterval(() => {
       dispatch(fetchGroups(signal));
       if (groupAccountList.group_accounts_list_by_payer) {
         if (subMonth != null) {
-          dispatch(fetchGroupAccount(Number(id), props.selectedYear, subMonth, signal));
+          dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, subMonth, signal));
         }
       }
     }, 3000);
@@ -88,9 +88,11 @@ const PayOff = (props: PayOffProps) => {
             className="payoff__account-btn"
             onClick={() => {
               if (window.confirm(`${selectedMonth}月の精算を削除してもよろしいですか?`)) {
-                dispatch(deleteGroupAccount(Number(id), String(props.selectedYear), subMonth));
+                dispatch(
+                  deleteGroupAccount(Number(group_id), String(props.selectedYear), subMonth)
+                );
                 props.setCurrentItem(false);
-                history.replace(`/group/${id}/accounting?year=${props.selectedYear}`);
+                history.replace(`/group/${group_id}/accounting?year=${props.selectedYear}`);
               }
             }}
           >
@@ -112,7 +114,9 @@ const PayOff = (props: PayOffProps) => {
                   )
                 ) {
                   if (subMonth != null) {
-                    dispatch(addGroupAccount(Number(id), String(props.selectedYear), subMonth));
+                    dispatch(
+                      addGroupAccount(Number(group_id), String(props.selectedYear), subMonth)
+                    );
                     setMessage('');
                   }
                 }
@@ -138,7 +142,7 @@ const PayOff = (props: PayOffProps) => {
               className="payoff__back-btn"
               onClick={() => {
                 props.setCurrentItem(false);
-                history.replace(`/group/${id}/accounting?year=${props.selectedYear}`);
+                history.replace(`/group/${group_id}/accounting?year=${props.selectedYear}`);
               }}
             >
               <ChevronLeftIcon />

@@ -41,7 +41,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
   const prevImplementationDate: Date = dateStringToDate(props.todoListItem.implementation_date);
   const prevDueDate: Date = dateStringToDate(props.todoListItem.due_date);
 
@@ -140,7 +140,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
         editGroupTodoListItem(
           date,
           props.currentYearMonth,
-          Number(id),
+          Number(group_id),
           props.todoListItem.id,
           props.selectedDate,
           selectedImplementationDate,
@@ -204,7 +204,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
                 ? editGroupTodoListItem(
                     date,
                     props.currentYearMonth,
-                    Number(id),
+                    Number(group_id),
                     props.todoListItem.id,
                     props.selectedDate,
                     selectedImplementationDate,

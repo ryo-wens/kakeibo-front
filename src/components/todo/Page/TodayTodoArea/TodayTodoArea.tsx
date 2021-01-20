@@ -36,16 +36,16 @@ const TodayTodoArea = (props: TodayTodoAreaProps) => {
   const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
   const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
   const todayYear = String(date.getFullYear());
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupExpiredTodoList(Number(id), signal));
-    dispatch(fetchGroupTodayTodoList(Number(id), todayYear, todayMonth, todayDate, signal));
-    dispatch(fetchGroupMonthTodoList(Number(id), todayYear, todayMonth, signal));
+    dispatch(fetchGroupExpiredTodoList(Number(group_id), signal));
+    dispatch(fetchGroupTodayTodoList(Number(group_id), todayYear, todayMonth, todayDate, signal));
+    dispatch(fetchGroupMonthTodoList(Number(group_id), todayYear, todayMonth, signal));
   };
 
   useEffect(() => {

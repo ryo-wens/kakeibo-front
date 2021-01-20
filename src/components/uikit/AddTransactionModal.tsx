@@ -78,7 +78,7 @@ interface AddTransactionModalProps {
 const AddTransactionModal = (props: AddTransactionModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
   const signal = axios.CancelToken.source();
   const approvedGroup = useSelector(getApprovedGroups);
@@ -147,10 +147,12 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
     if (pathName === 'group') {
       if (props.open) {
         const signal = axios.CancelToken.source();
-        dispatch(fetchGroupYearlyAccountListForModal(Number(id), addTransactionYear, signal));
+        dispatch(fetchGroupYearlyAccountListForModal(Number(group_id), addTransactionYear, signal));
 
         const interval = setInterval(() => {
-          dispatch(fetchGroupYearlyAccountListForModal(Number(id), addTransactionYear, signal));
+          dispatch(
+            fetchGroupYearlyAccountListForModal(Number(group_id), addTransactionYear, signal)
+          );
         }, 3000);
 
         return () => {
@@ -325,7 +327,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
 
     const groupAddTransaction = () => {
       async function groupTransaction() {
-        await dispatch(addGroupLatestTransactions(Number(id), groupAddRequestData));
+        await dispatch(addGroupLatestTransactions(Number(group_id), groupAddRequestData));
         dispatch(addGroupTransactions(customMonth));
         props.onClose();
         resetForm();
@@ -386,8 +388,8 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
             onChange={handleSelect}
             required={true}
             value={transactionsType}
-            label={'支出or収入'}
             disabled={unEditInputForm}
+            currentPage={''}
           />
           <div className="input-form__form-content--spacer-small" />
           <TextInput
@@ -405,7 +407,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
             <>
               <SelectPayer
                 approvedGroups={approvedGroup}
-                groupId={Number(id)}
+                groupId={Number(group_id)}
                 onChange={handlePayerChange}
                 pathName={pathName}
                 required={true}
