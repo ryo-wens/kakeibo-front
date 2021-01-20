@@ -18,7 +18,7 @@ import './budget.scss';
 
 const GroupStandardBudgets = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const groupStandardBudgetsList = useSelector(getGroupStandardBudgets);
   const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
   const [groupStandardBudgets, setGroupStandardBudgets] = useState<GroupStandardBudgetsList>([]);
@@ -27,7 +27,7 @@ const GroupStandardBudgets = () => {
 
   const fetchGroupStandardBudgetsData = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupStandardBudgets(Number(id), signal));
+    dispatch(fetchGroupStandardBudgets(Number(group_id), signal));
   };
 
   useEffect(() => {
@@ -103,7 +103,7 @@ const GroupStandardBudgets = () => {
             onClick={() => {
               dispatch(
                 editGroupStandardBudgets(
-                  Number(id),
+                  Number(group_id),
                   groupStandardBudgets.map((groupBudget) => {
                     const { big_category_name, last_month_expenses, ...rest } = groupBudget; // eslint-disable-line
                     return {

@@ -16,27 +16,27 @@ import axios from 'axios';
 const RecentInput = () => {
   const dispatch = useDispatch();
   const signal = axios.CancelToken.source();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
   const selector = useSelector((state: State) => state);
   const latestTransactionsList = getLatestTransactions(selector);
   const groupLatestTransactionList = getGroupLatestTransactions(selector);
   const approvedGroup = getApprovedGroups(selector);
-  const currentGroupId = approvedGroup.findIndex((group) => group.group_id === Number(id));
+  const currentGroupId = approvedGroup.findIndex((group) => group.group_id === Number(group_id));
   const currentGroup = approvedGroup[currentGroupId];
 
   useEffect(() => {
     if (pathName === 'group') {
-      dispatch(fetchLatestGroupTransactionsList(Number(id), signal));
+      dispatch(fetchLatestGroupTransactionsList(Number(group_id), signal));
       const interval = setInterval(() => {
-        dispatch(fetchLatestGroupTransactionsList(Number(id), signal));
+        dispatch(fetchLatestGroupTransactionsList(Number(group_id), signal));
       }, 3000);
       return () => {
         signal.cancel();
         clearInterval(interval);
       };
     }
-  }, [pathName, id]);
+  }, [pathName, group_id]);
 
   useEffect(() => {
     if (pathName !== 'group' && !latestTransactionsList.length) {

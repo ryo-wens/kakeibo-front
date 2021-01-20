@@ -12,7 +12,7 @@ import {
   History,
   Task,
   YearlyAccount,
-  InitialScreen
+  InitialScreen,
 } from './templates';
 
 const Router = (): JSX.Element => {
@@ -29,20 +29,24 @@ const Router = (): JSX.Element => {
       <Route exact path={'/standard/budgets/:year/:month'} component={EditStandardBudgets} />
       <Route exact path={'/todo'} component={Todo} />
       <Route exact path={'/yearly/budgets'} component={YearlyBudgets} />
-      <Route exact path={'/group/:id/home'} component={Home} />
-      <Route exact path={'/group/:id/daily/history'} component={History} />
-      <Route exact path={'/group/:id/weekly/history'} component={History} />
-      <Route exact path={'/group/:id/accounting'} component={YearlyAccount} />
-      <Route exact path={'/group/:id/standard/budgets'} component={StandardBudgets} />
-      <Route exact path={'/group/:id/custom/budgets/:year/:month'} component={CustomBudgets} />
-      <Route exact path={'/group/:id/yearly/budgets'} component={YearlyBudgets} />
+      <Route exact path={'/group/:group_id/home'} component={Home} />
+      <Route exact path={'/group/:group_id/daily/history'} component={History} />
+      <Route exact path={'/group/:group_id/weekly/history'} component={History} />
+      <Route exact path={'/group/:group_id/accounting'} component={YearlyAccount} />
+      <Route exact path={'/group/:group_id/standard/budgets'} component={StandardBudgets} />
       <Route
         exact
-        path={'/group/:id/standard/budgets/:year/:month'}
+        path={'/group/:group_id/custom/budgets/:year/:month'}
+        component={CustomBudgets}
+      />
+      <Route exact path={'/group/:group_id/yearly/budgets'} component={YearlyBudgets} />
+      <Route
+        exact
+        path={'/group/:group_id/standard/budgets/:year/:month'}
         component={EditStandardBudgets}
       />
-      <Route exact path={'/group/:id/task'} component={Task} />
-      <Route exact path={'/group/:id/todo'} component={Todo} />
+      <Route exact path={'/group/:group_id/task'} component={Task} />
+      <Route exact path={'/group/:group_id/todo'} component={Todo} />
     </Switch>
   );
 };

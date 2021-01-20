@@ -72,7 +72,7 @@ const EditGroupRegularShoppingListItemModal = (
   const [transactionAutoAdd, setTransactionAutoAdd] = useState<boolean>(initialTransactionAutoAdd);
   const [associatedCategory, setAssociatedCategory] = useState('');
 
-  const { id } = useParams();
+  const { group_id } = useParams();
   const signal = axios.CancelToken.source();
 
   const unInputCycle = () => {
@@ -218,7 +218,7 @@ const EditGroupRegularShoppingListItemModal = (
     const edit = async () => {
       await dispatch(
         editGroupRegularShoppingListItem(
-          Number(id),
+          Number(group_id),
           props.listItem.id,
           expectedPurchaseDate,
           cycleType,
@@ -234,7 +234,7 @@ const EditGroupRegularShoppingListItemModal = (
           signal
         )
       );
-      props.fetchTodayOrMonthlyShoppingList(Number(id), signal);
+      props.fetchTodayOrMonthlyShoppingList(Number(group_id), signal);
     };
     edit();
   };
@@ -248,7 +248,7 @@ const EditGroupRegularShoppingListItemModal = (
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
           dispatchOperation={deleteGroupRegularShoppingListItem(
-            Number(id),
+            Number(group_id),
             props.listItem.id,
             props.listItem.big_category_name,
             signal

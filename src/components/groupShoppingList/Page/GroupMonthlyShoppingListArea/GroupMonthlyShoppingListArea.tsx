@@ -23,7 +23,7 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
   const groupMonthlyShoppingList = useSelector(getGroupMonthlyShoppingList);
   const groupMonthlyShoppingListByCategories = useSelector(getGroupMonthlyShoppingListByCategories);
 
-  const { id } = useParams();
+  const { group_id } = useParams();
   const currentMonth = (`0` + `${props.selectedMonth}`).slice(-2);
   const currentYear = String(props.selectedYear);
   const currentYearMonth = `${props.selectedYear}/${currentMonth}`;
@@ -50,7 +50,7 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
               <GroupMonthlyShoppingListComponent
                 shoppingList={groupMonthlyShoppingList}
                 selectedMonth={props.selectedMonth}
-                groupId={Number(id)}
+                groupId={Number(group_id)}
                 currentYear={currentYear}
                 currentMonth={currentMonth}
                 currentYearMonth={currentYearMonth}
@@ -60,7 +60,7 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
               <GroupMonthlyShoppingListByCategoriesComponent
                 shoppingListByCategories={groupMonthlyShoppingListByCategories}
                 selectedMonth={props.selectedMonth}
-                groupId={Number(id)}
+                groupId={Number(group_id)}
                 currentYear={currentYear}
                 currentMonth={currentMonth}
                 currentYearMonth={currentYearMonth}

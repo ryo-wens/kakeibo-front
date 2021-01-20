@@ -21,7 +21,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 
 const GroupCustomBudgets = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const groupInYear = getGroupPathYear(window.location.pathname);
   const groupInMonth = getGroupPathMonth(window.location.pathname);
   const yearsInGroup = `${groupInYear}年${groupInMonth}月`;
@@ -33,7 +33,7 @@ const GroupCustomBudgets = () => {
 
   const fetchGroupCustomBudgetsData = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupCustomBudgets(groupInYear, groupInMonth, Number(id), signal));
+    dispatch(fetchGroupCustomBudgets(groupInYear, groupInMonth, Number(group_id), signal));
   };
 
   useEffect(() => {
@@ -61,7 +61,7 @@ const GroupCustomBudgets = () => {
         <div className="budget__back-btn--position">
           <button
             className="budget__back-btn"
-            onClick={() => dispatch(push(`/group/${id}/yearly/budgets`))}
+            onClick={() => dispatch(push(`/group/${group_id}/yearly/budgets`))}
           >
             <ChevronLeftIcon />
           </button>
@@ -118,7 +118,7 @@ const GroupCustomBudgets = () => {
                 editGroupCustomBudgets(
                   groupInYear,
                   groupInMonth,
-                  Number(id),
+                  Number(group_id),
                   groupCustomBudgets.map((groupBudget) => {
                     const { big_category_name, last_month_expenses, ...rest } = groupBudget; // eslint-disable-line
                     return {
@@ -128,7 +128,7 @@ const GroupCustomBudgets = () => {
                   })
                 )
               );
-              dispatch(push(`/group/${id}/yearly/budgets`));
+              dispatch(push(`/group/${group_id}/yearly/budgets`));
               setEditing(false);
             }}
           />

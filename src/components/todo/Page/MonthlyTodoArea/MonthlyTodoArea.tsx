@@ -39,7 +39,7 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
   const groupMonthImplementationTodoList = useSelector(getGroupMonthImplementationTodoList);
   const groupMonthDueTodoList = useSelector(getGroupMonthDueTodoList);
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
 
@@ -49,10 +49,10 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupExpiredTodoList(Number(id), signal));
+    dispatch(fetchGroupExpiredTodoList(Number(group_id), signal));
     dispatch(
       fetchGroupTodayTodoList(
-        Number(id),
+        Number(group_id),
         String(props.selectedYear),
         ('0' + props.selectedMonth).slice(-2),
         ('0' + selectedDate.getDate()).slice(-2),
@@ -61,7 +61,7 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
     );
     dispatch(
       fetchGroupMonthTodoList(
-        Number(id),
+        Number(group_id),
         String(props.selectedYear),
         ('0' + props.selectedMonth).slice(-2),
         signal

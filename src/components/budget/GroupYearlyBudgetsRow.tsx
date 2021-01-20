@@ -22,7 +22,7 @@ interface GroupYearlyBudgetsRowProps {
 const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
   const dispatch = useDispatch();
   const year = props.years;
-  const { id } = useParams();
+  const { group_id } = useParams();
   const groupYearlyBudgetsList = useSelector(getGroupYearlyBudgets);
   const [groupYearlyBudgets, setGroupYearlyBudgets] = useState<GroupYearlyBudgetsList>({
     year: '',
@@ -32,7 +32,7 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
 
   const fetchGroupYearlyBudgetsData = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupYearlyBudgets(Number(id), year, signal));
+    dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
   };
 
   useEffect(() => {
@@ -82,7 +82,9 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
             <IconButton
               size={'small'}
               onClick={() => {
-                dispatch(push(`/group/${id}${transitingBasePath}/${selectYear}/${selectMonth}`));
+                dispatch(
+                  push(`/group/${group_id}${transitingBasePath}/${selectYear}/${selectMonth}`)
+                );
               }}
             >
               <CreateIcon color={'primary'} />
@@ -92,7 +94,7 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
                 size={'small'}
                 onClick={() => {
                   if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
-                    dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(id)));
+                    dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(group_id)));
                   }
                 }}
               >

@@ -24,7 +24,7 @@ const Header = () => {
   const currentPath = useLocation().pathname;
   const approvedGroups: Groups = useSelector(getApprovedGroups);
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
   const [name, setName] = useState<string>('');
 
   useEffect(() => {
@@ -51,7 +51,7 @@ const Header = () => {
         await dispatch(fetchGroups(signal));
         let groupName = '';
         for (const group of approvedGroups) {
-          if (group.group_id === Number(id)) {
+          if (group.group_id === Number(group_id)) {
             groupName = group.group_name;
           }
         }
@@ -65,13 +65,13 @@ const Header = () => {
       unmount = true;
       signal.cancel();
     };
-  }, [approvedGroups, pathName, Number(id)]);
+  }, [approvedGroups, pathName, group_id]);
 
   const existsGroupWhenRouting = (path: string) => {
     if (pathName !== 'group') {
       return dispatch(push(`${path}`));
     } else if (pathName === 'group') {
-      return dispatch(push(`/group/${Number(id)}${path}`));
+      return dispatch(push(`/group/${Number(group_id)}${path}`));
     }
   };
 
@@ -91,7 +91,7 @@ const Header = () => {
 
   const currentPage = (path: string) => {
     if (path === currentPath) {
-      if (path === '/todo' || path === `/group/${id}/todo`) {
+      if (path === '/todo' || path === `/group/${group_id}/todo`) {
         return { borderBottom: '4px solid #e2750f', color: '#e2750f', paddingBottom: '13px' };
       }
       return { borderBottom: '4px solid #e2750f', color: '#e2750f' };
@@ -110,7 +110,7 @@ const Header = () => {
           <ul className="header__global-menu">
             <li
               className="header__global-menu--item"
-              style={currentPage(pathName !== 'group' ? '/home' : `/group/${id}/home`)}
+              style={currentPage(pathName !== 'group' ? '/home' : `/group/${group_id}/home`)}
               onClick={() => existsGroupWhenRouting('/home')}
             >
               <a>
@@ -121,7 +121,7 @@ const Header = () => {
             <li
               className="header__global-menu--item"
               style={currentPage(
-                pathName !== 'group' ? '/daily/history' : `/group/${id}/daily/history`
+                pathName !== 'group' ? '/daily/history' : `/group/${group_id}/daily/history`
               )}
               onClick={() => existsGroupWhenRouting('/daily/history')}
             >
@@ -133,7 +133,7 @@ const Header = () => {
             <li
               className="header__global-menu--item"
               style={currentPage(
-                pathName !== 'group' ? '/standard/budgets' : `/group/${id}/standard/budgets`
+                pathName !== 'group' ? '/standard/budgets' : `/group/${group_id}/standard/budgets`
               )}
               onClick={() => existsGroupWhenRouting('/standard/budgets')}
             >
@@ -145,7 +145,7 @@ const Header = () => {
             {pathName === 'group' && (
               <li
                 className="header__global-menu--item"
-                style={currentPage(`/group/${id}/accounting`)}
+                style={currentPage(`/group/${group_id}/accounting`)}
                 onClick={() => existsGroupWhenRouting(`/accounting?year=${year}`)}
               >
                 <a>
@@ -156,7 +156,7 @@ const Header = () => {
             )}
             <li
               className="header__global-menu--item"
-              style={currentPage(pathName !== 'group' ? '/todo' : `/group/${id}/todo`)}
+              style={currentPage(pathName !== 'group' ? '/todo' : `/group/${group_id}/todo`)}
               onClick={() => existsGroupWhenRouting('/todo')}
             >
               <a>

@@ -58,7 +58,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
   const approvedGroups = useSelector(getApprovedGroups);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
@@ -203,7 +203,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
         <ShoppingListPayerSelect
           value={props.paymentUser === null ? '' : props.paymentUser}
           approvedGroups={approvedGroups}
-          groupId={Number(id)}
+          groupId={Number(group_id)}
           onChange={props.handlePaymentUserChange}
         />
       ),
