@@ -124,33 +124,31 @@ const AddShoppingListModalContainer = () => {
     bigCategoryId === initialState.initialBigCategoryId;
 
   return (
-    <>
-      <AddShoppingListModal
-        open={open}
-        setOpen={setOpen}
-        expectedPurchaseDate={expectedPurchaseDate}
-        purchase={purchase}
-        shop={shop}
-        amount={amount}
-        bigCategoryId={bigCategoryId}
-        bigCategory={bigCategory}
-        bigCategoryIndex={bigCategoryIndex}
-        mediumCategoryId={mediumCategoryId}
-        customCategoryId={customCategoryId}
-        transactionAutoAdd={transactionAutoAdd}
-        associatedCategory={associatedCategory}
-        handlePurchaseChange={handlePurchaseChange}
-        handleDateChange={handleDateChange}
-        handleAmountChange={handleAmountChange}
-        selectCategory={selectCategory}
-        handleShopChange={handleShopChange}
-        handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-        openModal={openModal}
-        closeModal={closeModal}
-        unInput={unInput}
-        signal={signal}
-      />
-    </>
+    <AddShoppingListModal
+      open={open}
+      setOpen={setOpen}
+      expectedPurchaseDate={expectedPurchaseDate}
+      purchase={purchase}
+      shop={shop}
+      amount={amount}
+      bigCategoryId={bigCategoryId}
+      bigCategory={bigCategory}
+      bigCategoryIndex={bigCategoryIndex}
+      mediumCategoryId={mediumCategoryId}
+      customCategoryId={customCategoryId}
+      transactionAutoAdd={transactionAutoAdd}
+      associatedCategory={associatedCategory}
+      handlePurchaseChange={handlePurchaseChange}
+      handleDateChange={handleDateChange}
+      handleAmountChange={handleAmountChange}
+      selectCategory={selectCategory}
+      handleShopChange={handleShopChange}
+      handleAutoAddTransitionChange={handleAutoAddTransitionChange}
+      openModal={openModal}
+      closeModal={closeModal}
+      unInput={unInput}
+      signal={signal}
+    />
   );
 };
 
