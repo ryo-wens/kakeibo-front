@@ -101,6 +101,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
               required={false}
               value={props.selectStartDate}
               disabled={false}
+              minDate={new Date('1900-01-01')}
             />
             <span className="search-transaction__icon">〜</span>
             <DatePicker
@@ -110,6 +111,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
               required={false}
               value={props.selectEndDate}
               disabled={false}
+              minDate={new Date('1900-01-01')}
             />
           </div>
         </div>

@@ -3,6 +3,7 @@
 .selector {
 
   &__box {
+    -webkit-appearance: none;
     background-color: white;
     border: $task-border_color solid 1px;
     border-radius: 0.3rem;

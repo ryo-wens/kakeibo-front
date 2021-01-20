@@ -80,6 +80,7 @@ const SetTaskListItem = (props: SetTaskListItemProps) => {
           label={''}
           required={false}
           disabled={false}
+          minDate={new Date('1900-01-01')}
         />
       ),
     },

@@ -2,13 +2,11 @@ import React, { useEffect } from 'react';
 import 'date-fns';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import TextField from '@material-ui/core/TextField';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { deleteTodoListItem } from '../../reducks/todoList/operations';
 import { deleteGroupTodoListItem } from '../../reducks/groupTodoList/operations';
 import './input-todo-list.scss';
-import { DeleteButton } from '../uikit';
+import { DatePicker, DeleteButton } from '../uikit';
 import { useLocation, useParams } from 'react-router';
 import CloseIcon from '@material-ui/icons/Close';
 import { Action, Dispatch } from 'redux';
@@ -51,6 +49,8 @@ const InputTodoList = React.forwardRef(
     const pathName = useLocation().pathname.split('/').slice(-1)[0];
     const { group_id } = useParams();
 
+    console.log(pathName);
+
     useEffect(() => {
       document.addEventListener('click', props.onClickCloseInputTodoList);
       return () => {
@@ -59,7 +59,10 @@ const InputTodoList = React.forwardRef(
     }, [props.onClickCloseInputTodoList]);
 
     return (
-      <div className="input-todo-list" ref={inputTodoRef as React.RefObject<HTMLDivElement>}>
+      <div
+        className={pathName === 'home' ? 'input-todo-list--width' : 'input-todo-list'}
+        ref={inputTodoRef as React.RefObject<HTMLDivElement>}
+      >
         <div className="input-todo-list__title">
           <p className="input-todo-list__title--text">Todoを編集</p>
           <button
@@ -79,36 +82,47 @@ const InputTodoList = React.forwardRef(
         />
         <div
           className={
-            pathName === '' || pathName === group_id
-              ? 'input-todo-list__date--home'
-              : 'input-todo-list__date'
+            pathName === 'home' ? 'input-todo-list__date--home-page' : 'input-todo-list__date'
           }
         >
-          <MuiPickersUtilsProvider utils={DateFnsUtils}>
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              label="実施日"
-              format="yyyy年 MM月dd日"
+          <div
+            className={
+              pathName === 'home'
+                ? 'input-todo-list__date-picker--home-page'
+                : 'input-todo-list__date'
+            }
+          >
+            <DatePicker
+              id={'date'}
+              label={'実施日'}
               value={props.selectedImplementationDate}
               onChange={props.inputImplementationDate}
               required={true}
+              disabled={false}
+              minDate={new Date('1900-01-01')}
               onOpen={() => document.removeEventListener('click', props.onClickCloseInputTodoList)}
               onClose={() => document.addEventListener('click', props.onClickCloseInputTodoList)}
             />
-            <KeyboardDatePicker
-              margin="normal"
-              id="date-picker-dialog"
-              label="期限日"
-              format="yyyy年 MM月dd日"
+          </div>
+          <div
+            className={
+              pathName === 'home'
+                ? 'input-todo-list__date-picker--home-page'
+                : 'input-todo-list__date'
+            }
+          >
+            <DatePicker
+              id={'date'}
+              label={'締切日'}
               value={props.selectedDueDate}
               onChange={props.inputDueDate}
-              minDate={props.selectedImplementationDate}
               required={true}
+              disabled={false}
+              minDate={props.selectedImplementationDate}
               onOpen={() => document.removeEventListener('click', props.onClickCloseInputTodoList)}
               onClose={() => document.addEventListener('click', props.onClickCloseInputTodoList)}
             />
-          </MuiPickersUtilsProvider>
+          </div>
         </div>
 
         <div className="input-todo-list__btn">

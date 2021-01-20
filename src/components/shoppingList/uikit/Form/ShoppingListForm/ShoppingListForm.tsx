@@ -1,13 +1,11 @@
 import React, { useRef, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { BigCategoryInput, MediumCategoryInput, TextInput } from '../../../../uikit';
+import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getExpenseCategories,
   getIncomeCategories,
 } from '../../../../../reducks/categories/selectors';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import './shopping-list-form.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { Action, Dispatch } from 'redux';
@@ -122,18 +120,15 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
     {
       key: '購入予定日',
       value: (
-        <MuiPickersUtilsProvider utils={DateFnsUtils}>
-          <KeyboardDatePicker
-            margin="normal"
-            id="date-picker-dialog"
-            label="必須"
-            format="yyyy年 MM月dd日"
-            value={props.expectedPurchaseDate}
-            onChange={props.handleDateChange}
-            minDate={props.minDate}
-            required={true}
-          />
-        </MuiPickersUtilsProvider>
+        <DatePicker
+          id={'date'}
+          label={'必須'}
+          value={props.expectedPurchaseDate}
+          onChange={props.handleDateChange}
+          required={true}
+          disabled={false}
+          minDate={props.minDate}
+        />
       ),
     },
     {
