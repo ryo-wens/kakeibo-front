@@ -2,10 +2,10 @@ import React, { useState } from 'react';
 import { Header } from '../components/header';
 import TodoPage from '../components/todo/Page/TodoPage';
 import '../assets/todo/todo.scss';
-import ShoppingListPage from '../components/shoppingList/Page/ShoppingListPage';
 import Task from './Task';
 import { useLocation } from 'react-router';
 import GroupShoppingListPage from '../components/groupShoppingList/Page/GroupShoppingListPage';
+import ShoppingListPageContainer from '../containers/shoppingList/Page/ShoppingListPageContainer';
 
 const Todo = () => {
   const pathName = useLocation().pathname.split('/')[1];
@@ -46,7 +46,7 @@ const Todo = () => {
           {currentPage === 2 && pathName === 'group' ? (
             <GroupShoppingListPage />
           ) : (
-            currentPage === 2 && pathName !== 'group' && <ShoppingListPage />
+            currentPage === 2 && pathName !== 'group' && <ShoppingListPageContainer />
           )}
         </div>
       </main>

@@ -1,150 +1,81 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import ShoppingListForm from '../../Form/ShoppingListForm/ShoppingListForm';
 import AddIcon from '@material-ui/icons/Add';
 import './add-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
 import { addShoppingListItem } from '../../../../../reducks/shoppingList/operations';
-import axios from 'axios';
+import { CancelTokenSource } from 'axios';
 
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      width: 450,
-      margin: '20px auto auto auto',
-      backgroundColor: theme.palette.background.paper,
-    },
-  })
-);
-
-const AddShoppingListModal = () => {
-  const classes = useStyles();
-  const [open, setOpen] = useState(false);
-  const [purchase, setPurchase] = useState('');
-  const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(date);
-  const [amount, setAmount] = useState<string | null>(null);
-  const [bigCategoryId, setBigCategoryId] = useState(0);
-  const [bigCategory, setBigCategory] = useState<string | null>('');
-  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
-  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
-  const [associatedCategory, setAssociatedCategory] = useState('');
-  const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
-  const [shop, setShop] = useState<string | null>(null);
-  const [transactionAutoAdd, setTransactionAutoAdd] = useState(false);
-  const signal = axios.CancelToken.source();
-
-  const openModal = () => {
-    setOpen(true);
-    setExpectedPurchaseDate(date);
-    setPurchase('');
-    setAmount(null);
-    setBigCategoryId(0);
-    setBigCategory('');
-    setMediumCategoryId(null);
-    setAssociatedCategory('');
-    setCustomCategoryId(null);
-    setShop(null);
-    setTransactionAutoAdd(false);
-  };
-
-  const closeModal = () => {
-    setOpen(false);
-  };
-
-  const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setPurchase(event.target.value);
-  };
-
-  const handleDateChange = (expectedPurchaseDate: Date | null) => {
-    setExpectedPurchaseDate(expectedPurchaseDate);
-  };
-
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === '') {
-      setAmount(null);
-    } else {
-      setAmount(event.target.value);
-    }
-  };
-
-  const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === '') {
-      setShop(null);
-    } else {
-      setShop(event.target.value);
-    }
-  };
-
-  const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setTransactionAutoAdd(event.target.checked);
-  };
-
-  const selectCategory = (
+interface AddShoppingListModalProps {
+  open: boolean;
+  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  expectedPurchaseDate: Date | null;
+  purchase: string;
+  shop: string | null;
+  amount: string | null;
+  bigCategoryId: number;
+  bigCategory: string | null;
+  bigCategoryIndex: number;
+  mediumCategoryId: number | null;
+  customCategoryId: number | null;
+  transactionAutoAdd: boolean;
+  associatedCategory: string;
+  handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDateChange: (scheduledDate: Date | null) => void;
+  handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
     associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
+  ) => void;
+  handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  openModal: () => void;
+  closeModal: () => void;
+  unInput: boolean;
+  signal: CancelTokenSource;
+}
 
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
-  const unInput = purchase === '' || expectedPurchaseDate === null || bigCategoryId === 0;
-
+const AddShoppingListModal = (props: AddShoppingListModalProps) => {
   const body = (
-    <div className={classes.paper}>
+    <div className="add-shopping-list-modal">
       <ShoppingListForm
-        expectedPurchaseDate={expectedPurchaseDate}
-        purchase={purchase}
-        shop={shop}
-        amount={amount}
-        bigCategoryId={bigCategoryId}
-        bigCategory={bigCategory}
-        bigCategoryIndex={bigCategoryIndex}
-        mediumCategoryId={mediumCategoryId}
-        customCategoryId={customCategoryId}
-        transactionAutoAdd={transactionAutoAdd}
-        associatedCategory={associatedCategory}
-        handlePurchaseChange={handlePurchaseChange}
-        handleDateChange={handleDateChange}
-        handleAmountChange={handleAmountChange}
-        selectCategory={selectCategory}
-        handleShopChange={handleShopChange}
-        handleAutoAddTransitionChange={handleAutoAddTransitionChange}
+        expectedPurchaseDate={props.expectedPurchaseDate}
+        purchase={props.purchase}
+        shop={props.shop}
+        amount={props.amount}
+        bigCategoryId={props.bigCategoryId}
+        bigCategory={props.bigCategory}
+        bigCategoryIndex={props.bigCategoryIndex}
+        mediumCategoryId={props.mediumCategoryId}
+        customCategoryId={props.customCategoryId}
+        transactionAutoAdd={props.transactionAutoAdd}
+        associatedCategory={props.associatedCategory}
+        handlePurchaseChange={props.handlePurchaseChange}
+        handleDateChange={props.handleDateChange}
+        handleAmountChange={props.handleAmountChange}
+        selectCategory={props.selectCategory}
+        handleShopChange={props.handleShopChange}
+        handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
         titleLabel={'買い物リストに追加'}
         buttonLabel={'追加'}
-        setOpen={setOpen}
-        closeModal={closeModal}
-        unInput={unInput}
+        setOpen={props.setOpen}
+        closeModal={props.closeModal}
+        unInput={props.unInput}
         minDate={date}
         dispatchOperation={addShoppingListItem(
           date,
-          expectedPurchaseDate,
-          purchase,
-          shop,
-          typeof amount === 'string' ? Number(amount) : amount,
-          bigCategoryId,
-          mediumCategoryId,
-          customCategoryId,
-          transactionAutoAdd,
-          signal
+          props.expectedPurchaseDate,
+          props.purchase,
+          props.shop,
+          typeof props.amount === 'string' ? Number(props.amount) : props.amount,
+          props.bigCategoryId,
+          props.mediumCategoryId,
+          props.customCategoryId,
+          props.transactionAutoAdd,
+          props.signal
         )}
         displayInputAmountMessage={false}
       />
@@ -156,14 +87,14 @@ const AddShoppingListModal = () => {
       <button
         className="add-shopping-list-modal__button"
         disabled={false}
-        onClick={() => openModal()}
+        onClick={() => props.openModal()}
       >
         <AddIcon />
         買い物リストに追加
       </button>
       <Modal
-        open={open}
-        onClose={closeModal}
+        open={props.open}
+        onClose={props.closeModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
