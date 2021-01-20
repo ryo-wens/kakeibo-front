@@ -50,28 +50,12 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
               </span>
             </dt>
             <dt>
-              {groupTransaction.shop !== null ? (
-                <>
-                  <span className="recent-input__item-font">店名: </span>
-                  {groupTransaction.shop}
-                </>
-              ) : (
-                <>
-                  <span className="recent-input__item-font">店名: </span> -
-                </>
-              )}
+              <span className="recent-input__item-font">店名: </span>
+              {groupTransaction.shop !== null ? groupTransaction.shop : '-'}
             </dt>
             <dt>
-              {groupTransaction.memo !== null ? (
-                <>
-                  <span className="recent-input__item-font">メモ :</span>
-                  {groupTransaction.memo}
-                </>
-              ) : (
-                <>
-                  <span className="recent-input__item-font">メモ :</span> -
-                </>
-              )}
+              <span className="recent-input__item-font">メモ :</span>
+              {groupTransaction.memo !== null ? groupTransaction.memo : '-'}
             </dt>
           </dl>
           <EditTransactionModal

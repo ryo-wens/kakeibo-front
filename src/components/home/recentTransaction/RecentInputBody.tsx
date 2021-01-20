@@ -36,27 +36,12 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
             </dt>
             <dt className="recent-input__recent-text">￥ {transaction.amount.toLocaleString()}</dt>
             <dt>
-              {transaction.shop !== null ? (
-                <>
-                  <span className="recent-input__item-font">店名: </span> {transaction.shop}
-                </>
-              ) : (
-                <>
-                  <span className="recent-input__item-font">店名: </span> -
-                </>
-              )}
+              <span className="recent-input__item-font">店名: </span>{' '}
+              {transaction.shop !== null ? transaction.shop : '-'}
             </dt>
             <dt>
-              {transaction.memo !== null ? (
-                <>
-                  <span className="recent-input__item-font">メモ: </span>
-                  {transaction.memo}
-                </>
-              ) : (
-                <>
-                  <span className="recent-input__item-font">メモ: </span> -
-                </>
-              )}
+              <span className="recent-input__item-font">メモ: </span>
+              {transaction.memo !== null ? transaction.memo : '-'}
             </dt>
           </dl>
           <EditTransactionModal
