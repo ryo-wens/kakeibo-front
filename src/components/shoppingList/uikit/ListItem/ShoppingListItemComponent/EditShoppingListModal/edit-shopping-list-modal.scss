@@ -6,6 +6,5 @@
   &__edit-icon {
     @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
     padding: 3px;
-    margin-left: 20px;
   }
 }

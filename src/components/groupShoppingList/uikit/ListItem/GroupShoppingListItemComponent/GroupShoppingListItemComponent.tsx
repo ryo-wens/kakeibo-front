@@ -62,7 +62,7 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
         </p>
       )}
       <div className="shopping-list-item-component">
-        <div className="shopping-list-item-component__content">
+        <div className="shopping-list-item-component__check-box">
           <CheckedGroupShoppingListItemModal
             listItem={props.listItem}
             currentYearMonth={props.currentYearMonth}
@@ -99,71 +99,80 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
             setPaymentUser={setPaymentUser}
             setTransactionAutoAdd={setTransactionAutoAdd}
           />
-          <span
-            className="shopping-list-item-component__purchase"
-            style={currentPurchaseTextStyle()}
-          >
-            {props.listItem.purchase}
-          </span>
-          <span
-            className="shopping-list-item-component__amount--value"
-            style={currentPurchaseTextStyle()}
-          >
-            {props.listItem.amount === null ? '-' : props.listItem.amount}
-          </span>
-          <span style={currentPurchaseTextStyle()}>円</span>
-          <EditGroupShoppingListItemModal
-            listItem={props.listItem}
-            currentYearMonth={props.currentYearMonth}
-            initialExpectedPurchaseDate={initialExpectedPurchaseDate}
-            initialPurchase={initialPurchase}
-            initialShop={initialShop}
-            initialAmount={initialAmount}
-            initialBigCategoryId={initialBigCategoryId}
-            initialBigCategoryName={initialBigCategoryName}
-            initialMediumCategoryId={initialMediumCategoryId}
-            initialCustomCategoryId={initialCustomCategoryId}
-            initialPaymentUser={initialPaymentUser}
-            initialTransactionAutoAdd={initialTransactionAutoAdd}
-            expectedPurchaseDate={expectedPurchaseDate}
-            purchase={purchase}
-            shop={shop}
-            amount={amount}
-            bigCategoryId={bigCategoryId}
-            bigCategory={bigCategory}
-            mediumCategoryId={mediumCategoryId}
-            customCategoryId={customCategoryId}
-            paymentUser={paymentUser}
-            transactionAutoAdd={transactionAutoAdd}
-            setExpectedPurchaseDate={setExpectedPurchaseDate}
-            setPurchase={setPurchase}
-            setShop={setShop}
-            setAmount={setAmount}
-            setBigCategoryId={setBigCategoryId}
-            setBigCategory={setBigCategory}
-            setMediumCategoryId={setMediumCategoryId}
-            setCustomCategoryId={setCustomCategoryId}
-            setPaymentUser={setPaymentUser}
-            setTransactionAutoAdd={setTransactionAutoAdd}
-          />
         </div>
-        <div className="shopping-list-item-component__tag">
-          {props.listItem.regular_shopping_list_id !== null && (
-            <span className="shopping-list-item-component__tag--regular">定期</span>
-          )}
-          {props.listItem.transaction_auto_add && (
-            <span className="shopping-list-item-component__tag--transaction-auto-add">
-              家計簿へ自動追加
-            </span>
+        <div className="shopping-list-item-component__content">
+          <div className="shopping-list-item-component__items">
+            <div className="shopping-list-item-component__item">
+              <span
+                className="shopping-list-item-component__item-purchase"
+                style={currentPurchaseTextStyle()}
+              >
+                {props.listItem.purchase}
+              </span>
+              <span
+                className="shopping-list-item-component__item-amount"
+                style={currentPurchaseTextStyle()}
+              >
+                {props.listItem.amount === null ? '-' : props.listItem.amount}
+              </span>
+              <span style={currentPurchaseTextStyle()}>円</span>
+            </div>
+            <div className="shopping-list-item-component__edit-icon">
+              <EditGroupShoppingListItemModal
+                listItem={props.listItem}
+                currentYearMonth={props.currentYearMonth}
+                initialExpectedPurchaseDate={initialExpectedPurchaseDate}
+                initialPurchase={initialPurchase}
+                initialShop={initialShop}
+                initialAmount={initialAmount}
+                initialBigCategoryId={initialBigCategoryId}
+                initialBigCategoryName={initialBigCategoryName}
+                initialMediumCategoryId={initialMediumCategoryId}
+                initialCustomCategoryId={initialCustomCategoryId}
+                initialPaymentUser={initialPaymentUser}
+                initialTransactionAutoAdd={initialTransactionAutoAdd}
+                expectedPurchaseDate={expectedPurchaseDate}
+                purchase={purchase}
+                shop={shop}
+                amount={amount}
+                bigCategoryId={bigCategoryId}
+                bigCategory={bigCategory}
+                mediumCategoryId={mediumCategoryId}
+                customCategoryId={customCategoryId}
+                paymentUser={paymentUser}
+                transactionAutoAdd={transactionAutoAdd}
+                setExpectedPurchaseDate={setExpectedPurchaseDate}
+                setPurchase={setPurchase}
+                setShop={setShop}
+                setAmount={setAmount}
+                setBigCategoryId={setBigCategoryId}
+                setBigCategory={setBigCategory}
+                setMediumCategoryId={setMediumCategoryId}
+                setCustomCategoryId={setCustomCategoryId}
+                setPaymentUser={setPaymentUser}
+                setTransactionAutoAdd={setTransactionAutoAdd}
+              />
+            </div>
+          </div>
+
+          <div className="shopping-list-item-component__tag">
+            {props.listItem.regular_shopping_list_id !== null && (
+              <span className="shopping-list-item-component__tag--red">定期</span>
+            )}
+            {props.listItem.transaction_auto_add && (
+              <span className="shopping-list-item-component__tag--blue">家計簿へ自動追加</span>
+            )}
+          </div>
+          {props.listItem.related_transaction_data !== null && (
+            <div className="shopping-list-item-component__related-transaction-data">
+              <RelatedGroupTransactionDataButton
+                transactionData={props.listItem.related_transaction_data}
+                approvedGroups={approvedGroups}
+                groupId={Number(id)}
+              />
+            </div>
           )}
         </div>
-        {props.listItem.related_transaction_data !== null && (
-          <RelatedGroupTransactionDataButton
-            transactionData={props.listItem.related_transaction_data}
-            approvedGroups={approvedGroups}
-            groupId={Number(id)}
-          />
-        )}
       </div>
     </>
   );

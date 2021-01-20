@@ -63,6 +63,8 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
                     listItem={listItem}
                     displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
                     currentYearMonth={props.currentYearMonth}
+                    purchaseClassName={'shopping-list-item-component__item-purchase'}
+                    amountClassName={'shopping-list-item-component__item-amount'}
                   />
                 </div>
               );

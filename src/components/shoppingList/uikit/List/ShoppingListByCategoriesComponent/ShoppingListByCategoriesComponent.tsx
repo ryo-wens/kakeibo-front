@@ -57,6 +57,8 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                             shoppingListItem.big_category_id
                           )}
                           currentYearMonth={props.currentYearMonth}
+                          purchaseClassName={'shopping-list-item-component__item-purchase'}
+                          amountClassName={'shopping-list-item-component__item-amount'}
                         />
                       </div>
                     );

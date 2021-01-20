@@ -15,6 +15,7 @@ import {
 } from '../../../../../reducks/groupCategories/selectors';
 import { Action, Dispatch } from 'redux';
 import { State } from '../../../../../reducks/store/types';
+import ToolTipIcon from '../../../../shoppingList/uikit/ToolTip/ToolTipIcon';
 
 interface GroupShoppingListFormProps {
   expectedPurchaseDate: Date | null;
@@ -232,15 +233,20 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           );
         })}
       </div>
-      <label className="shopping-list-form__add-transaction">
-        <input
-          type="checkbox"
-          checked={props.transactionAutoAdd}
-          onChange={props.handleAutoAddTransitionChange}
-        />
-        <span />
-        取引履歴に自動追加
-      </label>
+      <div className="shopping-list-form__add-transaction">
+        <label className="shopping-list-form__add-transaction-check">
+          <input
+            type="checkbox"
+            checked={props.transactionAutoAdd}
+            onChange={props.handleAutoAddTransitionChange}
+          />
+          <span />
+          家計簿に自動追加
+        </label>
+        <span className="shopping-list-form__tool-tip">
+          <ToolTipIcon />
+        </span>
+      </div>
       <div className="set-task-list-item__operation-btn">
         <div>
           <button
