@@ -25,7 +25,6 @@ import {
 } from '../../reducks/groupCategories/operations';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
-import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import '../../assets/modules/category-input.scss';
 
 interface BigCategoryInputProps {
@@ -511,7 +510,6 @@ const BigCategoryInput = React.forwardRef(
             }}
           >
             {props.bigCategory === '' ? '大カテゴリー(必須)' : props.bigCategory}
-            <ExpandMoreIcon className="input-years__icon" />
           </button>
           {props.bigCategoryMenuOpen && bigCategoriesList()}
         </div>

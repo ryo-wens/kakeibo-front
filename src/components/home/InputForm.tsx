@@ -288,8 +288,8 @@ const InputForm = (): JSX.Element => {
           onChange={handleSelect}
           required={true}
           value={transactionsType}
-          label={'収入or支出(必須)'}
           disabled={false}
+          currentPage={''}
         />
         <div className="input-form__form-content--spacer-small" />
         <TextInput

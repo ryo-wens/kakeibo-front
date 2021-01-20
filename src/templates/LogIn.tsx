@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect } from 'react';
+import React, { useState, useEffect } from 'react';
 import { push } from 'connected-react-router';
 import Avatar from '@material-ui/core/Avatar';
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -9,7 +9,6 @@ import { makeStyles } from '@material-ui/core/styles';
 import Container from '@material-ui/core/Container';
 import { GenericButton, TextArea, ErrorIndication } from '../components/uikit/index';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../reducks/store/types';
 import { logIn } from '../reducks/users/operations';
 import { InvalidMessage } from '../components/uikit';
 import { isValidEmailFormat, onEmailFocusOut, passWordSubmit } from '../lib/validation';
@@ -37,39 +36,36 @@ const useStyles = makeStyles((theme) => ({
     color: '#154bd4',
     textDecoration: 'underLine',
   },
+  submitButton: {
+    width: '250px',
+    margin: '0 auto',
+  },
 }));
 
 const LogIn = () => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const selector = useSelector((state: State) => state);
-  const errorMessage = getErrorMessage(selector);
-  const [message, setMessage] = useState<string>('');
-  const [submit, setSubmit] = useState<boolean>(false);
-  const [email, setEmail] = useState<string>('');
-  const [password, setPassword] = useState<string>('');
-  const [emailMessage, setEmailMessage] = useState<string>('');
-  const [passwordMessage, setPassWordMessage] = useState<string>('');
+  const errorMessage = useSelector(getErrorMessage);
+  const [message, setMessage] = useState('');
+  const [submit, setSubmit] = useState(false);
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
+  const [emailMessage, setEmailMessage] = useState('');
+  const [passwordMessage, setPassWordMessage] = useState('');
 
   useEffect(() => {
     setMessage(errorMessage);
   }, [errorMessage]);
 
-  const inputEmail = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEmail(event.target.value);
-      setSubmit(false);
-    },
-    [setEmail]
-  );
+  const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEmail(event.target.value);
+    setSubmit(false);
+  };
 
-  const inputPassword = useCallback(
-    (event: React.ChangeEvent<HTMLInputElement>) => {
-      setPassword(event.target.value);
-      setSubmit(false);
-    },
-    [setPassword]
-  );
+  const inputPassword = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setPassword(event.target.value);
+    setSubmit(false);
+  };
 
   const unLogIn =
     email === '' || password === '' || password.length < 8 || !isValidEmailFormat(email) || submit;
@@ -119,7 +115,7 @@ const LogIn = () => {
               <InvalidMessage message={passwordMessage} />
             </div>
             <div className="module-spacer--small" />
-            <div className="center">
+            <div className={classes.submitButton}>
               <GenericButton
                 label={'ログインする'}
                 disabled={unLogIn}
@@ -130,7 +126,7 @@ const LogIn = () => {
               />
             </div>
             <div className="module-spacer--small" />
-            <div className="center">
+            <div className={classes.submitButton}>
               <GenericButton
                 label={'ゲストユーザーログイン'}
                 disabled={false}
