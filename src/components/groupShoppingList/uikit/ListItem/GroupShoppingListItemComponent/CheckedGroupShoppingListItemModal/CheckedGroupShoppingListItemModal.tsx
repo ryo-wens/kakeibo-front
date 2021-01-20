@@ -61,7 +61,7 @@ interface CheckedGroupShoppingListItemModalProps {
 const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
@@ -188,7 +188,7 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
     props.setChecked(event.target.checked);
     dispatch(
       editGroupShoppingListItem(
-        Number(id),
+        Number(group_id),
         date,
         props.currentYearMonth,
         props.listItem.id,
@@ -238,7 +238,7 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
         unInput={disabledButton()}
         minDate={new Date('1900-01-01')}
         dispatchOperation={editGroupShoppingListItem(
-          Number(id),
+          Number(group_id),
           date,
           props.currentYearMonth,
           props.listItem.id,

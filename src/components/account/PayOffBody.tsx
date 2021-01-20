@@ -19,7 +19,7 @@ interface PayOffBodyPros {
 
 const PayOffBody = (props: PayOffBodyPros) => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const getMonthIndexNumber = 1;
   const currentSelectMonth = props.groupAccountList.month.split('-')[getMonthIndexNumber];
   const completeMonth = props.completeJudge.completeMonth.split('-')[getMonthIndexNumber];
@@ -33,7 +33,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
     let approvedUsersList: ApprovedGroupUsers = [];
 
     for (const group of props.approvedGroup) {
-      if (group.group_id === Number(id)) {
+      if (group.group_id === Number(group_id)) {
         approvedUsersList = group.approved_users_list;
       }
     }
@@ -103,7 +103,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                           dispatch(
                                             editGroupAccount(
                                               account,
-                                              Number(id),
+                                              Number(group_id),
                                               props.selectYear,
                                               props.selectMonth
                                             )
@@ -126,7 +126,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                           dispatch(
                                             editGroupAccount(
                                               account,
-                                              Number(id),
+                                              Number(group_id),
                                               props.selectYear,
                                               props.selectMonth
                                             )
@@ -165,7 +165,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                           dispatch(
                                             editGroupAccount(
                                               account,
-                                              Number(id),
+                                              Number(group_id),
                                               props.selectYear,
                                               props.selectMonth
                                             )
@@ -188,7 +188,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                                           dispatch(
                                             editGroupAccount(
                                               account,
-                                              Number(id),
+                                              Number(group_id),
                                               props.selectYear,
                                               props.selectMonth
                                             )

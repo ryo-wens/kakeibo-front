@@ -62,7 +62,7 @@ interface EditGroupShoppingListItemModalProps {
 
 const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalProps) => {
   const classes = useStyles();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
@@ -195,7 +195,7 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
           dispatchOperation={deleteGroupShoppingListItem(
-            Number(id),
+            Number(group_id),
             props.listItem.id,
             props.listItem.big_category_name,
             signal
@@ -229,7 +229,7 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
           unInput={disabledButton()}
           minDate={new Date('1900-01-01')}
           dispatchOperation={editGroupShoppingListItem(
-            Number(id),
+            Number(group_id),
             date,
             props.currentYearMonth,
             props.listItem.id,

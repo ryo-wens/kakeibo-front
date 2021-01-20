@@ -35,7 +35,7 @@ interface SearchFieldProps {
 const SearchField = (props: SearchFieldProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   const searchFiled = [
     {
@@ -150,7 +150,7 @@ const SearchField = (props: SearchFieldProps) => {
           className="save-btn"
           onClick={() => {
             pathName === 'group'
-              ? dispatch(searchGroupTodoList(Number(id), requestData))
+              ? dispatch(searchGroupTodoList(Number(group_id), requestData))
               : dispatch(searchTodoList(requestData));
 
             props.setOpenSearchResultTodoList(true);

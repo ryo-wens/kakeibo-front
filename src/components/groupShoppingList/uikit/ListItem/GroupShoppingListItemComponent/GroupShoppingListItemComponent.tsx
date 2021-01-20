@@ -17,7 +17,7 @@ interface GroupShoppingListItemComponentProps {
 
 const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentProps) => {
   const approvedGroups = useSelector(getApprovedGroups);
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   const initialExpectedPurchaseDate: Date = dateStringToDate(props.listItem.expected_purchase_date);
   const initialPurchase = props.listItem.purchase;
@@ -168,7 +168,7 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
               <RelatedGroupTransactionDataButton
                 transactionData={props.listItem.related_transaction_data}
                 approvedGroups={approvedGroups}
-                groupId={Number(id)}
+                groupId={Number(group_id)}
               />
             </div>
           )}

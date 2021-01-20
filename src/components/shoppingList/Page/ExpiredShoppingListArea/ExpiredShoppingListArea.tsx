@@ -16,15 +16,15 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
   const dispatch = useDispatch();
   const expiredShoppingList = useSelector(getExpiredShoppingList);
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   useEffect(() => {
     if (pathName === 'group') {
       const signal = axios.CancelToken.source();
-      dispatch(fetchGroupExpiredShoppingList(Number(id), signal));
+      dispatch(fetchGroupExpiredShoppingList(Number(group_id), signal));
 
       const interval = setInterval(() => {
-        dispatch(fetchGroupExpiredShoppingList(Number(id), signal));
+        dispatch(fetchGroupExpiredShoppingList(Number(group_id), signal));
       }, 3000);
 
       return () => {

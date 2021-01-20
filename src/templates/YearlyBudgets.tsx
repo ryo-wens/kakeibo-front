@@ -15,7 +15,7 @@ import '../components/budget/yearly-budgets.scss';
 
 const YearlyBudgets = () => {
   const date = new Date();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const dispatch = useDispatch();
   const path = useLocation().pathname;
   const pathName = useLocation().pathname.split('/')[1];
@@ -48,7 +48,7 @@ const YearlyBudgets = () => {
   }, []);
 
   const currentPageColor = () => {
-    if (path === '/yearly/budgets' || path === `/group/${id}/yearly/budgets`) {
+    if (path === '/yearly/budgets' || path === `/group/${group_id}/yearly/budgets`) {
       return {
         background: 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)',
         color: '#fff',
@@ -72,7 +72,7 @@ const YearlyBudgets = () => {
                   {
                     pathName !== 'group'
                       ? dispatch(push('/standard/budgets'))
-                      : dispatch(push(`/group/${id}/standard/budgets`));
+                      : dispatch(push(`/group/${group_id}/standard/budgets`));
                   }
                 }}
               >
@@ -83,7 +83,7 @@ const YearlyBudgets = () => {
                 onClick={() => {
                   pathName !== 'group'
                     ? dispatch(push('/yearly/budgets'))
-                    : dispatch(push(`/group/${id}/yearly/budgets`));
+                    : dispatch(push(`/group/${group_id}/yearly/budgets`));
                 }}
               >
                 月別カスタム予算

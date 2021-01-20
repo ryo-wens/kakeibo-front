@@ -26,7 +26,7 @@ interface AddGroupShoppingListModalProps {
 
 const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
   const classes = useStyles();
-  const { id } = useParams();
+  const { group_id } = useParams();
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
@@ -152,7 +152,7 @@ const AddGroupShoppingListModal = (props: AddGroupShoppingListModalProps) => {
         closeModal={closeModal}
         unInput={unInput}
         dispatchOperation={addGroupShoppingListItem(
-          Number(id),
+          Number(group_id),
           date,
           props.currentYearMonth,
           expectedPurchaseDate,

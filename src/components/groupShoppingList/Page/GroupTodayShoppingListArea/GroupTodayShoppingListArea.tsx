@@ -20,7 +20,7 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
   const groupTodayShoppingList = useSelector(getGroupTodayShoppingList);
   const groupTodayShoppingListByCategories = useSelector(getGroupTodayShoppingListByCategories);
 
-  const { id } = useParams();
+  const { group_id } = useParams();
   const todayYear = String(date.getFullYear());
   const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
   const todayDate: string = ('0' + date.getDate()).slice(-2);
@@ -39,7 +39,7 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
               <GroupTodayShoppingListComponent
                 shoppingList={groupTodayShoppingList}
                 currentYearMonth={props.currentYearMonth}
-                groupId={Number(id)}
+                groupId={Number(group_id)}
                 year={todayYear}
                 month={todayMonth}
                 date={todayDate}
@@ -49,7 +49,7 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
               <GroupTodayShoppingListByCategoriesComponent
                 shoppingListByCategories={groupTodayShoppingListByCategories}
                 currentYearMonth={props.currentYearMonth}
-                groupId={Number(id)}
+                groupId={Number(group_id)}
                 year={todayYear}
                 month={todayMonth}
                 date={todayDate}

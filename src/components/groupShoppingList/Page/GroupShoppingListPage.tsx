@@ -15,7 +15,7 @@ import AddGroupRegularShoppingListModal from '../uikit/Modal/AddGroupRegularShop
 
 const GroupShoppingListPage = () => {
   const dispatch = useDispatch();
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   const [currentItems, setCurrentItems] = useState<TodayOrMonthly>('today');
   const [selectedYear, setSelectedYear] = useState<number>(year);
@@ -26,7 +26,7 @@ const GroupShoppingListPage = () => {
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    dispatch(fetchGroupCategories(Number(id), signal));
+    dispatch(fetchGroupCategories(Number(group_id), signal));
     return () => signal.cancel();
   }, []);
 

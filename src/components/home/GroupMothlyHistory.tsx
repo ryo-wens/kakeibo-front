@@ -21,10 +21,10 @@ interface GroupMonthlyHistoryProps {
 
 const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
   const selector = useSelector((state: State) => state);
-  const { id } = useParams();
+  const { group_id } = useParams();
   const path = window.location.pathname;
   const approvedGroup = useSelector(getApprovedGroups);
-  const currentGroupId = approvedGroup.findIndex((group) => group.group_id === Number(id));
+  const currentGroupId = approvedGroup.findIndex((group) => group.group_id === Number(group_id));
   const currentGroup = approvedGroup[currentGroupId];
   const groupTransactionsList = getGroupTransactions(selector);
   const [open, setOpen] = useState<boolean>(false);
@@ -273,7 +273,7 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
     <>
       <div className="monthly-history-table__spacer__big" />
       <div className="box__monthlyExpense">
-        {path !== `/group/${Number(id)}/weekly/history` && <h2>{month}月の支出</h2>}
+        {path !== `/group/${group_id}/weekly/history` && <h2>{month}月の支出</h2>}
         <ColorExplanation approvedGroup={currentGroup} />
         <div className="color-explanation__spacer--small" />
         <div className="monthly-history-table__spacer__small" />

@@ -26,7 +26,7 @@ import CurrentSchedule from '../components/home/CurrentSchedule/CurrentSchedule'
 const Home = () => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
   const sortCategoryTransactionsList = useSelector(getSortCategoryTransactions);
   const thisMonthTotalExpense = useSelector(getTotalExpense);
   const sortCategoryGroupTransactionsList = useSelector(getSortCategoryGroupTransactions);
@@ -54,12 +54,12 @@ const Home = () => {
         selectedYear: String(year),
         selectedMonth: month <= 9 ? '0' + month : String(month),
       };
-      dispatch(fetchGroupTransactionsList(Number(id), years, signal));
-      dispatch(fetchGroupYearlyBudgets(Number(id), year, signal));
+      dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
+      dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
       dispatch(fetchGroups(signal));
       const interval = setInterval(() => {
-        dispatch(fetchGroupTransactionsList(Number(id), years, signal));
-        dispatch(fetchGroupYearlyBudgets(Number(id), year, signal));
+        dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
+        dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
         dispatch(fetchGroups(signal));
       }, 3000);
       return () => {
@@ -67,7 +67,7 @@ const Home = () => {
         clearInterval(interval);
       };
     }
-  }, [pathName, id, todoEditing]);
+  }, [pathName, group_id, todoEditing]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();

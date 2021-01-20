@@ -49,7 +49,7 @@ const InputTodoList = React.forwardRef(
     const dispatch = useDispatch();
     const entityType = useLocation().pathname.split('/')[1];
     const pathName = useLocation().pathname.split('/').slice(-1)[0];
-    const { id } = useParams();
+    const { group_id } = useParams();
 
     useEffect(() => {
       document.addEventListener('click', props.onClickCloseInputTodoList);
@@ -79,7 +79,7 @@ const InputTodoList = React.forwardRef(
         />
         <div
           className={
-            pathName === '' || pathName === id
+            pathName === '' || pathName === group_id
               ? 'input-todo-list__date--home'
               : 'input-todo-list__date'
           }
@@ -141,7 +141,7 @@ const InputTodoList = React.forwardRef(
             modalTitle={'Todo'}
             onClickDelete={
               entityType === 'group'
-                ? deleteGroupTodoListItem(Number(id), props.todoListItemId)
+                ? deleteGroupTodoListItem(Number(group_id), props.todoListItemId)
                 : deleteTodoListItem(props.todoListItemId)
             }
             onClickCloseInputTodoList={props.onClickCloseInputTodoList}

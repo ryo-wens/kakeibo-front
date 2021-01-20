@@ -35,14 +35,14 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
   const monthlyShoppingList = useSelector(getMonthlyShoppingList);
   const monthlyShoppingListByCategories = useSelector(getMonthlyShoppingListByCategories);
   const pathName = useLocation().pathname.split('/')[1];
-  const { id } = useParams();
+  const { group_id } = useParams();
 
   useEffect(() => {
     if (pathName === 'group') {
       const signal = axios.CancelToken.source();
       dispatch(
         fetchGroupMonthlyShoppingList(
-          Number(id),
+          Number(group_id),
           String(props.selectedYear),
           ('0' + props.selectedMonth).slice(-2),
           signal
@@ -50,7 +50,7 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
       );
       dispatch(
         fetchGroupMonthlyShoppingListByCategories(
-          Number(id),
+          Number(group_id),
           String(props.selectedYear),
           ('0' + props.selectedMonth).slice(-2),
           signal
@@ -59,7 +59,7 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
       const interval = setInterval(() => {
         dispatch(
           fetchGroupMonthlyShoppingList(
-            Number(id),
+            Number(group_id),
             String(props.selectedYear),
             ('0' + props.selectedMonth).slice(-2),
             signal
@@ -67,7 +67,7 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
         );
         dispatch(
           fetchGroupMonthlyShoppingListByCategories(
-            Number(id),
+            Number(group_id),
             String(props.selectedYear),
             ('0' + props.selectedMonth).slice(-2),
             signal
@@ -79,7 +79,7 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
         clearInterval(interval);
       };
     }
-  }, [String(props.selectedYear), ('0' + props.selectedMonth).slice(-2), id]);
+  }, [String(props.selectedYear), ('0' + props.selectedMonth).slice(-2), group_id]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
