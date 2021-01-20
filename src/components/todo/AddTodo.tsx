@@ -1,12 +1,10 @@
 import React, { useCallback, useState } from 'react';
 import 'date-fns';
 import { TodoButton } from './index';
-import { AddButton } from '../uikit';
+import { AddButton, DatePicker } from '../uikit';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import Box from '@material-ui/core/Box';
 import TextField from '@material-ui/core/TextField';
-import { KeyboardDatePicker, MuiPickersUtilsProvider } from '@material-ui/pickers';
-import DateFnsUtils from '@date-io/date-fns';
 import { useDispatch } from 'react-redux';
 import { addTodoListItem } from '../../reducks/todoList/operations';
 import { addGroupTodoListItem } from '../../reducks/groupTodoList/operations';
@@ -111,28 +109,24 @@ const AddTodo = (props: AddTodoProps) => {
               onChange={inputTodo}
             />
             <div className={classes.buttons} style={{ justifyContent: 'flex-end' }}>
-              <MuiPickersUtilsProvider utils={DateFnsUtils}>
-                <KeyboardDatePicker
-                  margin="normal"
-                  id="date-picker-dialog"
-                  label="実施日"
-                  format="yyyy年 MM月dd日"
-                  value={selectedImplementationDate}
-                  onChange={handleImplementationDateChange}
-                  minDate={props.date}
-                  required={true}
-                />
-                <KeyboardDatePicker
-                  margin="normal"
-                  id="date-picker-dialog"
-                  label="期限日"
-                  format="yyyy年 MM月dd日"
-                  value={selectedDueDate}
-                  onChange={handleDueDateChange}
-                  minDate={selectedImplementationDate}
-                  required={true}
-                />
-              </MuiPickersUtilsProvider>
+              <DatePicker
+                id={'date'}
+                label={'実施日'}
+                value={selectedImplementationDate}
+                onChange={handleImplementationDateChange}
+                required={true}
+                disabled={false}
+                minDate={new Date('1900-01-01')}
+              />
+              <DatePicker
+                id={'date'}
+                label={'締切日'}
+                value={selectedDueDate}
+                onChange={handleDueDateChange}
+                required={true}
+                disabled={false}
+                minDate={selectedImplementationDate}
+              />
             </div>
           </Box>
 

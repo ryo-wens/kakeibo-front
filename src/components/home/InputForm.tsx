@@ -282,6 +282,7 @@ const InputForm = (): JSX.Element => {
           onChange={handleDateChange}
           required={true}
           disabled={false}
+          minDate={new Date('1900-01-01')}
         />
         <div className="input-form__form-content--spacer-small" />
         <KindSelectBox

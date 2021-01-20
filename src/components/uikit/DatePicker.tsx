@@ -29,6 +29,9 @@ type DatePickerProps = {
   onChange: (date: Date | null) => void;
   required: boolean;
   disabled: boolean;
+  minDate: Date | null;
+  onOpen?: () => void;
+  onClose?: () => void;
 };
 
 const DatePicker = (props: DatePickerProps) => {
@@ -51,6 +54,9 @@ const DatePicker = (props: DatePickerProps) => {
           okLabel="決定"
           cancelLabel="キャンセル"
           invalidDateMessage="日付の形式が正しくありません。"
+          minDate={props.minDate}
+          onOpen={props.onOpen}
+          onClose={props.onClose}
         />
       </Grid>
     </MuiPickersUtilsProvider>

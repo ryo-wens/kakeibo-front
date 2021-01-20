@@ -55,6 +55,7 @@ const SearchField = (props: SearchFieldProps) => {
             required={false}
             value={props.selectStartDate}
             disabled={false}
+            minDate={new Date('1900-01-01')}
           />
           <span>〜</span>
           <DatePicker
@@ -64,6 +65,7 @@ const SearchField = (props: SearchFieldProps) => {
             required={false}
             value={props.selectEndDate}
             disabled={false}
+            minDate={new Date('1900-01-01')}
           />
         </div>
       ),

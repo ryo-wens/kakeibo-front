@@ -74,6 +74,7 @@ const SkipDate = (props: SkipDateProps) => {
           label={''}
           required={false}
           disabled={false}
+          minDate={new Date('1900-01-01')}
         />
       </div>
       <div className="skip-date__display-week">
