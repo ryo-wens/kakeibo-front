@@ -7,28 +7,23 @@ interface ShoppingListByDate {
   shoppingListByDate: ShoppingList;
   currentYearMonth: string;
   message: string;
+  equalsDisplayDate: (date: string) => boolean;
 }
 
 const ShoppingListByDate = (props: ShoppingListByDate) => {
-  let prevDate = '';
-
-  const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <>
       {props.shoppingListByDate.length ? (
         props.shoppingListByDate.map((listItem) => {
           return (
             <div key={listItem.id}>
+              {props.equalsDisplayDate(listItem.expected_purchase_date) && (
+                <p className="shopping-list-item-component__date">
+                  {listItem.expected_purchase_date}
+                </p>
+              )}
               <ShoppingListItemComponent
                 listItem={listItem}
-                displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
                 currentYearMonth={props.currentYearMonth}
                 purchaseClassName={'shopping-list-item-component__item-purchase'}
                 amountClassName={'shopping-list-item-component__item-amount'}

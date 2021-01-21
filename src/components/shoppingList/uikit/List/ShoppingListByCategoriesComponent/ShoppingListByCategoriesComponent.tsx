@@ -12,24 +12,10 @@ interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: ShoppingListByCategories;
   currentYearMonth: string;
   message: string;
+  equalsDisplayDate: (date: string, categoryId: number) => boolean;
 }
 
 const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesComponentProps) => {
-  let prevDate = '';
-  let prevCategoryId = 0;
-
-  const equalsDisplayDate = (expectedPurchaseDate: string, categoryId: number) => {
-    if (prevCategoryId !== categoryId) {
-      prevCategoryId = categoryId;
-      prevDate = expectedPurchaseDate;
-      return true;
-    } else if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <>
       {props.shoppingListByCategories.length ? (
@@ -50,12 +36,16 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                   (shoppingListItem: ShoppingListItem) => {
                     return (
                       <div key={shoppingListItem.id}>
+                        {props.equalsDisplayDate(
+                          shoppingListItem.expected_purchase_date,
+                          shoppingListItem.big_category_id
+                        ) && (
+                          <p className="shopping-list-item-component__date">
+                            {shoppingListItem.expected_purchase_date}
+                          </p>
+                        )}
                         <ShoppingListItemComponent
                           listItem={shoppingListItem}
-                          displayPurchaseDate={equalsDisplayDate(
-                            shoppingListItem.expected_purchase_date,
-                            shoppingListItem.big_category_id
-                          )}
                           currentYearMonth={props.currentYearMonth}
                           purchaseClassName={'shopping-list-item-component__item-purchase'}
                           amountClassName={'shopping-list-item-component__item-amount'}

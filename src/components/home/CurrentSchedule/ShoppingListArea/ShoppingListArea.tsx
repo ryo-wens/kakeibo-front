@@ -10,16 +10,6 @@ interface ShoppingListArea {
 }
 
 const ShoppingListArea = (props: ShoppingListArea) => {
-  let prevDate = '';
-
-  const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <>
       {props.shoppingListByDate.length ? (
@@ -28,7 +18,6 @@ const ShoppingListArea = (props: ShoppingListArea) => {
             <div key={listItem.id}>
               <ShoppingListItemComponent
                 listItem={listItem}
-                displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
                 currentYearMonth={props.currentYearMonth}
                 purchaseClassName={'shopping-list-item-component__item-purchase--home-page'}
                 amountClassName={'shopping-list-item-component__item-amount--home-page'}
