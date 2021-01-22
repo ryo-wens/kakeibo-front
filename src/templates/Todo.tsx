@@ -46,7 +46,7 @@ const Todo = () => {
           {currentPage === 2 && pathName === 'group' ? (
             <GroupShoppingListPage />
           ) : (
-            currentPage === 2 && pathName !== 'group' && <ShoppingListPageContainer />
+            currentPage === 2 && pathName === 'todo' && <ShoppingListPageContainer />
           )}
         </div>
       </main>

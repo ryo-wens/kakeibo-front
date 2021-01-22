@@ -1,12 +1,12 @@
 import React from 'react';
 import './shopping-list-page.scss';
 import SwitchTodayOrMonthlyTabs from './SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
-import TodayShoppingListArea from './TodayShoppingListArea/TodayShoppingListArea';
-import MonthlyShoppingListArea from './MonthlyShoppingListArea/MonthlyShoppingListArea';
 import ExpiredShoppingListArea from './ExpiredShoppingListArea/ExpiredShoppingListArea';
 import RegularShoppingListArea from './RegularShoppingListArea/RegularShoppingListArea';
 import AddRegularShoppingListModal from '../uikit/Modal/AddRegularShoppingListModal/AddRegularShoppingListModal';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
+import TodayShoppingListAreaContainer from '../../../containers/shoppingList/Page/TodayShoppingListArea/TodayShoppingListAreaContainer';
+import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/Page/MonthlyShoppingListArea/MonthlyShoppingListAreaContainer';
 
 interface ShoppingListPageProps {
   selectedYear: number;
@@ -26,9 +26,9 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           <SwitchTodayOrMonthlyTabs
             currentItems={props.currentItem}
             setCurrentItems={props.setCurrentItem}
-            leftItem={<TodayShoppingListArea currentYearMonth={props.currentYearMonth} />}
+            leftItem={<TodayShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />}
             rightItem={
-              <MonthlyShoppingListArea
+              <MonthlyShoppingListAreaContainer
                 selectedYear={props.selectedYear}
                 selectedMonth={props.selectedMonth}
                 setSelectedYear={props.setSelectedYear}

@@ -6,6 +6,7 @@ import { month, year } from '../../../lib/constant';
 import axios from 'axios';
 import { fetchCategories } from '../../../reducks/categories/operations';
 import ShoppingListPage from '../../../components/shoppingList/Page/ShoppingListPage';
+import { fetchGroups } from '../../../reducks/groups/operations';
 
 const ShoppingListPageContainer = () => {
   const dispatch = useDispatch();
@@ -18,6 +19,19 @@ const ShoppingListPageContainer = () => {
 
   const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
   const currentYearMonth = `${selectedYear}/${currentMonth}`;
+
+  useEffect(() => {
+    const signal = axios.CancelToken.source();
+    dispatch(fetchGroups(signal));
+    const interval = setInterval(() => {
+      dispatch(fetchGroups(signal));
+    }, 3000);
+
+    return () => {
+      signal.cancel();
+      clearInterval(interval);
+    };
+  }, []);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();

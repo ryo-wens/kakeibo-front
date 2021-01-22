@@ -42,15 +42,6 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
     }
   }, []);
 
-  let prevDate = '';
-  const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <>
       <div>
@@ -61,7 +52,6 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
                 <div key={listItem.id}>
                   <ShoppingListItemComponent
                     listItem={listItem}
-                    displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
                     currentYearMonth={props.currentYearMonth}
                     purchaseClassName={'shopping-list-item-component__item-purchase'}
                     amountClassName={'shopping-list-item-component__item-amount'}
