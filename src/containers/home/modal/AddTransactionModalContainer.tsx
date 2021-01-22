@@ -39,7 +39,7 @@ interface AddTransactionModalContainerProps {
 const initialState = {
   initialAmount: '',
   initialBigCategory: '',
-  initialBigCategoryId: null,
+  initialBigCategoryId: 0,
 };
 
 const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) => {
@@ -57,7 +57,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
   const accountingStatus = useSelector(getYearlyAccountListStatusModals);
-  const [amount, setAmount] = useState(initialState.initialAmount);
+  const [amount, setAmount] = useState<string>(initialState.initialAmount);
   const [memo, setMemo] = useState('');
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState('');
@@ -65,13 +65,11 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const [transactionDate, setTransactionDate] = useState<Date | null>(props.selectDate);
   const [transactionsType, setTransactionType] = useState('expense');
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
-  const [bigCategoryId, setBigCategoryId] = useState(0);
+  const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [bigCategory, setBigCategory] = useState<string | null>(initialState.initialBigCategory);
   const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
-  const [customCategoryId, setCustomCategoryId] = useState<number | null>(
-    initialState.initialBigCategoryId
-  );
+  const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
   const [associatedCategory, setAssociatedCategory] = useState('');
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
