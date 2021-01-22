@@ -1,6 +1,6 @@
 import React from 'react';
 import { TransactionsList } from '../../../reducks/transactions/types';
-import { EditTransactionModal } from '../../uikit';
+import EditTransactionModalContainer from '../../../containers/home/modal/EditTransactionModalContainer';
 import { bigCategoryColor } from '../../../lib/function';
 import '../../../assets/home/recent-input.scss';
 
@@ -44,7 +44,7 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
               {transaction.memo !== null ? transaction.memo : '-'}
             </dt>
           </dl>
-          <EditTransactionModal
+          <EditTransactionModalContainer
             key={index}
             amount={transaction.amount}
             categoryName={categoryName}

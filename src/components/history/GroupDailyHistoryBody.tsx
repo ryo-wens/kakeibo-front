@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
-import EditTransactionModal from '../../components/uikit/EditTransactionModal';
+import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
 import { getUserId } from '../../reducks/users/selectors';
 import IconButton from '@material-ui/core/IconButton';
@@ -100,7 +100,7 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                   <IconButton onClick={() => handleOpen(id)}>
                     <CreateIcon color="primary" />
                   </IconButton>
-                  <EditTransactionModal
+                  <EditTransactionModalContainer
                     id={id}
                     onClose={handleClose}
                     open={openId === id && open}
@@ -110,7 +110,6 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                     categoryName={categoryName}
                     transactionDate={transaction_date}
                     transactionsType={transaction_type}
-                    approvedGroups={approvedGroup}
                     paymentUserId={userId}
                     bigCategoryId={big_category_id}
                     mediumCategoryId={medium_category_id}

@@ -26,7 +26,7 @@ import { customMonth } from '../../lib/constant';
 import { isValidAmountFormat } from '../../lib/validation';
 import axios from 'axios';
 import { BigCategoryInput, MediumCategoryInput } from '../uikit';
-import '../../assets/modules/input-form .scss';
+import '../../assets/modules/input-form.scss';
 
 const InputForm = (): JSX.Element => {
   const dispatch = useDispatch();
