@@ -1,9 +1,9 @@
 import React from 'react';
-import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
-import { Groups } from '../../../reducks/groups/types';
-import EditTransactionModalContainer from '../../../containers/home/modal/EditTransactionModalContainer';
-import { bigCategoryColor } from '../../../lib/function';
-import '../../../assets/home/recent-input.scss';
+import { GroupTransactionsList } from '../../../../reducks/groupTransactions/types';
+import { Groups } from '../../../../reducks/groups/types';
+import EditTransactionModalContainer from '../../../../containers/home/modal/EditTransactionModalContainer';
+import { bigCategoryColor } from '../../../../lib/function';
+import './recent-input.scss';
 
 interface RecentInputBodyProps {
   open: boolean;

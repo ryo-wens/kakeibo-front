@@ -4,7 +4,7 @@ import { GroupTransactionsList } from '../../../reducks/groupTransactions/types'
 import RecentInputBodyContainer from '../../../containers/home/recentTransaction/RecentInputBodyContainer';
 import GroupRecentInputBodyContainer from '../../../containers/home/recentTransaction/GroupRecentInputBodyContainer';
 import { guidanceMessage } from '../../../lib/constant';
-import '../../../assets/home/recent-input.scss';
+import './recentTransactionBody/recent-input.scss';
 
 interface RecentInputProps {
   pathName: string;

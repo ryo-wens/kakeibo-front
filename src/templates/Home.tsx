@@ -5,7 +5,8 @@ import axios from 'axios';
 import { SelectYears } from '../lib/date';
 import { year, month } from '../lib/constant';
 import { Header } from '../components/header';
-import { InputForm, MonthlyHistory } from '../components/home';
+import { MonthlyHistory } from '../components/home';
+import InputFormContainer from '../containers/home/transactionInputForm/InputFormContainer';
 import RecentInputContainer from '../containers/home/recentTransaction/RecentInputContainer';
 import { HistoryPieChart, HistoryBarChart } from '../components/home/graph';
 import { fetchGroups } from '../reducks/groups/operations';
@@ -89,7 +90,7 @@ const Home = () => {
       <Header />
       <main className="section__container">
         <div className="home__left">
-          <InputForm />
+          <InputFormContainer />
           <RecentInputContainer />
         </div>
         <div className="home__center">
