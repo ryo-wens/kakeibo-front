@@ -28,16 +28,18 @@ const TodayShoppingListByCategoriesContainer = (
     }
   }, []);
 
-  let prevDate = '';
-  let prevCategoryId = 0;
+  const prevData = {
+    categoryId: 0,
+    expectedPurchaseDate: '',
+  };
 
-  const equalsDisplayDate = (expectedPurchaseDate: string, categoryId: number) => {
-    if (prevCategoryId !== categoryId) {
-      prevCategoryId = categoryId;
-      prevDate = expectedPurchaseDate;
+  const equalsDisplayDate = (categoryId: number, expectedPurchaseDate: string) => {
+    if (prevData.categoryId !== categoryId) {
+      prevData.categoryId = categoryId;
+      prevData.expectedPurchaseDate = expectedPurchaseDate;
       return true;
-    } else if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
+    } else if (prevData.expectedPurchaseDate !== expectedPurchaseDate) {
+      prevData.expectedPurchaseDate = expectedPurchaseDate;
       return true;
     }
     return false;

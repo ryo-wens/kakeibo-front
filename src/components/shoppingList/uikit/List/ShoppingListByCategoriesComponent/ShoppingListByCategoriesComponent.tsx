@@ -12,7 +12,7 @@ interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: ShoppingListByCategories;
   currentYearMonth: string;
   message: string;
-  equalsDisplayDate: (date: string, categoryId: number) => boolean;
+  equalsDisplayDate: (categoryId: number, date: string) => boolean;
 }
 
 const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesComponentProps) => {
@@ -37,8 +37,8 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                     return (
                       <div key={shoppingListItem.id}>
                         {props.equalsDisplayDate(
-                          shoppingListItem.expected_purchase_date,
-                          shoppingListItem.big_category_id
+                          shoppingListItem.big_category_id,
+                          shoppingListItem.expected_purchase_date
                         ) && (
                           <p className="shopping-list-item-component__date">
                             {shoppingListItem.expected_purchase_date}

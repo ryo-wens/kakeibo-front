@@ -24,10 +24,13 @@ const MonthlyShoppingListByDateContainer = (props: MonthlyShoppingListByDateCont
     return () => signal.cancel();
   }, [currentYear, currentMonth]);
 
-  let prevDate = '';
+  const prevData = {
+    expectedPurchaseDate: '',
+  };
+
   const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
+    if (prevData.expectedPurchaseDate !== expectedPurchaseDate) {
+      prevData.expectedPurchaseDate = expectedPurchaseDate;
       return true;
     }
     return false;
