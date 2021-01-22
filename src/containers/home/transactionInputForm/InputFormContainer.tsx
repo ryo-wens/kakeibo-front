@@ -99,11 +99,11 @@ const InputFormContainer = () => {
     setTransactionDate(new Date());
     setShop('');
     setMemo('');
-    setAmount('');
-    setBigCategoryId(0);
+    setAmount(initialState.initialAmount);
+    setBigCategoryId(initialState.initialBigCategoryId);
     setMediumCategoryId(null);
     setCustomCategoryId(null);
-    setBigCategory('');
+    setBigCategory(initialState.initialBigCategory);
     setAssociatedCategory('');
   }, [transactionsType]);
 
@@ -254,8 +254,8 @@ const InputFormContainer = () => {
   const resetInputForm = () => {
     setShop('');
     setMemo('');
-    setAmount('');
-    setBigCategory('');
+    setAmount(initialState.initialAmount);
+    setBigCategory(initialState.initialBigCategory);
     setAssociatedCategory('');
     setTransactionType('expense');
   };

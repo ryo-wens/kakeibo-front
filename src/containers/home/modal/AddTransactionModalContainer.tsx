@@ -305,13 +305,13 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   };
 
   const resetForm = () => {
-    setAmount('');
+    setAmount(initialState.initialAmount);
     setMemo('');
     setShop('');
     setTransactionType('expense');
-    setBigCategory('');
+    setBigCategory(initialState.initialBigCategory);
     setAssociatedCategory('');
-    setBigCategoryId(0);
+    setBigCategoryId(initialState.initialBigCategoryId);
     setMediumCategoryId(null);
     setCustomCategoryId(null);
     setBigCategoryMenuOpen(false);
