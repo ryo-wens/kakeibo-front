@@ -39,8 +39,7 @@ interface AddTransactionModalContainerProps {
 const initialState = {
   initialAmount: '',
   initialBigCategory: '',
-  initialBigCategoryId: 0,
-  initialTransactionType: '',
+  initialBigCategoryId: null,
 };
 
 const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) => {
@@ -58,7 +57,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
   const accountingStatus = useSelector(getYearlyAccountListStatusModals);
-  const [amount, setAmount] = useState('');
+  const [amount, setAmount] = useState(initialState.initialAmount);
   const [memo, setMemo] = useState('');
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState('');
@@ -67,10 +66,12 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const [transactionsType, setTransactionType] = useState('expense');
   const [paymentUserId, setPaymentUserId] = useState<string>(userId);
   const [bigCategoryId, setBigCategoryId] = useState(0);
-  const [bigCategory, setBigCategory] = useState<string | null>('');
+  const [bigCategory, setBigCategory] = useState<string | null>(initialState.initialBigCategory);
   const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
-  const [customCategoryId, setCustomCategoryId] = useState<number | null>(null);
+  const [customCategoryId, setCustomCategoryId] = useState<number | null>(
+    initialState.initialBigCategoryId
+  );
   const [associatedCategory, setAssociatedCategory] = useState('');
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
@@ -254,8 +255,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     !isValidAmountFormat(amount) ||
     initialState.initialAmount === amount ||
     initialState.initialBigCategory === bigCategory ||
-    initialState.initialBigCategoryId === bigCategoryId ||
-    initialState.initialTransactionType === transactionsType;
+    initialState.initialBigCategoryId === bigCategoryId;
 
   const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,
