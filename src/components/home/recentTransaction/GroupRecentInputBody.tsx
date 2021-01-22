@@ -1,7 +1,7 @@
 import React from 'react';
 import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
 import { Groups } from '../../../reducks/groups/types';
-import { EditTransactionModal } from '../../uikit';
+import EditTransactionModalContainer from '../../../containers/home/modal/EditTransactionModalContainer';
 import { bigCategoryColor } from '../../../lib/function';
 import '../../../assets/home/recent-input.scss';
 
@@ -58,7 +58,7 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
               {groupTransaction.memo !== null ? groupTransaction.memo : '-'}
             </dt>
           </dl>
-          <EditTransactionModal
+          <EditTransactionModalContainer
             key={index}
             amount={groupTransaction.amount}
             categoryName={categoryName}
@@ -69,7 +69,6 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
             onClose={props.closeModal}
             transactionDate={groupTransaction.transaction_date}
             transactionsType={groupTransaction.transaction_type}
-            approvedGroups={props.approvedGroup}
             paymentUserId={groupTransaction.payment_user_id}
             bigCategoryId={groupTransaction.big_category_id}
             mediumCategoryId={groupTransaction.medium_category_id}

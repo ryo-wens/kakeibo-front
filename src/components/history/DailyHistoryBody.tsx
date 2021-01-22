@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TransactionsList } from '../../reducks/transactions/types';
-import EditTransactionModal from '../../components/uikit/EditTransactionModal';
+import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import '../../assets/history/daily-history.scss';
@@ -77,7 +77,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
                   <IconButton onClick={() => handleOpen(id)}>
                     <CreateIcon color="primary" />
                   </IconButton>
-                  <EditTransactionModal
+                  <EditTransactionModalContainer
                     id={id}
                     onClose={handleClose}
                     open={openId === id && open}

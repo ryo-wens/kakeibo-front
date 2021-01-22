@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Menu from '@material-ui/core/Menu';
 import MenuItem from '@material-ui/core/MenuItem';
 import { weekDays, selectedDate } from '../../lib/date';
-import AddTransactionModal from './AddTransactionModal';
+import AddTransactionModalContainer from '../../containers/home/modal/AddTransactionModalContainer';
 
 interface SelectMenuProps {
   startDate: number;
@@ -63,7 +63,7 @@ const SelectMenu = (props: SelectMenuProps) => {
           );
         })}
       </Menu>
-      <AddTransactionModal
+      <AddTransactionModalContainer
         selectDate={selectedDays(id)}
         open={open}
         onClose={modalClose}

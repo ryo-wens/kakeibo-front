@@ -6,7 +6,8 @@ import { getGroupTransactions } from '../../reducks/groupTransactions/selectors'
 import { month } from '../../lib/constant';
 import '../../assets/history/monthly-history.scss';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
-import { EditTransactionModal, SelectMenu } from '../uikit';
+import { SelectMenu } from '../uikit';
+import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
 import { incomeTransactionType } from '../../lib/constant';
 import { bigCategoryColor } from '../../lib/function';
 import { SelectYears } from '../../lib/date';
@@ -192,7 +193,7 @@ const MonthlyHistory = (props: MonthlyHistoryProps) => {
                       </span>
                     </dt>
                   </dl>,
-                  <EditTransactionModal
+                  <EditTransactionModalContainer
                     key={index}
                     open={openId === id && open}
                     onClose={handleClose}

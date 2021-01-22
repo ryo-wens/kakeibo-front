@@ -8,7 +8,8 @@ import { currentWeekNumber, incomeTransactionType } from '../../lib/constant';
 import { bigCategoryColor } from '../../lib/function';
 import { month } from '../../lib/constant';
 import { displayWeeks, WeeklyInfo } from '../../lib/date';
-import { EditTransactionModal, SelectMenu } from '../uikit';
+import { SelectMenu } from '../uikit';
+import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
 import { useParams } from 'react-router';
 import './color-explanation.scss';
 import ColorExplanation from './ColorExplanation';
@@ -206,7 +207,7 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                       </span>
                     </dt>
                   </dl>,
-                  <EditTransactionModal
+                  <EditTransactionModalContainer
                     key={index}
                     open={openId === id && open}
                     onClose={handleClose}
@@ -218,7 +219,6 @@ const GroupMonthlyHistory = (props: GroupMonthlyHistoryProps) => {
                     transactionDate={transaction_date}
                     transactionsType={transaction_type}
                     paymentUserId={payment_user_id}
-                    approvedGroups={approvedGroup}
                     bigCategoryId={big_category_id}
                     mediumCategoryId={medium_category_id}
                     customCategoryId={custom_category_id}

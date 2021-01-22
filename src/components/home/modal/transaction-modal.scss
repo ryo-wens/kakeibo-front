@@ -1,0 +1,77 @@
+@import "../../../assets/variable";
+@import "../../../assets/mixin/icon-btn";
+
+.transaction-modal {
+  background-color: white;
+  box-shadow: none;
+  margin: 0 auto;
+  margin-top: 10px;
+  border: 1px solid $task-border_color;
+  padding: 2px;
+
+  &--title {
+    text-align: center;
+  }
+
+  &--add {
+    width: 470px;
+  }
+
+  &--edit {
+    width: 490px;
+  }
+
+  &__form-column {
+    align-items: center;
+    display: flex;
+    flex-flow: column;
+    justify-content: center;
+  }
+
+  &__close-button {
+    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    float: right;
+  }
+
+  &__message {
+    color: $danger-color;
+    text-align: center;
+    padding-bottom: 10px;
+
+    &--small {
+      font-size: 0.9rem;
+    }
+  }
+
+  &__delimiter-line {
+    border-bottom: 1px solid;
+
+    &--form-spacer {
+      margin-top: 40px;
+    }
+  }
+
+  &__delete-button-position {
+    margin-right: 80%;
+  }
+
+  &__form-content {
+    width: 270px;
+
+    &-submit-button {
+      margin-bottom: 15px;
+    }
+
+    &--spacer-small {
+      margin-bottom: 12px;
+    }
+
+    &--spacer-medium {
+      margin-bottom: 18px;
+    }
+  }
+
+  &__select-category {
+    width: 270px;
+  }
+}

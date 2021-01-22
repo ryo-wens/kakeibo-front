@@ -4,7 +4,7 @@ import { useLocation } from 'react-router';
 import { getSearchTransactions } from '../../reducks/transactions/selectors';
 import { getSearchGroupTransactions } from '../../reducks/groupTransactions/selectors';
 import { TransactionsList } from '../../reducks/transactions/types';
-import EditTransactionModal from '../uikit/EditTransactionModal';
+import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
 import '../../assets/history/daily-history.scss';
@@ -86,7 +86,7 @@ const SearchResultTransactionsList = () => {
                 <IconButton onClick={() => handleOpen(id)}>
                   <CreateIcon color="primary" />
                 </IconButton>
-                <EditTransactionModal
+                <EditTransactionModalContainer
                   id={id}
                   onClose={handleClose}
                   open={openId === id && open}
