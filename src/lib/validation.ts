@@ -141,9 +141,7 @@ export const onConfirmPasswordFocusOut = (
   setConfirmPasswordMessage: React.Dispatch<React.SetStateAction<string>>
 ) => {
   if (password !== confirmPassword) {
-    setConfirmPasswordMessage(
-      'パスワードと確認パスワードが一致しません。もう一度入力してください。'
-    );
+    setConfirmPasswordMessage('パスワードと確認パスワードが一致しません。入力し直してください。');
   } else if (password === confirmPassword) {
     setConfirmPasswordMessage('');
   }

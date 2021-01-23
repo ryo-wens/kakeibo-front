@@ -1,0 +1,43 @@
+@import "../../assets/variable";
+@import "../../assets/modules/text-area";
+
+.login {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 408px;
+  margin: 0 auto;
+
+  &__position {
+    margin-top: 7%;
+  }
+
+  &__form-spacer {
+    margin-bottom: 20px;
+  }
+
+  &__label {
+    padding-left: 4px;
+  }
+
+  &__input-form {
+    text-align: center;
+  }
+
+  &__signup-link {
+    color: $link-color ;
+    cursor: pointer;
+    text-align: center;
+    padding-top: 15px;
+    text-decoration: underline;
+  }
+
+  &__button {
+    margin: 0 auto;
+    width: 250px;
+  }
+
+  &__error-message {
+    height: 20px;
+  }
+}
