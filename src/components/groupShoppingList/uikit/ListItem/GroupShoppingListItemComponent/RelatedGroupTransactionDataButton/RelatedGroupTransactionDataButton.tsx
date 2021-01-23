@@ -2,7 +2,7 @@ import React, { useEffect, useRef, useState } from 'react';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import '../../../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/RelatedTransactionDataButton/related-transaction-data-button.scss';
+import '../../../../../shoppingList/modules/ListItem/ShoppingListItemComponent/RelatedTransactionDataButton/related-transaction-data-button.scss';
 import { bigCategoryColor } from '../../../../../../lib/function';
 import { GroupRelatedTransactionData } from '../../../../../../reducks/groupShoppingList/types';
 import { Groups } from '../../../../../../reducks/groups/types';

@@ -3,7 +3,7 @@ export interface RegularShoppingListItem {
   posted_date: Date;
   updated_date: Date;
   expected_purchase_date: string;
-  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;
   shop: string | null;
@@ -140,7 +140,7 @@ export interface DeleteShoppingListItemRes {
 
 export interface AddRegularShoppingListItemReq {
   expected_purchase_date: Date;
-  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;
   shop: string | null;
@@ -158,7 +158,7 @@ export interface AddRegularShoppingListItemRes {
 
 export interface EditRegularShoppingListItemReq {
   expected_purchase_date: Date;
-  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;
   shop: string | null;
@@ -179,3 +179,21 @@ export interface DeleteRegularShoppingListItemRes {
 }
 
 export type TodayOrMonthly = 'today' | 'monthly';
+
+export type PurchaseCycleType = 'daily' | 'weekly' | 'monthly' | 'custom';
+
+export interface AddRegularShoppingListModalInitialState {
+  initialExpectedPurchaseDate: Date | null;
+  initialCycleType: PurchaseCycleType;
+  initialCycle: string | null;
+  initialPurchase: string;
+  initialAmount: string | null;
+  initialBigCategoryId: number;
+  initialBigCategoryName: string | null;
+  initialBigCategoryIndex: number;
+  initialMediumCategoryId: number | null;
+  initialCustomCategoryId: number | null;
+  initialAssociatedCategory: string;
+  initialShop: string | null;
+  initialTransactionAutoAdd: boolean;
+}

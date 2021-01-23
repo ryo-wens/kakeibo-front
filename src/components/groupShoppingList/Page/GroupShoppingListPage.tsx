@@ -5,19 +5,19 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
-import SwitchTodayOrMonthlyTabs from '../../shoppingList/Page/SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
 import GroupTodayShoppingListArea from './GroupTodayShoppingListArea/GroupTodayShoppingListArea';
 import GroupMonthlyShoppingListArea from './GroupMonthlyShoppingListArea/GroupMonthlyShoppingListArea';
 import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
 import GroupRegularShoppingListArea from './GroupRegularShoppingListArea/GroupRegularShoppingListArea';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
 import AddGroupRegularShoppingListModal from '../uikit/Modal/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
+import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
 
 const GroupShoppingListPage = () => {
   const dispatch = useDispatch();
   const { group_id } = useParams();
 
-  const [currentItems, setCurrentItems] = useState<TodayOrMonthly>('today');
+  const [currentItem, setCurrentItem] = useState<TodayOrMonthly>('today');
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
@@ -34,9 +34,9 @@ const GroupShoppingListPage = () => {
     <div className="shopping-list-page">
       <div className="shopping-list-page__left">
         <div className="shopping-list-page__left-content">
-          <SwitchTodayOrMonthlyTabs
-            currentItems={currentItems}
-            setCurrentItems={setCurrentItems}
+          <SwitchTodayOrMonthlyTabsContainer
+            currentItem={currentItem}
+            setCurrentItems={setCurrentItem}
             leftItem={<GroupTodayShoppingListArea currentYearMonth={currentYearMonth} />}
             rightItem={
               <GroupMonthlyShoppingListArea
@@ -55,7 +55,7 @@ const GroupShoppingListPage = () => {
           <AddGroupRegularShoppingListModal currentYearMonth={currentYearMonth} />
           <GroupRegularShoppingListArea
             currentYearMonth={currentYearMonth}
-            currentTodayOrMonthly={currentItems}
+            currentTodayOrMonthly={currentItem}
           />
         </div>
         <div className="shopping-list-page__right-content">

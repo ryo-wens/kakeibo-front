@@ -1,55 +1,34 @@
-import React, { useEffect } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { getExpiredShoppingList } from '../../../../reducks/shoppingList/selectors';
+import React from 'react';
 import './expired-shopping-list-area.scss';
-import axios from 'axios';
-import { useLocation, useParams } from 'react-router';
-import { fetchExpiredShoppingList } from '../../../../reducks/shoppingList/operations';
-import ShoppingListItemComponent from '../../uikit/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
-import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
+import ShoppingListItemComponent from '../../modules/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
+import { ShoppingList } from '../../../../reducks/shoppingList/types';
 
 interface ExpiredShoppingListAreaProps {
+  expiredShoppingList: ShoppingList;
+  slicedExpiredShoppingList: ShoppingList;
   currentYearMonth: string;
+  equalsDisplayDate: (date: string) => boolean;
+  readMore: boolean;
+  setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
+  initialDisplayNumberShoppingList: number;
 }
 
 const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
-  const dispatch = useDispatch();
-  const expiredShoppingList = useSelector(getExpiredShoppingList);
-  const pathName = useLocation().pathname.split('/')[1];
-  const { group_id } = useParams();
-
-  useEffect(() => {
-    if (pathName === 'group') {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchGroupExpiredShoppingList(Number(group_id), signal));
-
-      const interval = setInterval(() => {
-        dispatch(fetchGroupExpiredShoppingList(Number(group_id), signal));
-      }, 3000);
-
-      return () => {
-        signal.cancel();
-        clearInterval(interval);
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    if (pathName !== 'group' && !expiredShoppingList.length) {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchExpiredShoppingList(signal));
-      return () => signal.cancel();
-    }
-  }, []);
-
   return (
-    <>
-      <div>
-        <div className="expired-shopping-list-area">
-          {expiredShoppingList.length ? (
-            expiredShoppingList.map((listItem) => {
+    <div>
+      <div className="expired-shopping-list-area">
+        {props.expiredShoppingList.length ? (
+          <>
+            {props.slicedExpiredShoppingList.map((listItem) => {
               return (
                 <div key={listItem.id}>
+                  {props.equalsDisplayDate(listItem.expected_purchase_date) && (
+                    <p className="expired-shopping-list-area__date">
+                      {listItem.expected_purchase_date}
+                    </p>
+                  )}
                   <ShoppingListItemComponent
                     listItem={listItem}
                     currentYearMonth={props.currentYearMonth}
@@ -58,15 +37,24 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
                   />
                 </div>
               );
-            })
-          ) : (
-            <p className="expired-shopping-list-area__message">
-              期限切れの買い物リストはありません。
-            </p>
-          )}
-        </div>
+            })}
+            {props.expiredShoppingList.length > props.initialDisplayNumberShoppingList && (
+              <button
+                className="expired-shopping-list-area__read-more-button"
+                onClick={() => props.setReadMore(!props.readMore)}
+              >
+                {props.readMore ? 'close' : 'Read More'}
+                {props.readMore ? <KeyboardArrowUpIcon /> : <KeyboardArrowRightIcon />}
+              </button>
+            )}
+          </>
+        ) : (
+          <p className="expired-shopping-list-area__message">
+            期限切れの買い物リストはありません。
+          </p>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

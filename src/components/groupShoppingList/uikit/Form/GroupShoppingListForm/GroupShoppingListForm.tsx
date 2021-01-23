@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
 import { useDispatch, useSelector } from 'react-redux';
-import '../../../../shoppingList/uikit/Form/ShoppingListForm/shopping-list-form.scss';
+import '../../../../shoppingList/modules/Form/ShoppingListForm/shopping-list-form.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { useParams } from 'react-router';
 import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
@@ -13,7 +13,7 @@ import {
 } from '../../../../../reducks/groupCategories/selectors';
 import { Action, Dispatch } from 'redux';
 import { State } from '../../../../../reducks/store/types';
-import ToolTipIcon from '../../../../shoppingList/uikit/ToolTip/ToolTipIcon';
+import ToolTipIcon from '../../../../shoppingList/modules/ToolTip/ToolTipIcon';
 
 interface GroupShoppingListFormProps {
   expectedPurchaseDate: Date | null;

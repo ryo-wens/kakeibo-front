@@ -3,8 +3,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
 import { useSelector } from 'react-redux';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import '../../../../shoppingList/uikit/Form/RegularShoppingListForm/regular-shopping-list-form.scss';
-import CycleTypeSelector from '../../../../shoppingList/uikit/Selector/CycleTypeSelector/CycleTypeSelector';
+import '../../../../shoppingList/modules/Form/RegularShoppingListForm/regular-shopping-list-form.scss';
 import ShoppingListPayerSelect from '../../Select/ShoppingListPayerSelect/ShoppingListPayerSelect';
 import { useParams } from 'react-router';
 import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
@@ -12,7 +11,8 @@ import {
   getGroupExpenseCategories,
   getGroupIncomeCategories,
 } from '../../../../../reducks/groupCategories/selectors';
-import ToolTipIcon from '../../../../shoppingList/uikit/ToolTip/ToolTipIcon';
+import ToolTipIcon from '../../../../shoppingList/modules/ToolTip/ToolTipIcon';
+import SelectPurchaseCycleTypeContainer from '../../../../../containers/shoppingList/modules/Select/SelectPurchaseCycleTypeContainer/SelectPurchaseCycleTypeContainer';
 
 interface GroupRegularShoppingListFormProps {
   expectedPurchaseDate: Date | null;
@@ -145,7 +145,10 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
       value: (
         <>
           <div className="regular-shopping-list-form__select-content-value--flex">
-            <CycleTypeSelector value={props.cycleType} selectChange={props.handleCycleTypeChange} />
+            <SelectPurchaseCycleTypeContainer
+              value={props.cycleType}
+              selectChange={props.handleCycleTypeChange}
+            />
             {props.cycleType === 'custom' && (
               <TextInput
                 value={props.cycle}

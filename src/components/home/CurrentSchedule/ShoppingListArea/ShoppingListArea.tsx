@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShoppingList } from '../../../../reducks/shoppingList/types';
-import ShoppingListItemComponent from '../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
-import '../../../shoppingList/uikit/List/ShoppingListByDate/shopping-list-by-date.scss';
+import ShoppingListItemComponent from '../../../shoppingList/modules/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
+import '../../../shoppingList/modules/List/ShoppingListByDate/shopping-list-by-date.scss';
 
 interface ShoppingListArea {
   shoppingListByDate: ShoppingList;

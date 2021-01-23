@@ -1,12 +1,12 @@
 import React from 'react';
 import './shopping-list-page.scss';
-import SwitchTodayOrMonthlyTabs from './SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
-import ExpiredShoppingListArea from './ExpiredShoppingListArea/ExpiredShoppingListArea';
-import RegularShoppingListArea from './RegularShoppingListArea/RegularShoppingListArea';
-import AddRegularShoppingListModal from '../uikit/Modal/AddRegularShoppingListModal/AddRegularShoppingListModal';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import TodayShoppingListAreaContainer from '../../../containers/shoppingList/Page/TodayShoppingListArea/TodayShoppingListAreaContainer';
 import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/Page/MonthlyShoppingListArea/MonthlyShoppingListAreaContainer';
+import ExpiredShoppingListAreaContainer from '../../../containers/shoppingList/Page/ExpiredShoppingListArea/ExpiredShoppingListAreaContainer';
+import RegularShoppingListAreaContainer from '../../../containers/shoppingList/Page/RegularShoppingListArea/RegularShoppingListAreaContainer';
+import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
+import AddRegularShoppingListModalContainer from '../../../containers/shoppingList/modules/Modal/AddRegularShoppingListModalContainer/AddRegularShoppingListModalContainer';
 
 interface ShoppingListPageProps {
   selectedYear: number;
@@ -23,8 +23,8 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
     <div className="shopping-list-page">
       <div className="shopping-list-page__left">
         <div className="shopping-list-page__left-content">
-          <SwitchTodayOrMonthlyTabs
-            currentItems={props.currentItem}
+          <SwitchTodayOrMonthlyTabsContainer
+            currentItem={props.currentItem}
             setCurrentItems={props.setCurrentItem}
             leftItem={<TodayShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />}
             rightItem={
@@ -42,18 +42,18 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
-          <AddRegularShoppingListModal
+          <AddRegularShoppingListModalContainer
             selectedYear={props.selectedYear}
             selectedMonth={props.selectedMonth}
           />
-          <RegularShoppingListArea
+          <RegularShoppingListAreaContainer
             currentYearMonth={props.currentYearMonth}
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <ExpiredShoppingListArea currentYearMonth={props.currentYearMonth} />
+          <ExpiredShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
         </div>
       </div>
     </div>
