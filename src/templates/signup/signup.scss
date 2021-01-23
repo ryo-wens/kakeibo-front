@@ -1,0 +1,45 @@
+@import "../../assets/variable";
+@import "../../assets/modules/text-area";
+
+.signup {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin: 0 auto;
+  box-sizing: border-box;
+  width: 408px;
+
+  &__position {
+    margin-top: 7%;
+  }
+
+  &__form-spacer {
+    margin-bottom: 20px;
+  }
+
+  &__label {
+    padding-left: 2px;
+  }
+
+  &__input-form {
+    text-align: center;
+    width: 408px;
+  }
+
+  &__login-link {
+    cursor: pointer;
+    color: $link-color ;
+    text-align: center;
+    padding-top: 15px;
+    text-decoration: underline;
+  }
+
+  &__button {
+    margin: 0 auto;
+    width: 250px;
+  }
+
+  &__error-message {
+    height: 20px;
+  }
+}
