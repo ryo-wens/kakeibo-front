@@ -1,13 +1,15 @@
 import React from 'react';
-import { Groups } from '../../reducks/groups/types';
-import '../../templates/history/daily/daily-history.scss';
-import { SearchTransactionsField, SearchResultTransactionsList } from './index';
+import { Groups } from '../../../reducks/groups/types';
+import SearchTransactionsFieldContainer from '../../../containers/history/search/SearchTransactionsFieldContainer';
+import SearchResultTransactionsListContainer from '../../../containers/history/search/SearchResultTransactionsListContainer';
+import GroupSearchResultTransactionsListContainer from '../../../containers/history/search/GroupSearchResultTransactionsListContainer';
 import './search-transaction.scss';
 
 interface SearchTransactionProps {
   pathName: string;
   groupId: number;
   openSearchFiled: boolean;
+  displaySearchTransactionResult: boolean;
   openSearch: () => void;
   closeSearch: () => void;
   selectStartDateChange: (selectStartDate: Date | null) => void;
@@ -42,8 +44,6 @@ interface SearchTransactionProps {
 }
 
 const SearchTransaction = (props: SearchTransactionProps) => {
-  const displaySearchTransactionResult = props.submit && props.openSearchFiled;
-
   return (
     <>
       <button
@@ -55,7 +55,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
       <div className="daily-history__spacer" />
 
       {props.openSearchFiled && (
-        <SearchTransactionsField
+        <SearchTransactionsFieldContainer
           closeSearch={props.closeSearch}
           openSearch={props.openSearch}
           openSearchFiled={props.openSearchFiled}
@@ -93,7 +93,13 @@ const SearchTransaction = (props: SearchTransactionProps) => {
       )}
       <div className="daily-history__spacer" />
 
-      {displaySearchTransactionResult && <SearchResultTransactionsList />}
+      {props.displaySearchTransactionResult && props.pathName !== 'group' && (
+        <SearchResultTransactionsListContainer />
+      )}
+
+      {props.displaySearchTransactionResult && props.pathName === 'group' && (
+        <GroupSearchResultTransactionsListContainer />
+      )}
     </>
   );
 };

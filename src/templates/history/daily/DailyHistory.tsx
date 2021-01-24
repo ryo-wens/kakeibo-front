@@ -2,7 +2,7 @@ import React from 'react';
 import { Groups } from '../../../reducks/groups/types';
 import { TransactionsList } from '../../../reducks/transactions/types';
 import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
-import { SearchTransaction } from '../../../components/history';
+import SearchTransactionContainer from '../../../containers/history/search/SearchTransactionContainer';
 import DailyHistoryBodyContainer from '../../../containers/history/DailyHistoryBodyContainer';
 import GroupDailyHistoryBodyContainer from '../../../containers/history/GroupDailyHistoryBodyContainer';
 import { noTransactionMessage } from '../../../lib/constant';
@@ -58,7 +58,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
   return (
     <>
       <div className="daily-history daily-history__background">
-        <SearchTransaction
+        <SearchTransactionContainer
           closeSearch={props.closeSearch}
           openSearch={props.openSearch}
           openSearchFiled={props.openSearchField}
