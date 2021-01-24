@@ -3,8 +3,8 @@ import './shopping-list-item-component.scss';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import { dateStringToDate } from '../../../../../lib/date';
 import RelatedTransactionDataButton from './RelatedTransactionDataButton/RelatedTransactionDataButton';
-import CheckedShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/CheckedShoppingListItemModalContainer/CheckedShoppingListItemModalContainer';
-import EditShoppingListModalContainer from '../../../../../containers/shoppingList/modules/ListItem/EditShoppingListModalContainer/EditShoppingListModalContainer';
+import CheckedShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/CheckedShoppingListItemModalContainer/CheckedShoppingListItemModalContainer';
+import EditShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/EditShoppingListItemModalContainer/EditShoppingListItemModalContainer';
 
 interface ShoppingListItemComponentProps {
   listItem: ShoppingListItem;
@@ -97,7 +97,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           </div>
 
           <div className="shopping-list-item-component__edit-icon">
-            <EditShoppingListModalContainer
+            <EditShoppingListItemModalContainer
               listItem={props.listItem}
               currentYearMonth={props.currentYearMonth}
               initialExpectedPurchaseDate={initialExpectedPurchaseDate}

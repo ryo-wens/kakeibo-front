@@ -4,8 +4,8 @@ import {
   RegularShoppingListItem,
   TodayOrMonthly,
 } from '../../../../reducks/shoppingList/types';
-import RegularShoppingListItemComponent from '../../modules/ListItem/RegularShoppingListItemComponent/RegularShoppingListItemComponent';
 import './regular-shopping-list-area.scss';
+import RegularShoppingListItemComponentContainer from '../../../../containers/shoppingList/modules/ListItem/RegularShoppingListItemComponentContainer/RegularShoppingListItemComponentContainer';
 
 interface RegularShoppingListAreaProps {
   currentYearMonth: string;
@@ -21,7 +21,7 @@ const RegularShoppingListArea = (props: RegularShoppingListAreaProps) => {
           props.regularShoppingList.map((listItem: RegularShoppingListItem) => {
             return (
               <div className="regular-shopping-list-area__list-item" key={listItem.id}>
-                <RegularShoppingListItemComponent
+                <RegularShoppingListItemComponentContainer
                   listItem={listItem}
                   currentYearMonth={props.currentYearMonth}
                   currentTodayOrMonthly={props.currentTodayOrMonthly}

@@ -182,7 +182,7 @@ export type TodayOrMonthly = 'today' | 'monthly';
 
 export type PurchaseCycleType = 'daily' | 'weekly' | 'monthly' | 'custom';
 
-export interface AddRegularShoppingListModalInitialState {
+export interface AddRegularShoppingListItemModalInitialState {
   initialExpectedPurchaseDate: Date | null;
   initialCycleType: PurchaseCycleType;
   initialCycle: string | null;

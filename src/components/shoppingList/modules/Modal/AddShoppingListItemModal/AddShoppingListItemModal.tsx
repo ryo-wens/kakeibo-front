@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
-import './add-shopping-list-modal.scss';
+import './add-shopping-list-item-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
 import ShoppingListFormContainer from '../../../../../containers/shoppingList/modules/Form/ShoppingListFormContainer/ShoppingListFormContainer';
@@ -36,9 +36,9 @@ interface AddShoppingListModalProps {
   shoppingListItemOperation: () => void;
 }
 
-const AddShoppingListModal = (props: AddShoppingListModalProps) => {
+const AddShoppingListItemModal = (props: AddShoppingListModalProps) => {
   const body = (
-    <div className="add-shopping-list-modal">
+    <div className="add-shopping-list-item-modal">
       <ShoppingListFormContainer
         titleLabel={'買い物リストに追加'}
         buttonLabel={'追加'}
@@ -71,7 +71,7 @@ const AddShoppingListModal = (props: AddShoppingListModalProps) => {
   return (
     <>
       <button
-        className="add-shopping-list-modal__button"
+        className="add-shopping-list-item-modal__button"
         disabled={false}
         onClick={() => props.openModal()}
       >
@@ -90,4 +90,4 @@ const AddShoppingListModal = (props: AddShoppingListModalProps) => {
   );
 };
 
-export default AddShoppingListModal;
+export default AddShoppingListItemModal;

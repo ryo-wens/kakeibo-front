@@ -1,16 +1,16 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
+import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import {
   deleteShoppingListItem,
   editShoppingListItem,
-} from '../../../../../reducks/shoppingList/operations';
+} from '../../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
-import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
-import { date } from '../../../../../lib/constant';
-import EditShoppingListModal from '../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/EditShoppingListModal/EditShoppingListModal';
+import { ShoppingListItem } from '../../../../../../reducks/shoppingList/types';
+import { date } from '../../../../../../lib/constant';
+import EditShoppingListItemModal from '../../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/EditShoppingListItemModal/EditShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 
-interface EditShoppingListModalContainerProps {
+interface EditShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
   currentYearMonth: string;
   initialExpectedPurchaseDate: Date;
@@ -49,7 +49,7 @@ const unInput = {
   unInputAmount: null,
 };
 
-const EditShoppingListModalContainer = (props: EditShoppingListModalContainerProps) => {
+const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalContainerProps) => {
   const dispatch = useDispatch();
   const signal = axios.CancelToken.source();
 
@@ -166,7 +166,7 @@ const EditShoppingListModalContainer = (props: EditShoppingListModalContainerPro
   };
 
   return (
-    <EditShoppingListModal
+    <EditShoppingListItemModal
       open={open}
       deleteForm={deleteForm}
       expectedPurchaseDate={props.expectedPurchaseDate}
@@ -222,4 +222,4 @@ const EditShoppingListModalContainer = (props: EditShoppingListModalContainerPro
   );
 };
 
-export default EditShoppingListModalContainer;
+export default EditShoppingListItemModalContainer;

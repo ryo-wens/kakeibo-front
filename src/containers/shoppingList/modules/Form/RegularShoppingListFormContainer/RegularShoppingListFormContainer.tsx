@@ -5,12 +5,13 @@ import {
   getIncomeCategories,
 } from '../../../../../reducks/categories/selectors';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import ShoppingListForm from '../../../../../components/shoppingList/modules/Form/ShoppingListForm/ShoppingListForm';
+import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
+import RegularShoppingListForm from '../../../../../components/shoppingList/modules/Form/RegularShoppingListForm/RegularShoppingListForm';
 
-interface ShoppingListFormContainerProps {
-  titleLabel: string;
-  buttonLabel: string;
+interface RegularShoppingListFormContainerProps {
   expectedPurchaseDate: Date | null;
+  cycleType: PurchaseCycleType;
+  cycle: string | null;
   purchase: string;
   shop: string | null;
   amount: string | null;
@@ -21,8 +22,10 @@ interface ShoppingListFormContainerProps {
   customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
+  handleDateChange: (expectedPurchaseDate: Date | null) => void;
+  handleCycleTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   selectCategory: (
     bigCategoryIndex: number,
@@ -31,15 +34,16 @@ interface ShoppingListFormContainerProps {
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  titleLabel: string;
+  buttonLabel: string;
   closeModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  regularShoppingListItemOperation: () => void;
   minDate: Date;
-  displayInputAmountMessage: boolean;
   openDeleteForm?: () => void;
 }
 
-const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
+const RegularShoppingListFormContainer = (props: RegularShoppingListFormContainerProps) => {
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
 
@@ -61,10 +65,12 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
   };
 
   return (
-    <ShoppingListForm
+    <RegularShoppingListForm
       titleLabel={props.titleLabel}
       buttonLabel={props.buttonLabel}
       expectedPurchaseDate={props.expectedPurchaseDate}
+      cycleType={props.cycleType}
+      cycle={props.cycle}
       purchase={props.purchase}
       shop={props.shop}
       amount={props.amount}
@@ -75,8 +81,10 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       customCategoryId={props.customCategoryId}
       transactionAutoAdd={props.transactionAutoAdd}
       associatedCategory={props.associatedCategory}
-      handlePurchaseChange={props.handlePurchaseChange}
       handleDateChange={props.handleDateChange}
+      handleCycleTypeChange={props.handleCycleTypeChange}
+      handleCycleChange={props.handleCycleChange}
+      handlePurchaseChange={props.handlePurchaseChange}
       handleAmountChange={props.handleAmountChange}
       selectCategory={props.selectCategory}
       handleShopChange={props.handleShopChange}
@@ -84,7 +92,7 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       closeModal={props.closeModal}
       unInput={props.unInput}
       minDate={props.minDate}
-      shoppingListItemOperation={props.shoppingListItemOperation}
+      regularShoppingListItemOperation={props.regularShoppingListItemOperation}
       bigCategoryRef={bigCategoryRef}
       mediumMenuRef={mediumMenuRef}
       incomeCategories={incomeCategories}
@@ -95,10 +103,9 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
       onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
-      displayInputAmountMessage={false}
       openDeleteForm={props.openDeleteForm}
     />
   );
 };
 
-export default ShoppingListFormContainer;
+export default RegularShoppingListFormContainer;

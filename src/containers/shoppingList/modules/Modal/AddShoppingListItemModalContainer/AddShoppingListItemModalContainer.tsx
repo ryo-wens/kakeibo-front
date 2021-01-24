@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { date } from '../../../../../lib/constant';
 import axios from 'axios';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import AddShoppingListModal from '../../../../../components/shoppingList/modules/Modal/AddShoppingListModal/AddShoppingListModal';
+import AddShoppingListItemModal from '../../../../../components/shoppingList/modules/Modal/AddShoppingListItemModal/AddShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 import { addShoppingListItem } from '../../../../../reducks/shoppingList/operations';
 
@@ -20,7 +20,7 @@ const initialState = {
   initialTransactionAutoAdd: false,
 };
 
-const AddShoppingListModalContainer = () => {
+const AddShoppingListItemModalContainer = () => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -128,7 +128,7 @@ const AddShoppingListModalContainer = () => {
     bigCategoryId === initialState.initialBigCategoryId;
 
   return (
-    <AddShoppingListModal
+    <AddShoppingListItemModal
       open={open}
       setOpen={setOpen}
       expectedPurchaseDate={expectedPurchaseDate}
@@ -172,4 +172,4 @@ const AddShoppingListModalContainer = () => {
   );
 };
 
-export default AddShoppingListModalContainer;
+export default AddShoppingListItemModalContainer;

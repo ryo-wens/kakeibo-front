@@ -4,9 +4,9 @@ import { date } from '../../../../../lib/constant';
 import { addRegularShoppingListItem } from '../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import AddRegularShoppingListModal from '../../../../../components/shoppingList/modules/Modal/AddRegularShoppingListModal/AddRegularShoppingListModal';
+import AddRegularShoppingListItemModal from '../../../../../components/shoppingList/modules/Modal/AddRegularShoppingListItemModal/AddRegularShoppingListItemModal';
 import {
-  AddRegularShoppingListModalInitialState,
+  AddRegularShoppingListItemModalInitialState,
   PurchaseCycleType,
 } from '../../../../../reducks/shoppingList/types';
 
@@ -15,7 +15,7 @@ interface AddRegularShoppingListModalContainerProps {
   selectedMonth: number;
 }
 
-const initialState: AddRegularShoppingListModalInitialState = {
+const initialState: AddRegularShoppingListItemModalInitialState = {
   initialExpectedPurchaseDate: date,
   initialCycleType: 'weekly',
   initialCycle: null,
@@ -31,7 +31,9 @@ const initialState: AddRegularShoppingListModalInitialState = {
   initialTransactionAutoAdd: false,
 };
 
-const AddRegularShoppingListModalContainer = (props: AddRegularShoppingListModalContainerProps) => {
+const AddRegularShoppingListItemModalContainer = (
+  props: AddRegularShoppingListModalContainerProps
+) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -165,9 +167,8 @@ const AddRegularShoppingListModalContainer = (props: AddRegularShoppingListModal
   };
 
   return (
-    <AddRegularShoppingListModal
+    <AddRegularShoppingListItemModal
       open={open}
-      setOpen={setOpen}
       expectedPurchaseDate={expectedPurchaseDate}
       cycleType={cycleType}
       cycle={cycle}
@@ -194,7 +195,7 @@ const AddRegularShoppingListModalContainer = (props: AddRegularShoppingListModal
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput()}
-      dispatchOperation={() =>
+      regularShoppingListItemOperation={() => {
         dispatch(
           addRegularShoppingListItem(
             date,
@@ -211,10 +212,11 @@ const AddRegularShoppingListModalContainer = (props: AddRegularShoppingListModal
             transactionAutoAdd,
             signal
           )
-        )
-      }
+        );
+        setOpen(false);
+      }}
     />
   );
 };
 
-export default AddRegularShoppingListModalContainer;
+export default AddRegularShoppingListItemModalContainer;

@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import { editShoppingListItem } from '../../../../../reducks/shoppingList/operations';
+import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
+import { editShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
-import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
-import { date } from '../../../../../lib/constant';
+import { ShoppingListItem } from '../../../../../../reducks/shoppingList/types';
+import { date } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
-import CheckedShoppingListItemModal from '../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal';
+import CheckedShoppingListItemModal from '../../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal';
 
 interface CheckedShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
@@ -120,9 +120,6 @@ const CheckedShoppingListItemModalContainer = (
       props.setAmount(event.target.value);
     }
   };
-
-  console.log(props.initialShop);
-  console.log(props.shop);
 
   const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') {
