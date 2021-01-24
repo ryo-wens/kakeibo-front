@@ -1,6 +1,6 @@
 import React from 'react';
 import { Groups } from '../../reducks/groups/types';
-import '../../assets/history/daily-history.scss';
+import '../../templates/history/daily/daily-history.scss';
 import { SearchTransactionsField, SearchResultTransactionsList } from './index';
 import './search-transaction.scss';
 

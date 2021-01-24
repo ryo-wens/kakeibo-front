@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
-import { getConflictMessage, getErrorMessage } from '../../reducks/users/selectors';
-import { conflictMessageAction, informErrorAction } from '../../reducks/users/actions';
-import { signUp } from '../../reducks/users/operations';
-import { ConflictMessage } from '../../reducks/users/types';
-import SignUp from '../../templates/signup/SignUp';
+import { getConflictMessage, getErrorMessage } from '../../../reducks/users/selectors';
+import { conflictMessageAction, informErrorAction } from '../../../reducks/users/actions';
+import { signUp } from '../../../reducks/users/operations';
+import { ConflictMessage } from '../../../reducks/users/types';
+import SignUp from '../../../templates/signup/SignUp';
 
 const initialState = {
   initialUserId: '',

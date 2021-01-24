@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { months, year, month } from '../../lib/constant';
-import '../../assets/history/history.scss';
+import '../../templates/history/history.scss';
 import CloseIcon from '@material-ui/icons/Close';
 import { nextSelectYears, prevSelectYears } from '../../lib/date';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';

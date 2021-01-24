@@ -1,35 +1,30 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getTransactions, getSearchTransactions } from '../reducks/transactions/selectors';
+import { useLocation, useParams } from 'react-router';
+import { getSearchTransactions, getTransactions } from '../../reducks/transactions/selectors';
 import {
   getGroupTransactions,
   getSearchGroupTransactions,
-} from '../reducks/groupTransactions/selectors';
-import { getApprovedGroups } from '../reducks/groups/selectors';
-import { noTransactionMessage, year, month } from '../lib/constant';
-import {
-  DailyHistoryBody,
-  GroupDailyHistoryBody,
-  SearchTransaction,
-} from '../components/history/index';
-import '../assets/history/daily-history.scss';
-import { useLocation, useParams } from 'react-router';
+} from '../../reducks/groupTransactions/selectors';
+import { getApprovedGroups } from '../../reducks/groups/selectors';
+import { month, year } from '../../lib/constant';
+import DailyHistory from '../../templates/history/daily/DailyHistory';
 
-interface DailyHistoryProps {
+interface DailyHistoryContainerProps {
   selectYear: number;
   selectMonth: number;
   openSearchField: boolean;
   setOpenSearchField: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const DailyHistory = (props: DailyHistoryProps) => {
+const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
   const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
-  const transactionsList = useSelector(getTransactions);
-  const searchTransactionsList = useSelector(getSearchTransactions);
-  const groupTransactionsList = useSelector(getGroupTransactions);
-  const groupSearchTransactionsList = useSelector(getSearchGroupTransactions);
   const approvedGroup = useSelector(getApprovedGroups);
+  const transactionsList = useSelector(getTransactions);
+  const groupTransactionsList = useSelector(getGroupTransactions);
+  const searchTransactionsList = useSelector(getSearchTransactions);
+  const groupSearchTransactionsList = useSelector(getSearchGroupTransactions);
   const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
   const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date(year, month, 0));
   const [memo, setMemo] = useState('');
@@ -108,70 +103,51 @@ const DailyHistory = (props: DailyHistoryProps) => {
   };
 
   return (
-    <>
-      <div className="daily-history daily-history__background">
-        <SearchTransaction
-          closeSearch={closeSearch}
-          openSearch={openSearch}
-          openSearchFiled={props.openSearchField}
-          pathName={pathName}
-          inputMemo={inputMemo}
-          inputShop={inputShop}
-          selectTransactionsType={selectTransactionType}
-          memo={memo}
-          shop={shop}
-          transactionType={transactionType}
-          category={category}
-          selectCategory={selectCategory}
-          changeCategory={changeCategory}
-          bigCategoryId={bigCategoryId}
-          selectStartDate={selectStartDate}
-          selectEndDate={selectEndDate}
-          highAmount={highAmount}
-          lowAmount={lowAmount}
-          selectStartDateChange={selectStartDateChange}
-          selectEndDateChange={selectEndDateChange}
-          inputHighAmount={inputHighAmount}
-          inputLowAmount={inputLowAmount}
-          groupId={Number(group_id)}
-          approvedGroup={approvedGroup}
-          paymentUserId={paymentUserId}
-          changePayer={changePayer}
-          changeSortItem={changeSortItem}
-          changeSortType={changeSortType}
-          sortItem={sortItem}
-          sortType={sortType}
-          limit={limit}
-          selectLimit={selectLimit}
-          submit={submit}
-          setSearchSubmit={setSubmit}
-        />
-        <div className="daily-history__spacer" />
-        {displayPersonalTransactions && (
-          <>
-            {!transactionsList.length && <h3>{noTransactionMessage}</h3>}
-            <DailyHistoryBody
-              selectYears={props.selectYear}
-              selectMonth={props.selectMonth}
-              transactionsList={transactionsList}
-              searchTransactionsList={searchTransactionsList}
-            />
-          </>
-        )}
-
-        {displayGroupTransactions && (
-          <>
-            {!groupTransactionsList.length && <h3>{noTransactionMessage}</h3>}
-            <GroupDailyHistoryBody
-              selectYears={props.selectYear}
-              selectMonth={props.selectMonth}
-              groupTransactionsList={groupTransactionsList}
-              groupSearchTransactionsList={groupSearchTransactionsList}
-            />
-          </>
-        )}
-      </div>
-    </>
+    <DailyHistory
+      group_id={Number(group_id)}
+      pathName={pathName}
+      submit={submit}
+      selectYear={props.selectYear}
+      selectMonth={props.selectMonth}
+      selectStartDate={selectStartDate}
+      selectEndDate={selectEndDate}
+      transactionType={transactionType}
+      category={category}
+      bigCategoryId={bigCategoryId}
+      lowAmount={lowAmount}
+      highAmount={highAmount}
+      paymentUserId={paymentUserId}
+      shop={shop}
+      memo={memo}
+      sortItem={sortItem}
+      sortType={sortType}
+      limit={limit}
+      openSearchField={props.openSearchField}
+      setOpenSearchField={props.setOpenSearchField}
+      displayPersonalTransactions={displayPersonalTransactions}
+      displayGroupTransactions={displayGroupTransactions}
+      approvedGroup={approvedGroup}
+      transactionsList={transactionsList}
+      groupTransactionsList={groupTransactionsList}
+      searchTransactionsList={searchTransactionsList}
+      groupSearchTransactionsList={groupSearchTransactionsList}
+      setSubmit={setSubmit}
+      openSearch={openSearch}
+      closeSearch={closeSearch}
+      selectStartDateChange={selectStartDateChange}
+      selectEndDateChange={selectEndDateChange}
+      selectTransactionType={selectTransactionType}
+      selectCategory={selectCategory}
+      changeCategory={changeCategory}
+      changePayer={changePayer}
+      inputLowAmount={inputLowAmount}
+      inputShop={inputShop}
+      inputMemo={inputMemo}
+      inputHighAmount={inputHighAmount}
+      changeSortItem={changeSortItem}
+      changeSortType={changeSortType}
+      selectLimit={selectLimit}
+    />
   );
 };
-export default DailyHistory;
+export default DailyHistoryContainer;
