@@ -13,7 +13,9 @@ interface SearchResultTransactionsListProps {
   closeModal: () => void;
 }
 const SearchResultTransactionsList = (props: SearchResultTransactionsListProps) => {
-  return (
+  return props.searchTransaction.length === 0 ? (
+    <div className="daily-history__message">検索ワードに一致する履歴はありませんでした。</div>
+  ) : (
     <table className="daily-history">
       <tbody>
         <tr>
@@ -44,7 +46,6 @@ const SearchResultTransactionsList = (props: SearchResultTransactionsListProps) 
             customCategory:
               transaction.custom_category_name !== null ? transaction.custom_category_name : '',
           };
-
           return (
             <tr key={transaction.id} className="daily-history__tr">
               <td className="daily-history__td" align="center">

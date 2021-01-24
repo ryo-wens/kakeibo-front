@@ -75,7 +75,8 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
   };
 
   const changeCategory = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setCategory(event.target.value as string);
+    setCategory(String(event.target.value));
+    setBigCategoryId(Number(event.target.value));
   };
 
   const selectTransactionType = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -92,10 +93,6 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
 
   const changeSortType = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSortType(event.target.value as string);
-  };
-
-  const selectCategory = (bigCategoryId: number) => {
-    setBigCategoryId(bigCategoryId);
   };
 
   const selectLimit = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -137,7 +134,6 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
       selectStartDateChange={selectStartDateChange}
       selectEndDateChange={selectEndDateChange}
       selectTransactionType={selectTransactionType}
-      selectCategory={selectCategory}
       changeCategory={changeCategory}
       changePayer={changePayer}
       inputLowAmount={inputLowAmount}

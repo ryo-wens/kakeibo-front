@@ -14,7 +14,9 @@ interface GroupSearchResultTransactionsListProps {
   payerUser: (payerId: string) => string;
 }
 const GroupSearchResultTransactionsList = (props: GroupSearchResultTransactionsListProps) => {
-  return (
+  return props.searchTransaction.length === 0 ? (
+    <div className="daily-history__message">検索ワードに一致する履歴はありませんでした。</div>
+  ) : (
     <table className="daily-history">
       <tbody>
         <tr>
