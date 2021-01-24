@@ -1,6 +1,10 @@
 @import "../../../../../../assets/variable";
 
 .checked-shopping-list-item-modal {
+  width: 450px;
+  margin: 20px auto auto auto;
+  background-color: white;
+  outline: none;
 
   &__check {
     display: inline-block;

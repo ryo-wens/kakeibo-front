@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import './shopping-list-item-component.scss';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
-import EditShoppingListModal from './EditShoppingListModal/EditShoppingListModal';
 import { dateStringToDate } from '../../../../../lib/date';
-import CheckedShoppingListItemModal from './CheckedShoppingListItemModal/CheckedShoppingListItemModal';
 import RelatedTransactionDataButton from './RelatedTransactionDataButton/RelatedTransactionDataButton';
+import CheckedShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/CheckedShoppingListItemModalContainer/CheckedShoppingListItemModalContainer';
+import EditShoppingListModalContainer from '../../../../../containers/shoppingList/modules/ListItem/EditShoppingListModalContainer/EditShoppingListModalContainer';
 
 interface ShoppingListItemComponentProps {
   listItem: ShoppingListItem;
@@ -50,7 +50,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
   return (
     <div className="shopping-list-item-component">
       <div className="shopping-list-item-component__check-box">
-        <CheckedShoppingListItemModal
+        <CheckedShoppingListItemModalContainer
           listItem={props.listItem}
           currentYearMonth={props.currentYearMonth}
           initialExpectedPurchaseDate={initialExpectedPurchaseDate}
@@ -97,7 +97,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           </div>
 
           <div className="shopping-list-item-component__edit-icon">
-            <EditShoppingListModal
+            <EditShoppingListModalContainer
               listItem={props.listItem}
               currentYearMonth={props.currentYearMonth}
               initialExpectedPurchaseDate={initialExpectedPurchaseDate}

@@ -3,19 +3,11 @@
 
 .regular-shopping-list-item-component {
 
-  &__date {
-    color: $task-main_color;
-    font-size: 1.0rem;
-    font-weight: bold;
-    margin: 20px 0;
-  }
-
   &__content {
     display: flex;
     width: 100%;
     align-items: center;
     color: #253b66;
-    margin-bottom: 20px;
   }
 
   &__purchase {
