@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import ShoppingListByDate from '../../../../../components/shoppingList/uikit/List/ShoppingListByDate/ShoppingListByDate';
+import ShoppingListByDate from '../../../../../components/shoppingList/modules/List/ShoppingListByDate/ShoppingListByDate';
 import { useDispatch, useSelector } from 'react-redux';
 import { getMonthlyShoppingList } from '../../../../../reducks/shoppingList/selectors';
 import axios from 'axios';

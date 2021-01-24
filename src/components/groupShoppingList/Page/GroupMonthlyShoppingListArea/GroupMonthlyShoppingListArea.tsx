@@ -1,5 +1,5 @@
 import React from 'react';
-import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
+import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
 import '../../../shoppingList/Page/MonthlyShoppingListArea/monthly-shopping-list-area.scss';

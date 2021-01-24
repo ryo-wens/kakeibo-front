@@ -20,7 +20,7 @@ import { fetchMonthTodoList } from '../../../../reducks/todoList/operations';
 import InputYears from '../../../uikit/InputYears';
 import MonthlyTodoList from './MonthlyTodoList/MonthlyTodoList';
 import './monthly-todo-area.scss';
-import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
+import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 
 interface MonthlyTodoAreaProps {
   selectedYear: number;

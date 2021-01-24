@@ -1,8 +1,8 @@
 import React from 'react';
-import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
+import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import './monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
-import AddShoppingListModalContainer from '../../../../containers/shoppingList/uikit/Modal/AddShoppingListModalContainer';
+import AddShoppingListModalContainer from '../../../../containers/shoppingList/modules/Modal/AddShoppingListModalContainer/AddShoppingListModalContainer';
 import MonthlyShoppingListByDateContainer from '../../../../containers/shoppingList/Page/MonthlyShoppingListArea/MonthlyShoppingListByDateContainer/MonthlyShoppingListByDateContainer';
 import MonthlyShoppingListByCategoriesContainer from '../../../../containers/shoppingList/Page/MonthlyShoppingListArea/MonthlyShoppingListByCategoriesContainer/MonthlyShoppingListByCategoriesContainer';
 

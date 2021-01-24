@@ -21,7 +21,7 @@ import { useLocation, useParams } from 'react-router';
 import { date } from '../../../../lib/constant';
 import TodayTodoList from './TodayTodoList/TodayTodoList';
 import { AddTodo } from '../../index';
-import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
+import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 
 interface TodayTodoAreaProps {
   editing: boolean;
