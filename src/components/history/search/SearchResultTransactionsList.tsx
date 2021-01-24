@@ -8,12 +8,13 @@ import '../../../templates/history/daily/daily-history.scss';
 interface SearchResultTransactionsListProps {
   open: boolean;
   openId: number | undefined;
+  searchResults: boolean;
   searchTransaction: TransactionsList;
-  openModal: (transactionId: number) => void;
   closeModal: () => void;
+  openModal: (transactionId: number) => void;
 }
 const SearchResultTransactionsList = (props: SearchResultTransactionsListProps) => {
-  return props.searchTransaction.length === 0 ? (
+  return props.searchResults ? (
     <div className="daily-history__message">検索ワードに一致する履歴はありませんでした。</div>
   ) : (
     <table className="daily-history">

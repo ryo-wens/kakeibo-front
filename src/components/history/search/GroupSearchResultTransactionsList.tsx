@@ -8,13 +8,14 @@ import '../../../templates/history/daily/daily-history.scss';
 interface GroupSearchResultTransactionsListProps {
   open: boolean;
   openId: number | undefined;
+  searchResults: boolean;
   searchTransaction: GroupTransactionsList;
   openModal: (transactionId: number) => void;
   closeModal: () => void;
   payerUser: (payerId: string) => string;
 }
 const GroupSearchResultTransactionsList = (props: GroupSearchResultTransactionsListProps) => {
-  return props.searchTransaction.length === 0 ? (
+  return props.searchResults ? (
     <div className="daily-history__message">検索ワードに一致する履歴はありませんでした。</div>
   ) : (
     <table className="daily-history">
