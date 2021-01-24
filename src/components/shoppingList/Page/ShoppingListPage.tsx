@@ -6,7 +6,7 @@ import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/P
 import ExpiredShoppingListAreaContainer from '../../../containers/shoppingList/Page/ExpiredShoppingListArea/ExpiredShoppingListAreaContainer';
 import RegularShoppingListAreaContainer from '../../../containers/shoppingList/Page/RegularShoppingListArea/RegularShoppingListAreaContainer';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
-import AddRegularShoppingListModalContainer from '../../../containers/shoppingList/modules/Modal/AddRegularShoppingListModalContainer/AddRegularShoppingListModalContainer';
+import AddRegularShoppingListItemModalContainer from '../../../containers/shoppingList/modules/Modal/AddRegularShoppingListItemModalContainer/AddRegularShoppingListItemModalContainer';
 
 interface ShoppingListPageProps {
   selectedYear: number;
@@ -42,7 +42,7 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
-          <AddRegularShoppingListModalContainer
+          <AddRegularShoppingListItemModalContainer
             selectedYear={props.selectedYear}
             selectedMonth={props.selectedMonth}
           />

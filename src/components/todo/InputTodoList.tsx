@@ -49,8 +49,6 @@ const InputTodoList = React.forwardRef(
     const pathName = useLocation().pathname.split('/').slice(-1)[0];
     const { group_id } = useParams();
 
-    console.log(pathName);
-
     useEffect(() => {
       document.addEventListener('click', props.onClickCloseInputTodoList);
       return () => {

@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
-import '../../../../shoppingList/modules/Modal/AddShoppingListModal/add-shopping-list-modal.scss';
+import '../../../../shoppingList/modules/Modal/AddShoppingListItemModal/add-shopping-list-item-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
 import GroupShoppingListForm from '../../Form/GroupShoppingListForm/GroupShoppingListForm';

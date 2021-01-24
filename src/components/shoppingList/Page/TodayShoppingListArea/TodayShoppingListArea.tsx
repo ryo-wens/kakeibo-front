@@ -1,7 +1,7 @@
 import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import './today-shopping-list-area.scss';
-import AddShoppingListModalContainer from '../../../../containers/shoppingList/modules/Modal/AddShoppingListModalContainer/AddShoppingListModalContainer';
+import AddShoppingListItemModalContainer from '../../../../containers/shoppingList/modules/Modal/AddShoppingListItemModalContainer/AddShoppingListItemModalContainer';
 import TodayShoppingListByDateContainer from '../../../../containers/shoppingList/Page/TodayShoppingListArea/TodayShoppingListByDateContainer/TodayShoppingListByDateContainer';
 import TodayShoppingListByCategoriesContainer from '../../../../containers/shoppingList/Page/TodayShoppingListArea/TodayShoppingListByCategoriesContainer/TodayShoppingListByCategoriesContainer';
 
@@ -13,7 +13,7 @@ const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
   return (
     <>
       <div className="today-shopping-list-area__add-button">
-        <AddShoppingListModalContainer />
+        <AddShoppingListItemModalContainer />
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">

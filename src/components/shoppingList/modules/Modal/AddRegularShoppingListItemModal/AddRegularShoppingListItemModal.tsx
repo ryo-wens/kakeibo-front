@@ -1,26 +1,14 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import AddIcon from '@material-ui/icons/Add';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
-import RegularShoppingListForm from '../../Form/RegularShoppingListForm/RegularShoppingListForm';
-import './add-regular-shopping-list-modal.scss';
+import './add-regular-shopping-list-item-modal.scss';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      width: 550,
-      margin: '20px auto auto auto',
-      backgroundColor: theme.palette.background.paper,
-    },
-  })
-);
+import RegularShoppingListFormContainer from '../../../../../containers/shoppingList/modules/Form/RegularShoppingListFormContainer/RegularShoppingListFormContainer';
 
 interface AddRegularShoppingListModalProps {
   open: boolean;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   expectedPurchaseDate: Date | null;
   cycleType: PurchaseCycleType;
   cycle: string | null;
@@ -51,15 +39,13 @@ interface AddRegularShoppingListModalProps {
   openModal: () => void;
   closeModal: () => void;
   unInput: boolean;
-  dispatchOperation: () => void;
+  regularShoppingListItemOperation: () => void;
 }
 
-const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) => {
-  const classes = useStyles();
-
+const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps) => {
   const body = (
-    <div className={classes.paper}>
-      <RegularShoppingListForm
+    <div className="add-regular-shopping-list-item-modal">
+      <RegularShoppingListFormContainer
         expectedPurchaseDate={props.expectedPurchaseDate}
         cycleType={props.cycleType}
         cycle={props.cycle}
@@ -84,10 +70,9 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
         titleLabel={'定期買い物リストに追加'}
         buttonLabel={'追加'}
         closeModal={props.closeModal}
-        setOpen={props.setOpen}
         unInput={props.unInput}
         minDate={date}
-        dispatchOperation={props.dispatchOperation}
+        regularShoppingListItemOperation={props.regularShoppingListItemOperation}
       />
     </div>
   );
@@ -95,7 +80,7 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
   return (
     <>
       <button
-        className="add-regular-shopping-list-modal__button"
+        className="add-regular-shopping-list-item-modal__button"
         disabled={false}
         onClick={() => props.openModal()}
       >
@@ -114,4 +99,4 @@ const AddRegularShoppingListModal = (props: AddRegularShoppingListModalProps) =>
   );
 };
 
-export default AddRegularShoppingListModal;
+export default AddRegularShoppingListItemModal;

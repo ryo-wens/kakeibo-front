@@ -5,7 +5,7 @@ import { AssociatedCategory, Category } from '../../../../../../reducks/categori
 import axios, { CancelTokenSource } from 'axios';
 import ShoppingListDeleteForm from '../../../../../shoppingList/modules/Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import EditIcon from '@material-ui/icons/Edit';
-import '../../../../../shoppingList/modules/Modal/EditRegularShoppingListModal/edit-regular-shopping-list-modal.scss';
+import '../../../../../shoppingList/modules/ListItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/edit-regular-shopping-list-item-modal.scss';
 import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
 import { GroupRegularShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';

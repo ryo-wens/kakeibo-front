@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import Modal from '@material-ui/core/Modal';
 import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import '../../../../../shoppingList/modules/ListItem/ShoppingListItemComponent/EditShoppingListModal/edit-shopping-list-modal.scss';
+import '../../../../../shoppingList/modules/ListItem/ShoppingListItemComponent/EditShoppingListItemModal/edit-shopping-list-item-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import axios from 'axios';
 import EditIcon from '@material-ui/icons/Edit';

@@ -1,0 +1,14 @@
+@import "../../../../../../assets/variable";
+@import "../../../../../../assets/mixin/icon-btn";
+
+.edit-shopping-list-item-modal {
+  width: 450px;
+  margin: 20px auto auto auto;
+  background-color: white;
+  outline: none;
+
+  &__edit-icon {
+    @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
+    padding: 3px;
+  }
+}

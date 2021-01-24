@@ -1,6 +1,11 @@
 @import "../../../../../assets/variable";
 
-.add-regular-shopping-list-modal {
+.add-regular-shopping-list-item-modal {
+  width: 550px;
+  margin: 20px auto auto auto;
+  background-color: white;
+  outline: none;
+
   &__button {
     display: flex;
     align-items: center;

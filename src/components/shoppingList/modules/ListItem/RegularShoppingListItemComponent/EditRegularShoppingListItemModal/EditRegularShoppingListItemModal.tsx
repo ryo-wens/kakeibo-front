@@ -1,15 +1,18 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import './edit-shopping-list-modal.scss';
-import EditIcon from '@material-ui/icons/Edit';
-import ShoppingListDeleteForm from '../../../Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
-import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/Form/ShoppingListFormContainer/ShoppingListFormContainer';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
+import ShoppingListDeleteForm from '../../../Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
+import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
+import EditIcon from '@material-ui/icons/Edit';
+import './edit-regular-shopping-list-item-modal.scss';
+import RegularShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/Form/RegularShoppingListFormContainer/RegularShoppingListFormContainer';
 
-interface EditShoppingListModalProps {
+interface EditRegularShoppingListModalProps {
   open: boolean;
   deleteForm: boolean;
   expectedPurchaseDate: Date | null;
+  cycleType: PurchaseCycleType;
+  cycle: string | null;
   purchase: string;
   shop: string | null;
   amount: string | null;
@@ -20,8 +23,10 @@ interface EditShoppingListModalProps {
   customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
-  handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
+  handleCycleTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   selectCategory: (
     bigCategoryIndex: number,
@@ -36,26 +41,28 @@ interface EditShoppingListModalProps {
   closeDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  regularShoppingListItemOperation: () => void;
   deleteOperation: () => void;
 }
 
-const EditShoppingListModal = (props: EditShoppingListModalProps) => {
+const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalProps) => {
   const body = (
-    <div className="edit-shopping-list-modal">
+    <div className="edit-regular-shopping-list-item-modal">
       {props.deleteForm ? (
         <ShoppingListDeleteForm
-          titleLabel={'買い物リストアイテムを削除'}
+          titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
           closeModal={props.closeModal}
           closeDeleteForm={props.closeDeleteForm}
           deleteOperation={props.deleteOperation}
         />
       ) : (
-        <ShoppingListFormContainer
-          titleLabel={'買い物リストアイテムを編集'}
+        <RegularShoppingListFormContainer
+          titleLabel={'定期買い物リストアイテムを削除'}
           buttonLabel={'保存'}
           expectedPurchaseDate={props.expectedPurchaseDate}
+          cycleType={props.cycleType}
+          cycle={props.cycle}
           purchase={props.purchase}
           shop={props.shop}
           amount={props.amount}
@@ -66,8 +73,10 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
           customCategoryId={props.customCategoryId}
           transactionAutoAdd={props.transactionAutoAdd}
           associatedCategory={props.associatedCategory}
-          handlePurchaseChange={props.handlePurchaseChange}
           handleDateChange={props.handleDateChange}
+          handleCycleTypeChange={props.handleCycleTypeChange}
+          handleCycleChange={props.handleCycleChange}
+          handlePurchaseChange={props.handlePurchaseChange}
           handleAmountChange={props.handleAmountChange}
           selectCategory={props.selectCategory}
           handleShopChange={props.handleShopChange}
@@ -75,8 +84,7 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
           closeModal={props.closeModal}
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
-          shoppingListItemOperation={props.shoppingListItemOperation}
-          displayInputAmountMessage={false}
+          regularShoppingListItemOperation={props.regularShoppingListItemOperation}
           openDeleteForm={props.openDeleteForm}
         />
       )}
@@ -85,7 +93,10 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
 
   return (
     <>
-      <EditIcon className="edit-shopping-list-modal__edit-icon" onClick={() => props.openModal()} />
+      <EditIcon
+        className="edit-regular-shopping-list-item-modal__edit-icon"
+        onClick={() => props.openModal()}
+      />
       <Modal
         open={props.open}
         onClose={props.closeModal}
@@ -98,4 +109,4 @@ const EditShoppingListModal = (props: EditShoppingListModalProps) => {
   );
 };
 
-export default EditShoppingListModal;
+export default EditRegularShoppingListItemModal;

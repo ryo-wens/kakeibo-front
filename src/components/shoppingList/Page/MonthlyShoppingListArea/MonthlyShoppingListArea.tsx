@@ -2,7 +2,7 @@ import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import './monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
-import AddShoppingListModalContainer from '../../../../containers/shoppingList/modules/Modal/AddShoppingListModalContainer/AddShoppingListModalContainer';
+import AddShoppingListItemModalContainer from '../../../../containers/shoppingList/modules/Modal/AddShoppingListItemModalContainer/AddShoppingListItemModalContainer';
 import MonthlyShoppingListByDateContainer from '../../../../containers/shoppingList/Page/MonthlyShoppingListArea/MonthlyShoppingListByDateContainer/MonthlyShoppingListByDateContainer';
 import MonthlyShoppingListByCategoriesContainer from '../../../../containers/shoppingList/Page/MonthlyShoppingListArea/MonthlyShoppingListByCategoriesContainer/MonthlyShoppingListByCategoriesContainer';
 
@@ -17,7 +17,7 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
   return (
     <>
       <div className="monthly-shopping-list-area__add-button">
-        <AddShoppingListModalContainer />
+        <AddShoppingListItemModalContainer />
       </div>
       <div className="monthly-shopping-list-area__switch-item">
         <div className="monthly-shopping-list-area__switch-item--width">
