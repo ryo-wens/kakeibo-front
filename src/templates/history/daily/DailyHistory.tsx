@@ -98,20 +98,14 @@ const DailyHistory = (props: DailyHistoryProps) => {
         {props.displayPersonalTransactions && (
           <>
             {!props.transactionsList.length && <h3>{noTransactionMessage}</h3>}
-            <DailyHistoryBodyContainer
-              transactionsList={props.transactionsList}
-              searchTransactionsList={props.searchTransactionsList}
-            />
+            <DailyHistoryBodyContainer transactionsList={props.transactionsList} />
           </>
         )}
 
         {props.displayGroupTransactions && (
           <>
             {!props.groupTransactionsList.length && <h3>{noTransactionMessage}</h3>}
-            <GroupDailyHistoryBodyContainer
-              groupTransactionsList={props.groupTransactionsList}
-              groupSearchTransactionsList={props.groupSearchTransactionsList}
-            />
+            <GroupDailyHistoryBodyContainer groupTransactionsList={props.groupTransactionsList} />
           </>
         )}
       </div>

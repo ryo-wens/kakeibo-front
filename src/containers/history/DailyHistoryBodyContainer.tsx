@@ -4,7 +4,6 @@ import DailyHistoryBody from '../../components/history/DailyHistoryBody';
 
 interface DailyHistoryBodyContainerProps {
   transactionsList: TransactionsList;
-  searchTransactionsList: TransactionsList;
 }
 
 const DailyHistoryBodyContainer = (props: DailyHistoryBodyContainerProps) => {
@@ -26,7 +25,6 @@ const DailyHistoryBodyContainer = (props: DailyHistoryBodyContainerProps) => {
       open={open}
       openId={openId}
       transactionsList={props.transactionsList}
-      searchTransactionsList={props.searchTransactionsList}
       openModal={openModal}
       closeModal={closeModal}
     />

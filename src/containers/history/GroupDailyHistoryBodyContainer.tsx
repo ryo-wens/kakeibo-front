@@ -7,7 +7,6 @@ import GroupDailyHistoryBody from '../../components/history/GroupDailyHistoryBod
 
 interface GroupDailyHistoryBodyContainerProps {
   groupTransactionsList: GroupTransactionsList;
-  groupSearchTransactionsList: GroupTransactionsList;
 }
 
 const GroupDailyHistoryBodyContainer = (props: GroupDailyHistoryBodyContainerProps) => {
@@ -27,17 +26,19 @@ const GroupDailyHistoryBodyContainer = (props: GroupDailyHistoryBodyContainerPro
   };
 
   const payerUser = (payerId: string) => {
-    let payer = '';
+    const payer = {
+      user: '',
+    };
 
     for (const group of approvedGroup) {
       for (const user of group.approved_users_list) {
         if (user.user_id === payerId) {
-          payer = user.user_name;
+          payer.user = user.user_name;
         }
       }
     }
 
-    return payer;
+    return payer.user;
   };
 
   return (
@@ -46,7 +47,6 @@ const GroupDailyHistoryBodyContainer = (props: GroupDailyHistoryBodyContainerPro
       open={open}
       openId={openId}
       groupTransactionsList={props.groupTransactionsList}
-      groupSearchTransactionsList={props.groupSearchTransactionsList}
       openModal={openModal}
       closeModal={closeModal}
       payerUser={payerUser}
