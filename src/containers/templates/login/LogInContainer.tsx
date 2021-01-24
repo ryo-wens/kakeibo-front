@@ -1,11 +1,11 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { push } from 'connected-react-router';
-import { getErrorMessage } from '../../reducks/users/selectors';
-import { informErrorAction } from '../../reducks/users/actions';
-import { logIn } from '../../reducks/users/operations';
-import { isValidEmailFormat } from '../../lib/validation';
-import LogIn from '../../templates/login/LogIn';
+import { getErrorMessage } from '../../../reducks/users/selectors';
+import { informErrorAction } from '../../../reducks/users/actions';
+import { logIn } from '../../../reducks/users/operations';
+import { isValidEmailFormat } from '../../../lib/validation';
+import LogIn from '../../../templates/login/LogIn';
 
 const initialState = {
   initialEmail: '',

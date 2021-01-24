@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { prevSelectMonth, nextSelectMonth } from '../../lib/date';
 import { months } from '../../lib/constant';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
-import '../../assets/history/history.scss';
+import '../../templates/history/history.scss';
 import CloseIcon from '@material-ui/icons/Close';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';

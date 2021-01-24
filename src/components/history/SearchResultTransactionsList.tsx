@@ -7,7 +7,7 @@ import { TransactionsList } from '../../reducks/transactions/types';
 import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
-import '../../assets/history/daily-history.scss';
+import '../../templates/history/daily/daily-history.scss';
 
 const SearchResultTransactionsList = () => {
   const pathName = useLocation().pathname.split('/')[1];

@@ -1,144 +1,108 @@
-import React, { useState } from 'react';
-import { useSelector } from 'react-redux';
+import React from 'react';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
-import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { getUserId } from '../../reducks/users/selectors';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
-import '../../assets/history/daily-history.scss';
+import '../../templates/history/daily/daily-history.scss';
 
 interface GroupDailyHistoryBodyProps {
+  userId: string;
+  open: boolean;
+  openId: number | undefined;
   groupTransactionsList: GroupTransactionsList;
-  groupSearchTransactionsList: GroupTransactionsList;
-  selectYears: number;
-  selectMonth: number;
+  openModal: (transactionId: number) => void;
+  closeModal: () => void;
+  payerUser: (payerId: string) => string;
 }
+
 const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
-  const approvedGroup = useSelector(getApprovedGroups);
-  const userId = useSelector(getUserId);
-  const [open, setOpen] = useState<boolean>(false);
-  const [openId, setOpnId] = useState<number | undefined>(undefined);
-
-  const handleOpen = (transactionId: number) => {
-    setOpen(true);
-    setOpnId(transactionId);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setOpnId(undefined);
-  };
-
-  const payerUser = (payerId: string) => {
-    let payer = '';
-
-    for (const group of approvedGroup) {
-      for (const user of group.approved_users_list) {
-        if (user.user_id === payerId) {
-          payer = user.user_name;
-        }
-      }
-    }
-
-    return payer;
-  };
-
   return (
     <>
-      <table className="daily-history">
-        <tbody>
-          <tr>
-            <td className="daily-history__th" align="center">
-              編集
-            </td>
-            <td className="daily-history__th" align="center">
-              日付
-            </td>
-            <td className="daily-history__th" align="center">
-              カテゴリ
-            </td>
-            <td className="daily-history__th" align="center">
-              金額
-            </td>
-            <td className="daily-history__th" align="center">
-              支払人
-            </td>
-            <td className="daily-history__th" align="center">
-              お店
-            </td>
-            <td className="daily-history__th" align="center">
-              メモ
-            </td>
-          </tr>
-          {props.groupTransactionsList.map((groupTransaction) => {
-            const {
-              id,
-              transaction_type,
-              transaction_date,
-              big_category_id,
-              medium_category_id,
-              custom_category_id,
-              big_category_name,
-              medium_category_name,
-              custom_category_name,
-              amount,
-              payment_user_id,
-              shop,
-              memo,
-            } = groupTransaction;
+      {props.groupTransactionsList.length !== 0 && (
+        <table className="daily-history">
+          <tbody>
+            <tr>
+              <td className="daily-history__th" align="center">
+                編集
+              </td>
+              <td className="daily-history__th" align="center">
+                日付
+              </td>
+              <td className="daily-history__th" align="center">
+                カテゴリ
+              </td>
+              <td className="daily-history__th" align="center">
+                金額
+              </td>
+              <td className="daily-history__th" align="center">
+                支払人
+              </td>
+              <td className="daily-history__th" align="center">
+                お店
+              </td>
+              <td className="daily-history__th" align="center">
+                メモ
+              </td>
+            </tr>
+            {props.groupTransactionsList.map((groupTransaction) => {
+              const categoryName = {
+                bigCategory: groupTransaction.big_category_name,
+                mediumCategory:
+                  groupTransaction.medium_category_name !== null
+                    ? groupTransaction.medium_category_name
+                    : '',
+                customCategory:
+                  groupTransaction.custom_category_name !== null
+                    ? groupTransaction.custom_category_name
+                    : '',
+              };
 
-            const categoryName = {
-              bigCategory: big_category_name,
-              mediumCategory: medium_category_name !== null ? medium_category_name : '',
-              customCategory: custom_category_name !== null ? custom_category_name : '',
-            };
-
-            return (
-              <tr key={id} className="daily-history__tr">
-                <td className="daily-history__td" align="center">
-                  <IconButton onClick={() => handleOpen(id)}>
-                    <CreateIcon color="primary" />
-                  </IconButton>
-                  <EditTransactionModalContainer
-                    id={id}
-                    onClose={handleClose}
-                    open={openId === id && open}
-                    amount={amount}
-                    memo={memo !== null ? memo : ''}
-                    shop={shop !== null ? shop : ''}
-                    categoryName={categoryName}
-                    transactionDate={transaction_date}
-                    transactionsType={transaction_type}
-                    paymentUserId={userId}
-                    bigCategoryId={big_category_id}
-                    mediumCategoryId={medium_category_id}
-                    customCategoryId={custom_category_id}
-                  />
-                </td>
-                <td className="daily-history__td" align="center">
-                  {transaction_date}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {medium_category_name || custom_category_name}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {amount}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {payerUser(payment_user_id)}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {shop}
-                </td>
-                <td className="daily-history__td" align="center">
-                  {memo}
-                </td>
-              </tr>
-            );
-          })}
-        </tbody>
-      </table>
+              return (
+                <tr key={groupTransaction.id} className="daily-history__tr">
+                  <td className="daily-history__td" align="center">
+                    <IconButton onClick={() => props.openModal(groupTransaction.id)}>
+                      <CreateIcon color="primary" />
+                    </IconButton>
+                    <EditTransactionModalContainer
+                      id={groupTransaction.id}
+                      onClose={props.closeModal}
+                      open={props.openId === groupTransaction.id && props.open}
+                      amount={groupTransaction.amount}
+                      memo={groupTransaction.memo !== null ? groupTransaction.memo : ''}
+                      shop={groupTransaction.shop !== null ? groupTransaction.shop : ''}
+                      categoryName={categoryName}
+                      transactionDate={groupTransaction.transaction_date}
+                      transactionsType={groupTransaction.transaction_type}
+                      paymentUserId={props.userId}
+                      bigCategoryId={groupTransaction.big_category_id}
+                      mediumCategoryId={groupTransaction.medium_category_id}
+                      customCategoryId={groupTransaction.custom_category_id}
+                    />
+                  </td>
+                  <td className="daily-history__td" align="center">
+                    {groupTransaction.transaction_date}
+                  </td>
+                  <td className="daily-history__td" align="center">
+                    {groupTransaction.medium_category_name || groupTransaction.custom_category_name}
+                  </td>
+                  <td className="daily-history__td" align="center">
+                    {groupTransaction.amount}
+                  </td>
+                  <td className="daily-history__td" align="center">
+                    {props.payerUser(groupTransaction.payment_user_id)}
+                  </td>
+                  <td className="daily-history__td" align="center">
+                    {groupTransaction.shop}
+                  </td>
+                  <td className="daily-history__td" align="center">
+                    {groupTransaction.memo}
+                  </td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      )}
     </>
   );
 };

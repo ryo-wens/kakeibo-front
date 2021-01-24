@@ -7,13 +7,13 @@ import {
   YearlyBudgets,
   CustomBudgets,
   EditStandardBudgets,
-  History,
   Task,
   YearlyAccount,
   InitialScreen,
 } from './templates';
-import SignUpContainer from './containers/signup/SignUpContainer';
-import LogInContainer from './containers/login/LogInContainer';
+import SignUpContainer from './containers/templates/signup/SignUpContainer';
+import LogInContainer from './containers/templates/login/LogInContainer';
+import HistoryContainer from './containers/templates/history/HistoryContainer';
 
 const Router = (): JSX.Element => {
   return (
@@ -22,16 +22,16 @@ const Router = (): JSX.Element => {
       <Route exact path={'/signup'} component={SignUpContainer} />
       <Route exact path={'/login'} component={LogInContainer} />
       <Route exact path={'/home'} component={Home} />
+      <Route exact path={'/daily/history'} component={HistoryContainer} />
+      <Route exact path={'/weekly/history'} component={HistoryContainer} />
       <Route exact path={'/custom/budgets/:year/:month'} component={CustomBudgets} />
-      <Route exact path={'/daily/history'} component={History} />
-      <Route exact path={'/weekly/history'} component={History} />
       <Route exact path={'/standard/budgets'} component={StandardBudgets} />
       <Route exact path={'/standard/budgets/:year/:month'} component={EditStandardBudgets} />
       <Route exact path={'/todo'} component={Todo} />
       <Route exact path={'/yearly/budgets'} component={YearlyBudgets} />
       <Route exact path={'/group/:group_id/home'} component={Home} />
-      <Route exact path={'/group/:group_id/daily/history'} component={History} />
-      <Route exact path={'/group/:group_id/weekly/history'} component={History} />
+      <Route exact path={'/group/:group_id/daily/history'} component={HistoryContainer} />
+      <Route exact path={'/group/:group_id/weekly/history'} component={HistoryContainer} />
       <Route exact path={'/group/:group_id/accounting'} component={YearlyAccount} />
       <Route exact path={'/group/:group_id/standard/budgets'} component={StandardBudgets} />
       <Route
