@@ -1,90 +1,31 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router';
-import axios from 'axios';
-import { SelectYears } from '../lib/date';
-import { year, month } from '../lib/constant';
-import { Header } from '../components/header';
-import { MonthlyHistory } from '../components/home';
+import React from 'react';
+import { PieChartDataList } from '../reducks/transactions/types';
+import { CurrentMonthBudgetStatusList } from '../reducks/budgets/types';
+import { CurrentMonthBudgetGroupStatusList } from '../reducks/groupBudgets/types';
 import InputFormContainer from '../containers/home/transactionInputForm/InputFormContainer';
 import RecentInputContainer from '../containers/home/recentTransaction/RecentInputContainer';
-import { HistoryPieChart, HistoryBarChart } from '../components/home/graph';
-import { fetchGroups } from '../reducks/groups/operations';
-import { fetchGroupTransactionsList } from '../reducks/groupTransactions/operations';
-import { getSortCategoryTransactions, getTotalExpense } from '../reducks/transactions/selectors';
-import {
-  getSortCategoryGroupTransactions,
-  getTotalGroupExpense,
-} from '../reducks/groupTransactions/selectors';
-import { getCurrentMonthBudgets, getAmountPerDay } from '../reducks/budgets/selectors';
-import {
-  getCurrentMonthGroupBudget,
-  getGroupAmountPerDay,
-} from '../reducks/groupBudgets/selectors';
-import { fetchYearlyBudgets } from '../reducks/budgets/operations';
-import { fetchGroupYearlyBudgets } from '../reducks/groupBudgets/operations';
 import CurrentSchedule from '../components/home/CurrentSchedule/CurrentSchedule';
+import HistoryPieChartContainer from '../containers/home/graph/HistoryPieChartContainer';
+import HistoryBarChartContainer from '../containers/home/graph/HistoryBarChartContainer';
+import { MonthlyHistory } from '../components/home';
+import { Header } from '../components/header';
+import { year, month } from '../lib/constant';
 
-const Home = () => {
-  const dispatch = useDispatch();
-  const pathName = useLocation().pathname.split('/')[1];
-  const { group_id } = useParams();
-  const sortCategoryTransactionsList = useSelector(getSortCategoryTransactions);
-  const thisMonthTotalExpense = useSelector(getTotalExpense);
-  const sortCategoryGroupTransactionsList = useSelector(getSortCategoryGroupTransactions);
-  const thisMonthGroupTotalExpense = useSelector(getTotalGroupExpense);
-  const currentMonthBudgetStatus = useSelector(getCurrentMonthBudgets);
-  const currentMonthGroupBudgetStatus = useSelector(getCurrentMonthGroupBudget);
-  const amountPerDay = useSelector(getAmountPerDay);
-  const groupAmountPerDay = useSelector(getGroupAmountPerDay);
-  const [todoEditing, setTodoEditing] = useState(false);
+interface HomeProps {
+  pathName: string;
+  todoEditing: boolean;
+  thisMonthTotalExpense: number;
+  sortCategoryTransactionsList: PieChartDataList;
+  sortCategoryGroupTransactionsList: PieChartDataList;
+  thisMonthGroupTotalExpense: number;
+  currentMonthBudgetStatus: CurrentMonthBudgetStatusList;
+  currentMonthGroupBudgetStatus: CurrentMonthBudgetGroupStatusList;
+  amountPerDay: number;
+  groupAmountPerDay: number;
+  setTodoEditing: React.Dispatch<React.SetStateAction<boolean>>;
+}
 
-  useEffect(() => {
-    if (pathName !== 'group') {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchYearlyBudgets(year, signal));
-      return () => {
-        signal.cancel();
-      };
-    }
-  }, [pathName]);
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-    if (pathName === 'group' && !todoEditing) {
-      const years: SelectYears = {
-        selectedYear: String(year),
-        selectedMonth: month <= 9 ? '0' + month : String(month),
-      };
-      dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
-      dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
-      dispatch(fetchGroups(signal));
-      const interval = setInterval(() => {
-        dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
-        dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
-        dispatch(fetchGroups(signal));
-      }, 3000);
-      return () => {
-        signal.cancel();
-        clearInterval(interval);
-      };
-    }
-  }, [pathName, group_id, todoEditing]);
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-    if (pathName !== 'group') {
-      dispatch(fetchGroups(signal));
-      const interval = setInterval(() => {
-        dispatch(fetchGroups(signal));
-      }, 3000);
-      return () => {
-        signal.cancel();
-        clearInterval(interval);
-      };
-    }
-  }, [pathName]);
-
+const Home = (props: HomeProps) => {
   return (
     <>
       <Header />
@@ -97,31 +38,39 @@ const Home = () => {
           <div className=" box__monthlyExpense">
             <h2 className="">{month}月の状況</h2>
             <div className="box__monthlyExpense__graph">
-              <HistoryBarChart
+              <HistoryBarChartContainer
                 currentMonthBudgetsStatusList={
-                  pathName !== 'group' ? currentMonthBudgetStatus : currentMonthGroupBudgetStatus
+                  props.pathName !== 'group'
+                    ? props.currentMonthBudgetStatus
+                    : props.currentMonthGroupBudgetStatus
                 }
               />
-              <HistoryPieChart
+              <HistoryPieChartContainer
                 sortTransactionsList={
-                  pathName !== 'group'
-                    ? sortCategoryTransactionsList
-                    : sortCategoryGroupTransactionsList
+                  props.pathName !== 'group'
+                    ? props.sortCategoryTransactionsList
+                    : props.sortCategoryGroupTransactionsList
                 }
                 thisMonthTotalExpense={
-                  pathName !== 'group' ? thisMonthTotalExpense : thisMonthGroupTotalExpense
+                  props.pathName !== 'group'
+                    ? props.thisMonthTotalExpense
+                    : props.thisMonthGroupTotalExpense
                 }
                 currentMonthBudgetsStatusList={
-                  pathName !== 'group' ? currentMonthBudgetStatus : currentMonthGroupBudgetStatus
+                  props.pathName !== 'group'
+                    ? props.currentMonthBudgetStatus
+                    : props.currentMonthGroupBudgetStatus
                 }
-                amountPerDay={pathName !== 'group' ? amountPerDay : groupAmountPerDay}
+                amountPerDay={
+                  props.pathName !== 'group' ? props.amountPerDay : props.groupAmountPerDay
+                }
               />
             </div>
           </div>
           <MonthlyHistory month={month} year={year} />
         </div>
         <div className="home__right">
-          <CurrentSchedule todoEditing={todoEditing} setTodoEditing={setTodoEditing} />
+          <CurrentSchedule todoEditing={props.todoEditing} setTodoEditing={props.setTodoEditing} />
         </div>
       </main>
     </>

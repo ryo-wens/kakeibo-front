@@ -7,54 +7,15 @@ import { CurrentMonthBudgetStatusList } from '../../../reducks/budgets/types';
 import { CurrentMonthBudgetGroupStatusList } from '../../../reducks/groupBudgets/types';
 
 interface HistoryPieChartProps {
-  currentMonthBudgetsStatusList: CurrentMonthBudgetStatusList | CurrentMonthBudgetGroupStatusList;
-  sortTransactionsList: PieChartDataList;
-  thisMonthTotalExpense: number;
   amountPerDay: number;
+  thisMonthTotalExpense: number;
+  sortTransactionsList: PieChartDataList;
+  emptyPieChartData: { amount: number }[];
+  categoryIndex: (bigCategoryName: string) => number;
+  currentMonthBudgetsStatusList: CurrentMonthBudgetStatusList | CurrentMonthBudgetGroupStatusList;
 }
 
 const HistoryPieChart = (props: HistoryPieChartProps) => {
-  const emptyPieChartData = [{ amount: 1 }];
-
-  const categoryIndex = (bigCategoryName: string) => {
-    switch (bigCategoryName) {
-      case '食費':
-        return 0;
-      case '日用品':
-        return 1;
-      case '趣味・娯楽':
-        return 2;
-      case '交際費':
-        return 3;
-      case '交通費':
-        return 4;
-      case '衣服・美容':
-        return 5;
-      case '健康・医療':
-        return 6;
-      case '通信費':
-        return 7;
-      case '教養・教育':
-        return 8;
-      case '住宅':
-        return 9;
-      case '水道・光熱費':
-        return 10;
-      case '自動車':
-        return 11;
-      case '保険':
-        return 12;
-      case '税金・社会保険':
-        return 13;
-      case '現金・カード':
-        return 14;
-      case 'その他':
-        return 15;
-      default:
-        return 0;
-    }
-  };
-
   const EmptyTransactionMessage = () => {
     return (
       <div className="bar-chart__tooltip bar-chart__tooltip--empty-pie">
@@ -86,7 +47,7 @@ const HistoryPieChart = (props: HistoryPieChartProps) => {
                 return (
                   <Cell
                     key={transaction.big_category_name}
-                    fill={colors[categoryIndex(transaction.big_category_name)]}
+                    fill={colors[props.categoryIndex(transaction.big_category_name)]}
                   />
                 );
               })}
@@ -107,7 +68,7 @@ const HistoryPieChart = (props: HistoryPieChartProps) => {
           <PieChart width={230} height={200}>
             <Pie
               stroke="none"
-              data={emptyPieChartData}
+              data={props.emptyPieChartData}
               innerRadius={60}
               outerRadius={100}
               dataKey="amount"
