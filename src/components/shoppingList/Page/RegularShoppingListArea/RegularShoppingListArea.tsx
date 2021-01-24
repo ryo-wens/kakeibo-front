@@ -1,27 +1,24 @@
 import React from 'react';
-import { useSelector } from 'react-redux';
-import { getRegularShoppingList } from '../../../../reducks/shoppingList/selectors';
 import {
   RegularShoppingList,
   RegularShoppingListItem,
   TodayOrMonthly,
 } from '../../../../reducks/shoppingList/types';
-import RegularShoppingListItemComponent from '../../uikit/ListItem/RegularShoppingListItemComponent/RegularShoppingListItemComponent';
+import RegularShoppingListItemComponent from '../../modules/ListItem/RegularShoppingListItemComponent/RegularShoppingListItemComponent';
 import './regular-shopping-list-area.scss';
 
 interface RegularShoppingListAreaProps {
   currentYearMonth: string;
   currentTodayOrMonthly: TodayOrMonthly;
+  regularShoppingList: RegularShoppingList;
 }
 
 const RegularShoppingListArea = (props: RegularShoppingListAreaProps) => {
-  const regularShoppingList: RegularShoppingList = useSelector(getRegularShoppingList);
-
   return (
     <div>
       <div className="regular-shopping-list-area">
-        {regularShoppingList.length ? (
-          regularShoppingList.map((listItem: RegularShoppingListItem) => {
+        {props.regularShoppingList.length ? (
+          props.regularShoppingList.map((listItem: RegularShoppingListItem) => {
             return (
               <div key={listItem.id}>
                 <RegularShoppingListItemComponent

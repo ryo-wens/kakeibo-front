@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '../../../../shoppingList/uikit/List/ShoppingListByCategoriesComponent/shopping-list-by-categories-component.scss';
+import '../../../../shoppingList/modules/List/ShoppingListByCategoriesComponent/shopping-list-by-categories-component.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
 import GroupShoppingListItemComponent from '../../../uikit/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
 import {

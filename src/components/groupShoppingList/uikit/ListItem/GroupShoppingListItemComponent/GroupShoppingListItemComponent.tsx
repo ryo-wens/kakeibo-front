@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import '../../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/shopping-list-item-component.scss';
+import '../../../../shoppingList/modules/ListItem/ShoppingListItemComponent/shopping-list-item-component.scss';
 import { dateStringToDate } from '../../../../../lib/date';
 import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import EditGroupShoppingListItemModal from './EditGroupShoppingListItemModal/EditGroupShoppingListItemModal';

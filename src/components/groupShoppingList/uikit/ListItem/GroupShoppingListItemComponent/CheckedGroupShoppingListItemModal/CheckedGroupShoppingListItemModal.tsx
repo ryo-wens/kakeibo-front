@@ -4,7 +4,7 @@ import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import axios from 'axios';
 import { date } from '../../../../../../lib/constant';
-import '../../../../../shoppingList/uikit/ListItem/ShoppingListItemComponent/CheckedShoppingListItemModal/checked-shopping-list-item-modal.scss';
+import '../../../../../shoppingList/modules/ListItem/ShoppingListItemComponent/CheckedShoppingListItemModal/checked-shopping-list-item-modal.scss';
 import { useDispatch } from 'react-redux';
 import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
 import GroupShoppingListForm from '../../../Form/GroupShoppingListForm/GroupShoppingListForm';

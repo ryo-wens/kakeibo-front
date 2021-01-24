@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../../shoppingList/uikit/ListItem/RegularShoppingListItemComponent/regular-shopping-list-item-component.scss';
+import '../../../../shoppingList/modules/ListItem/RegularShoppingListItemComponent/regular-shopping-list-item-component.scss';
 import { TodayOrMonthly } from '../../../../../reducks/shoppingList/types';
 import { useDispatch } from 'react-redux';
 import { CancelTokenSource } from 'axios';

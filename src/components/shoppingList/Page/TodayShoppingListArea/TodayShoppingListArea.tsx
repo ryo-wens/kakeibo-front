@@ -1,7 +1,7 @@
 import React from 'react';
-import SwitchItemTabs from '../../../uikit/tabs/SwitchItemTabs';
+import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import './today-shopping-list-area.scss';
-import AddShoppingListModalContainer from '../../../../containers/shoppingList/uikit/Modal/AddShoppingListModalContainer';
+import AddShoppingListModalContainer from '../../../../containers/shoppingList/modules/Modal/AddShoppingListModalContainer/AddShoppingListModalContainer';
 import TodayShoppingListByDateContainer from '../../../../containers/shoppingList/Page/TodayShoppingListArea/TodayShoppingListByDateContainer/TodayShoppingListByDateContainer';
 import TodayShoppingListByCategoriesContainer from '../../../../containers/shoppingList/Page/TodayShoppingListArea/TodayShoppingListByCategoriesContainer/TodayShoppingListByCategoriesContainer';
 
