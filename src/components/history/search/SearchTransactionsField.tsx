@@ -1,6 +1,6 @@
 import React from 'react';
+import { Groups } from '../../../reducks/groups/types';
 import CloseIcon from '@material-ui/icons/Close';
-import { useDispatch } from 'react-redux';
 import {
   DatePicker,
   GenericButton,
@@ -11,10 +11,7 @@ import {
   SelectSort,
   SelectSortType,
   TextInput,
-} from '../uikit';
-import { searchTransactions } from '../../reducks/transactions/operations';
-import { searchGroupTransactions } from '../../reducks/groupTransactions/operations';
-import { Groups } from '../../reducks/groups/types';
+} from '../../uikit';
 
 interface SearchTransactionsFieldProps {
   pathName: string;
@@ -50,40 +47,11 @@ interface SearchTransactionsFieldProps {
   sortItem: string;
   sortType: string;
   limit: string;
+  searchOperation: () => void;
+  groupSearchOperation: () => void;
 }
 
 const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
-  const dispatch = useDispatch();
-
-  const searchRequestData = {
-    transaction_type: props.transactionType !== '' ? props.transactionType : null,
-    start_date: props.selectStartDate,
-    end_date: props.selectEndDate,
-    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
-    high_amount: props.highAmount !== '' ? props.highAmount : null,
-    memo: props.memo !== '' ? props.memo : null,
-    shop: props.shop !== '' ? props.shop : null,
-    sort: props.sortItem !== '' ? props.sortItem : null,
-    sort_type: props.sortType !== '' ? props.sortType : null,
-    big_category_id: props.bigCategoryId !== 0 ? props.bigCategoryId : null,
-    limit: props.limit !== '' ? props.limit : null,
-  };
-
-  const groupSearchRequestData = {
-    transaction_type: props.transactionType !== '' ? props.transactionType : null,
-    payment_user_id: props.paymentUserId !== '' ? props.paymentUserId : null,
-    start_date: props.selectStartDate,
-    end_date: props.selectEndDate,
-    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
-    high_amount: props.highAmount !== '' ? props.highAmount : null,
-    memo: props.memo !== '' ? props.memo : null,
-    shop: props.shop !== '' ? props.shop : null,
-    sort: props.sortItem !== '' ? props.sortItem : null,
-    sort_type: props.sortType !== '' ? props.sortType : null,
-    big_category_id: props.bigCategoryId !== 0 ? props.bigCategoryId : null,
-    limit: props.limit !== '' ? props.limit : null,
-  };
-
   return (
     <div className="search-transaction__back-ground">
       <button className="input-years__btn__close" onClick={props.closeSearch}>
@@ -239,6 +207,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           </div>
         </div>
       </div>
+
       <div className="daily-history__spacer" />
       <div className="search-transaction__search-button">
         <GenericButton
@@ -247,10 +216,10 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           onClick={() => {
             if (props.pathName !== 'group') {
               props.setSearchSubmit(true);
-              dispatch(searchTransactions(searchRequestData));
+              props.searchOperation();
             } else {
               props.setSearchSubmit(true);
-              dispatch(searchGroupTransactions(props.groupId, groupSearchRequestData));
+              props.groupSearchOperation();
             }
           }}
         />
