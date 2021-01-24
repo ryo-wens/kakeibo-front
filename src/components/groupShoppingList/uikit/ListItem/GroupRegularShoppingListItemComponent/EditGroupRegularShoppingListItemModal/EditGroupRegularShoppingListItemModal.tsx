@@ -247,12 +247,14 @@ const EditGroupRegularShoppingListItemModal = (
           purchase={props.listItem.purchase}
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
-          dispatchOperation={deleteGroupRegularShoppingListItem(
-            Number(group_id),
-            props.listItem.id,
-            props.listItem.big_category_name,
-            signal
-          )}
+          deleteOperation={() =>
+            deleteGroupRegularShoppingListItem(
+              Number(group_id),
+              props.listItem.id,
+              props.listItem.big_category_name,
+              signal
+            )
+          }
         />
       ) : (
         <GroupRegularShoppingListForm

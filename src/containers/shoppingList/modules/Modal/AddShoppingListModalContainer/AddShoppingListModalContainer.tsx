@@ -3,6 +3,8 @@ import { date } from '../../../../../lib/constant';
 import axios from 'axios';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import AddShoppingListModal from '../../../../../components/shoppingList/modules/Modal/AddShoppingListModal/AddShoppingListModal';
+import { useDispatch } from 'react-redux';
+import { addShoppingListItem } from '../../../../../reducks/shoppingList/operations';
 
 const initialState = {
   initialExpectedPurchaseDate: date,
@@ -19,6 +21,7 @@ const initialState = {
 };
 
 const AddShoppingListModalContainer = () => {
+  const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
     initialState.initialExpectedPurchaseDate
@@ -148,7 +151,23 @@ const AddShoppingListModalContainer = () => {
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput}
-      signal={signal}
+      shoppingListItemOperation={() => {
+        dispatch(
+          addShoppingListItem(
+            date,
+            expectedPurchaseDate,
+            purchase,
+            shop,
+            typeof amount === 'string' ? Number(amount) : amount,
+            bigCategoryId,
+            mediumCategoryId,
+            customCategoryId,
+            transactionAutoAdd,
+            signal
+          )
+        );
+        setOpen(false);
+      }}
     />
   );
 };

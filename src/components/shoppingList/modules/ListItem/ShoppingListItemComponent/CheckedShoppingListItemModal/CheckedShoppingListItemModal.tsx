@@ -1,37 +1,11 @@
-import React, { useState } from 'react';
+import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { createStyles, makeStyles, Theme } from '@material-ui/core/styles';
-import ShoppingListForm from '../../../Form/ShoppingListForm/ShoppingListForm';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
-import { editShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
-import axios from 'axios';
-import { ShoppingListItem } from '../../../../../../reducks/shoppingList/types';
-import { date } from '../../../../../../lib/constant';
 import './checked-shopping-list-item-modal.scss';
-import { useDispatch } from 'react-redux';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    paper: {
-      width: 450,
-      margin: '20px auto auto auto',
-      backgroundColor: theme.palette.background.paper,
-    },
-  })
-);
+import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/Form/ShoppingListFormContainer/ShoppingListFormContainer';
 
 interface CheckedShoppingListItemModalProps {
-  listItem: ShoppingListItem;
-  currentYearMonth: string;
-  initialExpectedPurchaseDate: Date;
-  initialPurchase: string;
-  initialShop: string | null;
-  initialAmount: string | null;
-  initialBigCategoryId: number;
-  initialBigCategoryName: string;
-  initialMediumCategoryId: number | null;
-  initialCustomCategoryId: number | null;
-  initialTransactionAutoAdd: boolean;
+  open: boolean;
   expectedPurchaseDate: Date | null;
   checked: boolean;
   purchase: string;
@@ -39,197 +13,55 @@ interface CheckedShoppingListItemModalProps {
   amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
+  bigCategoryIndex: number;
   mediumCategoryId: number | null;
   customCategoryId: number | null;
   transactionAutoAdd: boolean;
-  setExpectedPurchaseDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
-  setPurchase: React.Dispatch<React.SetStateAction<string>>;
-  setShop: React.Dispatch<React.SetStateAction<string | null>>;
-  setAmount: React.Dispatch<React.SetStateAction<string | null>>;
-  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
-  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
-  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
-  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
-  setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
-}
-
-const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) => {
-  const classes = useStyles();
-  const dispatch = useDispatch();
-
-  const [open, setOpen] = useState(false);
-  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
-  const [associatedCategory, setAssociatedCategory] = useState('');
-  const signal = axios.CancelToken.source();
-
-  const selectCategory = (
+  associatedCategory: string;
+  handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleCheckedChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleDateChange: (scheduledDate: Date | null) => void;
+  handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  selectCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
     associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
+  ) => void;
+  handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  openModal: () => void;
+  closeModal: () => void;
+  unInput: boolean;
+  shoppingListItemOperation: () => void;
+}
 
-    if (bigCategory !== null) {
-      props.setBigCategoryId(bigCategory.id);
-      props.setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        props.setMediumCategoryId(associatedCategory.id);
-        props.setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        props.setMediumCategoryId(null);
-        props.setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
-  const disabledButton = () => {
-    const unInput =
-      props.purchase === '' || props.expectedPurchaseDate === null || props.bigCategoryId === 0;
-
-    if (props.transactionAutoAdd && props.amount === null) {
-      return true;
-    } else if (
-      props.expectedPurchaseDate !== null &&
-      props.initialExpectedPurchaseDate.getTime() === props.expectedPurchaseDate.getTime() &&
-      props.initialPurchase === props.purchase &&
-      props.initialShop === props.shop &&
-      props.initialAmount === props.amount &&
-      props.initialBigCategoryId === props.bigCategoryId &&
-      props.initialBigCategoryName === props.bigCategory &&
-      props.initialMediumCategoryId === props.mediumCategoryId &&
-      props.initialCustomCategoryId === props.customCategoryId &&
-      props.initialTransactionAutoAdd === props.transactionAutoAdd
-    ) {
-      return true;
-    } else return unInput;
-  };
-
-  const openModal = () => {
-    setOpen(true);
-    if (props.listItem.medium_category_name) {
-      setAssociatedCategory(props.listItem.medium_category_name);
-    }
-    if (props.listItem.custom_category_name) {
-      setAssociatedCategory(props.listItem.custom_category_name);
-    }
-  };
-
-  const closeModal = () => {
-    setOpen(false);
-    props.setExpectedPurchaseDate(props.initialExpectedPurchaseDate);
-    props.setPurchase(props.initialPurchase);
-    props.setShop(props.initialShop);
-    props.setAmount(props.initialAmount);
-    props.setBigCategoryId(props.initialBigCategoryId);
-    props.setBigCategory(props.initialBigCategoryName);
-    props.setMediumCategoryId(props.initialMediumCategoryId);
-    props.setCustomCategoryId(props.initialCustomCategoryId);
-    props.setTransactionAutoAdd(props.initialTransactionAutoAdd);
-  };
-
-  const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setPurchase(event.target.value);
-  };
-
-  const handleDateChange = (expectedPurchaseDate: Date | null) => {
-    props.setExpectedPurchaseDate(expectedPurchaseDate);
-  };
-
-  const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === '') {
-      props.setAmount(null);
-    } else {
-      props.setAmount(event.target.value);
-    }
-  };
-
-  const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.value === '') {
-      props.setShop(null);
-    } else {
-      props.setShop(event.target.value);
-    }
-  };
-
-  const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setTransactionAutoAdd(event.target.checked);
-  };
-
-  const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    if (event.target.checked && props.transactionAutoAdd && props.amount === null) {
-      return openModal();
-    }
-    props.setChecked(event.target.checked);
-    dispatch(
-      editShoppingListItem(
-        date,
-        props.currentYearMonth,
-        props.listItem.id,
-        props.expectedPurchaseDate,
-        event.target.checked,
-        props.purchase,
-        props.shop,
-        typeof props.amount === 'string' ? Number(props.amount) : props.amount,
-        props.bigCategoryId,
-        props.mediumCategoryId,
-        props.customCategoryId,
-        props.listItem.regular_shopping_list_id,
-        props.transactionAutoAdd,
-        props.listItem.related_transaction_data,
-        signal
-      )
-    );
-  };
-
+const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) => {
   const body = (
-    <div className={classes.paper}>
-      <ShoppingListForm
+    <div className="checked-shopping-list-item-modal">
+      <ShoppingListFormContainer
+        titleLabel={'買い物リストアイテムを編集'}
+        buttonLabel={'保存'}
         expectedPurchaseDate={props.expectedPurchaseDate}
         purchase={props.purchase}
         shop={props.shop}
         amount={props.amount}
         bigCategoryId={props.bigCategoryId}
         bigCategory={props.bigCategory}
-        bigCategoryIndex={bigCategoryIndex}
+        bigCategoryIndex={props.bigCategoryIndex}
         mediumCategoryId={props.mediumCategoryId}
         customCategoryId={props.customCategoryId}
         transactionAutoAdd={props.transactionAutoAdd}
-        associatedCategory={associatedCategory}
-        handlePurchaseChange={handlePurchaseChange}
-        handleDateChange={handleDateChange}
-        handleAmountChange={handleAmountChange}
-        selectCategory={selectCategory}
-        handleShopChange={handleShopChange}
-        handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-        titleLabel={'買い物リストアイテムを編集'}
-        buttonLabel={'保存'}
-        setOpen={setOpen}
-        closeModal={closeModal}
-        unInput={disabledButton()}
+        associatedCategory={props.associatedCategory}
+        handlePurchaseChange={props.handlePurchaseChange}
+        handleDateChange={props.handleDateChange}
+        handleAmountChange={props.handleAmountChange}
+        selectCategory={props.selectCategory}
+        handleShopChange={props.handleShopChange}
+        handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
+        closeModal={props.closeModal}
+        unInput={props.unInput}
         minDate={new Date('1900-01-01')}
-        dispatchOperation={editShoppingListItem(
-          date,
-          props.currentYearMonth,
-          props.listItem.id,
-          props.expectedPurchaseDate,
-          true,
-          props.purchase,
-          props.shop,
-          Number(props.amount),
-          props.bigCategoryId,
-          props.mediumCategoryId,
-          props.customCategoryId,
-          props.listItem.regular_shopping_list_id,
-          props.transactionAutoAdd,
-          props.listItem.related_transaction_data,
-          signal
-        )}
+        shoppingListItemOperation={props.shoppingListItemOperation}
         displayInputAmountMessage={true}
       />
     </div>
@@ -238,12 +70,12 @@ const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) 
   return (
     <>
       <label className="checked-shopping-list-item-modal__check">
-        <input type="checkbox" checked={props.checked} onChange={handleCheckedChange} />
+        <input type="checkbox" checked={props.checked} onChange={props.handleCheckedChange} />
         <span />
       </label>
       <Modal
-        open={open}
-        onClose={closeModal}
+        open={props.open}
+        onClose={props.closeModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

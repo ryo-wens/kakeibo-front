@@ -20,7 +20,7 @@ const RegularShoppingListArea = (props: RegularShoppingListAreaProps) => {
         {props.regularShoppingList.length ? (
           props.regularShoppingList.map((listItem: RegularShoppingListItem) => {
             return (
-              <div key={listItem.id}>
+              <div className="regular-shopping-list-area__list-item" key={listItem.id}>
                 <RegularShoppingListItemComponent
                   listItem={listItem}
                   currentYearMonth={props.currentYearMonth}

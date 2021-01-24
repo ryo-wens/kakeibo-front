@@ -34,8 +34,7 @@ interface EditRegularShoppingListModalProps {
 const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) => {
   const classes = useStyles();
   const dispatch = useDispatch();
-  const [open, setOpen] = useState(false);
-  const [deleteForm, setDeleteForm] = useState(false);
+  const signal = axios.CancelToken.source();
 
   const initialExpectedPurchaseDate: Date = dateStringToDate(props.listItem.expected_purchase_date);
   const initialCycleType = props.listItem.cycle_type;
@@ -49,6 +48,8 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
   const initialCustomCategoryId = props.listItem.custom_category_id;
   const initialTransactionAutoAdd = props.listItem.transaction_auto_add;
 
+  const [open, setOpen] = useState(false);
+  const [deleteForm, setDeleteForm] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
     initialExpectedPurchaseDate
   );
@@ -66,7 +67,6 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
   const [customCategoryId, setCustomCategoryId] = useState<number | null>(initialCustomCategoryId);
   const [transactionAutoAdd, setTransactionAutoAdd] = useState<boolean>(initialTransactionAutoAdd);
   const [associatedCategory, setAssociatedCategory] = useState('');
-  const signal = axios.CancelToken.source();
 
   const unInputCycle = () => {
     if (cycleType === 'custom') {
@@ -227,11 +227,14 @@ const EditRegularShoppingListModal = (props: EditRegularShoppingListModalProps) 
           purchase={props.listItem.purchase}
           closeModal={closeModal}
           closeDeleteForm={closeDeleteForm}
-          dispatchOperation={deleteRegularShoppingListItem(
-            props.listItem.id,
-            props.listItem.big_category_name,
-            signal
-          )}
+          deleteOperation={() => {
+            deleteRegularShoppingListItem(
+              props.listItem.id,
+              props.listItem.big_category_name,
+              signal
+            );
+            closeModal();
+          }}
         />
       ) : (
         <RegularShoppingListForm

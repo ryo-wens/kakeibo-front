@@ -12,7 +12,7 @@ interface ShoppingListByDate {
 
 const ShoppingListByDate = (props: ShoppingListByDate) => {
   return (
-    <>
+    <div className="shopping-list-by-date">
       {props.shoppingListByDate.length ? (
         props.shoppingListByDate.map((listItem) => {
           return (
@@ -32,7 +32,7 @@ const ShoppingListByDate = (props: ShoppingListByDate) => {
       ) : (
         <p className="shopping-list-by-date__message">{props.message}</p>
       )}
-    </>
+    </div>
   );
 };
 

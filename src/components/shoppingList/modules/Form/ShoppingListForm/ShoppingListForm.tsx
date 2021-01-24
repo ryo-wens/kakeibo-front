@@ -1,18 +1,13 @@
-import React, { useRef, useState } from 'react';
+import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  getExpenseCategories,
-  getIncomeCategories,
-} from '../../../../../reducks/categories/selectors';
 import './shopping-list-form.scss';
-import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import { Action, Dispatch } from 'redux';
-import { State } from '../../../../../reducks/store/types';
+import { AssociatedCategory, Categories, Category } from '../../../../../reducks/categories/types';
 import ToolTipIcon from '../../ToolTip/ToolTipIcon';
 
 interface ShoppingListFormProps {
+  titleLabel: string;
+  buttonLabel: string;
   expectedPurchaseDate: Date | null;
   purchase: string;
   shop: string | null;
@@ -34,39 +29,25 @@ interface ShoppingListFormProps {
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  titleLabel: string;
-  buttonLabel: string;
   closeModal: () => void;
-  setOpen: React.Dispatch<React.SetStateAction<boolean>>;
   unInput: boolean;
-  dispatchOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  shoppingListItemOperation: () => void;
   minDate: Date;
   displayInputAmountMessage: boolean;
+  bigCategoryRef: React.RefObject<HTMLDivElement>;
+  mediumMenuRef: React.RefObject<HTMLDivElement>;
+  incomeCategories: Categories;
+  expenseCategories: Categories;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  onClickCloseBigCategoryMenu: (event: Event) => void;
+  onClickCloseMediumCategoryMenu: (event: Event) => void;
   openDeleteForm?: () => void;
 }
 
 const ShoppingListForm = (props: ShoppingListFormProps) => {
-  const dispatch = useDispatch();
-  const incomeCategories = useSelector(getIncomeCategories);
-  const expenseCategories = useSelector(getExpenseCategories);
-
-  const bigCategoryRef = useRef<HTMLDivElement>(null);
-  const mediumMenuRef = useRef<HTMLDivElement>(null);
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
-
-  const onClickCloseBigCategoryMenu = (event: Event) => {
-    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
-    }
-  };
-
-  const onClickCloseMediumCategoryMenu = (event: Event) => {
-    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
-    }
-  };
-
   const inputItems = [
     {
       key: '購入するもの',
@@ -88,30 +69,30 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
       value: (
         <>
           <BigCategoryInput
-            ref={bigCategoryRef}
+            ref={props.bigCategoryRef}
             kind={'expense'}
             bigCategory={props.bigCategory}
-            bigCategoryMenuOpen={bigCategoryMenuOpen}
-            expenseCategories={expenseCategories}
-            incomeCategories={incomeCategories}
+            bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+            expenseCategories={props.expenseCategories}
+            incomeCategories={props.incomeCategories}
             onClick={props.selectCategory}
-            onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
-            setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+            onClickCloseBigCategoryMenu={props.onClickCloseBigCategoryMenu}
+            setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
             disabled={false}
           />
           <MediumCategoryInput
-            ref={mediumMenuRef}
+            ref={props.mediumMenuRef}
             kind={'expense'}
             bigCategoryId={props.bigCategoryId}
             bigCategoryIndex={props.bigCategoryIndex}
             bigCategory={props.bigCategory}
             associatedCategory={props.associatedCategory}
-            expenseCategories={expenseCategories}
-            incomeCategories={incomeCategories}
-            mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+            expenseCategories={props.expenseCategories}
+            incomeCategories={props.incomeCategories}
+            mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
             onClick={props.selectCategory}
-            onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
-            setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+            onClickCloseMediumCategoryMenu={props.onClickCloseMediumCategoryMenu}
+            setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
             disabled={false}
           />
         </>
@@ -213,10 +194,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           <button
             className="shopping-list-form__operation-btn--add"
             disabled={props.unInput}
-            onClick={() => {
-              dispatch(props.dispatchOperation);
-              props.setOpen(false);
-            }}
+            onClick={props.shoppingListItemOperation}
           >
             {props.buttonLabel}
           </button>

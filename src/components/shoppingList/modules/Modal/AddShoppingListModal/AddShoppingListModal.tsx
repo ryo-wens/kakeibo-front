@@ -1,12 +1,10 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import ShoppingListForm from '../../Form/ShoppingListForm/ShoppingListForm';
 import AddIcon from '@material-ui/icons/Add';
 import './add-shopping-list-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
-import { addShoppingListItem } from '../../../../../reducks/shoppingList/operations';
-import { CancelTokenSource } from 'axios';
+import ShoppingListFormContainer from '../../../../../containers/shoppingList/modules/Form/ShoppingListFormContainer/ShoppingListFormContainer';
 
 interface AddShoppingListModalProps {
   open: boolean;
@@ -35,13 +33,15 @@ interface AddShoppingListModalProps {
   openModal: () => void;
   closeModal: () => void;
   unInput: boolean;
-  signal: CancelTokenSource;
+  shoppingListItemOperation: () => void;
 }
 
 const AddShoppingListModal = (props: AddShoppingListModalProps) => {
   const body = (
     <div className="add-shopping-list-modal">
-      <ShoppingListForm
+      <ShoppingListFormContainer
+        titleLabel={'買い物リストに追加'}
+        buttonLabel={'追加'}
         expectedPurchaseDate={props.expectedPurchaseDate}
         purchase={props.purchase}
         shop={props.shop}
@@ -59,24 +59,10 @@ const AddShoppingListModal = (props: AddShoppingListModalProps) => {
         selectCategory={props.selectCategory}
         handleShopChange={props.handleShopChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-        titleLabel={'買い物リストに追加'}
-        buttonLabel={'追加'}
-        setOpen={props.setOpen}
         closeModal={props.closeModal}
         unInput={props.unInput}
         minDate={date}
-        dispatchOperation={addShoppingListItem(
-          date,
-          props.expectedPurchaseDate,
-          props.purchase,
-          props.shop,
-          typeof props.amount === 'string' ? Number(props.amount) : props.amount,
-          props.bigCategoryId,
-          props.mediumCategoryId,
-          props.customCategoryId,
-          props.transactionAutoAdd,
-          props.signal
-        )}
+        shoppingListItemOperation={props.shoppingListItemOperation}
         displayInputAmountMessage={false}
       />
     </div>
