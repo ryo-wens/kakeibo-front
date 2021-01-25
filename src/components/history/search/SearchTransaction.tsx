@@ -23,7 +23,6 @@ interface SearchTransactionProps {
   changePayer: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeSortItem: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  selectCategory: (bigCategoryId: number) => void;
   selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   setSearchSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   selectStartDate: Date | null;
@@ -67,7 +66,6 @@ const SearchTransaction = (props: SearchTransactionProps) => {
           shop={props.shop}
           transactionType={props.transactionType}
           category={props.category}
-          selectCategory={props.selectCategory}
           changeCategory={props.changeCategory}
           bigCategoryId={props.bigCategoryId}
           selectStartDate={props.selectStartDate}

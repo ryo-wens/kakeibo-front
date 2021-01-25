@@ -30,7 +30,6 @@ interface SearchTransactionsFieldProps {
   changePayer: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeSortItem: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  selectCategory: (bigCategoryId: number) => void;
   selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   setSearchSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   selectStartDate: Date | null;
@@ -102,12 +101,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">カテゴリー</div>
           <div className="search-transaction__selector">
-            <SelectBigCategory
-              category={props.category}
-              onChange={props.changeCategory}
-              onClick={props.selectCategory}
-              pathName={props.pathName}
-            />
+            <SelectBigCategory category={props.category} onChange={props.changeCategory} />
           </div>
         </div>
 
@@ -168,17 +162,20 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
 
         {props.pathName === 'group' && (
           <>
+            <div className="search-transaction__spacer--top" />
             <div className="search-transaction__select-contents--value">
               <div className="search-transaction__select-contents--key">支払人</div>
-              <SelectPayer
-                value={props.paymentUserId}
-                required={false}
-                approvedGroups={props.approvedGroup}
-                groupId={props.groupId}
-                pathName={props.pathName}
-                onChange={props.changePayer}
-                disabled={false}
-              />
+              <div className="search-transaction__selector">
+                <SelectPayer
+                  value={props.paymentUserId}
+                  required={false}
+                  approvedGroups={props.approvedGroup}
+                  groupId={props.groupId}
+                  pathName={props.pathName}
+                  onChange={props.changePayer}
+                  disabled={false}
+                />
+              </div>
             </div>
           </>
         )}

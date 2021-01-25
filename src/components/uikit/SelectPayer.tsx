@@ -31,6 +31,7 @@ const SelectPayer = (props: SelectPayerProps) => {
       onChange={props.onChange}
       disabled={props.disabled}
     >
+      <option value={''}>指定しない</option>
       {paymentUsers() !== undefined
         ? paymentUsers().map((paymentUser) => {
             return (

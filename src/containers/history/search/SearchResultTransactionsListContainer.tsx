@@ -9,6 +9,7 @@ const SearchResultTransactionsListContainer = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpnId] = useState<number | undefined>(undefined);
   const [searchTransaction, setSearchTransaction] = useState<TransactionsList>([]);
+  const searchResults = searchTransactions.length === 0;
 
   useEffect(() => {
     setSearchTransaction(searchTransactions);
@@ -31,6 +32,7 @@ const SearchResultTransactionsListContainer = () => {
       searchTransaction={searchTransaction}
       openModal={openModal}
       closeModal={closeModal}
+      searchResults={searchResults}
     />
   );
 };

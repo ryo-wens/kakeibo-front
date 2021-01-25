@@ -19,7 +19,6 @@ interface SearchTransactionContainerProps {
   changePayer: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeSortItem: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  selectCategory: (bigCategoryId: number) => void;
   selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   setSearchSubmit: React.Dispatch<React.SetStateAction<boolean>>;
   selectStartDate: Date | null;
@@ -76,7 +75,6 @@ const SearchTransactionContainer = (props: SearchTransactionContainerProps) => {
       changeSortType={props.changeSortType}
       inputShop={props.inputShop}
       inputMemo={props.inputMemo}
-      selectCategory={props.selectCategory}
       selectLimit={props.selectLimit}
       setSearchSubmit={props.setSearchSubmit}
     />
