@@ -85,4 +85,9 @@
     @include search-btn($display-btn-main_color);
     color: white;
   }
+
+  &__message {
+    text-align: center;
+    font-size: 1rem;
+  }
 }

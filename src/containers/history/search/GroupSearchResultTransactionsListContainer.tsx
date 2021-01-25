@@ -11,6 +11,7 @@ const GroupSearchResultTransactionsListContainer = () => {
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpnId] = useState<number | undefined>(undefined);
   const [searchTransaction, setSearchTransaction] = useState<GroupTransactionsList>([]);
+  const searchResults = groupSearchTransactions.length === 0;
 
   useEffect(() => {
     setSearchTransaction(groupSearchTransactions);
@@ -50,6 +51,7 @@ const GroupSearchResultTransactionsListContainer = () => {
       openModal={openModal}
       closeModal={closeModal}
       payerUser={payerUser}
+      searchResults={searchResults}
     />
   );
 };
