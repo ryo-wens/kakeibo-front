@@ -161,7 +161,6 @@ const InputTodoList = React.forwardRef(
         </div>
       </div>
     );
-    // };
   }
 );
 
