@@ -4,9 +4,9 @@ import {
   ShoppingListItem,
   ShoppingListItemByCategories,
 } from '../../../../../reducks/shoppingList/types';
-import ShoppingListItemComponent from '../../ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
 import './shopping-list-by-categories-component.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
+import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
 
 interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: ShoppingListByCategories;
@@ -44,11 +44,15 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                             {shoppingListItem.expected_purchase_date}
                           </p>
                         )}
-                        <ShoppingListItemComponent
+                        <ShoppingListItemComponentContainer
                           listItem={shoppingListItem}
                           currentYearMonth={props.currentYearMonth}
                           purchaseClassName={'shopping-list-item-component__item-purchase'}
                           amountClassName={'shopping-list-item-component__item-amount'}
+                          transactionDataItemClassName={'related-transaction-data-button__item'}
+                          transactionDataItemKeyClassName={
+                            'related-transaction-data-button__item-key'
+                          }
                         />
                       </div>
                     );

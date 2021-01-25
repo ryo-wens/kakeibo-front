@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShoppingList } from '../../../../../reducks/shoppingList/types';
-import ShoppingListItemComponent from '../../ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
 import './shopping-list-by-date.scss';
+import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
 
 interface ShoppingListByDate {
   shoppingListByDate: ShoppingList;
@@ -20,11 +20,13 @@ const ShoppingListByDate = (props: ShoppingListByDate) => {
               {props.equalsDisplayDate(listItem.expected_purchase_date) && (
                 <p className="shopping-list-by-date__date">{listItem.expected_purchase_date}</p>
               )}
-              <ShoppingListItemComponent
+              <ShoppingListItemComponentContainer
                 listItem={listItem}
                 currentYearMonth={props.currentYearMonth}
                 purchaseClassName={'shopping-list-item-component__item-purchase'}
                 amountClassName={'shopping-list-item-component__item-amount'}
+                transactionDataItemClassName={'related-transaction-data-button__item'}
+                transactionDataItemKeyClassName={'related-transaction-data-button__item-key'}
               />
             </div>
           );
