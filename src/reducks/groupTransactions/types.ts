@@ -29,6 +29,14 @@ export interface YearlyAccountStatus {
   accountedMonth: string[];
 }
 
+export interface CompleteAccountStatus {
+  completeMonth: string[];
+}
+
+export interface MonthWithoutSplit {
+  withoutMonth: string[];
+}
+
 export interface GroupTransactionsList extends Array<GroupTransactions> {}
 
 export interface GroupLatestTransactionsListRes {

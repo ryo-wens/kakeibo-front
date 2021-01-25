@@ -9,6 +9,6 @@ export { default as Todo } from './Todo';
 export { default as History } from './history/History';
 export { default as DailyHistory } from './history/daily/DailyHistory';
 export { default as YearlyBudgets } from './YearlyBudgets';
-export { default as PayOff } from './PayOff';
-export { default as YearlyAccount } from './YearlyAccount';
+export { default as PayOff } from './account/PayOff';
+export { default as YearlyAccount } from './account/YearlyAccount';
 export { default as InitialScreen } from './InitialScreen';
