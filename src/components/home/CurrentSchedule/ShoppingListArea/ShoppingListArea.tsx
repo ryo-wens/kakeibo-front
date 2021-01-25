@@ -1,7 +1,7 @@
 import React from 'react';
 import { ShoppingList } from '../../../../reducks/shoppingList/types';
-import ShoppingListItemComponent from '../../../shoppingList/modules/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
 import '../../../shoppingList/modules/List/ShoppingListByDate/shopping-list-by-date.scss';
+import ShoppingListItemComponentContainer from '../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
 
 interface ShoppingListArea {
   shoppingListByDate: ShoppingList;
@@ -16,11 +16,15 @@ const ShoppingListArea = (props: ShoppingListArea) => {
         props.shoppingListByDate.map((listItem) => {
           return (
             <div key={listItem.id}>
-              <ShoppingListItemComponent
+              <ShoppingListItemComponentContainer
                 listItem={listItem}
                 currentYearMonth={props.currentYearMonth}
                 purchaseClassName={'shopping-list-item-component__item-purchase--home-page'}
                 amountClassName={'shopping-list-item-component__item-amount--home-page'}
+                transactionDataItemClassName={'related-transaction-data-button__item--home-page'}
+                transactionDataItemKeyClassName={
+                  'related-transaction-data-button__item-key--home-page'
+                }
               />
             </div>
           );
