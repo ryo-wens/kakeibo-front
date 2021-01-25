@@ -3,7 +3,6 @@ import { Route, Switch } from 'react-router';
 import {
   Todo,
   StandardBudgets,
-  YearlyBudgets,
   CustomBudgets,
   EditStandardBudgets,
   Task,
@@ -13,6 +12,7 @@ import SignUpContainer from './containers/templates/signup/SignUpContainer';
 import LogInContainer from './containers/templates/login/LogInContainer';
 import HomeContainer from './containers/templates/home/HomeContainer';
 import HistoryContainer from './containers/templates/history/HistoryContainer';
+import YearlyBudgetsContainer from './containers/templates/budgets/YearlyBudgetsContainer';
 import YearlyAccountContainer from './containers/templates/account/YearlyAccountContainer';
 
 const Router = (): JSX.Element => {
@@ -28,7 +28,7 @@ const Router = (): JSX.Element => {
       <Route exact path={'/standard/budgets'} component={StandardBudgets} />
       <Route exact path={'/standard/budgets/:year/:month'} component={EditStandardBudgets} />
       <Route exact path={'/todo'} component={Todo} />
-      <Route exact path={'/yearly/budgets'} component={YearlyBudgets} />
+      <Route exact path={'/yearly/budgets'} component={YearlyBudgetsContainer} />
       <Route exact path={'/group/:group_id/home'} component={HomeContainer} />
       <Route exact path={'/group/:group_id/daily/history'} component={HistoryContainer} />
       <Route exact path={'/group/:group_id/weekly/history'} component={HistoryContainer} />
@@ -39,7 +39,7 @@ const Router = (): JSX.Element => {
         path={'/group/:group_id/custom/budgets/:year/:month'}
         component={CustomBudgets}
       />
-      <Route exact path={'/group/:group_id/yearly/budgets'} component={YearlyBudgets} />
+      <Route exact path={'/group/:group_id/yearly/budgets'} component={YearlyBudgetsContainer} />
       <Route
         exact
         path={'/group/:group_id/standard/budgets/:year/:month'}
