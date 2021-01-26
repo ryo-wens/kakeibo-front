@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { TodoList, TodoListItem } from '../../reducks/todoList/types';
-import { date } from '../../lib/constant';
 import { Divider } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
 import TodoListItemComponentContainer from '../../containers/todo/modules/ListItem/TodoListItemComponentContainer/TodoListItemComponentContainer';
@@ -47,16 +46,11 @@ const ExpiredTodoList = (props: ExpiredTodoListProps) => {
   };
 
   const expiredTodoList = props.expiredTodoList.map((todoListItem: TodoListItem) => {
-    const displayDueDate = () => {
-      return <span className={classes.dueDate}>{todoListItem.due_date}</span>;
-    };
     return (
       <TodoListItemComponentContainer
         key={todoListItem.id}
         listItem={todoListItem}
-        selectedDate={date}
         currentYearMonth={props.currentYearMonth}
-        displayDueDate={displayDueDate}
         setEditing={props.setEditing}
       />
     );

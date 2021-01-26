@@ -3,14 +3,14 @@ import { ShoppingList } from '../../../../../reducks/shoppingList/types';
 import './shopping-list-by-date.scss';
 import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
 
-interface ShoppingListByDate {
+interface ShoppingListByDateProps {
   shoppingListByDate: ShoppingList;
   currentYearMonth: string;
   message: string;
   equalsDisplayDate: (date: string) => boolean;
 }
 
-const ShoppingListByDate = (props: ShoppingListByDate) => {
+const ShoppingListByDate = (props: ShoppingListByDateProps) => {
   return (
     <div className="shopping-list-by-date">
       {props.shoppingListByDate.length ? (

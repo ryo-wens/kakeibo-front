@@ -2,7 +2,6 @@ import React, { useEffect } from 'react';
 import axios, { CancelTokenSource } from 'axios';
 import {
   fetchGroupExpiredTodoList,
-  fetchGroupMonthTodoList,
   fetchGroupTodayTodoList,
 } from '../../../../reducks/groupTodoList/operations';
 import { fetchGroups } from '../../../../reducks/groups/operations';
@@ -13,17 +12,15 @@ import {
   getTodayImplementationTodoList,
   getTodayTodoListMessage,
 } from '../../../../reducks/todoList/selectors';
-import {
-  getGroupTodayDueTodoList,
-  getGroupTodayImplementationTodoList,
-} from '../../../../reducks/groupTodoList/selectors';
 import { useLocation, useParams } from 'react-router';
 import { date } from '../../../../lib/constant';
-import TodayTodoList from './TodayTodoList/TodayTodoList';
 import { AddTodo } from '../../index';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
+import TodayImplementationDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/TodayImplementationDateTodoListContainer/TodayImplementationDateTodoListContainer';
+import TodayDueDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/TodayDueDateTodoListContainer/TodayDueDateTodoListContainer';
 
 interface TodayTodoAreaProps {
+  currentYearMonth: string;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -33,8 +30,6 @@ const TodayTodoArea = (props: TodayTodoAreaProps) => {
   const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
   const todayDueTodoList = useSelector(getTodayDueTodoList);
   const todayTodoListMessage = useSelector(getTodayTodoListMessage);
-  const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
-  const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
   const todayYear = String(date.getFullYear());
@@ -45,7 +40,6 @@ const TodayTodoArea = (props: TodayTodoAreaProps) => {
     dispatch(fetchGroups(signal));
     dispatch(fetchGroupExpiredTodoList(Number(group_id), signal));
     dispatch(fetchGroupTodayTodoList(Number(group_id), todayYear, todayMonth, todayDate, signal));
-    dispatch(fetchGroupMonthTodoList(Number(group_id), todayYear, todayMonth, signal));
   };
 
   useEffect(() => {
@@ -81,26 +75,14 @@ const TodayTodoArea = (props: TodayTodoAreaProps) => {
         leftButtonLabel={'実施予定のToDo'}
         rightButtonLabel={'締切予定のToDo'}
         leftItem={
-          <TodayTodoList
-            planName={'実施予定'}
-            planTodoList={
-              pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
-            }
-            implementationTodoList={
-              pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
-            }
-            dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+          <TodayImplementationDateTodoListContainer
+            currentYearMonth={props.currentYearMonth}
             setEditing={props.setEditing}
           />
         }
         rightItem={
-          <TodayTodoList
-            planName={'締切予定'}
-            planTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
-            implementationTodoList={
-              pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
-            }
-            dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+          <TodayDueDateTodoListContainer
+            currentYearMonth={props.currentYearMonth}
             setEditing={props.setEditing}
           />
         }

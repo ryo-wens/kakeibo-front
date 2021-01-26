@@ -11,9 +11,7 @@ import { TodoListItemComponent } from '../../../../../components/todo';
 
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem | GroupTodoListItem;
-  selectedDate: Date | null;
   currentYearMonth: string;
-  displayDueDate?: () => void;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -108,7 +106,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
           date,
           props.currentYearMonth,
           props.listItem.id,
-          props.selectedDate,
           implementationDate,
           dueDate,
           todoContent,
@@ -122,7 +119,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
           props.currentYearMonth,
           Number(group_id),
           props.listItem.id,
-          props.selectedDate,
           implementationDate,
           dueDate,
           todoContent,
@@ -146,7 +142,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       listItem={props.listItem}
       pathName={pathName}
       group_id={group_id}
-      selectedDate={props.selectedDate}
       currentYearMonth={props.currentYearMonth}
       handleOpenEditTodoForm={handleOpenEditTodoForm}
       handleCloseEditTodoForm={handleCloseEditTodoForm}
@@ -161,7 +156,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
                   props.currentYearMonth,
                   Number(group_id),
                   props.listItem.id,
-                  props.selectedDate,
                   implementationDate,
                   dueDate,
                   todoContent,
@@ -173,7 +167,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
                   date,
                   props.currentYearMonth,
                   props.listItem.id,
-                  props.selectedDate,
                   implementationDate,
                   dueDate,
                   todoContent,

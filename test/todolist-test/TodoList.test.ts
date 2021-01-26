@@ -268,7 +268,6 @@ describe('async actions todoLists', () => {
     const currentYearMonth = `2020/09`;
     const todoListItemId = 2;
     const completeFlag = true;
-    const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = 'お掃除';
@@ -365,7 +364,6 @@ describe('async actions todoLists', () => {
       today,
       currentYearMonth,
       todoListItemId,
-      selectedDate,
       implementationDate,
       dueDate,
       todoContent,

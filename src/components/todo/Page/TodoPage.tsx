@@ -42,7 +42,13 @@ const TodoPage = (props: TodoPageProps) => {
               <SwitchTodayOrMonthlyTabsContainer
                 currentItem={props.currentTodayOrMonthly}
                 setCurrentItems={props.setCurrentTodayOrMonthly}
-                leftItem={<TodayTodoArea editing={props.editing} setEditing={props.setEditing} />}
+                leftItem={
+                  <TodayTodoArea
+                    currentYearMonth={props.currentYearMonth}
+                    editing={props.editing}
+                    setEditing={props.setEditing}
+                  />
+                }
                 rightItem={
                   <MonthlyTodoArea
                     selectedYear={props.selectedYear}
