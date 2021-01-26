@@ -1,0 +1,27 @@
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/check-box";
+@import "../../../../../assets/mixin/icon-btn";
+
+.todo-list-item-component {
+  display: flex;
+  align-items: center;
+  background-color: #fcfdff;
+  border-radius: 0.6rem;
+  padding: 10px 15px;
+  margin-bottom: 20px;
+
+  &__check {
+    @include check-box($task-add-color)
+  }
+
+  &__content {
+    width: calc(100% - 68px);
+    color: #253b66;
+    margin-left: 10px;
+  }
+
+  &__edit-icon {
+    @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
+    padding: 3px;
+  }
+}
