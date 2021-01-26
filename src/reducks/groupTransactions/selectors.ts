@@ -1,7 +1,7 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { PieChartData, PieChartDataList } from '../transactions/types';
-import { YearlyAccountStatus } from './types';
+import { YearlyAccountStatus, CompleteAccountStatus, MonthWithoutSplit } from './types';
 import { incomeTransactionType } from '../../lib/constant';
 
 const groupTransactionsSelector = (state: State) => state.groupTransactions;
@@ -97,10 +97,9 @@ export const getYearlyAccountListStatusModals = createSelector(
 
 const groupAccountList = (state: State) => state.groupTransactions.groupAccountList;
 
-export const getAccountCompleteJudgment = createSelector([groupAccountList], (groupAccountList) => {
-  const completeAccount = {
-    completeJudge: false,
-    completeMonth: '',
+export const getMonthWithoutSplitList = createSelector([groupAccountList], (groupAccountList) => {
+  const completeAccount: MonthWithoutSplit = {
+    withoutMonth: [],
   };
 
   if (groupAccountList) {
@@ -108,8 +107,7 @@ export const getAccountCompleteJudgment = createSelector([groupAccountList], (gr
       for (const account of groupAccountList.group_accounts_list_by_payer) {
         for (const accountByPayer of account.group_accounts_list) {
           if (accountByPayer.payer_user_id === null && accountByPayer.recipient_user_id === null) {
-            completeAccount.completeJudge = true;
-            completeAccount.completeMonth = accountByPayer.month;
+            completeAccount.withoutMonth.push(accountByPayer.month.split('-')[1]);
           }
         }
       }
@@ -118,6 +116,29 @@ export const getAccountCompleteJudgment = createSelector([groupAccountList], (gr
 
   return completeAccount;
 });
+
+export const getAccountCompleteMonthList = createSelector(
+  [yearlyAccountList],
+  (yearlyAccountList) => {
+    const yearlyAccountStatus: CompleteAccountStatus = {
+      completeMonth: [],
+    };
+
+    const september = 9;
+
+    for (const yearlyAccount of yearlyAccountList.yearly_accounting_status) {
+      if (yearlyAccount.calculation_status === '精算済') {
+        yearlyAccountStatus.completeMonth.push(
+          Number(yearlyAccount.month.split('月')[0]) <= september
+            ? '0' + yearlyAccount.month.split('月')[0]
+            : yearlyAccount.month.split('月')[0]
+        );
+      }
+    }
+
+    return yearlyAccountStatus;
+  }
+);
 
 export const getRemainingTotalAmount = createSelector([groupAccountList], (groupAccountList) => {
   const remainingAmountList: number[] = [];
