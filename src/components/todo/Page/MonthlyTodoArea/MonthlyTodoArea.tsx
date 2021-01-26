@@ -11,8 +11,8 @@ import { fetchMonthTodoList } from '../../../../reducks/todoList/operations';
 import InputYears from '../../../uikit/InputYears';
 import './monthly-todo-area.scss';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/MonthlyImplementationDateTodoLIstContainer/MonthlyImplementationDateTodoLIstContainer';
-import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/MonthlyDueDateTodoLIstContainer/MonthlyDueDateTodoLIstContainer';
+import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/MonthlyImplementationDateTodoListContainer/MonthlyImplementationDateTodoListContainer';
+import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/MonthlyDueDateTodoListContainer/MonthlyDueDateTodoListContainer';
 
 interface MonthlyTodoAreaProps {
   selectedYear: number;

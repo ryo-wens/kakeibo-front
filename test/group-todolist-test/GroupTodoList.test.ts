@@ -295,7 +295,6 @@ describe('async actions groupTodoLists', () => {
     const todoListItemId = 2;
     const today = new Date();
     const currentYearMonth = `2020/09`;
-    const selectedDate = new Date('2020-09-27T00:00:00');
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = '買い物へ行く';
@@ -401,7 +400,6 @@ describe('async actions groupTodoLists', () => {
       currentYearMonth,
       groupId,
       todoListItemId,
-      selectedDate,
       implementationDate,
       dueDate,
       todoContent,
