@@ -1,9 +1,9 @@
 import React from 'react';
-import { TodoListItemComponent } from './index';
 import { customMonth, date, year } from '../../lib/constant';
 import '../../assets/todo/search-result-todo-list.scss';
 import { TodoListItem } from '../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../reducks/groupTodoList/types';
+import TodoListItemComponentContainer from '../../containers/todo/modules/ListItem/TodoListItemComponentContainer/TodoListItemComponentContainer';
 
 interface SearchResultTodoListProps {
   currentDateType: string;
@@ -33,8 +33,8 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
       return (
         <div key={listItem.id}>
           {equalsDisplayDate()}
-          <TodoListItemComponent
-            todoListItem={listItem}
+          <TodoListItemComponentContainer
+            listItem={listItem}
             currentYearMonth={currentYearMonth}
             selectedDate={date}
           />

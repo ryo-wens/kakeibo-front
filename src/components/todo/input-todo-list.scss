@@ -34,14 +34,28 @@
     }
   }
 
-  &__date {
-    display: flex;
-    margin: 10px 20px;
+  &__items {
+    margin: 15px 25px;
 
     &--home-page {
       display: block;
       text-align: center;
-      margin-bottom: 10px;
+      margin: 15px 25px;
+
+    }
+  }
+
+  &__text-input {
+    width: 80%;
+    text-align: center;
+    margin: 0 auto 20px auto;
+  }
+
+  &__date {
+    display: flex;
+
+    &--home-page {
+      display: block;
     }
   }
 

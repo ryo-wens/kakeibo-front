@@ -5,56 +5,42 @@
   width: 100%;
   display: flex;
 
-  &__today-list {
+  &__left {
     width: calc((100% - 60px) * 0.7);
     margin-left: 20px;
   }
 
-  &__today-list-content {
+  &__left-content {
     background-color: white;
     border-radius: 0.6rem;
     padding: 20px;
   }
 
-  &__expired-list {
+  &__right {
     width: calc((100% - 60px) * 0.3);
     margin: 0 20px;
   }
 
-  &__expired-list-content {
+  &__right-content {
     background-color: white;
     border-radius: 0.6rem;
     padding: 15px;
-  }
 
-  &__menu {
-    display: flex;
-    margin-bottom: 30px;
+    > h4 {
+      color: $task-main_color;
+      margin: 0 0 10px 0;
+    }
+
+    > div {
+      background-color: $task-bg_color;
+      border-radius: 0.6rem;
+      padding: 10px;
+    }
   }
 
   &__search {
     @extend .task--btn;
     height: 40px;
     margin-left: 20px;
-  }
-
-  &__today-date {
-    display: inline-block;
-    color: $task-main_color;
-    font-size: 1.2rem;
-    font-weight: bold;
-    margin: 0 0 10px 10px;
-  }
-
-  &__switch-schedule-todo-list {
-    background-color: #F4F5F7;
-    border-radius: 0.6rem;
-    padding: 25px 0;
-    height: auto;
-
-    &--width {
-      width: 60%;
-      margin: auto;
-    }
   }
 }

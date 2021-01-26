@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { TodoList, TodoListItem } from '../../reducks/todoList/types';
-import { TodoListItemComponent } from './index';
 import { date } from '../../lib/constant';
 import { Divider } from '@material-ui/core';
 import { createStyles, makeStyles } from '@material-ui/core/styles';
+import TodoListItemComponentContainer from '../../containers/todo/modules/ListItem/TodoListItemComponentContainer/TodoListItemComponentContainer';
 
 const useStyles = makeStyles(() =>
   createStyles({
@@ -51,9 +51,9 @@ const ExpiredTodoList = (props: ExpiredTodoListProps) => {
       return <span className={classes.dueDate}>{todoListItem.due_date}</span>;
     };
     return (
-      <TodoListItemComponent
+      <TodoListItemComponentContainer
         key={todoListItem.id}
-        todoListItem={todoListItem}
+        listItem={todoListItem}
         selectedDate={date}
         currentYearMonth={props.currentYearMonth}
         displayDueDate={displayDueDate}
