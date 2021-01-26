@@ -18,7 +18,6 @@ interface TodoListItemComponentProps {
   pathName: string;
   group_id: number;
   listItem: TodoListItem | GroupTodoListItem;
-  selectedDate: Date | null;
   currentYearMonth: string;
   handleOpenEditTodoForm: () => void;
   handleCloseEditTodoForm: () => void;
@@ -55,7 +54,6 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           inputImplementationDate={props.inputImplementationDate}
           inputDueDate={props.inputDueDate}
           todoListItemId={props.listItem.id}
-          selectedDate={props.selectedDate}
           implementationDate={props.implementationDate}
           dueDate={props.dueDate}
           todoContent={props.todoContent}

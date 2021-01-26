@@ -181,7 +181,6 @@ export const editTodoListItem = (
   today: Date | null,
   currentYearMonth: string,
   todoListItemId: number,
-  selectedDate: Date | null,
   implementationDate: Date | null,
   dueDate: Date | null,
   todoContent: string,
@@ -189,9 +188,6 @@ export const editTodoListItem = (
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (today === null) {
-      return;
-    }
-    if (selectedDate === null) {
       return;
     }
     if (implementationDate === null) {

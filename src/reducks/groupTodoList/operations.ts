@@ -185,7 +185,6 @@ export const editGroupTodoListItem = (
   currentYearMonth: string,
   groupId: number,
   todoListItemId: number,
-  selectedDate: Date | null,
   implementationDate: Date | null,
   dueDate: Date | null,
   todoContent: string,
@@ -193,9 +192,6 @@ export const editGroupTodoListItem = (
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (today === null) {
-      return;
-    }
-    if (selectedDate === null) {
       return;
     }
     if (implementationDate === null) {

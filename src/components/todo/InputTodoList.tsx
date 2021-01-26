@@ -13,7 +13,6 @@ interface InputTodoListProps {
   inputImplementationDate: (date: Date | null) => void;
   inputDueDate: (date: Date | null) => void;
   todoListItemId: number;
-  selectedDate: Date | null;
   implementationDate: Date | null;
   dueDate: Date | null;
   todoContent: string;

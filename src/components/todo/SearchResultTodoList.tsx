@@ -1,5 +1,5 @@
 import React from 'react';
-import { customMonth, date, year } from '../../lib/constant';
+import { customMonth, year } from '../../lib/constant';
 import '../../assets/todo/search-result-todo-list.scss';
 import { TodoListItem } from '../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../reducks/groupTodoList/types';
@@ -33,11 +33,7 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
       return (
         <div key={listItem.id}>
           {equalsDisplayDate()}
-          <TodoListItemComponentContainer
-            listItem={listItem}
-            currentYearMonth={currentYearMonth}
-            selectedDate={date}
-          />
+          <TodoListItemComponentContainer listItem={listItem} currentYearMonth={currentYearMonth} />
         </div>
       );
     });
