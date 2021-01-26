@@ -1,53 +1,24 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
-import { fetchYearlyBudgets, deleteCustomBudgets } from '../../reducks/budgets/operations';
-import axios from 'axios';
+import React from 'react';
 import { YearlyBudgetsList } from '../../reducks/budgets/types';
 import IconButton from '@material-ui/core/IconButton';
-import { push } from 'connected-react-router';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import { standardBudgetType } from '../../lib/constant';
-import { getYearlyBudgets } from '../../reducks/budgets/selectors';
 
 interface YearlyBudgetsRowProps {
   years: number;
+  yearBudget: YearlyBudgetsList;
+  deleteCustomBudgets: (selectYear: string, selectMonth: string) => void;
+  routingAddCustomBudgets: (
+    transitingBasePath: string,
+    selectYear: string,
+    selectMonth: string
+  ) => void;
 }
 
 const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
-  const dispatch = useDispatch();
-  const year = props.years;
-  const pathName = useLocation().pathname.split('/')[1];
-  const signal = axios.CancelToken.source();
-  const yearlyBudgets = useSelector(getYearlyBudgets);
-  const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
-    year: '',
-    yearly_total_budget: 0,
-    monthly_budgets: [],
-  });
-
-  useEffect(() => {
-    if (pathName !== 'group') {
-      dispatch(fetchYearlyBudgets(year, signal));
-      return () => signal.cancel();
-    }
-  }, [year]);
-
-  useEffect(() => {
-    setYearBudget(yearlyBudgets);
-  }, [yearlyBudgets]);
-
-  const deleteCustom = (selectYear: string, selectMonth: string) => {
-    async function deleteBudgets() {
-      await dispatch(deleteCustomBudgets(selectYear, selectMonth));
-      dispatch(fetchYearlyBudgets(Number(selectYear), signal));
-    }
-    deleteBudgets();
-  };
-
   const customBudgetsTable = (): JSX.Element[] => {
-    return yearBudget.monthly_budgets.map((budget, index) => {
+    return props.yearBudget.monthly_budgets.map((budget, index) => {
       const transitingBasePath =
         budget.budget_type === 'CustomBudget' ? `/custom/budgets` : `/standard/budgets`;
       const budgetsType = () => {
@@ -58,7 +29,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
       };
       const selectYear = budget.month.slice(0, 4);
       const selectMonth = budget.month.slice(5, 7);
-      const lastDate = new Date(year, Number(selectMonth), 0).getDate();
+      const lastDate = new Date(props.years, Number(selectMonth), 0).getDate();
       return (
         <tr key={index}>
           <td className="budget__td" scope="row">
@@ -76,7 +47,9 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
           <td className="budget__td" align="center">
             <IconButton
               size={'small'}
-              onClick={() => dispatch(push(`${transitingBasePath}/${selectYear}/${selectMonth}`))}
+              onClick={() =>
+                props.routingAddCustomBudgets(transitingBasePath, selectYear, selectMonth)
+              }
             >
               <CreateIcon color={'primary'} />
             </IconButton>
@@ -85,7 +58,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
                 size={'small'}
                 onClick={() => {
                   if (window.confirm('カスタム予算を削除しても良いですか？ ')) {
-                    deleteCustom(selectYear, selectMonth);
+                    props.deleteCustomBudgets(selectYear, selectMonth);
                   }
                 }}
               >
