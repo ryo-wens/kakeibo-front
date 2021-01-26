@@ -1,134 +1,76 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { ExpiredTodoList, SearchTodoList } from '../index';
-import { getExpiredTodoList } from '../../../reducks/todoList/selectors';
-import { getGroupExpiredTodoList } from '../../../reducks/groupTodoList/selectors';
-import { getWeekDay } from '../../../lib/date';
-import { fetchExpiredTodoList } from '../../../reducks/todoList/operations';
+import React from 'react';
+import { SearchTodoList } from '../index';
 import { GroupTodoList } from '../../../reducks/groupTodoList/types';
 import { TodoList } from '../../../reducks/todoList/types';
-import { customMonth, date, month, year } from '../../../lib/constant';
-import axios from 'axios';
-import { useLocation } from 'react-router';
 import './todo-page.scss';
-import SwitchTodayOrMonthlyButton from '../SwitchTodayOrMonthlyButton';
 import TodayTodoArea from './TodayTodoArea/TodayTodoArea';
 import MonthlyTodoArea from './MonthlyTodoArea/MonthlyTodoArea';
-import { fetchGroups } from '../../../reducks/groups/operations';
+import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
+import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
 
-const TodoPage = () => {
-  const dispatch = useDispatch();
-  const expiredTodoList = useSelector(getExpiredTodoList);
-  const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
-  const pathName = useLocation().pathname.split('/')[1];
-  const [openSearchTodoList, setOpenSearchTodoList] = useState<boolean>(false);
-  const [openSearchResultTodoList, setOpenSearchResultTodoList] = useState<boolean>(false);
-  const [currentTodayOrMonthly, setCurrentTodayOrMonthly] = useState<'today' | 'monthly'>('today');
-  const [editing, setEditing] = useState(false);
-  const [selectedYear, setSelectedYear] = useState<number>(year);
-  const [selectedMonth, setSelectedMonth] = useState<number>(month);
-  const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
-  const currentYearMonth = `${selectedYear}/${currentMonth}`;
+interface TodoPageProps {
+  selectedYear: number;
+  selectedMonth: number;
+  setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
+  setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentTodayOrMonthly: TodayOrMonthly;
+  setCurrentTodayOrMonthly: React.Dispatch<React.SetStateAction<TodayOrMonthly>>;
+  editing: boolean;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  openSearchTodoList: boolean;
+  openSearchResultTodoList: boolean;
+  setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
+  openSearch: () => void;
+  closeSearch: () => void;
+  currentYearMonth: string;
+  pathName: string;
+  existsExpiredTodoList: (todoList: TodoList | GroupTodoList) => JSX.Element;
+  expiredTodoList: TodoList;
+  groupExpiredTodoList: GroupTodoList;
+}
 
-  useEffect(() => {
-    if (pathName !== 'group') {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchGroups(signal));
-      const interval = setInterval(() => {
-        dispatch(fetchGroups(signal));
-      }, 3000);
-
-      return () => {
-        signal.cancel();
-        clearInterval(interval);
-      };
-    }
-  }, []);
-
-  useEffect(() => {
-    if (pathName !== 'group' && !expiredTodoList.length) {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchExpiredTodoList(signal));
-      return () => signal.cancel();
-    }
-  }, [currentTodayOrMonthly]);
-
-  const existsExpiredTodoList = (todoList: TodoList | GroupTodoList) => {
-    if (todoList.length !== 0) {
-      return (
-        <ExpiredTodoList
-          currentYearMonth={
-            currentTodayOrMonthly === 'today' ? `${year}/${customMonth}` : currentYearMonth
-          }
-          expiredTodoList={todoList}
-          setEditing={setEditing}
-        />
-      );
-    }
-  };
-
-  const openSearch = () => {
-    setOpenSearchTodoList(true);
-  };
-
-  const closeSearch = () => {
-    setOpenSearchTodoList(false);
-    setOpenSearchResultTodoList(false);
-  };
-
+const TodoPage = (props: TodoPageProps) => {
   return (
     <>
-      {!openSearchTodoList ? (
+      {!props.openSearchTodoList ? (
         <div className="todo-page">
-          <div className="todo-page__today-list">
-            <div className="todo-page__today-list-content">
-              <div className="todo-page__menu">
-                <SwitchTodayOrMonthlyButton
-                  currentTodayOrMonthly={currentTodayOrMonthly}
-                  setCurrentTodayOrMonthly={setCurrentTodayOrMonthly}
-                />
-                <button className="todo-page__search" onClick={() => openSearch()}>
-                  検索
-                </button>
-              </div>
-              {currentTodayOrMonthly === 'today' && (
-                <span className="todo-page__today-date">
-                  今日 {date.getMonth() + 1}/{date.getDate()} ({getWeekDay(date)})
-                </span>
-              )}
-
-              <div className="todo-page__switch-schedule-todo-list">
-                <div className="todo-page__switch-schedule-todo-list--width">
-                  {currentTodayOrMonthly === 'today' ? (
-                    <TodayTodoArea editing={editing} setEditing={setEditing} />
-                  ) : (
-                    <MonthlyTodoArea
-                      selectedYear={selectedYear}
-                      selectedMonth={selectedMonth}
-                      setSelectedYear={setSelectedYear}
-                      setSelectedMonth={setSelectedMonth}
-                      currentYearMonth={currentYearMonth}
-                      editing={editing}
-                      setEditing={setEditing}
-                    />
-                  )}
-                </div>
-              </div>
+          <div className="todo-page__left">
+            <div className="todo-page__left-content">
+              <button className="todo-page__search" onClick={() => props.openSearch()}>
+                検索
+              </button>
+              <SwitchTodayOrMonthlyTabsContainer
+                currentItem={props.currentTodayOrMonthly}
+                setCurrentItems={props.setCurrentTodayOrMonthly}
+                leftItem={<TodayTodoArea editing={props.editing} setEditing={props.setEditing} />}
+                rightItem={
+                  <MonthlyTodoArea
+                    selectedYear={props.selectedYear}
+                    selectedMonth={props.selectedMonth}
+                    setSelectedYear={props.setSelectedYear}
+                    setSelectedMonth={props.setSelectedMonth}
+                    currentYearMonth={props.currentYearMonth}
+                    editing={props.editing}
+                    setEditing={props.setEditing}
+                  />
+                }
+              />
             </div>
           </div>
-          <div className="todo-page__expired-list">
-            <div className="todo-page__expired-list-content">
-              {pathName !== 'group'
-                ? existsExpiredTodoList(expiredTodoList)
-                : existsExpiredTodoList(groupExpiredTodoList)}
+          <div className="todo-page__right">
+            <div className="todo-page__right-content">
+              <h4>期限切れToDoリスト</h4>
+              {props.pathName !== 'group'
+                ? props.existsExpiredTodoList(props.expiredTodoList)
+                : props.existsExpiredTodoList(props.groupExpiredTodoList)}
             </div>
           </div>
         </div>
       ) : (
         <SearchTodoList
-          openSearchResultTodoList={openSearchResultTodoList}
-          setOpenSearchResultTodoList={setOpenSearchResultTodoList}
-          closeSearch={closeSearch}
+          openSearchResultTodoList={props.openSearchResultTodoList}
+          setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}
+          closeSearch={props.closeSearch}
         />
       )}
     </>

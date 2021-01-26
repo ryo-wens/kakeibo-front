@@ -30,7 +30,7 @@ interface DeleteButtonProps {
   contentName: string;
   disabled: boolean;
   onClickDelete: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
-  onClickCloseInputTodoList: (event: Event) => void;
+  onClickCloseInputTodoForm: (event: Event) => void;
 }
 
 const DeleteButton = (props: DeleteButtonProps) => {
@@ -42,12 +42,12 @@ const DeleteButton = (props: DeleteButtonProps) => {
 
   const openModal = () => {
     setOpen(true);
-    document.removeEventListener('click', props.onClickCloseInputTodoList);
+    document.removeEventListener('click', props.onClickCloseInputTodoForm);
   };
 
   const closeModal = () => {
     setOpen(false);
-    document.addEventListener('click', props.onClickCloseInputTodoList);
+    document.addEventListener('click', props.onClickCloseInputTodoForm);
   };
 
   const body = (

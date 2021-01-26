@@ -1,5 +1,5 @@
 import React from 'react';
-import { AddTodo, TodoListItemComponent } from '../../../index';
+import { AddTodo } from '../../../index';
 import { TodoList } from '../../../../../reducks/todoList/types';
 import {
   dateStringToDate,
@@ -8,6 +8,7 @@ import {
   getFirstDayOfMonth,
 } from '../../../../../lib/date';
 import { GroupTodoList } from '../../../../../reducks/groupTodoList/types';
+import TodoListItemComponentContainer from '../../../../../containers/todo/modules/ListItem/TodoListItemComponentContainer/TodoListItemComponentContainer';
 
 interface MonthlyTodoListProps {
   planName: string;
@@ -40,8 +41,8 @@ const MonthlyTodoList = (props: MonthlyTodoListProps) => {
         const weekDate: number = date.getTime();
         if (prevDate === weekDate) {
           dateTodoLists.push(
-            <TodoListItemComponent
-              todoListItem={listItem}
+            <TodoListItemComponentContainer
+              listItem={listItem}
               key={listItem.id}
               selectedDate={selectedDate}
               currentYearMonth={props.currentYearMonth}
