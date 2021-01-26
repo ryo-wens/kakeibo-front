@@ -132,10 +132,8 @@ const Header = () => {
             </li>
             <li
               className="header__global-menu--item"
-              style={currentPage(
-                pathName !== 'group' ? '/standard/budgets' : `/group/${group_id}/standard/budgets`
-              )}
-              onClick={() => existsGroupWhenRouting('/standard/budgets')}
+              style={currentPage(pathName !== 'group' ? '/budgets' : `/group/${group_id}/budgets`)}
+              onClick={() => existsGroupWhenRouting('/budgets?standard')}
             >
               <a>
                 <MoneyIcon className="header__icon" />
