@@ -3,7 +3,7 @@ export { default as Home } from './Home';
 export { default as LogIn } from './login/LogIn';
 export { default as EditStandardBudgets } from './EditStandardBudgets';
 export { default as SignUp } from './signup/SignUp';
-export { default as StandardBudgets } from './StandardBudgets';
+export { default as StandardBudgets } from '../components/budget/StandardBudgets';
 export { default as Task } from './Task';
 export { default as Todo } from './Todo';
 export { default as History } from './history/History';
