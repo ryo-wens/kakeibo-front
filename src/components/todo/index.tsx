@@ -1,5 +1,4 @@
 export { default as AddTodo } from './AddTodo';
-export { default as ExpiredTodoList } from './ExpiredTodoList';
 export { default as InputTodoList } from './InputTodoList';
 export { default as SearchField } from './SearchField';
 export { default as SearchTodoList } from './SearchTodoList';
