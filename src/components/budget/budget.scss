@@ -14,7 +14,7 @@
 
   &__background {
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    border: 1px solid $border_color;
     border-radius: 5px;
     box-sizing: border-box;
     height: auto;
@@ -24,9 +24,9 @@
 
     &__table {
       border: 1px solid $border_color;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       margin: 0 auto;
     }
-
   }
 
   &__switch-type {
@@ -94,7 +94,8 @@
   }
 
   &__submit-btn {
-    text-align: center;
+    width: 250px;
+    margin: 0 auto;
   }
 
   &__switching-btn {
