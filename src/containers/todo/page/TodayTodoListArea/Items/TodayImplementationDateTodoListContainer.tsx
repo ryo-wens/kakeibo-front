@@ -41,7 +41,7 @@ const TodayImplementationDateTodoListContainer = (
         pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
       }
       currentYearMonth={props.currentYearMonth}
-      message={'今日が、実施予定のToDoリストは登録されていません。'}
+      message={'今日の実施予定のToDoリストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
       setEditing={props.setEditing}

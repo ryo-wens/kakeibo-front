@@ -1,14 +1,9 @@
 @import "../../../../assets/variable";
-@import "../../../../assets/modules/task-btn";
 
-.monthly-shopping-list-area {
+.today-todo-list-area {
 
   &__add-button {
     margin: 20px 0;
-  }
-
-  &__input-years {
-    margin-bottom: 20px;
   }
 
   &__switch-item {

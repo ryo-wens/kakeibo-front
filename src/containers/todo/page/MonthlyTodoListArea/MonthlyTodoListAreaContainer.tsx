@@ -8,13 +8,9 @@ import {
 } from '../../../../reducks/groupTodoList/operations';
 import { fetchGroups } from '../../../../reducks/groups/operations';
 import { fetchMonthTodoList } from '../../../../reducks/todoList/operations';
-import InputYears from '../../../uikit/InputYears';
-import './monthly-todo-area.scss';
-import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/MonthlyImplementationDateTodoListContainer/MonthlyImplementationDateTodoListContainer';
-import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/MonthlyDueDateTodoListContainer/MonthlyDueDateTodoListContainer';
+import MonthlyTodoListArea from '../../../../components/todo/Page/MonthlyTodoListArea/MonthlyTodoListArea';
 
-interface MonthlyTodoAreaProps {
+interface MonthlyTodoListAreaContainerProps {
   selectedYear: number;
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
@@ -24,7 +20,7 @@ interface MonthlyTodoAreaProps {
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
+const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
@@ -62,34 +58,15 @@ const MonthlyTodoArea = (props: MonthlyTodoAreaProps) => {
   }, [props.selectedYear, props.selectedMonth]);
 
   return (
-    <>
-      <InputYears
-        selectedYear={props.selectedYear}
-        selectedMonth={props.selectedMonth}
-        setSelectedMonth={props.setSelectedMonth}
-        setSelectedYear={props.setSelectedYear}
-      />
-      <div className="monthly-todo-area__spacer" />
-      <SwitchItemTabs
-        leftButtonLabel={'実施予定のToDo'}
-        rightButtonLabel={'締切予定のToDo'}
-        leftItem={
-          <MonthlyImplementationDateTodoListContainer
-            selectedMonth={props.selectedMonth}
-            currentYearMonth={currentYearMonth}
-            setEditing={props.setEditing}
-          />
-        }
-        rightItem={
-          <MonthlyDueDateTodoListContainer
-            selectedMonth={props.selectedMonth}
-            currentYearMonth={currentYearMonth}
-            setEditing={props.setEditing}
-          />
-        }
-      />
-    </>
+    <MonthlyTodoListArea
+      selectedYear={props.selectedYear}
+      selectedMonth={props.selectedMonth}
+      setSelectedYear={props.setSelectedYear}
+      setSelectedMonth={props.setSelectedMonth}
+      currentYearMonth={currentYearMonth}
+      setEditing={props.setEditing}
+    />
   );
 };
 
-export default MonthlyTodoArea;
+export default MonthlyTodoListAreaContainer;
