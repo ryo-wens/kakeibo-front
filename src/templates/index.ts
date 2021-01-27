@@ -1,4 +1,4 @@
-export { default as CustomBudgets } from './CustomBudgets';
+export { default as CustomBudgets } from '../components/budget/CustomBudgets';
 export { default as Home } from './Home';
 export { default as LogIn } from './login/LogIn';
 export { default as EditStandardBudgets } from './EditStandardBudgets';

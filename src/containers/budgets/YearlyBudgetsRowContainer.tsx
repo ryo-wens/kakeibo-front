@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation } from 'react-router';
-import { push } from 'connected-react-router';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { getYearlyBudgets } from '../../reducks/budgets/selectors';
 import { deleteCustomBudgets, fetchYearlyBudgets } from '../../reducks/budgets/operations';
@@ -9,13 +8,12 @@ import { YearlyBudgetsList } from '../../reducks/budgets/types';
 import YearlyBudgetsRow from '../../components/budget/YearlyBudgetsRow';
 
 interface YearlyBudgetsRowContainerProps {
-  years: number;
+  budgetsYear: number;
 }
 
 const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
   const dispatch = useDispatch();
-  const pathName = useLocation().pathname.split('/')[1];
-  const year = props.years;
+  const history = useHistory();
   const yearlyBudgets = useSelector(getYearlyBudgets);
   const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
     year: '',
@@ -29,11 +27,10 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    if (pathName !== 'group') {
-      dispatch(fetchYearlyBudgets(year, signal));
-      return () => signal.cancel();
-    }
-  }, [year]);
+    dispatch(fetchYearlyBudgets(props.budgetsYear, signal));
+
+    return () => signal.cancel();
+  }, [props.budgetsYear]);
 
   const deleteCustom = (selectYear: string, selectMonth: string) => {
     const signal = axios.CancelToken.source();
@@ -46,12 +43,17 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
 
   return (
     <YearlyBudgetsRow
-      years={props.years}
+      budgetsYear={props.budgetsYear}
       yearBudget={yearBudget}
       deleteCustomBudgets={deleteCustom}
-      routingAddCustomBudgets={(transitingBasePath, selectYear, selectMonth) =>
-        dispatch(push(`${transitingBasePath}/${selectYear}/${selectMonth}`))
-      }
+      routingEditCustomBudgets={(routingAddress, selectYear, selectMonth) => {
+        if (routingAddress === 'custom') {
+          history.push({
+            pathname: '/budgets',
+            search: `?custom&year=${props.budgetsYear}&month=${selectMonth}`,
+          });
+        }
+      }}
     />
   );
 };

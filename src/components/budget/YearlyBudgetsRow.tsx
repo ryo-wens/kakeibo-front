@@ -6,10 +6,10 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { standardBudgetType } from '../../lib/constant';
 
 interface YearlyBudgetsRowProps {
-  years: number;
+  budgetsYear: number;
   yearBudget: YearlyBudgetsList;
   deleteCustomBudgets: (selectYear: string, selectMonth: string) => void;
-  routingAddCustomBudgets: (
+  routingEditCustomBudgets: (
     transitingBasePath: string,
     selectYear: string,
     selectMonth: string
@@ -19,8 +19,7 @@ interface YearlyBudgetsRowProps {
 const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
   const customBudgetsTable = (): JSX.Element[] => {
     return props.yearBudget.monthly_budgets.map((budget, index) => {
-      const transitingBasePath =
-        budget.budget_type === 'CustomBudget' ? `/custom/budgets` : `/standard/budgets`;
+      const routingAddress = budget.budget_type === 'CustomBudget' ? `custom` : `standard`;
       const budgetsType = () => {
         if (budget.budget_type === standardBudgetType) {
           return '標準';
@@ -29,7 +28,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
       };
       const selectYear = budget.month.slice(0, 4);
       const selectMonth = budget.month.slice(5, 7);
-      const lastDate = new Date(props.years, Number(selectMonth), 0).getDate();
+      const lastDate = new Date(props.budgetsYear, Number(selectMonth), 0).getDate();
       return (
         <tr key={index}>
           <td className="budget__td" scope="row">
@@ -47,9 +46,9 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
           <td className="budget__td" align="center">
             <IconButton
               size={'small'}
-              onClick={() =>
-                props.routingAddCustomBudgets(transitingBasePath, selectYear, selectMonth)
-              }
+              onClick={() => {
+                props.routingEditCustomBudgets(routingAddress, selectYear, selectMonth);
+              }}
             >
               <CreateIcon color={'primary'} />
             </IconButton>
