@@ -145,7 +145,7 @@ describe('async actions groups', () => {
       {
         type: '@@router/CALL_HISTORY_METHOD',
         payload: {
-          args: ['/group/3'],
+          args: ['/group/3/home'],
           method: 'push',
         },
       },
@@ -385,7 +385,7 @@ describe('async actions groups', () => {
       {
         type: '@@router/CALL_HISTORY_METHOD',
         payload: {
-          args: ['/group/2'],
+          args: ['/group/2/home'],
           method: 'push',
         },
       },

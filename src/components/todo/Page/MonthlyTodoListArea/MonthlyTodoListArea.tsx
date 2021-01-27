@@ -4,8 +4,8 @@ import './monthly-todo-list-area.scss';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/Items/MonthlyImplementationDateTodoListContainer';
 import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/Items/MonthlyDueDateTodoListContainer';
-import { AddTodo } from '../../index';
 import { date } from '../../../../lib/constant';
+import AddTodoListItemFormContainer from '../../../../containers/todo/modules/Form/AddTodoListItemFormContainer';
 
 interface MonthlyTodoListAreaProps {
   selectedYear: number;
@@ -20,7 +20,7 @@ const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
   return (
     <>
       <div className="monthly-todo-list-area__add-button">
-        <AddTodo date={date} />
+        <AddTodoListItemFormContainer date={date} />
       </div>
       <div className="monthly-todo-list-area__switch-item">
         <div className="monthly-todo-list-area__switch-item--width">

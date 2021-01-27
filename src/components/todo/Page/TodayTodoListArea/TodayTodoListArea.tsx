@@ -1,10 +1,10 @@
 import React from 'react';
 import { date } from '../../../../lib/constant';
-import { AddTodo } from '../../index';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import TodayImplementationDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/Items/TodayImplementationDateTodoListContainer';
 import TodayDueDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/Items/TodayDueDateTodoListContainer';
 import './today-todo-list-area.scss';
+import AddTodoListItemFormContainer from '../../../../containers/todo/modules/Form/AddTodoListItemFormContainer';
 
 interface TodayTodoListAreaProps {
   currentYearMonth: string;
@@ -16,7 +16,7 @@ const TodayTodoListArea = (props: TodayTodoListAreaProps) => {
   return (
     <>
       <div className="today-todo-list-area__add-button">
-        <AddTodo date={date} />
+        <AddTodoListItemFormContainer date={date} />
       </div>
       <div className="today-todo-list-area__switch-item">
         <div className="today-todo-list-area__switch-item--width">

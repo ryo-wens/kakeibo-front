@@ -3,7 +3,7 @@ import { customMonth, year } from '../../lib/constant';
 import '../../assets/todo/search-result-todo-list.scss';
 import { TodoListItem } from '../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../reducks/groupTodoList/types';
-import TodoListItemComponentContainer from '../../containers/todo/modules/ListItem/TodoListItemComponentContainer/TodoListItemComponentContainer';
+import TodoListItemComponentContainer from '../../containers/todo/modules/ListItem/TodoListItemComponentContainer';
 
 interface SearchResultTodoListProps {
   currentDateType: string;
