@@ -4,8 +4,7 @@ import { push } from 'connected-react-router';
 import { useParams } from 'react-router';
 import { getGroupYearlyBudgets } from '../../reducks/groupBudgets/selectors';
 import { GroupYearlyBudgetsList } from '../../reducks/groupBudgets/types';
-import axios, { CancelTokenSource } from 'axios';
-import { fetchGroups } from '../../reducks/groups/operations';
+import axios from 'axios';
 import {
   deleteGroupCustomBudgets,
   fetchGroupYearlyBudgets,
@@ -13,12 +12,11 @@ import {
 import GroupYearlyBudgetsRow from '../../components/budget/GroupYearlyBudgetsRow';
 
 interface GroupYearlyBudgetsRowContainerProps {
-  years: number;
+  budgetsYear: number;
 }
 
 const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerProps) => {
   const dispatch = useDispatch();
-  const year = props.years;
   const { group_id } = useParams();
   const groupYearlyBudgetsList = useSelector(getGroupYearlyBudgets);
   const [groupYearlyBudgets, setGroupYearlyBudgets] = useState<GroupYearlyBudgetsList>({
@@ -31,26 +29,23 @@ const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerPro
     setGroupYearlyBudgets(groupYearlyBudgetsList);
   }, [groupYearlyBudgetsList]);
 
-  const fetchGroupYearlyBudgetsData = (signal: CancelTokenSource) => {
-    dispatch(fetchGroups(signal));
-    dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
-  };
-
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    fetchGroupYearlyBudgetsData(signal);
+    dispatch(fetchGroupYearlyBudgets(Number(group_id), props.budgetsYear, signal));
+
     const interval = setInterval(() => {
-      fetchGroupYearlyBudgetsData(signal);
+      dispatch(fetchGroupYearlyBudgets(Number(group_id), props.budgetsYear, signal));
     }, 3000);
+
     return () => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, [year]);
+  }, [props.budgetsYear]);
 
   return (
     <GroupYearlyBudgetsRow
-      years={props.years}
+      years={props.budgetsYear}
       groupYearlyBudgets={groupYearlyBudgets}
       deleteCustomBudgets={(selectYear, selectMonth) =>
         dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(group_id)))

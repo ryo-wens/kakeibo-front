@@ -8,6 +8,8 @@ interface BudgetsProps {
   query: string;
   routingStandard: () => void;
   routingYearly: () => void;
+  budgetsYear: number;
+  setBudgetsYear: React.Dispatch<React.SetStateAction<number>>;
   currentStandardColor: () => { color: string; background: string };
   currentYearlyColor: () => { color: string; background: string };
 }
@@ -30,7 +32,12 @@ const Budgets = (props: BudgetsProps) => {
 
         {props.query === '?standard' && <StandardBudgetsContainer />}
 
-        {props.query === '?yearly' && <YearlyBudgetsContainer />}
+        {props.query === `?yearly&year=${props.budgetsYear}` && (
+          <YearlyBudgetsContainer
+            budgetsYear={props.budgetsYear}
+            setBudgetsYear={props.setBudgetsYear}
+          />
+        )}
       </main>
     </>
   );

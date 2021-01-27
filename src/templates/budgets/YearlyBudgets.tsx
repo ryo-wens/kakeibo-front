@@ -6,13 +6,10 @@ import '../../components/budget/yearly-budgets.scss';
 
 interface YearlyBudgetsProps {
   pathName: string;
-  years: number;
-  setYears: React.Dispatch<React.SetStateAction<number>>;
+  budgetsYear: number;
+  setBudgetsYear: React.Dispatch<React.SetStateAction<number>>;
   totalBudget: number;
   totalGroupBudget: number;
-  currentPageColor: () => { color: string; background: string };
-  routingStandardBudgets: () => void;
-  routingYearlyBudgets: () => void;
 }
 
 const YearlyBudgets = (props: YearlyBudgetsProps) => {
@@ -20,7 +17,7 @@ const YearlyBudgets = (props: YearlyBudgetsProps) => {
     <>
       <div className="yearly-budgets__yearly-table-position">
         <div className="yearly-budgets__select-year">
-          <SelectYears selectedYear={props.years} setSelectedYear={props.setYears} />
+          <SelectYears selectedYear={props.budgetsYear} setSelectedYear={props.setBudgetsYear} />
         </div>
         <div className="yearly-budgets__background">
           <h2>
@@ -39,9 +36,9 @@ const YearlyBudgets = (props: YearlyBudgetsProps) => {
                 <th align="center">操作</th>
               </tr>
               {props.pathName !== 'group' ? (
-                <YearlyBudgetsRowContainer years={props.years} />
+                <YearlyBudgetsRowContainer budgetsYear={props.budgetsYear} />
               ) : (
-                <GroupYearlyBudgetsRowContainer years={props.years} />
+                <GroupYearlyBudgetsRowContainer budgetsYear={props.budgetsYear} />
               )}
             </tbody>
           </table>

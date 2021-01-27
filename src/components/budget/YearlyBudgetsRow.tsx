@@ -6,7 +6,7 @@ import DeleteIcon from '@material-ui/icons/Delete';
 import { standardBudgetType } from '../../lib/constant';
 
 interface YearlyBudgetsRowProps {
-  years: number;
+  budgetsYear: number;
   yearBudget: YearlyBudgetsList;
   deleteCustomBudgets: (selectYear: string, selectMonth: string) => void;
   routingAddCustomBudgets: (
@@ -29,7 +29,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
       };
       const selectYear = budget.month.slice(0, 4);
       const selectMonth = budget.month.slice(5, 7);
-      const lastDate = new Date(props.years, Number(selectMonth), 0).getDate();
+      const lastDate = new Date(props.budgetsYear, Number(selectMonth), 0).getDate();
       return (
         <tr key={index}>
           <td className="budget__td" scope="row">
