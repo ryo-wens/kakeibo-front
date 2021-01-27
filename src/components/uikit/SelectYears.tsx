@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import qs from 'qs';
 import { years, year } from '../../lib/constant';
@@ -18,29 +18,46 @@ const SelectYears = (props: SelectYearsProps) => {
   const history = useHistory();
   const searchLocation = useLocation().search;
   const queryParams = qs.parse(searchLocation);
+  const { group_id } = useParams();
+  const pathName = useLocation().pathname.split('/')[1];
   const [itemYear, setItemYear] = useState<number>(props.selectedYear);
   const [selectOpen, setSelectOpen] = useState<boolean>(false);
   const prevDisable = props.selectedYear === year - 3;
   const nextDisable = props.selectedYear >= year + 3;
+  const budgetsPage = searchLocation === `?yearly&year=${props.selectedYear}`;
 
   const updatePrevYear = () => {
     const prevYear = props.selectedYear - 1;
-    const newPrevYearQuery = { ...queryParams, '?year': prevYear };
-    history.push({ search: decodeURIComponent(qs.stringify(newPrevYearQuery)) });
-
     setItemYear(prevYear);
     props.setSelectedYear(prevYear);
+
+    if (!budgetsPage) {
+      const newPrevYearQuery = { ...queryParams, '?year': prevYear };
+
+      history.push({ search: decodeURIComponent(qs.stringify(newPrevYearQuery)) });
+    } else if (pathName === 'group') {
+      history.push({ pathname: `/group/${group_id}/budgets`, search: `?yearly&year=${prevYear}` });
+    } else {
+      history.push({ pathname: '/budgets', search: `?yearly&year=${prevYear}` });
+    }
   };
 
   const updateNextYear = () => {
     const nextYear = props.selectedYear + 1;
-    const newNextYearQuery = { ...queryParams, '?year': nextYear };
-    history.push({
-      search: decodeURIComponent(qs.stringify(newNextYearQuery)),
-    });
-
     setItemYear(nextYear);
     props.setSelectedYear(nextYear);
+
+    if (!budgetsPage) {
+      const newNextYearQuery = { ...queryParams, '?year': nextYear };
+
+      history.push({
+        search: decodeURIComponent(qs.stringify(newNextYearQuery)),
+      });
+    } else if (pathName === 'group') {
+      history.push({ pathname: `/group/${group_id}/budgets`, search: `?yearly&year=${nextYear}` });
+    } else {
+      history.push({ pathname: '/budgets', search: `?yearly&year=${nextYear}` });
+    }
   };
 
   const changeItemYear = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -81,11 +98,21 @@ const SelectYears = (props: SelectYearsProps) => {
         <button
           className="select-years__display-btn select-years__display-btn--small"
           onClick={() => {
-            const currentYearQuery = { ...queryParams, '?year': year };
-            history.push({ search: decodeURIComponent(qs.stringify(currentYearQuery)) });
-
             setItemYear(year);
             props.setSelectedYear(year);
+
+            if (!budgetsPage) {
+              const currentYearQuery = { ...queryParams, '?year': year };
+
+              history.push({ search: decodeURIComponent(qs.stringify(currentYearQuery)) });
+            } else if (pathName === 'group') {
+              history.push({
+                pathname: `/group/${group_id}/budgets`,
+                search: `?yearly&year=${year}`,
+              });
+            } else {
+              history.push({ pathname: '/budgets', search: `?yearly&year=${year}` });
+            }
           }}
         >
           今年を表示

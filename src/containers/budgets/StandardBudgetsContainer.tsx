@@ -2,7 +2,6 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import axios from 'axios';
-import { fetchGroups } from '../../reducks/groups/operations';
 import { editStandardBudgets, fetchStandardBudgets } from '../../reducks/budgets/operations';
 import { getStandardBudgets, getTotalStandardBudget } from '../../reducks/budgets/selectors';
 import { StandardBudgetsList } from '../../reducks/budgets/types';
@@ -15,20 +14,6 @@ const StandardBudgetsContainer = () => {
   const totalStandardBudget = useSelector(getTotalStandardBudget);
   const [budgets, setBudgets] = useState<StandardBudgetsList>([]);
   const unEditBudgets = budgets === standardBudgets;
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-    dispatch(fetchGroups(signal));
-
-    const interval = setInterval(() => {
-      dispatch(fetchGroups(signal));
-    }, 3000);
-
-    return () => {
-      signal.cancel();
-      clearInterval(interval);
-    };
-  }, []);
 
   useEffect(() => {
     if (!standardBudgets.length && pathName !== 'group') {

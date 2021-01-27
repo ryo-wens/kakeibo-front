@@ -1,76 +1,36 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { push } from 'connected-react-router';
-import axios, { CancelTokenSource } from 'axios';
-import { useParams } from 'react-router';
-import {
-  fetchGroupCustomBudgets,
-  editGroupCustomBudgets,
-} from '../../reducks/groupBudgets/operations';
-import {
-  getGroupCustomBudgets,
-  getTotalGroupCustomBudget,
-} from '../../reducks/groupBudgets/selectors';
-import { fetchGroups } from '../../reducks/groups/operations';
+import React from 'react';
 import { GroupCustomBudgetsList } from '../../reducks/groupBudgets/types';
 import TextField from '@material-ui/core/TextField';
 import GenericButton from '../uikit/GenericButton';
-import { getGroupPathYear, getGroupPathMonth } from '../../lib/path';
-import './budget.scss';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
+import './budget.scss';
 
-const GroupCustomBudgets = () => {
-  const dispatch = useDispatch();
-  const { group_id } = useParams();
-  const groupInYear = getGroupPathYear(window.location.pathname);
-  const groupInMonth = getGroupPathMonth(window.location.pathname);
-  const yearsInGroup = `${groupInYear}年${groupInMonth}月`;
-  const groupCustomBudgetsList = useSelector(getGroupCustomBudgets);
-  const groupTotalCustomBudget = useSelector(getTotalGroupCustomBudget);
-  const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
-  const [editing, setEditing] = useState<boolean>(false);
-  const unEditCustomBudget = groupCustomBudgets === groupCustomBudgetsList;
+interface GroupCustomBudgetsProps {
+  yearsInGroup: string;
+  unEditCustomBudget: boolean;
+  groupTotalCustomBudget: number;
+  groupCustomBudgets: GroupCustomBudgetsList;
+  setGroupCustomBudgets: React.Dispatch<React.SetStateAction<GroupCustomBudgetsList>>;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  backPageOperation: () => void;
+  editGroupCustomBudgetOperation: () => void;
+}
 
-  const fetchGroupCustomBudgetsData = (signal: CancelTokenSource) => {
-    dispatch(fetchGroups(signal));
-    dispatch(fetchGroupCustomBudgets(groupInYear, groupInMonth, Number(group_id), signal));
-  };
-
-  useEffect(() => {
-    if (!editing) {
-      const signal = axios.CancelToken.source();
-      fetchGroupCustomBudgetsData(signal);
-      const interval = setInterval(() => {
-        fetchGroupCustomBudgetsData(signal);
-      }, 3000);
-      return () => {
-        signal.cancel();
-        clearInterval(interval);
-      };
-    }
-  }, [editing]);
-
-  useEffect(() => {
-    setGroupCustomBudgets(groupCustomBudgetsList);
-  }, [groupCustomBudgetsList]);
-
+const GroupCustomBudgets = (props: GroupCustomBudgetsProps) => {
   return (
     <>
       <div className="budget__spacer budget__spacer--medium" />
       <div className="budget budget__background budget__background__table">
         <div className="budget__back-btn--position">
-          <button
-            className="budget__back-btn"
-            onClick={() => dispatch(push(`/group/${group_id}/yearly/budgets`))}
-          >
+          <button className="budget__back-btn" onClick={() => props.backPageOperation()}>
             <ChevronLeftIcon />
           </button>
         </div>
         <div className="budget__spacer budget__spacer--medium" />
         <div className="budget__total-budget budget__total-budget__position">カスタム予算編集</div>
-        <div className="budget__total-budget budget__total-budget__space">{yearsInGroup}</div>
+        <div className="budget__total-budget budget__total-budget__space">{props.yearsInGroup}</div>
         <div className="budget__total-budget budget__total-budget__space">
-          総予算 ¥ {groupTotalCustomBudget.toLocaleString()}
+          総予算 ¥ {props.groupTotalCustomBudget.toLocaleString()}
         </div>
         <div className="budget__spacer budget__spacer--medium" />
         <table className="budget budget__background__table">
@@ -80,12 +40,12 @@ const GroupCustomBudgets = () => {
               <th align="center">先月の支出</th>
               <th align="center">予算</th>
             </tr>
-            {groupCustomBudgets.map((groupCustomBudget, index) => {
+            {props.groupCustomBudgets.map((groupCustomBudget, index) => {
               const onChangeBudget = (event: { target: { value: string } }) => {
-                const newBudgets = [...groupCustomBudgets];
+                const newBudgets = [...props.groupCustomBudgets];
                 newBudgets[index].budget = (event.target.value as unknown) as number;
-                setGroupCustomBudgets(newBudgets);
-                setEditing(true);
+                props.setGroupCustomBudgets(newBudgets);
+                props.setEditing(true);
               };
               return (
                 <tr key={groupCustomBudget.big_category_id}>
@@ -112,24 +72,10 @@ const GroupCustomBudgets = () => {
         <div className="budget__submit-btn">
           <GenericButton
             label={'更新する'}
-            disabled={unEditCustomBudget}
+            disabled={props.unEditCustomBudget}
             onClick={() => {
-              dispatch(
-                editGroupCustomBudgets(
-                  groupInYear,
-                  groupInMonth,
-                  Number(group_id),
-                  groupCustomBudgets.map((groupBudget) => {
-                    const { big_category_name, last_month_expenses, ...rest } = groupBudget; // eslint-disable-line
-                    return {
-                      big_category_id: rest.big_category_id,
-                      budget: Number(rest.budget),
-                    };
-                  })
-                )
-              );
-              dispatch(push(`/group/${group_id}/yearly/budgets`));
-              setEditing(false);
+              props.editGroupCustomBudgetOperation();
+              props.backPageOperation();
             }}
           />
         </div>
