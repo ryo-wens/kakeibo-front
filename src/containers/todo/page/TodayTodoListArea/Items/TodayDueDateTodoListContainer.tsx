@@ -37,7 +37,7 @@ const TodayDueDateTodoListContainer = (props: TodayDueDateTodoListContainerProps
     <TodoListComponent
       todoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
       currentYearMonth={props.currentYearMonth}
-      message={'今日が、締切予定のToDoリストは登録されていません。'}
+      message={'今日の締切予定のToDoリストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
       setEditing={props.setEditing}

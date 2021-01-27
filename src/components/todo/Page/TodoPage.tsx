@@ -1,12 +1,11 @@
 import React from 'react';
 import { SearchTodoList } from '../index';
-import { GroupTodoList } from '../../../reducks/groupTodoList/types';
-import { TodoList } from '../../../reducks/todoList/types';
 import './todo-page.scss';
-import TodayTodoArea from './TodayTodoArea/TodayTodoArea';
-import MonthlyTodoArea from './MonthlyTodoArea/MonthlyTodoArea';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
+import ExpiredTodoListAreaContainer from '../../../containers/todo/page/ExpiredTodoListArea/ExpiredTodoListAreaContainer';
+import TodayTodoAreaContainer from '../../../containers/todo/page/TodayTodoListArea/TodayTodoListAreaContainer';
+import MonthlyTodoListAreaContainer from '../../../containers/todo/page/MonthlyTodoListArea/MonthlyTodoListAreaContainer';
 
 interface TodoPageProps {
   selectedYear: number;
@@ -24,9 +23,6 @@ interface TodoPageProps {
   closeSearch: () => void;
   currentYearMonth: string;
   pathName: string;
-  existsExpiredTodoList: (todoList: TodoList | GroupTodoList) => JSX.Element;
-  expiredTodoList: TodoList;
-  groupExpiredTodoList: GroupTodoList;
 }
 
 const TodoPage = (props: TodoPageProps) => {
@@ -43,14 +39,14 @@ const TodoPage = (props: TodoPageProps) => {
                 currentItem={props.currentTodayOrMonthly}
                 setCurrentItems={props.setCurrentTodayOrMonthly}
                 leftItem={
-                  <TodayTodoArea
+                  <TodayTodoAreaContainer
                     currentYearMonth={props.currentYearMonth}
                     editing={props.editing}
                     setEditing={props.setEditing}
                   />
                 }
                 rightItem={
-                  <MonthlyTodoArea
+                  <MonthlyTodoListAreaContainer
                     selectedYear={props.selectedYear}
                     selectedMonth={props.selectedMonth}
                     setSelectedYear={props.setSelectedYear}
@@ -66,9 +62,7 @@ const TodoPage = (props: TodoPageProps) => {
           <div className="todo-page__right">
             <div className="todo-page__right-content">
               <h4>期限切れToDoリスト</h4>
-              {props.pathName !== 'group'
-                ? props.existsExpiredTodoList(props.expiredTodoList)
-                : props.existsExpiredTodoList(props.groupExpiredTodoList)}
+              <ExpiredTodoListAreaContainer currentYearMonth={props.currentYearMonth} />
             </div>
           </div>
         </div>

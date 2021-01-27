@@ -15,7 +15,7 @@ import {
 } from '../../../reducks/groupTodoList/selectors';
 import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operations';
 import SwitchItemTabs from '../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import TodayTodoList from '../../todo/Page/TodayTodoArea/TodayTodoList/TodayTodoList';
+import TodayTodoList from '../../todo/Page/TodayTodoListArea/TodayTodoList/TodayTodoList';
 import { getTodayShoppingList } from '../../../reducks/shoppingList/selectors';
 import { fetchTodayShoppingList } from '../../../reducks/shoppingList/operations';
 import ShoppingListArea from './ShoppingListArea/ShoppingListArea';

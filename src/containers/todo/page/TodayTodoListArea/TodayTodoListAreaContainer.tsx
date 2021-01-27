@@ -13,27 +13,26 @@ import {
   getTodayTodoListMessage,
 } from '../../../../reducks/todoList/selectors';
 import { useLocation, useParams } from 'react-router';
-import { date } from '../../../../lib/constant';
-import { AddTodo } from '../../index';
-import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import TodayImplementationDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/TodayImplementationDateTodoListContainer/TodayImplementationDateTodoListContainer';
-import TodayDueDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/TodayDueDateTodoListContainer/TodayDueDateTodoListContainer';
+import { customMonth, date, year } from '../../../../lib/constant';
+import TodayTodoListArea from '../../../../components/todo/Page/TodayTodoListArea/TodayTodoListArea';
 
-interface TodayTodoAreaProps {
+interface TodayTodoAreaContainerProps {
   currentYearMonth: string;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TodayTodoArea = (props: TodayTodoAreaProps) => {
+const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
   const dispatch = useDispatch();
+  const pathName = useLocation().pathname.split('/')[1];
+  const { group_id } = useParams();
+
   const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
   const todayDueTodoList = useSelector(getTodayDueTodoList);
   const todayTodoListMessage = useSelector(getTodayTodoListMessage);
-  const pathName = useLocation().pathname.split('/')[1];
-  const { group_id } = useParams();
-  const todayYear = String(date.getFullYear());
-  const todayMonth: string = ('0' + (date.getMonth() + 1)).slice(-2);
+
+  const todayYear = String(year);
+  const todayMonth = customMonth;
   const todayDate: string = ('0' + date.getDate()).slice(-2);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
@@ -70,26 +69,12 @@ const TodayTodoArea = (props: TodayTodoAreaProps) => {
   }, [todayYear, todayMonth, todayDate]);
 
   return (
-    <>
-      <SwitchItemTabs
-        leftButtonLabel={'実施予定のToDo'}
-        rightButtonLabel={'締切予定のToDo'}
-        leftItem={
-          <TodayImplementationDateTodoListContainer
-            currentYearMonth={props.currentYearMonth}
-            setEditing={props.setEditing}
-          />
-        }
-        rightItem={
-          <TodayDueDateTodoListContainer
-            currentYearMonth={props.currentYearMonth}
-            setEditing={props.setEditing}
-          />
-        }
-      />
-      <AddTodo date={date} />
-    </>
+    <TodayTodoListArea
+      currentYearMonth={props.currentYearMonth}
+      editing={props.editing}
+      setEditing={props.setEditing}
+    />
   );
 };
 
-export default TodayTodoArea;
+export default TodayTodoAreaContainer;
