@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header } from '../../components/header';
 import StandardBudgetsContainer from '../../containers/budgets/StandardBudgetsContainer';
+import CustomBudgetsContainer from '../../containers/budgets/CustomBudgetsContainer';
 import YearlyBudgetsContainer from '../../containers/templates/budgets/YearlyBudgetsContainer';
 import '../../components/budget/budget.scss';
 
@@ -32,12 +33,14 @@ const Budgets = (props: BudgetsProps) => {
 
         {props.query === '?standard' && <StandardBudgetsContainer />}
 
-        {props.query === `?yearly&year=${props.budgetsYear}` && (
+        {props.query === '?yearly' && (
           <YearlyBudgetsContainer
             budgetsYear={props.budgetsYear}
             setBudgetsYear={props.setBudgetsYear}
           />
         )}
+
+        {props.query === '?custom' && <CustomBudgetsContainer budgetsYear={props.budgetsYear} />}
       </main>
     </>
   );

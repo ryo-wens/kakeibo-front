@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { push } from 'connected-react-router';
+import { useHistory } from 'react-router-dom';
 import axios from 'axios';
 import { getYearlyBudgets } from '../../reducks/budgets/selectors';
 import { deleteCustomBudgets, fetchYearlyBudgets } from '../../reducks/budgets/operations';
@@ -13,6 +13,7 @@ interface YearlyBudgetsRowContainerProps {
 
 const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const yearlyBudgets = useSelector(getYearlyBudgets);
   const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
     year: '',
@@ -45,9 +46,14 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
       budgetsYear={props.budgetsYear}
       yearBudget={yearBudget}
       deleteCustomBudgets={deleteCustom}
-      routingAddCustomBudgets={(transitingBasePath, selectYear, selectMonth) =>
-        dispatch(push(`${transitingBasePath}/${selectYear}/${selectMonth}`))
-      }
+      routingEditCustomBudgets={(routingAddress, selectYear, selectMonth) => {
+        if (routingAddress === 'custom') {
+          history.push({
+            pathname: '/budgets',
+            search: `?custom&year=${props.budgetsYear}&month=${selectMonth}`,
+          });
+        }
+      }}
     />
   );
 };

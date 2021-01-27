@@ -9,18 +9,14 @@ interface GroupYearlyBudgetsRowProps {
   years: number;
   groupYearlyBudgets: GroupYearlyBudgetsList;
   deleteCustomBudgets: (selectYear: string, selectMonth: string) => void;
-  routingAddCustomBudgets: (
-    transitingBasePath: string,
-    selectYear: string,
-    selectMonth: string
-  ) => void;
+  routingEditBudgets: (transitingBasePath: string, selectYear: string, selectMonth: string) => void;
 }
 
 const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
   const groupCustomBudgetsTable = (): JSX.Element[] => {
     return props.groupYearlyBudgets.monthly_budgets.map((groupYearlyBudget, index) => {
-      const transitingBasePath =
-        groupYearlyBudget.budget_type === 'CustomBudget' ? `/custom/budgets` : `/standard/budgets`;
+      const routingAddress =
+        groupYearlyBudget.budget_type === 'CustomBudget' ? `custom` : `standard`;
       const budgetsType = () => {
         if (groupYearlyBudget.budget_type === standardBudgetType) {
           return '標準';
@@ -48,7 +44,7 @@ const GroupYearlyBudgetsRow = (props: GroupYearlyBudgetsRowProps) => {
             <IconButton
               size={'small'}
               onClick={() => {
-                props.routingAddCustomBudgets(transitingBasePath, selectYear, selectMonth);
+                props.routingEditBudgets(routingAddress, selectYear, selectMonth);
               }}
             >
               <CreateIcon color={'primary'} />

@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { push } from 'connected-react-router';
+import { useHistory } from 'react-router-dom';
 import { useParams } from 'react-router';
 import { getGroupYearlyBudgets } from '../../reducks/groupBudgets/selectors';
 import { GroupYearlyBudgetsList } from '../../reducks/groupBudgets/types';
@@ -17,6 +17,7 @@ interface GroupYearlyBudgetsRowContainerProps {
 
 const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerProps) => {
   const dispatch = useDispatch();
+  const history = useHistory();
   const { group_id } = useParams();
   const groupYearlyBudgetsList = useSelector(getGroupYearlyBudgets);
   const [groupYearlyBudgets, setGroupYearlyBudgets] = useState<GroupYearlyBudgetsList>({
@@ -50,9 +51,14 @@ const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerPro
       deleteCustomBudgets={(selectYear, selectMonth) =>
         dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(group_id)))
       }
-      routingAddCustomBudgets={(transitingBasePath, selectYear, selectMonth) =>
-        dispatch(push(`/group/${group_id}${transitingBasePath}/${selectYear}/${selectMonth}`))
-      }
+      routingEditBudgets={(routingAddress, selectYear, selectMonth) => {
+        if (routingAddress === 'custom') {
+          history.push({
+            pathname: `/group/${group_id}/budgets`,
+            search: `?custom&year=${props.budgetsYear}&month=${selectMonth}`,
+          });
+        }
+      }}
     />
   );
 };

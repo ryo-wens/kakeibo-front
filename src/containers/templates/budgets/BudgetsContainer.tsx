@@ -13,7 +13,7 @@ const BudgetsContainer = () => {
   const history = useHistory();
   const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
-  const query = useLocation().search;
+  const query = useLocation().search.split('&')[0];
   const [budgetsYear, setBudgetsYear] = useState(year);
 
   useEffect(() => {
@@ -50,7 +50,7 @@ const BudgetsContainer = () => {
       color: '',
     };
 
-    if (query === `?yearly&year=${budgetsYear}`) {
+    if (query === '?yearly') {
       style.background = 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)';
       style.color = '#fff';
     }
