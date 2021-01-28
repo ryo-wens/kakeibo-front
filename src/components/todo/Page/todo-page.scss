@@ -38,9 +38,15 @@
     }
   }
 
+  &__switch-btn {
+    position: relative;
+  }
+
   &__search {
     @extend .task--btn;
+    position: absolute;
+    top: 0;
+    left: 200px;
     height: 40px;
-    margin-left: 20px;
   }
 }

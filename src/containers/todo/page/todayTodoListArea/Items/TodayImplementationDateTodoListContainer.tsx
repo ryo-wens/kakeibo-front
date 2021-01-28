@@ -1,25 +1,23 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import TodoListComponent from '../../../../../components/todo/modules/List/TodoListComponent/TodoListComponent';
+import TodoListComponent from '../../../../../components/todo/modules/list/TodoListComponent/TodoListComponent';
+import { getTodayImplementationTodoList } from '../../../../../reducks/todoList/selectors';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
-import { getMonthImplementationTodoList } from '../../../../../reducks/todoList/selectors';
-import { getGroupMonthImplementationTodoList } from '../../../../../reducks/groupTodoList/selectors';
+import { getGroupTodayImplementationTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
 
-interface MonthlyImplementationDateTodoListContainerProps {
-  selectedMonth: number;
+interface TodayImplementationDateTodoListContainerProps {
   currentYearMonth: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MonthlyImplementationDateTodoListContainer = (
-  props: MonthlyImplementationDateTodoListContainerProps
+const TodayImplementationDateTodoListContainer = (
+  props: TodayImplementationDateTodoListContainerProps
 ) => {
   const pathName = useLocation().pathname.split('/')[1];
-
-  const monthlyImplementationTodoList = useSelector(getMonthImplementationTodoList);
-  const groupMonthlyImplementationTodoList = useSelector(getGroupMonthImplementationTodoList);
+  const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
+  const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
 
   const prevData = {
     implementationDate: '',
@@ -40,10 +38,10 @@ const MonthlyImplementationDateTodoListContainer = (
   return (
     <TodoListComponent
       todoList={
-        pathName === 'group' ? groupMonthlyImplementationTodoList : monthlyImplementationTodoList
+        pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
       }
       currentYearMonth={props.currentYearMonth}
-      message={`${props.selectedMonth}月の実施予定のToDoリストは、登録されていません。`}
+      message={'今日の実施予定のToDoリストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
       setEditing={props.setEditing}
@@ -51,4 +49,4 @@ const MonthlyImplementationDateTodoListContainer = (
   );
 };
 
-export default MonthlyImplementationDateTodoListContainer;
+export default TodayImplementationDateTodoListContainer;

@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import { useLocation } from 'react-router';
 import { Action, Dispatch } from 'redux';
 import { State } from '../../../../reducks/store/types';
-import TodoListItemForm from '../../../../components/todo/modules/Form/todoListItemForm/TodoListItemForm';
+import TodoListItemForm from '../../../../components/todo/modules/form/todoListItemForm/TodoListItemForm';
 
 interface TodoListItemFormContainerProps {
   titleLabel: string;

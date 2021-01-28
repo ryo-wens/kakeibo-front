@@ -66,7 +66,7 @@ export interface deleteGroupTodoListItemRes {
   message: string;
 }
 
-export interface fetchSearchGroupTodoListRes {
+export interface FetchSearchGroupTodoListRes {
   search_todo_list: GroupTodoList;
   message: string;
 }

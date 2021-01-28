@@ -4,7 +4,7 @@ import { addTodoListItem } from '../../../../reducks/todoList/operations';
 import { addGroupTodoListItem } from '../../../../reducks/groupTodoList/operations';
 import { date } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
-import AddTodoListItemForm from '../../../../components/todo/modules/Form/addTodoListItemForm/AddTodoListItemForm';
+import AddTodoListItemForm from '../../../../components/todo/modules/form/addTodoListItemForm/AddTodoListItemForm';
 
 interface AddTodoListItemFormContainerProps {
   date: Date;

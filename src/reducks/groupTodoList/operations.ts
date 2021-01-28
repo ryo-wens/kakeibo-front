@@ -13,7 +13,7 @@ import {
   fetchGroupMonthTodoListRes,
   GroupTodoListItem,
   GroupTodoList,
-  fetchSearchGroupTodoListRes,
+  FetchSearchGroupTodoListRes,
 } from './types';
 import {
   addGroupTodoListItemAction,
@@ -22,7 +22,7 @@ import {
   fetchGroupTodayTodoListAction,
   fetchGroupMonthTodoListAction,
   fetchGroupExpiredTodoListAction,
-  groupSearchTodoListAction,
+  fetchGroupSearchTodoListAction,
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
 import { errorHandling } from '../../lib/validation';
@@ -566,7 +566,7 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
   };
 };
 
-export const searchGroupTodoList = (
+export const fetchSearchGroupTodoList = (
   groupId: number,
   searchGroupRequestData: {
     date_type: string;
@@ -581,7 +581,7 @@ export const searchGroupTodoList = (
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
-      const result = await axios.get<fetchSearchGroupTodoListRes>(
+      const result = await axios.get<FetchSearchGroupTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/search`,
         {
           withCredentials: true,
@@ -602,10 +602,10 @@ export const searchGroupTodoList = (
 
       if (searchTodoList === undefined) {
         const searchTodoList: GroupTodoList = [];
-        dispatch(groupSearchTodoListAction(searchTodoList, message));
+        dispatch(fetchGroupSearchTodoListAction(searchTodoList, message));
       } else if (message === undefined) {
         const message = '';
-        dispatch(groupSearchTodoListAction(searchTodoList, message));
+        dispatch(fetchGroupSearchTodoListAction(searchTodoList, message));
       }
     } catch (error) {
       errorHandling(dispatch, error);

@@ -1,4 +1,3 @@
-export { default as AddButton } from './AddButton';
 export { default as DatePicker } from './DatePicker';
 export { default as DeleteButton } from './DeleteButton';
 export { default as GenericButton } from './GenericButton';
@@ -14,7 +13,6 @@ export { default as SelectMenu } from './SelectMenu';
 export { default as TextInput } from './TextInput';
 export { default as SelectPayer } from './SelectPayer';
 export { default as GroupCategoryInput } from './GroupCategoryInput';
-export { default as SelectCompleteFlag } from './SelectCompleteFlag';
 export { default as SelectSort } from './SelectSort';
 export { default as SelectSortType } from './SelectSortType';
 export { default as SelectBigCategory } from './SelectBigCategroy';

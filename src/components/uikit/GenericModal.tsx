@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
-import { TodoButton } from '../todo';
 import { useDispatch, useSelector } from 'react-redux';
 import { ModalInform } from './index';
 import { getModalMessage } from '../../reducks/modal/selectors';
@@ -13,9 +12,6 @@ import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    buttons: {
-      display: 'flex',
-    },
     paper: {
       width: 400,
       margin: '20px auto auto auto',
@@ -66,9 +62,13 @@ const GenericModal = (props: GenericModalProps) => {
   const body = (
     <div className={classes.paper}>
       <p>{props.modalText}</p>
-      <div className={classes.buttons}>
-        <TodoButton label={props.buttonLabel} disabled={false} onClick={() => switchOperation()} />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={() => closeModal()} />
+      <div className="add-group-modal__btn">
+        <button className="add-group-modal__btn--add" onClick={() => switchOperation()}>
+          {props.buttonLabel}
+        </button>
+        <button className="add-group-modal__btn--cancel" onClick={() => closeModal()}>
+          キャンセル
+        </button>
       </div>
     </div>
   );

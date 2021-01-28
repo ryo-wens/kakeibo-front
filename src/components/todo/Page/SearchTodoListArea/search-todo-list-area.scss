@@ -1,7 +1,7 @@
-@import "../variable";
-@import "../mixin/icon-btn";
+@import "../../../../assets/variable";
+@import "../../../../assets/mixin/icon-btn";
 
-.search-field {
+.search-todo-list-area {
   width: 70%;
   background-color: white;
   border-radius: 0.5rem;
@@ -31,12 +31,9 @@
     margin: 0;
   }
 
-  &__select-contents {
+  &__select-items {
     display: flex;
-    margin: 0 0 15px 0;
-    &:last-child {
-      margin: 0 0 30px 0;
-    }
+    margin: 0 0 30px 0;
 
     &--key {
       width: 180px;
@@ -45,11 +42,25 @@
       font-weight: bold;
       margin: 0 0 0 20px;
     }
+
+    &--value {
+      color: #333;
+    }
   }
 
   &__date-designation{
     display: flex;
     align-items: center;
+  }
+
+  &__date-pickers {
+    display: flex;
+    align-items: center;
+    margin-left: 50px;
+
+    &--space {
+      margin: 0 20px;
+    }
   }
 
   &__search-btn {

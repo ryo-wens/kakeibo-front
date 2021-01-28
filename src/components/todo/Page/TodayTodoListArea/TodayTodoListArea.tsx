@@ -1,8 +1,8 @@
 import React from 'react';
 import { date } from '../../../../lib/constant';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import TodayImplementationDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/Items/TodayImplementationDateTodoListContainer';
-import TodayDueDateTodoListContainer from '../../../../containers/todo/page/TodayTodoListArea/Items/TodayDueDateTodoListContainer';
+import TodayImplementationDateTodoListContainer from '../../../../containers/todo/page/todayTodoListArea/Items/TodayImplementationDateTodoListContainer';
+import TodayDueDateTodoListContainer from '../../../../containers/todo/page/todayTodoListArea/Items/TodayDueDateTodoListContainer';
 import './today-todo-list-area.scss';
 import AddTodoListItemFormContainer from '../../../../containers/todo/modules/Form/AddTodoListItemFormContainer';
 
