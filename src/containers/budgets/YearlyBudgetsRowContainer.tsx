@@ -50,7 +50,12 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
         if (routingAddress === 'custom') {
           history.push({
             pathname: '/budgets',
-            search: `?custom&year=${props.budgetsYear}&month=${selectMonth}`,
+            search: `?edit_custom&year=${props.budgetsYear}&month=${selectMonth}`,
+          });
+        } else {
+          history.push({
+            pathname: '/budgets',
+            search: `?add_custom&year=${props.budgetsYear}&month=${selectMonth}`,
           });
         }
       }}

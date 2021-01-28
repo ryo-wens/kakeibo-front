@@ -546,11 +546,9 @@ describe('async actions deleteGroupCustomBudgets', () => {
     ];
 
     axiosMock.onDelete(url).reply(200, mockResponse);
-    window.alert = jest.fn(() => mockResponse);
 
     // @ts-ignore
     await deleteGroupCustomBudgets(selectYear, selectMonth, groupId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
-    expect(window.alert).toHaveBeenCalled();
   });
 });
