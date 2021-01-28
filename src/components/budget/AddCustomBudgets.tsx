@@ -1,26 +1,27 @@
 import React from 'react';
 import { CustomBudgetsList } from '../../reducks/budgets/types';
 import TextField from '@material-ui/core/TextField';
-import GenericButton from '../uikit/GenericButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import GroupCustomBudgetsContainer from '../../containers/budgets/GroupCustomBudgetsContainer';
+import GenericButton from '../uikit/GenericButton';
+import AddGroupCustomBudgetsContainer from '../../containers/budgets/AddGroupCustomBudgetsContainer';
 import './budget.scss';
 
-interface CustomBudgetsProps {
+interface AddCustomBudgetsProps {
   pathName: string;
-  unInput: boolean;
   budgetsYear: number;
   yearsInPersonal: string;
-  totalCustomBudget: number;
+  unInputBudgets: boolean;
+  totalStandardBudget: number;
   customBudgets: CustomBudgetsList;
   setCustomBudgets: React.Dispatch<React.SetStateAction<CustomBudgetsList>>;
   backPageOperation: () => void;
-  editCustomBudgetOperation: () => void;
+  addCustomBudgetOperation: () => void;
 }
 
-const CustomBudgets = (props: CustomBudgetsProps) => {
+const AddCustomBudgets = (props: AddCustomBudgetsProps) => {
   return (
     <>
+      <div className="budget__spacer budget__spacer--medium" />
       {props.pathName !== 'group' ? (
         <>
           <div className="budget__spacer budget__spacer--medium" />
@@ -32,14 +33,13 @@ const CustomBudgets = (props: CustomBudgetsProps) => {
             </div>
             <div className="budget__spacer budget__spacer--medium" />
             <div className="budget__total-budget budget__total-budget__position">
-              カスタム予算編集
+              カスタム予算追加
             </div>
             <div className="budget__total-budget budget__total-budget__space">
               {props.yearsInPersonal}
             </div>
-            <div className="budget__spacer budget__spacer--medium" />
             <div className="budget__total-budget budget__total-budget__space">
-              総予算 ¥ {props.totalCustomBudget.toLocaleString()}
+              総予算 ¥ {props.totalStandardBudget.toLocaleString()}
             </div>
             <div className="budget__spacer budget__spacer--medium" />
             <table className="budget budget__background__table">
@@ -56,7 +56,7 @@ const CustomBudgets = (props: CustomBudgetsProps) => {
                     props.setCustomBudgets(newBudgets);
                   };
                   return (
-                    <tr key={customBudget.big_category_id}>
+                    <tr key={customBudget.big_category_name}>
                       <td className="budget__td" scope="row">
                         {customBudget.big_category_name}
                       </td>
@@ -80,9 +80,9 @@ const CustomBudgets = (props: CustomBudgetsProps) => {
             <div className="budget__submit-btn">
               <GenericButton
                 label={'更新する'}
-                disabled={props.unInput}
+                disabled={props.unInputBudgets}
                 onClick={() => {
-                  props.editCustomBudgetOperation();
+                  props.addCustomBudgetOperation();
                   props.backPageOperation();
                 }}
               />
@@ -91,9 +91,10 @@ const CustomBudgets = (props: CustomBudgetsProps) => {
           </div>
         </>
       ) : (
-        <GroupCustomBudgetsContainer budgetsYear={props.budgetsYear} />
+        <AddGroupCustomBudgetsContainer budgetsYear={props.budgetsYear} />
       )}
     </>
   );
 };
-export default CustomBudgets;
+
+export default AddCustomBudgets;

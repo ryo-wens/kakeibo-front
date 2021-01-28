@@ -73,6 +73,7 @@ const GroupStandardBudgets = (props: GroupStandardBudgetsProps) => {
             }}
           />
         </div>
+        <div className="budget__spacer budget__spacer--medium" />
       </div>
     </>
   );

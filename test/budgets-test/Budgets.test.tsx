@@ -528,11 +528,9 @@ describe('async actions deleteCustomBudgets', () => {
     ];
 
     axiosMock.onDelete(url).reply(200, mockResponse);
-    window.alert = jest.fn(() => mockResponse);
 
     // @ts-ignore
     await deleteCustomBudgets(selectYear, selectMonth)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
-    expect(window.alert).toHaveBeenCalled();
   });
 });

@@ -1,6 +1,7 @@
 import React from 'react';
 import { Header } from '../../components/header';
 import StandardBudgetsContainer from '../../containers/budgets/StandardBudgetsContainer';
+import AddCustomBudgetsContainer from '../../containers/budgets/AddCustomBudgetsContainer';
 import CustomBudgetsContainer from '../../containers/budgets/CustomBudgetsContainer';
 import YearlyBudgetsContainer from '../../containers/templates/budgets/YearlyBudgetsContainer';
 import '../../components/budget/budget.scss';
@@ -21,14 +22,17 @@ const Budgets = (props: BudgetsProps) => {
       <Header />
       <main className="section__container">
         <div className="budget__spacer budget__spacer--medium" />
-        <div className="switch-item-tabs__buttons budget__switch-type" aria-label="budgets-kind">
-          <button style={props.currentStandardColor()} onClick={() => props.routingStandard()}>
-            標準予算
-          </button>
-          <button style={props.currentYearlyColor()} onClick={() => props.routingYearly()}>
-            月別カスタム予算
-          </button>
-        </div>
+        {(props.query === '?standard' || props.query === '?yearly') && (
+          <div className="switch-item-tabs__buttons budget__switch-type" aria-label="budgets-kind">
+            <button style={props.currentStandardColor()} onClick={() => props.routingStandard()}>
+              標準予算
+            </button>
+            <button style={props.currentYearlyColor()} onClick={() => props.routingYearly()}>
+              月別カスタム予算
+            </button>
+          </div>
+        )}
+
         <div className="budget__spacer budget__spacer--medium" />
 
         {props.query === '?standard' && <StandardBudgetsContainer />}
@@ -40,7 +44,13 @@ const Budgets = (props: BudgetsProps) => {
           />
         )}
 
-        {props.query === '?custom' && <CustomBudgetsContainer budgetsYear={props.budgetsYear} />}
+        {props.query === '?edit_custom' && (
+          <CustomBudgetsContainer budgetsYear={props.budgetsYear} />
+        )}
+
+        {props.query === '?add_custom' && (
+          <AddCustomBudgetsContainer budgetsYear={props.budgetsYear} />
+        )}
       </main>
     </>
   );

@@ -3,20 +3,19 @@ import { GroupCustomBudgetsList } from '../../reducks/groupBudgets/types';
 import TextField from '@material-ui/core/TextField';
 import GenericButton from '../uikit/GenericButton';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import './budget.scss';
 
-interface GroupCustomBudgetsProps {
+interface AddGroupCustomBudgetsProps {
   yearsInGroup: string;
-  unEditCustomBudget: boolean;
-  groupTotalCustomBudget: number;
+  unAddCustomBudgets: boolean;
+  groupTotalStandardBudget: number;
   groupCustomBudgets: GroupCustomBudgetsList;
   setGroupCustomBudgets: React.Dispatch<React.SetStateAction<GroupCustomBudgetsList>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   backPageOperation: () => void;
-  editGroupCustomBudgetOperation: () => void;
+  addGroupCustomBudgetOperation: () => void;
 }
 
-const GroupCustomBudgets = (props: GroupCustomBudgetsProps) => {
+const AddGroupCustomBudgets = (props: AddGroupCustomBudgetsProps) => {
   return (
     <>
       <div className="budget__spacer budget__spacer--medium" />
@@ -27,10 +26,10 @@ const GroupCustomBudgets = (props: GroupCustomBudgetsProps) => {
           </button>
         </div>
         <div className="budget__spacer budget__spacer--medium" />
-        <div className="budget__total-budget budget__total-budget__position">カスタム予算編集</div>
+        <div className="budget__total-budget budget__total-budget__position">カスタム予算追加</div>
         <div className="budget__total-budget budget__total-budget__space">{props.yearsInGroup}</div>
         <div className="budget__total-budget budget__total-budget__space">
-          総予算 ¥ {props.groupTotalCustomBudget.toLocaleString()}
+          総予算 ¥ {props.groupTotalStandardBudget.toLocaleString()}
         </div>
         <div className="budget__spacer budget__spacer--medium" />
         <table className="budget budget__background__table">
@@ -72,10 +71,11 @@ const GroupCustomBudgets = (props: GroupCustomBudgetsProps) => {
         <div className="budget__submit-btn">
           <GenericButton
             label={'更新する'}
-            disabled={props.unEditCustomBudget}
+            disabled={props.unAddCustomBudgets}
             onClick={() => {
-              props.editGroupCustomBudgetOperation();
+              props.addGroupCustomBudgetOperation();
               props.backPageOperation();
+              props.setEditing(false);
             }}
           />
         </div>
@@ -84,4 +84,5 @@ const GroupCustomBudgets = (props: GroupCustomBudgetsProps) => {
     </>
   );
 };
-export default GroupCustomBudgets;
+
+export default AddGroupCustomBudgets;

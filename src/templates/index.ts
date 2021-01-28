@@ -1,7 +1,7 @@
 export { default as CustomBudgets } from '../components/budget/CustomBudgets';
 export { default as Home } from './Home';
 export { default as LogIn } from './login/LogIn';
-export { default as EditStandardBudgets } from './EditStandardBudgets';
+export { default as EditStandardBudgets } from '../components/budget/AddCustomBudgets';
 export { default as SignUp } from './signup/SignUp';
 export { default as StandardBudgets } from '../components/budget/StandardBudgets';
 export { default as Task } from './Task';

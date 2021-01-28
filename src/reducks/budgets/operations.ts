@@ -275,13 +275,12 @@ export const copyStandardBudgets = () => {
 export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     try {
-      const result = await axios.delete<DeleteCustomBudgetsRes>(
+      await axios.delete<DeleteCustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }
       );
-      const message = result.data.message;
       const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
       const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
 
@@ -315,7 +314,6 @@ export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => 
       };
 
       dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
-      alert(message);
     } catch (error) {
       errorHandling(dispatch, error);
     }
