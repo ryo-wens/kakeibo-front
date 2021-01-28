@@ -55,7 +55,12 @@ const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerPro
         if (routingAddress === 'custom') {
           history.push({
             pathname: `/group/${group_id}/budgets`,
-            search: `?custom&year=${props.budgetsYear}&month=${selectMonth}`,
+            search: `?edit_custom&year=${props.budgetsYear}&month=${selectMonth}`,
+          });
+        } else {
+          history.push({
+            pathname: `/group/${group_id}/budgets`,
+            search: `?add_custom&year=${props.budgetsYear}&month=${selectMonth}`,
           });
         }
       }}

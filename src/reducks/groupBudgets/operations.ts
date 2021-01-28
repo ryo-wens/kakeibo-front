@@ -299,14 +299,12 @@ export const deleteGroupCustomBudgets = (
 ) => {
   return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
     try {
-      const result = await axios.delete<DeleteGroupCustomBudgetsRes>(
+      await axios.delete<DeleteGroupCustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           withCredentials: true,
         }
       );
-      const message = result.data.message;
-
       const groupStandardBudgetsList: GroupStandardBudgetsList = getState().groupBudgets
         .groupStandardBudgetsList;
 
@@ -350,7 +348,6 @@ export const deleteGroupCustomBudgets = (
       };
 
       dispatch(deleteGroupCustomBudgetsActions(groupYearlyBudgetsList));
-      alert(message);
     } catch (error) {
       errorHandling(dispatch, error);
     }
