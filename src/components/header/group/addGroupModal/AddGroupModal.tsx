@@ -1,26 +1,11 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
-import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TodoButton, TextInput } from '../../todo';
-import { createGroup } from '../../../reducks/groups/operations';
-import { AddButton } from '../../uikit';
-
-const useStyles = makeStyles((theme: Theme) =>
-  createStyles({
-    buttons: {
-      display: 'flex',
-    },
-    paper: {
-      width: 400,
-      margin: '20px auto auto auto',
-      backgroundColor: theme.palette.background.paper,
-      border: '2px solid #000',
-      boxShadow: theme.shadows[5],
-      padding: theme.spacing(2, 4, 3),
-    },
-  })
-);
+import { TextInput } from '../../../todo';
+import { createGroup } from '../../../../reducks/groups/operations';
+import AddIcon from '@material-ui/icons/Add';
+import './add-group-modal.scss';
+import CloseIcon from '@material-ui/icons/Close';
 
 interface CreateGroupsProps {
   modalTitleLabel: string;
@@ -28,8 +13,7 @@ interface CreateGroupsProps {
   closeMenu: () => void;
 }
 
-const CreateGroups = (props: CreateGroupsProps) => {
-  const classes = useStyles();
+const AddGroupModal = (props: CreateGroupsProps) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState<boolean>(false);
   const [groupName, setGroupName] = useState<string>('');
@@ -59,9 +43,13 @@ const CreateGroups = (props: CreateGroupsProps) => {
   const isBlankGroupName = groupName === '';
 
   const body = (
-    <div className={classes.paper}>
-      <h3 id="simple-modal-title">{props.modalTitleLabel}</h3>
-      <p>{props.modalTextFieldLabel}</p>
+    <div className="add-group-modal">
+      <div className="add-group-modal__position">
+        <h3 id="simple-modal-title">{props.modalTitleLabel}</h3>
+        <button onClick={() => handleClose()}>
+          <CloseIcon />
+        </button>
+      </div>
       <TextInput
         id="filled-basic"
         variant="filled"
@@ -71,20 +59,27 @@ const CreateGroups = (props: CreateGroupsProps) => {
         value={groupName}
         onChange={inputGroupName}
       />
-      <div className={classes.buttons}>
-        <TodoButton
-          label={'作成'}
+      <div className="add-group-modal__btn">
+        <button
+          className="add-group-modal__btn--add"
           disabled={isBlankGroupName}
           onClick={() => onClickCreateButton()}
-        />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={handleClose} />
+        >
+          追加
+        </button>
+        <button className="add-group-modal__btn--cancel" onClick={handleClose}>
+          キャンセル
+        </button>
       </div>
     </div>
   );
 
   return (
     <>
-      <AddButton label={'グループ作成'} onClick={() => handleOpen()} />
+      <button className="add-group-modal__add-btn" onClick={() => handleOpen()}>
+        <AddIcon />
+        グループを追加
+      </button>
       <Modal
         open={open}
         onClose={handleClose}
@@ -97,4 +92,4 @@ const CreateGroups = (props: CreateGroupsProps) => {
   );
 };
 
-export default CreateGroups;
+export default AddGroupModal;

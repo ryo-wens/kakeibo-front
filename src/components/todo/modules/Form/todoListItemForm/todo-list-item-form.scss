@@ -1,20 +1,11 @@
-@import "../../assets/variable";
-@import "../../assets/mixin/operation-btn";
-@import "../../assets/mixin/icon-btn";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/operation-btn";
+@import "../../../../../assets/mixin/icon-btn";
 
-.input-todo-list {
+.todo-list-item-form {
   background-color: white;
-  border: $task-border_color solid 1px;
   border-radius: 0.6rem;
   padding: 10px 0;
-
-  &--width {
-    width: 100%;
-    background-color: white;
-    border: $task-border_color solid 1px;
-    border-radius: 0.6rem;
-    padding: 10px 0;
-  }
 
   &__title {
     display: flex;
@@ -35,20 +26,12 @@
   }
 
   &__items {
-    margin: 15px 25px;
-
-    &--home-page {
-      display: block;
-      text-align: center;
-      margin: 15px 25px;
-
-    }
+    width: 75%;
+    margin: 15px auto 20px 15px;
   }
 
   &__text-input {
-    width: 80%;
-    text-align: center;
-    margin: 0 auto 20px auto;
+    margin-bottom: 20px;
   }
 
   &__date {
@@ -60,22 +43,20 @@
   }
 
   &__date-picker {
-    width: 40%;
 
     &:last-child {
       margin-left: 20px;
     }
 
     &--home-page {
-      width: 80%;
-      margin: 0 auto 20px auto;
+      margin-bottom: 20px;
     }
   }
 
   &__btn {
     display: flex;
     justify-content: space-between;
-    margin: 0 10px;
+    margin: 0 15px 5px;
 
     &--save {
       @include operation-btn($task-add-color, white, $task-add-color);

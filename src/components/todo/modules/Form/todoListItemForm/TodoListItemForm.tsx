@@ -1,62 +1,43 @@
-import React, { useEffect } from 'react';
-import 'date-fns';
-import { deleteTodoListItem } from '../../reducks/todoList/operations';
-import { deleteGroupTodoListItem } from '../../reducks/groupTodoList/operations';
-import './input-todo-list.scss';
-import { DatePicker, DeleteButton, TextInput } from '../uikit';
-import { useLocation, useParams } from 'react-router';
+import React from 'react';
+import './todo-list-item-form.scss';
+import { DatePicker, DeleteButton, TextInput } from '../../../../uikit';
 import CloseIcon from '@material-ui/icons/Close';
+import { Action, Dispatch } from 'redux';
+import { State } from '../../../../../reducks/store/types';
 
-interface InputTodoListProps {
+interface TodoListItemFormProps {
+  titleLabel: string;
   buttonLabel: string;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   inputImplementationDate: (date: Date | null) => void;
   inputDueDate: (date: Date | null) => void;
-  todoListItemId: number;
   implementationDate: Date | null;
   dueDate: Date | null;
   todoContent: string;
-  completeFlag: boolean;
   todoListItemOperation: () => void;
   disabledButton: boolean;
   closeInputTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
+  pathName: string;
+  deleteOperation?: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
 }
 
-const InputTodoList = React.forwardRef(
-  (props: InputTodoListProps, inputTodoRef: React.Ref<HTMLDivElement>) => {
-    const entityType = useLocation().pathname.split('/')[1];
-    const pathName = useLocation().pathname.split('/').slice(-1)[0];
-    const { group_id } = useParams();
-
-    useEffect(() => {
-      document.addEventListener('click', props.onClickCloseInputTodoForm);
-      return () => {
-        document.removeEventListener('click', props.onClickCloseInputTodoForm);
-      };
-    }, [props.onClickCloseInputTodoForm]);
-
+const TodoListItemForm = React.forwardRef(
+  (props: TodoListItemFormProps, inputTodoRef: React.Ref<HTMLDivElement>) => {
     return (
-      <div
-        className={pathName === 'home' ? 'input-todo-list--width' : 'input-todo-list'}
-        ref={inputTodoRef as React.RefObject<HTMLDivElement>}
-      >
-        <div className="input-todo-list__title">
-          <p className="input-todo-list__title--text">Todoを編集</p>
+      <div className="todo-list-item-form" ref={inputTodoRef as React.RefObject<HTMLDivElement>}>
+        <div className="todo-list-item-form__title">
+          <p className="todo-list-item-form__title--text">{props.titleLabel}</p>
           <button
-            className="input-todo-list__title--close-btn"
+            className="todo-list-item-form__title--close-btn"
             onClick={() => props.closeInputTodoForm()}
           >
             <CloseIcon />
           </button>
         </div>
 
-        <div
-          className={
-            pathName === 'home' ? 'input-todo-list__items--home-page' : 'input-todo-list__items'
-          }
-        >
-          <div className="input-todo-list__text-input">
+        <div className="todo-list-item-form__items">
+          <div className="todo-list-item-form__text-input">
             <TextInput
               value={props.todoContent}
               type={'text'}
@@ -70,14 +51,16 @@ const InputTodoList = React.forwardRef(
           </div>
           <div
             className={
-              pathName === 'home' ? 'input-todo-list__date--home-page' : 'input-todo-list__date'
+              props.pathName === 'home'
+                ? 'todo-list-item-form__date--home-page'
+                : 'todo-list-item-form__date'
             }
           >
             <div
               className={
-                pathName === 'home'
-                  ? 'input-todo-list__date-picker--home-page'
-                  : 'input-todo-list__date-picker'
+                props.pathName === 'home'
+                  ? 'todo-list-item-form__date-picker--home-page'
+                  : 'todo-list-item-form__date-picker'
               }
             >
               <DatePicker
@@ -96,9 +79,9 @@ const InputTodoList = React.forwardRef(
             </div>
             <div
               className={
-                pathName === 'home'
-                  ? 'input-todo-list__date-picker--home-page'
-                  : 'input-todo-list__date-picker'
+                props.pathName === 'home'
+                  ? 'todo-list-item-form__date-picker--home-page'
+                  : 'todo-list-item-form__date-picker'
               }
             >
               <DatePicker
@@ -118,17 +101,17 @@ const InputTodoList = React.forwardRef(
           </div>
         </div>
 
-        <div className="input-todo-list__btn">
+        <div className="todo-list-item-form__btn">
           <div>
             <button
-              className="input-todo-list__btn--save"
+              className="todo-list-item-form__btn--save"
               disabled={props.disabledButton}
               onClick={props.todoListItemOperation}
             >
               {props.buttonLabel}
             </button>
             <button
-              className="input-todo-list__btn--cancel"
+              className="todo-list-item-form__btn--cancel"
               disabled={false}
               onClick={() => {
                 props.closeInputTodoForm();
@@ -138,23 +121,21 @@ const InputTodoList = React.forwardRef(
               キャンセル
             </button>
           </div>
-          <DeleteButton
-            buttonLabel={'削除'}
-            disabled={false}
-            contentName={props.todoContent}
-            modalTitle={'Todo'}
-            onClickDelete={
-              entityType === 'group'
-                ? deleteGroupTodoListItem(Number(group_id), props.todoListItemId)
-                : deleteTodoListItem(props.todoListItemId)
-            }
-            onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
-          />
+          {props.deleteOperation && (
+            <DeleteButton
+              buttonLabel={'削除'}
+              disabled={false}
+              contentName={props.todoContent}
+              modalTitle={'Todo'}
+              onClickDelete={props.deleteOperation}
+              onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
+            />
+          )}
         </div>
       </div>
     );
   }
 );
 
-InputTodoList.displayName = 'InputTodoList';
-export default InputTodoList;
+TodoListItemForm.displayName = 'TodoListItemForm';
+export default TodoListItemForm;

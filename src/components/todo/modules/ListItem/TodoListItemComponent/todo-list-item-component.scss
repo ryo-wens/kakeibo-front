@@ -20,6 +20,15 @@
     margin-left: 10px;
   }
 
+  &__input-todo {
+    width: 70%;
+    margin-bottom: 20px;
+
+    &--home-page {
+      margin-bottom: 20px;
+    }
+  }
+
   &__edit-icon {
     @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
     padding: 3px;

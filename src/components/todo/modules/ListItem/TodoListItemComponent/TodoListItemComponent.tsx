@@ -1,9 +1,11 @@
 import React from 'react';
-import { InputTodoList } from '../../../index';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import EditIcon from '@material-ui/icons/Edit';
 import './todo-list-item-component.scss';
+import { Action, Dispatch } from 'redux';
+import { State } from '../../../../../reducks/store/types';
+import TodoListItemFormContainer from '../../../../../containers/todo/modules/Form/TodoListItemFormContainer';
 
 interface TodoListItemComponentProps {
   openEditTodoForm: boolean;
@@ -15,17 +17,17 @@ interface TodoListItemComponentProps {
   inputDueDate: (date: Date | null) => void;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  pathName: string;
-  group_id: number;
   listItem: TodoListItem | GroupTodoListItem;
-  currentYearMonth: string;
   handleOpenEditTodoForm: () => void;
   handleCloseEditTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
   disabledButton: boolean;
   todoListItemOperation: () => void;
-  inputTodoRef: React.RefObject<HTMLDivElement>;
+  deleteOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  inputTodoClassName: string;
+  currentTextStyle: (completeFlag: boolean) => React.CSSProperties;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
+  inputTodoRef: React.RefObject<HTMLDivElement>;
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
@@ -38,7 +40,12 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
               <input type="checkbox" checked={props.checked} onChange={props.handleChangeChecked} />
               <span />
             </label>
-            <span className="todo-list-item-component__content">{props.listItem.todo_content}</span>
+            <span
+              className="todo-list-item-component__content"
+              style={props.currentTextStyle(props.checked)}
+            >
+              {props.listItem.todo_content}
+            </span>
             <EditIcon
               className="todo-list-item-component__edit-icon"
               onClick={() => {
@@ -48,22 +55,24 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           </div>
         </>
       ) : (
-        <InputTodoList
-          buttonLabel={'保存'}
-          handleTodoContentChange={props.handleTodoContentChange}
-          inputImplementationDate={props.inputImplementationDate}
-          inputDueDate={props.inputDueDate}
-          todoListItemId={props.listItem.id}
-          implementationDate={props.implementationDate}
-          dueDate={props.dueDate}
-          todoContent={props.todoContent}
-          completeFlag={props.checked}
-          todoListItemOperation={props.todoListItemOperation}
-          closeInputTodoForm={props.handleCloseEditTodoForm}
-          onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
-          disabledButton={props.disabledButton}
-          ref={props.inputTodoRef}
-        />
+        <div className={props.inputTodoClassName}>
+          <TodoListItemFormContainer
+            titleLabel={'ToDoを編集'}
+            buttonLabel={'保存'}
+            handleTodoContentChange={props.handleTodoContentChange}
+            inputImplementationDate={props.inputImplementationDate}
+            inputDueDate={props.inputDueDate}
+            implementationDate={props.implementationDate}
+            dueDate={props.dueDate}
+            todoContent={props.todoContent}
+            todoListItemOperation={props.todoListItemOperation}
+            closeInputTodoForm={props.handleCloseEditTodoForm}
+            onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
+            disabledButton={props.disabledButton}
+            deleteOperation={props.deleteOperation}
+            inputTodoRef={props.inputTodoRef}
+          />
+        </div>
       )}
     </>
   );
