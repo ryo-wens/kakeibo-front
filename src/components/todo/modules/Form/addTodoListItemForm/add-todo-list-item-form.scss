@@ -1,0 +1,30 @@
+@import "../../../../../assets/variable";
+
+.add-todo-list-form {
+  width: 45%;
+  padding: 1px;
+  background-color: $task-border_color;
+  border-radius: 0.65rem;
+
+  &__button {
+    display: flex;
+    align-items: center;
+    background-color: $task-sub_color;
+    color: white;
+    border: none;
+    border-radius: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: bolder;
+    padding: 0 15px 0 10px;
+    margin: 20px 0;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

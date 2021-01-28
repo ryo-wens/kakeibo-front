@@ -1,13 +1,16 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { TodoListItem } from '../../../../../reducks/todoList/types';
+import { TodoListItem } from '../../../../reducks/todoList/types';
 import { useDispatch } from 'react-redux';
-import { editTodoListItem } from '../../../../../reducks/todoList/operations';
-import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
-import { editGroupTodoListItem } from '../../../../../reducks/groupTodoList/operations';
-import { dateStringToDate } from '../../../../../lib/date';
-import { date } from '../../../../../lib/constant';
+import { deleteTodoListItem, editTodoListItem } from '../../../../reducks/todoList/operations';
+import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
+import {
+  deleteGroupTodoListItem,
+  editGroupTodoListItem,
+} from '../../../../reducks/groupTodoList/operations';
+import { dateStringToDate } from '../../../../lib/date';
+import { date } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
-import { TodoListItemComponent } from '../../../../../components/todo';
+import { TodoListItemComponent } from '../../../../components/todo';
 
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem | GroupTodoListItem;
@@ -91,10 +94,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
 
   const onClickCloseInputTodoForm = (event: Event) => {
     if (inputTodoRef.current && !inputTodoRef.current.contains(event.target as Node)) {
-      setOpenEditTodoForm(false);
-      setImplementationDate(initialState.initialImplementationDate);
-      setDueDate(initialState.initialDueDate);
-      setTodoContent(initialState.initialTodoContent);
+      return handleCloseEditTodoForm();
     }
   };
 
@@ -128,6 +128,13 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     }
   };
 
+  const currentTextStyle = (completeFlag: boolean) => {
+    if (completeFlag) {
+      return { opacity: 0.3 };
+    }
+    return { opacity: 1.0 };
+  };
+
   return (
     <TodoListItemComponent
       openEditTodoForm={openEditTodoForm}
@@ -140,9 +147,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       handleTodoContentChange={handleTodoContentChange}
       handleChangeChecked={handleChangeChecked}
       listItem={props.listItem}
-      pathName={pathName}
-      group_id={group_id}
-      currentYearMonth={props.currentYearMonth}
       handleOpenEditTodoForm={handleOpenEditTodoForm}
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
@@ -176,6 +180,17 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
         }
         setOpenEditTodoForm(false);
       }}
+      deleteOperation={
+        pathName === 'group'
+          ? deleteGroupTodoListItem(Number(group_id), props.listItem.id)
+          : deleteTodoListItem(props.listItem.id)
+      }
+      inputTodoClassName={
+        pathName === 'home'
+          ? 'todo-list-item-component__input-todo--home-page'
+          : 'todo-list-item-component__input-todo'
+      }
+      currentTextStyle={currentTextStyle}
       inputTodoRef={inputTodoRef}
     />
   );

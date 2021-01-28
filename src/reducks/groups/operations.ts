@@ -68,7 +68,7 @@ export const createGroup = (groupName: string) => {
       const nextApprovedGroups = [...prevApprovedGroups, newGroup];
 
       dispatch(createGroupAction(nextApprovedGroups));
-      dispatch(push(`/group/${result.data.group_id}`));
+      dispatch(push(`/group/${result.data.group_id}/home`));
     } catch (error) {
       errorHandling(dispatch, error);
     }
@@ -263,7 +263,7 @@ export const inviteGroupParticipate = (groupId: number) => {
         }
       );
       dispatch(inviteGroupParticipateAction(updateApprovedGroups, updateUnapprovedGroups));
-      dispatch(push(`/group/${result.data.group_id}`));
+      dispatch(push(`/group/${result.data.group_id}/home`));
     } catch (error) {
       errorHandling(dispatch, error);
     }

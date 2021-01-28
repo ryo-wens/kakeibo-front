@@ -2,7 +2,7 @@ import React from 'react';
 import './expired-todo-list-area.scss';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import TodoListItemComponentContainer from '../../../../containers/todo/modules/ListItem/TodoListItemComponentContainer/TodoListItemComponentContainer';
+import TodoListItemComponentContainer from '../../../../containers/todo/modules/ListItem/TodoListItemComponentContainer';
 import { TodoListItem } from '../../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
 
