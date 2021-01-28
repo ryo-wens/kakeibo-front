@@ -1,9 +1,9 @@
 import React from 'react';
-import { TextInput } from '../todo';
 import { useDispatch } from 'react-redux';
 import { Action, Dispatch } from 'redux';
 import { State } from '../../reducks/store/types';
 import '../../assets/task/input-task-user.scss';
+import { TextInput } from '../uikit';
 
 interface InputTaskProps {
   buttonLabel: string;
@@ -28,13 +28,14 @@ const InputTask = (props: InputTaskProps) => {
       >
         <p className="input-task-user__title">タスクを{props.titleLabel}</p>
         <TextInput
-          id="filled-basic"
-          variant="filled"
-          required={true}
-          rows={1}
-          type={'text'}
+          id="task-name"
+          label={''}
           value={props.taskName}
           onChange={props.inputTaskName}
+          required={true}
+          type={'text'}
+          fullWidth={false}
+          disabled={false}
         />
         <div className="input-task-user__btn">
           <div>

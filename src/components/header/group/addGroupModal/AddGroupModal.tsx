@@ -1,7 +1,7 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import Modal from '@material-ui/core/Modal';
-import { TextInput } from '../../../todo';
+import { TextInput } from '../../../uikit';
 import { createGroup } from '../../../../reducks/groups/operations';
 import AddIcon from '@material-ui/icons/Add';
 import './add-group-modal.scss';
@@ -51,13 +51,14 @@ const AddGroupModal = (props: CreateGroupsProps) => {
         </button>
       </div>
       <TextInput
-        id="filled-basic"
-        variant="filled"
-        required={true}
-        rows={1}
-        type={'text'}
+        id="group-name"
+        label={''}
         value={groupName}
         onChange={inputGroupName}
+        required={true}
+        type={'text'}
+        fullWidth={false}
+        disabled={false}
       />
       <div className="add-group-modal__btn">
         <button

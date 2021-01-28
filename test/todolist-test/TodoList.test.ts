@@ -11,7 +11,7 @@ import {
   fetchDateTodoList,
   fetchExpiredTodoList,
   fetchMonthTodoList,
-  searchTodoList,
+  fetchSearchTodoList,
 } from '../../src/reducks/todoList/operations';
 import addTodoListItemResponse from './addTodoListItemResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse.json';
@@ -19,7 +19,7 @@ import fetchDateTodoListResponse from './fetchDateTodoListResponse.json';
 import fetchMonthTodoListResponse from './fetchMonthTodoListResponse.json';
 import fetchExpiredTodoListResponse from './fetchExpiredTodoListResponse.json';
 import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
-import searchTodoListResponse from './searchTodoListResponse.json';
+import fetchSearchTodoListResponse from './fetchSearchTodoListResponse.json';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -612,11 +612,11 @@ describe('async actions todoLists', () => {
       sort_type: 'desc',
     };
 
-    const mockResponse = JSON.stringify(searchTodoListResponse);
+    const mockResponse = JSON.stringify(fetchSearchTodoListResponse);
 
     const expectedAction = [
       {
-        type: TodoListsActions.SEARCH_TODO_LIST,
+        type: TodoListsActions.FETCH_SEARCH_TODO_LIST,
         payload: {
           searchTodoList: [
             {
@@ -637,7 +637,7 @@ describe('async actions todoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await searchTodoList(params)(store.dispatch);
+    await fetchSearchTodoList(params)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

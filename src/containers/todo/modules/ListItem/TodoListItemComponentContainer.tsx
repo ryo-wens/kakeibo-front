@@ -10,8 +10,7 @@ import {
 import { dateStringToDate } from '../../../../lib/date';
 import { date } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
-import { TodoListItemComponent } from '../../../../components/todo';
-
+import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem | GroupTodoListItem;
   currentYearMonth: string;

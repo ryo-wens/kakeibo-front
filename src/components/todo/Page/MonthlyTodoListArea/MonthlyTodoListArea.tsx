@@ -2,8 +2,8 @@ import React from 'react';
 import InputYears from '../../../uikit/InputYears';
 import './monthly-todo-list-area.scss';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/Items/MonthlyImplementationDateTodoListContainer';
-import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/MonthlyTodoListArea/Items/MonthlyDueDateTodoListContainer';
+import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/monthlyTodoListArea/Items/MonthlyImplementationDateTodoListContainer';
+import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/monthlyTodoListArea/Items/MonthlyDueDateTodoListContainer';
 import { date } from '../../../../lib/constant';
 import AddTodoListItemFormContainer from '../../../../containers/todo/modules/Form/AddTodoListItemFormContainer';
 

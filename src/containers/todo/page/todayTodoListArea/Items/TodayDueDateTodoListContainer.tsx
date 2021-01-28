@@ -1,23 +1,21 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
-import TodoListComponent from '../../../../../components/todo/modules/List/TodoListComponent/TodoListComponent';
+import TodoListComponent from '../../../../../components/todo/modules/list/TodoListComponent/TodoListComponent';
+import { getTodayDueTodoList } from '../../../../../reducks/todoList/selectors';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
-import { getMonthDueTodoList } from '../../../../../reducks/todoList/selectors';
-import { getGroupMonthDueTodoList } from '../../../../../reducks/groupTodoList/selectors';
+import { getGroupTodayDueTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
 
-interface MonthlyDueDateTodoListContainerProps {
-  selectedMonth: number;
+interface TodayDueDateTodoListContainerProps {
   currentYearMonth: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const MonthlyDueDateTodoListContainer = (props: MonthlyDueDateTodoListContainerProps) => {
+const TodayDueDateTodoListContainer = (props: TodayDueDateTodoListContainerProps) => {
   const pathName = useLocation().pathname.split('/')[1];
-
-  const monthlyDueTodoList = useSelector(getMonthDueTodoList);
-  const groupMonthlyDueTodoList = useSelector(getGroupMonthDueTodoList);
+  const todayDueTodoList = useSelector(getTodayDueTodoList);
+  const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
 
   const prevData = {
     dueDate: '',
@@ -37,9 +35,9 @@ const MonthlyDueDateTodoListContainer = (props: MonthlyDueDateTodoListContainerP
 
   return (
     <TodoListComponent
-      todoList={pathName === 'group' ? groupMonthlyDueTodoList : monthlyDueTodoList}
+      todoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
       currentYearMonth={props.currentYearMonth}
-      message={`${props.selectedMonth}月の締切予定のToDoリストは、登録されていません。`}
+      message={'今日の締切予定のToDoリストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
       setEditing={props.setEditing}
@@ -47,4 +45,4 @@ const MonthlyDueDateTodoListContainer = (props: MonthlyDueDateTodoListContainerP
   );
 };
 
-export default MonthlyDueDateTodoListContainer;
+export default TodayDueDateTodoListContainer;
