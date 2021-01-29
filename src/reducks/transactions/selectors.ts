@@ -77,3 +77,12 @@ export const getTotalExpense = createSelector([transactionsList], (transactionsL
   }
   return total;
 });
+
+export const getWeeklyHistoryTransactions = createSelector(
+  [transactionsList],
+  (transactionsList) => {
+    return transactionsList.filter(
+      (transaction) => transaction.transaction_type !== incomeTransactionType
+    );
+  }
+);

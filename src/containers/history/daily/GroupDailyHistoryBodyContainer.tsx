@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
-import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { getUserId } from '../../reducks/users/selectors';
-import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
-import GroupDailyHistoryBody from '../../components/history/GroupDailyHistoryBody';
+import { getApprovedGroups } from '../../../reducks/groups/selectors';
+import { getUserId } from '../../../reducks/users/selectors';
+import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
+import GroupDailyHistoryBody from '../../../components/history/daily/GroupDailyHistoryBody';
 
 interface GroupDailyHistoryBodyContainerProps {
   groupTransactionsList: GroupTransactionsList;

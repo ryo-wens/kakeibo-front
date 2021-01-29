@@ -1,7 +1,8 @@
 import React from 'react';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
-import { MonthlyHistory, GroupMonthlyHistory } from '../../components/home';
-import DailyHistoryContainer from '../../containers/history/DailyHistoryContainer';
+import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistoryContainer';
+import GroupWeeklyHistoryContainer from '../../containers/history/weekly/GroupWeeklyHistoryContainer';
+import DailyHistoryContainer from '../../containers/history/daily/DailyHistoryContainer';
 import InputYears from '../../components/uikit/InputYears';
 import { Header } from '../../components/header';
 import './history.scss';
@@ -78,17 +79,13 @@ const History = (props: HistoryProps) => {
 
         {props.path === '/weekly/history' && (
           <div className="history__table-size">
-            <MonthlyHistory month={props.selectedMonth} year={props.selectedYear} />
+            <WeeklyHistoryContainer month={props.selectedMonth} year={props.selectedYear} />
           </div>
         )}
 
         {props.path === `/group/${props.groupId}/weekly/history` && (
           <div className="history__table-size">
-            <GroupMonthlyHistory
-              month={props.selectedMonth}
-              year={props.selectedYear}
-              groupTransactionsList={props.groupTransactionsList}
-            />
+            <GroupWeeklyHistoryContainer month={props.selectedMonth} year={props.selectedYear} />
           </div>
         )}
       </main>

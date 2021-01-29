@@ -3,8 +3,8 @@ import { Groups } from '../../../reducks/groups/types';
 import { TransactionsList } from '../../../reducks/transactions/types';
 import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
 import SearchTransactionContainer from '../../../containers/history/search/SearchTransactionContainer';
-import DailyHistoryBodyContainer from '../../../containers/history/DailyHistoryBodyContainer';
-import GroupDailyHistoryBodyContainer from '../../../containers/history/GroupDailyHistoryBodyContainer';
+import DailyHistoryBodyContainer from '../../../containers/history/daily/DailyHistoryBodyContainer';
+import GroupDailyHistoryBodyContainer from '../../../containers/history/daily/GroupDailyHistoryBodyContainer';
 import { noTransactionMessage } from '../../../lib/constant';
 import './daily-history.scss';
 
