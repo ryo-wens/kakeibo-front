@@ -1,7 +1,5 @@
 import React, { useEffect } from 'react';
 import { useLocation } from 'react-router';
-import { Action, Dispatch } from 'redux';
-import { State } from '../../../../reducks/store/types';
 import TodoListItemForm from '../../../../components/todo/modules/form/todoListItemForm/TodoListItemForm';
 
 interface TodoListItemFormContainerProps {
@@ -18,11 +16,11 @@ interface TodoListItemFormContainerProps {
   closeInputTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
   inputTodoRef: React.RefObject<HTMLDivElement>;
-  deleteOperation?: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  deleteOperation?: () => void;
 }
 
 const TodoListItemFormContainer = (props: TodoListItemFormContainerProps) => {
-  const pathName = useLocation().pathname.split('/').slice(-1)[0];
+  const pathName = useLocation().pathname.split('/')[1];
 
   useEffect(() => {
     document.addEventListener('click', props.onClickCloseInputTodoForm);

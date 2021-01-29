@@ -14,7 +14,7 @@ import {
 } from '../../../../reducks/todoList/selectors';
 import { useLocation, useParams } from 'react-router';
 import { customMonth, date, year } from '../../../../lib/constant';
-import TodayTodoListArea from '../../../../components/todo/Page/TodayTodoListArea/TodayTodoListArea';
+import TodayTodoListArea from '../../../../components/todo/page/TodayTodoListArea/TodayTodoListArea';
 
 interface TodayTodoAreaContainerProps {
   currentYearMonth: string;

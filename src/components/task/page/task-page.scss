@@ -1,7 +1,11 @@
-@import "../variable";
+@import "../../../assets/variable";
 
-.task {
-  width: 100%;
+.task-page {
+  background-color: white;
+  border-radius: 0.6rem;
+  border: none;
+  padding: 20px;
+  margin: 0 20px;
 
   &__menu {
     width: 900px;

@@ -1,7 +1,7 @@
-@import "../variable";
-@import "../mixin/icon-btn";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/icon-btn";
 
-.task-list-item {
+.task-list-item-component {
   display: flex;
   align-items: center;
   padding: 0 10px;

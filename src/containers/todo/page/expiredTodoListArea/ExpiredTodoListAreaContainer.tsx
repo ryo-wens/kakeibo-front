@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
-import ExpiredTodoListArea from '../../../../components/todo/Page/ExpiredTodoListArea/ExpiredTodoListArea';
+import ExpiredTodoListArea from '../../../../components/todo/page/ExpiredTodoListArea/ExpiredTodoListArea';
 import { TodoListItem } from '../../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
 import { getExpiredTodoList } from '../../../../reducks/todoList/selectors';

@@ -1,11 +1,14 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../reducks/store/types';
-import { getApprovedGroups } from '../reducks/groups/selectors';
-import { fetchGroups } from '../reducks/groups/operations';
-import { Group, Groups } from '../reducks/groups/types';
-import { getPathGroupId } from '../lib/path';
-import { fetchGroupTasksList, fetchGroupTasksListEachUser } from '../reducks/groupTasks/operations';
+import { State } from '../../../reducks/store/types';
+import { getApprovedGroups } from '../../../reducks/groups/selectors';
+import { fetchGroups } from '../../../reducks/groups/operations';
+import { Group, Groups } from '../../../reducks/groups/types';
+import { getPathGroupId } from '../../../lib/path';
+import {
+  fetchGroupTasksList,
+  fetchGroupTasksListEachUser,
+} from '../../../reducks/groupTasks/operations';
 import {
   EditTaskUser,
   OperateTaskListForUser,
@@ -13,19 +16,22 @@ import {
   TaskList,
   TaskListForUser,
   WeekTables,
-} from '../components/task';
-import { getGroupTasksList, getGroupTasksListForEachUser } from '../reducks/groupTasks/selectors';
-import '../assets/task/task.scss';
+} from '../index';
+import {
+  getGroupTasksList,
+  getGroupTasksListForEachUser,
+} from '../../../reducks/groupTasks/selectors';
+import './task-page.scss';
 import {
   GroupTasksList,
   GroupTasksListForEachUser,
   TasksListItem,
   TaskUser,
   TaskUsers,
-} from '../reducks/groupTasks/types';
+} from '../../../reducks/groupTasks/types';
 import axios, { CancelTokenSource } from 'axios';
 
-const Task = () => {
+const TaskPage = () => {
   const dispatch = useDispatch();
   const groupId = getPathGroupId(window.location.pathname);
   const [selectedDate, setSelectedDate] = useState<Date>(new Date());
@@ -94,61 +100,59 @@ const Task = () => {
   };
 
   return (
-    <>
-      <div className="task">
-        <div className="task__menu">
-          <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
-          <EditTaskUser
-            approvedGroup={approvedGroup}
-            groupTasksListForEachUser={taskListForUser}
-            participatingTaskUsers={participatingTaskUsers(approvedGroup)}
-          />
-        </div>
-        <TaskList
-          groupId={groupId}
-          groupTasksList={taskList}
+    <div className="task-page">
+      <div className="task-page__menu">
+        <SkipDate selectedDate={selectedDate} setSelectedDate={setSelectedDate} />
+        <EditTaskUser
+          approvedGroup={approvedGroup}
           groupTasksListForEachUser={taskListForUser}
+          participatingTaskUsers={participatingTaskUsers(approvedGroup)}
         />
-        <table className="task__table">
-          <thead>
-            <WeekTables selectedDate={selectedDate} />
-          </thead>
-          <tbody>
-            {taskList.map((tasksListItem: TasksListItem) => {
-              if (
-                tasksListItem.cycle_type !== null &&
-                taskListForUser.length &&
-                approvedGroup !== undefined &&
-                tasksListItem.group_id === groupId
-              ) {
-                return (
-                  <tr className="task__list-for-user" key={tasksListItem.id}>
-                    <TaskListForUser
-                      groupId={groupId}
-                      approvedGroup={approvedGroup}
-                      selectedDate={selectedDate}
-                      groupTaskList={taskList}
-                      groupTasksListForEachUser={taskListForUser}
-                      tasksListItem={tasksListItem}
-                    />
-                  </tr>
-                );
-              }
-            })}
-          </tbody>
-          <tfoot>
-            <tr className="task__assign-task">
-              <OperateTaskListForUser
-                approvedGroup={approvedGroup}
-                groupId={groupId}
-                label={'追加'}
-              />
-            </tr>
-          </tfoot>
-        </table>
       </div>
-    </>
+      <TaskList
+        groupId={groupId}
+        groupTasksList={taskList}
+        groupTasksListForEachUser={taskListForUser}
+      />
+      <table className="task-page__table">
+        <thead>
+          <WeekTables selectedDate={selectedDate} />
+        </thead>
+        <tbody>
+          {taskList.map((tasksListItem: TasksListItem) => {
+            if (
+              tasksListItem.cycle_type !== null &&
+              taskListForUser.length &&
+              approvedGroup !== undefined &&
+              tasksListItem.group_id === groupId
+            ) {
+              return (
+                <tr className="task-page__list-for-user" key={tasksListItem.id}>
+                  <TaskListForUser
+                    groupId={groupId}
+                    approvedGroup={approvedGroup}
+                    selectedDate={selectedDate}
+                    groupTaskList={taskList}
+                    groupTasksListForEachUser={taskListForUser}
+                    tasksListItem={tasksListItem}
+                  />
+                </tr>
+              );
+            }
+          })}
+        </tbody>
+        <tfoot>
+          <tr className="task-page__assign-task">
+            <OperateTaskListForUser
+              approvedGroup={approvedGroup}
+              groupId={groupId}
+              label={'追加'}
+            />
+          </tr>
+        </tfoot>
+      </table>
+    </div>
   );
 };
 
-export default Task;
+export default TaskPage;

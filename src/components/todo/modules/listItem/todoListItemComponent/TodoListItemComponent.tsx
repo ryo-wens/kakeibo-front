@@ -3,9 +3,7 @@ import { TodoListItem } from '../../../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import EditIcon from '@material-ui/icons/Edit';
 import './todo-list-item-component.scss';
-import { Action, Dispatch } from 'redux';
-import { State } from '../../../../../reducks/store/types';
-import TodoListItemFormContainer from '../../../../../containers/todo/modules/Form/TodoListItemFormContainer';
+import TodoListItemFormContainer from '../../../../../containers/todo/modules/form/TodoListItemFormContainer';
 
 interface TodoListItemComponentProps {
   openEditTodoForm: boolean;
@@ -23,7 +21,7 @@ interface TodoListItemComponentProps {
   onClickCloseInputTodoForm: (event: Event) => void;
   disabledButton: boolean;
   todoListItemOperation: () => void;
-  deleteOperation: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  deleteOperation: () => void;
   inputTodoClassName: string;
   currentTextStyle: (completeFlag: boolean) => React.CSSProperties;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;

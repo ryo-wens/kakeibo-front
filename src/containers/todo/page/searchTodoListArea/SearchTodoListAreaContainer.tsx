@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import SearchTodoListArea from '../../../../components/todo/Page/SearchTodoListArea/SearchTodoListArea';
+import SearchTodoListArea from '../../../../components/todo/page/SearchTodoListArea/SearchTodoListArea';
 import { month, year } from '../../../../lib/constant';
 import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router';

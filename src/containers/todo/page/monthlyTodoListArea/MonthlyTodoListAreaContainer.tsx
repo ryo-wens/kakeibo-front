@@ -8,7 +8,7 @@ import {
 } from '../../../../reducks/groupTodoList/operations';
 import { fetchGroups } from '../../../../reducks/groups/operations';
 import { fetchMonthTodoList } from '../../../../reducks/todoList/operations';
-import MonthlyTodoListArea from '../../../../components/todo/Page/MonthlyTodoListArea/MonthlyTodoListArea';
+import MonthlyTodoListArea from '../../../../components/todo/page/MonthlyTodoListArea/MonthlyTodoListArea';
 
 interface MonthlyTodoListAreaContainerProps {
   selectedYear: number;

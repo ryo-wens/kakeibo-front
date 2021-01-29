@@ -1,5 +1,4 @@
 export { default as DatePicker } from './DatePicker';
-export { default as DeleteButton } from './DeleteButton';
 export { default as GenericButton } from './GenericButton';
 export { default as GenericModal } from './GenericModal';
 export { default as InputInteger } from './InputInteger';
