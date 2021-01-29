@@ -10,7 +10,6 @@ import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
 import { Group } from '../../../reducks/groups/types';
 import ListItemText from '@material-ui/core/ListItemText';
-import { TodoButton } from '../../todo';
 import { useDispatch } from 'react-redux';
 import { inviteGroupUsers } from '../../../reducks/groups/operations';
 
@@ -22,9 +21,6 @@ const useStyles = makeStyles((theme: Theme) =>
       display: 'flex',
       alignItems: 'center',
       width: 350,
-    },
-    buttons: {
-      display: 'flex',
     },
     divider: {
       height: 28,
@@ -126,13 +122,20 @@ const EditGroupMembers = (props: EditGroupMembersProps) => {
           placeholder="メンバーを検索"
         />
       </Paper>
-      <div className={classes.buttons}>
-        <TodoButton
-          label={'招待を送る'}
+      <div className="add-group-modal__btn">
+        <button
+          className="add-group-modal__btn--add"
           disabled={isBlankUserId}
-          onClick={() => dispatch(inviteGroupUsers(groupId, userId)) && handleClose()}
-        />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={() => handleClose()} />
+          onClick={() => {
+            dispatch(inviteGroupUsers(groupId, userId));
+            handleClose();
+          }}
+        >
+          招待を送る
+        </button>
+        <button className="add-group-modal__btn--cancel" onClick={() => handleClose()}>
+          キャンセル
+        </button>
       </div>
     </div>
   );

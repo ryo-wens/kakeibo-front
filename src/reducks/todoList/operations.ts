@@ -8,7 +8,7 @@ import {
   fetchDateTodoListAction,
   fetchExpiredTodoListAction,
   fetchMonthTodoListAction,
-  searchTodoListAction,
+  fetchSearchTodoListAction,
 } from './actions';
 import {
   AddTodoListItemReq,
@@ -18,7 +18,7 @@ import {
   editTodoListItemRes,
   fetchExpiredTodoListRes,
   fetchMonthTodoListsRes,
-  fetchSearchTodoListRes,
+  FetchSearchTodoListRes,
   fetchTodayTodoListsRes,
   TodoList,
   TodoListItem,
@@ -522,7 +522,7 @@ export const deleteTodoListItem = (todoListItemId: number) => {
   };
 };
 
-export const searchTodoList = (searchRequestData: {
+export const fetchSearchTodoList = (searchRequestData: {
   date_type: string;
   start_date: Date | null;
   end_date: Date | null;
@@ -534,7 +534,7 @@ export const searchTodoList = (searchRequestData: {
 }) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
-      const result = await axios.get<fetchSearchTodoListRes>(
+      const result = await axios.get<FetchSearchTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/search`,
         {
           withCredentials: true,
@@ -555,10 +555,10 @@ export const searchTodoList = (searchRequestData: {
 
       if (searchTodoList === undefined) {
         const searchTodoList: TodoList = [];
-        dispatch(searchTodoListAction(searchTodoList, message));
+        dispatch(fetchSearchTodoListAction(searchTodoList, message));
       } else if (message === undefined) {
         const message = '';
-        dispatch(searchTodoListAction(searchTodoList, message));
+        dispatch(fetchSearchTodoListAction(searchTodoList, message));
       }
     } catch (error) {
       errorHandling(dispatch, error);

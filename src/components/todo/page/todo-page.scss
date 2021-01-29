@@ -1,0 +1,52 @@
+@import "../../../assets/variable";
+@import "../../../assets/modules/task-btn";
+
+.todo-page {
+  width: 100%;
+  display: flex;
+
+  &__left {
+    width: calc((100% - 60px) * 0.7);
+    margin-left: 20px;
+  }
+
+  &__left-content {
+    background-color: white;
+    border-radius: 0.6rem;
+    padding: 20px;
+  }
+
+  &__right {
+    width: calc((100% - 60px) * 0.3);
+    margin: 0 20px;
+  }
+
+  &__right-content {
+    background-color: white;
+    border-radius: 0.6rem;
+    padding: 15px;
+
+    > h4 {
+      color: $task-main_color;
+      margin: 0 0 10px 0;
+    }
+
+    > div {
+      background-color: $task-bg_color;
+      border-radius: 0.6rem;
+      padding: 10px;
+    }
+  }
+
+  &__switch-btn {
+    position: relative;
+  }
+
+  &__search {
+    @extend .task--btn;
+    position: absolute;
+    top: 0;
+    left: 200px;
+    height: 40px;
+  }
+}

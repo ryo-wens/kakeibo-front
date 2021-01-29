@@ -4,7 +4,7 @@ export { default as LogIn } from './login/LogIn';
 export { default as EditStandardBudgets } from '../components/budget/AddCustomBudgets';
 export { default as SignUp } from './signup/SignUp';
 export { default as StandardBudgets } from '../components/budget/StandardBudgets';
-export { default as Task } from './Task';
+export { default as Task } from '../components/task/page/TaskPage';
 export { default as Todo } from './Todo';
 export { default as History } from './history/History';
 export { default as DailyHistory } from './history/daily/DailyHistory';

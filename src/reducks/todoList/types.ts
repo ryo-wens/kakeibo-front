@@ -63,7 +63,7 @@ export interface deleteTodoListItemRes {
   message: string;
 }
 
-export interface searchTodoRequestData {
+export interface SearchTodoRequestData {
   date_type: string;
   start_date: Date | null;
   end_date: Date | null;
@@ -74,7 +74,7 @@ export interface searchTodoRequestData {
   limit?: string;
 }
 
-export interface fetchSearchTodoListRes {
+export interface FetchSearchTodoListRes {
   search_todo_list: TodoList;
   message: string;
 }

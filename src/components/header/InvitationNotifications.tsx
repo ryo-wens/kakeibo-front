@@ -2,7 +2,6 @@ import React, { useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
-import { TodoButton } from '../todo';
 import { Badge } from '@material-ui/core';
 import NotificationsIcon from '@material-ui/icons/Notifications';
 import IconButton from '@material-ui/core/IconButton';
@@ -16,10 +15,6 @@ import { Groups } from '../../reducks/groups/types';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
-    buttons: {
-      display: 'flex',
-      justifyContent: 'center',
-    },
     paper: {
       width: 400,
       margin: '20px auto auto auto',
@@ -78,17 +73,25 @@ const InvitationNotifications = () => {
             <div className={classes.invitationList} key={groupId}>
               <ListItemText secondary={'グループ名'} />
               <p className={classes.groupName}>{unapprovedGroup.group_name}</p>
-              <div className={classes.buttons}>
-                <TodoButton
-                  label={'参加'}
-                  disabled={false}
-                  onClick={() => dispatch(inviteGroupParticipate(groupId)) && handleClose()}
-                />
-                <TodoButton
-                  label={'拒否'}
-                  disabled={false}
-                  onClick={() => dispatch(inviteGroupReject(groupId)) && handleClose()}
-                />
+              <div className="add-group-modal__btn">
+                <button
+                  className="add-group-modal__btn--add"
+                  onClick={() => {
+                    dispatch(inviteGroupParticipate(groupId));
+                    handleClose();
+                  }}
+                >
+                  参加
+                </button>
+                <button
+                  className="add-group-modal__btn--cancel"
+                  onClick={() => {
+                    dispatch(inviteGroupReject(groupId));
+                    handleClose();
+                  }}
+                >
+                  キャンセル
+                </button>
               </div>
             </div>
           );

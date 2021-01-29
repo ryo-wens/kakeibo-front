@@ -1,0 +1,28 @@
+@import "../../../../../assets/variable";
+
+.add-task-name-form {
+  width: 25%;
+  margin-left: 20px;
+
+  &__btn {
+    display: flex;
+    align-items: center;
+    background-color: $task-sub_color;
+    color: white;
+    border: none;
+    border-radius: 0.8rem;
+    font-size: 0.9rem;
+    font-weight: bolder;
+    padding: 0 15px 0 10px;
+    margin: 20px 0 20px 20px;
+    cursor: pointer;
+
+    &:hover {
+      opacity: 0.9;
+    }
+
+    &:focus {
+      outline: none;
+    }
+  }
+}

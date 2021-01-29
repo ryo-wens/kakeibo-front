@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useLocation } from 'react-router';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
-import TodoPage from '../../../components/todo/Page/TodoPage';
+import TodoPage from '../../../components/todo/page/TodoPage';
 
 const TodoPageContainer = () => {
   const dispatch = useDispatch();

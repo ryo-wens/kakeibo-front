@@ -9,7 +9,7 @@ import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse.j
 import fetchGroupMonthTodoListResponse from './fetchGroupMonthTodoListResponse.json';
 import fetchGroupExpiredTodoListResponse from './fetchGroupExpiredTodoListResponse.json';
 import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
-import searchGroupTodoListResponse from './searchGroupTodoListResponse.json';
+import fetchSearchGroupTodoListResponse from './fetchSearchGroupTodoListResponse.json';
 import {
   addGroupTodoListItem,
   deleteGroupTodoListItem,
@@ -17,7 +17,7 @@ import {
   fetchGroupTodayTodoList,
   fetchGroupMonthTodoList,
   fetchGroupExpiredTodoList,
-  searchGroupTodoList,
+  fetchSearchGroupTodoList,
 } from '../../src/reducks/groupTodoList/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
 
@@ -684,11 +684,11 @@ describe('async actions groupTodoLists', () => {
       sort_type: 'desc',
     };
 
-    const mockResponse = JSON.stringify(searchGroupTodoListResponse);
+    const mockResponse = JSON.stringify(fetchSearchGroupTodoListResponse);
 
     const expectedAction = [
       {
-        type: GroupTodoListActions.SEARCH_GROUP_TODO_LIST,
+        type: GroupTodoListActions.FETCH_SEARCH_GROUP_TODO_LIST,
         payload: {
           groupSearchTodoList: [
             {
@@ -710,7 +710,7 @@ describe('async actions groupTodoLists', () => {
     axiosMock.onGet(url).reply(200, mockResponse);
 
     // @ts-ignore
-    await searchGroupTodoList(groupId, params)(store.dispatch);
+    await fetchSearchGroupTodoList(groupId, params)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

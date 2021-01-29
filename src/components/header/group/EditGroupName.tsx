@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
-import { TodoButton, TextInput } from '../../todo';
 import { updateGroupName } from '../../../reducks/groups/operations';
 import { Group } from '../../../reducks/groups/types';
+import { TextInput } from '../../uikit';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -69,21 +69,26 @@ const EditGroupName = (props: EditGroupNameProps) => {
       <h3 id="simple-modal-title">{props.modalTitleLabel}</h3>
       <p>{props.modalTextFieldLabel}</p>
       <TextInput
-        id="filled-basic"
-        variant="filled"
-        required={true}
-        rows={1}
-        type={'text'}
+        id="group-name"
+        label={''}
         value={groupName}
         onChange={inputGroupName}
+        required={true}
+        type={'text'}
+        fullWidth={false}
+        disabled={false}
       />
-      <div className={classes.buttons}>
-        <TodoButton
-          label={'保存'}
+      <div className="add-group-modal__btn">
+        <button
+          className="add-group-modal__btn--add"
           disabled={isBlankGroupName}
           onClick={() => onClickSaveButton()}
-        />
-        <TodoButton label={'キャンセル'} disabled={false} onClick={() => closeModal()} />
+        >
+          保存
+        </button>
+        <button className="add-group-modal__btn--cancel" onClick={() => closeModal()}>
+          キャンセル
+        </button>
       </div>
     </div>
   );

@@ -1,13 +1,12 @@
-import React, { useCallback, useState } from 'react';
+import React from 'react';
 import {
   GroupTasksList,
   GroupTasksListForEachUser,
   TasksListItem,
 } from '../../reducks/groupTasks/types';
-import { InputTask, TaskListItem } from './index';
-import AddIcon from '@material-ui/icons/Add';
-import { addTaskItem } from '../../reducks/groupTasks/operations';
 import '../../assets/task/task-list.scss';
+import AddTaskNameFormContainer from '../../containers/task/modules/form/AddTaskNameFormContainer';
+import TaskListItemComponentContainer from '../../containers/task/modules/listItem/TaskListItemComponentContainer';
 
 interface TaskListProps {
   groupId: number;
@@ -16,73 +15,23 @@ interface TaskListProps {
 }
 
 const TaskList = (props: TaskListProps) => {
-  const [openAddTask, setOpenAddTask] = useState<boolean>(false);
-  const [taskName, setTaskName] = useState<string>('');
-
-  const openAddInputTask = useCallback(() => {
-    setOpenAddTask(true);
-  }, [setOpenAddTask]);
-
-  const closeAddInputTask = useCallback(() => {
-    setOpenAddTask(false);
-    setTaskName('');
-  }, [setOpenAddTask, setTaskName]);
-
-  const inputTaskName = useCallback(
-    (event) => {
-      setTaskName(event.target.value as string);
-    },
-    [setTaskName]
-  );
-
-  const switchAddInputTask = () => {
-    if (!openAddTask) {
-      return (
-        <button className="task-list__add-task-btn" onClick={openAddInputTask}>
-          <AddIcon />
-          タスクを追加
-        </button>
-      );
-    } else if (openAddTask) {
-      return (
-        <>
-          <InputTask
-            buttonLabel={'追加'}
-            titleLabel={'追加'}
-            groupId={props.groupId}
-            inputTaskClose={closeAddInputTask}
-            inputTaskName={inputTaskName}
-            noDifferenceTaskName={false}
-            operation={addTaskItem(props.groupId, taskName)}
-            taskName={taskName}
-          />
-        </>
-      );
-    }
-  };
-
   return (
     <>
       <div className="task-list">
         <h3 className="task-list__title">タスクリスト</h3>
         <ul className="task-list__items">
           {props.groupTasksList &&
-            props.groupTasksList.map((groupTaskListItem: TasksListItem) => {
-              if (groupTaskListItem.cycle_type === null) {
+            props.groupTasksList.map((listItem: TasksListItem) => {
+              if (listItem.cycle_type === null) {
                 return (
-                  <div className="task-list__items--margin" key={groupTaskListItem.id}>
-                    <TaskListItem
-                      taskListItem={groupTaskListItem}
-                      taskName={taskName}
-                      inputTaskName={inputTaskName}
-                      setTaskName={setTaskName}
-                    />
+                  <div className="task-list__items--margin" key={listItem.id}>
+                    <TaskListItemComponentContainer listItem={listItem} />
                   </div>
                 );
               }
             })}
         </ul>
-        {switchAddInputTask()}
+        <AddTaskNameFormContainer />
       </div>
     </>
   );
