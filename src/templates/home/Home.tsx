@@ -1,15 +1,15 @@
 import React from 'react';
-import { PieChartDataList } from '../reducks/transactions/types';
-import { CurrentMonthBudgetStatusList } from '../reducks/budgets/types';
-import { CurrentMonthBudgetGroupStatusList } from '../reducks/groupBudgets/types';
-import InputFormContainer from '../containers/home/transactionInputForm/InputFormContainer';
-import RecentInputContainer from '../containers/home/recentTransaction/RecentInputContainer';
-import CurrentSchedule from '../components/home/CurrentSchedule/CurrentSchedule';
-import HistoryPieChartContainer from '../containers/home/graph/HistoryPieChartContainer';
-import HistoryBarChartContainer from '../containers/home/graph/HistoryBarChartContainer';
-import { MonthlyHistory } from '../components/home';
-import { Header } from '../components/header';
-import { year, month } from '../lib/constant';
+import { PieChartDataList } from '../../reducks/transactions/types';
+import { CurrentMonthBudgetStatusList } from '../../reducks/budgets/types';
+import { CurrentMonthBudgetGroupStatusList } from '../../reducks/groupBudgets/types';
+import InputFormContainer from '../../containers/home/transactionInputForm/InputFormContainer';
+import RecentInputContainer from '../../containers/home/recentTransaction/RecentInputContainer';
+import CurrentSchedule from '../../components/home/CurrentSchedule/CurrentSchedule';
+import HistoryPieChartContainer from '../../containers/home/graph/HistoryPieChartContainer';
+import HistoryBarChartContainer from '../../containers/home/graph/HistoryBarChartContainer';
+import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistoryContainer';
+import { Header } from '../../components/header';
+import { year, month } from '../../lib/constant';
 
 interface HomeProps {
   pathName: string;
@@ -67,7 +67,7 @@ const Home = (props: HomeProps) => {
               />
             </div>
           </div>
-          <MonthlyHistory month={month} year={year} />
+          <WeeklyHistoryContainer month={month} year={year} />
         </div>
         <div className="home__right">
           <CurrentSchedule todoEditing={props.todoEditing} setTodoEditing={props.setTodoEditing} />

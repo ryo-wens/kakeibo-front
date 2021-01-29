@@ -21,7 +21,7 @@ import {
 } from '../../../reducks/groupBudgets/selectors';
 import { month, year } from '../../../lib/constant';
 import { SelectYears } from '../../../lib/date';
-import Home from '../../../templates/Home';
+import Home from '../../../templates/home/Home';
 
 const HomeContainer = () => {
   const dispatch = useDispatch();

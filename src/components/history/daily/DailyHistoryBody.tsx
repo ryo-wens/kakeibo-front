@@ -1,9 +1,9 @@
 import React from 'react';
-import { TransactionsList } from '../../reducks/transactions/types';
-import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
+import { TransactionsList } from '../../../reducks/transactions/types';
+import EditTransactionModalContainer from '../../../containers/home/modal/EditTransactionModalContainer';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
-import '../../templates/history/daily/daily-history.scss';
+import '../../../templates/history/daily/daily-history.scss';
 
 interface DailyHistoryBodyProps {
   open: boolean;

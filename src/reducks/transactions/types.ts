@@ -1,3 +1,5 @@
+import { ReactElement } from 'react';
+
 export interface FetchTransactions {
   id: number;
   transaction_type: string;
@@ -18,6 +20,22 @@ export interface FetchTransactions {
 export interface PieChartData {
   big_category_name: string;
   amount: number;
+}
+
+export interface HistoryRow {
+  historyRow: ReactElement[];
+}
+
+export interface HistoryRowItem {
+  rowItem: ReactElement[];
+  prevTransactionDate: string;
+}
+
+export interface HistoryRows {
+  headerRow: ReactElement[];
+  operationRow: ReactElement[];
+  subTotalAmountRow: ReactElement[];
+  weekNum: number;
 }
 
 export interface PieChartDataList extends Array<PieChartData> {}

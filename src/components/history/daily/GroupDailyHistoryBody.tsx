@@ -1,9 +1,9 @@
 import React from 'react';
-import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
-import EditTransactionModalContainer from '../../containers/home/modal/EditTransactionModalContainer';
+import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
+import EditTransactionModalContainer from '../../../containers/home/modal/EditTransactionModalContainer';
 import IconButton from '@material-ui/core/IconButton';
 import CreateIcon from '@material-ui/icons/Create';
-import '../../templates/history/daily/daily-history.scss';
+import '../../../templates/history/daily/daily-history.scss';
 
 interface GroupDailyHistoryBodyProps {
   userId: string;

@@ -1,5 +1,5 @@
 export { default as CustomBudgets } from '../components/budget/CustomBudgets';
-export { default as Home } from './Home';
+export { default as Home } from './home/Home';
 export { default as LogIn } from './login/LogIn';
 export { default as EditStandardBudgets } from '../components/budget/AddCustomBudgets';
 export { default as SignUp } from './signup/SignUp';
