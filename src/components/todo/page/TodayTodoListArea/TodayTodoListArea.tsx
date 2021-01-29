@@ -4,7 +4,7 @@ import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import TodayImplementationDateTodoListContainer from '../../../../containers/todo/page/todayTodoListArea/Items/TodayImplementationDateTodoListContainer';
 import TodayDueDateTodoListContainer from '../../../../containers/todo/page/todayTodoListArea/Items/TodayDueDateTodoListContainer';
 import './today-todo-list-area.scss';
-import AddTodoListItemFormContainer from '../../../../containers/todo/modules/Form/AddTodoListItemFormContainer';
+import AddTodoListItemFormContainer from '../../../../containers/todo/modules/form/AddTodoListItemFormContainer';
 
 interface TodayTodoListAreaProps {
   currentYearMonth: string;

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Header } from '../components/header';
 import '../assets/todo/todo.scss';
-import Task from './Task';
+import TaskPage from '../components/task/page/TaskPage';
 import GroupShoppingListPage from '../components/groupShoppingList/Page/GroupShoppingListPage';
 import ShoppingListPageContainer from '../containers/shoppingList/Page/ShoppingListPageContainer';
 import TodoPageContainer from '../containers/todo/page/TodoPageContainer';
@@ -36,7 +36,7 @@ const Todo = (props: TodoProps) => {
             </button>
           </div>
           {props.currentPage === 0 && <TodoPageContainer />}
-          {props.currentPage === 1 && <Task />}
+          {props.currentPage === 1 && <TaskPage />}
           {props.currentPage === 2 && props.pathName === 'group' ? (
             <GroupShoppingListPage />
           ) : (

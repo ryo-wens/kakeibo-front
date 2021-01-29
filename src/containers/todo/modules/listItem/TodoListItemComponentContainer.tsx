@@ -179,11 +179,11 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
         }
         setOpenEditTodoForm(false);
       }}
-      deleteOperation={
+      deleteOperation={() => {
         pathName === 'group'
-          ? deleteGroupTodoListItem(Number(group_id), props.listItem.id)
-          : deleteTodoListItem(props.listItem.id)
-      }
+          ? dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id))
+          : dispatch(deleteTodoListItem(props.listItem.id));
+      }}
       inputTodoClassName={
         pathName === 'home'
           ? 'todo-list-item-component__input-todo--home-page'

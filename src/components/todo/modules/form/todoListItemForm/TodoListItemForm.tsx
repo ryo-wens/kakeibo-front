@@ -1,9 +1,8 @@
 import React from 'react';
 import './todo-list-item-form.scss';
-import { DatePicker, DeleteButton, TextInput } from '../../../../uikit';
+import { DatePicker, TextInput } from '../../../../uikit';
 import CloseIcon from '@material-ui/icons/Close';
-import { Action, Dispatch } from 'redux';
-import { State } from '../../../../../reducks/store/types';
+import DeleteModal from '../../../../uikit/modal/deleteModal/DeleteModal';
 
 interface TodoListItemFormProps {
   titleLabel: string;
@@ -19,7 +18,7 @@ interface TodoListItemFormProps {
   closeInputTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
   pathName: string;
-  deleteOperation?: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>;
+  deleteOperation?: () => void;
 }
 
 const TodoListItemForm = React.forwardRef(
@@ -122,11 +121,11 @@ const TodoListItemForm = React.forwardRef(
             </button>
           </div>
           {props.deleteOperation && (
-            <DeleteButton
+            <DeleteModal
+              title={'Todoを削除'}
               buttonLabel={'削除'}
               disabled={false}
               contentName={props.todoContent}
-              modalTitle={'Todo'}
               onClickDelete={props.deleteOperation}
               onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
             />

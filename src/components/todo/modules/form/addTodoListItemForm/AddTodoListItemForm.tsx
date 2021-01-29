@@ -1,7 +1,7 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
 import './add-todo-list-item-form.scss';
-import TodoListItemFormContainer from '../../../../../containers/todo/modules/Form/TodoListItemFormContainer';
+import TodoListItemFormContainer from '../../../../../containers/todo/modules/form/TodoListItemFormContainer';
 
 interface AddTodoListItemFormProps {
   implementationDate: Date | null;

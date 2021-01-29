@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux';
 import { getGroupSearchTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { getSearchTodoList } from '../../../../../reducks/todoList/selectors';
 import { useLocation } from 'react-router';
-import SearchResultTodoList from '../../../../../components/todo/Page/SearchTodoListArea/searchResultTodoList/SearchResultTodoList';
+import SearchResultTodoList from '../../../../../components/todo/page/SearchTodoListArea/searchResultTodoList/SearchResultTodoList';
 
 interface SearchResultTodoListContainerProps {
   currentDateType: string;

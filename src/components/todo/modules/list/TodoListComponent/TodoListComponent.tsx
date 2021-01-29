@@ -2,7 +2,7 @@ import React from 'react';
 import './todo-list-component.scss';
 import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
-import TodoListItemComponentContainer from '../../../../../containers/todo/modules/ListItem/TodoListItemComponentContainer';
+import TodoListItemComponentContainer from '../../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
 
 interface TodoListComponentProps {
   todoList: (TodoListItem | GroupTodoListItem)[];

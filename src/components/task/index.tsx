@@ -1,5 +1,5 @@
 export { default as EditTaskUser } from './EditTaskUser';
-export { default as InputTask } from './InputTask';
+export { default as InputTask } from './modules/form/inputTaskNameForm/InputTaskNameForm';
 export { default as OperateTaskListForUser } from './OperateTaskListForUser';
 export { default as OperateTaskUser } from './OperateTaskUser';
 export { default as SelectCycleType } from './SelectCycleType';
@@ -9,5 +9,5 @@ export { default as SetTaskListItem } from './SetTaskListItem';
 export { default as SkipDate } from './SkipDate';
 export { default as TaskList } from './TaskList';
 export { default as TaskListForUser } from './TaskListForUser';
-export { default as TaskListItem } from './TaskListItem';
+export { default as TaskListItem } from './modules/listItem/TaskListItemComponent/TaskListItemComponent';
 export { default as WeekTables } from './WeekTables';
