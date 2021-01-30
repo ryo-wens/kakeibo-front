@@ -14,7 +14,7 @@ import { OperateTaskListForUser } from './index';
 interface TaskListForUserProps {
   groupId: number;
   approvedGroup: Group;
-  selectedDate: Date;
+  selectedDate: Date | null;
   groupTaskList: GroupTasksList;
   groupTasksListForEachUser: GroupTasksListForEachUser;
   tasksListItem: TasksListItem;

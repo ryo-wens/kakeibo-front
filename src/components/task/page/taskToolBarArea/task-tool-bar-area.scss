@@ -1,7 +1,11 @@
-@import "../variable";
-@import "../modules/task-btn";
+@import "../../../../assets/variable";
+@import "../../../../assets/modules/task-btn";
 
-.skip-date {
+.task-tool-bar-area {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 20px 0;
 
   &__date-picker {
     width: 200px;

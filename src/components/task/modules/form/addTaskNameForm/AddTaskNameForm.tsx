@@ -26,19 +26,17 @@ const AddTaskNameForm = (props: AddTaskNameFormProps) => {
           タスクを追加
         </button>
       ) : (
-        <div className="add-task-name-form">
-          <InputTaskNameFormContainer
-            titleLabel={'タスクを追加'}
-            buttonLabel={'追加'}
-            handleTaskNameChange={props.handleTaskNameChange}
-            disabledButton={props.disabledButton}
-            taskName={props.taskName}
-            closeInputTaskForm={props.closeInputTaskForm}
-            taskNameOperation={props.taskNameOperation}
-            onClickCloseInputTaskNameForm={props.onClickCloseInputTaskNameForm}
-            inputTaskRef={props.inputTaskRef}
-          />
-        </div>
+        <InputTaskNameFormContainer
+          titleLabel={'タスクを追加'}
+          buttonLabel={'追加'}
+          handleTaskNameChange={props.handleTaskNameChange}
+          disabledButton={props.disabledButton}
+          taskName={props.taskName}
+          closeInputTaskForm={props.closeInputTaskForm}
+          taskNameOperation={props.taskNameOperation}
+          onClickCloseInputTaskNameForm={props.onClickCloseInputTaskNameForm}
+          inputTaskRef={props.inputTaskRef}
+        />
       )}
     </>
   );

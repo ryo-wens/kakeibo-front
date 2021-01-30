@@ -1,10 +1,10 @@
 import React from 'react';
 import { Header } from '../components/header';
 import '../assets/todo/todo.scss';
-import TaskPage from '../components/task/page/TaskPage';
 import GroupShoppingListPage from '../components/groupShoppingList/Page/GroupShoppingListPage';
 import ShoppingListPageContainer from '../containers/shoppingList/Page/ShoppingListPageContainer';
 import TodoPageContainer from '../containers/todo/page/TodoPageContainer';
+import TaskPageContainer from '../containers/task/page/TaskPageContainer';
 
 interface TodoProps {
   currentPage: number;
@@ -36,7 +36,7 @@ const Todo = (props: TodoProps) => {
             </button>
           </div>
           {props.currentPage === 0 && <TodoPageContainer />}
-          {props.currentPage === 1 && <TaskPage />}
+          {props.currentPage === 1 && <TaskPageContainer />}
           {props.currentPage === 2 && props.pathName === 'group' ? (
             <GroupShoppingListPage />
           ) : (

@@ -4,7 +4,7 @@ import '../../assets/task/week-tables.scss';
 import '../../assets/variable.scss';
 
 interface WeekTablesProps {
-  selectedDate: Date;
+  selectedDate: Date | null;
 }
 
 const WeekTables = (props: WeekTablesProps) => {
