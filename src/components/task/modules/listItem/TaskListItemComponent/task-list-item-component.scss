@@ -4,7 +4,9 @@
 .task-list-item-component {
   display: flex;
   align-items: center;
-  padding: 0 10px;
+  background-color: $list-item-bg-color;
+  border-radius: 0.6rem;
+  padding: 5px 10px;
 
   &__text {
     width: 100%;
