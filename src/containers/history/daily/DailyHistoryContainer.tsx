@@ -1,14 +1,14 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import { getSearchTransactions, getTransactions } from '../../reducks/transactions/selectors';
+import { getSearchTransactions, getTransactions } from '../../../reducks/transactions/selectors';
 import {
   getGroupTransactions,
   getSearchGroupTransactions,
-} from '../../reducks/groupTransactions/selectors';
-import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { month, year } from '../../lib/constant';
-import DailyHistory from '../../templates/history/daily/DailyHistory';
+} from '../../../reducks/groupTransactions/selectors';
+import { getApprovedGroups } from '../../../reducks/groups/selectors';
+import { month, year } from '../../../lib/constant';
+import DailyHistory from '../../../templates/history/daily/DailyHistory';
 
 interface DailyHistoryContainerProps {
   selectYear: number;

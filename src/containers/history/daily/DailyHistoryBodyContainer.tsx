@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { TransactionsList } from '../../reducks/transactions/types';
-import DailyHistoryBody from '../../components/history/DailyHistoryBody';
+import { TransactionsList } from '../../../reducks/transactions/types';
+import DailyHistoryBody from '../../../components/history/daily/DailyHistoryBody';
 
 interface DailyHistoryBodyContainerProps {
   transactionsList: TransactionsList;

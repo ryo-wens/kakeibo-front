@@ -210,3 +210,12 @@ export const getTotalGroupExpense = createSelector(
     return total;
   }
 );
+
+export const getGroupWeeklyTransaction = createSelector(
+  [groupTransactionsList],
+  (groupTransactionsList) => {
+    return groupTransactionsList.filter(
+      (transaction) => transaction.transaction_type !== incomeTransactionType
+    );
+  }
+);
