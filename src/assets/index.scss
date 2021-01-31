@@ -1,7 +1,7 @@
 @import "modules/primaly-btn";
 @import "modules/task-btn";
 @import "history/monthly-history";
-@import "task/operation-task-user";
-@import "task/edit-task-user";
+@import "../components/task/modules/form/taskUserForm/task-user-form";
+@import "../components/task/page/taskToolBarArea/EditTaskUserModal/edit-task-user-modal";
 @import "style.scss";
 @import "variable.scss";

@@ -1,32 +1,45 @@
-@import "../variable.scss";
-@import "../mixin/icon-btn";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/icon-btn";
 
 .edit-task-user-modal {
+  width: 450px;
+  background-color: white;
+  border-radius: 0.5rem;
+  padding: 15px 0;
+  margin: 20px auto auto auto;
+  outline: none;
 
   &__position {
     display: flex;
-    padding: 0 0 10px 0;
-    margin: 0 0 40px 0;
     border-bottom: $task-border_color solid 1px;
     justify-content: center;
     position: relative;
+    padding: 0 0 10px 0;
+    margin: 0 0 25px 0;
+
+    > h3 {
+      color: $task-main_color;
+      font-size: $task-title-font_size;
+      margin: 0;
+    }
+
+    > button {
+      @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+      position: absolute;
+      right: 0;
+      margin-right: 10px;
+    }
   }
 
-  &__btn-position{
-    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
-    position: absolute;
-    right: 0;
+  &__content {
+    margin: 0 15px;
   }
 
-  &__title {
-    margin: 0;
+  &__message {
+    text-align: center;
     color: $task-main_color;
-    font-size: $task-title-font_size;
-  }
-
-  &__text {
-    display: inline-block;
-    margin: 0 0 30px 0;
+    font-weight: bold;
+    margin: 0 0 40px 0;
   }
 
   &__user-list {
@@ -36,14 +49,14 @@
   }
 
   &__user-list-item {
-    margin: 0 0 30px 20px;
+    margin: 0 0 20px 25px;
     color: $task-sub_color;
     font-size: 1.0rem;
     font-weight: bolder;
     letter-spacing: 0.05rem;
 
     &:last-child {
-      margin-bottom: 60px;
+      margin-bottom: 40px;
     }
   }
 
@@ -55,12 +68,12 @@
     font-weight: bold;
     border-radius: 0.2rem;
     padding: 2px 5px 2px 10px;
-    margin: 0 0 15px 0;
+    margin: 0 15px 15px;
     cursor: pointer;
 
 
     &:last-child {
-      margin: 0;
+      margin: 0 15px;
     }
 
     &:hover{

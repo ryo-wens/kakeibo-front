@@ -1,6 +1,6 @@
-export { default as EditTaskUser } from './EditTaskUser';
+export { default as EditTaskUser } from './page/taskToolBarArea/EditTaskUserModal/EditTaskUserModal';
 export { default as OperateTaskListForUser } from './OperateTaskListForUser';
-export { default as OperateTaskUser } from './OperateTaskUser';
+export { default as OperateTaskUser } from './modules/form/taskUserForm/TaskUserForm';
 export { default as SelectCycleType } from './SelectCycleType';
 export { default as SelectTaskName } from './SelectTaskName';
 export { default as SelectTaskUser } from './SelectTaskUser';
