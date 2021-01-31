@@ -4,7 +4,7 @@ import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistor
 import GroupWeeklyHistoryContainer from '../../containers/history/weekly/GroupWeeklyHistoryContainer';
 import DailyHistoryContainer from '../../containers/history/daily/DailyHistoryContainer';
 import InputYears from '../../components/uikit/InputYears';
-import { Header } from '../../components/header';
+import HeaderContainer from '../../containers/header/HeaderContainer';
 import './history.scss';
 
 interface HistoryProps {
@@ -26,7 +26,7 @@ interface HistoryProps {
 const History = (props: HistoryProps) => {
   return (
     <>
-      <Header />
+      <HeaderContainer />
       <main className="section__container">
         <div className="history__position">
           <div

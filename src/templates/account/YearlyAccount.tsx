@@ -1,7 +1,7 @@
 import React from 'react';
 import { GroupYearlyAccountList } from '../../reducks/groupTransactions/types';
 import qs from 'qs';
-import { Header } from '../../components/header';
+import HeaderContainer from '../../containers/header/HeaderContainer';
 import { SelectYears } from '../../components/uikit';
 import PayOffContainer from '../../containers/templates/account/PayOffContainer';
 import '../../components/account/yearly-account.scss';
@@ -24,7 +24,7 @@ interface YearlyAccountProps {
 const YearlyAccount = (props: YearlyAccountProps) => {
   return (
     <>
-      <Header />
+      <HeaderContainer />
       <main className="section__container">
         {!props.currentItem && props.searchLocation.length === props.queryParamsLength ? (
           <>
