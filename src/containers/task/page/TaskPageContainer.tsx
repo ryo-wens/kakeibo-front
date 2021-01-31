@@ -87,9 +87,10 @@ const TaskPageContainer = () => {
           (approvedUser) => approvedUser.user_id === taskListForUserItem.user_id
         );
         const taskUser: TaskUser = {
-          taskUserId: taskListForUserItem.id,
-          taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
-          taskUserColor: approvedGroup.approved_users_list[approvedUserIdx].color_code,
+          id: taskListForUserItem.id,
+          user_id: approvedGroup.approved_users_list[approvedUserIdx].user_id,
+          user_name: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+          color_code: approvedGroup.approved_users_list[approvedUserIdx].color_code,
         };
         taskUsers.push(taskUser);
       }

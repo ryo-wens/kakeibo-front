@@ -8,7 +8,7 @@ import {
   TaskUsers,
 } from '../../../reducks/groupTasks/types';
 import TaskListArea from './taskListArea/TaskListArea';
-import TaskToolBarAreaContainer from '../../../containers/task/page/Area/TaskToolBarAreaContainer';
+import TaskToolBarAreaContainer from '../../../containers/task/page/Area/taskToolBarAreaContainer/TaskToolBarAreaContainer';
 import TaskTableArea from './TaskTableArea/TaskTableArea';
 
 interface TaskPageProps {

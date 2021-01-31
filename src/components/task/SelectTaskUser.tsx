@@ -27,9 +27,10 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
         return approvedUser.user_id === taskUserId;
       });
       const taskUser: TaskUser = {
-        taskUserId: groupTasksListItem.id,
-        taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
-        taskUserColor: approvedGroup.approved_users_list[approvedUserIdx].color_code,
+        id: groupTasksListItem.id,
+        user_id: approvedGroup.approved_users_list[approvedUserIdx].user_id,
+        user_name: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        color_code: approvedGroup.approved_users_list[approvedUserIdx].color_code,
       };
       taskUsers.push(taskUser);
     }
@@ -62,8 +63,8 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
       >
         <option value={0}>ユーザーを選択</option>
         {taskUsers().map((taskUser) => (
-          <option key={taskUser.taskUserId} value={taskUser.taskUserId}>
-            {taskUser.taskUserName}
+          <option key={taskUser.id} value={taskUser.id}>
+            {taskUser.user_name}
           </option>
         ))}
       </select>

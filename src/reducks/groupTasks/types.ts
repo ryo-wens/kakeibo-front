@@ -1,3 +1,5 @@
+import { ApprovedGroupUsers } from '../groups/types';
+
 export interface UserTasksListItem {
   id: number;
   user_id: string;
@@ -80,9 +82,14 @@ export interface deleteTaskItemRes {
 }
 
 export interface TaskUser {
-  taskUserId: number;
-  taskUserName: string;
-  taskUserColor: string;
+  id: number;
+  user_id: string;
+  user_name: string;
+  color_code: string;
 }
 
 export interface TaskUsers extends Array<TaskUser> {}
+
+export interface ParticipatingTaskUsers {
+  users: ApprovedGroupUsers;
+}

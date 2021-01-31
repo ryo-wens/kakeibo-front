@@ -3,9 +3,9 @@ import { DatePicker } from '../../../uikit';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import './task-tool-bar-area.scss';
-import { EditTaskUser } from '../../index';
 import { Group } from '../../../../reducks/groups/types';
 import { GroupTasksListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
+import EditTaskUserModalContainer from '../../../../containers/task/page/Area/taskToolBarAreaContainer/editTaskUserModalContainer/EditTaskUserModalContainer';
 
 interface TaskToolBarAreaProps {
   selectedDate: Date | null;
@@ -75,7 +75,7 @@ const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
       >
         今日
       </button>
-      <EditTaskUser
+      <EditTaskUserModalContainer
         approvedGroup={props.approvedGroup}
         groupTasksListForEachUser={props.groupTasksListForEachUser}
         participatingTaskUsers={props.participatingTaskUsers}

@@ -44,10 +44,10 @@ const TaskListForUser = (props: TaskListForUserProps) => {
       return (
         <span
           className="task-list-for-user__user-name"
-          key={taskUsers[idx].taskUserId}
-          style={{ borderColor: taskUsers[idx].taskUserColor }}
+          key={taskUsers[idx].user_id}
+          style={{ borderColor: taskUsers[idx].color_code }}
         >
-          {taskUsers[idx].taskUserName}
+          {taskUsers[idx].user_name}
         </span>
       );
     } else {
@@ -66,9 +66,10 @@ const TaskListForUser = (props: TaskListForUserProps) => {
         (approvedUser) => approvedUser.user_id === taskUserId
       );
       const taskUser: TaskUser = {
-        taskUserId: groupTasksListItem.id,
-        taskUserName: approvedGroup.approved_users_list[approvedUserIdx].user_name,
-        taskUserColor: approvedGroup.approved_users_list[approvedUserIdx].color_code,
+        id: groupTasksListItem.id,
+        user_id: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        user_name: approvedGroup.approved_users_list[approvedUserIdx].user_name,
+        color_code: approvedGroup.approved_users_list[approvedUserIdx].color_code,
       };
       taskUsers.push(taskUser);
     }
@@ -84,16 +85,16 @@ const TaskListForUser = (props: TaskListForUserProps) => {
 
       if (baseDay > currentDay) {
         differenceDay = (baseDay - currentDay) / 86400000;
-        taskUsers.sort((pre, cur) => cur.taskUserId - pre.taskUserId);
+        taskUsers.sort((pre, cur) => cur.id - pre.id);
       } else if (baseDay < currentDay) {
         differenceDay = (currentDay - baseDay) / 86400000;
-        taskUsers.sort((pre, cur) => pre.taskUserId - cur.taskUserId);
+        taskUsers.sort((pre, cur) => pre.id - cur.id);
       } else if (baseDay === currentDay) {
         differenceDay = 0;
       }
 
       const baseUserIdIdx = taskUsers.findIndex((taskUser) => {
-        return taskUser.taskUserId === props.tasksListItem.group_tasks_users_id;
+        return taskUser.id === props.tasksListItem.group_tasks_users_id;
       });
 
       const cycleCount = Math.floor(differenceDay / cycle);
