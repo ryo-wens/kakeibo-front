@@ -1,12 +1,15 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { CurrentMonthBudgetStatusList } from './types';
+import { displayWeeks } from '../../lib/date';
 import {
-  incomeTransactionType,
+  year,
   month,
-  thisMonthEndDate,
   todayDate,
   todayOfWeek,
+  thisMonthEndDate,
+  currentWeekNumber,
+  incomeTransactionType,
 } from '../../lib/constant';
 
 const budgetsSelector = (state: State) => state.budgets;
@@ -30,26 +33,47 @@ const transactionsList = (state: State) => state.transactions.transactionsList;
 export const getCurrentMonthBudgets = createSelector(
   [yearlyBudgets, transactionsList],
   (yearlyBudgets, transactionsList) => {
-    const remainingDays = thisMonthEndDate - todayDate;
+    const remainingDays = {
+      monthRemaining: 0,
+      weekRemaining: 0,
+    };
     const weekStartDate = todayDate - todayOfWeek;
-    const weekEndDate = weekStartDate + 7;
 
-    let currentMonthTotalExpense = 0;
-    let currentWeekTotalExpense = 0;
-    let currentDayTotalExpense = 0;
+    remainingDays.monthRemaining = thisMonthEndDate - todayDate;
+    const lastDayRemainingDays =
+      remainingDays.monthRemaining === 0 ? 1 : remainingDays.monthRemaining;
+
+    remainingDays.weekRemaining =
+      thisMonthEndDate - weekStartDate === 0 ? 1 : thisMonthEndDate - weekStartDate;
+
+    const currentWeekDate = {
+      weekEndDate: 0,
+    };
+
+    if (weekStartDate === 0) {
+      currentWeekDate.weekEndDate = displayWeeks(year, month)[0].endDate;
+    } else {
+      currentWeekDate.weekEndDate = displayWeeks(year, month)[currentWeekNumber - 1].endDate;
+    }
+
+    const currentTotalExpense = {
+      monthTotalExpense: 0,
+      weekTotalExpense: 0,
+      dayTotalExpense: 0,
+    };
 
     for (const transaction of transactionsList) {
       const transactionDay = Number(transaction.transaction_date.slice(8, 10));
 
       if (transaction.transaction_type !== incomeTransactionType) {
-        currentMonthTotalExpense += transaction.amount;
+        currentTotalExpense.monthTotalExpense += transaction.amount;
 
-        if (weekStartDate <= transactionDay && transactionDay <= weekEndDate) {
-          currentWeekTotalExpense += transaction.amount;
+        if (weekStartDate <= transactionDay && transactionDay <= currentWeekDate.weekEndDate) {
+          currentTotalExpense.weekTotalExpense += transaction.amount;
         }
 
         if (transactionDay === todayDate) {
-          currentDayTotalExpense += transaction.amount;
+          currentTotalExpense.dayTotalExpense += transaction.amount;
         }
       }
     }
@@ -59,33 +83,39 @@ export const getCurrentMonthBudgets = createSelector(
       : 0;
 
     const currentWeekBudgets = Math.round(
-      ((currentMonthBudgets - currentMonthTotalExpense + currentWeekTotalExpense) / remainingDays) *
-        7
+      (currentMonthBudgets -
+        currentTotalExpense.monthTotalExpense +
+        currentTotalExpense.weekTotalExpense) /
+        remainingDays.weekRemaining
     );
 
     const currentDayBudget = Math.round(
-      (currentMonthBudgets - currentMonthTotalExpense + currentDayTotalExpense) / remainingDays
+      (currentMonthBudgets -
+        currentTotalExpense.monthTotalExpense +
+        currentTotalExpense.dayTotalExpense) /
+        lastDayRemainingDays -
+        currentTotalExpense.dayTotalExpense
     );
 
     const currentMonthBudgetStatus = {
       label: '今月',
-      totalExpense: currentMonthTotalExpense,
-      remainingBudget: currentMonthBudgets - currentMonthTotalExpense,
-      percentage: Math.round((currentMonthTotalExpense / currentMonthBudgets) * 100),
+      totalExpense: currentTotalExpense.monthTotalExpense,
+      remainingBudget: currentMonthBudgets - currentTotalExpense.monthTotalExpense,
+      percentage: Math.round((currentTotalExpense.monthTotalExpense / currentMonthBudgets) * 100),
     };
 
     const currentWeekBudgetStatus = {
       label: '今週',
-      totalExpense: currentWeekTotalExpense,
-      remainingBudget: currentWeekBudgets - currentWeekTotalExpense,
-      percentage: Math.round((currentWeekTotalExpense / currentWeekBudgets) * 100),
+      totalExpense: currentTotalExpense.weekTotalExpense,
+      remainingBudget: currentWeekBudgets - currentTotalExpense.weekTotalExpense,
+      percentage: Math.round((currentTotalExpense.weekTotalExpense / currentWeekBudgets) * 100),
     };
 
     const currentDayBudgetStatus = {
       label: '今日',
-      totalExpense: currentDayTotalExpense,
-      remainingBudget: currentDayBudget - currentDayTotalExpense,
-      percentage: Math.round((currentDayTotalExpense / currentDayBudget) * 100),
+      totalExpense: currentTotalExpense.dayTotalExpense,
+      remainingBudget: currentDayBudget,
+      percentage: Math.round((currentTotalExpense.dayTotalExpense / currentDayBudget) * 100),
     };
 
     const currentBudgetStatusList: CurrentMonthBudgetStatusList = [
@@ -102,11 +132,15 @@ export const getAmountPerDay = createSelector(
   [yearlyBudgets, transactionsList],
   (yearlyBudgets, transactionsList) => {
     const remainingDays = thisMonthEndDate - todayDate;
-    let currentMonthTotalExpense = 0;
+    const lastDayRemainingDays = remainingDays === 0 ? 1 : remainingDays;
+
+    const currentTotalExpense = {
+      monthTotalExpense: 0,
+    };
 
     for (const transaction of transactionsList) {
       if (transaction.transaction_type !== incomeTransactionType) {
-        currentMonthTotalExpense += transaction.amount;
+        currentTotalExpense.monthTotalExpense += transaction.amount;
       }
     }
 
@@ -114,9 +148,9 @@ export const getAmountPerDay = createSelector(
       ? yearlyBudgets.monthly_budgets[month - 1].monthly_total_budget
       : 0;
 
-    const remainingBudget = currentMonthBudgets - currentMonthTotalExpense;
+    const remainingBudget = currentMonthBudgets - currentTotalExpense.monthTotalExpense;
 
-    return Math.round(remainingBudget / remainingDays);
+    return Math.round(remainingBudget / lastDayRemainingDays);
   }
 );
 
@@ -125,24 +159,28 @@ const standardBudgetsList = (state: State) => state.budgets.standard_budgets_lis
 export const getTotalStandardBudget = createSelector(
   [standardBudgetsList],
   (standardBudgetsList) => {
-    let totalStandardBudget = 0;
+    const totalBudget = {
+      totalStandardBudget: 0,
+    };
 
     for (let i = 0; i < standardBudgetsList.length; i++) {
-      totalStandardBudget += standardBudgetsList[i].budget;
+      totalBudget.totalStandardBudget += standardBudgetsList[i].budget;
     }
 
-    return totalStandardBudget;
+    return totalBudget.totalStandardBudget;
   }
 );
 
 const customBudgetsList = (state: State) => state.budgets.custom_budgets_list;
 
 export const getTotalCustomBudget = createSelector([customBudgetsList], (customBudgetsList) => {
-  let totalCustomBudget = 0;
+  const totalBudget = {
+    totalCustomBudget: 0,
+  };
 
   for (let i = 0; i < customBudgetsList.length; i++) {
-    totalCustomBudget += customBudgetsList[i].budget;
+    totalBudget.totalCustomBudget += customBudgetsList[i].budget;
   }
 
-  return totalCustomBudget;
+  return totalBudget.totalCustomBudget;
 });
