@@ -4,7 +4,7 @@ import { push } from 'connected-react-router';
 import axios from 'axios';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { Groups } from '../../../reducks/groups/types';
-import SwitchEntity from '../../../components/header/group/SwitchEntity';
+import SwitchEntity from '../../../components/header/group/switchEntity/SwitchEntity';
 
 interface SwitchEntityContainerProps {
   approvedGroups: Groups;

@@ -1,7 +1,8 @@
 import React from 'react';
-import { CreateGroups, GroupMenuButton } from './index';
+import { CreateGroups } from '../index';
+import GroupMenuButtonContainer from '../../../../containers/header/group/GrouopMenuButtonContainer';
 import { Menu } from '@material-ui/core';
-import { Groups } from '../../../reducks/groups/types';
+import { Groups } from '../../../../reducks/groups/types';
 import GroupIcon from '@material-ui/icons/Group';
 import CheckIcon from '@material-ui/icons/Check';
 import './switch-entity.scss';
@@ -52,7 +53,10 @@ const SwitchEntity = (props: SwitchEntityProps) => {
                 >
                   {approvedGroup.group_name}
                 </li>
-                <GroupMenuButton approvedGroup={approvedGroup} closeMenu={props.closeMenu} />
+                <GroupMenuButtonContainer
+                  approvedGroup={approvedGroup}
+                  closeMenu={props.closeMenu}
+                />
               </div>
             );
           })}
