@@ -1,0 +1,65 @@
+@import "../../../assets/variable";
+
+.switch-entity {
+
+  &__position {
+    display: flex;
+  }
+
+  &__list-item {
+    cursor: pointer;
+    padding: 8px;
+
+    &--personal {
+      width: 180px;
+    }
+  }
+
+  &__group {
+    display: inline-block;
+    width: 100%;
+    padding: 10px 0 10px 0;
+    text-align: center;
+    color: $light-black;
+    font-size: 12px;
+  }
+
+  &__group-list-item {
+    align-items: center;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    width: 220px;
+  }
+
+
+  &__button {
+    border: 2px solid;
+    cursor: pointer;
+    width: auto;
+    height: 30px;
+    padding: 5px 25px 5px 25px;
+    background-color: white;
+    text-transform: none;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__group-icon {
+    padding-right: 4px;
+    vertical-align: -10px;
+  }
+
+  &__check-icon {
+    padding-right: 0;
+    padding-top: 15px;
+  }
+
+  &__transparency-icon {
+    opacity: 0;
+    padding-right: 0;
+    padding-top: 15px;
+  }
+}
