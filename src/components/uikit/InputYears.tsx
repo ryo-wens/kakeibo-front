@@ -72,10 +72,7 @@ const InputYears = (props: InputYearsProps) => {
         if (!openSelectYears) {
           return (
             <div className="history history__top-button">
-              <button
-                className="skip-date__prev-btn history__prev-btn"
-                onClick={() => updatePrevYears()}
-              >
+              <button className="history__prev-btn" onClick={() => updatePrevYears()}>
                 <ArrowLeftIcon />
               </button>
               <button
@@ -85,10 +82,7 @@ const InputYears = (props: InputYearsProps) => {
                 {props.selectedYear} 年 {props.selectedMonth} 月
                 <ExpandMoreIcon className="input-years__icon" />
               </button>
-              <button
-                className="skip-date__next-btn history__next-btn"
-                onClick={() => updateNextYears()}
-              >
+              <button className="history__next-btn" onClick={() => updateNextYears()}>
                 <ArrowRightIcon />
               </button>
             </div>
