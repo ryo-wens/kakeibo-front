@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from '../../components/header';
+import HeaderContainer from '../../containers/header/HeaderContainer';
 import StandardBudgetsContainer from '../../containers/budgets/StandardBudgetsContainer';
 import AddCustomBudgetsContainer from '../../containers/budgets/AddCustomBudgetsContainer';
 import CustomBudgetsContainer from '../../containers/budgets/CustomBudgetsContainer';
@@ -19,7 +19,7 @@ interface BudgetsProps {
 const Budgets = (props: BudgetsProps) => {
   return (
     <>
-      <Header />
+      <HeaderContainer />
       <main className="section__container">
         <div className="budget__spacer budget__spacer--medium" />
         {(props.query === '?standard' || props.query === '?yearly') && (

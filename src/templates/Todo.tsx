@@ -1,5 +1,5 @@
 import React from 'react';
-import { Header } from '../components/header';
+import HeaderContainer from '../containers/header/HeaderContainer';
 import '../assets/todo/todo.scss';
 import GroupShoppingListPage from '../components/groupShoppingList/Page/GroupShoppingListPage';
 import ShoppingListPageContainer from '../containers/shoppingList/Page/ShoppingListPageContainer';
@@ -16,7 +16,7 @@ interface TodoProps {
 const Todo = (props: TodoProps) => {
   return (
     <>
-      <Header />
+      <HeaderContainer />
       <main className="section__container">
         <div className="todo">
           <div className="todo__switch-page">

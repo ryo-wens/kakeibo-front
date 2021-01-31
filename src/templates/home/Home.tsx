@@ -8,7 +8,7 @@ import CurrentSchedule from '../../components/home/CurrentSchedule/CurrentSchedu
 import HistoryPieChartContainer from '../../containers/home/graph/HistoryPieChartContainer';
 import HistoryBarChartContainer from '../../containers/home/graph/HistoryBarChartContainer';
 import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistoryContainer';
-import { Header } from '../../components/header';
+import HeaderContainer from '../../containers/header/HeaderContainer';
 import { year, month } from '../../lib/constant';
 
 interface HomeProps {
@@ -28,7 +28,7 @@ interface HomeProps {
 const Home = (props: HomeProps) => {
   return (
     <>
-      <Header />
+      <HeaderContainer />
       <main className="section__container">
         <div className="home__left">
           <InputFormContainer />
