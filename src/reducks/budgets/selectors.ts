@@ -83,10 +83,12 @@ export const getCurrentMonthBudgets = createSelector(
       : 0;
 
     const currentWeekBudgets = Math.round(
-      (currentMonthBudgets -
+      ((currentMonthBudgets -
         currentTotalExpense.monthTotalExpense +
         currentTotalExpense.weekTotalExpense) /
-        remainingDays.weekRemaining
+        remainingDays.weekRemaining) *
+        7 -
+        currentTotalExpense.weekTotalExpense
     );
 
     const currentDayBudget = Math.round(
