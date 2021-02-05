@@ -25,6 +25,7 @@ const HistoryContainer = () => {
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
   const [openSearchField, setOpenSearchField] = useState(false);
+  const [notSpecified, setNotSpecified] = useState(false);
 
   const fetchGroupHistoryData = (signal: CancelTokenSource) => {
     const years: SelectYears = {
@@ -95,14 +96,26 @@ const HistoryContainer = () => {
     }
   };
 
+  const searchFieldOpen = () => {
+    setOpenSearchField(true);
+    setNotSpecified(true);
+  };
+
+  const searchFieldClose = () => {
+    setOpenSearchField(false);
+    setNotSpecified(false);
+  };
+
   return (
     <History
       path={path}
       pathName={pathName}
       groupId={group_id}
       openSearchField={openSearchField}
+      notSpecified={notSpecified}
       groupTransactionsList={groupTransactionsList}
-      setOpenSearchField={setOpenSearchField}
+      searchFieldOpen={searchFieldOpen}
+      searchFieldClose={searchFieldClose}
       currentPageColor={currentPageColor}
       selectedYear={selectedYear}
       selectedMonth={selectedMonth}

@@ -13,8 +13,10 @@ import DailyHistory from '../../../templates/history/daily/DailyHistory';
 interface DailyHistoryContainerProps {
   selectYear: number;
   selectMonth: number;
+  notSpecified: boolean;
   openSearchField: boolean;
-  setOpenSearchField: React.Dispatch<React.SetStateAction<boolean>>;
+  searchFieldOpen: () => void;
+  searchFieldClose: () => void;
 }
 
 const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
@@ -41,14 +43,6 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
   const [submit, setSubmit] = useState(false);
   const displayPersonalTransactions = !props.openSearchField && pathName !== 'group';
   const displayGroupTransactions = !props.openSearchField && pathName === 'group';
-
-  const openSearch = () => {
-    props.setOpenSearchField(true);
-  };
-
-  const closeSearch = () => {
-    props.setOpenSearchField(false);
-  };
 
   const selectStartDateChange = (selectStartDate: Date | null) => {
     setStartSelectDate(selectStartDate as Date);
@@ -119,8 +113,8 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
       sortItem={sortItem}
       sortType={sortType}
       limit={limit}
+      notSpecified={props.notSpecified}
       openSearchField={props.openSearchField}
-      setOpenSearchField={props.setOpenSearchField}
       displayPersonalTransactions={displayPersonalTransactions}
       displayGroupTransactions={displayGroupTransactions}
       approvedGroup={approvedGroup}
@@ -129,8 +123,8 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
       searchTransactionsList={searchTransactionsList}
       groupSearchTransactionsList={groupSearchTransactionsList}
       setSubmit={setSubmit}
-      openSearch={openSearch}
-      closeSearch={closeSearch}
+      searchFieldOpen={props.searchFieldOpen}
+      searchFieldClose={props.searchFieldClose}
       selectStartDateChange={selectStartDateChange}
       selectEndDateChange={selectEndDateChange}
       selectTransactionType={selectTransactionType}
