@@ -25,6 +25,7 @@ interface SearchTransactionProps {
   changeSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
   selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   setSearchSubmit: React.Dispatch<React.SetStateAction<boolean>>;
+  notSpecified: boolean;
   selectStartDate: Date | null;
   selectEndDate: Date | null;
   lowAmount: string;
@@ -58,6 +59,7 @@ const SearchTransaction = (props: SearchTransactionProps) => {
           closeSearch={props.closeSearch}
           openSearch={props.openSearch}
           openSearchFiled={props.openSearchFiled}
+          notSpecified={props.notSpecified}
           pathName={props.pathName}
           inputMemo={props.inputMemo}
           inputShop={props.inputShop}

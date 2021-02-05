@@ -9,6 +9,7 @@ interface SelectPayerProps {
   groupId: number;
   pathName: string;
   disabled: boolean;
+  notSpecified: boolean;
   onChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 
@@ -31,7 +32,7 @@ const SelectPayer = (props: SelectPayerProps) => {
       onChange={props.onChange}
       disabled={props.disabled}
     >
-      <option value={''}>指定しない</option>
+      {props.notSpecified && <option value={''}>指定しない</option>}
       {paymentUsers() !== undefined
         ? paymentUsers().map((paymentUser) => {
             return (

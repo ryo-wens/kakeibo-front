@@ -24,6 +24,7 @@ interface SearchTransactionsFieldContainerProps {
   changeSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
   selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   setSearchSubmit: React.Dispatch<React.SetStateAction<boolean>>;
+  notSpecified: boolean;
   selectStartDate: Date | null;
   selectEndDate: Date | null;
   lowAmount: string;
@@ -76,6 +77,7 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
     <SearchTransactionsField
       groupId={props.groupId}
       pathName={props.pathName}
+      notSpecified={props.notSpecified}
       selectStartDate={props.selectStartDate}
       selectEndDate={props.selectEndDate}
       transactionType={props.transactionType}

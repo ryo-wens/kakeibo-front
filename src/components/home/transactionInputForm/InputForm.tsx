@@ -102,6 +102,7 @@ const InputForm = (props: InputFormProps) => {
               groupId={props.group_id}
               pathName={props.pathName}
               disabled={false}
+              notSpecified={false}
             />
             <div className="input-form__form-content--spacer-medium" />
           </>

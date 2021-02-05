@@ -28,6 +28,7 @@ interface DailyHistoryProps {
   sortItem: string;
   sortType: string;
   limit: string;
+  notSpecified: boolean;
   displayPersonalTransactions: boolean;
   displayGroupTransactions: boolean;
   approvedGroup: Groups;
@@ -35,10 +36,9 @@ interface DailyHistoryProps {
   groupTransactionsList: GroupTransactionsList;
   searchTransactionsList: TransactionsList;
   groupSearchTransactionsList: GroupTransactionsList;
-  openSearch: () => void;
-  closeSearch: () => void;
+  searchFieldOpen: () => void;
+  searchFieldClose: () => void;
   setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
-  setOpenSearchField: React.Dispatch<React.SetStateAction<boolean>>;
   selectStartDateChange: (selectStartDate: Date | null) => void;
   selectEndDateChange: (selectEndDate: Date | null) => void;
   inputMemo: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -58,9 +58,10 @@ const DailyHistory = (props: DailyHistoryProps) => {
     <>
       <div className="daily-history daily-history__background">
         <SearchTransactionContainer
-          closeSearch={props.closeSearch}
-          openSearch={props.openSearch}
+          closeSearch={props.searchFieldClose}
+          openSearch={props.searchFieldOpen}
           openSearchFiled={props.openSearchField}
+          notSpecified={props.notSpecified}
           pathName={props.pathName}
           inputMemo={props.inputMemo}
           inputShop={props.inputShop}
