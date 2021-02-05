@@ -95,7 +95,7 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
       onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
-      displayInputAmountMessage={false}
+      displayInputAmountMessage={props.displayInputAmountMessage}
       openDeleteForm={props.openDeleteForm}
     />
   );
