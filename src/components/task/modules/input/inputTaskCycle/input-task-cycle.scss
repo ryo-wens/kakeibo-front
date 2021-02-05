@@ -1,7 +1,7 @@
-@import "../variable";
-@import "invalid-message";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/modules/invalid-message";
 
-.input-integer {
+.input-task-cycle {
   width: 20%;
   border: $task-border_color 1px solid;
   border-radius: 0.3rem;

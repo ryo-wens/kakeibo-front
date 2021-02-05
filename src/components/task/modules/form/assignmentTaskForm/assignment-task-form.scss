@@ -1,9 +1,9 @@
-@import "../variable";
-@import "../mixin/icon-btn";
-@import "../mixin/operation-btn";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/mixin/icon-btn";
+@import "../../../../../assets/mixin/operation-btn";
 
-.set-task-list-item {
-  width: 380px;
+.assignment-task-form {
+  width: 400px;
   background-color: white;
   padding: 20px 0;
   margin: 20px auto auto auto;
@@ -30,6 +30,12 @@
     margin: 0;
   }
 
+  &__message {
+    color: $danger-color;
+    font-size: 0.85rem;
+    margin: 8px 0;
+  }
+
   &__select-contents {
     display: flex;
     &:last-child {
@@ -50,6 +56,15 @@
     display: flex;
     justify-content: space-between;
     margin: 0 20px;
+
+    &--add {
+      @include operation-btn($task-add-color, white, $task-add-color);
+    }
+
+    &--cancel {
+      @include operation-btn(white, $task-main_color,$task-border_color);
+      margin: 0 0 0 10px;
+    }
 
     &--release {
       @include operation-btn($task-delete-color, white, $task-delete-color);

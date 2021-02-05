@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
-import { Group } from '../../../../../../reducks/groups/types';
-import { GroupTasksListForEachUser, TaskUsers } from '../../../../../../reducks/groupTasks/types';
-import EditTaskUserModal from '../../../../../../components/task/page/taskToolBarArea/EditTaskUserModal/EditTaskUserModal';
+import { Group } from '../../../../../reducks/groups/types';
+import { GroupTasksListForEachUser, TaskUsers } from '../../../../../reducks/groupTasks/types';
+import EditTaskUserModal from '../../../../../components/task/page/taskToolBarArea/EditTaskUserModal/EditTaskUserModal';
 
 interface EditTaskUserModalContainerProps {
   approvedGroup: Group;

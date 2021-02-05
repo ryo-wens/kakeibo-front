@@ -6,8 +6,8 @@ import { GroupTasksListForEachUser, TaskUsers } from '../../../../../reducks/gro
 import { Group } from '../../../../../reducks/groups/types';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
-import AddTaskUserFormContainer from '../../../../../containers/task/page/Area/taskToolBarAreaContainer/editTaskUserModalContainer/taskUserForm/AddTaskUserFormContainer';
-import DeleteTaskUserFormContainer from '../../../../../containers/task/page/Area/taskToolBarAreaContainer/editTaskUserModalContainer/taskUserForm/DeleteTaskUserFormContainer';
+import AddTaskUserFormContainer from '../../../../../containers/task/page/taskToolBarAreaContainer/editTaskUserModalContainer/taskUserForm/AddTaskUserFormContainer';
+import DeleteTaskUserFormContainer from '../../../../../containers/task/page/taskToolBarAreaContainer/editTaskUserModalContainer/taskUserForm/DeleteTaskUserFormContainer';
 
 interface EditTaskUserModalProps {
   open: boolean;
