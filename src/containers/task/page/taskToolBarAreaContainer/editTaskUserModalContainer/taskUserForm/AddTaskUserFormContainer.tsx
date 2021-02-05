@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
-import { ApprovedGroupUsers, Group } from '../../../../../../../reducks/groups/types';
-import { GroupTasksListForEachUser } from '../../../../../../../reducks/groupTasks/types';
+import { ApprovedGroupUsers, Group } from '../../../../../../reducks/groups/types';
+import { GroupTasksListForEachUser } from '../../../../../../reducks/groupTasks/types';
 import { useDispatch } from 'react-redux';
-import TaskUserForm from '../../../../../../../components/task/modules/form/taskUserForm/TaskUserForm';
-import { addGroupTasksUsers } from '../../../../../../../reducks/groupTasks/operations';
+import TaskUserForm from '../../../../../../components/task/modules/form/taskUserForm/TaskUserForm';
+import { addGroupTasksUsers } from '../../../../../../reducks/groupTasks/operations';
 
 interface AddTaskUserFormContainerProps {
   approvedGroup: Group;

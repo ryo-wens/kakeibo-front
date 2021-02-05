@@ -1,11 +1,5 @@
-export { default as EditTaskUser } from './page/taskToolBarArea/EditTaskUserModal/EditTaskUserModal';
-export { default as OperateTaskListForUser } from './OperateTaskListForUser';
-export { default as OperateTaskUser } from './modules/form/taskUserForm/TaskUserForm';
-export { default as SelectCycleType } from './SelectCycleType';
-export { default as SelectTaskName } from './SelectTaskName';
+export { default as SelectCycleType } from './modules/select/SelectTaskCycleType/SelectTaskCycleType';
 export { default as SelectTaskUser } from './SelectTaskUser';
-export { default as SetTaskListItem } from './SetTaskListItem';
-export { default as SkipDate } from './page/taskToolBarArea/TaskToolBarArea';
 export { default as TaskListForUser } from './TaskListForUser';
 export { default as TaskListItem } from './modules/listItem/TaskListItemComponent/TaskListItemComponent';
 export { default as WeekTables } from './WeekTables';

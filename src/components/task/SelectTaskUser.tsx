@@ -1,14 +1,14 @@
-import React, { useCallback } from 'react';
+import React from 'react';
 import { GroupTasksListForEachUser, TaskUser, TaskUsers } from '../../reducks/groupTasks/types';
 import { Group, Groups } from '../../reducks/groups/types';
 import '../../assets/task/select-task-user.scss';
 
 interface SelectTaskUserProps {
+  taskUserId: number;
+  selectTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   groupId: number;
   approvedGroups: Groups;
   groupTasksListForEachUser: GroupTasksListForEachUser;
-  taskUserId: number;
-  setTaskUserId: React.Dispatch<React.SetStateAction<number>>;
   label: string;
 }
 
@@ -37,29 +37,14 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
     return taskUsers;
   };
 
-  const selectTaskUser = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      props.setTaskUserId(Number(event.target.value));
-    },
-    [props.setTaskUserId]
-  );
-
-  const currentSelectTaskUser = () => {
-    if (props.label === '保存') {
-      return props.taskUserId;
-    } else if (props.label === '追加') {
-      return 0;
-    }
-  };
-
   return (
     <form>
       <select
         name={'select-task-user'}
         className="select-task-user"
         required={true}
-        onChange={selectTaskUser}
-        defaultValue={currentSelectTaskUser()}
+        onChange={props.selectTaskUser}
+        defaultValue={props.taskUserId}
       >
         <option value={0}>ユーザーを選択</option>
         {taskUsers().map((taskUser) => (

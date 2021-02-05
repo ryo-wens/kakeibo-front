@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import AddTaskNameForm from '../../../../components/task/modules/form/addTaskNameForm/AddTaskNameForm';
+import AddTaskNameForm from '../../../../components/task/page/taskListArea/addTaskNameForm/AddTaskNameForm';
 import { addTaskItem } from '../../../../reducks/groupTasks/operations';
 
 const initialState = {

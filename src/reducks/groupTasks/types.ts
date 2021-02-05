@@ -1,5 +1,7 @@
 import { ApprovedGroupUsers } from '../groups/types';
 
+export type TaskCycleType = 'every' | 'consecutive' | 'none';
+
 export interface UserTasksListItem {
   id: number;
   user_id: string;
@@ -10,7 +12,7 @@ export interface UserTasksListItem {
 export interface TasksListItem {
   id: number;
   base_date: Date | null;
-  cycle_type: 'every' | 'consecutive' | 'none' | null;
+  cycle_type: TaskCycleType | null;
   cycle: number | null;
   task_name: string;
   group_id: number;
@@ -52,7 +54,7 @@ export interface addTaskItemReq {
 export interface addTaskItemRes {
   id: number;
   base_date: Date | null;
-  cycle_type: 'every' | 'consecutive' | 'none' | null;
+  cycle_type: TaskCycleType | null;
   cycle: number | null;
   task_name: string;
   group_id: number;
@@ -61,7 +63,7 @@ export interface addTaskItemRes {
 
 export interface editTaskItemReq {
   base_date: Date | null;
-  cycle_type: 'every' | 'consecutive' | 'none' | null;
+  cycle_type: TaskCycleType | null;
   cycle: number | null;
   task_name: string;
   group_tasks_users_id: number | null;
@@ -70,7 +72,7 @@ export interface editTaskItemReq {
 export interface editTaskItemRes {
   id: number;
   base_date: Date | null;
-  cycle_type: 'every' | 'consecutive' | 'none' | null;
+  cycle_type: TaskCycleType | null;
   cycle: number | null;
   task_name: string;
   group_id: number;
@@ -92,4 +94,13 @@ export interface TaskUsers extends Array<TaskUser> {}
 
 export interface ParticipatingTaskUsers {
   users: ApprovedGroupUsers;
+}
+
+export interface AssignmentTaskModalInitialState {
+  initialTaskItemId: number;
+  initialTaskName: string;
+  initialBaseDate: Date | null;
+  initialCycleType: TaskCycleType;
+  initialCycle: number;
+  initialUserId: number;
 }

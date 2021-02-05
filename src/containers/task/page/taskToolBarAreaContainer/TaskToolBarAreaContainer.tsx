@@ -1,8 +1,8 @@
 import React from 'react';
-import { date } from '../../../../../lib/constant';
-import { Group } from '../../../../../reducks/groups/types';
-import { GroupTasksListForEachUser, TaskUsers } from '../../../../../reducks/groupTasks/types';
-import TaskToolBarArea from '../../../../../components/task/page/taskToolBarArea/TaskToolBarArea';
+import { date } from '../../../../lib/constant';
+import { Group } from '../../../../reducks/groups/types';
+import { GroupTasksListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
+import TaskToolBarArea from '../../../../components/task/page/taskToolBarArea/TaskToolBarArea';
 
 interface TaskToolBarAreaContainerProps {
   selectedDate: Date | null;

@@ -1,7 +1,7 @@
 export { default as DatePicker } from './DatePicker';
 export { default as GenericButton } from './GenericButton';
 export { default as GenericModal } from './GenericModal';
-export { default as InputInteger } from './InputInteger';
+export { default as InputInteger } from '../task/modules/input/inputTaskCycle/InputTaskCycle';
 export { default as InputYears } from './InputYears';
 export { default as InvalidMessage } from './InvalidMessage';
 export { default as KindSelectBox } from './KindSelectBox';

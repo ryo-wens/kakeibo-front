@@ -9,7 +9,7 @@ import {
 } from '../../reducks/groupTasks/types';
 import '../../assets/task/task-list-for-user.scss';
 import { Group } from '../../reducks/groups/types';
-import { OperateTaskListForUser } from './index';
+import EditAssignmentTaskModalContainer from '../../containers/task/page/taskTableAreaContainer/editAssignmentTaskModal/EditAssignmentTaskModalContainer';
 
 interface TaskListForUserProps {
   groupId: number;
@@ -128,11 +128,10 @@ const TaskListForUser = (props: TaskListForUserProps) => {
 
   return (
     <>
-      <OperateTaskListForUser
+      <EditAssignmentTaskModalContainer
         approvedGroup={approvedGroup}
         groupId={props.groupId}
-        tasksListItem={props.tasksListItem}
-        label={'保存'}
+        taskItem={props.tasksListItem}
       />
       {week()}
     </>
