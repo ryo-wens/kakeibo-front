@@ -32,6 +32,7 @@ interface SearchTransactionsFieldProps {
   changeSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
   selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   setSearchSubmit: React.Dispatch<React.SetStateAction<boolean>>;
+  notSpecified: boolean;
   selectStartDate: Date | null;
   selectEndDate: Date | null;
   lowAmount: string;
@@ -174,6 +175,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
                   pathName={props.pathName}
                   onChange={props.changePayer}
                   disabled={false}
+                  notSpecified={props.notSpecified}
                 />
               </div>
             </div>

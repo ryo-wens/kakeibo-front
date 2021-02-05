@@ -12,12 +12,14 @@ interface HistoryProps {
   pathName: string;
   groupId: string;
   openSearchField: boolean;
+  notSpecified: boolean;
   selectedYear: number;
   selectedMonth: number;
   groupTransactionsList: GroupTransactionsList;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  setOpenSearchField: React.Dispatch<React.SetStateAction<boolean>>;
+  searchFieldOpen: () => void;
+  searchFieldClose: () => void;
   currentPageColor: (currentPath: string) => { backgroundColor: string; color: string } | undefined;
   routingDailyHistory: () => void;
   routingWeeklyHistory: () => void;
@@ -72,7 +74,9 @@ const History = (props: HistoryProps) => {
               selectYear={props.selectedYear}
               selectMonth={props.selectedMonth}
               openSearchField={props.openSearchField}
-              setOpenSearchField={props.setOpenSearchField}
+              notSpecified={props.notSpecified}
+              searchFieldOpen={props.searchFieldOpen}
+              searchFieldClose={props.searchFieldClose}
             />
           </div>
         )}

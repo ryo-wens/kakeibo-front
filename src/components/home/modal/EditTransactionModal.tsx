@@ -129,6 +129,7 @@ const EditTransactionModal = (props: InputModalProps) => {
                 required={true}
                 value={props.paymentUserId}
                 disabled={props.unEditInputForm}
+                notSpecified={false}
               />
               <div className="transaction-modal__form-content--spacer-small" />
             </>
