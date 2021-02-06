@@ -1,7 +1,7 @@
 import React from 'react';
-import { TaskCycleType, TaskUsers } from '../../../reducks/groupTasks/types';
+import { TaskCycleType, TaskUsers } from '../../../../../../reducks/groupTasks/types';
 import Modal from '@material-ui/core/Modal';
-import AssignmentTaskForm from '../modules/form/assignmentTaskForm/AssignmentTaskForm';
+import AssignmentTaskForm from '../../../../modules/form/assignmentTaskForm/AssignmentTaskForm';
 import './edit-assignment-task-modal.scss';
 
 interface EditAssignmentTaskModalProps {

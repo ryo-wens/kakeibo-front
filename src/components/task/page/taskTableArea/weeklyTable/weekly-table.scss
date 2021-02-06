@@ -13,7 +13,7 @@
 
     &--today {
       width: calc(100%/8);
-      background-color: #D7EDFA;
+      background-color: $task-table-bg-color;
       color: $task-sub_color;
       border-left: #F4F5F7 solid 2.5px;
       padding: 5px 0;
