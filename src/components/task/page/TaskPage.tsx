@@ -1,6 +1,5 @@
 import React from 'react';
 import { Group } from '../../../reducks/groups/types';
-
 import './task-page.scss';
 import {
   GroupTasksList,
@@ -8,7 +7,7 @@ import {
   TaskUsers,
 } from '../../../reducks/groupTasks/types';
 import TaskListArea from './taskListArea/TaskListArea';
-import TaskToolBarAreaContainer from '../../../containers/task/page/taskToolBarAreaContainer/TaskToolBarAreaContainer';
+import TaskToolBarAreaContainer from '../../../containers/task/page/taskToolBarArea/TaskToolBarAreaContainer';
 import TaskTableArea from './taskTableArea/TaskTableArea';
 
 interface TaskPageProps {
@@ -35,7 +34,6 @@ const TaskPage = (props: TaskPageProps) => {
       <TaskTableArea
         selectedDate={props.selectedDate}
         setSelectedDate={props.setSelectedDate}
-        approvedGroup={props.approvedGroup}
         taskListForUser={props.taskListForUser}
         participatingTaskUsers={props.participatingTaskUsers}
         taskList={props.taskList}

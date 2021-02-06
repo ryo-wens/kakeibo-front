@@ -1,10 +1,10 @@
 import React from 'react';
-import HeaderContainer from '../containers/header/HeaderContainer';
-import '../assets/todo/todo.scss';
-import GroupShoppingListPage from '../components/groupShoppingList/Page/GroupShoppingListPage';
-import ShoppingListPageContainer from '../containers/shoppingList/Page/ShoppingListPageContainer';
-import TodoPageContainer from '../containers/todo/page/TodoPageContainer';
-import TaskPageContainer from '../containers/task/page/TaskPageContainer';
+import HeaderContainer from '../../containers/header/HeaderContainer';
+import './todo.scss';
+import GroupShoppingListPage from '../../components/groupShoppingList/Page/GroupShoppingListPage';
+import ShoppingListPageContainer from '../../containers/shoppingList/Page/ShoppingListPageContainer';
+import TodoPageContainer from '../../containers/todo/page/TodoPageContainer';
+import TaskPageContainer from '../../containers/task/page/TaskPageContainer';
 
 interface TodoProps {
   currentPage: number;

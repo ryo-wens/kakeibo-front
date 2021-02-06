@@ -1,18 +1,14 @@
 import React from 'react';
-import { TaskCycleType } from '../../../reducks/groupTasks/types';
+import { TaskCycleType, TaskUsers } from '../../../../../../reducks/groupTasks/types';
 import Modal from '@material-ui/core/Modal';
-import { Group } from '../../../reducks/groups/types';
-import AssignmentTaskForm from '../modules/form/assignmentTaskForm/AssignmentTaskForm';
+import AssignmentTaskForm from '../../../../modules/form/assignmentTaskForm/AssignmentTaskForm';
 import './edit-assignment-task-modal.scss';
 
 interface EditAssignmentTaskModalProps {
-  approvedGroup: Group;
-  groupId: number;
+  participatingTaskUsers: TaskUsers;
   taskNameFormElement: JSX.Element;
   initialTaskName: string;
   open: boolean;
-  taskItemId: number;
-  taskName: string;
   baseDate: Date | null;
   cycleType: TaskCycleType;
   cycle: number;
@@ -26,7 +22,7 @@ interface EditAssignmentTaskModalProps {
   closeModal: () => void;
   disabledButton: boolean;
   message: string;
-  releaseAssignmentTask?: () => void;
+  releaseAssignmentTask: () => void;
 }
 
 const EditAssignmentTaskModal = (props: EditAssignmentTaskModalProps) => {
@@ -37,12 +33,9 @@ const EditAssignmentTaskModal = (props: EditAssignmentTaskModalProps) => {
       </th>
       <Modal open={props.open} onClose={props.closeModal}>
         <AssignmentTaskForm
-          approvedGroup={props.approvedGroup}
-          groupId={props.groupId}
+          participatingTaskUsers={props.participatingTaskUsers}
           taskNameFormElement={props.taskNameFormElement}
           buttonLabel={'保存'}
-          taskItemId={props.taskItemId}
-          taskName={props.taskName}
           baseDate={props.baseDate}
           cycleType={props.cycleType}
           cycle={props.cycle}

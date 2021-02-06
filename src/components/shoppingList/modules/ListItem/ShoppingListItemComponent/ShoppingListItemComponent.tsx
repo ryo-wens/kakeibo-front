@@ -94,7 +94,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
             <span style={props.currentTextStyle(props.checked)}>円</span>
           </div>
 
-          <div className="shopping-list-item-component__edit-button">
+          <span className="shopping-list-item-component__edit-icon">
             <EditShoppingListItemModalContainer
               listItem={props.listItem}
               currentYearMonth={props.currentYearMonth}
@@ -126,7 +126,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
               setCustomCategoryId={props.setCustomCategoryId}
               setTransactionAutoAdd={props.setTransactionAutoAdd}
             />
-          </div>
+          </span>
         </div>
         <div className="shopping-list-item-component__tag">
           {props.listItem.regular_shopping_list_id !== null && (

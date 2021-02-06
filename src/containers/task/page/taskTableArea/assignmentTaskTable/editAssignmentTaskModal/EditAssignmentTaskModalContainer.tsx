@@ -3,14 +3,14 @@ import {
   AssignmentTaskModalInitialState,
   TaskCycleType,
   TasksListItem,
-} from '../../../../../reducks/groupTasks/types';
-import { Group } from '../../../../../reducks/groups/types';
+  TaskUsers,
+} from '../../../../../../reducks/groupTasks/types';
 import { useDispatch } from 'react-redux';
-import { editTaskItem } from '../../../../../reducks/groupTasks/operations';
-import EditAssignmentTaskModal from '../../../../../components/task/editAssignmentTaskModal/EditAssignmentTaskModal';
+import { editTaskItem } from '../../../../../../reducks/groupTasks/operations';
+import EditAssignmentTaskModal from '../../../../../../components/task/page/taskTableArea/assignmentTaskTable/editAssignmentTaskModal/EditAssignmentTaskModal';
 
 interface EditAssignmentTaskModalContainerProps {
-  approvedGroup: Group;
+  participatingTaskUsers: TaskUsers;
   groupId: number;
   taskItem: TasksListItem;
 }
@@ -60,7 +60,7 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
   };
 
   const selectCycleType = (event: React.ChangeEvent<{ value: string }>) => {
-    setCycleType(event.target.value as 'every' | 'consecutive' | 'none');
+    setCycleType(event.target.value as TaskCycleType);
     if (event.target.value === 'none') {
       setCycle(Number(1));
     }
@@ -97,8 +97,7 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
 
   return (
     <EditAssignmentTaskModal
-      approvedGroup={props.approvedGroup}
-      groupId={props.groupId}
+      participatingTaskUsers={props.participatingTaskUsers}
       taskNameFormElement={
         <input
           id="filled-basic"
@@ -110,8 +109,6 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
       }
       initialTaskName={initialState.initialTaskName}
       open={open}
-      taskItemId={taskItemId}
-      taskName={taskName}
       baseDate={baseDate}
       cycleType={cycleType}
       cycle={cycle}

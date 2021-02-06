@@ -1,7 +1,7 @@
-@import "../variable";
-@import "../modules/task-btn";
+@import "../../../../../assets/variable";
+@import "../../../../../assets/modules/task-btn";
 
-.task-list-for-user {
+.assignment-task-table {
   &__item{
     border-left: #F4F5F7 solid 2.5px;
     width: calc(100%/8);

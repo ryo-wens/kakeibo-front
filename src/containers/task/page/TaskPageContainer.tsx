@@ -76,7 +76,7 @@ const TaskPageContainer = () => {
   const idx = groups.findIndex((group) => group.group_id === Number(group_id));
   const approvedGroup = groups[idx];
 
-  const participatingTaskUsers = (approvedGroup: Group) => {
+  const generateParticipatingTaskUsers = (approvedGroup: Group) => {
     const taskUsers: TaskUsers = [];
     for (const taskListForUserItem of taskListForUser) {
       if (
@@ -98,13 +98,15 @@ const TaskPageContainer = () => {
     return taskUsers;
   };
 
+  const participatingTaskUsers = generateParticipatingTaskUsers(approvedGroup);
+
   return (
     <TaskPage
       selectedDate={selectedDate}
       setSelectedDate={setSelectedDate}
       approvedGroup={approvedGroup}
       taskListForUser={taskListForUser}
-      participatingTaskUsers={participatingTaskUsers(approvedGroup)}
+      participatingTaskUsers={participatingTaskUsers}
       taskList={taskList}
       groupId={Number(group_id)}
     />

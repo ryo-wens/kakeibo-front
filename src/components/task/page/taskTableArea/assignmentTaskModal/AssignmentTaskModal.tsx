@@ -1,18 +1,14 @@
 import React from 'react';
-import { TaskCycleType } from '../../../../../reducks/groupTasks/types';
+import { TaskCycleType, TaskUsers } from '../../../../../reducks/groupTasks/types';
 import Modal from '@material-ui/core/Modal';
-import { Group } from '../../../../../reducks/groups/types';
 import './assignment-task-modal.scss';
 import AddIcon from '@material-ui/icons/Add';
 import AssignmentTaskForm from '../../../modules/form/assignmentTaskForm/AssignmentTaskForm';
 
 interface AssignmentTaskModalProps {
-  approvedGroup: Group;
-  groupId: number;
+  participatingTaskUsers: TaskUsers;
   taskNameFormElement: JSX.Element;
   open: boolean;
-  taskItemId: number;
-  taskName: string;
   baseDate: Date | null;
   cycleType: TaskCycleType;
   cycle: number;
@@ -37,12 +33,9 @@ const AssignmentTaskModal = (props: AssignmentTaskModalProps) => {
       </button>
       <Modal open={props.open} onClose={props.closeModal}>
         <AssignmentTaskForm
-          approvedGroup={props.approvedGroup}
-          groupId={props.groupId}
+          participatingTaskUsers={props.participatingTaskUsers}
           taskNameFormElement={props.taskNameFormElement}
           buttonLabel={'追加'}
-          taskItemId={props.taskItemId}
-          taskName={props.taskName}
           baseDate={props.baseDate}
           cycleType={props.cycleType}
           cycle={props.cycle}
