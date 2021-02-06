@@ -2,20 +2,14 @@ import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import './assignment-task-form.scss';
 import { DatePicker, InputInteger } from '../../../../uikit';
-import { SelectCycleType, SelectTaskUser } from '../../../index';
-import { Group } from '../../../../../reducks/groups/types';
-import { useSelector } from 'react-redux';
-import { getGroupTasksListForEachUser } from '../../../../../reducks/groupTasks/selectors';
-import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
-import { TaskCycleType } from '../../../../../reducks/groupTasks/types';
+import { TaskCycleType, TaskUsers } from '../../../../../reducks/groupTasks/types';
+import SelectTaskCycleType from '../../select/SelectTaskCycleType';
+import SelectTaskUser from '../../select/SelectTaskUser';
 
 interface AssignmentTaskFormProps {
-  approvedGroup: Group;
-  groupId: number;
+  participatingTaskUsers: TaskUsers;
   taskNameFormElement: JSX.Element;
   buttonLabel: string;
-  taskItemId: number;
-  taskName: string;
   baseDate: Date | null;
   cycleType: TaskCycleType;
   cycle: number;
@@ -32,9 +26,6 @@ interface AssignmentTaskFormProps {
 }
 
 const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
-  const approvedGroups = useSelector(getApprovedGroups);
-  const groupTasksListForEachUser = useSelector(getGroupTasksListForEachUser);
-
   const selectContents = [
     {
       key: 'タスク名',
@@ -57,7 +48,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
     {
       key: 'サイクルタイプ',
       value: (
-        <SelectCycleType cycleType={props.cycleType} selectCycleType={props.selectCycleType} />
+        <SelectTaskCycleType cycleType={props.cycleType} selectCycleType={props.selectCycleType} />
       ),
     },
     {
@@ -77,12 +68,9 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
       key: '割り当てるユーザー',
       value: (
         <SelectTaskUser
+          participatingTaskUsers={props.participatingTaskUsers}
           taskUserId={props.taskUserId}
           selectTaskUser={props.selectTaskUser}
-          groupId={props.groupId}
-          approvedGroups={approvedGroups}
-          groupTasksListForEachUser={groupTasksListForEachUser}
-          label={props.buttonLabel}
         />
       ),
     },

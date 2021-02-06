@@ -206,14 +206,23 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           <ToolTipIcon />
         </span>
       </div>
-      <div className="set-task-list-item__operation-btn">
-        <button
-          className="regular-shopping-list-form__operation-btn--add"
-          disabled={props.unInput}
-          onClick={props.regularShoppingListItemOperation}
-        >
-          {props.buttonLabel}
-        </button>
+      <div className="regular-shopping-list-form__operation-btn">
+        <div>
+          <button
+            className="regular-shopping-list-form__operation-btn--add"
+            disabled={props.unInput}
+            onClick={props.regularShoppingListItemOperation}
+          >
+            {props.buttonLabel}
+          </button>
+          <button
+            className="regular-shopping-list-form__operation-btn--cancel"
+            disabled={false}
+            onClick={() => props.closeModal()}
+          >
+            キャンセル
+          </button>
+        </div>
         {props.titleLabel === '定期買い物リストアイテムを編集' && (
           <button
             className="regular-shopping-list-form__operation-btn--delete"

@@ -1,5 +1,5 @@
-@import "../variable";
-@import "../modules/task-btn";
+@import "../../assets/variable";
+@import "../../assets/modules/task-btn";
 
 .todo {
   width: 100%;
@@ -46,8 +46,8 @@
     }
 
     > span {
-       border-bottom: #F56E6B 3px solid;
-       padding-bottom: 6px;
+      border-bottom: #F56E6B 3px solid;
+      padding-bottom: 6px;
     }
   }
 }

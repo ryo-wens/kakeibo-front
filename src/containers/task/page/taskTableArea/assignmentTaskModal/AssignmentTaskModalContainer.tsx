@@ -2,17 +2,17 @@ import React, { useState } from 'react';
 import {
   AssignmentTaskModalInitialState,
   TaskCycleType,
+  TaskUsers,
 } from '../../../../../reducks/groupTasks/types';
-import { Group } from '../../../../../reducks/groups/types';
 import { date } from '../../../../../lib/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroupTasksList } from '../../../../../reducks/groupTasks/selectors';
 import AssignmentTaskModal from '../../../../../components/task/page/taskTableArea/assignmentTaskModal/AssignmentTaskModal';
-import SelectTaskName from '../../../../../components/task/SelectTaskName';
+import SelectTaskName from '../../../../../components/task/modules/select/SelectTaskName';
 import { editTaskItem } from '../../../../../reducks/groupTasks/operations';
 
 interface AssignmentTaskModalContainerProps {
-  approvedGroup: Group;
+  participatingTaskUsers: TaskUsers;
   groupId: number;
 }
 
@@ -69,7 +69,7 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
   };
 
   const selectCycleType = (event: React.ChangeEvent<{ value: string }>) => {
-    setCycleType(event.target.value as 'every' | 'consecutive' | 'none');
+    setCycleType(event.target.value as TaskCycleType);
     if (event.target.value === 'none') {
       setCycle(Number(1));
     }
@@ -96,14 +96,11 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
 
   return (
     <AssignmentTaskModal
-      approvedGroup={props.approvedGroup}
-      groupId={props.groupId}
+      participatingTaskUsers={props.participatingTaskUsers}
       taskNameFormElement={
         <SelectTaskName selectTaskName={selectTaskName} groupTasksList={taskList} />
       }
       open={open}
-      taskItemId={taskItemId}
-      taskName={taskName}
       baseDate={baseDate}
       cycleType={cycleType}
       cycle={cycle}

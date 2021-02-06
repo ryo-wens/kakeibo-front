@@ -1,5 +1,5 @@
 import React from 'react';
-import './select-task-cycle-type.scss';
+import '../../../../assets/modules/selector.scss';
 
 interface SelectTaskCycleTypeProps {
   cycleType: string;
@@ -10,7 +10,7 @@ const SelectTaskCycleType = (props: SelectTaskCycleTypeProps) => {
   return (
     <form>
       <select
-        className="select-task-cycle-type"
+        className="selector__box"
         name={'select-task-name'}
         required={true}
         onChange={props.selectCycleType}

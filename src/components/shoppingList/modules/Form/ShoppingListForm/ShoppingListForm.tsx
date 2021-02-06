@@ -189,7 +189,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           <ToolTipIcon />
         </span>
       </div>
-      <div className="set-task-list-item__operation-btn">
+      <div className="shopping-list-form__operation-btn">
         <div>
           <button
             className="shopping-list-form__operation-btn--add"

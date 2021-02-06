@@ -58,7 +58,7 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
         />
       ) : (
         <RegularShoppingListFormContainer
-          titleLabel={'定期買い物リストアイテムを削除'}
+          titleLabel={'定期買い物リストアイテムを編集'}
           buttonLabel={'保存'}
           expectedPurchaseDate={props.expectedPurchaseDate}
           cycleType={props.cycleType}
