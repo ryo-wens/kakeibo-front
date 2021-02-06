@@ -1,22 +1,5 @@
 import React from 'react';
-import Button from '@material-ui/core/Button';
-import { createStyles, makeStyles } from '@material-ui/core/styles';
-
-const useStyles = makeStyles(() =>
-  createStyles({
-    button: {
-      borderColor: '#3086f0',
-      color: '#3086f0',
-      fontWeight: 700,
-      fontSize: 16,
-      width: '100%',
-      '&:hover': {
-        backgroundColor: '#3086f0',
-        color: '#fff',
-      },
-    },
-  })
-);
+import '../../assets/modules/generic-btn.scss';
 
 type GenericButtonProps = {
   label: string;
@@ -26,18 +9,11 @@ type GenericButtonProps = {
 };
 
 const GenericButton = (props: GenericButtonProps) => {
-  const classes = useStyles();
   return (
     <div>
-      <Button
-        variant="outlined"
-        className={classes.button}
-        startIcon={props.startIcon}
-        onClick={() => props.onClick()}
-        disabled={props.disabled}
-      >
+      <button className="generic-btn" onClick={() => props.onClick()} disabled={props.disabled}>
         {props.label}
-      </Button>
+      </button>
     </div>
   );
 };
