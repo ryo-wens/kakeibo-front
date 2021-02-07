@@ -11,6 +11,7 @@ import { fetchExpiredTodoList } from '../../../../reducks/todoList/operations';
 
 interface ExpiredTodoListAreaContainerProps {
   currentYearMonth: string;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) => {
@@ -74,6 +75,7 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
       readMore={readMore}
       setReadMore={setReadMore}
       initialDisplayNumberTodoList={initialDisplayNumberTodoList}
+      setEditing={props.setEditing}
     />
   );
 };

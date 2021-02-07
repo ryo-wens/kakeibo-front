@@ -1,21 +1,21 @@
 import React from 'react';
-import { ShoppingList } from '../../../../reducks/shoppingList/types';
-import '../../../shoppingList/modules/List/ShoppingListByDate/shopping-list-by-date.scss';
-import ShoppingListItemComponentContainer from '../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
+import { ShoppingList } from '../../../../../reducks/shoppingList/types';
+import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
+import './today-schedule-shopping-list-by-date.scss';
 
-interface ShoppingListArea {
+interface TodayScheduleShoppingListByDateProps {
   shoppingListByDate: ShoppingList;
   currentYearMonth: string;
   message: string;
 }
 
-const ShoppingListArea = (props: ShoppingListArea) => {
+const TodayScheduleShoppingListByDate = (props: TodayScheduleShoppingListByDateProps) => {
   return (
-    <>
+    <div className="today-schedule-shopping-list-by-date">
       {props.shoppingListByDate.length ? (
         props.shoppingListByDate.map((listItem) => {
           return (
-            <div key={listItem.id}>
+            <div className="today-schedule-shopping-list-by-date__item" key={listItem.id}>
               <ShoppingListItemComponentContainer
                 listItem={listItem}
                 currentYearMonth={props.currentYearMonth}
@@ -30,10 +30,10 @@ const ShoppingListArea = (props: ShoppingListArea) => {
           );
         })
       ) : (
-        <p className="shopping-list-by-date__message">{props.message}</p>
+        <p className="today-schedule-shopping-list-by-date__message">{props.message}</p>
       )}
-    </>
+    </div>
   );
 };
 
-export default ShoppingListArea;
+export default TodayScheduleShoppingListByDate;

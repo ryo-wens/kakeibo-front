@@ -248,7 +248,9 @@ const EditRegularShoppingListItemModalContainer = (
         editRegularShoppingList();
       }}
       deleteOperation={() => {
-        deleteShoppingListItem(props.listItem.id, props.listItem.big_category_name, signal);
+        dispatch(
+          deleteShoppingListItem(props.listItem.id, props.listItem.big_category_name, signal)
+        );
         closeDeleteForm();
       }}
     />

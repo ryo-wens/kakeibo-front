@@ -14,6 +14,7 @@ import TodoListItemComponent from '../../../../components/todo/modules/listItem/
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem | GroupTodoListItem;
   currentYearMonth: string;
+  inputTodoClassName: string;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -184,11 +185,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
           ? dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id))
           : dispatch(deleteTodoListItem(props.listItem.id));
       }}
-      inputTodoClassName={
-        pathName === 'home'
-          ? 'todo-list-item-component__input-todo--home-page'
-          : 'todo-list-item-component__input-todo'
-      }
+      inputTodoClassName={props.inputTodoClassName}
       currentTextStyle={currentTextStyle}
       inputTodoRef={inputTodoRef}
     />
