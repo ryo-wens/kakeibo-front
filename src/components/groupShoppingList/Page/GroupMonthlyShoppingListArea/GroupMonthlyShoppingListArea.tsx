@@ -2,15 +2,15 @@ import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import { useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import '../../../shoppingList/Page/MonthlyShoppingListArea/monthly-shopping-list-area.scss';
+import '../../../shoppingList/page/MonthlyShoppingListArea/monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
 import GroupMonthlyShoppingListByCategoriesComponent from './GroupMonthlyShoppingListByCategoriesComponent/GroupMonthlyShoppingListByCategoriesComponent';
 import {
   getGroupMonthlyShoppingList,
   getGroupMonthlyShoppingListByCategories,
 } from '../../../../reducks/groupShoppingList/selectors';
-import AddGroupShoppingListModal from '../../uikit/Modal/AddGroupShoppingListModal/AddGroupShoppingListModal';
 import GroupMonthlyShoppingListComponent from './GroupMonthlyShoppingListComponent/GroupMonthlyShoppingListComponent';
+import AddGroupShoppingListItemModalContainer from '../../../../containers/groupShoppingList/modules/modal/AddGroupShoppingListItemModalContainer';
 
 interface GroupMonthlyShoppingListAreaProps {
   selectedYear: number;
@@ -31,7 +31,7 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
   return (
     <>
       <div className="monthly-shopping-list-area__add-button">
-        <AddGroupShoppingListModal currentYearMonth={currentYearMonth} />
+        <AddGroupShoppingListItemModalContainer currentYearMonth={currentYearMonth} />
       </div>
       <div className="monthly-shopping-list-area__switch-item">
         <div className="monthly-shopping-list-area__switch-item--width">

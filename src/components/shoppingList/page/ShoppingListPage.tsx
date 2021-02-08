@@ -1,14 +1,14 @@
 import React from 'react';
-import '../../shoppingList/page/shopping-list-page.scss';
+import './shopping-list-page.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
-import GroupTodayShoppingListArea from './GroupTodayShoppingListArea/GroupTodayShoppingListArea';
-import GroupMonthlyShoppingListArea from './GroupMonthlyShoppingListArea/GroupMonthlyShoppingListArea';
-import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
-import GroupRegularShoppingListArea from './GroupRegularShoppingListArea/GroupRegularShoppingListArea';
-import AddGroupRegularShoppingListModal from '../modules/Modal/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
+import TodayShoppingListAreaContainer from '../../../containers/shoppingList/page/TodayShoppingListArea/TodayShoppingListAreaContainer';
+import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/page/MonthlyShoppingListArea/MonthlyShoppingListAreaContainer';
+import ExpiredShoppingListAreaContainer from '../../../containers/shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListAreaContainer';
+import RegularShoppingListAreaContainer from '../../../containers/shoppingList/page/RegularShoppingListArea/RegularShoppingListAreaContainer';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
+import AddRegularShoppingListItemModalContainer from '../../../containers/shoppingList/modules/Modal/AddRegularShoppingListItemModalContainer';
 
-interface GroupShoppingListPageProps {
+interface ShoppingListPageProps {
   selectedYear: number;
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
@@ -18,7 +18,7 @@ interface GroupShoppingListPageProps {
   currentYearMonth: string;
 }
 
-const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
+const ShoppingListPage = (props: ShoppingListPageProps) => {
   return (
     <div className="shopping-list-page">
       <div className="shopping-list-page__left">
@@ -26,13 +26,14 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
           <SwitchTodayOrMonthlyTabsContainer
             currentItem={props.currentItem}
             setCurrentItems={props.setCurrentItem}
-            leftItem={<GroupTodayShoppingListArea currentYearMonth={props.currentYearMonth} />}
+            leftItem={<TodayShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />}
             rightItem={
-              <GroupMonthlyShoppingListArea
+              <MonthlyShoppingListAreaContainer
                 selectedYear={props.selectedYear}
                 selectedMonth={props.selectedMonth}
                 setSelectedYear={props.setSelectedYear}
                 setSelectedMonth={props.setSelectedMonth}
+                currentYearMonth={props.currentYearMonth}
               />
             }
           />
@@ -41,19 +42,22 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
-          <AddGroupRegularShoppingListModal currentYearMonth={props.currentYearMonth} />
-          <GroupRegularShoppingListArea
+          <AddRegularShoppingListItemModalContainer
+            selectedYear={props.selectedYear}
+            selectedMonth={props.selectedMonth}
+          />
+          <RegularShoppingListAreaContainer
             currentYearMonth={props.currentYearMonth}
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <GroupExpiredShoppingListArea currentYearMonth={props.currentYearMonth} />
+          <ExpiredShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
         </div>
       </div>
     </div>
   );
 };
 
-export default GroupShoppingListPage;
+export default ShoppingListPage;

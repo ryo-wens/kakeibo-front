@@ -3,7 +3,7 @@ import Modal from '@material-ui/core/Modal';
 import './edit-shopping-list-item-modal.scss';
 import EditIcon from '@material-ui/icons/Edit';
 import ShoppingListDeleteForm from '../../../Form/ShoppingListDeleteForm/ShoppingListDeleteForm';
-import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/Form/ShoppingListFormContainer/ShoppingListFormContainer';
+import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/ShoppingListFormContainer';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 
 interface EditShoppingListItemModalProps {
@@ -16,8 +16,6 @@ interface EditShoppingListItemModalProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
-  mediumCategoryId: number | null;
-  customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -62,8 +60,6 @@ const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
           bigCategoryId={props.bigCategoryId}
           bigCategory={props.bigCategory}
           bigCategoryIndex={props.bigCategoryIndex}
-          mediumCategoryId={props.mediumCategoryId}
-          customCategoryId={props.customCategoryId}
           transactionAutoAdd={props.transactionAutoAdd}
           associatedCategory={props.associatedCategory}
           handlePurchaseChange={props.handlePurchaseChange}

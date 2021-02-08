@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import '../../../../shoppingList/modules/List/ShoppingListByDate/shopping-list-by-date.scss';
-import GroupShoppingListItemComponent from '../../../uikit/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
+import GroupShoppingListItemComponent from '../../../modules/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
 import { GroupShoppingList } from '../../../../../reducks/groupShoppingList/types';
 import axios, { CancelTokenSource } from 'axios';
 import { fetchGroups } from '../../../../../reducks/groups/operations';

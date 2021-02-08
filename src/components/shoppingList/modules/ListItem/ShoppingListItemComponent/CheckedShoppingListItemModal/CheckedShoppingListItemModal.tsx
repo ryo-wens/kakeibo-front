@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import './checked-shopping-list-item-modal.scss';
-import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/Form/ShoppingListFormContainer/ShoppingListFormContainer';
+import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/ShoppingListFormContainer';
 
 interface CheckedShoppingListItemModalProps {
   open: boolean;
@@ -14,8 +14,6 @@ interface CheckedShoppingListItemModalProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
-  mediumCategoryId: number | null;
-  customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -48,8 +46,6 @@ const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) 
         bigCategoryId={props.bigCategoryId}
         bigCategory={props.bigCategory}
         bigCategoryIndex={props.bigCategoryIndex}
-        mediumCategoryId={props.mediumCategoryId}
-        customCategoryId={props.customCategoryId}
         transactionAutoAdd={props.transactionAutoAdd}
         associatedCategory={props.associatedCategory}
         handlePurchaseChange={props.handlePurchaseChange}

@@ -3,14 +3,14 @@ import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import { useSelector } from 'react-redux';
 import { date } from '../../../../lib/constant';
 import { useParams } from 'react-router';
-import '../../../shoppingList/Page/TodayShoppingListArea/today-shopping-list-area.scss';
-import AddGroupShoppingListModal from '../../uikit/Modal/AddGroupShoppingListModal/AddGroupShoppingListModal';
+import '../../../shoppingList/page/TodayShoppingListArea/today-shopping-list-area.scss';
 import GroupTodayShoppingListComponent from './GroupTodayShoppingListComponent/GroupTodayShoppingListComponent';
 import {
   getGroupTodayShoppingList,
   getGroupTodayShoppingListByCategories,
 } from '../../../../reducks/groupShoppingList/selectors';
 import GroupTodayShoppingListByCategoriesComponent from './GroupTodayShoppingListByCategoriesComponent/GroupTodayShoppingListByCategoriesComponent';
+import AddGroupShoppingListItemModalContainer from '../../../../containers/groupShoppingList/modules/modal/AddGroupShoppingListItemModalContainer';
 
 interface GroupTodayShoppingListAreaProps {
   currentYearMonth: string;
@@ -28,7 +28,7 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
   return (
     <>
       <div className="today-shopping-list-area__add-button">
-        <AddGroupShoppingListModal currentYearMonth={props.currentYearMonth} />
+        <AddGroupShoppingListItemModalContainer currentYearMonth={props.currentYearMonth} />
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">
