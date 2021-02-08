@@ -3,7 +3,15 @@
 .shopping-list-by-date {
   margin-top: 30px;
 
-  &__date {
+  &__item {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+
+  &__item-date {
     color: $task-main_color;
     font-size: 1.0rem;
     margin: 0 0 20px 0;

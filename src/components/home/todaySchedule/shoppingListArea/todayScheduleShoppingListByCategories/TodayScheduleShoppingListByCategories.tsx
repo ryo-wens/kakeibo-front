@@ -4,18 +4,19 @@ import {
   ShoppingListItem,
   ShoppingListItemByCategories,
 } from '../../../../../reducks/shoppingList/types';
-import './shopping-list-by-categories-component.scss';
+import './today-schedule-shopping-list-by-categories.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
 import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
 
-interface ShoppingListByCategoriesComponentProps {
+interface TodayScheduleShoppingListByCategoriesCompo {
   shoppingListByCategories: ShoppingListByCategories;
   currentYearMonth: string;
   message: string;
-  equalsDisplayDate: (categoryId: number, date: string) => boolean;
 }
 
-const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesComponentProps) => {
+const TodayScheduleShoppingListByCategories = (
+  props: TodayScheduleShoppingListByCategoriesCompo
+) => {
   return (
     <>
       {props.shoppingListByCategories.length ? (
@@ -23,12 +24,12 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
           (shoppingListItemByCategories: ShoppingListItemByCategories) => {
             return (
               <div key={shoppingListItemByCategories.big_category_name}>
-                <div className="shopping-list-by-categories-component__category">
+                <div className="today-schedule-shopping-list-by-categories__category">
                   <span
-                    className="shopping-list-by-categories-component__category-color"
+                    className="today-schedule-shopping-list-by-categories__category-color"
                     style={bigCategoryColor(shoppingListItemByCategories.big_category_name)}
                   />
-                  <h4 className="shopping-list-by-categories-component__category-name">
+                  <h4 className="today-schedule-shopping-list-by-categories__category-name">
                     {shoppingListItemByCategories.big_category_name}
                   </h4>
                 </div>
@@ -36,25 +37,21 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                   (shoppingListItem: ShoppingListItem) => {
                     return (
                       <div
-                        className="shopping-list-by-categories-component__item"
+                        className="today-schedule-shopping-list-by-categories__item"
                         key={shoppingListItem.id}
                       >
-                        {props.equalsDisplayDate(
-                          shoppingListItem.big_category_id,
-                          shoppingListItem.expected_purchase_date
-                        ) && (
-                          <p className="shopping-list-by-categories-component__item-date">
-                            {shoppingListItem.expected_purchase_date}
-                          </p>
-                        )}
                         <ShoppingListItemComponentContainer
                           listItem={shoppingListItem}
                           currentYearMonth={props.currentYearMonth}
-                          purchaseClassName={'shopping-list-item-component__item-purchase'}
-                          amountClassName={'shopping-list-item-component__item-amount'}
-                          transactionDataItemClassName={'related-transaction-data-button__item'}
+                          purchaseClassName={
+                            'shopping-list-item-component__item-purchase--home-page'
+                          }
+                          amountClassName={'shopping-list-item-component__item-amount--home-page'}
+                          transactionDataItemClassName={
+                            'related-transaction-data-button__item--home-page'
+                          }
                           transactionDataItemKeyClassName={
-                            'related-transaction-data-button__item-key'
+                            'related-transaction-data-button__item-key--home-page'
                           }
                         />
                       </div>
@@ -66,10 +63,10 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
           }
         )
       ) : (
-        <p className="shopping-list-by-categories-component__message">{props.message}</p>
+        <p className="today-schedule-shopping-list-by-categories__message">{props.message}</p>
       )}
     </>
   );
 };
 
-export default ShoppingListByCategoriesComponent;
+export default TodayScheduleShoppingListByCategories;

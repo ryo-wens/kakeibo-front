@@ -15,6 +15,7 @@ interface ExpiredTodoListAreaProps {
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   initialDisplayNumberTodoList: number;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
@@ -25,13 +26,17 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
           <>
             {props.slicedExpiredTodoList.map((listItem) => {
               return (
-                <div key={listItem.id}>
+                <div className="expired-todo-list-area__item" key={listItem.id}>
                   {props.equalsDisplayDate(listItem) && (
-                    <p className="expired-todo-list-area__date">{props.displayDate(listItem)}</p>
+                    <p className="expired-todo-list-area__item-date">
+                      {props.displayDate(listItem)}
+                    </p>
                   )}
                   <TodoListItemComponentContainer
                     listItem={listItem}
                     currentYearMonth={props.currentYearMonth}
+                    setEditing={props.setEditing}
+                    inputTodoClassName={'todo-list-item-component__input-todo'}
                   />
                 </div>
               );

@@ -19,14 +19,15 @@ const TodoListComponent = (props: TodoListComponentProps) => {
       {props.todoList.length ? (
         props.todoList.map((listItem) => {
           return (
-            <div key={listItem.id}>
+            <div className="todo-list-component__item" key={listItem.id}>
               {props.equalsDisplayDate(listItem) && (
-                <p className="todo-list-component__date">{props.displayDate(listItem)}</p>
+                <p className="todo-list-component__item-date">{props.displayDate(listItem)}</p>
               )}
               <TodoListItemComponentContainer
                 listItem={listItem}
                 currentYearMonth={props.currentYearMonth}
                 setEditing={props.setEditing}
+                inputTodoClassName={'todo-list-item-component__input-todo'}
               />
             </div>
           );

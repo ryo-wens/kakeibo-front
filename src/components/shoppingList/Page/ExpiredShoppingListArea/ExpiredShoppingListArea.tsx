@@ -23,9 +23,9 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
           <>
             {props.slicedExpiredShoppingList.map((listItem) => {
               return (
-                <div key={listItem.id}>
+                <div className="expired-shopping-list-area__item" key={listItem.id}>
                   {props.equalsDisplayDate(listItem.expected_purchase_date) && (
-                    <p className="expired-shopping-list-area__date">
+                    <p className="expired-shopping-list-area__item-date">
                       {listItem.expected_purchase_date}
                     </p>
                   )}

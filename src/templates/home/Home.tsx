@@ -4,12 +4,12 @@ import { CurrentMonthBudgetStatusList } from '../../reducks/budgets/types';
 import { CurrentMonthBudgetGroupStatusList } from '../../reducks/groupBudgets/types';
 import InputFormContainer from '../../containers/home/transactionInputForm/InputFormContainer';
 import RecentInputContainer from '../../containers/home/recentTransaction/RecentInputContainer';
-import CurrentSchedule from '../../components/home/CurrentSchedule/CurrentSchedule';
 import HistoryPieChartContainer from '../../containers/home/graph/HistoryPieChartContainer';
 import HistoryBarChartContainer from '../../containers/home/graph/HistoryBarChartContainer';
 import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistoryContainer';
 import HeaderContainer from '../../containers/header/HeaderContainer';
 import { year, month } from '../../lib/constant';
+import TodayScheduleContainer from '../../containers/home/todaySchedule/TodayScheduleContainer';
 
 interface HomeProps {
   pathName: string;
@@ -70,7 +70,10 @@ const Home = (props: HomeProps) => {
           <WeeklyHistoryContainer month={month} year={year} />
         </div>
         <div className="home__right">
-          <CurrentSchedule todoEditing={props.todoEditing} setTodoEditing={props.setTodoEditing} />
+          <TodayScheduleContainer
+            todoEditing={props.todoEditing}
+            setTodoEditing={props.setTodoEditing}
+          />
         </div>
       </main>
     </>

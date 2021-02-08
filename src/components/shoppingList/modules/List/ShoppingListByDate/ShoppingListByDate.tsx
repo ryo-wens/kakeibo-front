@@ -16,9 +16,11 @@ const ShoppingListByDate = (props: ShoppingListByDateProps) => {
       {props.shoppingListByDate.length ? (
         props.shoppingListByDate.map((listItem) => {
           return (
-            <div key={listItem.id}>
+            <div className="shopping-list-by-date__item" key={listItem.id}>
               {props.equalsDisplayDate(listItem.expected_purchase_date) && (
-                <p className="shopping-list-by-date__date">{listItem.expected_purchase_date}</p>
+                <p className="shopping-list-by-date__item-date">
+                  {listItem.expected_purchase_date}
+                </p>
               )}
               <ShoppingListItemComponentContainer
                 listItem={listItem}

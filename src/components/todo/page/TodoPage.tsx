@@ -64,7 +64,10 @@ const TodoPage = (props: TodoPageProps) => {
           <div className="todo-page__right">
             <div className="todo-page__right-content">
               <h4>期限切れToDoリスト</h4>
-              <ExpiredTodoListAreaContainer currentYearMonth={props.currentYearMonth} />
+              <ExpiredTodoListAreaContainer
+                currentYearMonth={props.currentYearMonth}
+                setEditing={props.setEditing}
+              />
             </div>
           </div>
         </div>
