@@ -15,8 +15,14 @@ const initialState = {
     message: '',
   },
   categories: {
-    incomeList: [],
-    expenseList: [],
+    category: {
+      incomeList: [],
+      expenseList: [],
+      categoriesError: {
+        statusCode: 0,
+        errorMessage: '',
+      },
+    },
   },
   groupCategories: {
     groupIncomeList: [],

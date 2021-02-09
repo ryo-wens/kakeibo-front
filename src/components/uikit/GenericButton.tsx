@@ -11,7 +11,12 @@ type GenericButtonProps = {
 const GenericButton = (props: GenericButtonProps) => {
   return (
     <div>
-      <button className="generic-btn" onClick={() => props.onClick()} disabled={props.disabled}>
+      <button
+        type="button"
+        className="generic-btn"
+        onClick={() => props.onClick()}
+        disabled={props.disabled}
+      >
         {props.label}
       </button>
     </div>

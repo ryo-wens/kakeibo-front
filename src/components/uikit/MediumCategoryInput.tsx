@@ -20,6 +20,7 @@ import {
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import '../../assets/modules/category-input.scss';
+import axios from 'axios';
 
 interface MediumCategoryInputProps {
   kind: string;
@@ -105,6 +106,7 @@ const MediumCategoryInput = React.forwardRef(
                                 className="category-input__icon-add"
                                 type={'button'}
                                 onClick={(event) => {
+                                  const signal = axios.CancelToken.source();
                                   event.stopPropagation();
                                   document.removeEventListener(
                                     'click',
@@ -114,7 +116,8 @@ const MediumCategoryInput = React.forwardRef(
                                     editCustomCategories(
                                       incomeAssociated.id,
                                       editCustomCategoryName,
-                                      incomeAssociated.big_category_id
+                                      incomeAssociated.big_category_id,
+                                      signal
                                     ),
                                     editGroupCustomCategories(
                                       incomeAssociated.id,
@@ -160,12 +163,14 @@ const MediumCategoryInput = React.forwardRef(
                               className="category-input__icon-delete"
                               type={'button'}
                               onClick={(event) => {
+                                const signal = axios.CancelToken.source();
                                 event.stopPropagation();
                                 if (window.confirm('カスタムカテゴリーを削除しますか？')) {
                                   operationSwitching(
                                     deleteCustomCategories(
                                       incomeAssociated.id,
-                                      incomeAssociated.big_category_id
+                                      incomeAssociated.big_category_id,
+                                      signal
                                     ),
                                     deleteGroupCustomCategories(
                                       incomeAssociated.id,
@@ -216,9 +221,10 @@ const MediumCategoryInput = React.forwardRef(
                         disabled={customCategoryName === ''}
                         className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
                         onClick={(event) => {
+                          const signal = axios.CancelToken.source();
                           event.stopPropagation();
                           operationSwitching(
-                            addCustomCategories(customCategoryName, props.bigCategoryId),
+                            addCustomCategories(customCategoryName, props.bigCategoryId, signal),
                             addGroupCustomCategories(customCategoryName, props.bigCategoryId)
                           );
                           setCustomCategoryName('');
@@ -259,6 +265,7 @@ const MediumCategoryInput = React.forwardRef(
                                 className="category-input__icon-add"
                                 type={'button'}
                                 onClick={() => {
+                                  const signal = axios.CancelToken.source();
                                   document.removeEventListener(
                                     'click',
                                     props.onClickCloseMediumCategoryMenu
@@ -267,7 +274,8 @@ const MediumCategoryInput = React.forwardRef(
                                     editCustomCategories(
                                       expenseAssociated.id,
                                       editCustomCategoryName,
-                                      expenseAssociated.big_category_id
+                                      expenseAssociated.big_category_id,
+                                      signal
                                     ),
                                     editGroupCustomCategories(
                                       expenseAssociated.id,
@@ -313,12 +321,14 @@ const MediumCategoryInput = React.forwardRef(
                               className="category-input__icon-delete"
                               type={'button'}
                               onClick={(event) => {
+                                const signal = axios.CancelToken.source();
                                 event.stopPropagation();
                                 if (window.confirm('カスタムカテゴリーを削除しますか？')) {
                                   operationSwitching(
                                     deleteCustomCategories(
                                       expenseAssociated.id,
-                                      expenseAssociated.big_category_id
+                                      expenseAssociated.big_category_id,
+                                      signal
                                     ),
                                     deleteGroupCustomCategories(
                                       expenseAssociated.id,
@@ -368,9 +378,10 @@ const MediumCategoryInput = React.forwardRef(
                         disabled={customCategoryName === ''}
                         className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
                         onClick={(event) => {
+                          const signal = axios.CancelToken.source();
                           event.stopPropagation();
                           operationSwitching(
-                            addCustomCategories(customCategoryName, props.bigCategoryId),
+                            addCustomCategories(customCategoryName, props.bigCategoryId, signal),
                             addGroupCustomCategories(customCategoryName, props.bigCategoryId)
                           );
                           setCustomCategoryName('');
