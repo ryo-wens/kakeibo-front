@@ -19,8 +19,6 @@ interface EditRegularShoppingListModalProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
-  mediumCategoryId: number | null;
-  customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handleDateChange: (scheduledDate: Date | null) => void;
@@ -69,8 +67,6 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           bigCategoryId={props.bigCategoryId}
           bigCategory={props.bigCategory}
           bigCategoryIndex={props.bigCategoryIndex}
-          mediumCategoryId={props.mediumCategoryId}
-          customCategoryId={props.customCategoryId}
           transactionAutoAdd={props.transactionAutoAdd}
           associatedCategory={props.associatedCategory}
           handleDateChange={props.handleDateChange}

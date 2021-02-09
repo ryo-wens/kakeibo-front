@@ -1,4 +1,4 @@
-import { RegularShoppingListItem, ShoppingList } from '../shoppingList/types';
+import { PurchaseCycleType, RegularShoppingListItem, ShoppingList } from '../shoppingList/types';
 
 export interface GroupRegularShoppingListItem {
   id: number;
@@ -167,4 +167,21 @@ export interface EditGroupRegularShoppingListItemRes {
 
 export interface DeleteGroupRegularShoppingListItemRes {
   message: string;
+}
+
+export interface AddGroupRegularShoppingListItemModalInitialState {
+  initialExpectedPurchaseDate: Date | null;
+  initialCycleType: PurchaseCycleType;
+  initialCycle: string | null;
+  initialPurchase: string;
+  initialAmount: string | null;
+  initialBigCategoryId: number;
+  initialBigCategoryName: string | null;
+  initialBigCategoryIndex: number;
+  initialMediumCategoryId: number | null;
+  initialCustomCategoryId: number | null;
+  initialAssociatedCategory: string;
+  initialShop: string | null;
+  initialPaymentUser: string | null;
+  initialTransactionAutoAdd: boolean;
 }

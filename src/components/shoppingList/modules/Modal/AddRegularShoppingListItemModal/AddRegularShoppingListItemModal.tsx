@@ -18,8 +18,6 @@ interface AddRegularShoppingListModalProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
-  mediumCategoryId: number | null;
-  customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handleDateChange: (expectedPurchaseDate: Date | null) => void;
@@ -55,8 +53,6 @@ const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps
         bigCategoryId={props.bigCategoryId}
         bigCategory={props.bigCategory}
         bigCategoryIndex={props.bigCategoryIndex}
-        mediumCategoryId={props.mediumCategoryId}
-        customCategoryId={props.customCategoryId}
         transactionAutoAdd={props.transactionAutoAdd}
         associatedCategory={props.associatedCategory}
         handleDateChange={props.handleDateChange}

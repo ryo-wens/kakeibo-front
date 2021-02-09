@@ -5,8 +5,8 @@ import GroupTodayShoppingListArea from './GroupTodayShoppingListArea/GroupTodayS
 import GroupMonthlyShoppingListArea from './GroupMonthlyShoppingListArea/GroupMonthlyShoppingListArea';
 import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
 import GroupRegularShoppingListArea from './GroupRegularShoppingListArea/GroupRegularShoppingListArea';
-import AddGroupRegularShoppingListModal from '../modules/Modal/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
+import AddGroupRegularShoppingListModalContainer from '../../../containers/groupShoppingList/modules/modal/AddGroupRegularShoppingListItemModalContainer';
 
 interface GroupShoppingListPageProps {
   selectedYear: number;
@@ -41,7 +41,7 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
-          <AddGroupRegularShoppingListModal currentYearMonth={props.currentYearMonth} />
+          <AddGroupRegularShoppingListModalContainer currentYearMonth={props.currentYearMonth} />
           <GroupRegularShoppingListArea
             currentYearMonth={props.currentYearMonth}
             currentTodayOrMonthly={props.currentItem}

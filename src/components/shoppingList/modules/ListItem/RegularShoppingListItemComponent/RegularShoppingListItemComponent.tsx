@@ -2,7 +2,7 @@ import React from 'react';
 import './regular-shopping-list-item-component.scss';
 import { RegularShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import { CancelTokenSource } from 'axios';
-import EditRegularShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/RegularShoppingListItemComponentContainer/EditRegularShoppingListItemModalContainer/EditRegularShoppingListItemModalContainer';
+import EditRegularShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/RegularShoppingListItemComponentContainer/editRegularShoppingListItemModalContainer/EditRegularShoppingListItemModalContainer';
 
 interface RegularShoppingListItemComponentProps {
   listItem: RegularShoppingListItem;

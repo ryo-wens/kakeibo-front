@@ -17,8 +17,6 @@ interface RegularShoppingListFormProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
-  mediumCategoryId: number | null;
-  customCategoryId: number | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handleDateChange: (expectedPurchaseDate: Date | null) => void;
