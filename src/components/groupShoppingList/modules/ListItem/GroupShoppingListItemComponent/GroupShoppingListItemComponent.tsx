@@ -1,156 +1,145 @@
-import React, { useEffect, useState } from 'react';
+import React from 'react';
 import '../../../../shoppingList/modules/ListItem/ShoppingListItemComponent/shopping-list-item-component.scss';
-import { dateStringToDate } from '../../../../../lib/date';
 import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
-import RelatedGroupTransactionDataButton from './RelatedGroupTransactionDataButton/RelatedGroupTransactionDataButton';
-import { useSelector } from 'react-redux';
-import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
-import { useParams } from 'react-router';
 import EditGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/editGroupShoppingListItemModal/EditGroupShoppingListItemModalContainer';
 import CheckedGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/checkedGroupShoppingListItemModal/CheckedGroupShoppingListItemModalContainer';
+import { Groups } from '../../../../../reducks/groups/types';
+import RelatedGroupTransactionDataButtonContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/relatedGroupTransactionDataButton/RelatedGroupTransactionDataButtonContainer';
 
 interface GroupShoppingListItemComponentProps {
+  approvedGroups: Groups;
+  groupId: number;
   listItem: GroupShoppingListItem;
-  displayPurchaseDate: boolean;
   currentYearMonth: string;
+  initialExpectedPurchaseDate: Date;
+  initialPurchase: string;
+  initialShop: string | null;
+  initialAmount: string | null;
+  initialBigCategoryId: number;
+  initialBigCategoryName: string;
+  initialMediumCategoryId: number | null;
+  initialCustomCategoryId: number | null;
+  initialPaymentUser: string | null;
+  initialTransactionAutoAdd: boolean;
+  expectedPurchaseDate: Date | null;
+  checked: boolean;
+  purchase: string;
+  shop: string | null;
+  amount: string | null;
+  bigCategoryId: number;
+  bigCategory: string | null;
+  mediumCategoryId: number | null;
+  customCategoryId: number | null;
+  paymentUser: string | null;
+  transactionAutoAdd: boolean;
+  setExpectedPurchaseDate: React.Dispatch<React.SetStateAction<Date | null>>;
+  setChecked: React.Dispatch<React.SetStateAction<boolean>>;
+  setPurchase: React.Dispatch<React.SetStateAction<string>>;
+  setShop: React.Dispatch<React.SetStateAction<string | null>>;
+  setAmount: React.Dispatch<React.SetStateAction<string | null>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setPaymentUser: React.Dispatch<React.SetStateAction<string | null>>;
+  setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
+  purchaseClassName: string;
+  amountClassName: string;
+  transactionDataItemClassName: string;
+  transactionDataItemKeyClassName: string;
+  currentTextStyle: (completeFlag: boolean) => React.CSSProperties;
 }
 
 const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentProps) => {
-  const approvedGroups = useSelector(getApprovedGroups);
-  const { group_id } = useParams();
-
-  const initialExpectedPurchaseDate: Date = dateStringToDate(props.listItem.expected_purchase_date);
-  const initialPurchase = props.listItem.purchase;
-  const initialShop = props.listItem.shop;
-  const initialAmount = props.listItem.amount === null ? null : String(props.listItem.amount);
-  const initialBigCategoryId = props.listItem.big_category_id;
-  const initialBigCategoryName = props.listItem.big_category_name;
-  const initialMediumCategoryId = props.listItem.medium_category_id;
-  const initialCustomCategoryId = props.listItem.custom_category_id;
-  const initialPaymentUser = props.listItem.payment_user_id;
-  const initialTransactionAutoAdd = props.listItem.transaction_auto_add;
-
-  const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
-    initialExpectedPurchaseDate
-  );
-  const [checked, setChecked] = useState(false);
-  const [purchase, setPurchase] = useState<string>(initialPurchase);
-  const [shop, setShop] = useState<string | null>(initialShop);
-  const [amount, setAmount] = useState<string | null>(initialAmount);
-  const [bigCategoryId, setBigCategoryId] = useState<number>(initialBigCategoryId);
-  const [bigCategory, setBigCategory] = useState<string | null>(initialBigCategoryName);
-  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(initialMediumCategoryId);
-  const [customCategoryId, setCustomCategoryId] = useState<number | null>(initialCustomCategoryId);
-  const [paymentUser, setPaymentUser] = useState<string | null>(initialPaymentUser);
-  const [transactionAutoAdd, setTransactionAutoAdd] = useState<boolean>(initialTransactionAutoAdd);
-
-  useEffect(() => {
-    setChecked(props.listItem.complete_flag);
-  }, [props.listItem.complete_flag]);
-
-  const currentPurchaseTextStyle = () => {
-    if (checked) {
-      return { opacity: 0.3 };
-    }
-  };
-
   return (
     <>
-      {props.displayPurchaseDate && (
-        <p className="shopping-list-item-component__date">
-          {props.listItem.expected_purchase_date}
-        </p>
-      )}
       <div className="shopping-list-item-component">
         <div className="shopping-list-item-component__check-box">
           <CheckedGroupShoppingListItemModalContainer
             listItem={props.listItem}
             currentYearMonth={props.currentYearMonth}
-            initialExpectedPurchaseDate={initialExpectedPurchaseDate}
-            initialPurchase={initialPurchase}
-            initialShop={initialShop}
-            initialAmount={initialAmount}
-            initialBigCategoryId={initialBigCategoryId}
-            initialBigCategoryName={initialBigCategoryName}
-            initialMediumCategoryId={initialMediumCategoryId}
-            initialCustomCategoryId={initialCustomCategoryId}
-            initialPaymentUser={initialPaymentUser}
-            initialTransactionAutoAdd={initialTransactionAutoAdd}
-            expectedPurchaseDate={expectedPurchaseDate}
-            checked={checked}
-            purchase={purchase}
-            shop={shop}
-            amount={amount}
-            bigCategoryId={bigCategoryId}
-            bigCategory={bigCategory}
-            mediumCategoryId={mediumCategoryId}
-            customCategoryId={customCategoryId}
-            paymentUser={paymentUser}
-            transactionAutoAdd={transactionAutoAdd}
-            setExpectedPurchaseDate={setExpectedPurchaseDate}
-            setChecked={setChecked}
-            setPurchase={setPurchase}
-            setShop={setShop}
-            setAmount={setAmount}
-            setBigCategoryId={setBigCategoryId}
-            setBigCategory={setBigCategory}
-            setMediumCategoryId={setMediumCategoryId}
-            setCustomCategoryId={setCustomCategoryId}
-            setPaymentUser={setPaymentUser}
-            setTransactionAutoAdd={setTransactionAutoAdd}
+            initialExpectedPurchaseDate={props.initialExpectedPurchaseDate}
+            initialPurchase={props.initialPurchase}
+            initialShop={props.initialShop}
+            initialAmount={props.initialAmount}
+            initialBigCategoryId={props.initialBigCategoryId}
+            initialBigCategoryName={props.initialBigCategoryName}
+            initialMediumCategoryId={props.initialMediumCategoryId}
+            initialCustomCategoryId={props.initialCustomCategoryId}
+            initialPaymentUser={props.initialPaymentUser}
+            initialTransactionAutoAdd={props.initialTransactionAutoAdd}
+            expectedPurchaseDate={props.expectedPurchaseDate}
+            checked={props.checked}
+            purchase={props.purchase}
+            shop={props.shop}
+            amount={props.amount}
+            bigCategoryId={props.bigCategoryId}
+            bigCategory={props.bigCategory}
+            mediumCategoryId={props.mediumCategoryId}
+            customCategoryId={props.customCategoryId}
+            paymentUser={props.paymentUser}
+            transactionAutoAdd={props.transactionAutoAdd}
+            setExpectedPurchaseDate={props.setExpectedPurchaseDate}
+            setChecked={props.setChecked}
+            setPurchase={props.setPurchase}
+            setShop={props.setShop}
+            setAmount={props.setAmount}
+            setBigCategoryId={props.setBigCategoryId}
+            setBigCategory={props.setBigCategory}
+            setMediumCategoryId={props.setMediumCategoryId}
+            setCustomCategoryId={props.setCustomCategoryId}
+            setPaymentUser={props.setPaymentUser}
+            setTransactionAutoAdd={props.setTransactionAutoAdd}
           />
         </div>
         <div className="shopping-list-item-component__content">
           <div className="shopping-list-item-component__items">
             <div className="shopping-list-item-component__item">
               <span
-                className="shopping-list-item-component__item-purchase"
-                style={currentPurchaseTextStyle()}
+                className={props.purchaseClassName}
+                style={props.currentTextStyle(props.checked)}
               >
                 {props.listItem.purchase}
               </span>
-              <span
-                className="shopping-list-item-component__item-amount"
-                style={currentPurchaseTextStyle()}
-              >
+              <span className={props.amountClassName} style={props.currentTextStyle(props.checked)}>
                 {props.listItem.amount === null ? '-' : props.listItem.amount}
               </span>
-              <span style={currentPurchaseTextStyle()}>円</span>
+              <span style={props.currentTextStyle(props.checked)}>円</span>
             </div>
             <div className="shopping-list-item-component__edit-icon">
               <EditGroupShoppingListItemModalContainer
                 listItem={props.listItem}
                 currentYearMonth={props.currentYearMonth}
-                initialExpectedPurchaseDate={initialExpectedPurchaseDate}
-                initialPurchase={initialPurchase}
-                initialShop={initialShop}
-                initialAmount={initialAmount}
-                initialBigCategoryId={initialBigCategoryId}
-                initialBigCategoryName={initialBigCategoryName}
-                initialMediumCategoryId={initialMediumCategoryId}
-                initialCustomCategoryId={initialCustomCategoryId}
-                initialPaymentUser={initialPaymentUser}
-                initialTransactionAutoAdd={initialTransactionAutoAdd}
-                expectedPurchaseDate={expectedPurchaseDate}
-                purchase={purchase}
-                shop={shop}
-                amount={amount}
-                bigCategoryId={bigCategoryId}
-                bigCategory={bigCategory}
-                mediumCategoryId={mediumCategoryId}
-                customCategoryId={customCategoryId}
-                paymentUser={paymentUser}
-                transactionAutoAdd={transactionAutoAdd}
-                setExpectedPurchaseDate={setExpectedPurchaseDate}
-                setPurchase={setPurchase}
-                setShop={setShop}
-                setAmount={setAmount}
-                setBigCategoryId={setBigCategoryId}
-                setBigCategory={setBigCategory}
-                setMediumCategoryId={setMediumCategoryId}
-                setCustomCategoryId={setCustomCategoryId}
-                setPaymentUser={setPaymentUser}
-                setTransactionAutoAdd={setTransactionAutoAdd}
+                initialExpectedPurchaseDate={props.initialExpectedPurchaseDate}
+                initialPurchase={props.initialPurchase}
+                initialShop={props.initialShop}
+                initialAmount={props.initialAmount}
+                initialBigCategoryId={props.initialBigCategoryId}
+                initialBigCategoryName={props.initialBigCategoryName}
+                initialMediumCategoryId={props.initialMediumCategoryId}
+                initialCustomCategoryId={props.initialCustomCategoryId}
+                initialPaymentUser={props.initialPaymentUser}
+                initialTransactionAutoAdd={props.initialTransactionAutoAdd}
+                expectedPurchaseDate={props.expectedPurchaseDate}
+                purchase={props.purchase}
+                shop={props.shop}
+                amount={props.amount}
+                bigCategoryId={props.bigCategoryId}
+                bigCategory={props.bigCategory}
+                mediumCategoryId={props.mediumCategoryId}
+                customCategoryId={props.customCategoryId}
+                paymentUser={props.paymentUser}
+                transactionAutoAdd={props.transactionAutoAdd}
+                setExpectedPurchaseDate={props.setExpectedPurchaseDate}
+                setPurchase={props.setPurchase}
+                setShop={props.setShop}
+                setAmount={props.setAmount}
+                setBigCategoryId={props.setBigCategoryId}
+                setBigCategory={props.setBigCategory}
+                setMediumCategoryId={props.setMediumCategoryId}
+                setCustomCategoryId={props.setCustomCategoryId}
+                setPaymentUser={props.setPaymentUser}
+                setTransactionAutoAdd={props.setTransactionAutoAdd}
               />
             </div>
           </div>
@@ -165,10 +154,12 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
           </div>
           {props.listItem.related_transaction_data !== null && (
             <div className="shopping-list-item-component__related-transaction-data">
-              <RelatedGroupTransactionDataButton
+              <RelatedGroupTransactionDataButtonContainer
                 transactionData={props.listItem.related_transaction_data}
-                approvedGroups={approvedGroups}
-                groupId={Number(group_id)}
+                approvedGroups={props.approvedGroups}
+                groupId={props.groupId}
+                transactionDataItemClassName={props.transactionDataItemClassName}
+                transactionDataItemKeyClassName={props.transactionDataItemKeyClassName}
               />
             </div>
           )}

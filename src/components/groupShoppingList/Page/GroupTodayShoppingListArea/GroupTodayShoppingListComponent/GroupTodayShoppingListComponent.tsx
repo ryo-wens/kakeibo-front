@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import '../../../../shoppingList/modules/List/ShoppingListByDate/shopping-list-by-date.scss';
-import GroupShoppingListItemComponent from '../../../modules/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
 import { GroupShoppingList } from '../../../../../reducks/groupShoppingList/types';
 import axios, { CancelTokenSource } from 'axios';
 import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchGroupTodayShoppingList } from '../../../../../reducks/groupShoppingList/operations';
 import { useDispatch } from 'react-redux';
+import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/GroupShoppingListItemComponentContainer';
 
 interface GroupTodayShoppingListComponent {
   shoppingList: GroupShoppingList;
@@ -57,11 +57,19 @@ const GroupTodayShoppingListComponent = (props: GroupTodayShoppingListComponent)
       {props.shoppingList.length ? (
         props.shoppingList.map((listItem) => {
           return (
-            <div key={listItem.id}>
-              <GroupShoppingListItemComponent
+            <div className="shopping-list-by-date__item" key={listItem.id}>
+              {equalsDisplayDate(listItem.expected_purchase_date) && (
+                <p className="shopping-list-by-date__item-date">
+                  {listItem.expected_purchase_date}
+                </p>
+              )}
+              <GroupShoppingListItemComponentContainer
                 listItem={listItem}
-                displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
                 currentYearMonth={props.currentYearMonth}
+                purchaseClassName={'shopping-list-item-component__item-purchase'}
+                amountClassName={'shopping-list-item-component__item-amount'}
+                transactionDataItemClassName={'related-transaction-data-button__item'}
+                transactionDataItemKeyClassName={'related-transaction-data-button__item-key'}
               />
             </div>
           );

@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useParams } from 'react-router';
 import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
 import { getGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/selectors';
-import GroupShoppingListItemComponent from '../../modules/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
+import GroupShoppingListItemComponentContainer from '../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/GroupShoppingListItemComponentContainer';
 
 interface GroupExpiredShoppingListAreaProps {
   currentYearMonth: string;
@@ -46,11 +46,19 @@ const GroupExpiredShoppingListArea = (props: GroupExpiredShoppingListAreaProps) 
           {groupExpiredShoppingList.length ? (
             groupExpiredShoppingList.map((listItem) => {
               return (
-                <div key={listItem.id}>
-                  <GroupShoppingListItemComponent
+                <div className="expired-shopping-list-area__item" key={listItem.id}>
+                  {equalsDisplayDate(listItem.expected_purchase_date) && (
+                    <p className="expired-shopping-list-area__item-date">
+                      {listItem.expected_purchase_date}
+                    </p>
+                  )}
+                  <GroupShoppingListItemComponentContainer
                     listItem={listItem}
-                    displayPurchaseDate={equalsDisplayDate(listItem.expected_purchase_date)}
                     currentYearMonth={props.currentYearMonth}
+                    purchaseClassName={'shopping-list-item-component__item-purchase'}
+                    amountClassName={'shopping-list-item-component__item-amount'}
+                    transactionDataItemClassName={'related-transaction-data-button__item'}
+                    transactionDataItemKeyClassName={'related-transaction-data-button__item-key'}
                   />
                 </div>
               );
