@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import '../../../../shoppingList/modules/List/ShoppingListByCategoriesComponent/shopping-list-by-categories-component.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
-import GroupShoppingListItemComponent from '../../../modules/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
 import {
   GroupShoppingListByCategories,
   GroupShoppingListItem,
@@ -11,6 +10,7 @@ import axios, { CancelTokenSource } from 'axios';
 import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchGroupTodayShoppingListByCategories } from '../../../../../reducks/groupShoppingList/operations';
 import { useDispatch } from 'react-redux';
+import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/GroupShoppingListItemComponentContainer';
 
 interface GroupTodayShoppingListByCategoriesComponentProps {
   shoppingListByCategories: GroupShoppingListByCategories;
@@ -54,7 +54,7 @@ const GroupTodayShoppingListByCategoriesComponent = (
   let prevDate = '';
   let prevCategoryId = 0;
 
-  const equalsDisplayDate = (expectedPurchaseDate: string, categoryId: number) => {
+  const equalsDisplayDate = (categoryId: number, expectedPurchaseDate: string) => {
     if (prevCategoryId !== categoryId) {
       prevCategoryId = categoryId;
       prevDate = expectedPurchaseDate;
@@ -85,14 +85,27 @@ const GroupTodayShoppingListByCategoriesComponent = (
                 {shoppingListItemByCategories.shopping_list.map(
                   (shoppingListItem: GroupShoppingListItem) => {
                     return (
-                      <div key={shoppingListItem.id}>
-                        <GroupShoppingListItemComponent
+                      <div
+                        className="shopping-list-by-categories-component__item"
+                        key={shoppingListItem.id}
+                      >
+                        {equalsDisplayDate(
+                          shoppingListItem.big_category_id,
+                          shoppingListItem.expected_purchase_date
+                        ) && (
+                          <p className="shopping-list-by-categories-component__item-date">
+                            {shoppingListItem.expected_purchase_date}
+                          </p>
+                        )}
+                        <GroupShoppingListItemComponentContainer
                           listItem={shoppingListItem}
-                          displayPurchaseDate={equalsDisplayDate(
-                            shoppingListItem.expected_purchase_date,
-                            shoppingListItem.big_category_id
-                          )}
                           currentYearMonth={props.currentYearMonth}
+                          purchaseClassName={'shopping-list-item-component__item-purchase'}
+                          amountClassName={'shopping-list-item-component__item-amount'}
+                          transactionDataItemClassName={'related-transaction-data-button__item'}
+                          transactionDataItemKeyClassName={
+                            'related-transaction-data-button__item-key'
+                          }
                         />
                       </div>
                     );
