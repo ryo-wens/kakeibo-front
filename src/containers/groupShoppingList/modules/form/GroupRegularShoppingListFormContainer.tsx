@@ -1,14 +1,16 @@
 import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import {
-  getExpenseCategories,
-  getIncomeCategories,
-} from '../../../../reducks/categories/selectors';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
+import { useParams } from 'react-router';
+import { getApprovedGroups } from '../../../../reducks/groups/selectors';
+import {
+  getGroupExpenseCategories,
+  getGroupIncomeCategories,
+} from '../../../../reducks/groupCategories/selectors';
+import GroupRegularShoppingListForm from '../../../../components/groupShoppingList/modules/form/GroupRegularShoppingListForm/GroupRegularShoppingListForm';
 import { PurchaseCycleType } from '../../../../reducks/shoppingList/types';
-import RegularShoppingListForm from '../../../../components/shoppingList/modules/Form/RegularShoppingListForm/RegularShoppingListForm';
 
-interface RegularShoppingListFormContainerProps {
+interface GroupRegularShoppingListFormContainerProps {
   expectedPurchaseDate: Date | null;
   cycleType: PurchaseCycleType;
   cycle: string | null;
@@ -18,6 +20,7 @@ interface RegularShoppingListFormContainerProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
+  paymentUser: string | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handleDateChange: (expectedPurchaseDate: Date | null) => void;
@@ -31,6 +34,7 @@ interface RegularShoppingListFormContainerProps {
     associatedCategory: AssociatedCategory
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   titleLabel: string;
   buttonLabel: string;
@@ -41,12 +45,17 @@ interface RegularShoppingListFormContainerProps {
   openDeleteForm?: () => void;
 }
 
-const RegularShoppingListFormContainer = (props: RegularShoppingListFormContainerProps) => {
-  const incomeCategories = useSelector(getIncomeCategories);
-  const expenseCategories = useSelector(getExpenseCategories);
+const GroupRegularShoppingListFormContainer = (
+  props: GroupRegularShoppingListFormContainerProps
+) => {
+  const approvedGroups = useSelector(getApprovedGroups);
+  const groupExpenseCategories = useSelector(getGroupExpenseCategories);
+  const groupIncomeCategories = useSelector(getGroupIncomeCategories);
+  const { group_id } = useParams();
 
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
+
   const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
   const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
 
@@ -63,9 +72,11 @@ const RegularShoppingListFormContainer = (props: RegularShoppingListFormContaine
   };
 
   return (
-    <RegularShoppingListForm
+    <GroupRegularShoppingListForm
       titleLabel={props.titleLabel}
       buttonLabel={props.buttonLabel}
+      approvedGroups={approvedGroups}
+      groupId={Number(group_id)}
       expectedPurchaseDate={props.expectedPurchaseDate}
       cycleType={props.cycleType}
       cycle={props.cycle}
@@ -75,24 +86,26 @@ const RegularShoppingListFormContainer = (props: RegularShoppingListFormContaine
       bigCategoryId={props.bigCategoryId}
       bigCategory={props.bigCategory}
       bigCategoryIndex={props.bigCategoryIndex}
+      paymentUser={props.paymentUser}
       transactionAutoAdd={props.transactionAutoAdd}
       associatedCategory={props.associatedCategory}
-      handleDateChange={props.handleDateChange}
       handleCycleTypeChange={props.handleCycleTypeChange}
       handleCycleChange={props.handleCycleChange}
       handlePurchaseChange={props.handlePurchaseChange}
+      handleDateChange={props.handleDateChange}
       handleAmountChange={props.handleAmountChange}
       selectCategory={props.selectCategory}
       handleShopChange={props.handleShopChange}
+      handlePaymentUserChange={props.handlePaymentUserChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
       closeModal={props.closeModal}
       unInput={props.unInput}
-      minDate={props.minDate}
       regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+      minDate={props.minDate}
       bigCategoryRef={bigCategoryRef}
       mediumMenuRef={mediumMenuRef}
-      incomeCategories={incomeCategories}
-      expenseCategories={expenseCategories}
+      groupIncomeCategories={groupIncomeCategories}
+      groupExpenseCategories={groupExpenseCategories}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
@@ -104,4 +117,4 @@ const RegularShoppingListFormContainer = (props: RegularShoppingListFormContaine
   );
 };
 
-export default RegularShoppingListFormContainer;
+export default GroupRegularShoppingListFormContainer;

@@ -5,7 +5,6 @@ import { useDispatch } from 'react-redux';
 import { CancelTokenSource } from 'axios';
 import { customMonth, date, year } from '../../../../../lib/constant';
 import { GroupRegularShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
-import EditGroupRegularShoppingListItemModal from './EditGroupRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
 import {
   fetchGroupExpiredShoppingList,
   fetchGroupMonthlyShoppingList,
@@ -13,6 +12,7 @@ import {
   fetchGroupTodayShoppingList,
   fetchGroupTodayShoppingListByCategories,
 } from '../../../../../reducks/groupShoppingList/operations';
+import EditGroupRegularShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupRegularShoppingListItemComponent/editGroupRegularShoppingListItemModal/EditGroupRegularShoppingListItemModalContainer';
 
 interface GroupRegularShoppingListItemComponentProps {
   listItem: GroupRegularShoppingListItem;
@@ -59,7 +59,7 @@ const GroupRegularShoppingListItemComponent = (
         {props.listItem.amount === null ? '-' : props.listItem.amount}
       </span>
       <span>円</span>
-      <EditGroupRegularShoppingListItemModal
+      <EditGroupRegularShoppingListItemModalContainer
         listItem={props.listItem}
         currentYearMonth={props.currentYearMonth}
         fetchTodayOrMonthlyShoppingList={fetchGroupTodayOrMonthlyShoppingList}

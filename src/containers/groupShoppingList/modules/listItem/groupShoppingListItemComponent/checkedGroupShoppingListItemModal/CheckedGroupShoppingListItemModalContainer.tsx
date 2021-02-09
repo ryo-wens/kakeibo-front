@@ -1,12 +1,12 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
+import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import axios from 'axios';
-import { date } from '../../../../../lib/constant';
+import { date } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
-import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
-import { editGroupShoppingListItem } from '../../../../../reducks/groupShoppingList/operations';
+import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
+import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
 import { useParams } from 'react-router';
-import CheckedGroupShoppingListItemModal from '../../../../../components/groupShoppingList/modules/ListItem/GroupShoppingListItemComponent/CheckedGroupShoppingListItemModal/CheckedGroupShoppingListItemModal';
+import CheckedGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/ListItem/GroupShoppingListItemComponent/CheckedGroupShoppingListItemModal/CheckedGroupShoppingListItemModal';
 
 interface CheckedGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;

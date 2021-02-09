@@ -22,6 +22,9 @@ interface EditRegularShoppingListItemModalContainerProps {
 const EditRegularShoppingListItemModalContainer = (
   props: EditRegularShoppingListItemModalContainerProps
 ) => {
+  const dispatch = useDispatch();
+  const signal = axios.CancelToken.source();
+
   const initialState = {
     initialExpectedPurchaseDate: dateStringToDate(props.listItem.expected_purchase_date),
     initialCycleType: props.listItem.cycle_type,
@@ -35,9 +38,6 @@ const EditRegularShoppingListItemModalContainer = (
     initialCustomCategoryId: props.listItem.custom_category_id,
     initialTransactionAutoAdd: props.listItem.transaction_auto_add,
   };
-
-  const dispatch = useDispatch();
-  const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
@@ -226,8 +226,6 @@ const EditRegularShoppingListItemModalContainer = (
       bigCategoryId={bigCategoryId}
       bigCategory={bigCategory}
       bigCategoryIndex={bigCategoryIndex}
-      mediumCategoryId={mediumCategoryId}
-      customCategoryId={customCategoryId}
       transactionAutoAdd={transactionAutoAdd}
       associatedCategory={associatedCategory}
       handleDateChange={handleDateChange}

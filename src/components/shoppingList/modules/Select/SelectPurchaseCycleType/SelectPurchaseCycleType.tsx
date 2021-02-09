@@ -1,7 +1,8 @@
 import React from 'react';
+import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
 
 interface SelectPurchaseCycleTypeProps {
-  value: 'daily' | 'weekly' | 'monthly' | 'custom';
+  value: PurchaseCycleType;
   selectChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
 }
 

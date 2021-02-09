@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
+import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import axios from 'axios';
-import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
+import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
 import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
-import EditGroupShoppingListItemModal from '../../../../../components/groupShoppingList/modules/ListItem/GroupShoppingListItemComponent/EditGroupShoppingListItemModal/EditGroupShoppingListItemModal';
-import { date } from '../../../../../lib/constant';
+import EditGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/ListItem/GroupShoppingListItemComponent/EditGroupShoppingListItemModal/EditGroupShoppingListItemModal';
+import { date } from '../../../../../../lib/constant';
 import {
   deleteGroupShoppingListItem,
   editGroupShoppingListItem,
-} from '../../../../../reducks/groupShoppingList/operations';
+} from '../../../../../../reducks/groupShoppingList/operations';
 
 interface EditGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;

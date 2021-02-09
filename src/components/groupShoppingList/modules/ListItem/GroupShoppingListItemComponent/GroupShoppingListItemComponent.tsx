@@ -6,8 +6,8 @@ import RelatedGroupTransactionDataButton from './RelatedGroupTransactionDataButt
 import { useSelector } from 'react-redux';
 import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
 import { useParams } from 'react-router';
-import EditGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/editGroupShoppingListItemModal/EditGroupShoppingListItemModalContainer';
-import CheckedGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/checkedGroupShoppingListItemModal/CheckedGroupShoppingListItemModalContainer';
+import EditGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/editGroupShoppingListItemModal/EditGroupShoppingListItemModalContainer';
+import CheckedGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/checkedGroupShoppingListItemModal/CheckedGroupShoppingListItemModalContainer';
 
 interface GroupShoppingListItemComponentProps {
   listItem: GroupShoppingListItem;
