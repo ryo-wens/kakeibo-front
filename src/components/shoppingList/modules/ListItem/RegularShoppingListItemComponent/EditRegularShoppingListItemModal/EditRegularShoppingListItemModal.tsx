@@ -5,7 +5,7 @@ import ShoppingListDeleteForm from '../../../Form/ShoppingListDeleteForm/Shoppin
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditIcon from '@material-ui/icons/Edit';
 import './edit-regular-shopping-list-item-modal.scss';
-import RegularShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/Form/RegularShoppingListFormContainer/RegularShoppingListFormContainer';
+import RegularShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/RegularShoppingListFormContainer';
 
 interface EditRegularShoppingListModalProps {
   open: boolean;

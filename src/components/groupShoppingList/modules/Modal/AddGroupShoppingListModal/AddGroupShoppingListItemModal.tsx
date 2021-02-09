@@ -1,12 +1,12 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
-import './add-shopping-list-item-modal.scss';
+import '../../../../shoppingList/modules/Modal/AddShoppingListItemModal/add-shopping-list-item-modal.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
-import ShoppingListFormContainer from '../../../../../containers/shoppingList/modules/form/ShoppingListFormContainer';
+import GroupShoppingListFormContainer from '../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
 
-interface AddShoppingListModalProps {
+interface AddGroupShoppingListItemModalProps {
   open: boolean;
   expectedPurchaseDate: Date | null;
   purchase: string;
@@ -15,6 +15,7 @@ interface AddShoppingListModalProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
+  paymentUser: string | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,6 +27,7 @@ interface AddShoppingListModalProps {
     associatedCategory: AssociatedCategory
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   openModal: () => void;
   closeModal: () => void;
@@ -33,10 +35,10 @@ interface AddShoppingListModalProps {
   shoppingListItemOperation: () => void;
 }
 
-const AddShoppingListItemModal = (props: AddShoppingListModalProps) => {
+const AddGroupShoppingListItemModal = (props: AddGroupShoppingListItemModalProps) => {
   const body = (
     <div className="add-shopping-list-item-modal">
-      <ShoppingListFormContainer
+      <GroupShoppingListFormContainer
         titleLabel={'買い物リストに追加'}
         buttonLabel={'追加'}
         expectedPurchaseDate={props.expectedPurchaseDate}
@@ -46,6 +48,7 @@ const AddShoppingListItemModal = (props: AddShoppingListModalProps) => {
         bigCategoryId={props.bigCategoryId}
         bigCategory={props.bigCategory}
         bigCategoryIndex={props.bigCategoryIndex}
+        paymentUser={props.paymentUser}
         transactionAutoAdd={props.transactionAutoAdd}
         associatedCategory={props.associatedCategory}
         handlePurchaseChange={props.handlePurchaseChange}
@@ -53,12 +56,13 @@ const AddShoppingListItemModal = (props: AddShoppingListModalProps) => {
         handleAmountChange={props.handleAmountChange}
         selectCategory={props.selectCategory}
         handleShopChange={props.handleShopChange}
+        handlePaymentUserChange={props.handlePaymentUserChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
         closeModal={props.closeModal}
         unInput={props.unInput}
         minDate={date}
         shoppingListItemOperation={props.shoppingListItemOperation}
-        displayInputAmountMessage={false}
+        displayRequiredInputItemMessage={false}
       />
     </div>
   );
@@ -85,4 +89,4 @@ const AddShoppingListItemModal = (props: AddShoppingListModalProps) => {
   );
 };
 
-export default AddShoppingListItemModal;
+export default AddGroupShoppingListItemModal;

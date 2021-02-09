@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import '../../../shoppingList/Page/ExpiredShoppingListArea/expired-shopping-list-area.scss';
+import '../../../shoppingList/page/ExpiredShoppingListArea/expired-shopping-list-area.scss';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
 import { getGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/selectors';
-import GroupShoppingListItemComponent from '../../uikit/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
+import GroupShoppingListItemComponent from '../../modules/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
 
 interface GroupExpiredShoppingListAreaProps {
   currentYearMonth: string;

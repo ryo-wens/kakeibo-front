@@ -1,10 +1,10 @@
 import React from 'react';
-import '../../../shoppingList/Page/RegularShoppingListArea/regular-shopping-list-area.scss';
+import '../../../shoppingList/page/RegularShoppingListArea/regular-shopping-list-area.scss';
 import { useSelector } from 'react-redux';
 import { getGroupRegularShoppingList } from '../../../../reducks/groupShoppingList/selectors';
 import { GroupRegularShoppingListItem } from '../../../../reducks/groupShoppingList/types';
 import { TodayOrMonthly } from '../../../../reducks/shoppingList/types';
-import GroupRegularShoppingListItemComponent from '../../uikit/ListItem/GroupRegularShoppingListItemComponent/GroupRegularShoppingListItemComponent';
+import GroupRegularShoppingListItemComponent from '../../modules/ListItem/GroupRegularShoppingListItemComponent/GroupRegularShoppingListItemComponent';
 
 interface GroupRegularShoppingListAreaProps {
   currentYearMonth: string;

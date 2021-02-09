@@ -1,13 +1,18 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
-import './shopping-list-form.scss';
-import { AssociatedCategory, Categories, Category } from '../../../../../reducks/categories/types';
-import ToolTipIcon from '../../ToolTip/ToolTipIcon';
+import '../../../../shoppingList/modules/Form/ShoppingListForm/shopping-list-form.scss';
+import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
+import ShoppingListPayerSelect from '../../Select/ShoppingListPayerSelect/ShoppingListPayerSelect';
+import ToolTipIcon from '../../../../shoppingList/modules/ToolTip/ToolTipIcon';
+import { GroupCategories } from '../../../../../reducks/groupCategories/types';
+import { Groups } from '../../../../../reducks/groups/types';
 
-interface ShoppingListFormProps {
+interface GroupShoppingListFormProps {
   titleLabel: string;
   buttonLabel: string;
+  approvedGroups: Groups;
+  groupId: number;
   expectedPurchaseDate: Date | null;
   purchase: string;
   shop: string | null;
@@ -15,6 +20,7 @@ interface ShoppingListFormProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
+  paymentUser: string | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -26,16 +32,17 @@ interface ShoppingListFormProps {
     associatedCategory: AssociatedCategory
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
   unInput: boolean;
   shoppingListItemOperation: () => void;
   minDate: Date;
-  displayInputAmountMessage: boolean;
+  displayRequiredInputItemMessage: boolean;
   bigCategoryRef: React.RefObject<HTMLDivElement>;
   mediumMenuRef: React.RefObject<HTMLDivElement>;
-  incomeCategories: Categories;
-  expenseCategories: Categories;
+  groupIncomeCategories: GroupCategories;
+  groupExpenseCategories: GroupCategories;
   bigCategoryMenuOpen: boolean;
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -45,7 +52,7 @@ interface ShoppingListFormProps {
   openDeleteForm?: () => void;
 }
 
-const ShoppingListForm = (props: ShoppingListFormProps) => {
+const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
   const inputItems = [
     {
       key: '購入するもの',
@@ -71,8 +78,8 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             kind={'expense'}
             bigCategory={props.bigCategory}
             bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-            expenseCategories={props.expenseCategories}
-            incomeCategories={props.incomeCategories}
+            expenseCategories={props.groupExpenseCategories}
+            incomeCategories={props.groupIncomeCategories}
             onClick={props.selectCategory}
             onClickCloseBigCategoryMenu={props.onClickCloseBigCategoryMenu}
             setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
@@ -85,8 +92,8 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             bigCategoryIndex={props.bigCategoryIndex}
             bigCategory={props.bigCategory}
             associatedCategory={props.associatedCategory}
-            expenseCategories={props.expenseCategories}
-            incomeCategories={props.incomeCategories}
+            expenseCategories={props.groupExpenseCategories}
+            incomeCategories={props.groupIncomeCategories}
             mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
             onClick={props.selectCategory}
             onClickCloseMediumCategoryMenu={props.onClickCloseMediumCategoryMenu}
@@ -118,13 +125,15 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             value={props.amount}
             type={'tel'}
             id={'amount'}
-            label={props.displayInputAmountMessage && props.transactionAutoAdd ? '必須' : '任意'}
+            label={
+              props.displayRequiredInputItemMessage && props.transactionAutoAdd ? '必須' : '任意'
+            }
             onChange={props.handleAmountChange}
             required={false}
             fullWidth={false}
             disabled={false}
           />
-          {props.displayInputAmountMessage && (
+          {props.displayRequiredInputItemMessage && (
             <p
               className={
                 props.transactionAutoAdd && props.amount === null
@@ -151,6 +160,30 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           fullWidth={false}
           disabled={false}
         />
+      ),
+    },
+    {
+      key: '支払人',
+      value: (
+        <>
+          <ShoppingListPayerSelect
+            value={props.paymentUser === null ? '' : props.paymentUser}
+            approvedGroups={props.approvedGroups}
+            groupId={props.groupId}
+            onChange={props.handlePaymentUserChange}
+          />
+          {props.displayRequiredInputItemMessage && (
+            <p
+              className={
+                props.transactionAutoAdd && props.paymentUser === null
+                  ? 'shopping-list-form__required-input-item-message'
+                  : 'shopping-list-form__required-input-item-message--hide'
+              }
+            >
+              ※ 支払人の選択が必要です。
+            </p>
+          )}
+        </>
       ),
     },
   ];
@@ -219,4 +252,4 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
   );
 };
 
-export default ShoppingListForm;
+export default GroupShoppingListForm;

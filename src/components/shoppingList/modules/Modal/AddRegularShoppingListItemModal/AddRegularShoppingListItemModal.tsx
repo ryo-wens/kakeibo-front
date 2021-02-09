@@ -5,7 +5,7 @@ import { AssociatedCategory, Category } from '../../../../../reducks/categories/
 import { date } from '../../../../../lib/constant';
 import './add-regular-shopping-list-item-modal.scss';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
-import RegularShoppingListFormContainer from '../../../../../containers/shoppingList/modules/Form/RegularShoppingListFormContainer/RegularShoppingListFormContainer';
+import RegularShoppingListFormContainer from '../../../../../containers/shoppingList/modules/form/RegularShoppingListFormContainer';
 
 interface AddRegularShoppingListModalProps {
   open: boolean;
