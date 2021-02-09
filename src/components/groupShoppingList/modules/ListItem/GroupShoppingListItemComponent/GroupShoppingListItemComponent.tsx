@@ -2,12 +2,12 @@ import React, { useEffect, useState } from 'react';
 import '../../../../shoppingList/modules/ListItem/ShoppingListItemComponent/shopping-list-item-component.scss';
 import { dateStringToDate } from '../../../../../lib/date';
 import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
-import EditGroupShoppingListItemModal from './EditGroupShoppingListItemModal/EditGroupShoppingListItemModal';
-import CheckedGroupShoppingListItemModal from './CheckedGroupShoppingListItemModal/CheckedGroupShoppingListItemModal';
 import RelatedGroupTransactionDataButton from './RelatedGroupTransactionDataButton/RelatedGroupTransactionDataButton';
 import { useSelector } from 'react-redux';
 import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
 import { useParams } from 'react-router';
+import EditGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/editGroupShoppingListItemModal/EditGroupShoppingListItemModalContainer';
+import CheckedGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/checkedGroupShoppingListItemModal/CheckedGroupShoppingListItemModalContainer';
 
 interface GroupShoppingListItemComponentProps {
   listItem: GroupShoppingListItem;
@@ -63,7 +63,7 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
       )}
       <div className="shopping-list-item-component">
         <div className="shopping-list-item-component__check-box">
-          <CheckedGroupShoppingListItemModal
+          <CheckedGroupShoppingListItemModalContainer
             listItem={props.listItem}
             currentYearMonth={props.currentYearMonth}
             initialExpectedPurchaseDate={initialExpectedPurchaseDate}
@@ -118,7 +118,7 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
               <span style={currentPurchaseTextStyle()}>円</span>
             </div>
             <div className="shopping-list-item-component__edit-icon">
-              <EditGroupShoppingListItemModal
+              <EditGroupShoppingListItemModalContainer
                 listItem={props.listItem}
                 currentYearMonth={props.currentYearMonth}
                 initialExpectedPurchaseDate={initialExpectedPurchaseDate}

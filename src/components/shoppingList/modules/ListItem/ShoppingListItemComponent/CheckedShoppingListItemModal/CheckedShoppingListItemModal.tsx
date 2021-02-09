@@ -27,7 +27,6 @@ interface CheckedShoppingListItemModalProps {
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  openModal: () => void;
   closeModal: () => void;
   unInput: boolean;
   shoppingListItemOperation: () => void;
