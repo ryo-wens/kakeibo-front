@@ -1,12 +1,10 @@
 import React, { useEffect } from 'react';
 import '../../../../shoppingList/modules/List/ShoppingListByCategoriesComponent/shopping-list-by-categories-component.scss';
-import GroupShoppingListItemComponent from '../../../modules/ListItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
 import { GroupShoppingList } from '../../../../../reducks/groupShoppingList/types';
 import axios, { CancelTokenSource } from 'axios';
 import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchGroupMonthlyShoppingList } from '../../../../../reducks/groupShoppingList/operations';
 import { useDispatch } from 'react-redux';
-import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/groupShoppingListItemComponent/GroupShoppingListItemComponentContainer';
 
 interface GroupMonthlyShoppingListComponentProps {
