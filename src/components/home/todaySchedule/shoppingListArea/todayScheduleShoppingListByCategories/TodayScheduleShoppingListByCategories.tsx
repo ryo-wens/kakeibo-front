@@ -6,7 +6,7 @@ import {
 } from '../../../../../reducks/shoppingList/types';
 import './today-schedule-shopping-list-by-categories.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
-import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
+import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 
 interface TodayScheduleShoppingListByCategoriesCompo {
   shoppingListByCategories: ShoppingListByCategories;

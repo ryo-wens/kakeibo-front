@@ -6,7 +6,7 @@ import {
 } from '../../../../../reducks/shoppingList/types';
 import './shopping-list-by-categories-component.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
-import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/ShoppingListItemComponentContainer';
+import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 
 interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: ShoppingListByCategories;

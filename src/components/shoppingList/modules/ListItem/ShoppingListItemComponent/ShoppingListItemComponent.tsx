@@ -1,9 +1,9 @@
 import React from 'react';
 import './shopping-list-item-component.scss';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
-import CheckedShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/CheckedShoppingListItemModalContainer/CheckedShoppingListItemModalContainer';
-import EditShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/EditShoppingListItemModalContainer/EditShoppingListItemModalContainer';
-import RelatedTransactionDataButtonContainer from '../../../../../containers/shoppingList/modules/ListItem/ShoppingListItemComponentContainer/RelatedTransactionDataButtonContainer/RelatedTransactionDataButtonContainer';
+import CheckedShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/CheckedShoppingListItemModalContainer/CheckedShoppingListItemModalContainer';
+import EditShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/EditShoppingListItemModalContainer/EditShoppingListItemModalContainer';
+import RelatedTransactionDataButtonContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/RelatedTransactionDataButtonContainer/RelatedTransactionDataButtonContainer';
 
 interface ShoppingListItemComponentProps {
   listItem: ShoppingListItem;

@@ -42,13 +42,6 @@ interface EditShoppingListItemModalContainerProps {
   setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const unInput = {
-  unInputExpectedPurchaseDate: null,
-  unInputPurchase: '',
-  unInputBigCategoryId: 0,
-  unInputAmount: null,
-};
-
 const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalContainerProps) => {
   const dispatch = useDispatch();
   const signal = axios.CancelToken.source();
@@ -57,6 +50,13 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
   const [deleteForm, setDeleteForm] = useState(false);
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
+
+  const unInput = {
+    unInputExpectedPurchaseDate: null,
+    unInputPurchase: '',
+    unInputBigCategoryId: 0,
+    unInputAmount: null,
+  };
 
   const disabledButton = () => {
     if (
