@@ -1,4 +1,4 @@
-import { Categories } from '../categories/types';
+import { Categories, CategoriesError } from '../categories/types';
 import { GroupCategories } from '../groupCategories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
@@ -43,6 +43,7 @@ export interface State {
   categories: {
     incomeList: Categories;
     expenseList: Categories;
+    categoriesError: CategoriesError;
   };
   groupCategories: {
     groupIncomeList: GroupCategories;

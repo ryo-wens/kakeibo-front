@@ -17,6 +17,10 @@ const initialState = {
   categories: {
     incomeList: [],
     expenseList: [],
+    categoriesError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
   },
   groupCategories: {
     groupIncomeList: [],

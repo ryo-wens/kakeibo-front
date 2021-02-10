@@ -180,7 +180,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   useEffect(() => {
     const signal = axios.CancelToken.source();
 
-    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
+    if (pathName !== 'group') {
       dispatch(fetchCategories(signal));
     }
 

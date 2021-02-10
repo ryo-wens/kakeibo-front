@@ -1,200 +1,166 @@
-import { updateIncomeCategoriesAction, updateExpenseCategoriesAction } from './actions';
+import {
+  fetchIncomeCategoryActions,
+  fetchExpenseCategoryActions,
+  addIncomeCustomCategoryActions,
+  addExpenseCustomCategoryActions,
+  editIncomeCustomCategoryActions,
+  editExpenseCustomCategoryActions,
+  deleteIncomeCustomCategoryActions,
+  deleteExpenseCustomCategoryActions,
+} from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
 import {
-  Category,
-  fetchCategoriesRes,
-  addCustomReq,
-  addCustomRes,
-  editCustomReq,
-  editCustomRes,
-  deleteCustomRes,
+  FetchCategoriesRes,
+  CrudCustomCategoryReq,
+  CrudCustomCategoryRes,
+  DeletedMessage,
 } from './types';
-import { State } from '../store/types';
 import { errorHandling } from '../../lib/validation';
 
 export const fetchCategories = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
-    await axios
-      .get<fetchCategoriesRes>(`${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`, {
-        cancelToken: signal.token,
-        withCredentials: true,
-      })
-      .then((res) => {
-        const income = res.data.income_categories_list;
-        const expense = res.data.expense_categories_list;
-        dispatch(updateIncomeCategoriesAction(income));
-        dispatch(updateExpenseCategoriesAction(expense));
-      })
-      .catch((error) => {
-        if (axios.isCancel(error)) {
-          return;
-        } else {
-          errorHandling(dispatch, error);
+    try {
+      const result = await axios.get<FetchCategoriesRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
-      });
+      );
+      const incomeCategories = result.data.income_categories_list;
+      const expenseCategories = result.data.expense_categories_list;
+
+      dispatch(fetchIncomeCategoryActions(incomeCategories));
+      dispatch(fetchExpenseCategoryActions(expenseCategories));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        return;
+      } else {
+        errorHandling(dispatch, error);
+      }
+    }
   };
 };
 
-export const addCustomCategories = (name: string, bigCategoryId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    const data: addCustomReq = {
+export const addCustomCategories = (
+  name: string,
+  bigCategoryId: number,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    const data: CrudCustomCategoryReq = {
       name: name,
       big_category_id: bigCategoryId,
     };
-    await axios
-      .post<addCustomRes>(
+    try {
+      await axios.post<CrudCustomCategoryRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const addCategory = res.data;
-        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
-        if (bigCategoryId === 1) {
-          const incomeCategories = getState().categories.incomeList;
-          const nextCategories = incomeCategories.map((incomeCategory: Category) => {
-            if (incomeCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = incomeCategory.associated_categories_list;
-              incomeCategory.associated_categories_list = [
-                addCategory,
-                ...prevAssociatedCategories,
-              ];
-            }
-            return incomeCategory;
-          });
-          dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else {
-          const expenseCategories = getState().categories.expenseList;
-          const nextCategories = expenseCategories.map((expenseCategory: Category) => {
-            if (expenseCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = expenseCategory.associated_categories_list;
-              expenseCategory.associated_categories_list = [
-                addCategory,
-                ...prevAssociatedCategories,
-              ];
-            }
-            return expenseCategory;
-          });
-          dispatch(updateExpenseCategoriesAction(nextCategories));
+      );
+
+      const fetchResult = await axios.get<FetchCategoriesRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      );
+
+      const incomeCategories = fetchResult.data.income_categories_list;
+      const expenseCategories = fetchResult.data.expense_categories_list;
+
+      // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
+      if (bigCategoryId === 1) {
+        dispatch(addIncomeCustomCategoryActions(incomeCategories));
+      } else {
+        dispatch(addExpenseCustomCategoryActions(expenseCategories));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
-export const editCustomCategories = (id: number, name: string, bigCategoryId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    const data: editCustomReq = {
+export const editCustomCategories = (
+  id: number,
+  name: string,
+  bigCategoryId: number,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    const data: CrudCustomCategoryReq = {
       name: name,
       big_category_id: bigCategoryId,
     };
-    await axios
-      .put<editCustomRes>(
+    try {
+      await axios.put<CrudCustomCategoryRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const editCategory = res.data;
-        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
-        if (bigCategoryId === 1) {
-          const incomeCategories = getState().categories.incomeList;
-          const nextCategories = incomeCategories.map((incomeCategory: Category) => {
-            if (incomeCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = incomeCategory.associated_categories_list;
-              incomeCategory.associated_categories_list = prevAssociatedCategories.map(
-                (associatedCategory) => {
-                  if (
-                    associatedCategory.id === id &&
-                    associatedCategory.category_type === 'CustomCategory'
-                  ) {
-                    return editCategory;
-                  }
-                  return associatedCategory;
-                }
-              );
-            }
-            return incomeCategory;
-          });
-          dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else {
-          const expenseCategories = getState().categories.expenseList;
-          const nextCategories = expenseCategories.map((expenseCategory: Category) => {
-            if (expenseCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = expenseCategory.associated_categories_list;
-              expenseCategory.associated_categories_list = prevAssociatedCategories.map(
-                (associatedCategory) => {
-                  if (
-                    associatedCategory.id === id &&
-                    associatedCategory.category_type === 'CustomCategory'
-                  ) {
-                    return editCategory;
-                  }
-                  return associatedCategory;
-                }
-              );
-            }
-            return expenseCategory;
-          });
-          dispatch(updateExpenseCategoriesAction(nextCategories));
+      );
+
+      const fetchResult = await axios.get<FetchCategoriesRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      );
+
+      const incomeCategories = fetchResult.data.income_categories_list;
+      const expenseCategories = fetchResult.data.expense_categories_list;
+
+      // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
+      if (bigCategoryId === 1) {
+        dispatch(editIncomeCustomCategoryActions(incomeCategories));
+      } else {
+        dispatch(editExpenseCustomCategoryActions(expenseCategories));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };
 
-export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    await axios
-      .delete<deleteCustomRes>(
+export const deleteCustomCategories = (
+  id: number,
+  bigCategoryId: number,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    try {
+      await axios.delete<DeletedMessage>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`,
         {
           withCredentials: true,
         }
-      )
-      .then((res) => {
-        const resMessage = res.data.message;
-        // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
-        if (bigCategoryId === 1) {
-          const incomeCategories = getState().categories.incomeList;
-          const nextCategories = incomeCategories.map((incomeCategory: Category) => {
-            if (incomeCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = incomeCategory.associated_categories_list;
-              incomeCategory.associated_categories_list = prevAssociatedCategories.filter(
-                (associatedCategory) => associatedCategory.id !== id
-              );
-            }
-            return incomeCategory;
-          });
-          alert(resMessage);
-          dispatch(updateIncomeCategoriesAction(nextCategories));
-        } else {
-          const resMessage = res.data.message;
-          const expenseCategories = getState().categories.expenseList;
-          const nextCategories = expenseCategories.map((expenseCategory: Category) => {
-            if (expenseCategory.id === bigCategoryId) {
-              const prevAssociatedCategories = expenseCategory.associated_categories_list;
-              expenseCategory.associated_categories_list = prevAssociatedCategories.filter(
-                (associatedCategory) => associatedCategory.id !== id
-              );
-            }
-            return expenseCategory;
-          });
-          alert(resMessage);
-          dispatch(updateExpenseCategoriesAction(nextCategories));
+      );
+
+      const fetchResult = await axios.get<FetchCategoriesRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
-      })
-      .catch((error) => {
-        errorHandling(dispatch, error);
-      });
+      );
+
+      const incomeCategories = fetchResult.data.income_categories_list;
+      const expenseCategories = fetchResult.data.expense_categories_list;
+
+      // bigCategoryId = 1 収入 : bigCategoryId > 1 支出
+      if (bigCategoryId === 1) {
+        dispatch(deleteIncomeCustomCategoryActions(incomeCategories));
+      } else {
+        dispatch(deleteExpenseCustomCategoryActions(expenseCategories));
+      }
+    } catch (error) {
+      errorHandling(dispatch, error);
+    }
   };
 };

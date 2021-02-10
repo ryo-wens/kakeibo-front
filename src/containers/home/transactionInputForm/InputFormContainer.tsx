@@ -10,7 +10,6 @@ import {
   getGroupIncomeCategories,
 } from '../../../reducks/groupCategories/selectors';
 import { getYearlyAccountListStatus } from '../../../reducks/groupTransactions/selectors';
-import { fetchCategories } from '../../../reducks/categories/operations';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
 import { addLatestTransactions, addTransactions } from '../../../reducks/transactions/operations';
 import {
@@ -72,21 +71,17 @@ const InputFormContainer = () => {
   }
 
   const displayMessage = () => {
-    const displayMessageConditions = {
-      canDisplayMessage: false,
-    };
-
     if (pathName === 'group') {
       if (accountingStatus.year === addTransactionDate.addTransactionYear + '年') {
         for (const account of accountingStatus.accountedMonth) {
           if (account === addTransactionDate.addTransactionMonth + '月') {
-            displayMessageConditions.canDisplayMessage = true;
+            return true;
           }
         }
       }
     }
 
-    return displayMessageConditions;
+    return false;
   };
 
   const displayMessageDecision = displayMessage();
@@ -106,14 +101,6 @@ const InputFormContainer = () => {
     setBigCategory(initialState.initialBigCategory);
     setAssociatedCategory('');
   }, [transactionsType]);
-
-  useEffect(() => {
-    if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
-      const signal = axios.CancelToken.source();
-      dispatch(fetchCategories(signal));
-      return () => signal.cancel();
-    }
-  }, [pathName]);
 
   useEffect(() => {
     if (pathName === 'group') {
@@ -264,7 +251,7 @@ const InputFormContainer = () => {
     <InputForm
       unInput={unInput}
       addTransactionMonth={addTransactionDate.addTransactionMonth}
-      displayMessageDecision={displayMessageDecision.canDisplayMessage}
+      displayMessageDecision={displayMessageDecision}
       group_id={Number(group_id)}
       pathName={pathName}
       approvedGroups={approvedGroups}
