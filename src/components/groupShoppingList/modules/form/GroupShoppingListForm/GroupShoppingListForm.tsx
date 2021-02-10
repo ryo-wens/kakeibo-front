@@ -3,7 +3,7 @@ import CloseIcon from '@material-ui/icons/Close';
 import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
 import '../../../../shoppingList/modules/Form/ShoppingListForm/shopping-list-form.scss';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
-import ShoppingListPayerSelect from '../../Select/ShoppingListPayerSelect/ShoppingListPayerSelect';
+import ShoppingListPayerSelect from '../../select/ShoppingListPayerSelect/ShoppingListPayerSelect';
 import ToolTipIcon from '../../../../shoppingList/modules/ToolTip/ToolTipIcon';
 import { GroupCategories } from '../../../../../reducks/groupCategories/types';
 import { Groups } from '../../../../../reducks/groups/types';

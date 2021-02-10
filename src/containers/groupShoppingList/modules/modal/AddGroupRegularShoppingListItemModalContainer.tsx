@@ -5,7 +5,7 @@ import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { PurchaseCycleType } from '../../../../reducks/shoppingList/types';
-import AddGroupRegularShoppingListModal from '../../../../components/groupShoppingList/modules/Modal/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
+import AddGroupRegularShoppingListModal from '../../../../components/groupShoppingList/modules/modal/AddGroupRegularShoppingListModal/AddGroupRegularShoppingListModal';
 import { addGroupRegularShoppingListItem } from '../../../../reducks/groupShoppingList/operations';
 import { AddGroupRegularShoppingListItemModalInitialState } from '../../../../reducks/groupShoppingList/types';
 
