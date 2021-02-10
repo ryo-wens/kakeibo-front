@@ -25,8 +25,6 @@ const GroupRecentInputBodyContainer = () => {
   };
 
   const payerColor = (payerUserId: string): React.CSSProperties => {
-    let color = '';
-
     if (currentGroup) {
       if (currentGroup.approved_users_list) {
         const approvedUser = currentGroup.approved_users_list.find(
@@ -34,12 +32,11 @@ const GroupRecentInputBodyContainer = () => {
         );
 
         if (approvedUser) {
-          color = approvedUser.color_code;
+          return { borderBottom: `2px solid ${approvedUser.color_code}` };
         }
       }
     }
-
-    return { borderBottom: `2px solid ${color}` };
+    return { borderBottom: 0 };
   };
 
   return (
