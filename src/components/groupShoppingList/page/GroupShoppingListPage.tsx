@@ -1,14 +1,14 @@
 import React from 'react';
-import './shopping-list-page.scss';
+import '../../shoppingList/page/shopping-list-page.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
-import TodayShoppingListAreaContainer from '../../../containers/shoppingList/page/TodayShoppingListArea/TodayShoppingListAreaContainer';
-import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/page/MonthlyShoppingListArea/MonthlyShoppingListAreaContainer';
-import ExpiredShoppingListAreaContainer from '../../../containers/shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListAreaContainer';
-import RegularShoppingListAreaContainer from '../../../containers/shoppingList/page/regularShoppingListArea/RegularShoppingListAreaContainer';
+import GroupTodayShoppingListArea from './GroupTodayShoppingListArea/GroupTodayShoppingListArea';
+import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
-import AddRegularShoppingListItemModalContainer from '../../../containers/shoppingList/modules/Modal/AddRegularShoppingListItemModalContainer';
+import AddGroupRegularShoppingListModalContainer from '../../../containers/groupShoppingList/modules/modal/AddGroupRegularShoppingListItemModalContainer';
+import GroupRegularShoppingListAreaContainer from '../../../containers/groupShoppingList/page/regularShoppingListArea/GroupRegularShoppingListAreaContainer';
+import GroupMonthlyShoppingListAreaContainer from '../../../containers/groupShoppingList/page/monthlyShoppingListArea/GroupMonthlyShoppingListAreaContainer';
 
-interface ShoppingListPageProps {
+interface GroupShoppingListPageProps {
   selectedYear: number;
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
@@ -18,7 +18,7 @@ interface ShoppingListPageProps {
   currentYearMonth: string;
 }
 
-const ShoppingListPage = (props: ShoppingListPageProps) => {
+const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
   return (
     <div className="shopping-list-page">
       <div className="shopping-list-page__left">
@@ -26,14 +26,13 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           <SwitchTodayOrMonthlyTabsContainer
             currentItem={props.currentItem}
             setCurrentItems={props.setCurrentItem}
-            leftItem={<TodayShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />}
+            leftItem={<GroupTodayShoppingListArea currentYearMonth={props.currentYearMonth} />}
             rightItem={
-              <MonthlyShoppingListAreaContainer
+              <GroupMonthlyShoppingListAreaContainer
                 selectedYear={props.selectedYear}
                 selectedMonth={props.selectedMonth}
                 setSelectedYear={props.setSelectedYear}
                 setSelectedMonth={props.setSelectedMonth}
-                currentYearMonth={props.currentYearMonth}
               />
             }
           />
@@ -42,22 +41,19 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
-          <AddRegularShoppingListItemModalContainer
-            selectedYear={props.selectedYear}
-            selectedMonth={props.selectedMonth}
-          />
-          <RegularShoppingListAreaContainer
+          <AddGroupRegularShoppingListModalContainer currentYearMonth={props.currentYearMonth} />
+          <GroupRegularShoppingListAreaContainer
             currentYearMonth={props.currentYearMonth}
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <ExpiredShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
+          <GroupExpiredShoppingListArea currentYearMonth={props.currentYearMonth} />
         </div>
       </div>
     </div>
   );
 };
 
-export default ShoppingListPage;
+export default GroupShoppingListPage;

@@ -1,23 +1,24 @@
 import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import './monthly-shopping-list-area.scss';
+import '../../../shoppingList/page/MonthlyShoppingListArea/monthly-shopping-list-area.scss';
 import InputYears from '../../../uikit/InputYears';
-import AddShoppingListItemModalContainer from '../../../../containers/shoppingList/modules/Modal/AddShoppingListItemModalContainer';
-import MonthlyShoppingListByDateContainer from '../../../../containers/shoppingList/page/MonthlyShoppingListArea/monthlyShoppingListByDateContainer/MonthlyShoppingListByDateContainer';
-import MonthlyShoppingListByCategoriesContainer from '../../../../containers/shoppingList/page/MonthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/MonthlyShoppingListByCategoriesContainer';
+import AddGroupShoppingListItemModalContainer from '../../../../containers/groupShoppingList/modules/modal/AddGroupShoppingListItemModalContainer';
+import GroupMonthlyShoppingListByDateContainer from '../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByDateContainer/GroupMonthlyShoppingListByDateContainer';
+import GroupMonthlyShoppingListByCategoriesContainer from '../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/GroupMonthlyShoppingListByCategoriesContainer';
 
-interface MonthlyShoppingListAreaProps {
+interface GroupMonthlyShoppingListAreaProps {
   selectedYear: number;
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentYearMonth: string;
 }
 
-const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
+const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) => {
   return (
     <>
       <div className="monthly-shopping-list-area__add-button">
-        <AddShoppingListItemModalContainer />
+        <AddGroupShoppingListItemModalContainer currentYearMonth={props.currentYearMonth} />
       </div>
       <div className="monthly-shopping-list-area__switch-item">
         <div className="monthly-shopping-list-area__switch-item--width">
@@ -33,15 +34,15 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
             leftItem={
-              <MonthlyShoppingListByDateContainer
-                selectedYear={props.selectedYear}
+              <GroupMonthlyShoppingListByDateContainer
                 selectedMonth={props.selectedMonth}
+                selectedYear={props.selectedYear}
               />
             }
             rightItem={
-              <MonthlyShoppingListByCategoriesContainer
-                selectedYear={props.selectedYear}
+              <GroupMonthlyShoppingListByCategoriesContainer
                 selectedMonth={props.selectedMonth}
+                selectedYear={props.selectedYear}
               />
             }
           />
@@ -51,4 +52,4 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
   );
 };
 
-export default MonthlyShoppingListArea;
+export default GroupMonthlyShoppingListArea;
