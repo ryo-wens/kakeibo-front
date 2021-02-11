@@ -5,7 +5,7 @@ import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
-import GroupShoppingListPage from '../../../components/groupShoppingList/Page/GroupShoppingListPage';
+import GroupShoppingListPage from '../../../components/groupShoppingList/page/GroupShoppingListPage';
 
 const GroupShoppingListPageContainer = () => {
   const dispatch = useDispatch();
