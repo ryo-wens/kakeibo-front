@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { Action, Dispatch } from 'redux';
 import { State } from '../../reducks/store/types';
 import { AssociatedCategory, Categories, Category } from '../../reducks/categories/types';
@@ -44,6 +44,7 @@ interface MediumCategoryInputProps {
 const MediumCategoryInput = React.forwardRef(
   (props: MediumCategoryInputProps, mediumMenuRef: React.Ref<HTMLDivElement>) => {
     const dispatch = useDispatch();
+    const { group_id } = useParams();
     const pathName = useLocation().pathname.split('/')[1];
     const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
     const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
@@ -122,7 +123,9 @@ const MediumCategoryInput = React.forwardRef(
                                     editGroupCustomCategories(
                                       incomeAssociated.id,
                                       editCustomCategoryName,
-                                      incomeAssociated.big_category_id
+                                      incomeAssociated.big_category_id,
+                                      Number(group_id),
+                                      signal
                                     )
                                   );
                                   setEditCustomCategoryName('');
@@ -174,7 +177,9 @@ const MediumCategoryInput = React.forwardRef(
                                     ),
                                     deleteGroupCustomCategories(
                                       incomeAssociated.id,
-                                      incomeAssociated.big_category_id
+                                      incomeAssociated.big_category_id,
+                                      Number(group_id),
+                                      signal
                                     )
                                   );
                                 }
@@ -225,7 +230,12 @@ const MediumCategoryInput = React.forwardRef(
                           event.stopPropagation();
                           operationSwitching(
                             addCustomCategories(customCategoryName, props.bigCategoryId, signal),
-                            addGroupCustomCategories(customCategoryName, props.bigCategoryId)
+                            addGroupCustomCategories(
+                              customCategoryName,
+                              props.bigCategoryId,
+                              Number(group_id),
+                              signal
+                            )
                           );
                           setCustomCategoryName('');
                         }}
@@ -280,7 +290,9 @@ const MediumCategoryInput = React.forwardRef(
                                     editGroupCustomCategories(
                                       expenseAssociated.id,
                                       editCustomCategoryName,
-                                      expenseAssociated.big_category_id
+                                      expenseAssociated.big_category_id,
+                                      Number(group_id),
+                                      signal
                                     )
                                   );
                                   setEditCustomCategoryName('');
@@ -332,7 +344,9 @@ const MediumCategoryInput = React.forwardRef(
                                     ),
                                     deleteGroupCustomCategories(
                                       expenseAssociated.id,
-                                      expenseAssociated.big_category_id
+                                      expenseAssociated.big_category_id,
+                                      Number(group_id),
+                                      signal
                                     )
                                   );
                                 }
@@ -382,7 +396,12 @@ const MediumCategoryInput = React.forwardRef(
                           event.stopPropagation();
                           operationSwitching(
                             addCustomCategories(customCategoryName, props.bigCategoryId, signal),
-                            addGroupCustomCategories(customCategoryName, props.bigCategoryId)
+                            addGroupCustomCategories(
+                              customCategoryName,
+                              props.bigCategoryId,
+                              Number(group_id),
+                              signal
+                            )
                           );
                           setCustomCategoryName('');
                         }}

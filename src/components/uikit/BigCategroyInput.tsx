@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { useLocation } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import { Action, Dispatch } from 'redux';
 import { State } from '../../reducks/store/types';
 import { AssociatedCategory, Categories, Category } from '../../reducks/categories/types';
@@ -47,6 +47,7 @@ interface BigCategoryInputProps {
 const BigCategoryInput = React.forwardRef(
   (props: BigCategoryInputProps, bigCategoryRef: React.Ref<HTMLDivElement>) => {
     const dispatch = useDispatch();
+    const { group_id } = useParams();
     const pathName = useLocation().pathname.split('/')[1];
     const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
     const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
@@ -149,7 +150,9 @@ const BigCategoryInput = React.forwardRef(
                                               editGroupCustomCategories(
                                                 incomeAssociatedCategory.id,
                                                 editCustomCategoryName,
-                                                incomeAssociatedCategory.big_category_id
+                                                incomeAssociatedCategory.big_category_id,
+                                                Number(group_id),
+                                                signal
                                               )
                                             );
                                             setEditCustomCategoryName('');
@@ -210,7 +213,9 @@ const BigCategoryInput = React.forwardRef(
                                               ),
                                               deleteGroupCustomCategories(
                                                 incomeAssociatedCategory.id,
-                                                incomeAssociatedCategory.big_category_id
+                                                incomeAssociatedCategory.big_category_id,
+                                                Number(group_id),
+                                                signal
                                               )
                                             );
                                           }
@@ -274,7 +279,9 @@ const BigCategoryInput = React.forwardRef(
                                       ),
                                       addGroupCustomCategories(
                                         customCategoryName,
-                                        incomeCategory.id
+                                        incomeCategory.id,
+                                        Number(group_id),
+                                        signal
                                       )
                                     );
                                     setCustomCategoryName('');
@@ -356,7 +363,9 @@ const BigCategoryInput = React.forwardRef(
                                               editGroupCustomCategories(
                                                 expenseAssociatedCategory.id,
                                                 editCustomCategoryName,
-                                                expenseAssociatedCategory.big_category_id
+                                                expenseAssociatedCategory.big_category_id,
+                                                Number(group_id),
+                                                signal
                                               )
                                             );
                                             setEditCustomCategoryName('');
@@ -416,7 +425,9 @@ const BigCategoryInput = React.forwardRef(
                                               ),
                                               deleteGroupCustomCategories(
                                                 expenseAssociatedCategory.id,
-                                                expenseAssociatedCategory.big_category_id
+                                                expenseAssociatedCategory.big_category_id,
+                                                Number(group_id),
+                                                signal
                                               )
                                             );
                                           }
@@ -483,7 +494,9 @@ const BigCategoryInput = React.forwardRef(
                                       ),
                                       addGroupCustomCategories(
                                         customCategoryName,
-                                        expenseCategory.id
+                                        expenseCategory.id,
+                                        Number(group_id),
+                                        signal
                                       )
                                     );
                                     setCustomCategoryName('');
