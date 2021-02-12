@@ -1,27 +1,27 @@
 import React from 'react';
-import {
-  ShoppingListByCategories,
-  ShoppingListItem,
-  ShoppingListItemByCategories,
-} from '../../../../../reducks/shoppingList/types';
-import './today-schedule-shopping-list-by-categories.scss';
+import '../../shoppingListArea/todayScheduleShoppingListByCategories/today-schedule-shopping-list-by-categories.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
 import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
+import {
+  GroupShoppingListByCategories,
+  GroupShoppingListItem,
+  GroupShoppingListItemByCategories,
+} from '../../../../../reducks/groupShoppingList/types';
 
-interface TodayScheduleShoppingListByCategoriesProps {
-  shoppingListByCategories: ShoppingListByCategories;
+interface GroupTodayScheduleShoppingListByCategoriesProps {
+  shoppingListByCategories: GroupShoppingListByCategories;
   currentYearMonth: string;
   message: string;
 }
 
-const TodayScheduleShoppingListByCategories = (
-  props: TodayScheduleShoppingListByCategoriesProps
+const GroupTodayScheduleShoppingListByCategories = (
+  props: GroupTodayScheduleShoppingListByCategoriesProps
 ) => {
   return (
     <>
       {props.shoppingListByCategories.length ? (
         props.shoppingListByCategories.map(
-          (shoppingListItemByCategories: ShoppingListItemByCategories) => {
+          (shoppingListItemByCategories: GroupShoppingListItemByCategories) => {
             return (
               <div key={shoppingListItemByCategories.big_category_name}>
                 <div className="today-schedule-shopping-list-by-categories__category">
@@ -34,7 +34,7 @@ const TodayScheduleShoppingListByCategories = (
                   </h4>
                 </div>
                 {shoppingListItemByCategories.shopping_list.map(
-                  (shoppingListItem: ShoppingListItem) => {
+                  (shoppingListItem: GroupShoppingListItem) => {
                     return (
                       <div
                         className="today-schedule-shopping-list-by-categories__item"
@@ -69,4 +69,4 @@ const TodayScheduleShoppingListByCategories = (
   );
 };
 
-export default TodayScheduleShoppingListByCategories;
+export default GroupTodayScheduleShoppingListByCategories;
