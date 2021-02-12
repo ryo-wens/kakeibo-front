@@ -4,7 +4,7 @@ import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/
 import { useSelector } from 'react-redux';
 import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
 import { useParams } from 'react-router';
-import GroupShoppingListItemComponent from '../../../../../components/groupShoppingList/modules/listItem/GroupShoppingListItemComponent/GroupShoppingListItemComponent';
+import GroupShoppingListItemComponent from '../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponent';
 
 interface GroupShoppingListItemComponentContainerProps {
   listItem: GroupShoppingListItem;

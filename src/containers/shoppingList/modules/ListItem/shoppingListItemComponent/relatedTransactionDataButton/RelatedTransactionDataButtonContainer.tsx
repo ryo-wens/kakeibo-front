@@ -1,6 +1,6 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { RelatedTransactionData } from '../../../../../../reducks/shoppingList/types';
-import RelatedTransactionDataButton from '../../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/RelatedTransactionDataButton/RelatedTransactionDataButton';
+import RelatedTransactionDataButton from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/RelatedTransactionDataButton/RelatedTransactionDataButton';
 
 interface RelatedTransactionDataButtonContainerProps {
   transactionData: RelatedTransactionData;

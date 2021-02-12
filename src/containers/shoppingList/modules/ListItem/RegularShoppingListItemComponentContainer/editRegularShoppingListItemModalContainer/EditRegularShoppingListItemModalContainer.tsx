@@ -11,7 +11,7 @@ import {
 } from '../../../../../../reducks/shoppingList/types';
 import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
-import EditRegularShoppingListItemModal from '../../../../../../components/shoppingList/modules/ListItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/EditRegularShoppingListItemModal';
+import EditRegularShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/EditRegularShoppingListItemModal';
 
 interface EditRegularShoppingListItemModalContainerProps {
   listItem: RegularShoppingListItem;

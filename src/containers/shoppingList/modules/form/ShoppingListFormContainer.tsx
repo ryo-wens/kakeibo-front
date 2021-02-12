@@ -5,7 +5,7 @@ import {
   getIncomeCategories,
 } from '../../../../reducks/categories/selectors';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
-import ShoppingListForm from '../../../../components/shoppingList/modules/Form/ShoppingListForm/ShoppingListForm';
+import ShoppingListForm from '../../../../components/shoppingList/modules/form/ShoppingListForm/ShoppingListForm';
 
 interface ShoppingListFormContainerProps {
   titleLabel: string;

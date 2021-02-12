@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import { dateStringToDate } from '../../../../../lib/date';
-import ShoppingListItemComponent from '../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/ShoppingListItemComponent';
+import ShoppingListItemComponent from '../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/ShoppingListItemComponent';
 
 interface ShoppingListItemComponentContainerProps {
   listItem: ShoppingListItem;

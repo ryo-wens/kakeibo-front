@@ -4,7 +4,7 @@ import { date } from '../../../../lib/constant';
 import { addRegularShoppingListItem } from '../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import AddRegularShoppingListItemModal from '../../../../components/shoppingList/modules/Modal/AddRegularShoppingListItemModal/AddRegularShoppingListItemModal';
+import AddRegularShoppingListItemModal from '../../../../components/shoppingList/modules/modal/AddRegularShoppingListItemModal/AddRegularShoppingListItemModal';
 import {
   AddRegularShoppingListItemModalInitialState,
   PurchaseCycleType,
