@@ -6,7 +6,7 @@ import {
 } from '../../../../reducks/categories/selectors';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { PurchaseCycleType } from '../../../../reducks/shoppingList/types';
-import RegularShoppingListForm from '../../../../components/shoppingList/modules/Form/RegularShoppingListForm/RegularShoppingListForm';
+import RegularShoppingListForm from '../../../../components/shoppingList/modules/form/RegularShoppingListForm/RegularShoppingListForm';
 
 interface RegularShoppingListFormContainerProps {
   expectedPurchaseDate: Date | null;

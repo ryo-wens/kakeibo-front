@@ -11,7 +11,7 @@ import {
   fetchTodayShoppingListByCategories,
 } from '../../../../../reducks/shoppingList/operations';
 import { customMonth, date, year } from '../../../../../lib/constant';
-import RegularShoppingListItemComponent from '../../../../../components/shoppingList/modules/ListItem/RegularShoppingListItemComponent/RegularShoppingListItemComponent';
+import RegularShoppingListItemComponent from '../../../../../components/shoppingList/modules/listItem/RegularShoppingListItemComponent/RegularShoppingListItemComponent';
 
 interface RegularShoppingListItemComponentContainerProps {
   listItem: RegularShoppingListItem;

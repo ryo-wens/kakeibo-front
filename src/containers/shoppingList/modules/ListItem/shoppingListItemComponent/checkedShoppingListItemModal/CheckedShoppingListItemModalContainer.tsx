@@ -5,7 +5,7 @@ import axios from 'axios';
 import { ShoppingListItem } from '../../../../../../reducks/shoppingList/types';
 import { date } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
-import CheckedShoppingListItemModal from '../../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal';
+import CheckedShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal';
 
 interface CheckedShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;

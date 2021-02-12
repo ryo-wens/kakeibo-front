@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from 'react';
 import { GroupRelatedTransactionData } from '../../../../../../reducks/groupShoppingList/types';
 import { Groups } from '../../../../../../reducks/groups/types';
-import RelatedGroupTransactionDataButton from '../../../../../../components/groupShoppingList/modules/listItem/GroupShoppingListItemComponent/RelatedGroupTransactionDataButton/RelatedGroupTransactionDataButton';
+import RelatedGroupTransactionDataButton from '../../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/relatedTransactionDataButton/RelatedGroupTransactionDataButton';
 
 interface RelatedGroupTransactionDataButtonContainerProps {
   transactionData: GroupRelatedTransactionData;

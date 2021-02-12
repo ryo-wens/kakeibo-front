@@ -1,0 +1,98 @@
+import React from 'react';
+import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowRight';
+import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
+import '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/RelatedTransactionDataButton/related-transaction-data-button.scss';
+import { bigCategoryColor } from '../../../../../../lib/function';
+import { GroupRelatedTransactionData } from '../../../../../../reducks/groupShoppingList/types';
+import { Groups } from '../../../../../../reducks/groups/types';
+
+interface RelatedGroupTransactionDataButtonProps {
+  open: boolean;
+  approvedGroups: Groups;
+  groupId: number;
+  transactionData: GroupRelatedTransactionData;
+  associatedCategoryName: string;
+  openTransactionData: () => void;
+  getPaymentUserName: (approvedGroups: Groups, userId: string, groupId: number) => string;
+  transactionDataItemClassName: string;
+  transactionDataItemKeyClassName: string;
+}
+
+const RelatedGroupTransactionDataButton = React.forwardRef(
+  (
+    props: RelatedGroupTransactionDataButtonProps,
+    transactionDataRef: React.Ref<HTMLDivElement>
+  ) => {
+    const transactionData = [
+      { key: '購入日', value: props.transactionData.transaction_date },
+      {
+        key: 'カテゴリー',
+        value: (
+          <div className="related-transaction-data-button__item-value-category">
+            <span
+              className="related-transaction-data-button__item-value-category-color"
+              style={bigCategoryColor(props.transactionData.big_category_name)}
+            />
+            <span>{props.transactionData.big_category_name}</span>
+            <KeyboardArrowLeftIcon />
+            <span>{props.associatedCategoryName}</span>
+          </div>
+        ),
+      },
+      { key: '金額', value: `${props.transactionData.amount} 円` },
+      {
+        key: '支払人',
+        value: props.getPaymentUserName(
+          props.approvedGroups,
+          props.transactionData.payment_user_id,
+          props.groupId
+        ),
+      },
+      {
+        key: '店名',
+        value: props.transactionData.shop === null ? '-' : props.transactionData.shop,
+      },
+      { key: 'メモ', value: props.transactionData.memo },
+    ];
+
+    return (
+      <>
+        {!props.open ? (
+          <button
+            className="related-transaction-data-button__is-close"
+            onClick={() => props.openTransactionData()}
+          >
+            関連する取引データ
+            <KeyboardArrowRightIcon />
+          </button>
+        ) : (
+          <>
+            <button className="related-transaction-data-button__is-open">
+              関連する取引データ
+              <KeyboardArrowDownIcon />
+            </button>
+            <div
+              className="related-transaction-data-button__form"
+              ref={transactionDataRef as React.Ref<HTMLDivElement>}
+            >
+              {transactionData.map((item) => {
+                return (
+                  <div className={props.transactionDataItemClassName} key={item.key}>
+                    <span className={props.transactionDataItemKeyClassName}>{item.key}</span>
+                    <span className="related-transaction-data-button__item-value">
+                      {item.value}
+                    </span>
+                  </div>
+                );
+              })}
+            </div>
+          </>
+        )}
+      </>
+    );
+  }
+);
+
+RelatedGroupTransactionDataButton.displayName = 'RelatedGroupTransactionDataButton';
+export default RelatedGroupTransactionDataButton;

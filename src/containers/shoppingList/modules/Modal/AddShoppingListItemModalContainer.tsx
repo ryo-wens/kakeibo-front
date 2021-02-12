@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { date } from '../../../../lib/constant';
 import axios from 'axios';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
-import AddShoppingListItemModal from '../../../../components/shoppingList/modules/Modal/AddShoppingListItemModal/AddShoppingListItemModal';
+import AddShoppingListItemModal from '../../../../components/shoppingList/modules/modal/AddShoppingListItemModal/AddShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';
 

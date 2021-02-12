@@ -5,7 +5,7 @@ import { addGroupShoppingListItem } from '../../../../reducks/groupShoppingList/
 import { useParams } from 'react-router';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
-import AddGroupShoppingListItemModal from '../../../../components/groupShoppingList/modules/modal/AddGroupShoppingListModal/AddGroupShoppingListItemModal';
+import AddGroupShoppingListItemModal from '../../../../components/groupShoppingList/modules/modal/addShoppingListModal/AddGroupShoppingListItemModal';
 
 interface AddGroupShoppingListItemModalContainerProps {
   currentYearMonth: string;

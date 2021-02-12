@@ -7,7 +7,7 @@ import {
 import axios from 'axios';
 import { ShoppingListItem } from '../../../../../../reducks/shoppingList/types';
 import { date } from '../../../../../../lib/constant';
-import EditShoppingListItemModal from '../../../../../../components/shoppingList/modules/ListItem/ShoppingListItemComponent/EditShoppingListItemModal/EditShoppingListItemModal';
+import EditShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/EditShoppingListItemModal/EditShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 
 interface EditShoppingListItemModalContainerProps {
