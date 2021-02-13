@@ -1,8 +1,10 @@
 import { TransactionsList } from './types';
 export type transactionActions = ReturnType<
-  | typeof updateTransactionsAction
   | typeof fetchTransactionsActions
-  | typeof updateLatestTransactionsActions
+  | typeof fetchLatestTransactionsActions
+  | typeof addTransactionsAction
+  | typeof editTransactionsAction
+  | typeof deleteTransactionsAction
   | typeof searchTransactionsActions
 >;
 
@@ -20,19 +22,55 @@ export const fetchTransactionsActions = (
   };
 };
 
-export const UPDATE_LATEST_TRANSACTIONS = 'UPDATE_LATEST_TRANSACTIONS';
-export const updateLatestTransactionsActions = (latestTransactionsList: TransactionsList) => {
+export const FETCH_LATEST_TRANSACTIONS = 'FETCH_LATEST_TRANSACTIONS';
+export const fetchLatestTransactionsActions = (latestTransactionsList: TransactionsList) => {
   return {
-    type: UPDATE_LATEST_TRANSACTIONS,
-    payload: latestTransactionsList,
+    type: FETCH_LATEST_TRANSACTIONS,
+    payload: {
+      latestTransactionsList: latestTransactionsList,
+    },
   };
 };
 
-export const UPDATE_TRANSACTIONS = 'UPDATE_TRANSACTIONS';
-export const updateTransactionsAction = (transactionsList: TransactionsList) => {
+export const ADD_TRANSACTIONS = 'ADD_TRANSACTIONS';
+export const addTransactionsAction = (
+  transactionsList: TransactionsList,
+  latestTransactionsList: TransactionsList
+) => {
   return {
-    type: UPDATE_TRANSACTIONS,
-    payload: transactionsList,
+    type: ADD_TRANSACTIONS,
+    payload: {
+      transactionsList: transactionsList,
+      latestTransactionsList: latestTransactionsList,
+    },
+  };
+};
+
+export const EDIT_TRANSACTIONS = 'EDIT_TRANSACTIONS';
+export const editTransactionsAction = (
+  transactionsList: TransactionsList,
+  latestTransactionsList: TransactionsList
+) => {
+  return {
+    type: EDIT_TRANSACTIONS,
+    payload: {
+      transactionsList: transactionsList,
+      latestTransactionsList: latestTransactionsList,
+    },
+  };
+};
+
+export const DELETE_TRANSACTIONS = 'DELETE_TRANSACTIONS';
+export const deleteTransactionsAction = (
+  transactionsList: TransactionsList,
+  latestTransactionsList: TransactionsList
+) => {
+  return {
+    type: DELETE_TRANSACTIONS,
+    payload: {
+      transactionsList: transactionsList,
+      latestTransactionsList: latestTransactionsList,
+    },
   };
 };
 

@@ -12,15 +12,25 @@ export const transactionsReducer = (
         ...state,
         ...action.payload,
       };
-    case Actions.UPDATE_LATEST_TRANSACTIONS:
+    case Actions.FETCH_LATEST_TRANSACTIONS:
       return {
         ...state,
-        latestTransactionsList: [...action.payload],
+        ...action.payload,
       };
-    case Actions.UPDATE_TRANSACTIONS:
+    case Actions.ADD_TRANSACTIONS:
       return {
         ...state,
-        transactionsList: [...action.payload],
+        ...action.payload,
+      };
+    case Actions.EDIT_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.DELETE_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
       };
     case Actions.SEARCH_TRANSACTIONS:
       return {

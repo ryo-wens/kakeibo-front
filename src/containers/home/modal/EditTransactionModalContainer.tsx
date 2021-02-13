@@ -9,13 +9,7 @@ import {
   fetchGroupYearlyAccountListForModal,
   fetchLatestGroupTransactionsList,
 } from '../../../reducks/groupTransactions/operations';
-import {
-  deleteLatestTransactions,
-  deleteTransactions,
-  editLatestTransactions,
-  editTransactions,
-  fetchLatestTransactionsList,
-} from '../../../reducks/transactions/operations';
+import { deleteTransactions, editTransactions } from '../../../reducks/transactions/operations';
 import { getApprovedGroups } from '../../../reducks/groups/selectors';
 import { getExpenseCategories, getIncomeCategories } from '../../../reducks/categories/selectors';
 import {
@@ -28,6 +22,7 @@ import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import EditTransactionModal from '../../../components/home/modal/EditTransactionModal';
 import { isValidAmountFormat } from '../../../lib/validation';
+import { year, customMonth } from '../../../lib/constant';
 import axios from 'axios';
 
 interface EditTransactionModalContainerProps {
@@ -92,11 +87,9 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     editTransactionMonth: 0,
   };
 
-  if (pathName === 'group') {
-    if (transactionDate) {
-      editTransactionDate.editTransactionYear = transactionDate.getFullYear();
-      editTransactionDate.editTransactionMonth = transactionDate.getMonth() + 1;
-    }
+  if (transactionDate) {
+    editTransactionDate.editTransactionYear = transactionDate.getFullYear();
+    editTransactionDate.editTransactionMonth = transactionDate.getMonth() + 1;
   }
 
   useEffect(() => {
@@ -299,18 +292,43 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     shop: emptyShop,
   };
 
+  const september = 9;
+  const transactionsMonth =
+    editTransactionDate.editTransactionMonth <= september
+      ? '0' + editTransactionDate.editTransactionMonth
+      : String(editTransactionDate.editTransactionMonth);
+
   const personalDeleteTransaction = (): void => {
     const signal = axios.CancelToken.source();
-    async function personalTransaction() {
-      await dispatch(deleteLatestTransactions(transactionId));
-      dispatch(fetchLatestTransactionsList(signal));
-      dispatch(deleteTransactions(transactionId));
-    }
-    personalTransaction();
+
+    pathName === 'home'
+      ? dispatch(deleteTransactions(transactionId, signal, year, customMonth))
+      : dispatch(
+          deleteTransactions(
+            transactionId,
+            signal,
+            editTransactionDate.editTransactionYear,
+            transactionsMonth
+          )
+        );
   };
+
   const personalEditTransaction = (): void => {
-    dispatch(editTransactions(transactionId, personalEditRequestData));
-    dispatch(editLatestTransactions(transactionId, personalEditRequestData));
+    const signal = axios.CancelToken.source();
+
+    pathName === 'home'
+      ? dispatch(
+          editTransactions(transactionId, personalEditRequestData, year, customMonth, signal)
+        )
+      : dispatch(
+          editTransactions(
+            transactionId,
+            personalEditRequestData,
+            editTransactionDate.editTransactionYear,
+            transactionsMonth,
+            signal
+          )
+        );
     props.onClose();
   };
 
