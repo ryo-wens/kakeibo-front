@@ -22,6 +22,10 @@ import {
   fetchGroupTodayShoppingListByCategories,
 } from '../../../reducks/groupShoppingList/operations';
 import TodaySchedule from '../../../components/home/todaySchedule/TodaySchedule';
+import {
+  fetchGroupTasksList,
+  fetchGroupTasksListEachUser,
+} from '../../../reducks/groupTasks/operations';
 
 interface TodayScheduleContainerProps {
   todoEditing: boolean;
@@ -50,6 +54,8 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
     dispatch(
       fetchGroupTodayShoppingListByCategories(groupId, todayYear, todayMonth, todayDate, signal)
     );
+    dispatch(fetchGroupTasksList(groupId, signal));
+    dispatch(fetchGroupTasksListEachUser(groupId, signal));
   };
 
   useEffect(() => {

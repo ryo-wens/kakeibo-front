@@ -1,11 +1,12 @@
 import React from 'react';
 import './today-schedule.scss';
 import SwitchItemTabs from '../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import TodayScheduleTodoList from './todoListArea/TodayScheduleTodoList';
+import TodayScheduleTodoListArea from './todoListArea/TodayScheduleTodoListArea';
 import { TodoListItem } from '../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../reducks/groupTodoList/types';
 import GroupTodayScheduleShoppingListAreaContainer from '../../../containers/home/todaySchedule/groupShoppingListArea/GroupTodayScheduleShoppingListAreaContainer';
 import TodayScheduleShoppingListAreaContainer from '../../../containers/home/todaySchedule/shoppingListArea/TodayScheduleShoppingListAreaContainer';
+import TodayScheduleTaskAreaContainer from '../../../containers/home/todaySchedule/taskArea/TodayScheduleTaskAreaContainer';
 
 interface TodayScheduleProps {
   todoEditing: boolean;
@@ -26,7 +27,7 @@ const TodaySchedule = (props: TodayScheduleProps) => {
           leftButtonLabel={'実施予定のToDo'}
           rightButtonLabel={'締切予定のToDo'}
           leftItem={
-            <TodayScheduleTodoList
+            <TodayScheduleTodoListArea
               todoList={props.implementationTodoList}
               currentYearMonth={props.currentYearMonth}
               message={'今日の実施予定のToDoリストは、登録されていません。'}
@@ -34,7 +35,7 @@ const TodaySchedule = (props: TodayScheduleProps) => {
             />
           }
           rightItem={
-            <TodayScheduleTodoList
+            <TodayScheduleTodoListArea
               todoList={props.dueTodoList}
               currentYearMonth={props.currentYearMonth}
               message={'今日の締切予定のToDoリストは、登録されていません。'}
@@ -53,7 +54,8 @@ const TodaySchedule = (props: TodayScheduleProps) => {
       </div>
       {props.pathName === 'group' && (
         <div className="today-schedule__content">
-          <h4>割り当てられたタスク</h4>
+          <h4>タスク</h4>
+          <TodayScheduleTaskAreaContainer />
         </div>
       )}
     </div>
