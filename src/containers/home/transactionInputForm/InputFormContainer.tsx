@@ -11,7 +11,7 @@ import {
 } from '../../../reducks/groupCategories/selectors';
 import { getYearlyAccountListStatus } from '../../../reducks/groupTransactions/selectors';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
-import { addLatestTransactions, addTransactions } from '../../../reducks/transactions/operations';
+import { addTransactions } from '../../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
   addGroupTransactions,
@@ -21,7 +21,7 @@ import { AssociatedCategory, Category } from '../../../reducks/categories/types'
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { isValidAmountFormat } from '../../../lib/validation';
-import { customMonth } from '../../../lib/constant';
+import { year, customMonth } from '../../../lib/constant';
 import InputForm from '../../../components/home/transactionInputForm/InputForm';
 
 const initialState = {
@@ -214,12 +214,9 @@ const InputFormContainer = () => {
   };
 
   const addTransaction = () => {
-    async function addedTransaction() {
-      await dispatch(addLatestTransactions(personalAddRequestData));
-      dispatch(addTransactions(customMonth));
-      resetInputForm();
-    }
-    addedTransaction();
+    const signal = axios.CancelToken.source();
+    dispatch(addTransactions(personalAddRequestData, year, customMonth, signal));
+    resetInputForm();
   };
 
   const addGroupTransaction = () => {

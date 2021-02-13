@@ -10,11 +10,7 @@ import {
   getGroupIncomeCategories,
 } from '../../../reducks/groupCategories/selectors';
 import { getYearlyAccountListStatusModals } from '../../../reducks/groupTransactions/selectors';
-import {
-  addLatestTransactions,
-  addTransactions,
-  fetchTransactionsList,
-} from '../../../reducks/transactions/operations';
+import { addTransactions } from '../../../reducks/transactions/operations';
 import {
   addGroupLatestTransactions,
   addGroupTransactions,
@@ -24,7 +20,7 @@ import { fetchCategories } from '../../../reducks/categories/operations';
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { AssociatedCategory, Category } from '../../../reducks/categories/types';
-import { customMonth } from '../../../lib/constant';
+import { customMonth, year } from '../../../lib/constant';
 import { isValidAmountFormat } from '../../../lib/validation';
 import AddTransactionModal from '../../../components/home/modal/AddTransactionModal';
 
@@ -47,10 +43,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
   const userId = useSelector(getUserId);
-  const years = {
-    selectedYear: String(props.year),
-    selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),
-  };
   const approvedGroup = useSelector(getApprovedGroups);
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
@@ -84,12 +76,11 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     addTransactionMonth: 0,
   };
 
-  if (pathName === 'group') {
-    if (transactionDate) {
-      addTransactionDate.addTransactionYear = transactionDate.getFullYear();
-      addTransactionDate.addTransactionMonth = transactionDate.getMonth() + 1;
-    }
+  if (transactionDate) {
+    addTransactionDate.addTransactionYear = transactionDate.getFullYear();
+    addTransactionDate.addTransactionMonth = transactionDate.getMonth() + 1;
   }
+
   useEffect(() => {
     if (pathName === 'group') {
       setFirstTransactionDate(transactionDate);
@@ -280,15 +271,23 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
 
   const switchingAddTransaction = () => {
     const signal = axios.CancelToken.source();
+    const transactionsMonth =
+      addTransactionDate.addTransactionMonth <= 9
+        ? '0' + addTransactionDate.addTransactionMonth
+        : String(addTransactionDate.addTransactionMonth);
     const personalAddTransaction = () => {
-      async function personalTransaction() {
-        await dispatch(addLatestTransactions(personalAddRequestData));
-        dispatch(addTransactions(customMonth));
-        dispatch(fetchTransactionsList(years, signal));
-        props.onClose();
-        resetForm();
-      }
-      personalTransaction();
+      pathName === 'home'
+        ? dispatch(addTransactions(personalAddRequestData, year, customMonth, signal))
+        : dispatch(
+            addTransactions(
+              personalAddRequestData,
+              addTransactionDate.addTransactionYear,
+              String(transactionsMonth),
+              signal
+            )
+          );
+      props.onClose();
+      resetForm();
     };
 
     const groupAddTransaction = () => {

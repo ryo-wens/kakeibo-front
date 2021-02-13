@@ -28,7 +28,7 @@ const WeeklyHistoryRow = (props: WeeklyHistoryRowProps) => {
         <td
           style={props.currentWeekBorder(index + 1)}
           className="monthly-history-table__record-second"
-          key={'week' + index}
+          key={index}
         >
           {(() => {
             const historyRowItem: HistoryRowItem = {
@@ -36,7 +36,7 @@ const WeeklyHistoryRow = (props: WeeklyHistoryRowProps) => {
               prevTransactionDate: '',
             };
 
-            props.expenseTransactionsList.map((transaction, index) => {
+            props.expenseTransactionsList.map((transaction, transactionIndex) => {
               const transactionDay = Number(transaction.transaction_date.slice(8, 10));
 
               const categoryName = {
@@ -92,7 +92,7 @@ const WeeklyHistoryRow = (props: WeeklyHistoryRowProps) => {
                     </dt>
                   </dl>,
                   <EditTransactionModalContainer
-                    key={index}
+                    key={transactionIndex}
                     open={props.openId === transaction.id && props.open}
                     onClose={props.closeModal}
                     id={transaction.id}
