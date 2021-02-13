@@ -11,7 +11,7 @@ import {
   fetchGroupTodayShoppingList,
   fetchGroupTodayShoppingListByCategories,
 } from '../../../../../reducks/groupShoppingList/operations';
-import GroupRegularShoppingListItemComponent from '../../../../../components/groupShoppingList/modules/listItem/GroupRegularShoppingListItemComponent/GroupRegularShoppingListItemComponent';
+import GroupRegularShoppingListItemComponent from '../../../../../components/groupShoppingList/modules/listItem/regularShoppingListItemComponent/GroupRegularShoppingListItemComponent';
 
 interface GroupRegularShoppingListItemComponentContainerProps {
   listItem: GroupRegularShoppingListItem;

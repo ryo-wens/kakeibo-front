@@ -1,5 +1,5 @@
 import React from 'react';
-import SelectPurchaseCycleType from '../../../../../components/shoppingList/modules/Select/SelectPurchaseCycleType/SelectPurchaseCycleType';
+import SelectPurchaseCycleType from '../../../../../components/shoppingList/modules/select/SelectPurchaseCycleType/SelectPurchaseCycleType';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
 
 interface SelectPurchaseCycleTypeContainerProps {

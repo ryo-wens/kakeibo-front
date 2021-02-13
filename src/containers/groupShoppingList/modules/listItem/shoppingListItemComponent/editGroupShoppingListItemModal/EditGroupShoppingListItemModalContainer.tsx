@@ -4,7 +4,7 @@ import axios from 'axios';
 import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
 import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
-import EditGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/GroupShoppingListItemComponent/EditGroupShoppingListItemModal/EditGroupShoppingListItemModal';
+import EditGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/editShoppingListItemModal/EditGroupShoppingListItemModal';
 import { date } from '../../../../../../lib/constant';
 import {
   deleteGroupShoppingListItem,

@@ -7,7 +7,7 @@ import {
   getGroupExpenseCategories,
   getGroupIncomeCategories,
 } from '../../../../reducks/groupCategories/selectors';
-import GroupRegularShoppingListForm from '../../../../components/groupShoppingList/modules/form/GroupRegularShoppingListForm/GroupRegularShoppingListForm';
+import GroupRegularShoppingListForm from '../../../../components/groupShoppingList/modules/form/regularShoppingListForm/GroupRegularShoppingListForm';
 import { PurchaseCycleType } from '../../../../reducks/shoppingList/types';
 
 interface GroupRegularShoppingListFormContainerProps {
@@ -71,12 +71,13 @@ const GroupRegularShoppingListFormContainer = (
     }
   };
 
+  const approvedGroup = approvedGroups.filter((group) => group.group_id === Number(group_id));
+
   return (
     <GroupRegularShoppingListForm
       titleLabel={props.titleLabel}
       buttonLabel={props.buttonLabel}
-      approvedGroups={approvedGroups}
-      groupId={Number(group_id)}
+      approvedGroup={approvedGroup[0]}
       expectedPurchaseDate={props.expectedPurchaseDate}
       cycleType={props.cycleType}
       cycle={props.cycle}

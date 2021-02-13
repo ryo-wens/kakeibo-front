@@ -6,7 +6,7 @@ import { useDispatch } from 'react-redux';
 import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
 import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
 import { useParams } from 'react-router';
-import CheckedGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/GroupShoppingListItemComponent/CheckedGroupShoppingListItemModal/CheckedGroupShoppingListItemModal';
+import CheckedGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedGroupShoppingListItemModal';
 
 interface CheckedGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;

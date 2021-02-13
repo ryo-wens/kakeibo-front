@@ -10,7 +10,7 @@ import {
   editGroupRegularShoppingListItem,
 } from '../../../../../../reducks/groupShoppingList/operations';
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
-import EditGroupRegularShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/GroupRegularShoppingListItemComponent/EditGroupRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
+import EditGroupRegularShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/regularShoppingListItemComponent/editRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
 
 interface EditGroupRegularShoppingListItemModalContainerProps {
   listItem: GroupRegularShoppingListItem;

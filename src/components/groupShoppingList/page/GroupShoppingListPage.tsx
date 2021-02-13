@@ -1,12 +1,12 @@
 import React from 'react';
 import '../../shoppingList/page/shopping-list-page.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
-import GroupTodayShoppingListArea from './GroupTodayShoppingListArea/GroupTodayShoppingListArea';
-import GroupExpiredShoppingListArea from './GroupExpiredShoppingListArea/GroupExpiredShoppingListArea';
+import GroupTodayShoppingListArea from './todayShoppingListArea/GroupTodayShoppingListArea';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
 import AddGroupRegularShoppingListModalContainer from '../../../containers/groupShoppingList/modules/modal/AddGroupRegularShoppingListItemModalContainer';
 import GroupRegularShoppingListAreaContainer from '../../../containers/groupShoppingList/page/regularShoppingListArea/GroupRegularShoppingListAreaContainer';
 import GroupMonthlyShoppingListAreaContainer from '../../../containers/groupShoppingList/page/monthlyShoppingListArea/GroupMonthlyShoppingListAreaContainer';
+import GroupExpiredShoppingListAreaContainer from '../../../containers/groupShoppingList/page/expiredShoppingListArea/GroupExpiredShoppingListAreaContainer';
 
 interface GroupShoppingListPageProps {
   selectedYear: number;
@@ -49,7 +49,7 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <GroupExpiredShoppingListArea currentYearMonth={props.currentYearMonth} />
+          <GroupExpiredShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
         </div>
       </div>
     </div>
