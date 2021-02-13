@@ -1,12 +1,11 @@
 import React from 'react';
 import './today-schedule.scss';
 import SwitchItemTabs from '../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import TodayScheduleShoppingListByDate from './shoppingListArea/todayScheduleShoppingListByDate/TodayScheduleShoppingListByDate';
-import TodayScheduleShoppingListByCategories from './shoppingListArea/todayScheduleShoppingListByCategories/TodayScheduleShoppingListByCategories';
 import TodayScheduleTodoList from './todoListArea/TodayScheduleTodoList';
 import { TodoListItem } from '../../../reducks/todoList/types';
 import { GroupTodoListItem } from '../../../reducks/groupTodoList/types';
-import { ShoppingList, ShoppingListByCategories } from '../../../reducks/shoppingList/types';
+import GroupTodayScheduleShoppingListAreaContainer from '../../../containers/home/todaySchedule/groupShoppingListArea/GroupTodayScheduleShoppingListAreaContainer';
+import TodayScheduleShoppingListAreaContainer from '../../../containers/home/todaySchedule/shoppingListArea/TodayScheduleShoppingListAreaContainer';
 
 interface TodayScheduleProps {
   todoEditing: boolean;
@@ -15,8 +14,6 @@ interface TodayScheduleProps {
   currentYearMonth: string;
   implementationTodoList: (TodoListItem | GroupTodoListItem)[];
   dueTodoList: (TodoListItem | GroupTodoListItem)[];
-  todayShoppingList: ShoppingList;
-  todayShoppingListByCategories: ShoppingListByCategories;
 }
 
 const TodaySchedule = (props: TodayScheduleProps) => {
@@ -40,7 +37,7 @@ const TodaySchedule = (props: TodayScheduleProps) => {
             <TodayScheduleTodoList
               todoList={props.dueTodoList}
               currentYearMonth={props.currentYearMonth}
-              message={'今日の実施予定のToDoリストは、登録されていません。'}
+              message={'今日の締切予定のToDoリストは、登録されていません。'}
               setEditing={props.setTodoEditing}
             />
           }
@@ -48,24 +45,11 @@ const TodaySchedule = (props: TodayScheduleProps) => {
       </div>
       <div className="today-schedule__content">
         <h4>買い物リスト</h4>
-        <SwitchItemTabs
-          leftButtonLabel={'日別'}
-          rightButtonLabel={'カテゴリ別'}
-          leftItem={
-            <TodayScheduleShoppingListByDate
-              shoppingListByDate={props.todayShoppingList}
-              currentYearMonth={props.currentYearMonth}
-              message={'今日の買い物リストは、登録されていません。'}
-            />
-          }
-          rightItem={
-            <TodayScheduleShoppingListByCategories
-              shoppingListByCategories={props.todayShoppingListByCategories}
-              currentYearMonth={props.currentYearMonth}
-              message={'今日の買い物リストは、登録されていません。'}
-            />
-          }
-        />
+        {props.pathName === 'group' ? (
+          <GroupTodayScheduleShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
+        ) : (
+          <TodayScheduleShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
+        )}
       </div>
       {props.pathName === 'group' && (
         <div className="today-schedule__content">

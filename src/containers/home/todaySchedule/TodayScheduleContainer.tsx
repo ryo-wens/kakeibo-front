@@ -14,10 +14,6 @@ import {
 } from '../../../reducks/groupTodoList/selectors';
 import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operations';
 import {
-  getTodayShoppingList,
-  getTodayShoppingListByCategories,
-} from '../../../reducks/shoppingList/selectors';
-import {
   fetchTodayShoppingList,
   fetchTodayShoppingListByCategories,
 } from '../../../reducks/shoppingList/operations';
@@ -41,8 +37,6 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
   const todayDueTodoList = useSelector(getTodayDueTodoList);
   const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
   const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
-  const todayShoppingList = useSelector(getTodayShoppingList);
-  const todayShoppingListByCategories = useSelector(getTodayShoppingListByCategories);
 
   const todayYear = String(year);
   const todayMonth = customMonth;
@@ -92,8 +86,6 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
         pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
       }
       dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
-      todayShoppingList={todayShoppingList}
-      todayShoppingListByCategories={todayShoppingListByCategories}
     />
   );
 };
