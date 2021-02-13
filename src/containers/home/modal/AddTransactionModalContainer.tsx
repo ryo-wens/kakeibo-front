@@ -271,8 +271,9 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
 
   const switchingAddTransaction = () => {
     const signal = axios.CancelToken.source();
+    const september = 9;
     const transactionsMonth =
-      addTransactionDate.addTransactionMonth <= 9
+      addTransactionDate.addTransactionMonth <= september
         ? '0' + addTransactionDate.addTransactionMonth
         : String(addTransactionDate.addTransactionMonth);
     const personalAddTransaction = () => {

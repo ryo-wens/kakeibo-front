@@ -292,8 +292,9 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     shop: emptyShop,
   };
 
+  const september = 9;
   const transactionsMonth =
-    editTransactionDate.editTransactionMonth <= 9
+    editTransactionDate.editTransactionMonth <= september
       ? '0' + editTransactionDate.editTransactionMonth
       : String(editTransactionDate.editTransactionMonth);
 
