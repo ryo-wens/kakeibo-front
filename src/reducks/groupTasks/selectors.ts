@@ -19,8 +19,6 @@ const userId = (state: State) => state.users.id;
 export const getUserTaskListItem = createSelector(
   [tasksListForEachUser, userId],
   (tasksListForEachUser, userId) => {
-    const userTaskListItem = tasksListForEachUser.filter((listItem) => listItem.user_id === userId);
-
-    return userTaskListItem[0];
+    return tasksListForEachUser.find((listItem) => listItem.user_id === userId);
   }
 );

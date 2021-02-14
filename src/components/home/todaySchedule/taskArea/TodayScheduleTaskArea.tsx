@@ -3,8 +3,8 @@ import './today-schedule-task-area.scss';
 import { UserTasksListItem } from '../../../../reducks/groupTasks/types';
 
 interface TodayScheduleTaskAreaProps {
-  userTaskListItem: UserTasksListItem;
-  existAssignTask: boolean;
+  userTaskListItem: UserTasksListItem | undefined;
+  existAssignTask: boolean | undefined;
 }
 
 const TodayScheduleTaskArea = (props: TodayScheduleTaskAreaProps) => {
