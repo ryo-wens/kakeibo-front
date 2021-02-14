@@ -36,7 +36,7 @@ export const getSearchGroupTransactions = createSelector(
   (state) => state.groupSearchTransactionsList
 );
 
-const errorInfo = (state: State) => state.groupTransactions.groupTransactionsError;
+const errorInfo = (state: State) => state.groupTransactions.groupAccountListError;
 
 export const getStatusNotFoundMessage = createSelector([errorInfo], (errorInfo) => {
   let errorMessage;

@@ -6,7 +6,6 @@ import {
   GroupTransactionsList,
   GroupAccountList,
   GroupYearlyAccountList,
-  ErrorInfo,
 } from '../groupTransactions/types';
 import { StandardBudgetsList, YearlyBudgetsList, CustomBudgetsList } from '../budgets/types';
 import {
@@ -58,14 +57,43 @@ export interface State {
   };
   groupTransactions: {
     groupLatestTransactionsList: GroupTransactionsList;
+    groupLatestTransactionsListLoading: boolean;
+    groupLatestTransactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     groupTransactionsList: GroupTransactionsList;
+    groupTransactionsListLoading: boolean;
+    groupTransactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     groupSearchTransactionsList: GroupTransactionsList;
+    groupSearchTransactionsListLoading: boolean;
+    groupSearchTransactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     groupAccountList: GroupAccountList;
+    groupAccountListLoading: boolean;
+    groupAccountListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     groupYearlyAccountList: GroupYearlyAccountList;
+    groupYearlyAccountListLoading: boolean;
+    groupYearlyAccountListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     groupYearlyAccountListForModal: GroupYearlyAccountList;
+    groupYearlyAccountListForModalLoading: boolean;
+    groupYearlyAccountListForModalError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     notAccountMessage: string;
     deletedMessage: string;
-    groupTransactionsError: ErrorInfo;
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;

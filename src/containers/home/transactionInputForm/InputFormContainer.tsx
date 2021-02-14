@@ -13,7 +13,6 @@ import { getYearlyAccountListStatus } from '../../../reducks/groupTransactions/s
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
 import { addTransactions } from '../../../reducks/transactions/operations';
 import {
-  addGroupLatestTransactions,
   addGroupTransactions,
   fetchGroupYearlyAccountList,
 } from '../../../reducks/groupTransactions/operations';
@@ -220,12 +219,11 @@ const InputFormContainer = () => {
   };
 
   const addGroupTransaction = () => {
-    async function addedGroupTransaction() {
-      await dispatch(addGroupLatestTransactions(Number(group_id), groupAddRequestData));
-      dispatch(addGroupTransactions(customMonth));
-      resetInputForm();
-    }
-    addedGroupTransaction();
+    const signal = axios.CancelToken.source();
+    dispatch(
+      addGroupTransactions(Number(group_id), signal, year, customMonth, groupAddRequestData)
+    );
+    resetInputForm();
   };
 
   const unInput =
