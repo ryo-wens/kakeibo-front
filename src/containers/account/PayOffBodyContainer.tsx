@@ -5,6 +5,7 @@ import { ApprovedGroupUsers, Groups } from '../../reducks/groups/types';
 import { GroupAccountList, MonthWithoutSplit } from '../../reducks/groupTransactions/types';
 import PayOffBody from '../../components/account/PayOffBody';
 import { editGroupAccount } from '../../reducks/groupTransactions/operations';
+import axios from 'axios';
 
 interface PayOffBodyContainerProps {
   selectYear: string;
@@ -73,11 +74,18 @@ const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
       selectYear={props.selectYear}
       displayAccountList={displayAccountList}
       groupUserInfo={groupUserInfo}
-      editAccountOperation={(account) =>
+      editAccountOperation={(account) => {
+        const signal = axios.CancelToken.source();
         dispatch(
-          editGroupAccount(account, Number(group_id), props.selectYear, String(props.selectMonth))
-        )
-      }
+          editGroupAccount(
+            account,
+            Number(group_id),
+            props.selectYear,
+            String(props.selectMonth),
+            signal
+          )
+        );
+      }}
     />
   );
 };

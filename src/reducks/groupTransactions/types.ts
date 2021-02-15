@@ -18,12 +18,6 @@ export interface GroupTransactions {
   custom_category_name: string | null;
 }
 
-export interface ErrorInfo {
-  loading: boolean;
-  statusCode: number;
-  errorMessage: string;
-}
-
 export interface YearlyAccountStatus {
   year: string;
   accountedMonth: string[];

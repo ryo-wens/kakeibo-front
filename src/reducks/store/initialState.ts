@@ -34,10 +34,24 @@ const initialState = {
     notHistoryMessage: '',
   },
   groupTransactions: {
-    loading: false,
     groupLatestTransactionsList: [],
+    groupLatestTransactionsListLoading: false,
+    groupLatestTransactionsListError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     groupTransactionsList: [],
+    groupTransactionsListLoading: false,
+    groupTransactionsListError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     groupSearchTransactionsList: [],
+    groupSearchTransactionsListLoading: false,
+    groupSearchTransactionsListError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     notHistoryMessage: '',
     deletedMessage: '',
     groupAccountList: {
@@ -48,16 +62,26 @@ const initialState = {
       group_remaining_amount: 0,
       group_accounts_list_by_payer: [],
     },
+    groupAccountListLoading: false,
+    groupAccountListError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     groupYearlyAccountList: {
       year: '',
       yearly_accounting_status: [],
+    },
+    groupYearlyAccountListLoading: false,
+    groupYearlyAccountListError: {
+      statusCode: 0,
+      errorMessage: '',
     },
     groupYearlyAccountListForModal: {
       year: '',
       yearly_accounting_status: [],
     },
-    groupTransactionsError: {
-      loading: false,
+    groupYearlyAccountListForModalLoading: false,
+    groupYearlyAccountListForModalError: {
       statusCode: 0,
       errorMessage: '',
     },

@@ -1,14 +1,45 @@
 import {
-  addGroupAccountAction,
-  deleteGroupAccountAction,
-  editGroupAccountAction,
-  failedFetchDataAction,
-  fetchGroupAccountAction,
-  fetchGroupYearlyAccountListAction,
-  fetchYearlyAccountListForModalAction,
+  startFetchGroupTransactionsAction,
+  fetchGroupTransactionsAction,
+  cancelFetchTransactionsAction,
+  failedFetchGroupTransactionsAction,
+  startFetchGroupLatestTransactionsAction,
+  fetchGroupLatestTransactionsAction,
+  cancelFetchGroupLatestTransactionsAction,
+  failedFetchGroupLatestTransactionsAction,
+  startAddGroupTransactionsAction,
+  addGroupTransactionsAction,
+  failedAddGroupTransactionsAction,
+  startEditGroupTransactionsAction,
+  editGroupTransactionsAction,
+  failedEditGroupTransactionsAction,
+  startDeleteGroupTransactionsAction,
+  deleteGroupTransactionsAction,
+  failedDeleteGroupTransactionsAction,
+  startSearchGroupTransactionsAction,
   searchGroupTransactionsAction,
-  updateGroupLatestTransactionsAction,
-  updateGroupTransactionsAction,
+  failedSearchGroupTransactionsAction,
+  startFetchGroupAccountAction,
+  fetchGroupAccountAction,
+  cancelFetchGroupAccountAction,
+  failedFetchGroupAccountAction,
+  startFetchGroupYearlyAccountList,
+  fetchGroupYearlyAccountListAction,
+  cancelFetchGroupYearlyAccountList,
+  failedFetchGroupYearlyAccountList,
+  startFetchYearlyAccountListForModalAction,
+  fetchYearlyAccountListForModalAction,
+  cancelFetchYearlyAccountListForModalAction,
+  failedFetchYearlyAccountListForModalAction,
+  startAddGroupAccountAction,
+  addGroupAccountAction,
+  failedAddGroupAccountAction,
+  startEditGroupAccountAction,
+  editGroupAccountAction,
+  failedEditGroupAccountAction,
+  startDeleteGroupAccountAction,
+  deleteGroupAccountAction,
+  failedDeleteGroupAccountAction,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
@@ -23,11 +54,8 @@ import {
   GroupTransactionsList,
   GroupYearlyAccountList,
 } from './types';
-import { State } from '../store/types';
-import { push } from 'connected-react-router';
 import { errorHandling, isValidAmountFormat } from '../../lib/validation';
 import moment from 'moment';
-import { customMonth } from '../../lib/constant';
 
 export const fetchGroupTransactionsList = (
   groupId: number,
@@ -38,6 +66,8 @@ export const fetchGroupTransactionsList = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchGroupTransactionsAction());
+
     try {
       const result = await axios.get<FetchGroupTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
@@ -49,17 +79,22 @@ export const fetchGroupTransactionsList = (
       const groupTransactionsList = result.data.transactions_list;
 
       if (groupTransactionsList !== undefined) {
-        dispatch(updateGroupTransactionsAction(groupTransactionsList));
+        dispatch(fetchGroupTransactionsAction(groupTransactionsList));
       } else {
         const emptyGroupTransactionsList: GroupTransactionsList = [];
 
-        dispatch(updateGroupTransactionsAction(emptyGroupTransactionsList));
+        dispatch(fetchGroupTransactionsAction(emptyGroupTransactionsList));
       }
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchTransactionsAction());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchGroupTransactionsAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
@@ -67,6 +102,7 @@ export const fetchGroupTransactionsList = (
 
 export const fetchLatestGroupTransactionsList = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchGroupLatestTransactionsAction());
     try {
       const result = await axios.get<GroupLatestTransactionsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
@@ -78,23 +114,31 @@ export const fetchLatestGroupTransactionsList = (groupId: number, signal: Cancel
       const latestGroupTransactionsList = result.data.transactions_list;
 
       if (latestGroupTransactionsList !== undefined) {
-        dispatch(updateGroupLatestTransactionsAction(latestGroupTransactionsList));
+        dispatch(fetchGroupLatestTransactionsAction(latestGroupTransactionsList));
       } else {
         const emptyGroupLatestTransactionsList: GroupTransactionsList = [];
-        dispatch(updateGroupLatestTransactionsAction(emptyGroupLatestTransactionsList));
+        dispatch(fetchGroupLatestTransactionsAction(emptyGroupLatestTransactionsList));
       }
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchGroupLatestTransactionsAction());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchGroupLatestTransactionsAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
 };
 
-export const addGroupLatestTransactions = (
+export const addGroupTransactions = (
   groupId: number,
+  signal: CancelTokenSource,
+  addTransactionYear: number,
+  addTransactionMonth: string,
   requestData: {
     transaction_type: string;
     transaction_date: Date | null;
@@ -107,12 +151,14 @@ export const addGroupLatestTransactions = (
     custom_category_id: number | null;
   }
 ) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+  return async (dispatch: Dispatch<Action>) => {
     if (!isValidAmountFormat(requestData.amount as string)) {
       alert('金額は数字で入力してください。');
     }
+    dispatch(startAddGroupTransactionsAction());
+
     try {
-      const result = await axios.post<GroupTransactions>(
+      await axios.post<GroupTransactions>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
@@ -124,70 +170,44 @@ export const addGroupLatestTransactions = (
           withCredentials: true,
         }
       );
-      const addedTransaction = result.data;
 
-      const prevGroupLatestTransactionsList = getState().groupTransactions
-        .groupLatestTransactionsList;
-
-      const addedLatestTransactionsList = prevGroupLatestTransactionsList.filter(
-        (transaction, index) => index !== 9
+      const fetchGroupTransactionsResult = await axios.get<FetchGroupTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${addTransactionYear}-${addTransactionMonth}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
       );
 
-      const nextGroupLatestTransactionsList = [addedTransaction, ...addedLatestTransactionsList];
+      const fetchGroupLatestTransactionsResult = await axios.get<GroupLatestTransactionsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
 
-      dispatch(updateGroupLatestTransactionsAction(nextGroupLatestTransactionsList));
+      const addedGroupTransactionsList = fetchGroupTransactionsResult.data.transactions_list;
+      const addedGroupLatestTransactionsList =
+        fetchGroupLatestTransactionsResult.data.transactions_list;
+
+      dispatch(
+        addGroupTransactionsAction(addedGroupTransactionsList, addedGroupLatestTransactionsList)
+      );
     } catch (error) {
-      if (error.response.status === 400) {
-        alert(error.response.data.error.message.join('\n'));
-        return;
-      }
-
-      if (error.response.status === 401) {
-        alert(error.response.data.error.message);
-        dispatch(push('/login'));
-        return;
-      }
-
-      if (error.response.status === 500) {
-        alert(error.response.data.error.message);
-        return;
-      }
-      if (error) {
-        alert(error);
-      }
+      dispatch(
+        failedAddGroupTransactionsAction(error.response.status, error.response.data.error.message)
+      );
     }
-  };
-};
-
-export const addGroupTransactions = (customMonth: string) => {
-  return (dispatch: Dispatch<Action>, getState: () => State) => {
-    const prevGroupTransactionsList = getState().groupTransactions.groupTransactionsList;
-    const groupLatestTransactionsList = getState().groupTransactions.groupLatestTransactionsList;
-
-    const addedTransaction = groupLatestTransactionsList[0];
-
-    const nextGroupTransactionsList = () => {
-      let addedTransactionsList: GroupTransactionsList = [];
-
-      if (addedTransaction.transaction_date.slice(5, 7) === String(customMonth)) {
-        addedTransactionsList = [...prevGroupTransactionsList, addedTransaction].sort(
-          (a, b) =>
-            Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
-        );
-      } else {
-        return prevGroupTransactionsList;
-      }
-
-      return addedTransactionsList;
-    };
-
-    dispatch(updateGroupTransactionsAction(nextGroupTransactionsList()));
   };
 };
 
 export const editGroupTransactions = (
   id: number,
   groupId: number,
+  signal: CancelTokenSource,
+  editTransactionYear: number,
+  editTransactionMonth: string,
   requestData: {
     transaction_type: string;
     transaction_date: Date | null;
@@ -200,13 +220,14 @@ export const editGroupTransactions = (
     custom_category_id: number | null;
   }
 ) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+  return async (dispatch: Dispatch<Action>) => {
     if (!isValidAmountFormat(requestData.amount as string)) {
       alert('金額は数字で入力してください。');
     }
+    dispatch(startEditGroupTransactionsAction());
 
     try {
-      const result = await axios.put<GroupTransactions>(
+      await axios.put<GroupTransactions>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
@@ -219,170 +240,47 @@ export const editGroupTransactions = (
         }
       );
 
-      const editedGroupTransaction = result.data;
-      const groupTransactionsList: GroupTransactionsList = getState().groupTransactions
-        .groupTransactionsList;
-      const editedTransactionMonth = editedGroupTransaction.transaction_date.slice(5, 7);
-      const canEditMonth = customMonth === editedTransactionMonth;
-
-      const changeTransactionIndex = groupTransactionsList.findIndex(
-        (item) => item.id === editedGroupTransaction.id
+      const fetchGroupTransactionsResult = await axios.get<FetchGroupTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
       );
 
-      const existTransaction = changeTransactionIndex !== -1;
-
-      if (existTransaction) {
-        if (canEditMonth) {
-          groupTransactionsList[changeTransactionIndex] = editedGroupTransaction;
-        } else if (!canEditMonth) {
-          groupTransactionsList.splice(changeTransactionIndex, 1);
+      const fetchGroupLatestTransactionsResult = await axios.get<GroupLatestTransactionsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
-      } else if (!existTransaction) {
-        if (canEditMonth) {
-          groupTransactionsList.push(editedGroupTransaction);
-        }
-      }
-
-      groupTransactionsList.sort((a, b) => a.id - b.id);
-
-      groupTransactionsList.sort(
-        (a, b) => Number(a.transaction_date.slice(8, 10)) - Number(b.transaction_date.slice(8, 10))
       );
 
-      dispatch(updateGroupTransactionsAction(groupTransactionsList));
+      const editedGroupTransactionsList = fetchGroupTransactionsResult.data.transactions_list;
+      const editedGroupLatestTransactionsList =
+        fetchGroupLatestTransactionsResult.data.transactions_list;
+
+      dispatch(
+        editGroupTransactionsAction(editedGroupTransactionsList, editedGroupLatestTransactionsList)
+      );
     } catch (error) {
-      if (error && error.response) {
-        if (error.response.status === 400) {
-          if (Array.isArray(error.response.data.error.message)) {
-            alert(error.response.data.error.message.join('\n'));
-            return;
-          } else if (!Array.isArray(error.response.data.error.message)) {
-            alert(error.response.data.error.message);
-            return;
-          }
-        }
-
-        if (error.response.status === 401) {
-          alert(error.response.data.error.message);
-          dispatch(push('/login'));
-          return;
-        }
-
-        if (error.response.status === 500) {
-          alert(error.response.data.error.message);
-          return;
-        }
-      } else {
-        alert(error);
-      }
+      dispatch(
+        failedEditGroupTransactionsAction(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
 
-export const editGroupLatestTransactionsList = (
+export const deleteGroupTransactions = (
   id: number,
   groupId: number,
-  requestData: {
-    transaction_type: string;
-    transaction_date: Date | null;
-    shop: string | null;
-    memo: string | null;
-    amount: string | number;
-    payment_user_id: string;
-    big_category_id: number;
-    medium_category_id: number | null;
-    custom_category_id: number | null;
-  }
+  signal: CancelTokenSource,
+  editTransactionYear: number,
+  editTransactionMonth: string
 ) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (!isValidAmountFormat(requestData.amount as string)) {
-      alert('金額は数字で入力してください。');
-    }
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startDeleteGroupTransactionsAction());
 
-    try {
-      const result = await axios.put<GroupTransactions>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
-        JSON.stringify(requestData, function (key, value) {
-          if (key === 'transaction_date') {
-            return moment(new Date(value)).format();
-          }
-          return value;
-        }),
-        {
-          withCredentials: true,
-        }
-      );
-      const editedTransaction = result.data;
-
-      const groupLatestTransactionsList = getState().groupTransactions.groupLatestTransactionsList;
-
-      const editTransactionIndex = groupLatestTransactionsList.findIndex(
-        (item) => item.id === editedTransaction.id
-      );
-
-      const existTransaction = editTransactionIndex !== -1;
-
-      if (existTransaction) {
-        groupLatestTransactionsList.splice(editTransactionIndex, 1);
-        groupLatestTransactionsList.unshift(editedTransaction);
-      } else if (!existTransaction) {
-        groupLatestTransactionsList.pop();
-        groupLatestTransactionsList.unshift(editedTransaction);
-      }
-
-      dispatch(updateGroupLatestTransactionsAction(groupLatestTransactionsList));
-    } catch (error) {
-      if (error.response.status === 400) {
-        alert(error.response.data.error.message.join('\n'));
-        return;
-      }
-
-      if (error.response.status === 401) {
-        alert(error.response.data.error.message);
-        dispatch(push('/login'));
-        return;
-      }
-
-      if (error.response.status === 500) {
-        alert(error.response.data.error.message);
-        return;
-      }
-
-      if (error) {
-        alert(error);
-      }
-    }
-  };
-};
-
-export const deleteGroupTransactions = (id: number, groupId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    try {
-      const result = await axios.delete<deleteActionRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
-        {
-          withCredentials: true,
-        }
-      );
-      const message = result.data.message;
-
-      const groupTransactionsList: GroupTransactionsList = getState().groupTransactions
-        .groupTransactionsList;
-
-      const nextGroupTransactionsList = groupTransactionsList.filter(
-        (groupTransaction) => groupTransaction.id !== id
-      );
-
-      dispatch(updateGroupTransactionsAction(nextGroupTransactionsList));
-      alert(message);
-    } catch (error) {
-      errorHandling(dispatch, error);
-    }
-  };
-};
-
-export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
       await axios.delete<deleteActionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
@@ -390,16 +288,40 @@ export const deleteGroupLatestTransactions = (id: number, groupId: number) => {
           withCredentials: true,
         }
       );
-      const groupLatestTransactionsList: GroupTransactionsList = getState().groupTransactions
-        .groupLatestTransactionsList;
 
-      const nextGroupLatestTransactionsList = groupLatestTransactionsList.filter(
-        (groupLatestTransaction) => groupLatestTransaction.id !== id
+      const fetchGroupTransactionsResult = await axios.get<FetchGroupTransactionsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
       );
 
-      dispatch(updateGroupLatestTransactionsAction(nextGroupLatestTransactionsList));
+      const fetchGroupLatestTransactionsResult = await axios.get<GroupLatestTransactionsListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const deletedGroupTransactionsList = fetchGroupTransactionsResult.data.transactions_list;
+      const deletedGroupLatestTransactionsList =
+        fetchGroupLatestTransactionsResult.data.transactions_list;
+
+      dispatch(
+        deleteGroupTransactionsAction(
+          deletedGroupTransactionsList,
+          deletedGroupLatestTransactionsList
+        )
+      );
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedDeleteGroupTransactionsAction(
+          error.response.status,
+          error.response.error.data.error.message
+        )
+      );
     }
   };
 };
@@ -411,6 +333,7 @@ export const fetchGroupAccount = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchGroupAccountAction());
     try {
       const result = await axios.get<GroupAccountListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
@@ -423,15 +346,11 @@ export const fetchGroupAccount = (
       dispatch(fetchGroupAccountAction(groupAccountList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchGroupAccountAction());
       } else {
-        const groupTransactionsError = {
-          loading: false,
-          statusCode: error.response.status,
-          errorMessage: error.response.data.error.message,
-        };
-
-        dispatch(failedFetchDataAction(groupTransactionsError));
+        dispatch(
+          failedFetchGroupAccountAction(error.response.status, error.response.data.error.message)
+        );
       }
     }
   };
@@ -443,6 +362,8 @@ export const fetchGroupYearlyAccountList = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchGroupYearlyAccountList());
+
     try {
       const result = await axios.get<GroupYearlyAccountList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
@@ -456,19 +377,14 @@ export const fetchGroupYearlyAccountList = (
       dispatch(fetchGroupYearlyAccountListAction(groupYearlyAccountList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchGroupYearlyAccountList());
       } else {
-        const groupTransactionsError = {
-          loading: false,
-          statusCode: error.response.status,
-          errorMessage: error.response.data.error.message,
-        };
-
-        dispatch(failedFetchDataAction(groupTransactionsError));
-
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
-        }
+        dispatch(
+          failedFetchGroupYearlyAccountList(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
@@ -480,6 +396,8 @@ export const fetchGroupYearlyAccountListForModal = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchYearlyAccountListForModalAction());
+
     try {
       const result = await axios.get<GroupYearlyAccountList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
@@ -493,52 +411,61 @@ export const fetchGroupYearlyAccountListForModal = (
       dispatch(fetchYearlyAccountListForModalAction(groupYearlyAccountList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchYearlyAccountListForModalAction());
       } else {
-        const groupTransactionsError = {
-          loading: false,
-          statusCode: error.response.status,
-          errorMessage: error.response.data.error.message,
-        };
-
-        dispatch(failedFetchDataAction(groupTransactionsError));
-
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
-        }
+        dispatch(
+          failedFetchYearlyAccountListForModalAction(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
 };
 
-export const addGroupAccount = (groupId: number, year: string, customMonth: string) => {
+export const addGroupAccount = (
+  groupId: number,
+  year: string,
+  customMonth: string,
+  signal: CancelTokenSource
+) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startAddGroupAccountAction());
+
     try {
-      const result = await axios.post<GroupAccountList>(
+      await axios.post<GroupAccountList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
         null,
         {
           withCredentials: true,
         }
       );
-      const groupAccountList = result.data;
 
-      dispatch(addGroupAccountAction(groupAccountList));
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        return;
-      } else {
-        const groupTransactionsError = {
-          loading: false,
-          statusCode: error.response.status,
-          errorMessage: error.response.data.error.message,
-        };
-
-        dispatch(failedFetchDataAction(groupTransactionsError));
-        if (error.response.status === 401) {
-          dispatch(push('/login'));
+      const fetchAccountResult = await axios.get<GroupAccountListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
-      }
+      );
+
+      const fetchYearlyAccountResult = await axios.get<GroupYearlyAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const addedGroupAccountList = fetchAccountResult.data;
+      const addedGroupYearlyAccountList = fetchYearlyAccountResult.data;
+
+      dispatch(addGroupAccountAction(addedGroupYearlyAccountList, addedGroupAccountList));
+    } catch (error) {
+      dispatch(
+        failedAddGroupAccountAction(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
@@ -547,41 +474,47 @@ export const editGroupAccount = (
   groupAccount: GroupAccount,
   groupId: number,
   year: string,
-  customMonth: string
+  customMonth: string,
+  signal: CancelTokenSource
 ) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startEditGroupAccountAction());
+
     try {
-      const result = await axios.put<GroupAccount>(
+      await axios.put<GroupAccount>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account/${groupAccount.id}`,
         JSON.stringify(groupAccount),
         { withCredentials: true }
       );
-      const editedGroupAccount = result.data;
-      const prevGroupAccountList = getState().groupTransactions.groupAccountList;
 
-      prevGroupAccountList.group_accounts_list_by_payer = prevGroupAccountList.group_accounts_list_by_payer.map(
-        (accountByPayer) => {
-          accountByPayer.group_accounts_list = accountByPayer.group_accounts_list.map((account) => {
-            if (account.id === editedGroupAccount.id) {
-              return editedGroupAccount;
-            }
-
-            return account;
-          });
-
-          return accountByPayer;
+      const fetchAccountResult = await axios.get<GroupAccountListRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
       );
 
-      dispatch(editGroupAccountAction(prevGroupAccountList));
+      const editedAccountList = fetchAccountResult.data;
+
+      dispatch(editGroupAccountAction(editedAccountList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedEditGroupAccountAction(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
 
-export const deleteGroupAccount = (groupId: number, year: string, customMonth: string) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+export const deleteGroupAccount = (
+  groupId: number,
+  year: string,
+  customMonth: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startDeleteGroupAccountAction());
+
     try {
       const result = await axios.delete<deleteActionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
@@ -589,24 +522,32 @@ export const deleteGroupAccount = (groupId: number, year: string, customMonth: s
           withCredentials: true,
         }
       );
+
+      const fetchYearlyAccountResult = await axios.get<GroupYearlyAccountList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
       const deletedMessage = result.data.message;
-      const prevGroupAccountList = getState().groupTransactions.groupAccountList;
+      const deletedYearlyAccountList = fetchYearlyAccountResult.data;
+      const emptyGroupAccountList: GroupAccountList = {
+        group_id: 0,
+        month: '',
+        group_total_payment_amount: 0,
+        group_average_payment_amount: 0,
+        group_remaining_amount: 0,
+        group_accounts_list_by_payer: [],
+      };
 
-      if (prevGroupAccountList.group_id === groupId) {
-        const emptyGroupAccountList: GroupAccountList = {
-          group_id: 0,
-          month: '',
-          group_total_payment_amount: 0,
-          group_average_payment_amount: 0,
-          group_remaining_amount: 0,
-          group_accounts_list_by_payer: [],
-        };
-
-        dispatch(deleteGroupAccountAction(emptyGroupAccountList, deletedMessage));
-      } else {
-        return prevGroupAccountList;
-      }
+      dispatch(
+        deleteGroupAccountAction(emptyGroupAccountList, deletedYearlyAccountList, deletedMessage)
+      );
     } catch (error) {
+      dispatch(
+        failedDeleteGroupAccountAction(error.response.status, error.response.data.error.message)
+      );
       errorHandling(dispatch, error);
     }
   };
@@ -630,6 +571,7 @@ export const searchGroupTransactions = (
   }
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startSearchGroupTransactionsAction());
     try {
       const result = await axios.get<FetchGroupTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/search`,
@@ -666,7 +608,12 @@ export const searchGroupTransactions = (
         );
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedSearchGroupTransactionsAction(
+          error.response.status,
+          error.response.data.error.message
+        )
+      );
     }
   };
 };

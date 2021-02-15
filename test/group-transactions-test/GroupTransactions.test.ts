@@ -6,14 +6,11 @@ import configureStore from 'redux-mock-store';
 import { GroupTransactionsReq } from '../../src/reducks/groupTransactions/types';
 import { SelectYears } from '../../src/lib/date';
 import {
-  addGroupTransactions,
   fetchGroupTransactionsList,
+  fetchLatestGroupTransactionsList,
+  addGroupTransactions,
   editGroupTransactions,
   deleteGroupTransactions,
-  fetchLatestGroupTransactionsList,
-  addGroupLatestTransactions,
-  editGroupLatestTransactionsList,
-  deleteGroupLatestTransactions,
   fetchGroupAccount,
   fetchGroupYearlyAccountList,
   fetchGroupYearlyAccountListForModal,
@@ -39,6 +36,7 @@ import deleteAccountResponse from './deleteGroupAccountResponse.json';
 import searchGroupTransactionsRes from './fetchSearchGroupTransactionsResponse.json';
 import groupYearlyAccountListRes from './groupYearlyAccountList.json';
 import groupYearlyAccountListForModalRes from './groupYearlyAccountListForModal.json';
+import deleteGroupYearlyAccountListRes from './deletedYearlyAccountList.json';
 
 const axiosMock = new axiosMockAdapter(axios);
 const middlewares = [thunk];
@@ -67,8 +65,17 @@ describe('async actions groupTransactions', () => {
 
     const expectedAddActions = [
       {
-        type: actionTypes.UPDATE_GROUP_TRANSACTIONS,
-        payload: mockResponse.transactions_list,
+        type: actionTypes.START_FETCH_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: true,
+        },
+      },
+      {
+        type: actionTypes.FETCH_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: false,
+          groupTransactionsList: mockResponse.transactions_list,
+        },
       },
     ];
 
@@ -93,8 +100,17 @@ describe('async actions groupTransactions', () => {
 
     const expectedAddActions = [
       {
-        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
-        payload: mockResponse.transactions_list,
+        type: actionTypes.START_FETCH_GROUP_LATEST_TRANSACTIONS,
+        payload: {
+          groupLatestTransactionsListLoading: true,
+        },
+      },
+      {
+        type: actionTypes.FETCH_GROUP_LATEST_TRANSACTIONS,
+        payload: {
+          groupLatestTransactionsListLoading: false,
+          groupLatestTransactionsList: mockResponse.transactions_list,
+        },
       },
     ];
 
@@ -104,7 +120,7 @@ describe('async actions groupTransactions', () => {
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 
-  it('Add groupLatestTransactionsData in groupLatestTransactionsList if fetch succeeds', async () => {
+  it('Add groupTransaction in groupTransactionsList and groupLatestTransactionsList if fetch succeeds', async () => {
     beforeEach(() => {
       store.clearActions();
     });
@@ -114,7 +130,12 @@ describe('async actions groupTransactions', () => {
     });
 
     const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`;
+    const year = 2020;
+    const month = '11';
+    const signal = axios.CancelToken.source();
+    const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`;
+    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${month}`;
+    const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`;
 
     let now: Date;
     let spiedDate: Date;
@@ -136,17 +157,9 @@ describe('async actions groupTransactions', () => {
       spiedDate.mockRestore();
     });
 
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupLatestTransactionsList: groupLatestTransactions.transactions_list,
-        },
-      };
-    };
-
-    const mockResponse = addResponse;
-
-    const mockGroupTransactionsList = addedGroupLatestTransactions.transactions_list;
+    const addGroupTransactionResponse = addResponse;
+    const addedGroupTransactionsList = addedGroupTransactions.transactions_list;
+    const addedGroupLatestTransactionsList = addedGroupLatestTransactions.transactions_list;
 
     const requestData: GroupTransactionsReq = {
       transaction_type: 'expense',
@@ -162,62 +175,32 @@ describe('async actions groupTransactions', () => {
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
-        payload: mockGroupTransactionsList,
-      },
-    ];
-
-    axiosMock.onPost(url).reply(201, mockResponse);
-
-    await addGroupLatestTransactions(groupId, requestData)(
-      store.dispatch,
-      // @ts-ignore
-      getState
-    );
-    expect(store.getActions()).toEqual(expectedActions);
-  });
-
-  it('Add groupTransactionsData in groupTransactionsList if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-
-    const store = mockStore({ groupTransactions: { groupTransactionsList: groupTransactions } });
-
-    const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`;
-
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupTransactionsList: groupTransactions.transactions_list,
-          groupLatestTransactionsList: addedGroupLatestTransactions.transactions_list,
+        type: actionTypes.START_ADD_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: true,
+          groupLatestTransactionsListLoading: true,
         },
-      };
-    };
-
-    const mockResponse = addResponse;
-
-    const mockGroupTransactionsList = addedGroupTransactions.transactions_list;
-
-    const expectedActions = [
+      },
       {
-        type: actionTypes.UPDATE_GROUP_TRANSACTIONS,
-        payload: mockGroupTransactionsList,
+        type: actionTypes.ADD_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: false,
+          groupTransactionsList: addedGroupTransactionsList,
+          groupLatestTransactionsListLoading: false,
+          groupLatestTransactionsList: addedGroupLatestTransactionsList,
+        },
       },
     ];
 
-    axiosMock.onPost(url).reply(201, mockResponse);
+    axiosMock.onPost(addUrl).reply(201, addGroupTransactionResponse);
+    axiosMock.onGet(fetchUrl).reply(200, addedGroupTransactions);
+    axiosMock.onGet(fetchLatestUrl).reply(200, addedGroupLatestTransactions);
 
-    await addGroupTransactions('11')(
-      store.dispatch,
-      // @ts-ignore
-      getState
-    );
+    await addGroupTransactions(groupId, signal, year, month, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('Edit groupTransactionsData in groupTransactionsList if fetch succeeds', async () => {
+  it('Edit groupTransactions in groupTransactionsList and groupLatestTransactionsList if fetch succeeds', async () => {
     beforeEach(() => {
       store.clearActions();
     });
@@ -246,17 +229,14 @@ describe('async actions groupTransactions', () => {
       spiedDate.mockRestore();
     });
 
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupTransactionsList: addedGroupTransactions.transactions_list,
-        },
-      };
-    };
-
     const id = 101;
     const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
+    const year = 2020;
+    const month = '11';
+    const signal = axios.CancelToken.source();
+    const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
+    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${month}`;
+    const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`;
 
     const requestData: GroupTransactionsReq = {
       transaction_type: 'expense',
@@ -270,110 +250,38 @@ describe('async actions groupTransactions', () => {
       custom_category_id: null,
     };
 
-    const mockResponse = editResponse;
-
-    const mockGroupTransactionsList = editedGroupTransaction.transactions_list;
+    const editGroupTransactionResponse = editResponse;
+    const editedGroupTransactionsList = editedGroupTransaction.transactions_list;
+    const editedGroupLatestTransactionsList = editedGroupLatestTransactions.transactions_list;
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_TRANSACTIONS,
-        payload: mockGroupTransactionsList,
-      },
-    ];
-
-    axiosMock.onPut(url).reply(200, mockResponse);
-
-    await editGroupTransactions(
-      id,
-      groupId,
-      requestData
-    )(
-      store.dispatch,
-      // @ts-ignore
-      getState
-    );
-    expect(store.getActions()).toEqual(expectedActions);
-  });
-
-  it('Edit groupLatestTransactionsData in groupLatestTransactionsList if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-
-    const store = mockStore({
-      groupTransactions: { groupLatestTransactionsList: addedGroupLatestTransactions },
-    });
-
-    let now: Date;
-    let spiedDate: Date;
-    const originalDate = Date;
-    now = new originalDate('2020-11-12T23:54:59Z');
-    Date.now = jest.fn().mockReturnValue(now.valueOf());
-    const actual = new Date();
-
-    // @ts-ignore
-    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
-      if (arg === 0 || arg) {
-        return new originalDate();
-      }
-      return now;
-    });
-
-    afterAll(() => {
-      // @ts-ignore
-      spiedDate.mockRestore();
-    });
-
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupLatestTransactionsList: addedGroupLatestTransactions.transactions_list,
+        type: actionTypes.START_EDIT_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: true,
+          groupLatestTransactionsListLoading: true,
         },
-      };
-    };
-
-    const id = 101;
-    const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
-
-    const requestData: GroupTransactionsReq = {
-      transaction_type: 'expense',
-      transaction_date: actual,
-      shop: 'ニトリ',
-      memo: 'テーブル',
-      amount: 8000,
-      payment_user_id: 'taira',
-      big_category_id: 3,
-      medium_category_id: 16,
-      custom_category_id: null,
-    };
-
-    const mockResponse = editResponse;
-
-    const mockGroupTransactionsList = editedGroupLatestTransactions.transactions_list;
-
-    const expectedActions = [
+      },
       {
-        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
-        payload: mockGroupTransactionsList,
+        type: actionTypes.EDIT_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: false,
+          groupTransactionsList: editedGroupTransactionsList,
+          groupLatestTransactionsListLoading: false,
+          groupLatestTransactionsList: editedGroupLatestTransactionsList,
+        },
       },
     ];
 
-    axiosMock.onPut(url).reply(200, mockResponse);
+    axiosMock.onPut(editUrl).reply(200, editGroupTransactionResponse);
+    axiosMock.onGet(fetchUrl).reply(200, editedGroupTransaction);
+    axiosMock.onGet(fetchLatestUrl).reply(200, editedGroupLatestTransactions);
 
-    await editGroupLatestTransactionsList(
-      id,
-      groupId,
-      requestData
-    )(
-      store.dispatch,
-      // @ts-ignore
-      getState
-    );
+    await editGroupTransactions(id, groupId, signal, year, month, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('Delete groupTransactionsData in transactionsList if fetch succeeds', async () => {
+  it('Delete groupTransactions in groupTransactionsList and groupLatestTransactionsList if fetch succeeds', async () => {
     const store = mockStore({
       groupTransactions: { groupTransactionsList: editedGroupTransaction },
     });
@@ -381,73 +289,45 @@ describe('async actions groupTransactions', () => {
       store.clearActions();
     });
 
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupTransactionsList: editedGroupTransaction.transactions_list,
-        },
-      };
-    };
-
     const id = 101;
     const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
+    const year = 2020;
+    const month = '11';
+    const signal = axios.CancelToken.source();
+    const deleteUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
+    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${month}`;
+    const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`;
 
-    const mockResponse = deleteResponse.message;
+    const deleteGroupTransactionsResponse = deleteResponse.message;
 
-    const mockDeletedGroupTransactionsList = groupTransactions.transactions_list;
+    const deletedGroupTransactionsList = groupTransactions.transactions_list;
+    const deletedGroupLatestTransactionsList = deletedGroupLatestTransaction.transactions_list;
 
     const expectedActions = [
       {
-        type: actionTypes.UPDATE_GROUP_TRANSACTIONS,
-        payload: mockDeletedGroupTransactionsList,
-      },
-    ];
-
-    axiosMock.onDelete(url).reply(200, mockResponse);
-    window.alert = jest.fn(() => mockResponse);
-
-    // @ts-ignore
-    await deleteGroupTransactions(id, groupId)(store.dispatch, getState);
-    expect(store.getActions()).toEqual(expectedActions);
-    expect(window.alert).toHaveBeenCalled();
-  });
-
-  it('Delete groupLatestTransactionsData in groupLatestTransactionsList if fetch succeeds', async () => {
-    const store = mockStore({
-      groupTransactions: { groupLatestTransactionsList: editedGroupLatestTransactions },
-    });
-    beforeEach(() => {
-      store.clearActions();
-    });
-
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupLatestTransactionsList: editedGroupLatestTransactions.transactions_list,
+        type: actionTypes.START_DELETE_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: true,
+          groupLatestTransactionsListLoading: true,
         },
-      };
-    };
-
-    const id = 101;
-    const groupId = 1;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`;
-
-    const mockResponse = deleteResponse.message;
-
-    const mockDeletedGroupTransactionsList = deletedGroupLatestTransaction.transactions_list;
-
-    const expectedActions = [
+      },
       {
-        type: actionTypes.UPDATE_GROUP_LATEST_TRANSACTIONS,
-        payload: mockDeletedGroupTransactionsList,
+        type: actionTypes.DELETE_GROUP_TRANSACTIONS,
+        payload: {
+          groupTransactionsListLoading: false,
+          groupTransactionsList: deletedGroupTransactionsList,
+          groupLatestTransactionsListLoading: false,
+          groupLatestTransactionsList: deletedGroupLatestTransactionsList,
+        },
       },
     ];
 
-    axiosMock.onDelete(url).reply(200, mockResponse);
+    axiosMock.onDelete(deleteUrl).reply(200, deleteGroupTransactionsResponse);
+    axiosMock.onGet(fetchUrl).reply(200, groupTransactions);
+    axiosMock.onGet(fetchLatestUrl).reply(200, deletedGroupLatestTransaction);
 
     // @ts-ignore
-    await deleteGroupLatestTransactions(id, groupId)(store.dispatch, getState);
+    await deleteGroupTransactions(id, groupId, signal, year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -468,8 +348,17 @@ describe('async actions groupTransactions', () => {
 
     const expectedActions = [
       {
+        type: actionTypes.START_FETCH_GROUP_ACCOUNT,
+        payload: {
+          groupAccountListLoading: true,
+        },
+      },
+      {
         type: actionTypes.FETCH_GROUP_ACCOUNT,
-        payload: mockResponse,
+        payload: {
+          groupAccountListLoading: false,
+          groupAccountList: mockResponse,
+        },
       },
     ];
 
@@ -488,32 +377,42 @@ describe('async actions groupTransactions', () => {
       store.clearActions();
     });
 
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupAccountList: groupAccountList,
-        },
-      };
-    };
-
     const groupId = 1;
     const year = '2020';
     const customMonth = '11';
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+    const signal = axios.CancelToken.source();
+    const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+    const fetchAccountUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+    const fetchYearlyUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`;
 
-    const mockResponse = groupAccountList;
+    const addedAccountList = groupAccountList;
+    const addedAccountYearlyList = groupYearlyAccountListRes;
 
     const expectedActions = [
       {
+        type: actionTypes.START_ADD_GROUP_ACCOUNT,
+        payload: {
+          groupAccountListLoading: true,
+          groupYearlyAccountListLoading: true,
+        },
+      },
+      {
         type: actionTypes.ADD_GROUP_ACCOUNT,
-        payload: mockResponse,
+        payload: {
+          groupAccountListLoading: false,
+          groupAccountList: addedAccountList,
+          groupYearlyAccountListLoading: false,
+          groupYearlyAccountList: addedAccountYearlyList,
+        },
       },
     ];
 
-    axiosMock.onPost(url).reply(201, mockResponse);
+    axiosMock.onPost(addUrl).reply(201, addedAccountList);
+    axiosMock.onGet(fetchAccountUrl).reply(200, groupAccountList);
+    axiosMock.onGet(fetchYearlyUrl).reply(200, groupYearlyAccountListRes);
 
     // @ts-ignore
-    await addGroupAccount(groupId, year, customMonth)(store.dispatch, getState);
+    await addGroupAccount(groupId, year, customMonth, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -526,19 +425,13 @@ describe('async actions groupTransactions', () => {
       store.clearActions();
     });
 
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupAccountList: groupAccountList,
-        },
-      };
-    };
-
     const groupId = 1;
     const year = '2020';
     const customMonth = '11';
     const editAccountId = 14;
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account/${editAccountId}`;
+    const signal = axios.CancelToken.source();
+    const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account/${editAccountId}`;
+    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
 
     const requestData = {
       id: 14,
@@ -551,67 +444,89 @@ describe('async actions groupTransactions', () => {
       receipt_confirmation: false,
     };
 
-    const mockResponse = editGroupAccountResponse;
-
     const expectedActions = [
       {
+        type: actionTypes.START_EDIT_GROUP_ACCOUNT,
+        payload: {
+          groupAccountListLoading: true,
+        },
+      },
+      {
         type: actionTypes.EDIT_GROUP_ACCOUNT,
-        payload: editGroupAccountList,
+        payload: {
+          groupAccountListLoading: false,
+          groupAccountList: editGroupAccountList,
+        },
       },
     ];
 
-    axiosMock.onPut(url).reply(200, mockResponse);
+    axiosMock.onPut(editUrl).reply(200, editGroupAccountResponse);
+    axiosMock.onGet(fetchUrl).reply(200, editGroupAccountList);
 
     // @ts-ignore
-    await editGroupAccount(requestData, groupId, year, customMonth)(store.dispatch, getState);
+    await editGroupAccount(requestData, groupId, year, customMonth, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
   it('Delete groupAccountList  if fetch succeeds', async () => {
     const store = mockStore({
-      groupTransactions: { groupAccountList: editGroupAccountList },
+      groupTransactions: {
+        groupAccountList: editGroupAccountList,
+        groupYearlyAccountList: groupYearlyAccountListRes,
+      },
     });
 
     beforeEach(() => {
       store.clearActions();
     });
 
-    const getState = () => {
-      return {
-        groupTransactions: {
-          groupAccountList: editGroupAccountList,
-        },
-      };
-    };
-
     const groupId = 1;
     const year = '2020';
     const customMonth = '11';
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+    const signal = axios.CancelToken.source();
+    const deleteUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+    const fetchAccountUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`;
+    const fetchYearlyUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`;
 
-    const mockResponse = deleteAccountResponse;
+    const deletedAccountListMessage = deleteAccountResponse;
+    const deletedYearlyAccountList = deleteGroupYearlyAccountListRes;
+    const deletedAccountList = {
+      groupAccountList: {
+        group_id: 0,
+        month: '',
+        group_total_payment_amount: 0,
+        group_average_payment_amount: 0,
+        group_remaining_amount: 0,
+        group_accounts_list_by_payer: [],
+      },
+    };
 
     const expectActions = [
       {
+        type: actionTypes.START_DELETE_GROUP_ACCOUNT,
+        payload: {
+          groupAccountListLoading: true,
+          groupYearlyAccountListLoading: true,
+        },
+      },
+      {
         type: actionTypes.DELETE_GROUP_ACCOUNT,
         payload: {
-          groupAccountList: {
-            group_id: 0,
-            month: '',
-            group_total_payment_amount: 0,
-            group_average_payment_amount: 0,
-            group_remaining_amount: 0,
-            group_accounts_list_by_payer: [],
-          },
-          deletedMessage: mockResponse.message,
+          deletedMessage: deletedAccountListMessage.message,
+          groupAccountListLoading: false,
+          groupAccountList: deletedAccountList.groupAccountList,
+          groupYearlyAccountListLoading: false,
+          groupYearlyAccountList: deletedYearlyAccountList,
         },
       },
     ];
 
-    axiosMock.onDelete(url).reply(200, mockResponse);
+    axiosMock.onDelete(deleteUrl).reply(200, deletedAccountListMessage);
+    axiosMock.onGet(fetchAccountUrl).reply(200, deletedAccountList.groupAccountList);
+    axiosMock.onGet(fetchYearlyUrl).reply(200, deleteGroupYearlyAccountListRes);
 
     // @ts-ignore
-    await deleteGroupAccount(groupId, year, customMonth)(store.dispatch, getState);
+    await deleteGroupAccount(groupId, year, customMonth, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectActions);
   });
 
@@ -636,8 +551,15 @@ describe('async actions groupTransactions', () => {
 
     const expectActions = [
       {
+        type: actionTypes.START_SEARCH_GROUP_TRANSACTIONS,
+        payload: {
+          groupSearchTransactionsListLoading: true,
+        },
+      },
+      {
         type: actionTypes.SEARCH_GROUP_TRANSACTIONS,
         payload: {
+          groupSearchTransactionsListLoading: false,
           groupSearchTransactionsList: mockResponse.transactions_list,
           notHistoryMessage: '',
         },
@@ -666,9 +588,15 @@ describe('async actions groupTransactions', () => {
 
     const expectActions = [
       {
+        type: actionTypes.START_FETCH_GROUP_YEARLY_ACCOUNT,
+        payload: {
+          groupYearlyAccountListLoading: true,
+        },
+      },
+      {
         type: actionTypes.FETCH_GROUP_YEARLY_ACCOUNT,
         payload: {
-          loading: false,
+          groupYearlyAccountListLoading: false,
           groupYearlyAccountList: mockResponse,
         },
       },
@@ -696,9 +624,15 @@ describe('async actions groupTransactions', () => {
 
     const expectActions = [
       {
+        type: actionTypes.START_FETCH_YEARLY_ACCOUNT_MODAL,
+        payload: {
+          groupYearlyAccountListForModalLoading: true,
+        },
+      },
+      {
         type: actionTypes.FETCH_YEARLY_ACCOUNT_MODAL,
         payload: {
-          loading: false,
+          groupYearlyAccountListForModalLoading: false,
           groupYearlyAccountListForModal: mockResponse,
         },
       },
