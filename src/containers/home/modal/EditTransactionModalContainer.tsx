@@ -2,12 +2,9 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import {
-  deleteGroupLatestTransactions,
   deleteGroupTransactions,
-  editGroupLatestTransactionsList,
   editGroupTransactions,
   fetchGroupYearlyAccountListForModal,
-  fetchLatestGroupTransactionsList,
 } from '../../../reducks/groupTransactions/operations';
 import { deleteTransactions, editTransactions } from '../../../reducks/transactions/operations';
 import { getApprovedGroups } from '../../../reducks/groups/selectors';
@@ -50,6 +47,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const transactionId = props.id;
   const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
+  const groupCurrentPage = useLocation().pathname.split('/')[2];
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
@@ -334,18 +332,46 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
 
   const groupDeleteTransaction = (): void => {
     const signal = axios.CancelToken.source();
-    async function groupTransaction() {
-      dispatch(deleteGroupLatestTransactions(transactionId, Number(group_id)));
-      dispatch(fetchLatestGroupTransactionsList(Number(group_id), signal));
-      dispatch(deleteGroupTransactions(transactionId, Number(group_id)));
-    }
-    groupTransaction();
+
+    groupCurrentPage === 'home'
+      ? dispatch(
+          deleteGroupTransactions(transactionId, Number(group_id), signal, year, customMonth)
+        )
+      : dispatch(
+          deleteGroupTransactions(
+            transactionId,
+            Number(group_id),
+            signal,
+            editTransactionDate.editTransactionYear,
+            transactionsMonth
+          )
+        );
   };
+
   const groupEditTransaction = (): void => {
-    dispatch(editGroupTransactions(transactionId, Number(group_id), groupEditRequestData));
-    dispatch(
-      editGroupLatestTransactionsList(transactionId, Number(group_id), groupEditRequestData)
-    );
+    const signal = axios.CancelToken.source();
+
+    groupCurrentPage === 'home'
+      ? dispatch(
+          editGroupTransactions(
+            Number(group_id),
+            transactionId,
+            signal,
+            year,
+            customMonth,
+            groupEditRequestData
+          )
+        )
+      : dispatch(
+          editGroupTransactions(
+            transactionId,
+            Number(group_id),
+            signal,
+            editTransactionDate.editTransactionYear,
+            transactionsMonth,
+            groupEditRequestData
+          )
+        );
     props.onClose();
   };
 

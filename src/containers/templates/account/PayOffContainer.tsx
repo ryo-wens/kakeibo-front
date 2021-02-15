@@ -108,12 +108,18 @@ const PayOffContainer = (props: PayOffContainerProps) => {
       backPageOperation={() =>
         history.replace(`/group/${group_id}/accounting?year=${props.selectedYear}`)
       }
-      addAccountOperation={() =>
-        dispatch(addGroupAccount(Number(group_id), String(props.selectedYear), String(subMonth)))
-      }
-      deleteAccountOperation={() =>
-        dispatch(deleteGroupAccount(Number(group_id), String(props.selectedYear), String(subMonth)))
-      }
+      addAccountOperation={() => {
+        const signal = axios.CancelToken.source();
+        dispatch(
+          addGroupAccount(Number(group_id), String(props.selectedYear), String(subMonth), signal)
+        );
+      }}
+      deleteAccountOperation={() => {
+        const signal = axios.CancelToken.source();
+        dispatch(
+          deleteGroupAccount(Number(group_id), String(props.selectedYear), String(subMonth), signal)
+        );
+      }}
     />
   );
 };

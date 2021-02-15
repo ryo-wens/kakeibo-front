@@ -12,7 +12,6 @@ import {
 import { getYearlyAccountListStatusModals } from '../../../reducks/groupTransactions/selectors';
 import { addTransactions } from '../../../reducks/transactions/operations';
 import {
-  addGroupLatestTransactions,
   addGroupTransactions,
   fetchGroupYearlyAccountListForModal,
 } from '../../../reducks/groupTransactions/operations';
@@ -42,6 +41,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const dispatch = useDispatch();
   const { group_id } = useParams();
   const pathName = useLocation().pathname.split('/')[1];
+  const groupCurrentPage = useLocation().pathname.split('/')[2];
   const userId = useSelector(getUserId);
   const approvedGroup = useSelector(getApprovedGroups);
   const incomeCategories = useSelector(getIncomeCategories);
@@ -276,6 +276,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       addTransactionDate.addTransactionMonth <= september
         ? '0' + addTransactionDate.addTransactionMonth
         : String(addTransactionDate.addTransactionMonth);
+
     const personalAddTransaction = () => {
       pathName === 'home'
         ? dispatch(addTransactions(personalAddRequestData, year, customMonth, signal))
@@ -292,13 +293,20 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     };
 
     const groupAddTransaction = () => {
-      async function groupTransaction() {
-        await dispatch(addGroupLatestTransactions(Number(group_id), groupAddRequestData));
-        dispatch(addGroupTransactions(customMonth));
-        props.onClose();
-        resetForm();
-      }
-      groupTransaction();
+      groupCurrentPage === 'home'
+        ? dispatch(addGroupTransactions(group_id, signal, year, customMonth, groupAddRequestData))
+        : dispatch(
+            addGroupTransactions(
+              group_id,
+              signal,
+              addTransactionDate.addTransactionYear,
+              transactionsMonth,
+              groupAddRequestData
+            )
+          );
+
+      props.onClose();
+      resetForm();
     };
 
     return pathName !== 'group' ? personalAddTransaction() : groupAddTransaction();
