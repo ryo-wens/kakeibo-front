@@ -1,11 +1,10 @@
 import React from 'react';
 import './today-schedule-todo-list-area.scss';
-import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
 import { TodoListItem } from '../../../../reducks/todoList/types';
 import TodoListItemComponentContainer from '../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
 
 interface TodayScheduleTodoListAreaProps {
-  todoList: (TodoListItem | GroupTodoListItem)[];
+  todoList: TodoListItem[];
   currentYearMonth: string;
   message: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;

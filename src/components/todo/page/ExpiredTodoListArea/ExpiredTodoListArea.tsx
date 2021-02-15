@@ -4,14 +4,13 @@ import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import TodoListItemComponentContainer from '../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
 import { TodoListItem } from '../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
 
 interface ExpiredTodoListAreaProps {
-  expiredTodoList: (TodoListItem | GroupTodoListItem)[];
-  slicedExpiredTodoList: (TodoListItem | GroupTodoListItem)[];
+  expiredTodoList: TodoListItem[];
+  slicedExpiredTodoList: TodoListItem[];
   currentYearMonth: string;
-  equalsDisplayDate: (listItem: TodoListItem | GroupTodoListItem) => boolean;
-  displayDate: (listItem: TodoListItem | GroupTodoListItem) => string;
+  equalsDisplayDate: (listItem: TodoListItem) => boolean;
+  displayDate: (listItem: TodoListItem) => string;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   initialDisplayNumberTodoList: number;

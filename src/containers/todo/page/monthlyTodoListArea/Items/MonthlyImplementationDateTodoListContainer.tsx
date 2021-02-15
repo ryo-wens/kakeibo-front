@@ -2,9 +2,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import TodoListComponent from '../../../../../components/todo/modules/list/TodoListComponent/TodoListComponent';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import { getMonthImplementationTodoList } from '../../../../../reducks/todoList/selectors';
-import { getGroupMonthImplementationTodoList } from '../../../../../reducks/groupTodoList/selectors';
+import { getGroupMonthlyImplementationTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
 
 interface MonthlyImplementationDateTodoListContainerProps {
@@ -19,13 +18,13 @@ const MonthlyImplementationDateTodoListContainer = (
   const pathName = useLocation().pathname.split('/')[1];
 
   const monthlyImplementationTodoList = useSelector(getMonthImplementationTodoList);
-  const groupMonthlyImplementationTodoList = useSelector(getGroupMonthImplementationTodoList);
+  const groupMonthlyImplementationTodoList = useSelector(getGroupMonthlyImplementationTodoList);
 
   const prevData = {
     implementationDate: '',
   };
 
-  const equalsDisplayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const equalsDisplayDate = (listItem: TodoListItem) => {
     if (prevData.implementationDate !== listItem.implementation_date) {
       prevData.implementationDate = listItem.implementation_date;
       return true;
@@ -33,7 +32,7 @@ const MonthlyImplementationDateTodoListContainer = (
     return false;
   };
 
-  const displayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const displayDate = (listItem: TodoListItem) => {
     return listItem.implementation_date;
   };
 

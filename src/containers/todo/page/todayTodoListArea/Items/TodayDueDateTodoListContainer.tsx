@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import TodoListComponent from '../../../../../components/todo/modules/list/TodoListComponent/TodoListComponent';
 import { getTodayDueTodoList } from '../../../../../reducks/todoList/selectors';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import { getGroupTodayDueTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
 
@@ -21,7 +20,7 @@ const TodayDueDateTodoListContainer = (props: TodayDueDateTodoListContainerProps
     dueDate: '',
   };
 
-  const equalsDisplayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const equalsDisplayDate = (listItem: TodoListItem) => {
     if (prevData.dueDate !== listItem.due_date) {
       prevData.dueDate = listItem.due_date;
       return true;
@@ -29,7 +28,7 @@ const TodayDueDateTodoListContainer = (props: TodayDueDateTodoListContainerProps
     return false;
   };
 
-  const displayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const displayDate = (listItem: TodoListItem) => {
     return listItem.due_date;
   };
 

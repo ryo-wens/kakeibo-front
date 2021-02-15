@@ -1,6 +1,5 @@
 import React from 'react';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import EditIcon from '@material-ui/icons/Edit';
 import './todo-list-item-component.scss';
 import TodoListItemFormContainer from '../../../../../containers/todo/modules/form/TodoListItemFormContainer';
@@ -15,7 +14,7 @@ interface TodoListItemComponentProps {
   inputDueDate: (date: Date | null) => void;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  listItem: TodoListItem | GroupTodoListItem;
+  listItem: TodoListItem;
   handleOpenEditTodoForm: () => void;
   handleCloseEditTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;

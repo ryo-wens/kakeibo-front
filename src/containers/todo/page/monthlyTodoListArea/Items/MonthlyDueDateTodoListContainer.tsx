@@ -2,9 +2,8 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import TodoListComponent from '../../../../../components/todo/modules/list/TodoListComponent/TodoListComponent';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import { getMonthDueTodoList } from '../../../../../reducks/todoList/selectors';
-import { getGroupMonthDueTodoList } from '../../../../../reducks/groupTodoList/selectors';
+import { getGroupMonthlyDueTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
 
 interface MonthlyDueDateTodoListContainerProps {
@@ -17,13 +16,13 @@ const MonthlyDueDateTodoListContainer = (props: MonthlyDueDateTodoListContainerP
   const pathName = useLocation().pathname.split('/')[1];
 
   const monthlyDueTodoList = useSelector(getMonthDueTodoList);
-  const groupMonthlyDueTodoList = useSelector(getGroupMonthDueTodoList);
+  const groupMonthlyDueTodoList = useSelector(getGroupMonthlyDueTodoList);
 
   const prevData = {
     dueDate: '',
   };
 
-  const equalsDisplayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const equalsDisplayDate = (listItem: TodoListItem) => {
     if (prevData.dueDate !== listItem.due_date) {
       prevData.dueDate = listItem.due_date;
       return true;
@@ -31,7 +30,7 @@ const MonthlyDueDateTodoListContainer = (props: MonthlyDueDateTodoListContainerP
     return false;
   };
 
-  const displayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const displayDate = (listItem: TodoListItem) => {
     return listItem.due_date;
   };
 

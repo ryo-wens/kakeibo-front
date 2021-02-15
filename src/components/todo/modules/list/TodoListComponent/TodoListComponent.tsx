@@ -1,15 +1,14 @@
 import React from 'react';
 import './todo-list-component.scss';
-import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
 import TodoListItemComponentContainer from '../../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
 
 interface TodoListComponentProps {
-  todoList: (TodoListItem | GroupTodoListItem)[];
+  todoList: TodoListItem[];
   currentYearMonth: string;
   message: string;
-  equalsDisplayDate: (listItem: TodoListItem | GroupTodoListItem) => boolean;
-  displayDate: (listItem: TodoListItem | GroupTodoListItem) => string;
+  equalsDisplayDate: (listItem: TodoListItem) => boolean;
+  displayDate: (listItem: TodoListItem) => string;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
 }
 

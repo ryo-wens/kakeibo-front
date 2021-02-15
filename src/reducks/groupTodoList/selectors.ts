@@ -1,44 +1,80 @@
 import { State } from '../store/types';
 import { createSelector } from 'reselect';
+import { GroupTodoList } from './types';
+import { TodoList } from '../todoList/types';
 
-const groupTodoListSelector = (state: State) => state.groupTodoList;
+const generateGroupTodoList = (groupTodoList: GroupTodoList) => {
+  return groupTodoList.map((listItem) => {
+    const { user_id, ...rest } = listItem; //eslint-disable-line
+
+    return rest;
+  });
+};
+
+const groupExpiredTodoListSelector = (state: State) => state.groupTodoList.groupExpiredTodoList;
 
 export const getGroupExpiredTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupExpiredTodoList
+  [groupExpiredTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateGroupTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );
+
+const groupTodayImplementationTodoListSelector = (state: State) =>
+  state.groupTodoList.groupTodayImplementationTodoList;
 
 export const getGroupTodayImplementationTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupTodayImplementationTodoList
-);
-export const getGroupTodayDueTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupTodayDueTodoList
-);
-export const getGroupTodayTodoListMessage = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupTodayTodoListMessage
+  [groupTodayImplementationTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateGroupTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );
 
-export const getGroupMonthImplementationTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupMonthImplementationTodoList
+const groupTodayDueTodoListSelector = (state: State) => state.groupTodoList.groupTodayDueTodoList;
+
+export const getGroupTodayDueTodoList = createSelector(
+  [groupTodayDueTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateGroupTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );
-export const getGroupMonthDueTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupMonthDueTodoList
+
+const groupMonthlyImplementationTodoListSelector = (state: State) =>
+  state.groupTodoList.groupMonthImplementationTodoList;
+
+export const getGroupMonthlyImplementationTodoList = createSelector(
+  [groupMonthlyImplementationTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateGroupTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );
-export const getGroupMonthTodoListMessage = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupMonthTodoListMessage
+
+const groupMonthlyDueTodoListSelector = (state: State) => state.groupTodoList.groupMonthDueTodoList;
+
+export const getGroupMonthlyDueTodoList = createSelector(
+  [groupMonthlyDueTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateGroupTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );
+
+const groupSearchTodoListSelector = (state: State) => state.groupTodoList.groupSearchTodoList;
 
 export const getGroupSearchTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupSearchTodoList
-);
-export const getGroupSearchTodoListMessage = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupSearchTodoListMessage
+  [groupSearchTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateGroupTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );

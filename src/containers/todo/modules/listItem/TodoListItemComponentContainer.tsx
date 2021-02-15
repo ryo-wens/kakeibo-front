@@ -2,7 +2,6 @@ import React, { useEffect, useRef, useState } from 'react';
 import { TodoListItem } from '../../../../reducks/todoList/types';
 import { useDispatch } from 'react-redux';
 import { deleteTodoListItem, editTodoListItem } from '../../../../reducks/todoList/operations';
-import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
 import {
   deleteGroupTodoListItem,
   editGroupTodoListItem,
@@ -12,7 +11,7 @@ import { date } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
 interface TodoListItemComponentContainerProps {
-  listItem: TodoListItem | GroupTodoListItem;
+  listItem: TodoListItem;
   currentYearMonth: string;
   inputTodoClassName: string;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;

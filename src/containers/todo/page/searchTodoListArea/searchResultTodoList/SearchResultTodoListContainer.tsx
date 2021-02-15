@@ -1,7 +1,6 @@
 import React from 'react';
 import { customMonth, year } from '../../../../../lib/constant';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import { useSelector } from 'react-redux';
 import { getGroupSearchTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { getSearchTodoList } from '../../../../../reducks/todoList/selectors';
@@ -23,7 +22,7 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
     date: '',
   };
 
-  const equalsDisplayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const equalsDisplayDate = (listItem: TodoListItem) => {
     const displayDate =
       props.currentDateType === 'implementation_date'
         ? listItem.implementation_date
@@ -36,7 +35,7 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
     return false;
   };
 
-  const displayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const displayDate = (listItem: TodoListItem) => {
     return props.currentDateType === 'implementation_date'
       ? listItem.implementation_date
       : listItem.due_date;

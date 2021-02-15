@@ -3,7 +3,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import ExpiredTodoListArea from '../../../../components/todo/page/ExpiredTodoListArea/ExpiredTodoListArea';
 import { TodoListItem } from '../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
 import { getExpiredTodoList } from '../../../../reducks/todoList/selectors';
 import { getGroupExpiredTodoList } from '../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
@@ -36,7 +35,7 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
     dueDate: '',
   };
 
-  const equalsDisplayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const equalsDisplayDate = (listItem: TodoListItem) => {
     if (prevData.dueDate !== listItem.due_date) {
       prevData.dueDate = listItem.due_date;
       return true;
@@ -44,12 +43,12 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
     return false;
   };
 
-  const displayDate = (listItem: TodoListItem | GroupTodoListItem) => {
+  const displayDate = (listItem: TodoListItem) => {
     return listItem.due_date;
   };
 
   const sliceTodoList = (
-    shoppingList: (TodoListItem | GroupTodoListItem)[],
+    shoppingList: TodoListItem[],
     currentReadMore: boolean,
     initialDisplayNumber: number
   ) => {

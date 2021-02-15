@@ -1,14 +1,13 @@
 import React from 'react';
 import './search-result-todo-list.scss';
 import { TodoList, TodoListItem } from '../../../../../reducks/todoList/types';
-import { GroupTodoList, GroupTodoListItem } from '../../../../../reducks/groupTodoList/types';
 import TodoListComponent from '../../../modules/list/TodoListComponent/TodoListComponent';
 
 interface SearchResultTodoListProps {
-  searchTodoList: TodoList | GroupTodoList;
+  searchTodoList: TodoList;
   currentYearMonth: string;
-  equalsDisplayDate: (listItem: TodoListItem | GroupTodoListItem) => boolean;
-  displayDate: (listItem: TodoListItem | GroupTodoListItem) => string;
+  equalsDisplayDate: (listItem: TodoListItem) => boolean;
+  displayDate: (listItem: TodoListItem) => string;
 }
 
 const SearchResultTodoList = (props: SearchResultTodoListProps) => {
