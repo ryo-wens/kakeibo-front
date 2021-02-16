@@ -31,10 +31,12 @@ const GroupStandardBudgetsContainer = () => {
   useEffect(() => {
     if (!editing) {
       const signal = axios.CancelToken.source();
+
       fetchGroupStandardBudgetsData(signal);
       const interval = setInterval(() => {
         fetchGroupStandardBudgetsData(signal);
       }, 3000);
+
       return () => {
         signal.cancel();
         clearInterval(interval);
@@ -53,10 +55,12 @@ const GroupStandardBudgetsContainer = () => {
       groupStandardBudgets={groupStandardBudgets}
       setGroupStandardBudgets={setGroupStandardBudgets}
       groupTotalStandardBudget={groupTotalStandardBudget}
-      editGroupStandardBudgetOperation={() =>
+      editGroupStandardBudgetOperation={() => {
+        const signal = axios.CancelToken.source();
         dispatch(
           editGroupStandardBudgets(
             Number(group_id),
+            signal,
             groupStandardBudgets.map((groupBudget) => {
               const { big_category_name, last_month_expenses, ...rest } = groupBudget; // eslint-disable-line
               return {
@@ -65,8 +69,8 @@ const GroupStandardBudgetsContainer = () => {
               };
             })
           )
-        )
-      }
+        );
+      }}
     />
   );
 };

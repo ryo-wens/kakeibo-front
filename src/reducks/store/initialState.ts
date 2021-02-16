@@ -112,11 +112,26 @@ const initialState = {
   },
   groupBudgets: {
     groupStandardBudgetsList: [],
+    groupStandardBudgetsLoading: false,
+    groupStandardBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     groupCustomBudgetsList: [],
+    groupCustomBudgetsLoading: false,
+    groupCustomBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     groupYearlyBudgetsList: {
       year: '',
       yearly_total_budget: 0,
       monthly_budgets: [],
+    },
+    groupYearlyBudgetsLoading: false,
+    groupYearlyBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
     },
   },
   groupTasks: {

@@ -46,10 +46,12 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
   useEffect(() => {
     if (!editing) {
       const signal = axios.CancelToken.source();
+
       fetchEditGroupStandardBudgetsData(signal);
       const interval = setInterval(() => {
         fetchEditGroupStandardBudgetsData(signal);
       }, 3000);
+
       return () => {
         signal.cancel();
         clearInterval(interval);
@@ -77,11 +79,13 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
       }
       addGroupCustomBudgetOperation={() => {
         if (queryMonth != null) {
+          const signal = axios.CancelToken.source();
           dispatch(
             addGroupCustomBudgets(
               String(props.budgetsYear),
               queryMonth,
               Number(group_id),
+              signal,
               groupCustomBudgets.map((groupCustomBudget) => {
                 const { big_category_name, last_month_expenses, ...rest } = groupCustomBudget; // eslint-disable-line
                 return {
