@@ -71,10 +71,12 @@ const AddCustomBudgetsContainer = (props: AddCustomBudgetsContainerProps) => {
       }
       addCustomBudgetOperation={() => {
         if (queryMonth != null) {
+          const signal = axios.CancelToken.source();
           dispatch(
             addCustomBudgets(
               String(props.budgetsYear),
               queryMonth,
+              signal,
               customBudgets.map((budget) => {
                 const { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
                 return {

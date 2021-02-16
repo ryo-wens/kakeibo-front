@@ -35,7 +35,8 @@ const StandardBudgetsContainer = () => {
       pathName={pathName}
       unEditBudgets={unEditBudgets}
       totalStandardBudget={totalStandardBudget}
-      editStandardBudgetOperation={() =>
+      editStandardBudgetOperation={() => {
+        const signal = axios.CancelToken.source();
         dispatch(
           editStandardBudgets(
             budgets.map((budget) => {
@@ -44,10 +45,11 @@ const StandardBudgetsContainer = () => {
                 big_category_id: rest.big_category_id,
                 budget: Number(rest.budget),
               };
-            })
+            }),
+            signal
           )
-        )
-      }
+        );
+      }}
     />
   );
 };

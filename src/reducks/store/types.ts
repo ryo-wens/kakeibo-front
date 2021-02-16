@@ -97,8 +97,23 @@ export interface State {
   };
   budgets: {
     standard_budgets_list: StandardBudgetsList;
+    standardBudgetsLoading: boolean;
+    standardBudgetsError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     yearly_budgets_list: YearlyBudgetsList;
+    yearlyBudgetsLoading: boolean;
+    yearlyBudgetsError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     custom_budgets_list: CustomBudgetsList;
+    customBudgetsLoading: boolean;
+    customBudgetsError: {
+      statusCode: number;
+      errorMessage: string;
+    };
   };
   groupBudgets: {
     groupStandardBudgetsList: GroupStandardBudgetsList;

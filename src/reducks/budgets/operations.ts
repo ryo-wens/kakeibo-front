@@ -1,33 +1,48 @@
 import {
+  startFetchStandardBudgetsAction,
+  fetchStandardBudgetsActions,
+  cancelFetchStandardBudgetsAction,
+  failedFetchStandardBudgetsAction,
+  startEditStandardBudgetsAction,
+  editStandardBudgetsActions,
+  failedEditStandardBudgetsAction,
+  startFetchCustomBudgetsActions,
+  fetchCustomBudgetsActions,
+  cancelFetchCustomBudgetsActions,
+  failedFetchCustomBudgetsActions,
+  startAddCustomBudgetsActions,
+  addCustomBudgetsActions,
+  failedAddCustomBudgetsActions,
+  startEditCustomBudgetsActions,
+  editCustomBudgetsActions,
+  failedEditCustomBudgetsActions,
+  startDeleteCustomBudgetsActions,
+  deleteCustomBudgetsActions,
+  failedDeleteCustomBudgetsActions,
   copyStandardBudgetsActions,
-  updateCustomBudgetsActions,
-  updateStandardBudgetsActions,
-  updateYearlyBudgetsActions,
+  startFetchYearlyBudgetsActions,
+  fetchYearlyBudgetsActions,
+  cancelFetchYearlyBudgetsActions,
+  failedFetchYearlyBudgetsActions,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
 import { State } from '../store/types';
-import { standardBudgetType, customBudgetType } from '../../lib/constant';
-import {
-  errorHandling,
-  isValidBudgetFormat,
-  totalStandardBudget,
-  totalCustomBudgets,
-} from '../../lib/validation';
+import { isValidBudgetFormat } from '../../lib/validation';
 import {
   BudgetsReq,
-  CustomBudgetsList,
   CustomBudgetsRes,
   DeleteCustomBudgetsRes,
   fetchCustomBudgetsRes,
   fetchStandardBudgetsRes,
-  StandardBudgetsList,
   StandardBudgetsListRes,
   YearlyBudgetsList,
 } from './types';
 
 export const fetchStandardBudgets = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startFetchStandardBudgetsAction());
+
     try {
       const result = await axios.get<fetchStandardBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
@@ -38,58 +53,62 @@ export const fetchStandardBudgets = (signal: CancelTokenSource) => {
       );
       const standardBudgetsList = result.data.standard_budgets;
 
-      dispatch(updateStandardBudgetsActions(standardBudgetsList));
+      dispatch(fetchStandardBudgetsActions(standardBudgetsList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchStandardBudgetsAction());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchStandardBudgetsAction(error.response.status, error.response.data.error.message)
+        );
       }
     }
   };
 };
 
-export const editStandardBudgets = (budgets: BudgetsReq) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+export const editStandardBudgets = (budgets: BudgetsReq, signal: CancelTokenSource) => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
     const validBudgets = budgets.every((budget) => isValidBudgetFormat(budget.budget));
     if (!validBudgets) {
       alert('予算は0以上の整数で入力してください。');
       return;
     }
 
+    dispatch(startEditStandardBudgetsAction());
     const data = { standard_budgets: budgets };
+
     try {
-      const result = await axios.put<StandardBudgetsListRes>(
+      await axios.put<StandardBudgetsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
         JSON.stringify(data),
         {
           withCredentials: true,
         }
       );
-      const editStandardBudgetsList: StandardBudgetsList = result.data.standard_budgets;
-      const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
 
-      const nextStandardBudgetsList = standardBudgetsList.map((standardBudget) => {
-        const editStandardBudget = editStandardBudgetsList.find(
-          (item: { big_category_id: number }) =>
-            item.big_category_id === standardBudget.big_category_id
-        );
-        if (editStandardBudget) {
-          return editStandardBudget;
+      const fetchResult = await axios.get<fetchStandardBudgetsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
+      );
 
-        return standardBudget;
-      });
+      const editedStandardBudgetsList = fetchResult.data.standard_budgets;
 
-      dispatch(updateStandardBudgetsActions(nextStandardBudgetsList));
+      dispatch(editStandardBudgetsActions(editedStandardBudgetsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedEditStandardBudgetsAction(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
 
 export const fetchYearlyBudgets = (year: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startFetchYearlyBudgetsActions());
+
     try {
       const result = await axios.get<YearlyBudgetsList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${year}`,
@@ -100,12 +119,14 @@ export const fetchYearlyBudgets = (year: number, signal: CancelTokenSource) => {
       );
       const yearlyBudgetsList = result.data;
 
-      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
+      dispatch(fetchYearlyBudgetsActions(yearlyBudgetsList));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchYearlyBudgetsActions());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchYearlyBudgetsActions(error.response.status, error.response.data.error.message)
+        );
       }
     }
   };
@@ -117,6 +138,8 @@ export const fetchCustomBudgets = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startFetchCustomBudgetsActions());
+
     try {
       const result = await axios.get<fetchCustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
@@ -125,133 +148,18 @@ export const fetchCustomBudgets = (
           withCredentials: true,
         }
       );
-      const customBudgets = result.data.custom_budgets;
+      const customBudgetsList = result.data.custom_budgets;
 
-      dispatch(updateCustomBudgetsActions(customBudgets));
+      dispatch(fetchCustomBudgetsActions(customBudgetsList));
     } catch (error) {
       if (axios.isCancel(error)) {
+        dispatch(cancelFetchCustomBudgetsActions());
         return;
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchCustomBudgetsActions(error.response.status, error.response.data.error.message)
+        );
       }
-    }
-  };
-};
-
-export const addCustomBudgets = (
-  selectYear: string,
-  selectMonth: string,
-  customBudgets: BudgetsReq
-) => {
-  const data = { custom_budgets: customBudgets };
-  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    const validBudgets = customBudgets.every((budget) => isValidBudgetFormat(budget.budget));
-    if (!validBudgets) {
-      alert('予算は0以上の整数で入力してください。');
-      return;
-    }
-
-    try {
-      const result = await axios.post<CustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
-      );
-      const addedCustomBudgetsList: CustomBudgetsList = result.data.custom_budgets;
-      const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
-      const prevCustomBudgetTotal =
-        yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
-
-      const customBudgets: number[] = addedCustomBudgetsList.map((budget) => {
-        return budget.budget;
-      });
-
-      const newTotalBudget = (): number => {
-        if (totalCustomBudgets(customBudgets) < prevCustomBudgetTotal) {
-          return (
-            yearlyBudgetsList.yearly_total_budget -
-            (prevCustomBudgetTotal - totalCustomBudgets(customBudgets))
-          );
-        } else {
-          return (
-            yearlyBudgetsList.yearly_total_budget +
-            (totalCustomBudgets(customBudgets) - prevCustomBudgetTotal)
-          );
-        }
-      };
-
-      yearlyBudgetsList.yearly_total_budget = newTotalBudget();
-
-      yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
-        month: `${selectYear}年${selectMonth}月`,
-        budget_type: customBudgetType,
-        monthly_total_budget: totalCustomBudgets(customBudgets),
-      };
-
-      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
-    } catch (error) {
-      errorHandling(dispatch, error);
-    }
-  };
-};
-
-export const editCustomBudgets = (
-  selectYear: string,
-  selectMonth: string,
-  customBudgets: BudgetsReq
-) => {
-  const data = { custom_budgets: customBudgets };
-  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
-    const validBudgets = customBudgets.every((budget) => isValidBudgetFormat(budget.budget));
-    if (!validBudgets) {
-      alert('予算は0以上の整数で入力してください。');
-      return;
-    }
-
-    try {
-      const result = await axios.put<CustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
-      );
-      const editedCustomBudgetsList: CustomBudgetsList = result.data.custom_budgets;
-      const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
-      const prevCustomBudgetTotal =
-        yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
-
-      const budgets: number[] = editedCustomBudgetsList.map((editedBudget) => {
-        return editedBudget.budget;
-      });
-
-      const newTotalBudget = (): number => {
-        if (totalCustomBudgets(budgets) < prevCustomBudgetTotal) {
-          return (
-            yearlyBudgetsList.yearly_total_budget -
-            (prevCustomBudgetTotal - totalCustomBudgets(budgets))
-          );
-        } else {
-          return (
-            yearlyBudgetsList.yearly_total_budget +
-            (totalCustomBudgets(budgets) - prevCustomBudgetTotal)
-          );
-        }
-      };
-
-      yearlyBudgetsList.yearly_total_budget = newTotalBudget();
-
-      yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
-        month: `${selectYear}年${selectMonth}月`,
-        budget_type: customBudgetType,
-        monthly_total_budget: totalCustomBudgets(budgets),
-      };
-
-      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
-    } catch (error) {
-      errorHandling(dispatch, error);
     }
   };
 };
@@ -272,8 +180,120 @@ export const copyStandardBudgets = () => {
   };
 };
 
-export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State): Promise<void> => {
+export const addCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  signal: CancelTokenSource,
+  customBudgets: BudgetsReq
+) => {
+  const data = { custom_budgets: customBudgets };
+
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    const validBudgets = customBudgets.every((budget) => isValidBudgetFormat(budget.budget));
+    if (!validBudgets) {
+      alert('予算は0以上の整数で入力してください。');
+      return;
+    }
+    dispatch(startAddCustomBudgetsActions());
+
+    try {
+      await axios.post<CustomBudgetsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      );
+
+      const fetchCustomBudgetsResult = await axios.get<fetchCustomBudgetsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const fetchYearlyBudgetsResult = await axios.get<YearlyBudgetsList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${selectYear}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const addedCustomBudgetsList = fetchCustomBudgetsResult.data.custom_budgets;
+      const addedYearlyBudgetsList = fetchYearlyBudgetsResult.data;
+
+      dispatch(addCustomBudgetsActions(addedCustomBudgetsList, addedYearlyBudgetsList));
+    } catch (error) {
+      dispatch(
+        failedAddCustomBudgetsActions(error.response.status, error.response.data.error.message)
+      );
+    }
+  };
+};
+
+export const editCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  signal: CancelTokenSource,
+  customBudgets: BudgetsReq
+) => {
+  const data = { custom_budgets: customBudgets };
+
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    const validBudgets = customBudgets.every((budget) => isValidBudgetFormat(budget.budget));
+    if (!validBudgets) {
+      alert('予算は0以上の整数で入力してください。');
+      return;
+    }
+    dispatch(startEditCustomBudgetsActions());
+
+    try {
+      await axios.put<CustomBudgetsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data),
+        {
+          withCredentials: true,
+        }
+      );
+
+      const fetchCustomBudgetsResult = await axios.get<fetchCustomBudgetsRes>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const fetchYearlyBudgetsResult = await axios.get<YearlyBudgetsList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${selectYear}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
+        }
+      );
+
+      const editedCustomBudgetsList = fetchCustomBudgetsResult.data.custom_budgets;
+      const editedYearlyBudgetsList = fetchYearlyBudgetsResult.data;
+
+      dispatch(editCustomBudgetsActions(editedCustomBudgetsList, editedYearlyBudgetsList));
+    } catch (error) {
+      dispatch(
+        failedEditCustomBudgetsActions(error.response.status, error.response.data.error.message)
+      );
+    }
+  };
+};
+
+export const deleteCustomBudgets = (
+  selectYear: string,
+  selectMonth: string,
+  signal: CancelTokenSource
+) => {
+  return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startDeleteCustomBudgetsActions());
+
     try {
       await axios.delete<DeleteCustomBudgetsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
@@ -281,41 +301,22 @@ export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => 
           withCredentials: true,
         }
       );
-      const standardBudgetsList: StandardBudgetsList = getState().budgets.standard_budgets_list;
-      const yearlyBudgetsList: YearlyBudgetsList = getState().budgets.yearly_budgets_list;
 
-      const standardBudget = standardBudgetsList.map((budget) => {
-        return budget.budget;
-      });
-
-      const newTotalBudget = (): number => {
-        const deleteBudget =
-          yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1].monthly_total_budget;
-
-        if (totalStandardBudget(standardBudget) > deleteBudget) {
-          return (
-            yearlyBudgetsList.yearly_total_budget +
-            (totalStandardBudget(standardBudget) - deleteBudget)
-          );
-        } else {
-          return (
-            yearlyBudgetsList.yearly_total_budget -
-            (deleteBudget - totalStandardBudget(standardBudget))
-          );
+      const fetchYearlyBudgetsResult = await axios.get<YearlyBudgetsList>(
+        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${selectYear}`,
+        {
+          cancelToken: signal.token,
+          withCredentials: true,
         }
-      };
+      );
 
-      yearlyBudgetsList.yearly_total_budget = newTotalBudget();
+      const deletedYearlyBudgetsList = fetchYearlyBudgetsResult.data;
 
-      yearlyBudgetsList.monthly_budgets[Number(selectMonth) - 1] = {
-        month: `${selectYear}年${selectMonth}月`,
-        budget_type: standardBudgetType,
-        monthly_total_budget: totalStandardBudget(standardBudget),
-      };
-
-      dispatch(updateYearlyBudgetsActions(yearlyBudgetsList));
+      dispatch(deleteCustomBudgetsActions(deletedYearlyBudgetsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedDeleteCustomBudgetsActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
