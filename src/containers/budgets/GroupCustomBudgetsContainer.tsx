@@ -83,7 +83,11 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
               Number(group_id),
               signal,
               groupCustomBudgets.map((groupBudget) => {
-                const { big_category_name, last_month_expenses, ...rest } = groupBudget; // eslint-disable-line
+                const {
+                  big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
+                  last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
+                  ...rest
+                } = groupBudget;
                 return {
                   big_category_id: rest.big_category_id,
                   budget: Number(rest.budget),
