@@ -78,3 +78,10 @@ export interface FetchSearchTodoListRes {
   search_todo_list: TodoList;
   message: string;
 }
+
+export interface DisplayTodoListItem {
+  date: string;
+  list: TodoList;
+}
+
+export interface DisplayTodoList extends Array<DisplayTodoListItem> {}

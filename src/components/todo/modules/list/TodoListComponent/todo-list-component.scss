@@ -3,18 +3,31 @@
 .todo-list-component {
   margin-top: 30px;
 
-  &__item {
+  &__list-by-date {
+    list-style-type: none;
+    padding: 0;
+    margin: 0;
+  }
+
+  &__date {
+    color: $task-main_color;
+    font-size: 1.0rem;
+    margin: 0 0 20px 0;
+  }
+
+  &__todo-list {
+    list-style-type: none;
+    padding: 0;
+    margin-bottom: 20px;
+  }
+
+  &__todo-list-item {
+    padding: 0;
     margin-bottom: 20px;
 
     &:last-child {
       margin-bottom: 0;
     }
-  }
-
-  &__item-date {
-    color: $task-main_color;
-    font-size: 1.0rem;
-    margin: 0 0 20px 0;
   }
 
   &__message {

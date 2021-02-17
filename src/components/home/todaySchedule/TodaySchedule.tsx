@@ -3,7 +3,6 @@ import './today-schedule.scss';
 import SwitchItemTabs from '../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import TodayScheduleTodoListArea from './todoListArea/TodayScheduleTodoListArea';
 import { TodoListItem } from '../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../reducks/groupTodoList/types';
 import GroupTodayScheduleShoppingListAreaContainer from '../../../containers/home/todaySchedule/groupShoppingListArea/GroupTodayScheduleShoppingListAreaContainer';
 import TodayScheduleShoppingListAreaContainer from '../../../containers/home/todaySchedule/shoppingListArea/TodayScheduleShoppingListAreaContainer';
 import TodayScheduleTaskAreaContainer from '../../../containers/home/todaySchedule/taskArea/TodayScheduleTaskAreaContainer';
@@ -13,8 +12,8 @@ interface TodayScheduleProps {
   setTodoEditing: React.Dispatch<React.SetStateAction<boolean>>;
   pathName: string;
   currentYearMonth: string;
-  implementationTodoList: (TodoListItem | GroupTodoListItem)[];
-  dueTodoList: (TodoListItem | GroupTodoListItem)[];
+  implementationTodoList: TodoListItem[];
+  dueTodoList: TodoListItem[];
 }
 
 const TodaySchedule = (props: TodayScheduleProps) => {

@@ -5,12 +5,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import { customMonth, date, year } from '../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import {
-  getTodayDueTodoList,
-  getTodayImplementationTodoList,
+  getDisplayInHomeDueTodoList,
+  getDisplayInHomeImplementationTodoList,
 } from '../../../reducks/todoList/selectors';
 import {
-  getGroupTodayDueTodoList,
-  getGroupTodayImplementationTodoList,
+  getGroupDisplayInHomeDueTodoList,
+  getGroupDisplayInHomeImplementationTodoList,
 } from '../../../reducks/groupTodoList/selectors';
 import { fetchGroupTodayTodoList } from '../../../reducks/groupTodoList/operations';
 import {
@@ -37,10 +37,10 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
 
-  const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
-  const todayDueTodoList = useSelector(getTodayDueTodoList);
-  const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
-  const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
+  const implementationTodoList = useSelector(getDisplayInHomeImplementationTodoList);
+  const dueTodoList = useSelector(getDisplayInHomeDueTodoList);
+  const groupImplementationTodoList = useSelector(getGroupDisplayInHomeImplementationTodoList);
+  const groupDueTodoList = useSelector(getGroupDisplayInHomeDueTodoList);
 
   const todayYear = String(year);
   const todayMonth = customMonth;
@@ -89,9 +89,9 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
       pathName={pathName}
       currentYearMonth={currentYearMonth}
       implementationTodoList={
-        pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
+        pathName === 'group' ? groupImplementationTodoList : implementationTodoList
       }
-      dueTodoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+      dueTodoList={pathName === 'group' ? groupDueTodoList : dueTodoList}
     />
   );
 };

@@ -1,44 +1,167 @@
 import { State } from '../store/types';
 import { createSelector } from 'reselect';
+import { GroupTodoList, GroupTodoListItem } from './types';
+import { DisplayTodoList, DisplayTodoListItem, TodoList, TodoListItem } from '../todoList/types';
 
-const groupTodoListSelector = (state: State) => state.groupTodoList;
+const generateTodoList = (groupTodoList: GroupTodoList) => {
+  return groupTodoList.map((listItem) => {
+    const { user_id: _, ...rest } = listItem; //eslint-disable-line @typescript-eslint/no-unused-vars
 
-export const getGroupExpiredTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupExpiredTodoList
+    return rest;
+  });
+};
+
+const generateTodoListItem = (groupTodoListItem: GroupTodoListItem) => {
+  const { user_id: _, ...rest } = groupTodoListItem; //eslint-disable-line @typescript-eslint/no-unused-vars
+
+  return rest;
+};
+
+const generateDisplayTodoList = (todoList: GroupTodoList, displayDate: string) => {
+  const displayTodoList: DisplayTodoList = [];
+  const notFound = -1;
+
+  for (const item of todoList) {
+    const groupTodoListItem: TodoListItem = generateTodoListItem(item);
+    const itemDate = displayDate === 'dueDate' ? item.due_date : item.implementation_date;
+    const idx = displayTodoList.findIndex(
+      (displayTodoListItem) => displayTodoListItem.date === itemDate
+    );
+
+    if (idx !== notFound) {
+      if (displayTodoList[idx].date !== itemDate) {
+        const displayTodoListItem: DisplayTodoListItem = {
+          date: itemDate,
+          list: [groupTodoListItem],
+        };
+
+        displayTodoList.push(displayTodoListItem);
+        continue;
+      }
+
+      displayTodoList[idx].list.push(groupTodoListItem);
+      continue;
+    }
+
+    const displayTodoListItem: DisplayTodoListItem = {
+      date: itemDate,
+      list: [groupTodoListItem],
+    };
+
+    displayTodoList.push(displayTodoListItem);
+  }
+
+  return displayTodoList;
+};
+
+const groupTodayImplementationTodoListSelector = (state: State) =>
+  state.groupTodoList.groupTodayImplementationTodoList;
+
+export const getGroupDisplayInHomeImplementationTodoList = createSelector(
+  [groupTodayImplementationTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );
 
 export const getGroupTodayImplementationTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupTodayImplementationTodoList
-);
-export const getGroupTodayDueTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupTodayDueTodoList
-);
-export const getGroupTodayTodoListMessage = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupTodayTodoListMessage
+  [groupTodayImplementationTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: DisplayTodoList = generateDisplayTodoList(
+      groupTodoList,
+      'implementationDate'
+    );
+
+    return nextGroupTodoList;
+  }
 );
 
-export const getGroupMonthImplementationTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupMonthImplementationTodoList
+const groupTodayDueTodoListSelector = (state: State) => state.groupTodoList.groupTodayDueTodoList;
+
+export const getGroupDisplayInHomeDueTodoList = createSelector(
+  [groupTodayDueTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );
-export const getGroupMonthDueTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupMonthDueTodoList
+
+export const getGroupTodayDueTodoList = createSelector(
+  [groupTodayDueTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: DisplayTodoList = generateDisplayTodoList(groupTodoList, 'dueDate');
+
+    return nextGroupTodoList;
+  }
 );
-export const getGroupMonthTodoListMessage = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupMonthTodoListMessage
+
+const groupMonthlyImplementationTodoListSelector = (state: State) =>
+  state.groupTodoList.groupMonthImplementationTodoList;
+
+export const getGroupMonthlyImplementationTodoList = createSelector(
+  [groupMonthlyImplementationTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: DisplayTodoList = generateDisplayTodoList(
+      groupTodoList,
+      'implementationDate'
+    );
+
+    return nextGroupTodoList;
+  }
 );
+
+const groupMonthlyDueTodoListSelector = (state: State) => state.groupTodoList.groupMonthDueTodoList;
+
+export const getGroupMonthlyDueTodoList = createSelector(
+  [groupMonthlyDueTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: DisplayTodoList = generateDisplayTodoList(groupTodoList, 'dueDate');
+
+    return nextGroupTodoList;
+  }
+);
+
+const groupExpiredTodoListSelector = (state: State) => state.groupTodoList.groupExpiredTodoList;
+
+export const getGroupExpiredTodoList = createSelector(
+  [groupExpiredTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: DisplayTodoList = generateDisplayTodoList(groupTodoList, 'dueDate');
+
+    return nextGroupTodoList;
+  }
+);
+
+export const getSlicedGroupExpiredTodoList = createSelector(
+  [groupExpiredTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const initialDisplayItemNumber = 3;
+
+    if (groupTodoList.length > initialDisplayItemNumber) {
+      const slicedGroupTodoList = groupTodoList.slice(0, initialDisplayItemNumber);
+      const nextGroupTodoList: DisplayTodoList = generateDisplayTodoList(
+        slicedGroupTodoList,
+        'dueDate'
+      );
+
+      return nextGroupTodoList;
+    }
+    const nextGroupTodoList: DisplayTodoList = generateDisplayTodoList(groupTodoList, 'dueDate');
+
+    return nextGroupTodoList;
+  }
+);
+
+const groupSearchTodoListSelector = (state: State) => state.groupTodoList.groupSearchTodoList;
 
 export const getGroupSearchTodoList = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupSearchTodoList
-);
-export const getGroupSearchTodoListMessage = createSelector(
-  [groupTodoListSelector],
-  (state) => state.groupSearchTodoListMessage
+  [groupSearchTodoListSelector],
+  (groupTodoList: GroupTodoList) => {
+    const nextGroupTodoList: TodoList = generateTodoList(groupTodoList);
+
+    return nextGroupTodoList;
+  }
 );

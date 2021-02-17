@@ -10,7 +10,6 @@ import { useDispatch, useSelector } from 'react-redux';
 import {
   getTodayDueTodoList,
   getTodayImplementationTodoList,
-  getTodayTodoListMessage,
 } from '../../../../reducks/todoList/selectors';
 import { useLocation, useParams } from 'react-router';
 import { customMonth, date, year } from '../../../../lib/constant';
@@ -29,7 +28,6 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
 
   const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
   const todayDueTodoList = useSelector(getTodayDueTodoList);
-  const todayTodoListMessage = useSelector(getTodayTodoListMessage);
 
   const todayYear = String(year);
   const todayMonth = customMonth;
@@ -56,12 +54,7 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
   }, [todayYear, todayMonth, todayDate, props.editing]);
 
   useEffect(() => {
-    if (
-      pathName !== 'group' &&
-      !todayImplementationTodoList.length &&
-      !todayDueTodoList.length &&
-      !todayTodoListMessage
-    ) {
+    if (pathName !== 'group' && !todayImplementationTodoList.length && !todayDueTodoList.length) {
       const signal = axios.CancelToken.source();
       dispatch(fetchDateTodoList(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();

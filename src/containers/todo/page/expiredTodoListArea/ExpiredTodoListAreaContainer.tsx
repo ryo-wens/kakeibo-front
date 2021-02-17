@@ -2,12 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import ExpiredTodoListArea from '../../../../components/todo/page/ExpiredTodoListArea/ExpiredTodoListArea';
-import { TodoListItem } from '../../../../reducks/todoList/types';
-import { GroupTodoListItem } from '../../../../reducks/groupTodoList/types';
-import { getExpiredTodoList } from '../../../../reducks/todoList/selectors';
-import { getGroupExpiredTodoList } from '../../../../reducks/groupTodoList/selectors';
+import {
+  getExpiredTodoList,
+  getSlicedExpiredTodoList,
+} from '../../../../reducks/todoList/selectors';
+import {
+  getGroupExpiredTodoList,
+  getSlicedGroupExpiredTodoList,
+} from '../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
 import { fetchExpiredTodoList } from '../../../../reducks/todoList/operations';
+import { DisplayTodoList, DisplayTodoListItem } from '../../../../reducks/todoList/types';
 
 interface ExpiredTodoListAreaContainerProps {
   currentYearMonth: string;
@@ -17,10 +22,11 @@ interface ExpiredTodoListAreaContainerProps {
 const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const initialDisplayNumberTodoList = 3;
 
   const expiredTodoList = useSelector(getExpiredTodoList);
+  const slicedExpiredTodoList = useSelector(getSlicedExpiredTodoList);
   const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
+  const slicedGroupExpiredTodoList = useSelector(getSlicedGroupExpiredTodoList);
 
   const [readMore, setReadMore] = useState(false);
 
@@ -32,49 +38,40 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
     }
   }, []);
 
-  const prevData = {
-    dueDate: '',
-  };
-
-  const equalsDisplayDate = (listItem: TodoListItem | GroupTodoListItem) => {
-    if (prevData.dueDate !== listItem.due_date) {
-      prevData.dueDate = listItem.due_date;
-      return true;
-    }
-    return false;
-  };
-
-  const displayDate = (listItem: TodoListItem | GroupTodoListItem) => {
-    return listItem.due_date;
-  };
-
-  const sliceTodoList = (
-    shoppingList: (TodoListItem | GroupTodoListItem)[],
-    currentReadMore: boolean,
-    initialDisplayNumber: number
+  const generateDisplayTodoList = (
+    expiredTodoList: DisplayTodoList,
+    slicedTodoList: DisplayTodoList,
+    readMore: boolean
   ) => {
-    if (shoppingList.length > initialDisplayNumber && !currentReadMore) {
-      return shoppingList.slice(0, initialDisplayNumber);
+    const initialDisplayNumberTodoList = 3;
+
+    if (expiredTodoList.length > initialDisplayNumberTodoList && !readMore) {
+      return slicedTodoList;
     }
-    return shoppingList;
+    return expiredTodoList;
   };
 
-  const slicedExpiredTodoList = sliceTodoList(
-    pathName === 'group' ? groupExpiredTodoList : expiredTodoList,
-    readMore,
-    initialDisplayNumberTodoList
+  const displayExpiredTodoList: DisplayTodoListItem[] = generateDisplayTodoList(
+    expiredTodoList,
+    slicedExpiredTodoList,
+    readMore
+  );
+
+  const groupDisplayExpiredTodoList: DisplayTodoListItem[] = generateDisplayTodoList(
+    groupExpiredTodoList,
+    slicedGroupExpiredTodoList,
+    readMore
   );
 
   return (
     <ExpiredTodoListArea
       expiredTodoList={pathName === 'group' ? groupExpiredTodoList : expiredTodoList}
-      slicedExpiredTodoList={slicedExpiredTodoList}
+      displayExpiredTodoList={
+        pathName === 'group' ? groupDisplayExpiredTodoList : displayExpiredTodoList
+      }
       currentYearMonth={props.currentYearMonth}
-      equalsDisplayDate={equalsDisplayDate}
-      displayDate={displayDate}
       readMore={readMore}
       setReadMore={setReadMore}
-      initialDisplayNumberTodoList={initialDisplayNumberTodoList}
       setEditing={props.setEditing}
     />
   );
