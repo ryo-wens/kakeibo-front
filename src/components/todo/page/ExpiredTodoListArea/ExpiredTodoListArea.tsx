@@ -3,44 +3,50 @@ import './expired-todo-list-area.scss';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import TodoListItemComponentContainer from '../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
-import { TodoListItem } from '../../../../reducks/todoList/types';
+import { DisplayTodoListItem } from '../../../../reducks/todoList/types';
 
 interface ExpiredTodoListAreaProps {
-  expiredTodoList: TodoListItem[];
-  slicedExpiredTodoList: TodoListItem[];
+  expiredTodoList: DisplayTodoListItem[];
+  displayExpiredTodoList: DisplayTodoListItem[];
   currentYearMonth: string;
-  equalsDisplayDate: (listItem: TodoListItem) => boolean;
-  displayDate: (listItem: TodoListItem) => string;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
-  initialDisplayNumberTodoList: number;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
+  const existExpiredTodoList = props.displayExpiredTodoList.length !== 0;
+  const initialDisplayNumberTodoList = 3;
+
   return (
     <div>
       <div className="expired-todo-list-area">
-        {props.expiredTodoList.length ? (
+        {existExpiredTodoList ? (
           <>
-            {props.slicedExpiredTodoList.map((listItem) => {
-              return (
-                <div className="expired-todo-list-area__item" key={listItem.id}>
-                  {props.equalsDisplayDate(listItem) && (
-                    <p className="expired-todo-list-area__item-date">
-                      {props.displayDate(listItem)}
-                    </p>
-                  )}
-                  <TodoListItemComponentContainer
-                    listItem={listItem}
-                    currentYearMonth={props.currentYearMonth}
-                    setEditing={props.setEditing}
-                    inputTodoClassName={'todo-list-item-component__input-todo'}
-                  />
-                </div>
-              );
-            })}
-            {props.expiredTodoList.length > props.initialDisplayNumberTodoList && (
+            <ol className="expired-todo-list-area__list-by-date">
+              {props.displayExpiredTodoList.map((displayTodolistItem) => {
+                return (
+                  <li key={displayTodolistItem.date}>
+                    <p className="expired-todo-list-area__date">{displayTodolistItem.date}</p>
+                    <ol className="expired-todo-list-area__todo-list">
+                      {displayTodolistItem.list.map((item) => {
+                        return (
+                          <li className="expired-todo-list-area__todo-list-item" key={item.id}>
+                            <TodoListItemComponentContainer
+                              listItem={item}
+                              currentYearMonth={props.currentYearMonth}
+                              setEditing={props.setEditing}
+                              inputTodoClassName={'todo-list-item-component__input-todo'}
+                            />
+                          </li>
+                        );
+                      })}
+                    </ol>
+                  </li>
+                );
+              })}
+            </ol>
+            {props.expiredTodoList.length > initialDisplayNumberTodoList && (
               <button
                 className="expired-todo-list-area__read-more-button"
                 onClick={() => props.setReadMore(!props.readMore)}

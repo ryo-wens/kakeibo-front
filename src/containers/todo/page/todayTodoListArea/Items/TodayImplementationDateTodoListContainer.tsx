@@ -2,7 +2,6 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import TodoListComponent from '../../../../../components/todo/modules/list/TodoListComponent/TodoListComponent';
 import { getTodayImplementationTodoList } from '../../../../../reducks/todoList/selectors';
-import { TodoListItem } from '../../../../../reducks/todoList/types';
 import { getGroupTodayImplementationTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
 
@@ -18,22 +17,6 @@ const TodayImplementationDateTodoListContainer = (
   const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
   const groupTodayImplementationTodoList = useSelector(getGroupTodayImplementationTodoList);
 
-  const prevData = {
-    implementationDate: '',
-  };
-
-  const equalsDisplayDate = (listItem: TodoListItem) => {
-    if (prevData.implementationDate !== listItem.implementation_date) {
-      prevData.implementationDate = listItem.implementation_date;
-      return true;
-    }
-    return false;
-  };
-
-  const displayDate = (listItem: TodoListItem) => {
-    return listItem.implementation_date;
-  };
-
   return (
     <TodoListComponent
       todoList={
@@ -41,8 +24,6 @@ const TodayImplementationDateTodoListContainer = (
       }
       currentYearMonth={props.currentYearMonth}
       message={'今日の実施予定のToDoリストは、登録されていません。'}
-      equalsDisplayDate={equalsDisplayDate}
-      displayDate={displayDate}
       setEditing={props.setEditing}
     />
   );

@@ -47,6 +47,7 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
       currentYearMonth={currentYearMonth}
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
+      message={'条件に一致するtodoは見つかりませんでした。'}
     />
   );
 };

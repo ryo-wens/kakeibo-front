@@ -31,26 +31,24 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   return (
     <>
       {!props.openEditTodoForm ? (
-        <>
-          <div className="todo-list-item-component">
-            <label className="todo-list-item-component__check">
-              <input type="checkbox" checked={props.checked} onChange={props.handleChangeChecked} />
-              <span />
-            </label>
-            <span
-              className="todo-list-item-component__content"
-              style={props.currentTextStyle(props.checked)}
-            >
-              {props.listItem.todo_content}
-            </span>
-            <EditIcon
-              className="todo-list-item-component__edit-icon"
-              onClick={() => {
-                props.handleOpenEditTodoForm();
-              }}
-            />
-          </div>
-        </>
+        <div className="todo-list-item-component">
+          <label className="todo-list-item-component__check">
+            <input type="checkbox" checked={props.checked} onChange={props.handleChangeChecked} />
+            <span />
+          </label>
+          <span
+            className="todo-list-item-component__content"
+            style={props.currentTextStyle(props.checked)}
+          >
+            {props.listItem.todo_content}
+          </span>
+          <EditIcon
+            className="todo-list-item-component__edit-icon"
+            onClick={() => {
+              props.handleOpenEditTodoForm();
+            }}
+          />
+        </div>
       ) : (
         <div className={props.inputTodoClassName}>
           <TodoListItemFormContainer
