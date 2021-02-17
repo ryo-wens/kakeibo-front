@@ -117,8 +117,23 @@ export interface State {
   };
   groupBudgets: {
     groupStandardBudgetsList: GroupStandardBudgetsList;
-    groupYearlyBudgetsList: GroupYearlyBudgetsList;
+    groupStandardBudgetsLoading: boolean;
+    groupStandardBudgetsError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     groupCustomBudgetsList: GroupCustomBudgetsList;
+    groupCustomBudgetsLoading: boolean;
+    groupCustomBudgetsError: {
+      statusCode: number;
+      errorMessage: string;
+    };
+    groupYearlyBudgetsList: GroupYearlyBudgetsList;
+    groupYearlyBudgetsLoading: boolean;
+    groupYearlyBudgetsError: {
+      statusCode: number;
+      errorMessage: string;
+    };
   };
   groupTasks: {
     groupTasksListForEachUser: GroupTasksListForEachUser;
