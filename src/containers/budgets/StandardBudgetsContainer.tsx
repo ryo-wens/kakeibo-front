@@ -35,19 +35,25 @@ const StandardBudgetsContainer = () => {
       pathName={pathName}
       unEditBudgets={unEditBudgets}
       totalStandardBudget={totalStandardBudget}
-      editStandardBudgetOperation={() =>
+      editStandardBudgetOperation={() => {
+        const signal = axios.CancelToken.source();
         dispatch(
           editStandardBudgets(
             budgets.map((budget) => {
-              const { big_category_name, last_month_expenses, ...rest } = budget; // eslint-disable-line
+              const {
+                big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
+                last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
+                ...rest
+              } = budget;
               return {
                 big_category_id: rest.big_category_id,
                 budget: Number(rest.budget),
               };
-            })
+            }),
+            signal
           )
-        )
-      }
+        );
+      }}
     />
   );
 };

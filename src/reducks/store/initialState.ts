@@ -88,20 +88,50 @@ const initialState = {
   },
   budgets: {
     standard_budgets_list: [],
+    standardBudgetsLoading: false,
+    standardBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     yearly_budgets_list: {
       year: '',
       yearly_total_budget: 0,
       monthly_budgets: [],
     },
+    yearlyBudgetsLoading: false,
+    yearlyBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     custom_budgets_list: [],
+    customBudgetsLoading: false,
+    customBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
   },
   groupBudgets: {
     groupStandardBudgetsList: [],
+    groupStandardBudgetsLoading: false,
+    groupStandardBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     groupCustomBudgetsList: [],
+    groupCustomBudgetsLoading: false,
+    groupCustomBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     groupYearlyBudgetsList: {
       year: '',
       yearly_total_budget: 0,
       monthly_budgets: [],
+    },
+    groupYearlyBudgetsLoading: false,
+    groupYearlyBudgetsError: {
+      statusCode: 0,
+      errorMessage: '',
     },
   },
   groupTasks: {
