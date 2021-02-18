@@ -123,8 +123,8 @@ export const failedAddGroupCategoriesActions = (statusCode: number, errorMessage
   return {
     type: FAILED_ADD_GROUP_CATEGORIES,
     payload: {
-      groupIncomeCategoriesLoading: true,
-      groupExpenseCategoriesLoading: true,
+      groupIncomeCategoriesLoading: false,
+      groupExpenseCategoriesLoading: false,
 
       groupIncomeCategoriesError: {
         statusCode: statusCode,
