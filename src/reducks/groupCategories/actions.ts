@@ -4,7 +4,7 @@ export type groupCategoriesActions = ReturnType<
   | typeof startFetchGroupCategoriesActions
   | typeof fetchGroupIncomeCategoriesAction
   | typeof fetchGroupExpenseCategoriesAction
-  | typeof cna1celFetchGroupCategoriesActions
+  | typeof cancelFetchGroupCategoriesActions
   | typeof failedFetchGroupCategories
   | typeof startAddGroupCategoriesActions
   | typeof addGroupIncomeCategory
@@ -54,7 +54,7 @@ export const fetchGroupExpenseCategoriesAction = (groupExpenseCategories: GroupC
 };
 
 export const CANCEL_FETCH_GROUP_CATEGORIES = 'CANCEL_FETCH_GROUP_CATEGORIES';
-export const cna1celFetchGroupCategoriesActions = () => {
+export const cancelFetchGroupCategoriesActions = () => {
   return {
     type: CANCEL_FETCH_GROUP_CATEGORIES,
     payload: {

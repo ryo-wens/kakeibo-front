@@ -2,7 +2,7 @@ import {
   startFetchGroupCategoriesActions,
   fetchGroupIncomeCategoriesAction,
   fetchGroupExpenseCategoriesAction,
-  cna1celFetchGroupCategoriesActions,
+  cancelFetchGroupCategoriesActions,
   failedFetchGroupCategories,
   startAddGroupCategoriesActions,
   addGroupIncomeCategory,
@@ -45,7 +45,7 @@ export const fetchGroupCategories = (groupId: number, signal: CancelTokenSource)
       dispatch(fetchGroupExpenseCategoriesAction(groupExpenseCategories));
     } catch (error) {
       if (axios.isCancel(error)) {
-        dispatch(cna1celFetchGroupCategoriesActions());
+        dispatch(cancelFetchGroupCategoriesActions());
       } else {
         dispatch(
           failedFetchGroupCategories(error.response.status, error.response.data.error.message)
