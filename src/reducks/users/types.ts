@@ -11,7 +11,7 @@ export interface UserInfo {
 }
 
 export interface SignupReq {
-  id: string;
+  user_id: string;
   name: string;
   email: string;
   password: string;
@@ -23,7 +23,7 @@ export interface LoginReq {
 }
 
 export interface UserRes {
-  id: string;
+  user_id: string;
   name: string;
   email: string;
 }
