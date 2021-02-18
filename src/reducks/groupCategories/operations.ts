@@ -1,12 +1,21 @@
 import {
+  startFetchGroupCategoriesActions,
   fetchGroupIncomeCategoriesAction,
   fetchGroupExpenseCategoriesAction,
+  cancelFetchGroupCategoriesActions,
+  failedFetchGroupCategories,
+  startAddGroupCategoriesActions,
   addGroupIncomeCategory,
   addGroupExpenseCategory,
+  failedAddGroupCategoriesActions,
+  startEditGroupCategoriesActions,
   editGroupIncomeCategory,
   editGroupExpenseCategory,
+  failedEditGroupCategories,
+  startDeleteGroupCategoriesActions,
   deleteIncomeCategory,
   deleteExpenseCategory,
+  failedDeleteGroupCategories,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -16,10 +25,11 @@ import {
   operationCategoriesRes,
   deleteGroupCustomCategoriesRes,
 } from './types';
-import { errorHandling } from '../../lib/validation';
 
 export const fetchGroupCategories = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startFetchGroupCategoriesActions());
+
     try {
       const fetchResult = await axios.get<fetchGroupCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories`,
@@ -35,9 +45,11 @@ export const fetchGroupCategories = (groupId: number, signal: CancelTokenSource)
       dispatch(fetchGroupExpenseCategoriesAction(groupExpenseCategories));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchGroupCategoriesActions());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchGroupCategories(error.response.status, error.response.data.error.message)
+        );
       }
     }
   };
@@ -54,6 +66,9 @@ export const addGroupCustomCategories = (
       name: name,
       big_category_id: bigCategoryId,
     };
+
+    dispatch(startAddGroupCategoriesActions());
+
     try {
       await axios.post<operationCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories`,
@@ -81,7 +96,9 @@ export const addGroupCustomCategories = (
         dispatch(addGroupExpenseCategory(addedGroupExpenseCategoriesList));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedAddGroupCategoriesActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
@@ -98,6 +115,9 @@ export const editGroupCustomCategories = (
       name: name,
       big_category_id: bigCategoryId,
     };
+
+    dispatch(startEditGroupCategoriesActions());
+
     try {
       await axios.put<operationCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`,
@@ -125,7 +145,7 @@ export const editGroupCustomCategories = (
         dispatch(editGroupExpenseCategory(editedGroupExpenseCategories));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(failedEditGroupCategories(error.response.status, error.response.data.error.message));
     }
   };
 };
@@ -137,6 +157,8 @@ export const deleteGroupCustomCategories = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startDeleteGroupCategoriesActions());
+
     try {
       await axios.delete<deleteGroupCustomCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`,
@@ -163,7 +185,9 @@ export const deleteGroupCustomCategories = (
         dispatch(deleteExpenseCategory(deletedGroupExpenseCategories));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedDeleteGroupCategories(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
