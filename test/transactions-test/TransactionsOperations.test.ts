@@ -289,7 +289,6 @@ describe('async actions transactions', () => {
     };
 
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`;
-
     const mockResponse = fetchResSearchTransaction;
 
     const expectSearchActions = [
