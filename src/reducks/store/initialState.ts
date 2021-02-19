@@ -44,8 +44,23 @@ const initialState = {
   },
   transactions: {
     latestTransactionsList: [],
+    latestTransactionsListLoading: false,
+    latestTransactionsListError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     transactionsList: [],
+    transactionsListLoading: false,
+    transactionsListError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     searchTransactionsList: [],
+    searchTransactionsListLoading: false,
+    searchTransactionsListError: {
+      statusCode: 0,
+      errorMessage: '',
+    },
     noTransactionsMessage: '',
     notHistoryMessage: '',
   },

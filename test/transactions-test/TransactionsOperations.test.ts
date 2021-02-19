@@ -29,27 +29,36 @@ const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 process.on('unhandledRejection', console.dir);
 
-describe('async actions fetchTransactionsList', () => {
-  const store = mockStore({ transactionsList: [] });
+const store = mockStore({
+  transactions: { transactionsList: [], latestTransactionsList: [], searchTransactionsList: [] },
+});
 
+describe('async actions transactions', () => {
   beforeEach(() => {
     store.clearActions();
   });
 
-  const years: SelectYears = {
-    selectedYear: '2020',
-    selectedMonth: '11',
-  };
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${years.selectedYear}-${years.selectedMonth}`;
-
   it('Get transactionsList if fetch succeeds', async () => {
+    const years: SelectYears = {
+      selectedYear: '2020',
+      selectedMonth: '11',
+    };
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${years.selectedYear}-${years.selectedMonth}`;
+
     const mockResponse = transactionsList;
     const signal = axios.CancelToken.source();
 
     const expectedAddActions = [
       {
+        type: actionTypes.START_FETCH_TRANSACTIONS,
+        payload: {
+          transactionsListLoading: true,
+        },
+      },
+      {
         type: actionTypes.FETCH_TRANSACTIONS,
         payload: {
+          transactionsListLoading: false,
           transactionsList: mockResponse.transactions_list,
           noTransactionsMessage: '',
         },
@@ -61,25 +70,23 @@ describe('async actions fetchTransactionsList', () => {
     await fetchTransactionsList(years, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
-});
-
-describe('async actions fetchLatestTransactionsList', () => {
-  const store = mockStore({ latestTransactionsList: [] });
-
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
-
-  beforeEach(() => {
-    store.clearActions();
-  });
 
   it('Get latestTransactionsList if fetch succeeds', async () => {
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
     const mockResponse = latestTransactionsList;
     const signal = axios.CancelToken.source();
 
     const expectedActions = [
       {
+        type: actionTypes.START_FETCH_LATEST_TRANSACTIONS,
+        payload: {
+          latestTransactionsListLoading: true,
+        },
+      },
+      {
         type: actionTypes.FETCH_LATEST_TRANSACTIONS,
         payload: {
+          latestTransactionsListLoading: false,
           latestTransactionsList: mockResponse.transactions_list,
         },
       },
@@ -90,46 +97,35 @@ describe('async actions fetchLatestTransactionsList', () => {
     await fetchLatestTransactionsList(signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
-});
-
-describe('async actions addTransactions', () => {
-  const store = mockStore({
-    transactionsList: transactionsList,
-    latestTransactionsList: latestTransactionsList,
-  });
-
-  const year = 2020;
-  const month = '11';
-  const signal = axios.CancelToken.source();
-  const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`;
-  const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
-  const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
-
-  beforeEach(() => {
-    store.clearActions();
-  });
-
-  let now: Date;
-  let spiedDate: Date;
-  const originalDate = Date;
-  now = new originalDate('2020-11-07T17:07:31Z');
-  Date.now = jest.fn().mockReturnValue(now.valueOf());
-  const actual = new Date();
-
-  // @ts-ignore
-  spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
-    if (arg === 0 || arg) {
-      return new originalDate();
-    }
-    return now;
-  });
-
-  afterAll(() => {
-    // @ts-ignore
-    spiedDate.mockRestore();
-  });
 
   it('Add transaction in transactionsList and latestTransactionsList if fetch succeeds', async () => {
+    const year = 2020;
+    const month = '11';
+    const signal = axios.CancelToken.source();
+    const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`;
+    const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
+    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
+
+    let now: Date;
+    let spiedDate: Date;
+    const originalDate = Date;
+    now = new originalDate('2020-11-07T17:07:31Z');
+    Date.now = jest.fn().mockReturnValue(now.valueOf());
+    const actual = new Date();
+
+    // @ts-ignore
+    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+      if (arg === 0 || arg) {
+        return new originalDate();
+      }
+      return now;
+    });
+
+    afterAll(() => {
+      // @ts-ignore
+      spiedDate.mockRestore();
+    });
+
     const requestData: TransactionsReq = {
       transaction_type: 'expense',
       transaction_date: actual,
@@ -147,8 +143,17 @@ describe('async actions addTransactions', () => {
 
     const expectedAddActions = [
       {
+        type: actionTypes.START_ADD_TRANSACTIONS,
+        payload: {
+          transactionsListLoading: true,
+          latestTransactionsListLoading: true,
+        },
+      },
+      {
         type: actionTypes.ADD_TRANSACTIONS,
         payload: {
+          transactionsListLoading: false,
+          latestTransactionsListLoading: false,
           transactionsList: addedTransactionsList.transactions_list,
           latestTransactionsList: addedLatestTransactionsList.transactions_list,
         },
@@ -162,37 +167,6 @@ describe('async actions addTransactions', () => {
     await addTransactions(requestData, year, month, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
-});
-
-describe('async actions editTransactions', () => {
-  const store = mockStore({
-    transactionsList: addTransactionsList,
-    latestTransactionsList: addLatestTransaction,
-  });
-
-  let now: Date;
-  let spiedDate: Date;
-  const originalDate = Date;
-  now = new originalDate('2020-07-26T17:00:15Z');
-  Date.now = jest.fn().mockReturnValue(now.valueOf());
-  const actual = new Date();
-
-  // @ts-ignore
-  spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
-    if (arg === 0 || arg) {
-      return new originalDate();
-    }
-    return now;
-  });
-
-  afterAll(() => {
-    // @ts-ignore
-    spiedDate.mockRestore();
-  });
-
-  beforeEach(() => {
-    store.clearActions();
-  });
 
   it('Edit transaction in transactionsList and latestTransactionsList if fetch succeeds', async () => {
     const year = 2020;
@@ -202,6 +176,26 @@ describe('async actions editTransactions', () => {
     const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`;
     const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
     const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
+
+    let now: Date;
+    let spiedDate: Date;
+    const originalDate = Date;
+    now = new originalDate('2020-07-26T17:00:15Z');
+    Date.now = jest.fn().mockReturnValue(now.valueOf());
+    const actual = new Date();
+
+    // @ts-ignore
+    spiedDate = jest.spyOn(global, 'Date').mockImplementation((arg) => {
+      if (arg === 0 || arg) {
+        return new originalDate();
+      }
+      return now;
+    });
+
+    afterAll(() => {
+      // @ts-ignore
+      spiedDate.mockRestore();
+    });
 
     const editResponse = editResTransaction;
     const editedTransactionsList = editTransactionsList;
@@ -220,8 +214,17 @@ describe('async actions editTransactions', () => {
 
     const expectedEditActions = [
       {
+        type: actionTypes.START_EDIT_TRANSACTIONS,
+        payload: {
+          transactionsListLoading: true,
+          latestTransactionsListLoading: true,
+        },
+      },
+      {
         type: actionTypes.EDIT_TRANSACTIONS,
         payload: {
+          transactionsListLoading: false,
+          latestTransactionsListLoading: false,
           transactionsList: editedTransactionsList.transactions_list,
           latestTransactionsList: editedLatestTransactionsList.transactions_list,
         },
@@ -234,16 +237,6 @@ describe('async actions editTransactions', () => {
 
     await editTransactions(130, requestData, year, month, signal)(store.dispatch);
     expect(store.getActions()).toEqual(expectedEditActions);
-  });
-});
-
-describe('async actions deleteTransactions', () => {
-  const store = mockStore({
-    transactionsList: editTransactionsList,
-    latestTransactionsList: editLatestTransaction,
-  });
-  beforeEach(() => {
-    store.clearActions();
   });
 
   it('Delete transaction in transactionsList and latestTransactionsList if fetch succeeds', async () => {
@@ -261,8 +254,17 @@ describe('async actions deleteTransactions', () => {
 
     const expectedDeleteActions = [
       {
+        type: actionTypes.START_DELETE_TRANSACTIONS,
+        payload: {
+          transactionsListLoading: true,
+          latestTransactionsListLoading: true,
+        },
+      },
+      {
         type: actionTypes.DELETE_TRANSACTIONS,
         payload: {
+          transactionsListLoading: false,
+          latestTransactionsListLoading: false,
           transactionsList: deletedTransactionsList,
           latestTransactionsList: deletedLatestTransactionsList,
         },
@@ -276,42 +278,39 @@ describe('async actions deleteTransactions', () => {
     await deleteTransactions(130, signal, year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedDeleteActions);
   });
-});
 
-it('Get transactionsList  search criteria match in  if fetch succeeds', async () => {
-  const store = mockStore({
-    transactions: {
-      searchTransactionsList: [],
-    },
-  });
-  beforeEach(() => {
-    store.clearActions();
-  });
+  it('Get transactionsList  search criteria match in  if fetch succeeds', async () => {
+    const params = {
+      transaction_type: 'expense',
+      low_amount: 2000,
+      high_amount: 10000,
+      big_category_id: 2,
+      sort: 'transaction_date',
+    };
 
-  const params = {
-    transaction_type: 'expense',
-    low_amount: 2000,
-    high_amount: 10000,
-    big_category_id: 2,
-    sort: 'transaction_date',
-  };
+    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`;
+    const mockResponse = fetchResSearchTransaction;
 
-  const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`;
-
-  const mockResponse = fetchResSearchTransaction;
-
-  const expectSearchActions = [
-    {
-      type: actionTypes.SEARCH_TRANSACTIONS,
-      payload: {
-        searchTransactionsList: mockResponse.transactions_list,
-        notHistoryMessage: '',
+    const expectSearchActions = [
+      {
+        type: actionTypes.START_SEARCH_TRANSACTIONS,
+        payload: {
+          searchTransactionsListLoading: true,
+        },
       },
-    },
-  ];
+      {
+        type: actionTypes.SEARCH_TRANSACTIONS,
+        payload: {
+          searchTransactionsListLoading: false,
+          searchTransactionsList: mockResponse.transactions_list,
+          notHistoryMessage: '',
+        },
+      },
+    ];
 
-  axiosMock.onGet(url).reply(200, mockResponse);
+    axiosMock.onGet(url).reply(200, mockResponse);
 
-  await searchTransactions(params)(store.dispatch);
-  expect(store.getActions()).toEqual(expectSearchActions);
+    await searchTransactions(params)(store.dispatch);
+    expect(store.getActions()).toEqual(expectSearchActions);
+  });
 });
