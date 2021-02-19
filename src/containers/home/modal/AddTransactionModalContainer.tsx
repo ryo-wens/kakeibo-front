@@ -249,8 +249,8 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const personalAddRequestData: TransactionsReq = {
     transaction_type: transactionsType,
     transaction_date: transactionDate,
-    shop: emptyShop,
-    memo: emptyMemo,
+    shop: emptyShop !== null ? emptyShop.trim() : null,
+    memo: emptyMemo !== null ? emptyMemo.trim() : null,
     amount: Number(amount),
     big_category_id: bigCategoryId,
     medium_category_id: mediumCategoryId,
@@ -260,8 +260,8 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const groupAddRequestData: GroupTransactionsReq = {
     transaction_type: transactionsType,
     transaction_date: transactionDate,
-    shop: emptyShop,
-    memo: emptyMemo,
+    shop: emptyShop !== null ? emptyShop.trim() : null,
+    memo: emptyMemo !== null ? emptyMemo.trim() : null,
     amount: Number(amount),
     payment_user_id: paymentUserId,
     big_category_id: bigCategoryId,
