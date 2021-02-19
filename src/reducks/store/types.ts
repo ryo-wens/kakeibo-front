@@ -59,8 +59,23 @@ export interface State {
   };
   transactions: {
     latestTransactionsList: TransactionsList;
+    latestTransactionsListLoading: boolean;
+    latestTransactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     transactionsList: TransactionsList;
+    transactionsListLoading: boolean;
+    transactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     searchTransactionsList: TransactionsList;
+    searchTransactionsListLoading: boolean;
+    searchTransactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     noTransactionsMessage: string;
     notHistoryMessage: string;
   };

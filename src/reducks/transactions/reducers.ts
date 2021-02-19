@@ -7,7 +7,22 @@ export const transactionsReducer = (
   action: transactionActions
 ) => {
   switch (action.type) {
+    case Actions.START_FETCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FETCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_LATEST_TRANSACTIONS:
       return {
         ...state,
         ...action.payload,
@@ -17,7 +32,32 @@ export const transactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.CANCEL_FETCH_LATEST_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_LATEST_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_ADD_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.ADD_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_ADD_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_EDIT_TRANSACTIONS:
       return {
         ...state,
         ...action.payload,
@@ -27,12 +67,37 @@ export const transactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.FAILED_EDIT_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_DELETE_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.DELETE_TRANSACTIONS:
       return {
         ...state,
         ...action.payload,
       };
+    case Actions.FAILED_DELETE_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_SEARCH_TRANSACTIONS:
       return {
         ...state,
         ...action.payload,
