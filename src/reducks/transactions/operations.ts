@@ -273,8 +273,15 @@ export const deleteTransactions = (
         }
       );
 
-      const deletedTransactionsList = fetchTransactionsResult.data.transactions_list;
-      const deletedLatestTransactionsList = fetchLatestTransactionsResult.data.transactions_list;
+      const deletedTransactionsList =
+        fetchTransactionsResult.data.transactions_list === undefined
+          ? []
+          : fetchTransactionsResult.data.transactions_list;
+
+      const deletedLatestTransactionsList =
+        fetchLatestTransactionsResult.data.transactions_list === undefined
+          ? []
+          : fetchLatestTransactionsResult.data.transactions_list;
 
       dispatch(deleteTransactionsActions(deletedTransactionsList, deletedLatestTransactionsList));
     } catch (error) {

@@ -14,7 +14,7 @@ export const getGroupTasksList = createSelector(
 );
 
 const tasksListForEachUser = (state: State) => state.groupTasks.groupTasksListForEachUser;
-const userId = (state: State) => state.users.id;
+const userId = (state: State) => state.users.user_id;
 
 export const getUserTaskListItem = createSelector(
   [tasksListForEachUser, userId],
