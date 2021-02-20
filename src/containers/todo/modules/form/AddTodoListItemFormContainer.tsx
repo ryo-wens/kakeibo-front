@@ -69,10 +69,38 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     dueDate === null ||
     todoContent === initialState.initialTodoContent;
 
-  const addRequestData: AddTodoListItemReq = {
-    implementation_date: implementationDate,
-    due_date: dueDate,
-    todo_content: todoContent,
+  const addTodoListItemOperation = () => {
+    const addRequestData: AddTodoListItemReq = {
+      implementation_date: implementationDate,
+      due_date: dueDate,
+      todo_content: todoContent,
+    };
+
+    if (pathName === 'group') {
+      dispatch(
+        addGroupTodoListItem(
+          Number(group_id),
+          date,
+          props.date,
+          implementationDate,
+          dueDate,
+          todoContent
+        )
+      );
+      setOpenAddTodoForm(false);
+    }
+    dispatch(
+      addTodoListItem(
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth,
+        addRequestData,
+        signal
+      )
+    );
+    setOpenAddTodoForm(false);
   };
 
   return (
@@ -87,33 +115,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
       handleOpenAddTodoForm={handleOpenAddTodoForm}
       handleCloseAddTodoForm={handleCloseAddTodoForm}
       disabledButton={disabledButton}
-      todoListItemOperation={() => {
-        {
-          pathName === 'group'
-            ? dispatch(
-                addGroupTodoListItem(
-                  Number(group_id),
-                  date,
-                  props.date,
-                  implementationDate,
-                  dueDate,
-                  todoContent
-                )
-              )
-            : dispatch(
-                addTodoListItem(
-                  String(year),
-                  customMonth,
-                  String(todayDate),
-                  props.currentYear,
-                  props.currentMonth,
-                  addRequestData,
-                  signal
-                )
-              );
-        }
-        setOpenAddTodoForm(false);
-      }}
+      todoListItemOperation={() => addTodoListItemOperation()}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       inputTodoRef={inputTodoRef}
       date={date}

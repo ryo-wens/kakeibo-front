@@ -7,9 +7,10 @@ import {
   editGroupTodoListItem,
 } from '../../../../reducks/groupTodoList/operations';
 import { dateStringToDate } from '../../../../lib/date';
-import { customMonth, date, todayDate, year } from '../../../../lib/constant';
+import { customMonth, date, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
+import moment from 'moment';
 import axios from 'axios';
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
@@ -30,6 +31,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
   const currentYearMonth = `${props.currentYear}/${props.currentMonth}`;
+  const todayDate = moment().format('DD');
   const signal = axios.CancelToken.source();
 
   const inputTodoRef = useRef<HTMLDivElement>(null);
@@ -116,7 +118,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
           props.listItem.id,
           String(year),
           customMonth,
-          String(todayDate),
+          todayDate,
           props.currentYear,
           props.currentMonth,
           requestData,
@@ -139,11 +141,59 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     }
   };
 
-  const requestData: EditTodoListItemReq = {
-    implementation_date: implementationDate,
-    due_date: dueDate,
-    todo_content: todoContent,
-    complete_flag: checked,
+  const editTodoListItemOperation = () => {
+    const requestData: EditTodoListItemReq = {
+      implementation_date: implementationDate,
+      due_date: dueDate,
+      todo_content: todoContent,
+      complete_flag: checked,
+    };
+
+    if (pathName === 'group') {
+      dispatch(
+        editGroupTodoListItem(
+          date,
+          currentYearMonth,
+          Number(group_id),
+          props.listItem.id,
+          implementationDate,
+          dueDate,
+          todoContent,
+          checked
+        )
+      );
+      setOpenEditTodoForm(false);
+    }
+    dispatch(
+      editTodoListItem(
+        props.listItem.id,
+        String(year),
+        customMonth,
+        todayDate,
+        props.currentYear,
+        props.currentMonth,
+        requestData,
+        signal
+      )
+    );
+    setOpenEditTodoForm(false);
+  };
+
+  const deleteTodoListItemOperation = () => {
+    if (pathName === 'group') {
+      dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id));
+    }
+    dispatch(
+      deleteTodoListItem(
+        props.listItem.id,
+        String(year),
+        customMonth,
+        todayDate,
+        props.currentYear,
+        props.currentMonth,
+        signal
+      )
+    );
   };
 
   return (
@@ -162,51 +212,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       disabledButton={disabledButton()}
-      todoListItemOperation={() => {
-        {
-          pathName === 'group'
-            ? dispatch(
-                editGroupTodoListItem(
-                  date,
-                  currentYearMonth,
-                  Number(group_id),
-                  props.listItem.id,
-                  implementationDate,
-                  dueDate,
-                  todoContent,
-                  checked
-                )
-              )
-            : dispatch(
-                editTodoListItem(
-                  props.listItem.id,
-                  String(year),
-                  customMonth,
-                  String(date.getDate()),
-                  props.currentYear,
-                  props.currentMonth,
-                  requestData,
-                  signal
-                )
-              );
-        }
-        setOpenEditTodoForm(false);
-      }}
-      deleteOperation={() => {
-        pathName === 'group'
-          ? dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id))
-          : dispatch(
-              deleteTodoListItem(
-                props.listItem.id,
-                String(year),
-                customMonth,
-                String(date.getDate()),
-                props.currentYear,
-                props.currentMonth,
-                signal
-              )
-            );
-      }}
+      todoListItemOperation={() => editTodoListItemOperation()}
+      deleteOperation={() => deleteTodoListItemOperation()}
       inputTodoClassName={props.inputTodoClassName}
       inputTodoRef={inputTodoRef}
     />

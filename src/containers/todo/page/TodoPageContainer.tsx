@@ -6,6 +6,7 @@ import { useLocation } from 'react-router';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import TodoPage from '../../../components/todo/page/TodoPage';
+import moment from 'moment';
 
 const TodoPageContainer = () => {
   const dispatch = useDispatch();
@@ -19,7 +20,7 @@ const TodoPageContainer = () => {
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
   const currentYear = String(selectedYear);
-  const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
+  const currentMonth = moment(selectedMonth, 'MM').format('MM');
 
   useEffect(() => {
     if (pathName !== 'group') {

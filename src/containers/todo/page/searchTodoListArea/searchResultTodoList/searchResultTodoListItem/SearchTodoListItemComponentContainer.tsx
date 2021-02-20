@@ -127,11 +127,42 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     }
   };
 
-  const requestData: EditTodoListItemReq = {
-    implementation_date: implementationDate,
-    due_date: dueDate,
-    todo_content: todoContent,
-    complete_flag: checked,
+  const editTodoListItemOperation = () => {
+    const requestData: EditTodoListItemReq = {
+      implementation_date: implementationDate,
+      due_date: dueDate,
+      todo_content: todoContent,
+      complete_flag: checked,
+    };
+
+    if (pathName === 'group') {
+      dispatch(
+        editGroupTodoListItem(
+          date,
+          currentYearMonth,
+          Number(group_id),
+          props.listItem.id,
+          implementationDate,
+          dueDate,
+          todoContent,
+          checked
+        )
+      );
+      setOpenEditTodoForm(false);
+    }
+
+    dispatch(
+      editSearchTodoListItem(props.listItem.id, requestData, props.fetchSearchTodoListRequestData)
+    );
+    setOpenEditTodoForm(false);
+  };
+
+  const deleteTodoListItemOperation = () => {
+    if (pathName === 'group') {
+      dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id));
+    }
+
+    dispatch(deleteSearchTodoListItem(props.listItem.id, props.fetchSearchTodoListRequestData));
   };
 
   return (
@@ -150,38 +181,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       disabledButton={disabledButton()}
-      todoListItemOperation={() => {
-        {
-          pathName === 'group'
-            ? dispatch(
-                editGroupTodoListItem(
-                  date,
-                  currentYearMonth,
-                  Number(group_id),
-                  props.listItem.id,
-                  implementationDate,
-                  dueDate,
-                  todoContent,
-                  checked
-                )
-              )
-            : dispatch(
-                editSearchTodoListItem(
-                  props.listItem.id,
-                  requestData,
-                  props.fetchSearchTodoListRequestData
-                )
-              );
-        }
-        setOpenEditTodoForm(false);
-      }}
-      deleteOperation={() => {
-        pathName === 'group'
-          ? dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id))
-          : dispatch(
-              deleteSearchTodoListItem(props.listItem.id, props.fetchSearchTodoListRequestData)
-            );
-      }}
+      todoListItemOperation={() => editTodoListItemOperation()}
+      deleteOperation={() => deleteTodoListItemOperation()}
       inputTodoClassName={props.inputTodoClassName}
       inputTodoRef={inputTodoRef}
     />

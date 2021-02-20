@@ -12,8 +12,9 @@ import {
   getTodayImplementationTodoList,
 } from '../../../../reducks/todoList/selectors';
 import { useLocation, useParams } from 'react-router';
-import { customMonth, date, year } from '../../../../lib/constant';
+import { customMonth, year } from '../../../../lib/constant';
 import TodayTodoListArea from '../../../../components/todo/page/TodayTodoListArea/TodayTodoListArea';
+import moment from 'moment';
 
 interface TodayTodoAreaContainerProps {
   currentYear: string;
@@ -32,7 +33,7 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
 
   const todayYear = String(year);
   const todayMonth = customMonth;
-  const todayDate: string = ('0' + date.getDate()).slice(-2);
+  const todayDate = moment().format('DD');
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));

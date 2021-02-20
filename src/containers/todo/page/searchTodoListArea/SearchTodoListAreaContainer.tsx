@@ -105,6 +105,18 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
 
   const requestData: SearchTodoRequestData = searchTodoRequestData();
 
+  const fetchSearchTodoListOperation = () => {
+    if (pathName === 'group') {
+      dispatch(fetchSearchGroupTodoList(Number(group_id), requestData));
+      props.setOpenSearchResultTodoList(true);
+      setCurrentDateType(dateType);
+    }
+
+    dispatch(fetchSearchTodoList(requestData));
+    props.setOpenSearchResultTodoList(true);
+    setCurrentDateType(dateType);
+  };
+
   return (
     <SearchTodoListArea
       currentDateType={currentDateType}
@@ -126,14 +138,7 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
       selectSortItemChange={selectSortItemChange}
       selectSortType={selectSortType}
       openSearchResultTodoList={props.openSearchResultTodoList}
-      getSearchResultTodoList={() => {
-        pathName === 'group'
-          ? dispatch(fetchSearchGroupTodoList(Number(group_id), requestData))
-          : dispatch(fetchSearchTodoList(requestData));
-
-        props.setOpenSearchResultTodoList(true);
-        setCurrentDateType(dateType);
-      }}
+      getSearchResultTodoList={() => fetchSearchTodoListOperation()}
       fetchSearchTodoListRequestData={requestData}
       selectLimit={selectLimit}
     />
