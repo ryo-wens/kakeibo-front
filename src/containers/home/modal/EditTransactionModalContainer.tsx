@@ -275,8 +275,8 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     medium_category_id: mediumCategoryId,
     custom_category_id: customCategoryId,
     amount: Number(amount),
-    memo: emptyMemo,
-    shop: emptyShop,
+    memo: emptyMemo !== null ? emptyMemo.trim() : null,
+    shop: emptyShop !== null ? emptyShop.trim() : null,
   };
   const groupEditRequestData: GroupTransactionsReq = {
     transaction_date: transactionDate,
@@ -286,8 +286,8 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     custom_category_id: customCategoryId,
     amount: Number(amount),
     payment_user_id: paymentUserId,
-    memo: emptyMemo,
-    shop: emptyShop,
+    memo: emptyMemo !== null ? emptyMemo.trim() : null,
+    shop: emptyShop !== null ? emptyShop.trim() : null,
   };
 
   const september = 9;

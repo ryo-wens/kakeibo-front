@@ -1,10 +1,24 @@
 import {
+  startFetchTransactionsActions,
   fetchTransactionsActions,
+  cancelFetchTransactionsActions,
+  failedFetchTransactionsActions,
+  startFetchLatestTransactionsActions,
   fetchLatestTransactionsActions,
-  addTransactionsAction,
-  editTransactionsAction,
-  deleteTransactionsAction,
+  cancelFetchLatestTransactionsActions,
+  failedFetchLatestTransactionsActions,
+  startAddTransactionsActions,
+  addTransactionsActions,
+  failedAddTransactionsActions,
+  startEditTransactionsActions,
+  editTransactionsActions,
+  failedEditTransactionsActions,
+  startDeleteTransactionsActions,
+  deleteTransactionsActions,
+  failedDeleteTransactionsActions,
+  startSearchTransactionsActions,
   searchTransactionsActions,
+  failedSearchTransactionsActions,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -16,7 +30,7 @@ import {
   DeleteTransactionRes,
 } from './types';
 import moment from 'moment';
-import { isValidAmountFormat, errorHandling } from '../../lib/validation';
+import { isValidAmountFormat } from '../../lib/validation';
 
 export const fetchTransactionsList = (
   selectYears: {
@@ -26,6 +40,8 @@ export const fetchTransactionsList = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchTransactionsActions());
+
     try {
       const result = await axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
@@ -48,9 +64,11 @@ export const fetchTransactionsList = (
       }
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchTransactionsActions());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchTransactionsActions(error.response.status, error.response.data.error.message)
+        );
       }
     }
   };
@@ -58,6 +76,8 @@ export const fetchTransactionsList = (
 
 export const fetchLatestTransactionsList = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchLatestTransactionsActions());
+
     try {
       const result = await axios.get<FetchLatestTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
@@ -76,9 +96,14 @@ export const fetchLatestTransactionsList = (signal: CancelTokenSource) => {
       }
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchLatestTransactionsActions());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchLatestTransactionsActions(
+            error.response.status,
+            error.response.data.error.message
+          )
+        );
       }
     }
   };
@@ -104,6 +129,9 @@ export const addTransactions = (
       alert('金額は数字で入力してください。');
       return;
     }
+
+    dispatch(startAddTransactionsActions());
+
     try {
       await axios.post<TransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`,
@@ -137,9 +165,11 @@ export const addTransactions = (
       const addedTransactionsList = fetchTransactionsResult.data.transactions_list;
       const addedLatestTransactionsList = fetchLatestTransactionsResult.data.transactions_list;
 
-      dispatch(addTransactionsAction(addedTransactionsList, addedLatestTransactionsList));
+      dispatch(addTransactionsActions(addedTransactionsList, addedLatestTransactionsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedAddTransactionsActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
@@ -165,6 +195,8 @@ export const editTransactions = (
       alert('金額は数字で入力してください。');
       return;
     }
+
+    dispatch(startEditTransactionsActions());
 
     try {
       await axios.put<TransactionsRes>(
@@ -199,9 +231,11 @@ export const editTransactions = (
       const editedTransactionsList = fetchTransactionsResult.data.transactions_list;
       const editedLatestTransactionsList = fetchLatestTransactionsResult.data.transactions_list;
 
-      dispatch(editTransactionsAction(editedTransactionsList, editedLatestTransactionsList));
+      dispatch(editTransactionsActions(editedTransactionsList, editedLatestTransactionsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedEditTransactionsActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
@@ -213,6 +247,8 @@ export const deleteTransactions = (
   editTransactionMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startDeleteTransactionsActions());
+
     try {
       await axios.delete<DeleteTransactionRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
@@ -240,9 +276,11 @@ export const deleteTransactions = (
       const deletedTransactionsList = fetchTransactionsResult.data.transactions_list;
       const deletedLatestTransactionsList = fetchLatestTransactionsResult.data.transactions_list;
 
-      dispatch(deleteTransactionsAction(deletedTransactionsList, deletedLatestTransactionsList));
+      dispatch(deleteTransactionsActions(deletedTransactionsList, deletedLatestTransactionsList));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedDeleteTransactionsActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
@@ -261,6 +299,8 @@ export const searchTransactions = (searchRequestData: {
   limit?: string | null;
 }) => {
   return async (dispatch: Dispatch<Action>) => {
+    dispatch(startSearchTransactionsActions());
+
     try {
       const result = await axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`,
@@ -298,7 +338,9 @@ export const searchTransactions = (searchRequestData: {
         dispatch(searchTransactionsActions(emptySearchTransactionsList, message));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedSearchTransactionsActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };

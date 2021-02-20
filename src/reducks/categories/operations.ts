@@ -1,12 +1,21 @@
 import {
+  startFetchCategoriesActions,
   fetchIncomeCategoryActions,
   fetchExpenseCategoryActions,
+  cancelFetchCategoriesActions,
+  failedFetchCategoriesActions,
+  startAddCustomCategoryActions,
   addIncomeCustomCategoryActions,
   addExpenseCustomCategoryActions,
+  failedAddCustomCategoryActions,
+  startEditCustomCategoryActions,
   editIncomeCustomCategoryActions,
   editExpenseCustomCategoryActions,
+  failedEditCustomCategoryActions,
+  startDeleteCustomCategoryActions,
   deleteIncomeCustomCategoryActions,
   deleteExpenseCustomCategoryActions,
+  failedDeleteCustomCategoryActions,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
 import { Dispatch, Action } from 'redux';
@@ -16,10 +25,11 @@ import {
   CrudCustomCategoryRes,
   DeletedMessage,
 } from './types';
-import { errorHandling } from '../../lib/validation';
 
 export const fetchCategories = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startFetchCategoriesActions());
+
     try {
       const result = await axios.get<FetchCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
@@ -35,9 +45,11 @@ export const fetchCategories = (signal: CancelTokenSource) => {
       dispatch(fetchExpenseCategoryActions(expenseCategories));
     } catch (error) {
       if (axios.isCancel(error)) {
-        return;
+        dispatch(cancelFetchCategoriesActions());
       } else {
-        errorHandling(dispatch, error);
+        dispatch(
+          failedFetchCategoriesActions(error.response.status, error.response.data.error.message)
+        );
       }
     }
   };
@@ -53,6 +65,9 @@ export const addCustomCategories = (
       name: name,
       big_category_id: bigCategoryId,
     };
+
+    dispatch(startAddCustomCategoryActions());
+
     try {
       await axios.post<CrudCustomCategoryRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`,
@@ -80,7 +95,9 @@ export const addCustomCategories = (
         dispatch(addExpenseCustomCategoryActions(expenseCategories));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedAddCustomCategoryActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
@@ -96,6 +113,9 @@ export const editCustomCategories = (
       name: name,
       big_category_id: bigCategoryId,
     };
+
+    dispatch(startEditCustomCategoryActions());
+
     try {
       await axios.put<CrudCustomCategoryRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`,
@@ -123,7 +143,9 @@ export const editCustomCategories = (
         dispatch(editExpenseCustomCategoryActions(expenseCategories));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedEditCustomCategoryActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };
@@ -134,6 +156,8 @@ export const deleteCustomCategories = (
   signal: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
+    dispatch(startDeleteCustomCategoryActions());
+
     try {
       await axios.delete<DeletedMessage>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`,
@@ -160,7 +184,9 @@ export const deleteCustomCategories = (
         dispatch(deleteExpenseCustomCategoryActions(expenseCategories));
       }
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedDeleteCustomCategoryActions(error.response.status, error.response.data.error.message)
+      );
     }
   };
 };

@@ -11,8 +11,3 @@ export const getExpenseCategories = createSelector(
   [categoriesSelector],
   (state) => state.expenseList
 );
-
-export const getCategoriesError = createSelector(
-  [categoriesSelector],
-  (state) => state.categoriesError
-);

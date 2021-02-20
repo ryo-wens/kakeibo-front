@@ -1,4 +1,4 @@
-import { Categories, CategoriesError } from '../categories/types';
+import { Categories } from '../categories/types';
 import { GroupCategories } from '../groupCategories/types';
 import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
@@ -41,8 +41,17 @@ export interface State {
   };
   categories: {
     incomeList: Categories;
+    incomeCategoriesLoading: boolean;
+    incomeCategoriesError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     expenseList: Categories;
-    categoriesError: CategoriesError;
+    expenseCategoriesLoading: boolean;
+    expenseCategoriesError: {
+      statusCode: number;
+      errorMessage: string;
+    };
   };
   groupCategories: {
     groupIncomeList: GroupCategories;
@@ -50,8 +59,23 @@ export interface State {
   };
   transactions: {
     latestTransactionsList: TransactionsList;
+    latestTransactionsListLoading: boolean;
+    latestTransactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     transactionsList: TransactionsList;
+    transactionsListLoading: boolean;
+    transactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     searchTransactionsList: TransactionsList;
+    searchTransactionsListLoading: boolean;
+    searchTransactionsListError: {
+      statusCode: number;
+      errorMessage: string;
+    };
     noTransactionsMessage: string;
     notHistoryMessage: string;
   };

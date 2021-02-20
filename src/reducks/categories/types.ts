@@ -16,11 +16,6 @@ export interface AssociatedCategory {
 export type AssociatedCategories = Array<AssociatedCategory>;
 export type Categories = Array<Category>;
 
-export interface CategoriesError {
-  statusCode: number;
-  errorMessage: string;
-}
-
 export interface FetchCategoriesRes {
   income_categories_list: [];
   expense_categories_list: [];

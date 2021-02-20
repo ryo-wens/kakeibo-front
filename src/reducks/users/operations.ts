@@ -8,7 +8,7 @@ import {
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
-import { SignupReq, UserRes, LoginReq, LogoutRes, ConflictMessage } from './types';
+import { SignupReq, UserRes, LoginReq, LogoutRes, ConflictMessage, UserInfo } from './types';
 import axios, { CancelTokenSource } from 'axios';
 import { errorHandling } from '../../lib/validation';
 
@@ -20,7 +20,7 @@ export const signUp = (
   confirmPassword: string
 ) => {
   const data: SignupReq = {
-    id: userId,
+    user_id: userId,
     name: userName,
     email: email,
     password: password,
@@ -103,11 +103,11 @@ export const logOut = () => {
 export const fetchUserInfo = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     try {
-      const result = await axios.get<UserRes>(`${process.env.REACT_APP_USER_API_HOST}/user`, {
+      const result = await axios.get<UserInfo>(`${process.env.REACT_APP_USER_API_HOST}/user`, {
         cancelToken: signal.token,
         withCredentials: true,
       });
-      const userInfo: UserRes = result.data;
+      const userInfo: UserInfo = result.data;
 
       dispatch(fetchUserInfoAction(userInfo));
     } catch (error) {

@@ -26,7 +26,7 @@ describe('async actions users', () => {
     const url = `${process.env.REACT_APP_USER_API_HOST}/signup`;
 
     const signUpReq = {
-      id: 'kohh20',
+      user_id: 'kohh20',
       name: '千葉雄喜',
       email: 'kohh@gmail.com',
       password: 'kohhworst',
