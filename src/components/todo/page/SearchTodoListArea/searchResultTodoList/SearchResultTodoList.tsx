@@ -1,13 +1,18 @@
 import React from 'react';
 import './search-result-todo-list.scss';
-import { TodoList, TodoListItem } from '../../../../../reducks/todoList/types';
-import TodoListItemComponentContainer from '../../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
+import {
+  SearchTodoRequestData,
+  TodoList,
+  TodoListItem,
+} from '../../../../../reducks/todoList/types';
+import { customMonth, year } from '../../../../../lib/constant';
+import SearchTodoListItemComponentContainer from '../../../../../containers/todo/page/searchTodoListArea/searchResultTodoList/searchResultTodoListItem/SearchTodoListItemComponentContainer';
 
 interface SearchResultTodoListProps {
   searchTodoList: TodoList;
-  currentYearMonth: string;
   equalsDisplayDate: (listItem: TodoListItem) => boolean;
   displayDate: (listItem: TodoListItem) => string;
+  fetchSearchTodoListRequestData: SearchTodoRequestData;
   message: string;
 }
 
@@ -18,20 +23,24 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
         {props.searchTodoList.length ? (
           props.searchTodoList.map((listItem) => {
             return (
-              <div className="todo-list-component__item" key={listItem.id}>
+              <div className="search-result-todo-list__item" key={listItem.id}>
                 {props.equalsDisplayDate(listItem) && (
-                  <p className="todo-list-component__item-date">{props.displayDate(listItem)}</p>
+                  <p className="search-result-todo-list__item-date">
+                    {props.displayDate(listItem)}
+                  </p>
                 )}
-                <TodoListItemComponentContainer
+                <SearchTodoListItemComponentContainer
                   listItem={listItem}
-                  currentYearMonth={props.currentYearMonth}
+                  currentYear={String(year)}
+                  currentMonth={customMonth}
                   inputTodoClassName={'todo-list-item-component__input-todo'}
+                  fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}
                 />
               </div>
             );
           })
         ) : (
-          <p className="todo-list-component__message">{props.message}</p>
+          <p className="search-result-todo-list__message">{props.message}</p>
         )}
       </div>
     </div>

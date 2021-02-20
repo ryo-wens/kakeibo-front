@@ -134,6 +134,7 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
         props.setOpenSearchResultTodoList(true);
         setCurrentDateType(dateType);
       }}
+      fetchSearchTodoListRequestData={requestData}
       selectLimit={selectLimit}
     />
   );

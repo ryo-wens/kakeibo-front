@@ -6,6 +6,7 @@ import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SearchResultTodoListContainer from '../../../../containers/todo/page/searchTodoListArea/searchResultTodoList/SearchResultTodoListContainer';
 import SelectSortItem from '../../modules/select/SelectSortItem';
 import SelectCompleteFlag from '../../modules/select/SelectCompleteFlag';
+import { SearchTodoRequestData } from '../../../../reducks/todoList/types';
 
 interface SearchTodoListAreaProps {
   currentDateType: string;
@@ -28,6 +29,7 @@ interface SearchTodoListAreaProps {
   selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   openSearchResultTodoList: boolean;
   getSearchResultTodoList: () => void;
+  fetchSearchTodoListRequestData: SearchTodoRequestData;
   closeSearch: () => void;
 }
 
@@ -133,7 +135,10 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
         </button>
       </div>
       {props.openSearchResultTodoList && (
-        <SearchResultTodoListContainer currentDateType={props.currentDateType} />
+        <SearchResultTodoListContainer
+          currentDateType={props.currentDateType}
+          fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}
+        />
       )}
     </div>
   );

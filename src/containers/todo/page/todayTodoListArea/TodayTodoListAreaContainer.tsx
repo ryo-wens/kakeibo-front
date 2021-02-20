@@ -5,7 +5,7 @@ import {
   fetchGroupTodayTodoList,
 } from '../../../../reducks/groupTodoList/operations';
 import { fetchGroups } from '../../../../reducks/groups/operations';
-import { fetchDateTodoList } from '../../../../reducks/todoList/operations';
+import { fetchTodayTodoList } from '../../../../reducks/todoList/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import {
   getTodayDueTodoList,
@@ -16,7 +16,8 @@ import { customMonth, date, year } from '../../../../lib/constant';
 import TodayTodoListArea from '../../../../components/todo/page/TodayTodoListArea/TodayTodoListArea';
 
 interface TodayTodoAreaContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -56,14 +57,15 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
   useEffect(() => {
     if (pathName !== 'group' && !todayImplementationTodoList.length && !todayDueTodoList.length) {
       const signal = axios.CancelToken.source();
-      dispatch(fetchDateTodoList(todayYear, todayMonth, todayDate, signal));
+      dispatch(fetchTodayTodoList(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();
     }
   }, [todayYear, todayMonth, todayDate]);
 
   return (
     <TodayTodoListArea
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       editing={props.editing}
       setEditing={props.setEditing}
     />

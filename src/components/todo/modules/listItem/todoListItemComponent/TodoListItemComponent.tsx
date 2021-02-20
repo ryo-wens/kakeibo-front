@@ -22,12 +22,18 @@ interface TodoListItemComponentProps {
   todoListItemOperation: () => void;
   deleteOperation: () => void;
   inputTodoClassName: string;
-  currentTextStyle: (completeFlag: boolean) => React.CSSProperties;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
   inputTodoRef: React.RefObject<HTMLDivElement>;
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
+  const currentTextStyle = (completeFlag: boolean) => {
+    if (completeFlag) {
+      return { opacity: 0.3 };
+    }
+    return { opacity: 1.0 };
+  };
+
   return (
     <>
       {!props.openEditTodoForm ? (
@@ -38,7 +44,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           </label>
           <span
             className="todo-list-item-component__content"
-            style={props.currentTextStyle(props.checked)}
+            style={currentTextStyle(props.checked)}
           >
             {props.listItem.todo_content}
           </span>

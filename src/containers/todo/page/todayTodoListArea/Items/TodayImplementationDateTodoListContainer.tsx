@@ -6,7 +6,8 @@ import { getGroupTodayImplementationTodoList } from '../../../../../reducks/grou
 import { useLocation } from 'react-router';
 
 interface TodayImplementationDateTodoListContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -22,7 +23,8 @@ const TodayImplementationDateTodoListContainer = (
       todoList={
         pathName === 'group' ? groupTodayImplementationTodoList : todayImplementationTodoList
       }
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={'今日の実施予定のToDoリストは、登録されていません。'}
       setEditing={props.setEditing}
     />

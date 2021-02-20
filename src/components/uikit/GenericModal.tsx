@@ -2,13 +2,10 @@ import React, { useState } from 'react';
 import { makeStyles, Theme, createStyles } from '@material-ui/core/styles';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { ModalInform } from './index';
 import { getModalMessage } from '../../reducks/modal/selectors';
 import { State } from '../../reducks/store/types';
-import { deleteTodoListItem } from '../../reducks/todoList/operations';
-import { deleteGroupTodoListItem } from '../../reducks/groupTodoList/operations';
-import { getPathGroupId, getPathTemplateName } from '../../lib/path';
 
 const useStyles = makeStyles((theme: Theme) =>
   createStyles({
@@ -27,18 +24,14 @@ interface GenericModalProps {
   buttonLabel: string;
   menuLabel: string;
   modalText: string;
-  todoListItemId?: number;
-  onClickGroupWithdrawal?: () => void;
+  onClickGroupWithdrawal: () => void;
 }
 
 const GenericModal = (props: GenericModalProps) => {
   const classes = useStyles();
-  const dispatch = useDispatch();
   const selector = useSelector((state: State) => state);
   const [open, setOpen] = useState<boolean>(false);
   const modalMessage = getModalMessage(selector);
-  const templateName = getPathTemplateName(window.location.pathname);
-  const pathGroupId = getPathGroupId(window.location.pathname);
 
   const openModal = () => {
     setOpen(true);
@@ -49,14 +42,7 @@ const GenericModal = (props: GenericModalProps) => {
   };
 
   const switchOperation = () => {
-    const todoListItemId = props.todoListItemId;
-    if (templateName === 'todo' && todoListItemId) {
-      return dispatch(deleteTodoListItem(todoListItemId)) && closeModal();
-    } else if (templateName === 'group' && todoListItemId) {
-      return dispatch(deleteGroupTodoListItem(pathGroupId, todoListItemId)) && closeModal();
-    } else if (props.onClickGroupWithdrawal) {
-      return props.onClickGroupWithdrawal();
-    }
+    return props.onClickGroupWithdrawal();
   };
 
   const body = (

@@ -18,8 +18,8 @@ const TodoPageContainer = () => {
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
+  const currentYear = String(selectedYear);
   const currentMonth = (`0` + `${selectedMonth}`).slice(-2);
-  const currentYearMonth = `${selectedYear}/${currentMonth}`;
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -60,7 +60,8 @@ const TodoPageContainer = () => {
       setOpenSearchResultTodoList={setOpenSearchResultTodoList}
       openSearch={openSearch}
       closeSearch={closeSearch}
-      currentYearMonth={currentYearMonth}
+      currentYear={currentYear}
+      currentMonth={currentMonth}
       pathName={pathName}
     />
   );

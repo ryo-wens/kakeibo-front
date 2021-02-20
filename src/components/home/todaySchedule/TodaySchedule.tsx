@@ -11,6 +11,8 @@ interface TodayScheduleProps {
   todoEditing: boolean;
   setTodoEditing: React.Dispatch<React.SetStateAction<boolean>>;
   pathName: string;
+  currentYear: string;
+  currentMonth: string;
   currentYearMonth: string;
   implementationTodoList: TodoListItem[];
   dueTodoList: TodoListItem[];
@@ -28,7 +30,8 @@ const TodaySchedule = (props: TodayScheduleProps) => {
           leftItem={
             <TodayScheduleTodoListArea
               todoList={props.implementationTodoList}
-              currentYearMonth={props.currentYearMonth}
+              currentYear={props.currentYear}
+              currentMonth={props.currentMonth}
               message={'今日の実施予定のToDoリストは、登録されていません。'}
               setEditing={props.setTodoEditing}
             />
@@ -36,7 +39,8 @@ const TodaySchedule = (props: TodayScheduleProps) => {
           rightItem={
             <TodayScheduleTodoListArea
               todoList={props.dueTodoList}
-              currentYearMonth={props.currentYearMonth}
+              currentYear={props.currentYear}
+              currentMonth={props.currentMonth}
               message={'今日の締切予定のToDoリストは、登録されていません。'}
               setEditing={props.setTodoEditing}
             />
