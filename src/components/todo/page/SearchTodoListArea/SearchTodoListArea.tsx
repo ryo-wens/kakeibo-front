@@ -19,18 +19,18 @@ interface SearchTodoListAreaProps {
   sortType: string;
   limit: string;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
-  selectDateTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  startDateChange: (selectStartDate: Date | null) => void;
-  endDateChange: (selectEndDate: Date | null) => void;
-  selectCompleteFlagChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  inputTaskContent: (event: React.ChangeEvent<{ value: string }>) => void;
-  selectSortItemChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  selectSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
-  selectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleSelectDateTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleStartDateChange: (selectStartDate: Date | null) => void;
+  handleEndDateChange: (selectEndDate: Date | null) => void;
+  handleSelectCompleteFlagChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleTaskContent: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleSelectSortItem: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleSelectSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleSelectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   openSearchResultTodoList: boolean;
   getSearchResultTodoList: () => void;
   fetchSearchTodoListRequestData: SearchTodoRequestData;
-  closeSearch: () => void;
+  handleCloseSearch: () => void;
 }
 
 const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
@@ -42,13 +42,13 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
           <SelectDateType
             value={props.dateType}
             id={'dateType'}
-            selectChange={props.selectDateTypeChange}
+            selectChange={props.handleSelectDateTypeChange}
           />
           <div className="search-todo-list-area__date-pickers">
             <DatePicker
               id={'startDate'}
               label={'開始日'}
-              onChange={props.startDateChange}
+              onChange={props.handleStartDateChange}
               required={false}
               value={props.startDate}
               disabled={false}
@@ -58,7 +58,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
             <DatePicker
               id={'startDate'}
               label={'終了日'}
-              onChange={props.endDateChange}
+              onChange={props.handleEndDateChange}
               required={false}
               value={props.endDate}
               disabled={false}
@@ -74,7 +74,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
         <SelectCompleteFlag
           id={'select-complete-flag'}
           value={props.completeFlag}
-          selectChange={props.selectCompleteFlagChange}
+          selectChange={props.handleSelectCompleteFlagChange}
         />
       ),
     },
@@ -85,7 +85,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
           id="todo-consent"
           label={''}
           value={props.todoContent}
-          onChange={props.inputTaskContent}
+          onChange={props.handleTaskContent}
           required={true}
           type={'text'}
           fullWidth={false}
@@ -99,24 +99,27 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
         <SelectSortItem
           id={'sortItem'}
           value={props.sortItem}
-          selectChange={props.selectSortItemChange}
+          selectChange={props.handleSelectSortItem}
         />
       ),
     },
     {
       key: '並び順',
-      value: <SelectSortType selectSortType={props.selectSortType} value={props.sortType} />,
+      value: <SelectSortType selectSortType={props.handleSelectSortType} value={props.sortType} />,
     },
     {
       key: '取得件数',
-      value: <SelectLimit selectLimit={props.selectLimit} value={props.limit} />,
+      value: <SelectLimit selectLimit={props.handleSelectLimit} value={props.limit} />,
     },
   ];
 
   return (
     <div className="search-todo-list-area">
       <div className="search-todo-list-area__position">
-        <button className="search-todo-list-area__btn-position" onClick={() => props.closeSearch()}>
+        <button
+          className="search-todo-list-area__btn-position"
+          onClick={() => props.handleCloseSearch()}
+        >
           <ChevronLeftIcon />
         </button>
         <h3 className="search-todo-list-area__title">Todoを検索</h3>

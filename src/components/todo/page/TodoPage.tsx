@@ -19,8 +19,8 @@ interface TodoPageProps {
   openSearchTodoList: boolean;
   openSearchResultTodoList: boolean;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
-  openSearch: () => void;
-  closeSearch: () => void;
+  handleOpenSearch: () => void;
+  handleCloseSearch: () => void;
   currentYear: string;
   currentMonth: string;
   pathName: string;
@@ -34,7 +34,7 @@ const TodoPage = (props: TodoPageProps) => {
           <div className="todo-page__left">
             <div className="todo-page__left-content">
               <div className="todo-page__switch-btn">
-                <button className="todo-page__search" onClick={() => props.openSearch()}>
+                <button className="todo-page__search" onClick={() => props.handleOpenSearch()}>
                   検索
                 </button>
                 <SwitchTodayOrMonthlyTabsContainer
@@ -79,7 +79,7 @@ const TodoPage = (props: TodoPageProps) => {
         <SearchTodoListAreaContainer
           openSearchResultTodoList={props.openSearchResultTodoList}
           setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}
-          closeSearch={props.closeSearch}
+          handleCloseSearch={props.handleCloseSearch}
         />
       )}
     </>

@@ -10,8 +10,8 @@ interface TodoListItemComponentProps {
   dueDate: Date | null;
   todoContent: string;
   checked: boolean;
-  inputImplementationDate: (date: Date | null) => void;
-  inputDueDate: (date: Date | null) => void;
+  handleImplementationDate: (date: Date | null) => void;
+  handleDueDate: (date: Date | null) => void;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
   listItem: TodoListItem;
@@ -19,8 +19,8 @@ interface TodoListItemComponentProps {
   handleCloseEditTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
   disabledButton: boolean;
-  todoListItemOperation: () => void;
-  deleteOperation: () => void;
+  handleEditTodoListItem: () => void;
+  handleDeleteTodoListItem: () => void;
   inputTodoClassName: string;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
   inputTodoRef: React.RefObject<HTMLDivElement>;
@@ -61,16 +61,16 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
             titleLabel={'ToDoを編集'}
             buttonLabel={'保存'}
             handleTodoContentChange={props.handleTodoContentChange}
-            inputImplementationDate={props.inputImplementationDate}
-            inputDueDate={props.inputDueDate}
+            handleImplementationDate={props.handleImplementationDate}
+            handleDueDate={props.handleDueDate}
             implementationDate={props.implementationDate}
             dueDate={props.dueDate}
             todoContent={props.todoContent}
-            todoListItemOperation={props.todoListItemOperation}
+            handleTodoListItem={props.handleEditTodoListItem}
             closeInputTodoForm={props.handleCloseEditTodoForm}
             onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
             disabledButton={props.disabledButton}
-            deleteOperation={props.deleteOperation}
+            handleDeleteTodoListItem={props.handleDeleteTodoListItem}
             inputTodoRef={props.inputTodoRef}
           />
         </div>

@@ -7,10 +7,9 @@ import {
   editGroupTodoListItem,
 } from '../../../../reducks/groupTodoList/operations';
 import { dateStringToDate } from '../../../../lib/date';
-import { customMonth, date, year } from '../../../../lib/constant';
+import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
-import moment from 'moment';
 import axios from 'axios';
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
@@ -31,7 +30,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
   const currentYearMonth = `${props.currentYear}/${props.currentMonth}`;
-  const todayDate = moment().format('DD');
   const signal = axios.CancelToken.source();
 
   const inputTodoRef = useRef<HTMLDivElement>(null);
@@ -86,12 +84,12 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     setTodoContent(event.target.value);
   };
 
-  const inputImplementationDate = (date: Date | null) => {
+  const handleImplementationDate = (date: Date | null) => {
     setImplementationDate(date);
     setDueDate(date);
   };
 
-  const inputDueDate = (date: Date | null) => {
+  const handleDueDate = (date: Date | null) => {
     setDueDate(date);
   };
 
@@ -118,7 +116,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
           props.listItem.id,
           String(year),
           customMonth,
-          todayDate,
+          customDate,
           props.currentYear,
           props.currentMonth,
           requestData,
@@ -141,7 +139,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     }
   };
 
-  const editTodoListItemOperation = () => {
+  const handleEditTodoListItem = () => {
     const requestData: EditTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -169,7 +167,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
         props.listItem.id,
         String(year),
         customMonth,
-        todayDate,
+        customDate,
         props.currentYear,
         props.currentMonth,
         requestData,
@@ -179,7 +177,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     setOpenEditTodoForm(false);
   };
 
-  const deleteTodoListItemOperation = () => {
+  const handleDeleteTodoListItem = () => {
     if (pathName === 'group') {
       dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id));
     }
@@ -188,7 +186,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
         props.listItem.id,
         String(year),
         customMonth,
-        todayDate,
+        customDate,
         props.currentYear,
         props.currentMonth,
         signal
@@ -203,8 +201,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       dueDate={dueDate}
       todoContent={todoContent}
       checked={checked}
-      inputImplementationDate={inputImplementationDate}
-      inputDueDate={inputDueDate}
+      handleImplementationDate={handleImplementationDate}
+      handleDueDate={handleDueDate}
       handleTodoContentChange={handleTodoContentChange}
       handleChangeChecked={handleChangeChecked}
       listItem={props.listItem}
@@ -212,8 +210,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       disabledButton={disabledButton()}
-      todoListItemOperation={() => editTodoListItemOperation()}
-      deleteOperation={() => deleteTodoListItemOperation()}
+      handleEditTodoListItem={() => handleEditTodoListItem()}
+      handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
       inputTodoClassName={props.inputTodoClassName}
       inputTodoRef={inputTodoRef}
     />

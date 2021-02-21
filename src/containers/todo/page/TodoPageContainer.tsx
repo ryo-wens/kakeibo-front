@@ -6,7 +6,7 @@ import { useLocation } from 'react-router';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import TodoPage from '../../../components/todo/page/TodoPage';
-import moment from 'moment';
+import { generateZeroPaddingMonth } from '../../../lib/date';
 
 const TodoPageContainer = () => {
   const dispatch = useDispatch();
@@ -20,7 +20,7 @@ const TodoPageContainer = () => {
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
 
   const currentYear = String(selectedYear);
-  const currentMonth = moment(selectedMonth, 'MM').format('MM');
+  const currentMonth = generateZeroPaddingMonth(selectedMonth);
 
   useEffect(() => {
     if (pathName !== 'group') {
@@ -37,11 +37,11 @@ const TodoPageContainer = () => {
     }
   }, []);
 
-  const openSearch = () => {
+  const handleOpenSearch = () => {
     setOpenSearchTodoList(true);
   };
 
-  const closeSearch = () => {
+  const handleCloseSearch = () => {
     setOpenSearchTodoList(false);
     setOpenSearchResultTodoList(false);
   };
@@ -59,8 +59,8 @@ const TodoPageContainer = () => {
       openSearchTodoList={openSearchTodoList}
       openSearchResultTodoList={openSearchResultTodoList}
       setOpenSearchResultTodoList={setOpenSearchResultTodoList}
-      openSearch={openSearch}
-      closeSearch={closeSearch}
+      handleOpenSearch={handleOpenSearch}
+      handleCloseSearch={handleCloseSearch}
       currentYear={currentYear}
       currentMonth={currentMonth}
       pathName={pathName}

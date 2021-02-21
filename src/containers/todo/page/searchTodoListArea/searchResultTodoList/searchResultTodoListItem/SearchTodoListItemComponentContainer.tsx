@@ -82,12 +82,12 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     setTodoContent(event.target.value);
   };
 
-  const inputImplementationDate = (date: Date | null) => {
+  const handleImplementationDate = (date: Date | null) => {
     setImplementationDate(date);
     setDueDate(date);
   };
 
-  const inputDueDate = (date: Date | null) => {
+  const handleDueDate = (date: Date | null) => {
     setDueDate(date);
   };
 
@@ -127,7 +127,7 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     }
   };
 
-  const editTodoListItemOperation = () => {
+  const handleEditTodoListItem = () => {
     const requestData: EditTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -157,7 +157,7 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     setOpenEditTodoForm(false);
   };
 
-  const deleteTodoListItemOperation = () => {
+  const handleDeleteTodoListItem = () => {
     if (pathName === 'group') {
       dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id));
     }
@@ -172,8 +172,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       dueDate={dueDate}
       todoContent={todoContent}
       checked={checked}
-      inputImplementationDate={inputImplementationDate}
-      inputDueDate={inputDueDate}
+      handleImplementationDate={handleImplementationDate}
+      handleDueDate={handleDueDate}
       handleTodoContentChange={handleTodoContentChange}
       handleChangeChecked={handleChangeChecked}
       listItem={props.listItem}
@@ -181,8 +181,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       disabledButton={disabledButton()}
-      todoListItemOperation={() => editTodoListItemOperation()}
-      deleteOperation={() => deleteTodoListItemOperation()}
+      handleEditTodoListItem={() => handleEditTodoListItem()}
+      handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
       inputTodoClassName={props.inputTodoClassName}
       inputTodoRef={inputTodoRef}
     />

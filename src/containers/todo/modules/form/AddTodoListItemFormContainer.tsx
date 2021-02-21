@@ -45,12 +45,12 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     setOpenAddTodoForm(false);
   };
 
-  const inputImplementationDate = (date: Date | null) => {
+  const handleImplementationDate = (date: Date | null) => {
     setImplementationDate(date);
     setDueDate(date);
   };
 
-  const inputDueDate = (date: Date | null) => {
+  const handleDueDate = (date: Date | null) => {
     setDueDate(date);
   };
 
@@ -69,7 +69,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     dueDate === null ||
     todoContent === initialState.initialTodoContent;
 
-  const addTodoListItemOperation = () => {
+  const handleAddTodoListItem = () => {
     const addRequestData: AddTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -108,14 +108,14 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
       implementationDate={implementationDate}
       dueDate={dueDate}
       todoContent={todoContent}
-      inputImplementationDate={inputImplementationDate}
-      inputDueDate={inputDueDate}
+      handleImplementationDate={handleImplementationDate}
+      handleDueDate={handleDueDate}
       handleTodoContentChange={handleTodoContentChange}
       openAddTodoForm={openAddTodoForm}
       handleOpenAddTodoForm={handleOpenAddTodoForm}
       handleCloseAddTodoForm={handleCloseAddTodoForm}
       disabledButton={disabledButton}
-      todoListItemOperation={() => addTodoListItemOperation()}
+      handleAddTodoListItem={() => handleAddTodoListItem()}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       inputTodoRef={inputTodoRef}
       date={date}

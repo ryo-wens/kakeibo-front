@@ -1,4 +1,5 @@
 import { AssociatedCategory } from '../reducks/categories/types';
+import moment from 'moment';
 
 export const standardBudgetType = 'StandardBudget';
 export const customBudgetType = 'CustomBudget';
@@ -13,7 +14,8 @@ export const todayDate = date.getDate();
 export const todayOfWeek = date.getDay();
 export const thisMonthStartDate = new Date(year, month - 1, 1).getDate();
 export const thisMonthEndDate = new Date(year, month, 0).getDate();
-export const customMonth = ('0' + month).slice(-2);
+export const customMonth = moment().format('MM');
+export const customDate = moment().format('DD');
 export const currentWeekNumber = Math.floor((date.getDate() - date.getDay() + 12) / 7);
 export const guidanceMessage = '「入力フォーム」から家計簿の追加を行ってください';
 export const noTransactionMessage = 'この月には、まだ記録がありません。';

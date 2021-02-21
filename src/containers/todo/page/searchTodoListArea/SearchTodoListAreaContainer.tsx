@@ -10,7 +10,7 @@ import { fetchSearchTodoList } from '../../../../reducks/todoList/operations';
 interface SearchTodoListAreaContainerProps {
   openSearchResultTodoList: boolean;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
-  closeSearch: () => void;
+  handleCloseSearch: () => void;
 }
 
 const initialState = {
@@ -44,19 +44,19 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
   const [sortType, setSortType] = useState<string>(initialState.initialSortType);
   const [limit, setLimit] = useState<string>(initialState.initialLimit);
 
-  const selectDateTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectDateTypeChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     setDateType(event.target.value as string);
   };
 
-  const startDateChange = (startDate: Date | null) => {
+  const handleStartDateChange = (startDate: Date | null) => {
     startSelectDate(startDate as Date);
   };
 
-  const endDateChange = (endDate: Date | null) => {
+  const handleEndDateChange = (endDate: Date | null) => {
     setEndDate(endDate as Date);
   };
 
-  const selectCompleteFlagChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectCompleteFlagChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     if (event.target.value === 'true') {
       setCompleteFlag(true);
     } else if (event.target.value === 'false') {
@@ -66,19 +66,19 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
     }
   };
 
-  const inputTaskContent = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleTaskContent = (event: React.ChangeEvent<{ value: string }>) => {
     setTodoContent(event.target.value);
   };
 
-  const selectSortItemChange = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectSortItem = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSortItem(event.target.value as string);
   };
 
-  const selectSortType = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectSortType = (event: React.ChangeEvent<{ value: unknown }>) => {
     setSortType(event.target.value as string);
   };
 
-  const selectLimit = (event: React.ChangeEvent<{ value: unknown }>) => {
+  const handleSelectLimit = (event: React.ChangeEvent<{ value: unknown }>) => {
     setLimit(event.target.value as string);
   };
 
@@ -120,7 +120,7 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
   return (
     <SearchTodoListArea
       currentDateType={currentDateType}
-      closeSearch={props.closeSearch}
+      handleCloseSearch={props.handleCloseSearch}
       setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}
       dateType={dateType}
       startDate={startDate}
@@ -130,17 +130,17 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
       sortItem={sortItem}
       sortType={sortType}
       limit={limit}
-      selectDateTypeChange={selectDateTypeChange}
-      startDateChange={startDateChange}
-      endDateChange={endDateChange}
-      selectCompleteFlagChange={selectCompleteFlagChange}
-      inputTaskContent={inputTaskContent}
-      selectSortItemChange={selectSortItemChange}
-      selectSortType={selectSortType}
+      handleSelectDateTypeChange={handleSelectDateTypeChange}
+      handleStartDateChange={handleStartDateChange}
+      handleEndDateChange={handleEndDateChange}
+      handleSelectCompleteFlagChange={handleSelectCompleteFlagChange}
+      handleTaskContent={handleTaskContent}
+      handleSelectSortItem={handleSelectSortItem}
+      handleSelectSortType={handleSelectSortType}
       openSearchResultTodoList={props.openSearchResultTodoList}
       getSearchResultTodoList={() => fetchSearchTodoListOperation()}
       fetchSearchTodoListRequestData={requestData}
-      selectLimit={selectLimit}
+      handleSelectLimit={handleSelectLimit}
     />
   );
 };

@@ -8,17 +8,17 @@ interface TodoListItemFormProps {
   titleLabel: string;
   buttonLabel: string;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  inputImplementationDate: (date: Date | null) => void;
-  inputDueDate: (date: Date | null) => void;
+  handleImplementationDate: (date: Date | null) => void;
+  handleDueDate: (date: Date | null) => void;
   implementationDate: Date | null;
   dueDate: Date | null;
   todoContent: string;
-  todoListItemOperation: () => void;
+  handleTodoListItem: () => void;
   disabledButton: boolean;
   closeInputTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
   pathName: string;
-  deleteOperation?: () => void;
+  handleDeleteTodoListItem?: () => void;
 }
 
 const TodoListItemForm = React.forwardRef(
@@ -66,7 +66,7 @@ const TodoListItemForm = React.forwardRef(
                 id={'date'}
                 label={'実施日'}
                 value={props.implementationDate}
-                onChange={props.inputImplementationDate}
+                onChange={props.handleImplementationDate}
                 required={true}
                 disabled={false}
                 minDate={new Date('1900-01-01')}
@@ -87,7 +87,7 @@ const TodoListItemForm = React.forwardRef(
                 id={'date'}
                 label={'締切日'}
                 value={props.dueDate}
-                onChange={props.inputDueDate}
+                onChange={props.handleDueDate}
                 required={true}
                 disabled={false}
                 minDate={props.implementationDate}
@@ -105,7 +105,7 @@ const TodoListItemForm = React.forwardRef(
             <button
               className="todo-list-item-form__btn--save"
               disabled={props.disabledButton}
-              onClick={props.todoListItemOperation}
+              onClick={props.handleTodoListItem}
             >
               {props.buttonLabel}
             </button>
@@ -120,13 +120,13 @@ const TodoListItemForm = React.forwardRef(
               キャンセル
             </button>
           </div>
-          {props.deleteOperation && (
+          {props.handleDeleteTodoListItem && (
             <DeleteModal
               title={'Todoを削除'}
               buttonLabel={'削除'}
               disabled={false}
               contentName={props.todoContent}
-              onClickDelete={props.deleteOperation}
+              onClickDelete={props.handleDeleteTodoListItem}
               onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
             />
           )}
