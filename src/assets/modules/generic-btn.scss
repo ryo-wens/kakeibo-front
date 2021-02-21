@@ -14,4 +14,10 @@
     color: #fff;
   }
 
+  &:disabled{
+    background-color: white;
+    color: $disable-color;
+    border-color: $disable-color;
+  }
+
 }

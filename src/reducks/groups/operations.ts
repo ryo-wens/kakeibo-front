@@ -53,7 +53,7 @@ export const createGroup = (groupName: string) => {
 
       const user: ApprovedGroupUser = {
         group_id: result.data.group_id,
-        user_id: currentUser.id,
+        user_id: currentUser.user_id,
         user_name: currentUser.name,
         color_code: `#FF0000`,
       };
