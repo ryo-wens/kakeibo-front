@@ -37,7 +37,7 @@ const BudgetsContainer = () => {
     };
 
     if (query === '?standard') {
-      style.background = 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)';
+      style.background = '#ff802b';
       style.color = '#fff';
     }
 
@@ -51,7 +51,7 @@ const BudgetsContainer = () => {
     };
 
     if (query === '?yearly') {
-      style.background = 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)';
+      style.background = '#ff802b';
       style.color = '#fff';
     }
 

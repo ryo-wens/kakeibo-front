@@ -305,9 +305,15 @@ export const deleteGroupTransactions = (
         }
       );
 
-      const deletedGroupTransactionsList = fetchGroupTransactionsResult.data.transactions_list;
+      const deletedGroupTransactionsList =
+        fetchGroupTransactionsResult.data.transactions_list === undefined
+          ? []
+          : fetchGroupTransactionsResult.data.transactions_list;
+
       const deletedGroupLatestTransactionsList =
-        fetchGroupLatestTransactionsResult.data.transactions_list;
+        fetchGroupLatestTransactionsResult.data.transactions_list === undefined
+          ? []
+          : fetchGroupLatestTransactionsResult.data.transactions_list;
 
       dispatch(
         deleteGroupTransactionsAction(

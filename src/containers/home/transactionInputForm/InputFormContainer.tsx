@@ -227,6 +227,7 @@ const InputFormContainer = () => {
   };
 
   const unInput =
+    displayMessageDecision ||
     amount === '' ||
     !isValidAmountFormat(amount) ||
     initialState.initialAmount === amount ||

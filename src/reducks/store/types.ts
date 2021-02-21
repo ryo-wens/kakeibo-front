@@ -25,7 +25,7 @@ import {
 
 export interface State {
   users: {
-    id: string;
+    user_id: string;
     name: string;
     email: string;
     errorMessage: string;
