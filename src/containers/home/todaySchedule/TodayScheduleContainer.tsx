@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import axios, { CancelTokenSource } from 'axios';
-import { fetchDateTodoList } from '../../../reducks/todoList/operations';
+import { fetchTodayTodoList } from '../../../reducks/todoList/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { customMonth, date, year } from '../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
@@ -75,7 +75,7 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
   useEffect(() => {
     if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
-      dispatch(fetchDateTodoList(todayYear, todayMonth, todayDate, signal));
+      dispatch(fetchTodayTodoList(todayYear, todayMonth, todayDate, signal));
       dispatch(fetchTodayShoppingList(todayYear, todayMonth, todayDate, signal));
       dispatch(fetchTodayShoppingListByCategories(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();
@@ -87,6 +87,8 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
       todoEditing={props.todoEditing}
       setTodoEditing={props.setTodoEditing}
       pathName={pathName}
+      currentYear={todayYear}
+      currentMonth={todayMonth}
       currentYearMonth={currentYearMonth}
       implementationTodoList={
         pathName === 'group' ? groupImplementationTodoList : implementationTodoList

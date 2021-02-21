@@ -15,7 +15,8 @@ import { fetchExpiredTodoList } from '../../../../reducks/todoList/operations';
 import { DisplayTodoList, DisplayTodoListItem } from '../../../../reducks/todoList/types';
 
 interface ExpiredTodoListAreaContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -69,7 +70,8 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
       displayExpiredTodoList={
         pathName === 'group' ? groupDisplayExpiredTodoList : displayExpiredTodoList
       }
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       readMore={readMore}
       setReadMore={setReadMore}
       setEditing={props.setEditing}

@@ -7,7 +7,7 @@ import {
   fetchGroupMonthTodoList,
 } from '../../../../reducks/groupTodoList/operations';
 import { fetchGroups } from '../../../../reducks/groups/operations';
-import { fetchMonthTodoList } from '../../../../reducks/todoList/operations';
+import { fetchMonthlyTodoList } from '../../../../reducks/todoList/operations';
 import MonthlyTodoListArea from '../../../../components/todo/page/MonthlyTodoListArea/MonthlyTodoListArea';
 
 interface MonthlyTodoListAreaContainerProps {
@@ -15,7 +15,8 @@ interface MonthlyTodoListAreaContainerProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -25,14 +26,12 @@ const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) 
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
 
-  const currentYear = String(props.selectedYear);
-  const currentMonth = (`0` + `${props.selectedMonth}`).slice(-2);
-  const currentYearMonth = `${currentYear}/${currentMonth}`;
-
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
     dispatch(fetchGroupExpiredTodoList(Number(group_id), signal));
-    dispatch(fetchGroupMonthTodoList(Number(group_id), currentYear, currentMonth, signal));
+    dispatch(
+      fetchGroupMonthTodoList(Number(group_id), props.currentYear, props.currentMonth, signal)
+    );
   };
 
   useEffect(() => {
@@ -52,7 +51,7 @@ const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) 
   useEffect(() => {
     if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
-      dispatch(fetchMonthTodoList(currentYear, currentMonth, signal));
+      dispatch(fetchMonthlyTodoList(props.currentYear, props.currentMonth, signal));
       return () => signal.cancel();
     }
   }, [props.selectedYear, props.selectedMonth]);
@@ -63,7 +62,8 @@ const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) 
       selectedMonth={props.selectedMonth}
       setSelectedYear={props.setSelectedYear}
       setSelectedMonth={props.setSelectedMonth}
-      currentYearMonth={currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       setEditing={props.setEditing}
     />
   );

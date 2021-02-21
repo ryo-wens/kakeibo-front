@@ -8,7 +8,8 @@ import { DisplayTodoListItem } from '../../../../reducks/todoList/types';
 interface ExpiredTodoListAreaProps {
   expiredTodoList: DisplayTodoListItem[];
   displayExpiredTodoList: DisplayTodoListItem[];
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
@@ -34,7 +35,8 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
                           <li className="expired-todo-list-area__todo-list-item" key={item.id}>
                             <TodoListItemComponentContainer
                               listItem={item}
-                              currentYearMonth={props.currentYearMonth}
+                              currentYear={props.currentYear}
+                              currentMonth={props.currentMonth}
                               setEditing={props.setEditing}
                               inputTodoClassName={'todo-list-item-component__input-todo'}
                             />

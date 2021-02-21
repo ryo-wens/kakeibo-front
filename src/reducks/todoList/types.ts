@@ -26,14 +26,14 @@ export interface AddTodoListItemRes {
   complete_flag: boolean;
 }
 
-export interface editTodoListItemReq {
+export interface EditTodoListItemReq {
   implementation_date: Date | null;
   due_date: Date | null;
   todo_content: string;
   complete_flag: boolean;
 }
 
-export interface editTodoListItemRes {
+export interface EditTodoListItemRes {
   id: number;
   posted_date: Date | null;
   updated_date: Date | null;
@@ -43,23 +43,23 @@ export interface editTodoListItemRes {
   complete_flag: boolean;
 }
 
-export interface fetchTodayTodoListsRes {
+export interface FetchTodayTodoListRes {
   implementation_todo_list: TodoList;
   due_todo_list: TodoList;
   message: string;
 }
 
-export interface fetchMonthTodoListsRes {
+export interface FetchMonthlyTodoListRes {
   implementation_todo_list: TodoList;
   due_todo_list: TodoList;
   message: string;
 }
 
-export interface fetchExpiredTodoListRes {
+export interface FetchExpiredTodoListRes {
   expired_todo_list: TodoList;
 }
 
-export interface deleteTodoListItemRes {
+export interface DeleteTodoListItemRes {
   message: string;
 }
 

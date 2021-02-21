@@ -164,76 +164,76 @@ export interface State {
     groupTasksList: GroupTasksList;
   };
   shoppingList: {
-    regularShoppingListLoading: boolean;
     regularShoppingList: RegularShoppingList;
+    regularShoppingListLoading: boolean;
     regularShoppingListError: {
       message: string;
       statusCode: number;
     };
-    expiredShoppingListLoading: boolean;
     expiredShoppingList: ShoppingList;
+    expiredShoppingListLoading: boolean;
     expiredShoppingListError: {
       message: string;
       statusCode: number;
     };
-    todayShoppingListLoading: boolean;
     todayShoppingList: ShoppingList;
+    todayShoppingListLoading: boolean;
     todayShoppingListError: {
       message: string;
       statusCode: number;
     };
-    todayShoppingListByCategoriesLoading: boolean;
     todayShoppingListByCategories: ShoppingListByCategories;
+    todayShoppingListByCategoriesLoading: boolean;
     todayShoppingListByCategoriesError: {
       message: string;
       statusCode: number;
     };
-    monthlyShoppingListLoading: boolean;
     monthlyShoppingList: ShoppingList;
+    monthlyShoppingListLoading: boolean;
     monthlyShoppingListError: {
       message: string;
       statusCode: number;
     };
-    monthlyShoppingListByCategoriesLoading: boolean;
     monthlyShoppingListByCategories: ShoppingListByCategories;
+    monthlyShoppingListByCategoriesLoading: boolean;
     monthlyShoppingListByCategoriesError: {
       message: string;
       statusCode: number;
     };
   };
   groupShoppingList: {
-    groupRegularShoppingListLoading: boolean;
     groupRegularShoppingList: GroupRegularShoppingList;
+    groupRegularShoppingListLoading: boolean;
     groupRegularShoppingListError: {
       message: string;
       statusCode: number;
     };
-    groupExpiredShoppingListLoading: boolean;
     groupExpiredShoppingList: GroupShoppingList;
+    groupExpiredShoppingListLoading: boolean;
     groupExpiredShoppingListError: {
       message: string;
       statusCode: number;
     };
-    groupTodayShoppingListLoading: boolean;
     groupTodayShoppingList: GroupShoppingList;
+    groupTodayShoppingListLoading: boolean;
     groupTodayShoppingListError: {
       message: string;
       statusCode: number;
     };
-    groupTodayShoppingListByCategoriesLoading: boolean;
     groupTodayShoppingListByCategories: GroupShoppingListByCategories;
+    groupTodayShoppingListByCategoriesLoading: boolean;
     groupTodayShoppingListByCategoriesError: {
       message: string;
       statusCode: number;
     };
-    groupMonthlyShoppingListLoading: boolean;
     groupMonthlyShoppingList: GroupShoppingList;
+    groupMonthlyShoppingListLoading: boolean;
     groupMonthlyShoppingListError: {
       message: string;
       statusCode: number;
     };
-    groupMonthlyShoppingListByCategoriesLoading: boolean;
     groupMonthlyShoppingListByCategories: GroupShoppingListByCategories;
+    groupMonthlyShoppingListByCategoriesLoading: boolean;
     groupMonthlyShoppingListByCategoriesError: {
       message: string;
       statusCode: number;
@@ -241,14 +241,38 @@ export interface State {
   };
   todoList: {
     expiredTodoList: TodoList;
+    expiredTodoListLoading: boolean;
+    expiredTodoListError: {
+      message: string;
+      statusCode: number;
+    };
     todayImplementationTodoList: TodoList;
     todayDueTodoList: TodoList;
+    todayTodoListLoading: boolean;
+    todayTodoListError: {
+      message: string;
+      statusCode: number;
+    };
     todayTodoListMessage: string;
-    monthImplementationTodoList: TodoList;
-    monthDueTodoList: TodoList;
-    monthTodoListMessage: string;
+    monthlyImplementationTodoList: TodoList;
+    monthlyDueTodoList: TodoList;
+    monthlyTodoListLoading: boolean;
+    monthlyTodoListError: {
+      message: string;
+      statusCode: number;
+    };
+    monthlyTodoListMessage: string;
     searchTodoList: TodoList;
+    searchTodoListLoading: boolean;
+    searchTodoListError: {
+      message: string;
+      statusCode: number;
+    };
     searchTodoListMessage: string;
+    todoListError: {
+      message: string;
+      statusCode: number;
+    };
   };
   groupTodoList: {
     groupExpiredTodoList: GroupTodoList;

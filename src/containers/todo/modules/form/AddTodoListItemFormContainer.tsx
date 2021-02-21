@@ -2,12 +2,16 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTodoListItem } from '../../../../reducks/todoList/operations';
 import { addGroupTodoListItem } from '../../../../reducks/groupTodoList/operations';
-import { date } from '../../../../lib/constant';
+import { customMonth, date, todayDate, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import AddTodoListItemForm from '../../../../components/todo/modules/form/addTodoListItemForm/AddTodoListItemForm';
+import { AddTodoListItemReq } from '../../../../reducks/todoList/types';
+import axios from 'axios';
 
 interface AddTodoListItemFormContainerProps {
   date: Date;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const initialState = {
@@ -20,6 +24,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
+  const signal = axios.CancelToken.source();
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
   const [openAddTodoForm, setOpenAddTodoForm] = useState(false);
@@ -40,12 +45,12 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     setOpenAddTodoForm(false);
   };
 
-  const inputImplementationDate = (date: Date | null) => {
+  const handleImplementationDate = (date: Date | null) => {
     setImplementationDate(date);
     setDueDate(date);
   };
 
-  const inputDueDate = (date: Date | null) => {
+  const handleDueDate = (date: Date | null) => {
     setDueDate(date);
   };
 
@@ -64,35 +69,53 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     dueDate === null ||
     todoContent === initialState.initialTodoContent;
 
+  const handleAddTodoListItem = () => {
+    const addRequestData: AddTodoListItemReq = {
+      implementation_date: implementationDate,
+      due_date: dueDate,
+      todo_content: todoContent,
+    };
+
+    if (pathName === 'group') {
+      dispatch(
+        addGroupTodoListItem(
+          Number(group_id),
+          date,
+          props.date,
+          implementationDate,
+          dueDate,
+          todoContent
+        )
+      );
+      setOpenAddTodoForm(false);
+    }
+    dispatch(
+      addTodoListItem(
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth,
+        addRequestData,
+        signal
+      )
+    );
+    setOpenAddTodoForm(false);
+  };
+
   return (
     <AddTodoListItemForm
       implementationDate={implementationDate}
       dueDate={dueDate}
       todoContent={todoContent}
-      inputImplementationDate={inputImplementationDate}
-      inputDueDate={inputDueDate}
+      handleImplementationDate={handleImplementationDate}
+      handleDueDate={handleDueDate}
       handleTodoContentChange={handleTodoContentChange}
       openAddTodoForm={openAddTodoForm}
       handleOpenAddTodoForm={handleOpenAddTodoForm}
       handleCloseAddTodoForm={handleCloseAddTodoForm}
       disabledButton={disabledButton}
-      todoListItemOperation={() => {
-        {
-          pathName === 'group'
-            ? dispatch(
-                addGroupTodoListItem(
-                  Number(group_id),
-                  date,
-                  props.date,
-                  implementationDate,
-                  dueDate,
-                  todoContent
-                )
-              )
-            : dispatch(addTodoListItem(date, props.date, implementationDate, dueDate, todoContent));
-        }
-        setOpenAddTodoForm(false);
-      }}
+      handleAddTodoListItem={() => handleAddTodoListItem()}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       inputTodoRef={inputTodoRef}
       date={date}

@@ -7,7 +7,8 @@ import { useLocation } from 'react-router';
 
 interface MonthlyImplementationDateTodoListContainerProps {
   selectedMonth: number;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -24,7 +25,8 @@ const MonthlyImplementationDateTodoListContainer = (
       todoList={
         pathName === 'group' ? groupMonthlyImplementationTodoList : monthlyImplementationTodoList
       }
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={`${props.selectedMonth}月の実施予定のToDoリストは、登録されていません。`}
       setEditing={props.setEditing}
     />
