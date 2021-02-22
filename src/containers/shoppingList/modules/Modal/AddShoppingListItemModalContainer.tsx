@@ -28,6 +28,8 @@ const AddShoppingListItemModalContainer = () => {
   );
   const [purchase, setPurchase] = useState<string>(initialState.initialPurchase);
   const [amount, setAmount] = useState<string | null>(initialState.initialAmount);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [bigCategory, setBigCategory] = useState<string | null>(
     initialState.initialBigCategoryName
@@ -97,13 +99,19 @@ const AddShoppingListItemModalContainer = () => {
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
+  const handleChangeCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? setBigCategoryMenuOpen(false)
+      : setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       setBigCategoryId(bigCategory.id);
@@ -142,12 +150,16 @@ const AddShoppingListItemModalContainer = () => {
       handlePurchaseChange={handlePurchaseChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
+      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput}
+      bigCategoryMenuOpen={bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       shoppingListItemOperation={() => {
         dispatch(
           addShoppingListItem(

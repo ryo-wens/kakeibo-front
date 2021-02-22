@@ -32,6 +32,8 @@ const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentCont
   const [purchase, setPurchase] = useState<string>(initialState.initialPurchase);
   const [shop, setShop] = useState<string | null>(initialState.initialShop);
   const [amount, setAmount] = useState<string | null>(initialState.initialAmount);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [bigCategory, setBigCategory] = useState<string | null>(
     initialState.initialBigCategoryName
@@ -95,6 +97,10 @@ const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentCont
       transactionDataItemClassName={props.transactionDataItemClassName}
       transactionDataItemKeyClassName={props.transactionDataItemKeyClassName}
       currentTextStyle={currentTextStyle}
+      bigCategoryMenuOpen={bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
     />
   );
 };

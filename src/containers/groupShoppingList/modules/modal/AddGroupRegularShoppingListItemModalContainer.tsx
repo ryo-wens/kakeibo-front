@@ -45,6 +45,8 @@ const AddGroupRegularShoppingListModalContainer = (
   const [cycle, setCycle] = useState<string | null>(initialState.initialCycle);
   const [purchase, setPurchase] = useState<string>(initialState.initialPurchase);
   const [amount, setAmount] = useState<string | null>(initialState.initialAmount);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [bigCategory, setBigCategory] = useState<string | null>(
     initialState.initialBigCategoryName
@@ -135,13 +137,19 @@ const AddGroupRegularShoppingListModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
+  const handleChangeCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? setBigCategoryMenuOpen(false)
+      : setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       setBigCategoryId(bigCategory.id);
@@ -193,7 +201,7 @@ const AddGroupRegularShoppingListModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
+      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
@@ -202,6 +210,10 @@ const AddGroupRegularShoppingListModalContainer = (
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput()}
+      bigCategoryMenuOpen={bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       regularShoppingListItemOperation={() => {
         dispatch(
           addGroupRegularShoppingListItem(

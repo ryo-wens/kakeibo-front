@@ -10,7 +10,12 @@ import {
   getGroupIncomeCategories,
 } from '../../../reducks/groupCategories/selectors';
 import { getYearlyAccountListStatus } from '../../../reducks/groupTransactions/selectors';
-import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
+import {
+  addGroupCustomCategories,
+  deleteGroupCustomCategories,
+  editGroupCustomCategories,
+  fetchGroupCategories,
+} from '../../../reducks/groupCategories/operations';
 import { addTransactions } from '../../../reducks/transactions/operations';
 import {
   addGroupTransactions,
@@ -22,6 +27,12 @@ import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { isValidAmountFormat } from '../../../lib/validation';
 import { year, customMonth } from '../../../lib/constant';
 import InputForm from '../../../components/home/transactionInputForm/InputForm';
+import { Action, Dispatch } from 'redux';
+import {
+  addCustomCategories,
+  deleteCustomCategories,
+  editCustomCategories,
+} from '../../../reducks/categories/operations';
 
 const initialState = {
   initialAmount: '',
@@ -58,6 +69,10 @@ const InputFormContainer = () => {
   const emptyShop = shop === '' ? null : shop;
   const [memo, setMemo] = useState('');
   const emptyMemo = memo === '' ? null : memo;
+  const [customCategoryName, setCustomCategoryName] = useState<string>('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
   const addTransactionDate = {
     addTransactionYear: 0,
@@ -143,25 +158,31 @@ const InputFormContainer = () => {
     setPaymentUserId(event.target.value as string);
   };
 
-  const closeBigCategoryMenu = (event: Event) => {
+  const handleCloseBigCategoryMenu = (event: Event) => {
     if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
       setBigCategoryMenuOpen(false);
     }
   };
 
-  const closeMediumCategoryMenu = (event: Event) => {
+  const handleCloseMediumCategoryMenu = (event: Event) => {
     if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
       setMediumCategoryMenuOpen(false);
     }
   };
 
-  const changeCategory = (
+  const handleChangeCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? setBigCategoryMenuOpen(false)
+      : setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       setTransactionType(bigCategory.transaction_type);
@@ -178,6 +199,104 @@ const InputFormContainer = () => {
         setMediumCategoryId(null);
         setCustomCategoryId(associatedCategory.id);
         break;
+    }
+  };
+
+  const handleChangeAddCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomCategoryName(event.target.value);
+  };
+
+  const handleChangeEditCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditCustomCategoryName(event.target.value);
+  };
+
+  const categoryOperationSwitching = (
+    operationFunction: (dispatch: Dispatch<Action>) => Promise<void>,
+    groupOperationFunction: (dispatch: Dispatch<Action>) => Promise<void>
+  ) => {
+    if (pathName !== 'group') {
+      dispatch(operationFunction);
+    } else if (pathName === 'group') {
+      dispatch(groupOperationFunction);
+    }
+  };
+
+  const handleOpenEditCustomCategoryField = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryName: string,
+    associatedCategoryIndex: number,
+    bigCategoriesIndex: number,
+    categoryType: string
+  ) => {
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    event.stopPropagation();
+    setEditCustomCategoryName(associatedCategoryName);
+    setAssociatedIndex(associatedCategoryIndex);
+    setBigEditCategoryIndex(bigCategoriesIndex);
+  };
+
+  const handleAddCustomCategory = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    bigCategoryId: number,
+    categoryType: string
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    setCustomCategoryName('');
+    categoryOperationSwitching(
+      addCustomCategories(customCategoryName, bigCategoryId, signal),
+      addGroupCustomCategories(customCategoryName, bigCategoryId, Number(group_id), signal)
+    );
+  };
+
+  const handleEditCustomCategory = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number,
+    categoryType: string
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    setEditCustomCategoryName('');
+    setAssociatedIndex(null);
+    setBigEditCategoryIndex(null);
+
+    categoryOperationSwitching(
+      editCustomCategories(associatedCategoryId, editCustomCategoryName, bigCategoryId, signal),
+      editGroupCustomCategories(
+        associatedCategoryId,
+        editCustomCategoryName,
+        bigCategoryId,
+        Number(group_id),
+        signal
+      )
+    );
+  };
+
+  const handleDeleteCustomCategory = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+
+    if (window.confirm('カスタムカテゴリーを削除しますか？')) {
+      categoryOperationSwitching(
+        deleteCustomCategories(associatedCategoryId, bigCategoryId, signal),
+        deleteGroupCustomCategories(associatedCategoryId, bigCategoryId, Number(group_id), signal)
+      );
     }
   };
 
@@ -261,9 +380,9 @@ const InputFormContainer = () => {
       changeTransactionType={changeTransactionType}
       changeAmount={changeAmount}
       changePayer={changePayer}
-      closeBigCategoryMenu={closeBigCategoryMenu}
-      closeMediumCategoryMenu={closeMediumCategoryMenu}
-      changeCategory={changeCategory}
+      handleCloseBigCategoryMenu={handleCloseBigCategoryMenu}
+      handleCloseMediumCategoryMenu={handleCloseMediumCategoryMenu}
+      handleChangeCategory={handleChangeCategory}
       changeMemo={changeMemo}
       changeShop={changeShop}
       transactionDate={transactionDate}
@@ -284,6 +403,16 @@ const InputFormContainer = () => {
       paymentUserId={paymentUserId}
       shop={shop}
       memo={memo}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      handleChangeAddCustomCategory={handleChangeAddCustomCategory}
+      handleChangeEditCustomCategory={handleChangeEditCustomCategory}
+      handleAddCustomCategory={handleAddCustomCategory}
+      handleEditCustomCategory={handleEditCustomCategory}
+      handleDeleteCustomCategory={handleDeleteCustomCategory}
+      handleOpenEditCustomCategoryField={handleOpenEditCustomCategoryField}
     />
   );
 };

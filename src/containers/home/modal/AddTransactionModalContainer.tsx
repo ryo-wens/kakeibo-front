@@ -15,13 +15,24 @@ import {
   addGroupTransactions,
   fetchGroupYearlyAccountListForModal,
 } from '../../../reducks/groupTransactions/operations';
-import { fetchCategories } from '../../../reducks/categories/operations';
+import {
+  addCustomCategories,
+  deleteCustomCategories,
+  editCustomCategories,
+  fetchCategories,
+} from '../../../reducks/categories/operations';
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { AssociatedCategory, Category } from '../../../reducks/categories/types';
 import { customMonth, year } from '../../../lib/constant';
 import { isValidAmountFormat } from '../../../lib/validation';
 import AddTransactionModal from '../../../components/home/modal/AddTransactionModal';
+import { Action, Dispatch } from 'redux';
+import {
+  addGroupCustomCategories,
+  deleteGroupCustomCategories,
+  editGroupCustomCategories,
+} from '../../../reducks/groupCategories/operations';
 
 interface AddTransactionModalContainerProps {
   open: boolean;
@@ -70,6 +81,10 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const [editing, setEditing] = useState(false);
   const [firstTransactionDate, setFirstTransactionDate] = useState<Date | null>(transactionDate);
   const [firstTransactionMonth, setFirstTransactionMonth] = useState(0);
+  const [customCategoryName, setCustomCategoryName] = useState<string>('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
   const addTransactionDate = {
     addTransactionYear: 0,
@@ -178,6 +193,11 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     return () => signal.cancel();
   }, [pathName]);
 
+  useEffect(() => {
+    setBigCategory(initialState.initialBigCategory);
+    setAssociatedCategory('');
+  }, [transactionsType]);
+
   const changeTransactionDate = (transactionDate: Date | null) => {
     setTransactionDate(transactionDate as Date);
   };
@@ -190,13 +210,19 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     setAmount(event.target.value);
   };
 
-  const changeCategory = (
+  const handleChangeCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? setBigCategoryMenuOpen(false)
+      : setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       setTransactionType(bigCategory.transaction_type);
@@ -216,15 +242,113 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     }
   };
 
-  const closeBigCategoryMenu = (event: Event) => {
+  const handleCloseBigCategoryMenu = (event: Event) => {
     if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
       setBigCategoryMenuOpen(false);
     }
   };
 
-  const closeMediumCategoryMenu = (event: Event) => {
+  const handleCloseMediumCategoryMenu = (event: Event) => {
     if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
       setMediumCategoryMenuOpen(false);
+    }
+  };
+
+  const handleChangeAddCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomCategoryName(event.target.value);
+  };
+
+  const handleChangeEditCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditCustomCategoryName(event.target.value);
+  };
+
+  const categoryOperationSwitching = (
+    operationFunction: (dispatch: Dispatch<Action>) => Promise<void>,
+    groupOperationFunction: (dispatch: Dispatch<Action>) => Promise<void>
+  ) => {
+    if (pathName !== 'group') {
+      dispatch(operationFunction);
+    } else if (pathName === 'group') {
+      dispatch(groupOperationFunction);
+    }
+  };
+
+  const handleOpenEditCustomCategoryField = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryName: string,
+    associatedCategoryIndex: number,
+    bigCategoriesIndex: number,
+    categoryType: string
+  ) => {
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    event.stopPropagation();
+    setEditCustomCategoryName(associatedCategoryName);
+    setAssociatedIndex(associatedCategoryIndex);
+    setBigEditCategoryIndex(bigCategoriesIndex);
+  };
+
+  const handleAddCustomCategory = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    bigCategoryId: number,
+    categoryType: string
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    setCustomCategoryName('');
+    categoryOperationSwitching(
+      addCustomCategories(customCategoryName, bigCategoryId, signal),
+      addGroupCustomCategories(customCategoryName, bigCategoryId, Number(group_id), signal)
+    );
+  };
+
+  const handleEditCustomCategory = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number,
+    categoryType: string
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    setEditCustomCategoryName('');
+    setAssociatedIndex(null);
+    setBigEditCategoryIndex(null);
+
+    categoryOperationSwitching(
+      editCustomCategories(associatedCategoryId, editCustomCategoryName, bigCategoryId, signal),
+      editGroupCustomCategories(
+        associatedCategoryId,
+        editCustomCategoryName,
+        bigCategoryId,
+        Number(group_id),
+        signal
+      )
+    );
+  };
+
+  const handleDeleteCustomCategory = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+
+    if (window.confirm('カスタムカテゴリーを削除しますか？')) {
+      categoryOperationSwitching(
+        deleteCustomCategories(associatedCategoryId, bigCategoryId, signal),
+        deleteGroupCustomCategories(associatedCategoryId, bigCategoryId, Number(group_id), signal)
+      );
     }
   };
 
@@ -365,9 +489,9 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       changeTransactionDate={changeTransactionDate}
       changeTransactionType={changeTransactionType}
       changeAmount={changeAmount}
-      changeCategory={changeCategory}
-      closeBigCategoryMenu={closeBigCategoryMenu}
-      closeMediumCategoryMenu={closeMediumCategoryMenu}
+      handleChangeCategory={handleChangeCategory}
+      closeBigCategoryMenu={handleCloseBigCategoryMenu}
+      closeMediumCategoryMenu={handleCloseMediumCategoryMenu}
       changePayer={changePayer}
       changeShop={changeShop}
       changeMemo={changeMemo}
@@ -376,6 +500,16 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       expenseCategories={expenseCategories}
       groupIncomeCategories={groupIncomeCategories}
       groupExpenseCategories={groupExpenseCategories}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      handleChangeAddCustomCategory={handleChangeAddCustomCategory}
+      handleChangeEditCustomCategory={handleChangeEditCustomCategory}
+      handleOpenEditCustomCategoryField={handleOpenEditCustomCategoryField}
+      handleAddCustomCategory={handleAddCustomCategory}
+      handleEditCustomCategory={handleEditCustomCategory}
+      handleDeleteCustomCategory={handleDeleteCustomCategory}
     />
   );
 };

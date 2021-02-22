@@ -57,6 +57,8 @@ const EditGroupShoppingListItemModalContainer = (
   const [deleteForm, setDeleteForm] = useState(false);
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
 
   const unInput = {
     unInputExpectedPurchaseDate: null,
@@ -160,13 +162,19 @@ const EditGroupShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
+  const handleChangeCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? setBigCategoryMenuOpen(false)
+      : setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       props.setBigCategoryId(bigCategory.id);
@@ -202,7 +210,7 @@ const EditGroupShoppingListItemModalContainer = (
       handlePurchaseChange={handlePurchaseChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
+      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
@@ -212,6 +220,10 @@ const EditGroupShoppingListItemModalContainer = (
       closeDeleteForm={closeDeleteForm}
       unInput={disabledButton()}
       initialPurchase={props.initialPurchase}
+      bigCategoryMenuOpen={bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       shoppingListItemOperation={() => {
         dispatch(
           editGroupShoppingListItem(

@@ -49,6 +49,8 @@ const EditRegularShoppingListItemModalContainer = (
   const [purchase, setPurchase] = useState<string>(initialState.initialPurchase);
   const [shop, setShop] = useState<string | null>(initialState.initialShop);
   const [amount, setAmount] = useState<string | null>(initialState.initialAmount);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [bigCategory, setBigCategory] = useState<string | null>(
     initialState.initialBigCategoryName
@@ -162,13 +164,19 @@ const EditRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
+  const handleChangeCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? setBigCategoryMenuOpen(false)
+      : setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       setBigCategoryId(bigCategory.id);
@@ -233,7 +241,7 @@ const EditRegularShoppingListItemModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
+      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       openModal={openModal}
@@ -242,6 +250,10 @@ const EditRegularShoppingListItemModalContainer = (
       closeDeleteForm={closeDeleteForm}
       unInput={disabledButton()}
       initialPurchase={initialState.initialPurchase}
+      bigCategoryMenuOpen={bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       regularShoppingListItemOperation={() => {
         editRegularShoppingList();
       }}

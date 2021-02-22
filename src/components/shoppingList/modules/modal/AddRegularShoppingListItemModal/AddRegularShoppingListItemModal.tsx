@@ -25,11 +25,17 @@ interface AddRegularShoppingListModalProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   titleLabel: string;
@@ -60,7 +66,7 @@ const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps
         handleCycleChange={props.handleCycleChange}
         handlePurchaseChange={props.handlePurchaseChange}
         handleAmountChange={props.handleAmountChange}
-        selectCategory={props.selectCategory}
+        handleChangeCategory={props.handleChangeCategory}
         handleShopChange={props.handleShopChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
         titleLabel={'定期買い物リストに追加'}
@@ -69,6 +75,10 @@ const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps
         unInput={props.unInput}
         minDate={date}
         regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+        bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+        mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+        setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+        setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
       />
     </div>
   );

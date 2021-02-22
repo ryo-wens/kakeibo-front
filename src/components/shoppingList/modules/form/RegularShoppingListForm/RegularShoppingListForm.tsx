@@ -24,10 +24,12 @@ interface RegularShoppingListFormProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -48,6 +50,35 @@ interface RegularShoppingListFormProps {
   onClickCloseBigCategoryMenu: (event: Event) => void;
   onClickCloseMediumCategoryMenu: (event: Event) => void;
   openDeleteForm?: () => void;
+  bigEditCategoryIndex: number | null;
+  associatedIndex: number | null;
+  customCategoryName: string;
+  editCustomCategoryName: string;
+  handleChangeAddCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeEditCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOpenEditCustomCategoryField: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryName: string,
+    associatedCategoryIndex: number,
+    bigCategoriesIndex: number,
+    categoryType: string
+  ) => void;
+  handleAddCustomCategory: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleEditCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleDeleteCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number
+  ) => void;
 }
 
 const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
@@ -78,10 +109,20 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
             bigCategoryMenuOpen={props.bigCategoryMenuOpen}
             expenseCategories={props.expenseCategories}
             incomeCategories={props.incomeCategories}
-            onClick={props.selectCategory}
+            handleChangeCategory={props.handleChangeCategory}
             onClickCloseBigCategoryMenu={props.onClickCloseBigCategoryMenu}
             setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
             disabled={false}
+            associatedIndex={props.associatedIndex}
+            bigEditCategoryIndex={props.bigEditCategoryIndex}
+            customCategoryName={props.customCategoryName}
+            editCustomCategoryName={props.editCustomCategoryName}
+            handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
+            handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
+            handleAddCustomCategory={props.handleAddCustomCategory}
+            handleEditCustomCategory={props.handleEditCustomCategory}
+            handleDeleteCustomCategory={props.handleDeleteCustomCategory}
+            handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
           />
           <MediumCategoryInput
             ref={props.mediumMenuRef}
@@ -93,10 +134,20 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
             expenseCategories={props.expenseCategories}
             incomeCategories={props.incomeCategories}
             mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-            onClick={props.selectCategory}
+            handleChangeCategory={props.handleChangeCategory}
             onClickCloseMediumCategoryMenu={props.onClickCloseMediumCategoryMenu}
             setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
             disabled={false}
+            associatedIndex={props.associatedIndex}
+            bigEditCategoryIndex={props.bigEditCategoryIndex}
+            customCategoryName={props.customCategoryName}
+            editCustomCategoryName={props.editCustomCategoryName}
+            handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
+            handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
+            handleAddCustomCategory={props.handleAddCustomCategory}
+            handleEditCustomCategory={props.handleEditCustomCategory}
+            handleDeleteCustomCategory={props.handleDeleteCustomCategory}
+            handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
           />
         </>
       ),

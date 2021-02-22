@@ -1,11 +1,24 @@
 import React, { useRef, useState } from 'react';
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import {
   getExpenseCategories,
   getIncomeCategories,
 } from '../../../../reducks/categories/selectors';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import ShoppingListForm from '../../../../components/shoppingList/modules/form/ShoppingListForm/ShoppingListForm';
+import { Action, Dispatch } from 'redux';
+import axios from 'axios';
+import {
+  addCustomCategories,
+  deleteCustomCategories,
+  editCustomCategories,
+} from '../../../../reducks/categories/operations';
+import {
+  addGroupCustomCategories,
+  deleteGroupCustomCategories,
+  editGroupCustomCategories,
+} from '../../../../reducks/groupCategories/operations';
+import { useLocation, useParams } from 'react-router';
 
 interface ShoppingListFormContainerProps {
   titleLabel: string;
@@ -22,10 +35,12 @@ interface ShoppingListFormContainerProps {
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -35,26 +50,133 @@ interface ShoppingListFormContainerProps {
   minDate: Date;
   displayInputAmountMessage: boolean;
   openDeleteForm?: () => void;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
+  const { group_id } = useParams();
+  const dispatch = useDispatch();
+  const pathName = useLocation().pathname.split('/')[1];
 
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
+  const [customCategoryName, setCustomCategoryName] = useState<string>('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
-  const onClickCloseBigCategoryMenu = (event: Event) => {
+  const handleCloseBigCategoryMenu = (event: Event) => {
     if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
+      props.setBigCategoryMenuOpen(false);
     }
   };
 
-  const onClickCloseMediumCategoryMenu = (event: Event) => {
+  const handleCloseMediumCategoryMenu = (event: Event) => {
     if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
+      props.setMediumCategoryMenuOpen(false);
+    }
+  };
+
+  const handleChangeAddCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setCustomCategoryName(event.target.value);
+  };
+
+  const handleChangeEditCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
+    setEditCustomCategoryName(event.target.value);
+  };
+
+  const categoryOperationSwitching = (
+    operationFunction: (dispatch: Dispatch<Action>) => Promise<void>,
+    groupOperationFunction: (dispatch: Dispatch<Action>) => Promise<void>
+  ) => {
+    if (pathName !== 'group') {
+      dispatch(operationFunction);
+    } else if (pathName === 'group') {
+      dispatch(groupOperationFunction);
+    }
+  };
+
+  const handleOpenEditCustomCategoryField = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryName: string,
+    associatedCategoryIndex: number,
+    bigCategoriesIndex: number,
+    categoryType: string
+  ) => {
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    event.stopPropagation();
+    setEditCustomCategoryName(associatedCategoryName);
+    setAssociatedIndex(associatedCategoryIndex);
+    setBigEditCategoryIndex(bigCategoriesIndex);
+  };
+
+  const handleAddCustomCategory = (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    bigCategoryId: number,
+    categoryType: string
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    setCustomCategoryName('');
+    categoryOperationSwitching(
+      addCustomCategories(customCategoryName, bigCategoryId, signal),
+      addGroupCustomCategories(customCategoryName, bigCategoryId, Number(group_id), signal)
+    );
+  };
+
+  const handleEditCustomCategory = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number,
+    categoryType: string
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+    document.removeEventListener(
+      'click',
+      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+    );
+    setEditCustomCategoryName('');
+    setAssociatedIndex(null);
+    setBigEditCategoryIndex(null);
+
+    categoryOperationSwitching(
+      editCustomCategories(associatedCategoryId, editCustomCategoryName, bigCategoryId, signal),
+      editGroupCustomCategories(
+        associatedCategoryId,
+        editCustomCategoryName,
+        bigCategoryId,
+        Number(group_id),
+        signal
+      )
+    );
+  };
+
+  const handleDeleteCustomCategory = (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number
+  ) => {
+    const signal = axios.CancelToken.source();
+    event.stopPropagation();
+
+    if (window.confirm('カスタムカテゴリーを削除しますか？')) {
+      categoryOperationSwitching(
+        deleteCustomCategories(associatedCategoryId, bigCategoryId, signal),
+        deleteGroupCustomCategories(associatedCategoryId, bigCategoryId, Number(group_id), signal)
+      );
     }
   };
 
@@ -74,7 +196,7 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       handlePurchaseChange={props.handlePurchaseChange}
       handleDateChange={props.handleDateChange}
       handleAmountChange={props.handleAmountChange}
-      selectCategory={props.selectCategory}
+      handleChangeCategory={props.handleChangeCategory}
       handleShopChange={props.handleShopChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
       closeModal={props.closeModal}
@@ -85,14 +207,24 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       mediumMenuRef={mediumMenuRef}
       incomeCategories={incomeCategories}
       expenseCategories={expenseCategories}
-      bigCategoryMenuOpen={bigCategoryMenuOpen}
-      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
-      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
-      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
-      onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
-      onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+      bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+      onClickCloseBigCategoryMenu={handleCloseBigCategoryMenu}
+      onClickCloseMediumCategoryMenu={handleCloseMediumCategoryMenu}
       displayInputAmountMessage={props.displayInputAmountMessage}
       openDeleteForm={props.openDeleteForm}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      handleChangeAddCustomCategory={handleChangeAddCustomCategory}
+      handleChangeEditCustomCategory={handleChangeEditCustomCategory}
+      handleAddCustomCategory={handleAddCustomCategory}
+      handleEditCustomCategory={handleEditCustomCategory}
+      handleDeleteCustomCategory={handleDeleteCustomCategory}
+      handleOpenEditCustomCategoryField={handleOpenEditCustomCategoryField}
     />
   );
 };

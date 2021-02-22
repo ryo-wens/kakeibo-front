@@ -1,8 +1,4 @@
-import React, { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
-import { useLocation, useParams } from 'react-router';
-import { Action, Dispatch } from 'redux';
-import { State } from '../../reducks/store/types';
+import React, { useEffect } from 'react';
 import { AssociatedCategory, Categories, Category } from '../../reducks/categories/types';
 import { GroupCategories } from '../../reducks/groupCategories/types';
 import {
@@ -13,72 +9,65 @@ import {
 } from '../../lib/constant';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
-import {
-  addCustomCategories,
-  deleteCustomCategories,
-  editCustomCategories,
-} from '../../reducks/categories/operations';
-import {
-  addGroupCustomCategories,
-  deleteGroupCustomCategories,
-  editGroupCustomCategories,
-} from '../../reducks/groupCategories/operations';
 import CreateIcon from '@material-ui/icons/Create';
 import DeleteIcon from '@material-ui/icons/Delete';
 import '../../assets/modules/category-input.scss';
-import axios from 'axios';
 
 interface BigCategoryInputProps {
   kind: string;
   bigCategory: string | null;
   incomeCategories: Categories | GroupCategories;
   expenseCategories: Categories | GroupCategories;
+  customCategoryName: string;
+  editCustomCategoryName: string;
+  bigEditCategoryIndex: number | null;
+  associatedIndex: number | null;
   bigCategoryMenuOpen: boolean;
-  onClick: (
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
-  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onClickCloseBigCategoryMenu: (event: Event) => void;
   disabled: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleChangeAddCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeEditCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  onClickCloseBigCategoryMenu: (event: Event) => void;
+  handleOpenEditCustomCategoryField: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryName: string,
+    associatedCategoryIndex: number,
+    bigCategoriesIndex: number,
+    categoryType: string
+  ) => void;
+  handleAddCustomCategory: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleEditCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleDeleteCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number
+  ) => void;
 }
 
 const BigCategoryInput = React.forwardRef(
   (props: BigCategoryInputProps, bigCategoryRef: React.Ref<HTMLDivElement>) => {
-    const dispatch = useDispatch();
-    const { group_id } = useParams();
-    const pathName = useLocation().pathname.split('/')[1];
-    const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
-    const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
-    const [customCategoryName, setCustomCategoryName] = useState<string>('');
-    const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
-
-    const addCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setCustomCategoryName(event.target.value);
-    };
-
-    const editCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-      setEditCustomCategoryName(event.target.value);
-    };
-
     useEffect(() => {
       document.addEventListener('click', props.onClickCloseBigCategoryMenu);
       return () => {
         document.removeEventListener('click', props.onClickCloseBigCategoryMenu);
       };
     }, [props.onClickCloseBigCategoryMenu]);
-
-    const operationSwitching = (
-      operationFunction: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>,
-      groupOperationFunction: (dispatch: Dispatch<Action>, getState: () => State) => Promise<void>
-    ) => {
-      if (pathName !== 'group') {
-        dispatch(operationFunction);
-      } else if (pathName === 'group') {
-        dispatch(groupOperationFunction);
-      }
-    };
 
     const incomeStyle = () => {
       if (props.kind !== 'expense') {
@@ -93,13 +82,14 @@ const BigCategoryInput = React.forwardRef(
         bigCategoriesList = props.incomeCategories.map((incomeCategory, bigCategoriesIndex) => {
           return (
             <li
-              onClick={() => {
-                props.onClick(
+              onClick={(event) => {
+                props.handleChangeCategory(
                   bigCategoriesIndex,
                   incomeCategory,
-                  defaultIncomeCategoryList[bigCategoriesIndex]
+                  defaultIncomeCategoryList[bigCategoriesIndex],
+                  'bigCategory',
+                  event
                 );
-                props.setBigCategoryMenuOpen(false);
               }}
               id="income-big"
               key={incomeCategory.name}
@@ -118,46 +108,28 @@ const BigCategoryInput = React.forwardRef(
                               <div className="category-input__form-position">
                                 {(() => {
                                   if (
-                                    bigEditCategoryIndex === bigCategoriesIndex &&
-                                    associatedIndex === associatedCategoryIndex
+                                    props.bigEditCategoryIndex === bigCategoriesIndex &&
+                                    props.associatedIndex === associatedCategoryIndex
                                   ) {
                                     return (
                                       <div className="category-input__form-position">
                                         <input
                                           onClick={(event) => event.stopPropagation()}
                                           placeholder={incomeAssociatedCategory.name}
-                                          onChange={editCustomCategory}
+                                          onChange={props.handleChangeEditCustomCategory}
                                           className="category-input__add-form"
-                                          value={editCustomCategoryName}
+                                          value={props.editCustomCategoryName}
                                         />
                                         <AddCircleOutlineIcon
                                           className="category-input__icon-add"
                                           type={'button'}
                                           onClick={(event) => {
-                                            const signal = axios.CancelToken.source();
-                                            event.stopPropagation();
-                                            document.removeEventListener(
-                                              'click',
-                                              props.onClickCloseBigCategoryMenu
+                                            props.handleEditCustomCategory(
+                                              event,
+                                              incomeAssociatedCategory.id,
+                                              incomeAssociatedCategory.big_category_id,
+                                              'bigCategory'
                                             );
-                                            operationSwitching(
-                                              editCustomCategories(
-                                                incomeAssociatedCategory.id,
-                                                editCustomCategoryName,
-                                                incomeAssociatedCategory.big_category_id,
-                                                signal
-                                              ),
-                                              editGroupCustomCategories(
-                                                incomeAssociatedCategory.id,
-                                                editCustomCategoryName,
-                                                incomeAssociatedCategory.big_category_id,
-                                                Number(group_id),
-                                                signal
-                                              )
-                                            );
-                                            setEditCustomCategoryName('');
-                                            setAssociatedIndex(null);
-                                            setBigEditCategoryIndex(null);
                                           }}
                                         />
                                       </div>
@@ -170,13 +142,13 @@ const BigCategoryInput = React.forwardRef(
                                         className="category-input__menu-item"
                                         value={incomeAssociatedCategory.name}
                                         onClick={(event) => {
-                                          event.stopPropagation();
-                                          props.onClick(
+                                          props.handleChangeCategory(
                                             bigCategoriesIndex,
                                             incomeCategory,
-                                            incomeAssociatedCategory
+                                            incomeAssociatedCategory,
+                                            'bigCategory',
+                                            event
                                           );
-                                          props.setBigCategoryMenuOpen(false);
                                         }}
                                       >
                                         {incomeAssociatedCategory.name}
@@ -185,14 +157,13 @@ const BigCategoryInput = React.forwardRef(
                                         type={'button'}
                                         className="category-input__icon-edit"
                                         onClick={(event) => {
-                                          document.removeEventListener(
-                                            'click',
-                                            props.onClickCloseBigCategoryMenu
+                                          props.handleOpenEditCustomCategoryField(
+                                            event,
+                                            incomeAssociatedCategory.name,
+                                            associatedCategoryIndex,
+                                            bigCategoriesIndex,
+                                            'bigCategory'
                                           );
-                                          event.stopPropagation();
-                                          setEditCustomCategoryName(incomeAssociatedCategory.name);
-                                          setAssociatedIndex(associatedCategoryIndex);
-                                          setBigEditCategoryIndex(bigCategoriesIndex);
                                         }}
                                       />
 
@@ -200,25 +171,11 @@ const BigCategoryInput = React.forwardRef(
                                         className="category-input__icon-delete"
                                         type={'button'}
                                         onClick={(event) => {
-                                          const signal = axios.CancelToken.source();
-                                          event.stopPropagation();
-                                          if (
-                                            window.confirm('カスタムカテゴリーを削除しますか？')
-                                          ) {
-                                            operationSwitching(
-                                              deleteCustomCategories(
-                                                incomeAssociatedCategory.id,
-                                                incomeAssociatedCategory.big_category_id,
-                                                signal
-                                              ),
-                                              deleteGroupCustomCategories(
-                                                incomeAssociatedCategory.id,
-                                                incomeAssociatedCategory.big_category_id,
-                                                Number(group_id),
-                                                signal
-                                              )
-                                            );
-                                          }
+                                          props.handleDeleteCustomCategory(
+                                            event,
+                                            incomeAssociatedCategory.id,
+                                            incomeAssociatedCategory.big_category_id
+                                          );
                                         }}
                                       />
                                     </div>
@@ -235,13 +192,13 @@ const BigCategoryInput = React.forwardRef(
                                   className="category-input__menu-item"
                                   value={incomeAssociatedCategory.name}
                                   onClick={(event) => {
-                                    event.stopPropagation();
-                                    props.onClick(
+                                    props.handleChangeCategory(
                                       bigCategoriesIndex,
                                       incomeCategory,
-                                      incomeAssociatedCategory
+                                      incomeAssociatedCategory,
+                                      'bigCategory',
+                                      event
                                     );
-                                    props.setBigCategoryMenuOpen(false);
                                   }}
                                 >
                                   {incomeAssociatedCategory.name}
@@ -259,32 +216,21 @@ const BigCategoryInput = React.forwardRef(
                               <div className="category-input__form-position">
                                 <input
                                   onClick={(event) => event.stopPropagation()}
-                                  onChange={addCustomCategory}
+                                  onChange={props.handleChangeAddCustomCategory}
                                   placeholder={'カテゴリーを追加'}
                                   className="category-input__add-form"
-                                  value={customCategoryName}
+                                  value={props.customCategoryName}
                                 />
                                 <button
                                   type="button"
-                                  disabled={customCategoryName === ''}
+                                  disabled={props.customCategoryName === ''}
                                   className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
                                   onClick={(event) => {
-                                    const signal = axios.CancelToken.source();
-                                    event.stopPropagation();
-                                    operationSwitching(
-                                      addCustomCategories(
-                                        customCategoryName,
-                                        incomeCategory.id,
-                                        signal
-                                      ),
-                                      addGroupCustomCategories(
-                                        customCategoryName,
-                                        incomeCategory.id,
-                                        Number(group_id),
-                                        signal
-                                      )
+                                    props.handleAddCustomCategory(
+                                      event,
+                                      incomeCategory.id,
+                                      'bigCategory'
                                     );
-                                    setCustomCategoryName('');
                                   }}
                                 />
                               </div>
@@ -303,13 +249,14 @@ const BigCategoryInput = React.forwardRef(
         bigCategoriesList = props.expenseCategories.map((expenseCategory, bigCategoriesIndex) => {
           return (
             <li
-              onClick={() => {
-                props.onClick(
+              onClick={(event) => {
+                props.handleChangeCategory(
                   bigCategoriesIndex,
                   expenseCategory,
-                  defaultExpenseCategoryList[bigCategoriesIndex]
+                  defaultExpenseCategoryList[bigCategoriesIndex],
+                  'bigCategory',
+                  event
                 );
-                props.setBigCategoryMenuOpen(false);
               }}
               key={expenseCategory.name}
               id="expense-big"
@@ -331,46 +278,28 @@ const BigCategoryInput = React.forwardRef(
                               >
                                 {(() => {
                                   if (
-                                    bigEditCategoryIndex === bigCategoriesIndex &&
-                                    associatedIndex === associatedCategoryIndex
+                                    props.bigEditCategoryIndex === bigCategoriesIndex &&
+                                    props.associatedIndex === associatedCategoryIndex
                                   ) {
                                     return (
                                       <div className="category-input__form-position">
                                         <input
                                           onClick={(event) => event.stopPropagation()}
                                           placeholder={expenseAssociatedCategory.name}
-                                          onChange={editCustomCategory}
+                                          onChange={props.handleChangeEditCustomCategory}
                                           className="category-input__add-form"
-                                          value={editCustomCategoryName}
+                                          value={props.editCustomCategoryName}
                                         />
                                         <AddCircleOutlineIcon
                                           className="category-input__icon-add"
                                           type={'button'}
                                           onClick={(event) => {
-                                            const signal = axios.CancelToken.source();
-                                            event.stopPropagation();
-                                            document.removeEventListener(
-                                              'click',
-                                              props.onClickCloseBigCategoryMenu
+                                            props.handleEditCustomCategory(
+                                              event,
+                                              expenseAssociatedCategory.id,
+                                              expenseAssociatedCategory.big_category_id,
+                                              'bigCategory'
                                             );
-                                            operationSwitching(
-                                              editCustomCategories(
-                                                expenseAssociatedCategory.id,
-                                                editCustomCategoryName,
-                                                expenseAssociatedCategory.big_category_id,
-                                                signal
-                                              ),
-                                              editGroupCustomCategories(
-                                                expenseAssociatedCategory.id,
-                                                editCustomCategoryName,
-                                                expenseAssociatedCategory.big_category_id,
-                                                Number(group_id),
-                                                signal
-                                              )
-                                            );
-                                            setEditCustomCategoryName('');
-                                            setAssociatedIndex(null);
-                                            setBigEditCategoryIndex(null);
                                           }}
                                         />
                                       </div>
@@ -384,12 +313,13 @@ const BigCategoryInput = React.forwardRef(
                                         value={expenseAssociatedCategory.name}
                                         onClick={(event) => {
                                           event.stopPropagation();
-                                          props.onClick(
+                                          props.handleChangeCategory(
                                             bigCategoriesIndex,
                                             expenseCategory,
-                                            expenseAssociatedCategory
+                                            expenseAssociatedCategory,
+                                            'bigCategory',
+                                            event
                                           );
-                                          props.setBigCategoryMenuOpen(false);
                                         }}
                                       >
                                         {expenseAssociatedCategory.name}
@@ -398,39 +328,24 @@ const BigCategoryInput = React.forwardRef(
                                         className="category-input__icon-edit"
                                         type={'button'}
                                         onClick={(event) => {
-                                          document.removeEventListener(
-                                            'click',
-                                            props.onClickCloseBigCategoryMenu
+                                          props.handleOpenEditCustomCategoryField(
+                                            event,
+                                            expenseAssociatedCategory.name,
+                                            associatedCategoryIndex,
+                                            bigCategoriesIndex,
+                                            'bigCategory'
                                           );
-                                          event.stopPropagation();
-                                          setEditCustomCategoryName(expenseAssociatedCategory.name);
-                                          setAssociatedIndex(associatedCategoryIndex);
-                                          setBigEditCategoryIndex(bigCategoriesIndex);
                                         }}
                                       />
                                       <DeleteIcon
                                         className="category-input__icon-delete"
                                         type={'button'}
                                         onClick={(event) => {
-                                          const signal = axios.CancelToken.source();
-                                          event.stopPropagation();
-                                          if (
-                                            window.confirm('カスタムカテゴリーを削除しますか？')
-                                          ) {
-                                            operationSwitching(
-                                              deleteCustomCategories(
-                                                expenseAssociatedCategory.id,
-                                                expenseAssociatedCategory.big_category_id,
-                                                signal
-                                              ),
-                                              deleteGroupCustomCategories(
-                                                expenseAssociatedCategory.id,
-                                                expenseAssociatedCategory.big_category_id,
-                                                Number(group_id),
-                                                signal
-                                              )
-                                            );
-                                          }
+                                          props.handleDeleteCustomCategory(
+                                            event,
+                                            expenseAssociatedCategory.id,
+                                            expenseAssociatedCategory.big_category_id
+                                          );
                                         }}
                                       />
                                     </div>
@@ -447,13 +362,13 @@ const BigCategoryInput = React.forwardRef(
                                   className="category-input__menu-item"
                                   value={expenseAssociatedCategory.name}
                                   onClick={(event) => {
-                                    event.stopPropagation();
-                                    props.onClick(
+                                    props.handleChangeCategory(
                                       bigCategoriesIndex,
                                       expenseCategory,
-                                      expenseAssociatedCategory
+                                      expenseAssociatedCategory,
+                                      'bigCategory',
+                                      event
                                     );
-                                    props.setBigCategoryMenuOpen(false);
                                   }}
                                 >
                                   {expenseAssociatedCategory.name}
@@ -475,31 +390,20 @@ const BigCategoryInput = React.forwardRef(
                                     event.stopPropagation();
                                   }}
                                   className="category-input__add-form"
-                                  onChange={addCustomCategory}
-                                  value={customCategoryName}
+                                  onChange={props.handleChangeAddCustomCategory}
+                                  value={props.customCategoryName}
                                   placeholder={'カテゴリーを追加'}
                                 />
                                 <button
                                   type="button"
-                                  disabled={customCategoryName === ''}
+                                  disabled={props.customCategoryName === ''}
                                   className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
                                   onClick={(event) => {
-                                    const signal = axios.CancelToken.source();
-                                    event.stopPropagation();
-                                    operationSwitching(
-                                      addCustomCategories(
-                                        customCategoryName,
-                                        expenseCategory.id,
-                                        signal
-                                      ),
-                                      addGroupCustomCategories(
-                                        customCategoryName,
-                                        expenseCategory.id,
-                                        Number(group_id),
-                                        signal
-                                      )
+                                    props.handleAddCustomCategory(
+                                      event,
+                                      expenseCategory.id,
+                                      'bigCategory'
                                     );
-                                    setCustomCategoryName('');
                                   }}
                                 />
                               </div>

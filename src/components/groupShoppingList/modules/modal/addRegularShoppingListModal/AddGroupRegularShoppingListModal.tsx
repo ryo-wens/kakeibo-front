@@ -26,10 +26,16 @@ interface AddGroupRegularShoppingListModalProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
@@ -63,7 +69,7 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         handleCycleChange={props.handleCycleChange}
         handlePurchaseChange={props.handlePurchaseChange}
         handleAmountChange={props.handleAmountChange}
-        selectCategory={props.selectCategory}
+        handleChangeCategory={props.handleChangeCategory}
         handleShopChange={props.handleShopChange}
         handlePaymentUserChange={props.handlePaymentUserChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
@@ -73,6 +79,10 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         unInput={props.unInput}
         regularShoppingListItemOperation={props.regularShoppingListItemOperation}
         minDate={date}
+        bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+        mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+        setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+        setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
       />
     </div>
   );

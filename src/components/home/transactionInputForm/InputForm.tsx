@@ -42,15 +42,46 @@ interface InputFormProps {
   changePayer: (event: React.ChangeEvent<{ value: unknown }>) => void;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  closeBigCategoryMenu: (event: Event) => void;
-  closeMediumCategoryMenu: (event: Event) => void;
-  changeCategory: (
+  handleCloseBigCategoryMenu: (event: Event) => void;
+  handleCloseMediumCategoryMenu: (event: Event) => void;
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
   changeShop: (event: React.ChangeEvent<HTMLInputElement>) => void;
   changeMemo: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  bigEditCategoryIndex: number | null;
+  associatedIndex: number | null;
+  customCategoryName: string;
+  editCustomCategoryName: string;
+  handleChangeAddCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeEditCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOpenEditCustomCategoryField: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryName: string,
+    associatedCategoryIndex: number,
+    bigCategoriesIndex: number,
+    categoryType: string
+  ) => void;
+  handleAddCustomCategory: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleEditCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleDeleteCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number
+  ) => void;
 }
 
 const InputForm = (props: InputFormProps) => {
@@ -112,8 +143,8 @@ const InputForm = (props: InputFormProps) => {
           kind={props.transactionsType}
           ref={props.bigCategoryRef}
           bigCategory={props.bigCategory}
-          onClick={props.changeCategory}
-          onClickCloseBigCategoryMenu={props.closeBigCategoryMenu}
+          handleChangeCategory={props.handleChangeCategory}
+          onClickCloseBigCategoryMenu={props.handleCloseBigCategoryMenu}
           bigCategoryMenuOpen={props.bigCategoryMenuOpen}
           setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
           expenseCategories={
@@ -122,6 +153,16 @@ const InputForm = (props: InputFormProps) => {
           incomeCategories={
             props.pathName !== 'group' ? props.incomeCategories : props.groupIncomeCategories
           }
+          associatedIndex={props.associatedIndex}
+          bigEditCategoryIndex={props.bigEditCategoryIndex}
+          customCategoryName={props.customCategoryName}
+          editCustomCategoryName={props.editCustomCategoryName}
+          handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
+          handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
+          handleAddCustomCategory={props.handleAddCustomCategory}
+          handleEditCustomCategory={props.handleEditCustomCategory}
+          handleDeleteCustomCategory={props.handleDeleteCustomCategory}
+          handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
         />
         <div className="input-form__form-content--spacer-medium" />
         <MediumCategoryInput
@@ -132,8 +173,8 @@ const InputForm = (props: InputFormProps) => {
           bigCategoryIndex={props.bigCategoryIndex}
           bigCategory={props.bigCategory}
           associatedCategory={props.associatedCategory}
-          onClick={props.changeCategory}
-          onClickCloseMediumCategoryMenu={props.closeMediumCategoryMenu}
+          handleChangeCategory={props.handleChangeCategory}
+          onClickCloseMediumCategoryMenu={props.handleCloseMediumCategoryMenu}
           mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
           setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
           expenseCategories={
@@ -142,6 +183,16 @@ const InputForm = (props: InputFormProps) => {
           incomeCategories={
             props.pathName !== 'group' ? props.incomeCategories : props.groupIncomeCategories
           }
+          associatedIndex={props.associatedIndex}
+          bigEditCategoryIndex={props.bigEditCategoryIndex}
+          customCategoryName={props.customCategoryName}
+          editCustomCategoryName={props.editCustomCategoryName}
+          handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
+          handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
+          handleAddCustomCategory={props.handleAddCustomCategory}
+          handleEditCustomCategory={props.handleEditCustomCategory}
+          handleDeleteCustomCategory={props.handleDeleteCustomCategory}
+          handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
         />
         <div className="input-form__form-content--spacer-medium" />
         <TextInput

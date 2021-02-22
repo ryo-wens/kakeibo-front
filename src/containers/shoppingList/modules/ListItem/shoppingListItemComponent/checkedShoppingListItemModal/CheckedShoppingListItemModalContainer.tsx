@@ -29,6 +29,8 @@ interface CheckedShoppingListItemModalContainerProps {
   mediumCategoryId: number | null;
   customCategoryId: number | null;
   transactionAutoAdd: boolean;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
   setExpectedPurchaseDate: React.Dispatch<React.SetStateAction<Date | null>>;
   setChecked: React.Dispatch<React.SetStateAction<boolean>>;
   setPurchase: React.Dispatch<React.SetStateAction<string>>;
@@ -39,6 +41,8 @@ interface CheckedShoppingListItemModalContainerProps {
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CheckedShoppingListItemModalContainer = (
@@ -134,13 +138,19 @@ const CheckedShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
+  const handleChangeCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? props.setBigCategoryMenuOpen(false)
+      : props.setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       props.setBigCategoryId(bigCategory.id);
@@ -206,11 +216,15 @@ const CheckedShoppingListItemModalContainer = (
       handleCheckedChange={handleCheckedChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
+      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       closeModal={closeModal}
       unInput={disabledButton()}
+      bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
       shoppingListItemOperation={() => {
         dispatch(
           editShoppingListItem(

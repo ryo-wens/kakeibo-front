@@ -50,6 +50,8 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
   const [deleteForm, setDeleteForm] = useState(false);
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
 
   const unInput = {
     unInputExpectedPurchaseDate: null,
@@ -143,10 +145,16 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
   const selectCategory = (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => {
     setBigCategoryIndex(bigCategoryIndex);
     setAssociatedCategory(associatedCategory.name);
+    categoryType === 'bigCategory'
+      ? setBigCategoryMenuOpen(false)
+      : setMediumCategoryMenuOpen(false);
+    event.stopPropagation();
 
     if (bigCategory !== null) {
       props.setBigCategoryId(bigCategory.id);
@@ -181,7 +189,7 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
       handlePurchaseChange={handlePurchaseChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
+      handleChangeCategory={selectCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       openModal={openModal}
@@ -190,6 +198,10 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
       closeDeleteForm={closeDeleteForm}
       unInput={disabledButton()}
       initialPurchase={props.initialPurchase}
+      bigCategoryMenuOpen={bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       shoppingListItemOperation={() => {
         dispatch(
           editShoppingListItem(

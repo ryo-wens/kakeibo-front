@@ -60,16 +60,47 @@ interface AddTransactionModalProps {
   changeTransactionDate: (transactionDate: Date | null) => void;
   changeTransactionType: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeAmount: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  changeCategory: (
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
   closeBigCategoryMenu: (event: Event) => void;
   closeMediumCategoryMenu: (event: Event) => void;
   changePayer: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeShop: (event: React.ChangeEvent<HTMLInputElement>) => void;
   changeMemo: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  bigEditCategoryIndex: number | null;
+  associatedIndex: number | null;
+  customCategoryName: string;
+  editCustomCategoryName: string;
+  handleChangeAddCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeEditCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleOpenEditCustomCategoryField: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryName: string,
+    associatedCategoryIndex: number,
+    bigCategoriesIndex: number,
+    categoryType: string
+  ) => void;
+  handleAddCustomCategory: (
+    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleEditCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number,
+    categoryType: string
+  ) => void;
+  handleDeleteCustomCategory: (
+    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
+    associatedCategoryId: number,
+    bigCategoryId: number
+  ) => void;
 }
 
 const AddTransactionModal = (props: AddTransactionModalProps) => {
@@ -145,7 +176,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
               ref={props.bigCategoryRef}
               bigCategory={props.bigCategory}
               bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-              onClick={props.changeCategory}
+              handleChangeCategory={props.handleChangeCategory}
               onClickCloseBigCategoryMenu={props.closeBigCategoryMenu}
               setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
               disabled={props.unEditInputForm}
@@ -155,6 +186,16 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
               incomeCategories={
                 props.pathName !== 'group' ? props.incomeCategories : props.groupIncomeCategories
               }
+              customCategoryName={props.customCategoryName}
+              editCustomCategoryName={props.editCustomCategoryName}
+              handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
+              handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
+              handleAddCustomCategory={props.handleAddCustomCategory}
+              handleEditCustomCategory={props.handleEditCustomCategory}
+              handleDeleteCustomCategory={props.handleDeleteCustomCategory}
+              associatedIndex={props.associatedIndex}
+              bigEditCategoryIndex={props.bigEditCategoryIndex}
+              handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
             />
           </div>
           <div className="transaction-modal__form-content--spacer-medium" />
@@ -167,9 +208,8 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
               bigCategoryId={props.bigCategoryId}
               bigCategoryIndex={props.bigCategoryIndex}
               mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-              onClick={props.changeCategory}
+              handleChangeCategory={props.handleChangeCategory}
               onClickCloseMediumCategoryMenu={props.closeMediumCategoryMenu}
-              setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
               disabled={props.unEditInputForm}
               expenseCategories={
                 props.pathName !== 'group' ? props.expenseCategories : props.groupExpenseCategories
@@ -177,6 +217,17 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
               incomeCategories={
                 props.pathName !== 'group' ? props.incomeCategories : props.groupIncomeCategories
               }
+              associatedIndex={props.associatedIndex}
+              bigEditCategoryIndex={props.bigEditCategoryIndex}
+              customCategoryName={props.customCategoryName}
+              editCustomCategoryName={props.editCustomCategoryName}
+              handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
+              handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
+              handleAddCustomCategory={props.handleAddCustomCategory}
+              handleEditCustomCategory={props.handleEditCustomCategory}
+              handleDeleteCustomCategory={props.handleDeleteCustomCategory}
+              handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
+              setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
             />
           </div>
           <div className="transaction-modal__form-content--spacer-medium" />

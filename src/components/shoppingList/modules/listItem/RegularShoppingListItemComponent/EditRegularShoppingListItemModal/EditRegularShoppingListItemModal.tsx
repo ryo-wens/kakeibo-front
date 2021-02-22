@@ -26,11 +26,17 @@ interface EditRegularShoppingListModalProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   openModal: () => void;
@@ -74,7 +80,7 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           handleCycleChange={props.handleCycleChange}
           handlePurchaseChange={props.handlePurchaseChange}
           handleAmountChange={props.handleAmountChange}
-          selectCategory={props.selectCategory}
+          handleChangeCategory={props.handleChangeCategory}
           handleShopChange={props.handleShopChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
           closeModal={props.closeModal}
@@ -82,6 +88,10 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           minDate={new Date('1900-01-01')}
           regularShoppingListItemOperation={props.regularShoppingListItemOperation}
           openDeleteForm={props.openDeleteForm}
+          bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+          mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+          setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+          setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
         />
       )}
     </div>

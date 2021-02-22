@@ -22,10 +22,12 @@ interface EditGroupShoppingListItemModalProps {
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
+  handleChangeCategory: (
     bigCategoryIndex: number,
     bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
+    associatedCategory: AssociatedCategory,
+    categoryType: string,
+    event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
@@ -38,6 +40,10 @@ interface EditGroupShoppingListItemModalProps {
   unInput: boolean;
   shoppingListItemOperation: () => void;
   deleteOperation: () => void;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalProps) => {
@@ -66,7 +72,7 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
           handlePurchaseChange={props.handlePurchaseChange}
           handleDateChange={props.handleDateChange}
           handleAmountChange={props.handleAmountChange}
-          selectCategory={props.selectCategory}
+          handleChangeCategory={props.handleChangeCategory}
           handleShopChange={props.handleShopChange}
           handlePaymentUserChange={props.handlePaymentUserChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
@@ -78,6 +84,10 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
           shoppingListItemOperation={props.shoppingListItemOperation}
           displayRequiredInputItemMessage={false}
           openDeleteForm={props.openDeleteForm}
+          bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+          mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+          setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+          setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
         />
       )}
     </div>
