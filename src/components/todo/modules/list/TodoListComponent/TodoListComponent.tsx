@@ -12,9 +12,11 @@ interface TodoListComponentProps {
 }
 
 const TodoListComponent = (props: TodoListComponentProps) => {
+  const existTodoList = props.todoList.length !== 0;
+
   return (
     <div className="todo-list-component">
-      {props.todoList.length ? (
+      {existTodoList ? (
         <ol className="todo-list-component__list-by-date">
           {props.todoList.map((displayTodolistItem) => {
             return (

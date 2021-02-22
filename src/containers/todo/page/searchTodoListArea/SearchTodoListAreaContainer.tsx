@@ -4,7 +4,7 @@ import { month, year } from '../../../../lib/constant';
 import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import { SearchTodoRequestData } from '../../../../reducks/todoList/types';
-import { fetchSearchGroupTodoList } from '../../../../reducks/groupTodoList/operations';
+import { fetchGroupSearchTodoList } from '../../../../reducks/groupTodoList/operations';
 import { fetchSearchTodoList } from '../../../../reducks/todoList/operations';
 
 interface SearchTodoListAreaContainerProps {
@@ -107,7 +107,7 @@ const SearchTodoListAreaContainer = (props: SearchTodoListAreaContainerProps) =>
 
   const fetchSearchTodoListOperation = () => {
     if (pathName === 'group') {
-      dispatch(fetchSearchGroupTodoList(Number(group_id), requestData));
+      dispatch(fetchGroupSearchTodoList(Number(group_id), requestData));
       props.setOpenSearchResultTodoList(true);
       setCurrentDateType(dateType);
     }

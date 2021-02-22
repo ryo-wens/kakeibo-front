@@ -80,11 +80,13 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
       dispatch(
         addGroupTodoListItem(
           Number(group_id),
-          date,
-          props.date,
-          implementationDate,
-          dueDate,
-          todoContent
+          String(year),
+          customMonth,
+          String(todayDate),
+          props.currentYear,
+          props.currentMonth,
+          addRequestData,
+          signal
         )
       );
       setOpenAddTodoForm(false);

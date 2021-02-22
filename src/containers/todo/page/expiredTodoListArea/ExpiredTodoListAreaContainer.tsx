@@ -25,8 +25,8 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
   const pathName = useLocation().pathname.split('/')[1];
 
   const expiredTodoList = useSelector(getExpiredTodoList);
-  const slicedExpiredTodoList = useSelector(getSlicedExpiredTodoList);
   const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
+  const slicedExpiredTodoList = useSelector(getSlicedExpiredTodoList);
   const slicedGroupExpiredTodoList = useSelector(getSlicedGroupExpiredTodoList);
 
   const [readMore, setReadMore] = useState(false);
@@ -64,12 +64,34 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
     readMore
   );
 
+  const determineTodoList = (
+    pathName: string,
+    todoList: DisplayTodoList,
+    groupTodoList: DisplayTodoList
+  ) => {
+    if (pathName === 'group') {
+      return todoList;
+    }
+
+    return groupTodoList;
+  };
+
+  const todoList: DisplayTodoList = determineTodoList(
+    pathName,
+    expiredTodoList,
+    groupExpiredTodoList
+  );
+
+  const displayTodoList: DisplayTodoList = determineTodoList(
+    pathName,
+    displayExpiredTodoList,
+    groupDisplayExpiredTodoList
+  );
+
   return (
     <ExpiredTodoListArea
-      expiredTodoList={pathName === 'group' ? groupExpiredTodoList : expiredTodoList}
-      displayExpiredTodoList={
-        pathName === 'group' ? groupDisplayExpiredTodoList : displayExpiredTodoList
-      }
+      expiredTodoList={todoList}
+      displayExpiredTodoList={displayTodoList}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       readMore={readMore}

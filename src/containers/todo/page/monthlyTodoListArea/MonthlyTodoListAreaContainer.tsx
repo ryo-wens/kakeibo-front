@@ -4,7 +4,7 @@ import { useLocation, useParams } from 'react-router';
 import axios, { CancelTokenSource } from 'axios';
 import {
   fetchGroupExpiredTodoList,
-  fetchGroupMonthTodoList,
+  fetchGroupMonthlyTodoList,
 } from '../../../../reducks/groupTodoList/operations';
 import { fetchGroups } from '../../../../reducks/groups/operations';
 import { fetchMonthlyTodoList } from '../../../../reducks/todoList/operations';
@@ -30,7 +30,7 @@ const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) 
     dispatch(fetchGroups(signal));
     dispatch(fetchGroupExpiredTodoList(Number(group_id), signal));
     dispatch(
-      fetchGroupMonthTodoList(Number(group_id), props.currentYear, props.currentMonth, signal)
+      fetchGroupMonthlyTodoList(Number(group_id), props.currentYear, props.currentMonth, signal)
     );
   };
 
