@@ -2,7 +2,8 @@ import React from 'react';
 import { Groups } from '../../../reducks/groups/types';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
 import { Categories, Category, AssociatedCategory } from '../../../reducks/categories/types';
-import { BigCategoryInput, MediumCategoryInput } from '../../uikit';
+import BigCategoryList from '../../modules/category/BigCategroyList';
+import MediumCategoryList from '../../modules/category/MediumCategoryList';
 import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../../uikit';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import './input-form.scss';
@@ -138,7 +139,7 @@ const InputForm = (props: InputFormProps) => {
             <div className="input-form__form-content--spacer-medium" />
           </>
         )}
-        <BigCategoryInput
+        <BigCategoryList
           disabled={false}
           kind={props.transactionsType}
           ref={props.bigCategoryRef}
@@ -165,7 +166,7 @@ const InputForm = (props: InputFormProps) => {
           handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
         />
         <div className="input-form__form-content--spacer-medium" />
-        <MediumCategoryInput
+        <MediumCategoryList
           disabled={false}
           ref={props.mediumMenuRef}
           kind={props.transactionsType}

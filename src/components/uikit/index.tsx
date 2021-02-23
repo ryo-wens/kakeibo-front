@@ -18,5 +18,3 @@ export { default as TextArea } from './TextArea';
 export { default as ErrorIndication } from './ErrorIndication';
 export { default as SelectYears } from '../modules/SelectYears';
 export { default as SelectMonth } from '../modules/SelectMonth';
-export { default as BigCategoryInput } from '../modules/BigCategroyInput';
-export { default as MediumCategoryInput } from '../modules/MediumCategoryInput';

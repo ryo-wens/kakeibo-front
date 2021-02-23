@@ -1,6 +1,8 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
+import { DatePicker, TextInput } from '../../../../uikit';
+import BigCategoryList from '../../../../modules/category/BigCategroyList';
+import MediumCategoryList from '../../../../modules/category/MediumCategoryList';
 import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import '../../../../shoppingList/modules/form/RegularShoppingListForm/regular-shopping-list-form.scss';
 import ShoppingListPayerSelect from '../../select/shoppingListPayerSelect/ShoppingListPayerSelect';
@@ -108,7 +110,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
       key: 'カテゴリ',
       value: (
         <>
-          <BigCategoryInput
+          <BigCategoryList
             ref={props.bigCategoryRef}
             kind={'expense'}
             bigCategory={props.bigCategory}
@@ -130,7 +132,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
             handleDeleteCustomCategory={props.handleDeleteCustomCategory}
             handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
           />
-          <MediumCategoryInput
+          <MediumCategoryList
             ref={props.mediumMenuRef}
             kind={'expense'}
             bigCategoryId={props.bigCategoryId}

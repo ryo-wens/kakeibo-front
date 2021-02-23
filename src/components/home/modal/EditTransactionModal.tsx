@@ -2,15 +2,9 @@ import React from 'react';
 import { Categories, Category, AssociatedCategory } from '../../../reducks/categories/types';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
 import { Groups } from '../../../reducks/groups/types';
-import {
-  GenericButton,
-  DatePicker,
-  TextInput,
-  KindSelectBox,
-  SelectPayer,
-  BigCategoryInput,
-  MediumCategoryInput,
-} from '../../uikit';
+import BigCategoryList from '../../modules/category/BigCategroyList';
+import MediumCategoryList from '../../modules/category/MediumCategoryList';
+import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../../uikit';
 import Modal from '@material-ui/core/Modal';
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -166,7 +160,7 @@ const EditTransactionModal = (props: InputModalProps) => {
             </>
           )}
           <div className="transaction-modal__select-category">
-            <BigCategoryInput
+            <BigCategoryList
               kind={props.transactionsType}
               ref={props.bigCategoryRef}
               bigCategory={props.bigCategory}
@@ -195,7 +189,7 @@ const EditTransactionModal = (props: InputModalProps) => {
           </div>
           <div className="transaction-modal__form-content--spacer-medium" />
           <div className="input-form__select-category">
-            <MediumCategoryInput
+            <MediumCategoryList
               kind={props.transactionsType}
               ref={props.mediumMenuRef}
               bigCategory={props.bigCategory}

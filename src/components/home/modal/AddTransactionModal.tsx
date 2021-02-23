@@ -1,13 +1,7 @@
 import React from 'react';
-import {
-  GenericButton,
-  DatePicker,
-  TextInput,
-  KindSelectBox,
-  SelectPayer,
-  BigCategoryInput,
-  MediumCategoryInput,
-} from '../../uikit';
+import BigCategoryList from '../../modules/category/BigCategroyList';
+import MediumCategoryList from '../../modules/category/MediumCategoryList';
+import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../../uikit';
 import Modal from '@material-ui/core/Modal';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TransactionsReq } from '../../../reducks/transactions/types';
@@ -171,7 +165,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
             </>
           )}
           <div className="transaction-modal__select-category">
-            <BigCategoryInput
+            <BigCategoryList
               kind={props.transactionType}
               ref={props.bigCategoryRef}
               bigCategory={props.bigCategory}
@@ -200,7 +194,7 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           </div>
           <div className="transaction-modal__form-content--spacer-medium" />
           <div className="transaction-modal__select-category">
-            <MediumCategoryInput
+            <MediumCategoryList
               kind={props.transactionType}
               ref={props.mediumMenuRef}
               bigCategory={props.bigCategory}

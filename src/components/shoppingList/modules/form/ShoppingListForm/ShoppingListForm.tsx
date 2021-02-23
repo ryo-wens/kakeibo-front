@@ -1,6 +1,8 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
+import { DatePicker, TextInput } from '../../../../uikit';
+import BigCategoryList from '../../../../modules/category/BigCategroyList';
+import MediumCategoryList from '../../../../modules/category/MediumCategoryList';
 import './shopping-list-form.scss';
 import { AssociatedCategory, Categories, Category } from '../../../../../reducks/categories/types';
 import ToolTipIcon from '../../toolTip/ToolTipIcon';
@@ -97,7 +99,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
       key: 'カテゴリー',
       value: (
         <>
-          <BigCategoryInput
+          <BigCategoryList
             ref={props.bigCategoryRef}
             kind={'expense'}
             bigCategory={props.bigCategory}
@@ -119,7 +121,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             handleDeleteCustomCategory={props.handleDeleteCustomCategory}
             handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
           />
-          <MediumCategoryInput
+          <MediumCategoryList
             ref={props.mediumMenuRef}
             kind={'expense'}
             bigCategoryId={props.bigCategoryId}
