@@ -81,8 +81,8 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const [editing, setEditing] = useState(false);
   const [firstTransactionDate, setFirstTransactionDate] = useState<Date | null>(transactionDate);
   const [firstTransactionMonth, setFirstTransactionMonth] = useState(0);
-  const [customCategoryName, setCustomCategoryName] = useState<string>('');
-  const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 

@@ -90,8 +90,8 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const [associatedCategory, setAssociatedCategory] = useState<string>(
     props.categoryName.mediumCategory || props.categoryName.customCategory
   );
-  const [customCategoryName, setCustomCategoryName] = useState<string>('');
-  const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 

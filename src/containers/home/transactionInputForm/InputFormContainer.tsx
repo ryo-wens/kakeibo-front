@@ -55,7 +55,7 @@ const InputFormContainer = () => {
   const [transactionsType, setTransactionType] = useState('expense');
   const [amount, setAmount] = useState<string>(initialState.initialAmount);
   const [bigCategory, setBigCategory] = useState<string | null>(initialState.initialBigCategory);
-  const [associatedCategory, setAssociatedCategory] = useState<string>('');
+  const [associatedCategory, setAssociatedCategory] = useState('');
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
@@ -69,8 +69,8 @@ const InputFormContainer = () => {
   const emptyShop = shop === '' ? null : shop;
   const [memo, setMemo] = useState('');
   const emptyMemo = memo === '' ? null : memo;
-  const [customCategoryName, setCustomCategoryName] = useState<string>('');
-  const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 

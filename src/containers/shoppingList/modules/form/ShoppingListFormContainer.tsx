@@ -65,8 +65,8 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
 
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
-  const [customCategoryName, setCustomCategoryName] = useState<string>('');
-  const [editCustomCategoryName, setEditCustomCategoryName] = useState<string>('');
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
