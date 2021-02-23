@@ -6,17 +6,17 @@ interface TodoListItemFormContainerProps {
   titleLabel: string;
   buttonLabel: string;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  inputImplementationDate: (date: Date | null) => void;
-  inputDueDate: (date: Date | null) => void;
+  handleImplementationDate: (date: Date | null) => void;
+  handleDueDate: (date: Date | null) => void;
   implementationDate: Date | null;
   dueDate: Date | null;
   todoContent: string;
-  todoListItemOperation: () => void;
+  handleTodoListItem: () => void;
   disabledButton: boolean;
   closeInputTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
   inputTodoRef: React.RefObject<HTMLDivElement>;
-  deleteOperation?: () => void;
+  handleDeleteTodoListItem?: () => void;
 }
 
 const TodoListItemFormContainer = (props: TodoListItemFormContainerProps) => {
@@ -34,17 +34,17 @@ const TodoListItemFormContainer = (props: TodoListItemFormContainerProps) => {
       titleLabel={props.titleLabel}
       buttonLabel={props.buttonLabel}
       handleTodoContentChange={props.handleTodoContentChange}
-      inputImplementationDate={props.inputImplementationDate}
-      inputDueDate={props.inputDueDate}
+      handleImplementationDate={props.handleImplementationDate}
+      handleDueDate={props.handleDueDate}
       implementationDate={props.implementationDate}
       dueDate={props.dueDate}
       todoContent={props.todoContent}
-      todoListItemOperation={props.todoListItemOperation}
+      handleTodoListItem={props.handleTodoListItem}
       disabledButton={props.disabledButton}
       closeInputTodoForm={props.closeInputTodoForm}
       onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
       pathName={pathName}
-      deleteOperation={props.deleteOperation}
+      handleDeleteTodoListItem={props.handleDeleteTodoListItem}
       ref={props.inputTodoRef}
     />
   );

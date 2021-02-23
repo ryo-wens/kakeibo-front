@@ -7,14 +7,14 @@ interface AddTodoListItemFormProps {
   implementationDate: Date | null;
   dueDate: Date | null;
   todoContent: string;
-  inputImplementationDate: (date: Date | null) => void;
-  inputDueDate: (date: Date | null) => void;
+  handleImplementationDate: (date: Date | null) => void;
+  handleDueDate: (date: Date | null) => void;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   openAddTodoForm: boolean;
   handleOpenAddTodoForm: () => void;
   handleCloseAddTodoForm: () => void;
   disabledButton: boolean;
-  todoListItemOperation: () => void;
+  handleAddTodoListItem: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
   inputTodoRef: React.RefObject<HTMLDivElement>;
   date: Date;
@@ -38,12 +38,12 @@ const AddTodoListItemForm = (props: AddTodoListItemFormProps) => {
             titleLabel={'ToDoを追加'}
             buttonLabel={'追加'}
             handleTodoContentChange={props.handleTodoContentChange}
-            inputImplementationDate={props.inputImplementationDate}
-            inputDueDate={props.inputDueDate}
+            handleImplementationDate={props.handleImplementationDate}
+            handleDueDate={props.handleDueDate}
             implementationDate={props.implementationDate}
             dueDate={props.dueDate}
             todoContent={props.todoContent}
-            todoListItemOperation={props.todoListItemOperation}
+            handleTodoListItem={props.handleAddTodoListItem}
             disabledButton={props.disabledButton}
             closeInputTodoForm={props.handleCloseAddTodoForm}
             onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}

@@ -19,9 +19,10 @@ interface TodoPageProps {
   openSearchTodoList: boolean;
   openSearchResultTodoList: boolean;
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
-  openSearch: () => void;
-  closeSearch: () => void;
-  currentYearMonth: string;
+  handleOpenSearch: () => void;
+  handleCloseSearch: () => void;
+  currentYear: string;
+  currentMonth: string;
   pathName: string;
 }
 
@@ -33,7 +34,7 @@ const TodoPage = (props: TodoPageProps) => {
           <div className="todo-page__left">
             <div className="todo-page__left-content">
               <div className="todo-page__switch-btn">
-                <button className="todo-page__search" onClick={() => props.openSearch()}>
+                <button className="todo-page__search" onClick={() => props.handleOpenSearch()}>
                   検索
                 </button>
                 <SwitchTodayOrMonthlyTabsContainer
@@ -41,7 +42,8 @@ const TodoPage = (props: TodoPageProps) => {
                   setCurrentItems={props.setCurrentTodayOrMonthly}
                   leftItem={
                     <TodayTodoAreaContainer
-                      currentYearMonth={props.currentYearMonth}
+                      currentYear={props.currentYear}
+                      currentMonth={props.currentMonth}
                       editing={props.editing}
                       setEditing={props.setEditing}
                     />
@@ -52,7 +54,8 @@ const TodoPage = (props: TodoPageProps) => {
                       selectedMonth={props.selectedMonth}
                       setSelectedYear={props.setSelectedYear}
                       setSelectedMonth={props.setSelectedMonth}
-                      currentYearMonth={props.currentYearMonth}
+                      currentYear={props.currentYear}
+                      currentMonth={props.currentMonth}
                       editing={props.editing}
                       setEditing={props.setEditing}
                     />
@@ -65,7 +68,8 @@ const TodoPage = (props: TodoPageProps) => {
             <div className="todo-page__right-content">
               <h4>期限切れToDoリスト</h4>
               <ExpiredTodoListAreaContainer
-                currentYearMonth={props.currentYearMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
                 setEditing={props.setEditing}
               />
             </div>
@@ -75,7 +79,7 @@ const TodoPage = (props: TodoPageProps) => {
         <SearchTodoListAreaContainer
           openSearchResultTodoList={props.openSearchResultTodoList}
           setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}
-          closeSearch={props.closeSearch}
+          handleCloseSearch={props.handleCloseSearch}
         />
       )}
     </>

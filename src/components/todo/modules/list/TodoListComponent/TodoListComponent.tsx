@@ -5,9 +5,10 @@ import TodoListItemComponentContainer from '../../../../../containers/todo/modul
 
 interface TodoListComponentProps {
   todoList: DisplayTodoListItem[];
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   message: string;
-  setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const TodoListComponent = (props: TodoListComponentProps) => {
@@ -25,7 +26,8 @@ const TodoListComponent = (props: TodoListComponentProps) => {
                       <li className="todo-list-component__todo-list-item" key={item.id}>
                         <TodoListItemComponentContainer
                           listItem={item}
-                          currentYearMonth={props.currentYearMonth}
+                          currentYear={props.currentYear}
+                          currentMonth={props.currentMonth}
                           setEditing={props.setEditing}
                           inputTodoClassName={'todo-list-item-component__input-todo'}
                         />

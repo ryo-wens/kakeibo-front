@@ -1,6 +1,5 @@
 import React from 'react';
-import { customMonth, year } from '../../../../../lib/constant';
-import { TodoListItem } from '../../../../../reducks/todoList/types';
+import { SearchTodoRequestData, TodoListItem } from '../../../../../reducks/todoList/types';
 import { useSelector } from 'react-redux';
 import { getGroupSearchTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { getSearchTodoList } from '../../../../../reducks/todoList/selectors';
@@ -9,18 +8,16 @@ import SearchResultTodoList from '../../../../../components/todo/page/SearchTodo
 
 interface SearchResultTodoListContainerProps {
   currentDateType: string;
+  fetchSearchTodoListRequestData: SearchTodoRequestData;
 }
 
 const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps) => {
   const pathName = useLocation().pathname.split('/')[1];
 
-  const currentYearMonth = `${year}/${customMonth}`;
   const searchTodoList = useSelector(getSearchTodoList);
   const groupSearchTodoList = useSelector(getGroupSearchTodoList);
 
-  const prevData = {
-    date: '',
-  };
+  let date = '';
 
   const equalsDisplayDate = (listItem: TodoListItem) => {
     const displayDate =
@@ -28,8 +25,8 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
         ? listItem.implementation_date
         : listItem.due_date;
 
-    if (prevData.date !== displayDate) {
-      prevData.date = displayDate;
+    if (date !== displayDate) {
+      date = displayDate;
       return true;
     }
     return false;
@@ -44,9 +41,9 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
   return (
     <SearchResultTodoList
       searchTodoList={pathName === 'group' ? groupSearchTodoList : searchTodoList}
-      currentYearMonth={currentYearMonth}
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
+      fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}
       message={'条件に一致するtodoは見つかりませんでした。'}
     />
   );

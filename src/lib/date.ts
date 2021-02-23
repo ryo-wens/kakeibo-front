@@ -1,4 +1,9 @@
 import { year } from './constant';
+import moment from 'moment';
+
+export const generateZeroPaddingMonth = (month: number) => {
+  return moment(month, 'MM').format('MM');
+};
 
 export const dateStringToDate = (date: string) => {
   const prevDates = date.split(/[/()]/, 3);
