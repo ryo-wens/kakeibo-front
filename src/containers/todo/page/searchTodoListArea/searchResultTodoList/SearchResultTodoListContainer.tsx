@@ -1,5 +1,9 @@
 import React from 'react';
-import { SearchTodoRequestData, TodoListItem } from '../../../../../reducks/todoList/types';
+import {
+  SearchTodoRequestData,
+  TodoList,
+  TodoListItem,
+} from '../../../../../reducks/todoList/types';
 import { useSelector } from 'react-redux';
 import { getGroupSearchTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { getSearchTodoList } from '../../../../../reducks/todoList/selectors';
@@ -38,9 +42,19 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
       : listItem.due_date;
   };
 
+  const determineTodoList = (pathName: string, todoList: TodoList, groupTodoList: TodoList) => {
+    if (pathName === 'group') {
+      return todoList;
+    }
+
+    return groupTodoList;
+  };
+
+  const todoList: TodoList = determineTodoList(pathName, searchTodoList, groupSearchTodoList);
+
   return (
     <SearchResultTodoList
-      searchTodoList={pathName === 'group' ? groupSearchTodoList : searchTodoList}
+      searchTodoList={todoList}
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
       fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}

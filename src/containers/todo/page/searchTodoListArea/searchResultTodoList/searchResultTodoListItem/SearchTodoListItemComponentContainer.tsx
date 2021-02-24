@@ -10,11 +10,10 @@ import {
   editSearchTodoListItem,
 } from '../../../../../../reducks/todoList/operations';
 import {
-  deleteGroupTodoListItem,
-  editGroupTodoListItem,
+  deleteGroupSearchTodoListItem,
+  editGroupSearchTodoListItem,
 } from '../../../../../../reducks/groupTodoList/operations';
 import { dateStringToDate } from '../../../../../../lib/date';
-import { date } from '../../../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
 interface SearchTodoListItemComponentContainerProps {
@@ -35,7 +34,6 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams();
-  const currentYearMonth = `${props.currentYear}/${props.currentMonth}`;
 
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
@@ -107,22 +105,18 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       complete_flag: event.target.checked,
     };
 
-    if (pathName !== 'group') {
+    if (pathName === 'group') {
       dispatch(
-        editSearchTodoListItem(props.listItem.id, requestData, props.fetchSearchTodoListRequestData)
-      );
-    } else if (pathName === 'group') {
-      dispatch(
-        editGroupTodoListItem(
-          date,
-          currentYearMonth,
+        editGroupSearchTodoListItem(
           Number(group_id),
           props.listItem.id,
-          implementationDate,
-          dueDate,
-          todoContent,
-          event.target.checked
+          requestData,
+          props.fetchSearchTodoListRequestData
         )
+      );
+    } else if (pathName !== 'group') {
+      dispatch(
+        editSearchTodoListItem(props.listItem.id, requestData, props.fetchSearchTodoListRequestData)
       );
     }
   };
@@ -137,15 +131,11 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
 
     if (pathName === 'group') {
       dispatch(
-        editGroupTodoListItem(
-          date,
-          currentYearMonth,
+        editGroupSearchTodoListItem(
           Number(group_id),
           props.listItem.id,
-          implementationDate,
-          dueDate,
-          todoContent,
-          checked
+          requestData,
+          props.fetchSearchTodoListRequestData
         )
       );
       setOpenEditTodoForm(false);
@@ -159,7 +149,13 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
 
   const handleDeleteTodoListItem = () => {
     if (pathName === 'group') {
-      dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id));
+      dispatch(
+        deleteGroupSearchTodoListItem(
+          Number(group_id),
+          props.listItem.id,
+          props.fetchSearchTodoListRequestData
+        )
+      );
     }
 
     dispatch(deleteSearchTodoListItem(props.listItem.id, props.fetchSearchTodoListRequestData));

@@ -259,7 +259,6 @@ const initialState = {
       message: '',
       statusCode: 0,
     },
-    todayTodoListMessage: '',
     monthlyImplementationTodoList: [],
     monthlyDueTodoList: [],
     monthlyTodoListLoading: false,
@@ -267,14 +266,12 @@ const initialState = {
       message: '',
       statusCode: 0,
     },
-    monthlyTodoListMessage: '',
     searchTodoList: [],
     searchTodoListLoading: false,
     searchTodoListError: {
       message: '',
       statusCode: 0,
     },
-    searchTodoListMessage: '',
     todoListError: {
       message: '',
       statusCode: 0,
@@ -282,14 +279,35 @@ const initialState = {
   },
   groupTodoList: {
     groupExpiredTodoList: [],
+    groupExpiredTodoListLoading: false,
+    groupExpiredTodoListError: {
+      message: '',
+      statusCode: 0,
+    },
     groupTodayImplementationTodoList: [],
     groupTodayDueTodoList: [],
-    groupTodayTodoListMessage: '',
-    groupMonthImplementationTodoList: [],
-    groupMonthDueTodoList: [],
-    groupMonthTodoListMessage: '',
+    groupTodayTodoListLoading: false,
+    groupTodayTodoListError: {
+      message: '',
+      statusCode: 0,
+    },
+    groupMonthlyImplementationTodoList: [],
+    groupMonthlyDueTodoList: [],
+    groupMonthlyTodoListLoading: false,
+    groupMonthlyTodoListError: {
+      message: '',
+      statusCode: 0,
+    },
     groupSearchTodoList: [],
-    groupSearchTodoListMessage: '',
+    groupSearchTodoListLoading: false,
+    groupSearchTodoListError: {
+      message: '',
+      statusCode: 0,
+    },
+    groupTodoListError: {
+      message: '',
+      statusCode: 0,
+    },
   },
   modal: {
     message: '',

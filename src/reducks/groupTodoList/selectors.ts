@@ -99,7 +99,7 @@ export const getGroupTodayDueTodoList = createSelector(
 );
 
 const groupMonthlyImplementationTodoListSelector = (state: State) =>
-  state.groupTodoList.groupMonthImplementationTodoList;
+  state.groupTodoList.groupMonthlyImplementationTodoList;
 
 export const getGroupMonthlyImplementationTodoList = createSelector(
   [groupMonthlyImplementationTodoListSelector],
@@ -113,7 +113,8 @@ export const getGroupMonthlyImplementationTodoList = createSelector(
   }
 );
 
-const groupMonthlyDueTodoListSelector = (state: State) => state.groupTodoList.groupMonthDueTodoList;
+const groupMonthlyDueTodoListSelector = (state: State) =>
+  state.groupTodoList.groupMonthlyDueTodoList;
 
 export const getGroupMonthlyDueTodoList = createSelector(
   [groupMonthlyDueTodoListSelector],

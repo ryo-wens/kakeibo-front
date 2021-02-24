@@ -4,6 +4,7 @@ import TodoListComponent from '../../../../../components/todo/modules/list/TodoL
 import { getTodayDueTodoList } from '../../../../../reducks/todoList/selectors';
 import { getGroupTodayDueTodoList } from '../../../../../reducks/groupTodoList/selectors';
 import { useLocation } from 'react-router';
+import { DisplayTodoList } from '../../../../../reducks/todoList/types';
 
 interface TodayDueDateTodoListContainerProps {
   currentYear: string;
@@ -16,9 +17,27 @@ const TodayDueDateTodoListContainer = (props: TodayDueDateTodoListContainerProps
   const todayDueTodoList = useSelector(getTodayDueTodoList);
   const groupTodayDueTodoList = useSelector(getGroupTodayDueTodoList);
 
+  const determineTodoList = (
+    pathName: string,
+    todoList: DisplayTodoList,
+    groupTodoList: DisplayTodoList
+  ) => {
+    if (pathName === 'group') {
+      return todoList;
+    }
+
+    return groupTodoList;
+  };
+
+  const todoList: DisplayTodoList = determineTodoList(
+    pathName,
+    todayDueTodoList,
+    groupTodayDueTodoList
+  );
+
   return (
     <TodoListComponent
-      todoList={pathName === 'group' ? groupTodayDueTodoList : todayDueTodoList}
+      todoList={todoList}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       message={'今日の締切予定のToDoリストは、登録されていません。'}

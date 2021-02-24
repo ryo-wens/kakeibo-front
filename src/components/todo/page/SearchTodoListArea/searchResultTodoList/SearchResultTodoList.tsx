@@ -17,15 +17,17 @@ interface SearchResultTodoListProps {
 }
 
 const SearchResultTodoList = (props: SearchResultTodoListProps) => {
+  const existSearchTodoList = props.searchTodoList.length !== 0;
+
   return (
     <div className="search-result-todo-list">
-      <div className="search-result-todo-list__list">
-        {props.searchTodoList.length ? (
-          props.searchTodoList.map((listItem) => {
+      {existSearchTodoList ? (
+        <ol className="search-result-todo-list__list-by-date">
+          {props.searchTodoList.map((listItem) => {
             return (
-              <div className="search-result-todo-list__item" key={listItem.id}>
+              <li className="search-result-todo-list__list-item" key={listItem.id}>
                 {props.equalsDisplayDate(listItem) && (
-                  <p className="search-result-todo-list__item-date">
+                  <p className="search-result-todo-list__list-item-date">
                     {props.displayDate(listItem)}
                   </p>
                 )}
@@ -36,13 +38,13 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
                   inputTodoClassName={'todo-list-item-component__input-todo'}
                   fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}
                 />
-              </div>
+              </li>
             );
-          })
-        ) : (
-          <p className="search-result-todo-list__message">{props.message}</p>
-        )}
-      </div>
+          })}
+        </ol>
+      ) : (
+        <p className="search-result-todo-list__message">{props.message}</p>
+      )}
     </div>
   );
 };

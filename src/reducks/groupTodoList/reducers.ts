@@ -7,22 +7,7 @@ export const groupTodoListsReducer = (
   action: groupTodoListsActions
 ) => {
   switch (action.type) {
-    case Actions.ADD_GROUP_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.EDIT_GROUP_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.FETCH_GROUP_TODAY_TODO_LIST:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.FETCH_GROUP_MONTH_TODO_LIST:
+    case Actions.START_FETCH_GROUP_EXPIRED_TODO_LIST:
       return {
         ...state,
         ...action.payload,
@@ -32,16 +17,152 @@ export const groupTodoListsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.CANCEL_FETCH_GROUP_EXPIRED_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_GROUP_EXPIRED_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_GROUP_TODAY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_GROUP_TODAY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_GROUP_TODAY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_GROUP_TODAY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_GROUP_MONTHLY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_GROUP_MONTHLY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_GROUP_MONTHLY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_GROUP_MONTHLY_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_FETCH_GROUP_SEARCH_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_GROUP_SEARCH_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_GROUP_SEARCH_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_GROUP_SEARCH_TODO_LIST:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_ADD_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.ADD_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_ADD_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_EDIT_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.EDIT_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_EDIT_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_DELETE_GROUP_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.DELETE_GROUP_TODO_LIST_ITEM:
       return {
         ...state,
         ...action.payload,
       };
-    case Actions.FETCH_SEARCH_GROUP_TODO_LIST:
+    case Actions.FAILED_DELETE_GROUP_TODO_LIST_ITEM:
       return {
         ...state,
         ...action.payload,
       };
+    case Actions.START_EDIT_GROUP_SEARCH_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.EDIT_GROUP_SEARCH_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_EDIT_GROUP_SEARCH_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_DELETE_GROUP_SEARCH_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.DELETE_GROUP_SEARCH_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_DELETE_GROUP_SEARCH_TODO_LIST_ITEM:
+      return {
+        ...state,
+        ...action.payload,
+      };
+
     default:
       return state;
   }

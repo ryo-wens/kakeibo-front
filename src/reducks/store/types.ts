@@ -253,7 +253,6 @@ export interface State {
       message: string;
       statusCode: number;
     };
-    todayTodoListMessage: string;
     monthlyImplementationTodoList: TodoList;
     monthlyDueTodoList: TodoList;
     monthlyTodoListLoading: boolean;
@@ -261,14 +260,12 @@ export interface State {
       message: string;
       statusCode: number;
     };
-    monthlyTodoListMessage: string;
     searchTodoList: TodoList;
     searchTodoListLoading: boolean;
     searchTodoListError: {
       message: string;
       statusCode: number;
     };
-    searchTodoListMessage: string;
     todoListError: {
       message: string;
       statusCode: number;
@@ -276,14 +273,35 @@ export interface State {
   };
   groupTodoList: {
     groupExpiredTodoList: GroupTodoList;
+    groupExpiredTodoListLoading: boolean;
+    groupExpiredTodoListError: {
+      message: string;
+      statusCode: number;
+    };
     groupTodayImplementationTodoList: GroupTodoList;
     groupTodayDueTodoList: GroupTodoList;
-    groupTodayTodoListMessage: string;
-    groupMonthImplementationTodoList: GroupTodoList;
-    groupMonthDueTodoList: GroupTodoList;
-    groupMonthTodoListMessage: string;
+    groupTodayTodoListLoading: boolean;
+    groupTodayTodoListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupMonthlyImplementationTodoList: GroupTodoList;
+    groupMonthlyDueTodoList: GroupTodoList;
+    groupMonthlyTodoListLoading: boolean;
+    groupMonthlyTodoListError: {
+      message: string;
+      statusCode: number;
+    };
     groupSearchTodoList: GroupTodoList;
-    groupSearchTodoListMessage: string;
+    groupSearchTodoListLoading: boolean;
+    groupSearchTodoListError: {
+      message: string;
+      statusCode: number;
+    };
+    groupTodoListError: {
+      message: string;
+      statusCode: number;
+    };
   };
   modal: {
     message: string;
