@@ -6,14 +6,18 @@ import TodayShoppingListByDateContainer from '../../../../containers/shoppingLis
 import TodayShoppingListByCategoriesContainer from '../../../../containers/shoppingList/page/TodayShoppingListArea/TodayShoppingListByCategoriesContainer/TodayShoppingListByCategoriesContainer';
 
 interface TodayShoppingListAreaProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
   return (
     <>
       <div className="today-shopping-list-area__add-button">
-        <AddShoppingListItemModalContainer />
+        <AddShoppingListItemModalContainer
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
+        />
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">
@@ -21,10 +25,16 @@ const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
             leftItem={
-              <TodayShoppingListByDateContainer currentYearMonth={props.currentYearMonth} />
+              <TodayShoppingListByDateContainer
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
+              />
             }
             rightItem={
-              <TodayShoppingListByCategoriesContainer currentYearMonth={props.currentYearMonth} />
+              <TodayShoppingListByCategoriesContainer
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
+              />
             }
           />
         </div>

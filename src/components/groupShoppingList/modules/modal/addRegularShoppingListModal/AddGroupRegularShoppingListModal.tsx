@@ -39,7 +39,7 @@ interface AddGroupRegularShoppingListModalProps {
   openModal: () => void;
   closeModal: () => void;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
+  handleAddRegularShoppingListItem: () => void;
 }
 
 const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModalProps) => {
@@ -71,7 +71,7 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         buttonLabel={'追加'}
         closeModal={props.closeModal}
         unInput={props.unInput}
-        regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+        handleRegularShoppingListItem={props.handleAddRegularShoppingListItem}
         minDate={date}
       />
     </div>

@@ -1,29 +1,29 @@
 import React, { useState } from 'react';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import {
-  deleteShoppingListItem,
+  deleteRegularShoppingListItem,
   editRegularShoppingListItem,
 } from '../../../../../../reducks/shoppingList/operations';
-import axios, { CancelTokenSource } from 'axios';
 import {
+  EditRegularShoppingListItemReq,
   PurchaseCycleType,
   RegularShoppingListItem,
 } from '../../../../../../reducks/shoppingList/types';
 import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
 import EditRegularShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/EditRegularShoppingListItemModal';
+import { customMonth, todayDate, year } from '../../../../../../lib/constant';
 
 interface EditRegularShoppingListItemModalContainerProps {
   listItem: RegularShoppingListItem;
-  currentYearMonth: string;
-  fetchTodayOrMonthlyShoppingList: (signal: CancelTokenSource) => void;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const EditRegularShoppingListItemModalContainer = (
   props: EditRegularShoppingListItemModalContainerProps
 ) => {
   const dispatch = useDispatch();
-  const signal = axios.CancelToken.source();
 
   const initialState = {
     initialExpectedPurchaseDate: dateStringToDate(props.listItem.expected_purchase_date),
@@ -89,7 +89,7 @@ const EditRegularShoppingListItemModalContainer = (
     return false;
   };
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
     if (props.listItem.medium_category_name) {
       setAssociatedCategory(props.listItem.medium_category_name);
@@ -99,7 +99,7 @@ const EditRegularShoppingListItemModalContainer = (
     }
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
     setDeleteForm(false);
     setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
@@ -187,30 +187,46 @@ const EditRegularShoppingListItemModalContainer = (
     }
   };
 
-  const editRegularShoppingList = () => {
-    const signal = axios.CancelToken.source();
-
-    const edit = async () => {
-      await dispatch(
-        editRegularShoppingListItem(
-          props.listItem.id,
-          expectedPurchaseDate,
-          cycleType,
-          typeof cycle === 'string' ? Number(cycle) : cycle,
-          purchase,
-          shop,
-          typeof amount === 'string' ? Number(amount) : amount,
-          bigCategoryId,
-          mediumCategoryId,
-          customCategoryId,
-          transactionAutoAdd,
-          signal
-        )
-      );
-      props.fetchTodayOrMonthlyShoppingList(signal);
-      setOpen(false);
+  const handleEditRegularShoppingListItem = () => {
+    const requestData: EditRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: typeof cycle === 'string' ? Number(cycle) : cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: typeof amount === 'string' ? Number(amount) : amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      transaction_auto_add: transactionAutoAdd,
     };
-    edit();
+
+    dispatch(
+      editRegularShoppingListItem(
+        props.listItem.id,
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
+  };
+
+  const handleDeleteRegularShoppingListItem = () => {
+    dispatch(
+      deleteRegularShoppingListItem(
+        props.listItem.id,
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth
+      )
+    );
+    closeDeleteForm();
   };
 
   return (
@@ -236,21 +252,14 @@ const EditRegularShoppingListItemModalContainer = (
       selectCategory={selectCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-      openModal={openModal}
-      closeModal={closeModal}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
       openDeleteForm={openDeleteForm}
       closeDeleteForm={closeDeleteForm}
       unInput={disabledButton()}
       initialPurchase={initialState.initialPurchase}
-      regularShoppingListItemOperation={() => {
-        editRegularShoppingList();
-      }}
-      deleteOperation={() => {
-        dispatch(
-          deleteShoppingListItem(props.listItem.id, props.listItem.big_category_name, signal)
-        );
-        closeDeleteForm();
-      }}
+      handleEditRegularShoppingListItem={() => handleEditRegularShoppingListItem()}
+      handleDeleteRegularShoppingListItem={() => handleDeleteRegularShoppingListItem()}
     />
   );
 };

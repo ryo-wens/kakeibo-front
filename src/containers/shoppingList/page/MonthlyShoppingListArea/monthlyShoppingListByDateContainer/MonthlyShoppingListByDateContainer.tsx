@@ -8,21 +8,19 @@ import { fetchMonthlyShoppingList } from '../../../../../reducks/shoppingList/op
 interface MonthlyShoppingListByDateContainerProps {
   selectedYear: number;
   selectedMonth: number;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const MonthlyShoppingListByDateContainer = (props: MonthlyShoppingListByDateContainerProps) => {
   const dispatch = useDispatch();
   const monthlyShoppingList = useSelector(getMonthlyShoppingList);
 
-  const currentYear = String(props.selectedYear);
-  const currentMonth = (`0` + `${props.selectedMonth}`).slice(-2);
-  const currentYearMonth = `${currentYear}/${currentMonth}`;
-
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    dispatch(fetchMonthlyShoppingList(currentYear, currentMonth, signal));
+    dispatch(fetchMonthlyShoppingList(props.currentYear, props.currentMonth, signal));
     return () => signal.cancel();
-  }, [currentYear, currentMonth]);
+  }, [props.currentYear, props.currentMonth]);
 
   const prevData = {
     expectedPurchaseDate: '',
@@ -39,7 +37,8 @@ const MonthlyShoppingListByDateContainer = (props: MonthlyShoppingListByDateCont
   return (
     <ShoppingListByDate
       shoppingListByDate={monthlyShoppingList}
-      currentYearMonth={currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={`${props.selectedMonth}月の買い物リストは、登録されていません。`}
       equalsDisplayDate={equalsDisplayDate}
     />

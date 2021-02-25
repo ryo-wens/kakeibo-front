@@ -202,7 +202,7 @@ const AddGroupRegularShoppingListModalContainer = (
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput()}
-      regularShoppingListItemOperation={() => {
+      handleAddRegularShoppingListItem={() => {
         dispatch(
           addGroupRegularShoppingListItem(
             Number(group_id),

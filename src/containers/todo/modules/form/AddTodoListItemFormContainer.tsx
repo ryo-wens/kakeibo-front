@@ -9,7 +9,6 @@ import { AddTodoListItemReq } from '../../../../reducks/todoList/types';
 import axios from 'axios';
 
 interface AddTodoListItemFormContainerProps {
-  date: Date;
   currentYear: string;
   currentMonth: string;
 }

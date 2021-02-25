@@ -34,9 +34,9 @@ interface RegularShoppingListFormContainerProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   titleLabel: string;
   buttonLabel: string;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
+  handleRegularShoppingListItem: () => void;
   minDate: Date;
   openDeleteForm?: () => void;
 }
@@ -85,10 +85,10 @@ const RegularShoppingListFormContainer = (props: RegularShoppingListFormContaine
       selectCategory={props.selectCategory}
       handleShopChange={props.handleShopChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-      closeModal={props.closeModal}
+      handleCloseModal={props.handleCloseModal}
       unInput={props.unInput}
       minDate={props.minDate}
-      regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+      handleRegularShoppingListItem={props.handleRegularShoppingListItem}
       bigCategoryRef={bigCategoryRef}
       mediumMenuRef={mediumMenuRef}
       incomeCategories={incomeCategories}

@@ -6,9 +6,9 @@ import './shopping-list-delete-form.scss';
 interface ShoppingListDeleteFormProps {
   titleLabel: string;
   purchase: string;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   closeDeleteForm: () => void;
-  deleteOperation: () => void;
+  handleDeleteShoppingListItem: () => void;
 }
 
 const ShoppingListDeleteForm = (props: ShoppingListDeleteFormProps) => {
@@ -22,12 +22,18 @@ const ShoppingListDeleteForm = (props: ShoppingListDeleteFormProps) => {
           <ChevronLeftIcon />
         </button>
         <h3 className="shopping-list-delete-form__title">{props.titleLabel}</h3>
-        <button className="shopping-list-delete-form__close-btn" onClick={() => props.closeModal()}>
+        <button
+          className="shopping-list-delete-form__close-btn"
+          onClick={() => props.handleCloseModal()}
+        >
           <CloseIcon />
         </button>
       </div>
       <p className="shopping-list-delete-form__message">{props.purchase}を削除しますか？</p>
-      <button className="shopping-list-delete-form__delete-btn" onClick={props.deleteOperation}>
+      <button
+        className="shopping-list-delete-form__delete-btn"
+        onClick={props.handleDeleteShoppingListItem}
+      >
         削除
       </button>
     </div>

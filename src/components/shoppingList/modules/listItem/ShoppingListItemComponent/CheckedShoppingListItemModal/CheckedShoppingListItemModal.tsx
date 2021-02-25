@@ -29,7 +29,7 @@ interface CheckedShoppingListItemModalProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleEditShoppingListItem: () => void;
 }
 
 const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) => {
@@ -53,10 +53,10 @@ const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) 
         selectCategory={props.selectCategory}
         handleShopChange={props.handleShopChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-        closeModal={props.closeModal}
+        handleCloseModal={props.closeModal}
         unInput={props.unInput}
         minDate={new Date('1900-01-01')}
-        shoppingListItemOperation={props.shoppingListItemOperation}
+        handleShoppingListItem={props.handleEditShoppingListItem}
         displayInputAmountMessage={true}
       />
     </div>

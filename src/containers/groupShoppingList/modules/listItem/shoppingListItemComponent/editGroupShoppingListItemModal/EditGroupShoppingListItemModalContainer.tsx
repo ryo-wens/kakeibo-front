@@ -236,7 +236,7 @@ const EditGroupShoppingListItemModalContainer = (
         );
         setOpen(false);
       }}
-      deleteOperation={() => {
+      handleDeleteShoppingListItem={() => {
         dispatch(
           deleteGroupShoppingListItem(
             Number(group_id),

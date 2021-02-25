@@ -200,6 +200,10 @@ export interface State {
       message: string;
       statusCode: number;
     };
+    shoppingListError: {
+      message: string;
+      statusCode: number;
+    };
   };
   groupShoppingList: {
     groupRegularShoppingList: GroupRegularShoppingList;

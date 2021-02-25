@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
-import { date } from '../../../../lib/constant';
+import { customMonth, date, todayDate, year } from '../../../../lib/constant';
 import { addRegularShoppingListItem } from '../../../../reducks/shoppingList/operations';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import AddRegularShoppingListItemModal from '../../../../components/shoppingList/modules/modal/AddRegularShoppingListItemModal/AddRegularShoppingListItemModal';
 import {
   AddRegularShoppingListItemModalInitialState,
+  AddRegularShoppingListItemReq,
   PurchaseCycleType,
 } from '../../../../reducks/shoppingList/types';
 
 interface AddRegularShoppingListModalContainerProps {
   selectedYear: number;
   selectedMonth: number;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const initialState: AddRegularShoppingListItemModalInitialState = {
@@ -65,15 +67,11 @@ const AddRegularShoppingListItemModalContainer = (
     initialState.initialTransactionAutoAdd
   );
 
-  const signal = axios.CancelToken.source();
-  const currentMonth = `0` + `${props.selectedMonth}`.slice(-2);
-  const currentYearMonth = `${props.selectedYear}/${currentMonth}`;
-
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
     setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
     setCycleType(initialState.initialCycleType);
@@ -167,6 +165,33 @@ const AddRegularShoppingListItemModalContainer = (
     return false;
   };
 
+  const handleAddRegularShoppingListItem = () => {
+    const requestData: AddRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: typeof cycle === 'string' ? Number(cycle) : cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: typeof amount === 'string' ? Number(amount) : amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    dispatch(
+      addRegularShoppingListItem(
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
+  };
+
   return (
     <AddRegularShoppingListItemModal
       open={open}
@@ -191,29 +216,10 @@ const AddRegularShoppingListItemModalContainer = (
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       titleLabel={'定期買い物リストに追加'}
       buttonLabel={'追加'}
-      openModal={openModal}
-      closeModal={closeModal}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
       unInput={unInput()}
-      regularShoppingListItemOperation={() => {
-        dispatch(
-          addRegularShoppingListItem(
-            date,
-            currentYearMonth,
-            expectedPurchaseDate,
-            cycleType,
-            typeof cycle === 'string' ? Number(cycle) : cycle,
-            purchase,
-            shop,
-            typeof amount === 'string' ? Number(amount) : amount,
-            bigCategoryId,
-            mediumCategoryId,
-            customCategoryId,
-            transactionAutoAdd,
-            signal
-          )
-        );
-        setOpen(false);
-      }}
+      handleAddRegularShoppingListItem={() => handleAddRegularShoppingListItem()}
     />
   );
 };

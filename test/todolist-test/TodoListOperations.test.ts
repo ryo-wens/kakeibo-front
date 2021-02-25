@@ -15,25 +15,25 @@ import {
   editSearchTodoListItem,
   deleteSearchTodoListItem,
 } from '../../src/reducks/todoList/operations';
-import fetchExpiredTodoListResponse from './fetchExpiredTodoListResponse.json';
-import fetchTodayTodoListResponse from './fetchTodayTodoListResponse.json';
-import fetchMonthlyTodoListResponse from './fetchMonthlyTodoListResponse.json';
-import fetchSearchTodoListResponse from './fetchSearchTodoListResponse.json';
-import addTodoListItemResponse from './addTodoListItemResponse.json';
-import addExpiredTodoListResponse from './addExpiredTodoListResponse.json';
-import addTodayTodoListResponse from './addTodayTodoListResponse.json';
-import addMonthlyTodoListResponse from './addMonthlyTodoListResponse.json';
-import editTodoListItemResponse from './editTodoListItemResponse.json';
-import editExpiredTodoListResponse from './editExpiredTodoListResponse.json';
-import editTodayTodoListResponse from './editTodayTodoListResponse.json';
-import editMonthlyTodoListResponse from './editMonthlyTodoListResponse.json';
-import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
-import deleteExpiredTodoListResponse from './deleteExpiredTodoListResponse.json';
-import deleteTodayTodoListResponse from './deleteTodayTodoListResponse.json';
-import deleteMonthlyTodoListResponse from './deleteMonthlyTodoListResponse.json';
-import editSearchTodoListItemResponse from './editSearchTodoListItemResponse.json';
-import editSearchTodoListResponse from './editSearchTodoListResponse.json';
-import deleteSearchTodoListResponse from './deleteSearchTodoListResponse.json';
+import fetchExpiredTodoListResponse from './fetchExpiredTodoListResponse/fetchExpiredTodoListResponse.json';
+import fetchTodayTodoListResponse from './fetchTodayTodoListResponse/fetchTodayTodoListResponse.json';
+import fetchMonthlyTodoListResponse from './fetchMonthlyTodoListResponse/fetchMonthlyTodoListResponse.json';
+import fetchSearchTodoListResponse from './fetchSearchTodoListResponse/fetchSearchTodoListResponse.json';
+import addTodoListItemResponse from './addTodoListItemResponse/addTodoListItemResponse.json';
+import addExpiredTodoListResponse from './addTodoListItemResponse/addExpiredTodoListResponse.json';
+import addTodayTodoListResponse from './addTodoListItemResponse/addTodayTodoListResponse.json';
+import addMonthlyTodoListResponse from './addTodoListItemResponse/addMonthlyTodoListResponse.json';
+import editTodoListItemResponse from './editTodoListItemResponse/editTodoListItemResponse.json';
+import editExpiredTodoListResponse from './editTodoListItemResponse/editExpiredTodoListResponse.json';
+import editTodayTodoListResponse from './editTodoListItemResponse/editTodayTodoListResponse.json';
+import editMonthlyTodoListResponse from './editTodoListItemResponse/editMonthlyTodoListResponse.json';
+import deleteTodoListItemResponse from './deleteTodoListItemResponse/deleteTodoListItemResponse.json';
+import deleteExpiredTodoListResponse from './deleteTodoListItemResponse/deleteExpiredTodoListResponse.json';
+import deleteTodayTodoListResponse from './deleteTodoListItemResponse/deleteTodayTodoListResponse.json';
+import deleteMonthlyTodoListResponse from './deleteTodoListItemResponse/deleteMonthlyTodoListResponse.json';
+import editSearchTodoListItemResponse from './editSearchTodoListItemResponse/editSearchTodoListItemResponse.json';
+import editSearchTodoListResponse from './editSearchTodoListItemResponse/editSearchTodoListResponse.json';
+import deleteSearchTodoListResponse from './deleteSearchTodoListItemResponse/deleteSearchTodoListResponse.json';
 import { AddTodoListItemReq, EditTodoListItemReq } from '../../src/reducks/todoList/types';
 
 const middlewares = [thunk];

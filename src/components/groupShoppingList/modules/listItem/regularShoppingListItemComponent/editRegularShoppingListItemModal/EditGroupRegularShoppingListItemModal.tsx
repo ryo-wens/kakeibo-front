@@ -42,8 +42,8 @@ interface EditGroupRegularShoppingListItemModalProps {
   closeDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
-  deleteOperation: () => void;
+  handleEditRegularShoppingListItem: () => void;
+  handleDeleteShoppingListItem: () => void;
 }
 
 const EditGroupRegularShoppingListItemModal = (
@@ -55,9 +55,9 @@ const EditGroupRegularShoppingListItemModal = (
         <ShoppingListDeleteForm
           titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
-          closeModal={props.closeModal}
+          handleCloseModal={props.closeModal}
           closeDeleteForm={props.closeDeleteForm}
-          deleteOperation={props.deleteOperation}
+          handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
         />
       ) : (
         <GroupRegularShoppingListFormContainer
@@ -87,7 +87,7 @@ const EditGroupRegularShoppingListItemModal = (
           closeModal={props.closeModal}
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
-          regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+          handleRegularShoppingListItem={props.handleEditRegularShoppingListItem}
           openDeleteForm={props.openDeleteForm}
         />
       )}

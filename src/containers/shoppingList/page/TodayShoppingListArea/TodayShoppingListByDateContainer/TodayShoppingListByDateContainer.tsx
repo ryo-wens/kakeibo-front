@@ -7,7 +7,8 @@ import { fetchTodayShoppingList } from '../../../../../reducks/shoppingList/oper
 import { customMonth, date, year } from '../../../../../lib/constant';
 
 interface TodayShoppingListByDateContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContainerProps) => {
@@ -41,7 +42,8 @@ const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContaine
   return (
     <ShoppingListByDate
       shoppingListByDate={todayShoppingList}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={'今日の買い物リストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
     />

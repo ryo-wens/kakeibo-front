@@ -7,7 +7,8 @@ import {
 } from '../../../../reducks/shoppingList/selectors';
 
 interface TodayScheduleShoppingListAreaContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const TodayScheduleShoppingListAreaContainer = (
@@ -20,7 +21,8 @@ const TodayScheduleShoppingListAreaContainer = (
     <TodayScheduleShoppingListArea
       todayShoppingList={todayShoppingList}
       todayShoppingListByCategories={todayShoppingListByCategories}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
     />
   );
 };

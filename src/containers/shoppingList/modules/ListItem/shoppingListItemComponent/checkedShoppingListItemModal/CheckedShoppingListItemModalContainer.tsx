@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
 import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import { editShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
-import axios from 'axios';
-import { ShoppingListItem } from '../../../../../../reducks/shoppingList/types';
-import { date } from '../../../../../../lib/constant';
+import {
+  EditShoppingListItemReq,
+  ShoppingListItem,
+} from '../../../../../../reducks/shoppingList/types';
+import { customMonth, todayDate, year } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
 import CheckedShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal';
 
 interface CheckedShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   initialExpectedPurchaseDate: Date;
   initialPurchase: string;
   initialShop: string | null;
@@ -45,7 +48,6 @@ const CheckedShoppingListItemModalContainer = (
   props: CheckedShoppingListItemModalContainerProps
 ) => {
   const dispatch = useDispatch();
-  const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
@@ -168,25 +170,61 @@ const CheckedShoppingListItemModalContainer = (
       return openModal();
     }
     props.setChecked(event.target.checked);
+
+    const requestData: EditShoppingListItemReq = {
+      expected_purchase_date: props.expectedPurchaseDate,
+      complete_flag: event.target.checked,
+      purchase: props.purchase,
+      shop: props.shop,
+      amount: typeof props.amount === 'string' ? Number(props.amount) : props.amount,
+      big_category_id: props.bigCategoryId,
+      medium_category_id: props.mediumCategoryId,
+      custom_category_id: props.customCategoryId,
+      regular_shopping_list_id: props.listItem.regular_shopping_list_id,
+      transaction_auto_add: props.transactionAutoAdd,
+      related_transaction_data: props.listItem.related_transaction_data,
+    };
+
     dispatch(
       editShoppingListItem(
-        date,
-        props.currentYearMonth,
         props.listItem.id,
-        props.expectedPurchaseDate,
-        event.target.checked,
-        props.purchase,
-        props.shop,
-        typeof props.amount === 'string' ? Number(props.amount) : props.amount,
-        props.bigCategoryId,
-        props.mediumCategoryId,
-        props.customCategoryId,
-        props.listItem.regular_shopping_list_id,
-        props.transactionAutoAdd,
-        props.listItem.related_transaction_data,
-        signal
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth,
+        requestData
       )
     );
+  };
+
+  const handleEditShoppingListItem = () => {
+    const requestData: EditShoppingListItemReq = {
+      expected_purchase_date: props.expectedPurchaseDate,
+      complete_flag: true,
+      purchase: props.purchase,
+      shop: props.shop,
+      amount: Number(props.amount),
+      big_category_id: props.bigCategoryId,
+      medium_category_id: props.mediumCategoryId,
+      custom_category_id: props.customCategoryId,
+      regular_shopping_list_id: props.listItem.regular_shopping_list_id,
+      transaction_auto_add: props.transactionAutoAdd,
+      related_transaction_data: props.listItem.related_transaction_data,
+    };
+
+    dispatch(
+      editShoppingListItem(
+        props.listItem.id,
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
   };
 
   return (
@@ -211,28 +249,7 @@ const CheckedShoppingListItemModalContainer = (
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       closeModal={closeModal}
       unInput={disabledButton()}
-      shoppingListItemOperation={() => {
-        dispatch(
-          editShoppingListItem(
-            date,
-            props.currentYearMonth,
-            props.listItem.id,
-            props.expectedPurchaseDate,
-            true,
-            props.purchase,
-            props.shop,
-            Number(props.amount),
-            props.bigCategoryId,
-            props.mediumCategoryId,
-            props.customCategoryId,
-            props.listItem.regular_shopping_list_id,
-            props.transactionAutoAdd,
-            props.listItem.related_transaction_data,
-            signal
-          )
-        );
-        setOpen(false);
-      }}
+      handleEditShoppingListItem={() => handleEditShoppingListItem()}
     />
   );
 };

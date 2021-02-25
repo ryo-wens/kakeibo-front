@@ -5,7 +5,8 @@ import { GroupShoppingList } from '../../../../../reducks/groupShoppingList/type
 
 interface GroupTodayScheduleShoppingListByDateProps {
   shoppingListByDate: GroupShoppingList;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   message: string;
 }
 
@@ -18,7 +19,8 @@ const GroupTodayScheduleShoppingListByDate = (props: GroupTodayScheduleShoppingL
             <div className="today-schedule-shopping-list-by-date__item" key={listItem.id}>
               <ShoppingListItemComponentContainer
                 listItem={listItem}
-                currentYearMonth={props.currentYearMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentYear}
                 purchaseClassName={'shopping-list-item-component__item-purchase--home-page'}
                 amountClassName={'shopping-list-item-component__item-amount--home-page'}
                 transactionDataItemClassName={'related-transaction-data-button__item--home-page'}

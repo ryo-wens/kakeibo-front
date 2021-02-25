@@ -259,10 +259,10 @@ const EditGroupRegularShoppingListItemModalContainer = (
       closeDeleteForm={closeDeleteForm}
       unInput={disabledButton()}
       initialPurchase={initialState.initialPurchase}
-      regularShoppingListItemOperation={() => {
+      handleEditRegularShoppingListItem={() => {
         editRegularShoppingList();
       }}
-      deleteOperation={() => {
+      handleDeleteShoppingListItem={() => {
         deleteGroupRegularShoppingListItem(
           Number(group_id),
           props.listItem.id,

@@ -33,9 +33,9 @@ interface RegularShoppingListFormProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   titleLabel: string;
   buttonLabel: string;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
+  handleRegularShoppingListItem: () => void;
   minDate: Date;
   bigCategoryRef: React.RefObject<HTMLDivElement>;
   mediumMenuRef: React.RefObject<HTMLDivElement>;
@@ -176,7 +176,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
     <div className="regular-shopping-list-form">
       <div className="regular-shopping-list-form__position">
         <h3>{props.titleLabel}</h3>
-        <button onClick={() => props.closeModal()}>
+        <button onClick={() => props.handleCloseModal()}>
           <CloseIcon />
         </button>
       </div>
@@ -209,14 +209,14 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           <button
             className="regular-shopping-list-form__operation-btn--add"
             disabled={props.unInput}
-            onClick={props.regularShoppingListItemOperation}
+            onClick={props.handleRegularShoppingListItem}
           >
             {props.buttonLabel}
           </button>
           <button
             className="regular-shopping-list-form__operation-btn--cancel"
             disabled={false}
-            onClick={() => props.closeModal()}
+            onClick={() => props.handleCloseModal()}
           >
             キャンセル
           </button>

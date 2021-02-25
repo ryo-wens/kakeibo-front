@@ -387,7 +387,7 @@ export const deleteGroupTodoListItem = (
     dispatch(startDeleteGroupTodoListItemAction());
 
     try {
-      const resultDeleteTodoListItem = await axios.delete<DeleteGroupTodoListItemRes>(
+      const deleteTodoListItemResult = await axios.delete<DeleteGroupTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         {
           withCredentials: true,
@@ -440,7 +440,7 @@ export const deleteGroupTodoListItem = (
           monthlyDuesTodoList
         )
       );
-      dispatch(openTextModalAction(resultDeleteTodoListItem.data.message));
+      dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
     } catch (error) {
       dispatch(
         failedDeleteGroupTodoListItemAction(
@@ -518,7 +518,7 @@ export const deleteGroupSearchTodoListItem = (
     dispatch(startDeleteGroupSearchTodoListItemAction());
 
     try {
-      const resultDeleteTodoListItem = await axios.delete<DeleteGroupTodoListItemRes>(
+      const deleteTodoListItemResult = await axios.delete<DeleteGroupTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         {
           withCredentials: true,
@@ -543,7 +543,7 @@ export const deleteGroupSearchTodoListItem = (
       );
 
       dispatch(deleteGroupSearchTodoListItemAction(fetchSearchResult.data.search_todo_list));
-      dispatch(openTextModalAction(resultDeleteTodoListItem.data.message));
+      dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
     } catch (error) {
       dispatch(
         failedDeleteGroupSearchTodoListItemAction(

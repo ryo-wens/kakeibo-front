@@ -13,9 +13,10 @@ interface ShoppingListPageProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentYear: string;
+  currentMonth: string;
   currentItem: TodayOrMonthly;
   setCurrentItem: React.Dispatch<React.SetStateAction<TodayOrMonthly>>;
-  currentYearMonth: string;
 }
 
 const ShoppingListPage = (props: ShoppingListPageProps) => {
@@ -26,14 +27,20 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           <SwitchTodayOrMonthlyTabsContainer
             currentItem={props.currentItem}
             setCurrentItems={props.setCurrentItem}
-            leftItem={<TodayShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />}
+            leftItem={
+              <TodayShoppingListAreaContainer
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
+              />
+            }
             rightItem={
               <MonthlyShoppingListAreaContainer
                 selectedYear={props.selectedYear}
                 selectedMonth={props.selectedMonth}
                 setSelectedYear={props.setSelectedYear}
                 setSelectedMonth={props.setSelectedMonth}
-                currentYearMonth={props.currentYearMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
               />
             }
           />
@@ -45,15 +52,21 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           <AddRegularShoppingListItemModalContainer
             selectedYear={props.selectedYear}
             selectedMonth={props.selectedMonth}
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
           />
           <RegularShoppingListAreaContainer
-            currentYearMonth={props.currentYearMonth}
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <ExpiredShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
+          <ExpiredShoppingListAreaContainer
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
+          />
         </div>
       </div>
     </div>

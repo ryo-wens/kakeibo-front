@@ -1,10 +1,15 @@
 import React, { useState } from 'react';
-import { date } from '../../../../lib/constant';
-import axios from 'axios';
+import { customMonth, date, todayDate, year } from '../../../../lib/constant';
 import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import AddShoppingListItemModal from '../../../../components/shoppingList/modules/modal/AddShoppingListItemModal/AddShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';
+import { AddShoppingListItemReq } from '../../../../reducks/shoppingList/types';
+
+interface AddShoppingListItemFormContainerProps {
+  currentYear: string;
+  currentMonth: string;
+}
 
 const initialState = {
   initialExpectedPurchaseDate: date,
@@ -20,7 +25,7 @@ const initialState = {
   initialTransactionAutoAdd: false,
 };
 
-const AddShoppingListItemModalContainer = () => {
+const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContainerProps) => {
   const dispatch = useDispatch();
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -49,9 +54,7 @@ const AddShoppingListItemModalContainer = () => {
     initialState.initialTransactionAutoAdd
   );
 
-  const signal = axios.CancelToken.source();
-
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
     setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
     setPurchase(initialState.initialPurchase);
@@ -65,7 +68,7 @@ const AddShoppingListItemModalContainer = () => {
     setTransactionAutoAdd(initialState.initialTransactionAutoAdd);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
   };
 
@@ -122,6 +125,31 @@ const AddShoppingListItemModalContainer = () => {
     }
   };
 
+  const handleAddShoppingListItem = () => {
+    const requestData: AddShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      purchase: purchase,
+      shop: shop,
+      amount: typeof amount === 'string' ? Number(amount) : amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    dispatch(
+      addShoppingListItem(
+        String(year),
+        customMonth,
+        String(todayDate),
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
+  };
+
   const unInput =
     expectedPurchaseDate === null ||
     purchase === initialState.initialPurchase ||
@@ -145,26 +173,10 @@ const AddShoppingListItemModalContainer = () => {
       selectCategory={selectCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-      openModal={openModal}
-      closeModal={closeModal}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
       unInput={unInput}
-      shoppingListItemOperation={() => {
-        dispatch(
-          addShoppingListItem(
-            date,
-            expectedPurchaseDate,
-            purchase,
-            shop,
-            typeof amount === 'string' ? Number(amount) : amount,
-            bigCategoryId,
-            mediumCategoryId,
-            customCategoryId,
-            transactionAutoAdd,
-            signal
-          )
-        );
-        setOpen(false);
-      }}
+      handleAddShoppingListItem={() => handleAddShoppingListItem()}
     />
   );
 };

@@ -41,7 +41,7 @@ interface GroupRegularShoppingListFormProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
+  handleRegularShoppingListItem: () => void;
   minDate: Date;
   bigCategoryRef: React.RefObject<HTMLDivElement>;
   mediumMenuRef: React.RefObject<HTMLDivElement>;
@@ -225,7 +225,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
           <button
             className="regular-shopping-list-form__operation-btn--add"
             disabled={props.unInput}
-            onClick={props.regularShoppingListItemOperation}
+            onClick={props.handleRegularShoppingListItem}
           >
             {props.buttonLabel}
           </button>
