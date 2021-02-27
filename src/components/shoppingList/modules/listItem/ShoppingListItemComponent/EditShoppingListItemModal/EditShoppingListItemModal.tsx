@@ -4,7 +4,6 @@ import './edit-shopping-list-item-modal.scss';
 import EditIcon from '@material-ui/icons/Edit';
 import ShoppingListDeleteForm from '../../../form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/ShoppingListFormContainer';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 
 interface EditShoppingListItemModalProps {
   open: boolean;
@@ -15,19 +14,16 @@ interface EditShoppingListItemModalProps {
   amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
-  bigCategoryIndex: number;
   transactionAutoAdd: boolean;
   associatedCategory: string;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   openModal: () => void;
@@ -38,10 +34,6 @@ interface EditShoppingListItemModalProps {
   unInput: boolean;
   shoppingListItemOperation: () => void;
   deleteOperation: () => void;
-  bigCategoryMenuOpen: boolean;
-  mediumCategoryMenuOpen: boolean;
-  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
@@ -65,13 +57,11 @@ const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
           amount={props.amount}
           bigCategoryId={props.bigCategoryId}
           bigCategory={props.bigCategory}
-          bigCategoryIndex={props.bigCategoryIndex}
           transactionAutoAdd={props.transactionAutoAdd}
           associatedCategory={props.associatedCategory}
           handlePurchaseChange={props.handlePurchaseChange}
           handleDateChange={props.handleDateChange}
           handleAmountChange={props.handleAmountChange}
-          handleChangeCategory={props.handleChangeCategory}
           handleShopChange={props.handleShopChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
           closeModal={props.closeModal}
@@ -80,10 +70,11 @@ const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
           shoppingListItemOperation={props.shoppingListItemOperation}
           displayInputAmountMessage={false}
           openDeleteForm={props.openDeleteForm}
-          bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-          mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-          setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-          setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+          setBigCategory={props.setBigCategory}
+          setBigCategoryId={props.setBigCategoryId}
+          setCustomCategoryId={props.setCustomCategoryId}
+          setMediumCategoryId={props.setMediumCategoryId}
+          setAssociatedCategory={props.setAssociatedCategory}
         />
       )}
     </div>

@@ -1,15 +1,15 @@
 import React from 'react';
-import { Categories, Category, AssociatedCategory } from '../../../reducks/categories/types';
+import { Categories } from '../../../reducks/categories/types';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
 import { Groups } from '../../../reducks/groups/types';
-import BigCategoryList from '../../modules/category/BigCategroyList';
-import MediumCategoryList from '../../modules/category/MediumCategoryList';
 import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../../uikit';
 import Modal from '@material-ui/core/Modal';
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
 import CloseIcon from '@material-ui/icons/Close';
 import './transaction-modal.scss';
+import BigCategoryListContainer from '../../../containers/modules/BigCategoryListContainer';
+import MediumCategoryListContainer from '../../../containers/modules/MediumCategoryListContainer';
 
 interface InputModalProps {
   open: boolean;
@@ -35,8 +35,8 @@ interface InputModalProps {
   memo: string | null;
   shop: string | null;
   paymentUserId: string;
-  bigCategoryRef: React.RefObject<HTMLDivElement>;
-  mediumMenuRef: React.RefObject<HTMLDivElement>;
+  bigCategoryMenuRef: React.RefObject<HTMLDivElement>;
+  mediumCategoryMenuRef: React.RefObject<HTMLDivElement>;
   approvedGroups: Groups;
   incomeCategories: Categories;
   expenseCategories: Categories;
@@ -46,15 +46,6 @@ interface InputModalProps {
   changeTransactionDate: (transactionDate: Date | null) => void;
   changeTransactionType: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeAmount: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => void;
-  handleCloseBigCategoryMenu: (event: Event) => void;
-  handleCloseMediumCategoryMenu: (event: Event) => void;
   changePayer: (event: React.ChangeEvent<{ value: unknown }>) => void;
   changeMemo: (event: React.ChangeEvent<HTMLInputElement>) => void;
   changeShop: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -66,31 +57,17 @@ interface InputModalProps {
   associatedIndex: number | null;
   customCategoryName: string;
   editCustomCategoryName: string;
-  handleChangeAddCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeEditCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleOpenEditCustomCategoryField: (
-    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    associatedCategoryName: string,
-    associatedCategoryIndex: number,
-    bigCategoriesIndex: number,
-    categoryType: string
-  ) => void;
-  handleAddCustomCategory: (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    bigCategoryId: number,
-    categoryType: string
-  ) => void;
-  handleEditCustomCategory: (
-    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    associatedCategoryId: number,
-    bigCategoryId: number,
-    categoryType: string
-  ) => void;
-  handleDeleteCustomCategory: (
-    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    associatedCategoryId: number,
-    bigCategoryId: number
-  ) => void;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setTransactionType: React.Dispatch<React.SetStateAction<string>>;
+  setCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setEditCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const EditTransactionModal = (props: InputModalProps) => {
@@ -160,63 +137,59 @@ const EditTransactionModal = (props: InputModalProps) => {
             </>
           )}
           <div className="transaction-modal__select-category">
-            <BigCategoryList
-              kind={props.transactionsType}
-              ref={props.bigCategoryRef}
-              bigCategory={props.bigCategory}
-              handleChangeCategory={props.handleChangeCategory}
-              onClickCloseBigCategoryMenu={props.handleCloseBigCategoryMenu}
-              setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-              disabled={props.unEditInputForm}
-              bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-              expenseCategories={
-                props.pathName !== 'group' ? props.expenseCategories : props.groupExpenseCategories
-              }
-              incomeCategories={
-                props.pathName !== 'group' ? props.incomeCategories : props.groupIncomeCategories
-              }
+            <BigCategoryListContainer
               customCategoryName={props.customCategoryName}
-              editCustomCategoryName={props.editCustomCategoryName}
+              setCustomCategoryName={props.setCustomCategoryName}
+              bigCategoryMenuRef={props.bigCategoryMenuRef}
+              mediumCategoryMenuRef={props.mediumCategoryMenuRef}
+              bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+              transactionType={props.transactionsType}
+              unEditInputForm={props.unEditInputForm}
+              setBigCategoryId={props.setBigCategoryId}
+              setBigCategoryIndex={props.setBigCategoryIndex}
+              setMediumCategoryId={props.setMediumCategoryId}
+              setCustomCategoryId={props.setCustomCategoryId}
+              setAssociatedCategory={props.setAssociatedCategory}
+              setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
               associatedIndex={props.associatedIndex}
+              bigCategory={props.bigCategory}
               bigEditCategoryIndex={props.bigEditCategoryIndex}
-              handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
-              handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
-              handleAddCustomCategory={props.handleAddCustomCategory}
-              handleEditCustomCategory={props.handleEditCustomCategory}
-              handleDeleteCustomCategory={props.handleDeleteCustomCategory}
-              handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
+              editCustomCategoryName={props.editCustomCategoryName}
+              setAssociatedIndex={props.setAssociatedIndex}
+              setBigCategory={props.setBigCategory}
+              setBigEditCategoryIndex={props.setBigEditCategoryIndex}
+              setEditCustomCategoryName={props.setEditCustomCategoryName}
+              setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
             />
           </div>
           <div className="transaction-modal__form-content--spacer-medium" />
           <div className="input-form__select-category">
-            <MediumCategoryList
-              kind={props.transactionsType}
-              ref={props.mediumMenuRef}
-              bigCategory={props.bigCategory}
-              associatedCategory={props.associatedCategory}
+            <MediumCategoryListContainer
+              transactionType={props.transactionsType}
+              unEditInputForm={props.unEditInputForm}
               bigCategoryId={props.bigCategoryId}
               bigCategoryIndex={props.bigCategoryIndex}
+              associatedCategory={props.associatedCategory}
+              bigCategoryMenuRef={props.bigCategoryMenuRef}
+              mediumCategoryMenuRef={props.mediumCategoryMenuRef}
               mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-              handleChangeCategory={props.handleChangeCategory}
-              onClickCloseMediumCategoryMenu={props.handleCloseMediumCategoryMenu}
+              setBigCategoryId={props.setBigCategoryId}
+              setBigCategoryIndex={props.setBigCategoryIndex}
+              setCustomCategoryId={props.setCustomCategoryId}
+              setMediumCategoryId={props.setMediumCategoryId}
+              setAssociatedCategory={props.setAssociatedCategory}
               setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
-              disabled={props.unEditInputForm}
-              expenseCategories={
-                props.pathName !== 'group' ? props.expenseCategories : props.groupExpenseCategories
-              }
-              incomeCategories={
-                props.pathName !== 'group' ? props.incomeCategories : props.groupIncomeCategories
-              }
               associatedIndex={props.associatedIndex}
-              bigEditCategoryIndex={props.bigEditCategoryIndex}
+              bigCategory={props.bigCategory}
+              bigEditCategoryIndex={props.bigCategoryIndex}
               customCategoryName={props.customCategoryName}
               editCustomCategoryName={props.editCustomCategoryName}
-              handleChangeAddCustomCategory={props.handleChangeAddCustomCategory}
-              handleChangeEditCustomCategory={props.handleChangeEditCustomCategory}
-              handleAddCustomCategory={props.handleAddCustomCategory}
-              handleEditCustomCategory={props.handleEditCustomCategory}
-              handleDeleteCustomCategory={props.handleDeleteCustomCategory}
-              handleOpenEditCustomCategoryField={props.handleOpenEditCustomCategoryField}
+              setAssociatedIndex={props.setAssociatedIndex}
+              setBigCategory={props.setBigCategory}
+              setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+              setBigEditCategoryIndex={props.setBigEditCategoryIndex}
+              setCustomCategoryName={props.setCustomCategoryName}
+              setEditCustomCategoryName={props.setEditCustomCategoryName}
             />
           </div>
           <div className="transaction-modal__form-content--spacer-medium" />

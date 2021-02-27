@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import { editShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import axios from 'axios';
 import { ShoppingListItem } from '../../../../../../reducks/shoppingList/types';
@@ -29,8 +28,6 @@ interface CheckedShoppingListItemModalContainerProps {
   mediumCategoryId: number | null;
   customCategoryId: number | null;
   transactionAutoAdd: boolean;
-  bigCategoryMenuOpen: boolean;
-  mediumCategoryMenuOpen: boolean;
   setExpectedPurchaseDate: React.Dispatch<React.SetStateAction<Date | null>>;
   setChecked: React.Dispatch<React.SetStateAction<boolean>>;
   setPurchase: React.Dispatch<React.SetStateAction<string>>;
@@ -41,8 +38,6 @@ interface CheckedShoppingListItemModalContainerProps {
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
-  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const CheckedShoppingListItemModalContainer = (
@@ -52,7 +47,6 @@ const CheckedShoppingListItemModalContainer = (
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
-  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
 
   const unInput = {
@@ -138,37 +132,6 @@ const CheckedShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleChangeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-    categoryType === 'bigCategory'
-      ? props.setBigCategoryMenuOpen(false)
-      : props.setMediumCategoryMenuOpen(false);
-    event.stopPropagation();
-
-    if (bigCategory !== null) {
-      props.setBigCategoryId(bigCategory.id);
-      props.setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        props.setMediumCategoryId(associatedCategory.id);
-        props.setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        props.setMediumCategoryId(null);
-        props.setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
@@ -209,22 +172,21 @@ const CheckedShoppingListItemModalContainer = (
       amount={props.amount}
       bigCategoryId={props.bigCategoryId}
       bigCategory={props.bigCategory}
-      bigCategoryIndex={bigCategoryIndex}
       transactionAutoAdd={props.transactionAutoAdd}
       associatedCategory={associatedCategory}
       handlePurchaseChange={handlePurchaseChange}
       handleCheckedChange={handleCheckedChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       closeModal={closeModal}
       unInput={disabledButton()}
-      bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-      mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-      setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-      setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+      setBigCategory={props.setBigCategory}
+      setBigCategoryId={props.setBigCategoryId}
+      setCustomCategoryId={props.setCustomCategoryId}
+      setMediumCategoryId={props.setMediumCategoryId}
+      setAssociatedCategory={setAssociatedCategory}
       shoppingListItemOperation={() => {
         dispatch(
           editShoppingListItem(

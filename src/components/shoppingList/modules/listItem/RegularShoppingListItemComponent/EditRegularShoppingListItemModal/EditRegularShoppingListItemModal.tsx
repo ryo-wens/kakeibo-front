@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import ShoppingListDeleteForm from '../../../form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditIcon from '@material-ui/icons/Edit';
@@ -26,17 +25,6 @@ interface EditRegularShoppingListModalProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => void;
-  bigCategoryMenuOpen: boolean;
-  mediumCategoryMenuOpen: boolean;
-  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   openModal: () => void;
@@ -47,6 +35,12 @@ interface EditRegularShoppingListModalProps {
   unInput: boolean;
   regularShoppingListItemOperation: () => void;
   deleteOperation: () => void;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalProps) => {
@@ -80,7 +74,6 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           handleCycleChange={props.handleCycleChange}
           handlePurchaseChange={props.handlePurchaseChange}
           handleAmountChange={props.handleAmountChange}
-          handleChangeCategory={props.handleChangeCategory}
           handleShopChange={props.handleShopChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
           closeModal={props.closeModal}
@@ -88,10 +81,12 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           minDate={new Date('1900-01-01')}
           regularShoppingListItemOperation={props.regularShoppingListItemOperation}
           openDeleteForm={props.openDeleteForm}
-          bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-          mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-          setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-          setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+          setBigCategory={props.setBigCategory}
+          setAssociatedCategory={props.setAssociatedCategory}
+          setBigCategoryId={props.setBigCategoryId}
+          setCustomCategoryId={props.setCustomCategoryId}
+          setMediumCategoryId={props.setMediumCategoryId}
+          setBigCategoryIndex={props.setBigCategoryIndex}
         />
       )}
     </div>

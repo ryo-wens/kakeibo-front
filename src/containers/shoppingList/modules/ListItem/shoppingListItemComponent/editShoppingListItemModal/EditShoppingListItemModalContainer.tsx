@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import {
   deleteShoppingListItem,
   editShoppingListItem,
@@ -48,10 +47,7 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
 
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
-  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
 
   const unInput = {
     unInputExpectedPurchaseDate: null,
@@ -142,37 +138,6 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-    categoryType === 'bigCategory'
-      ? setBigCategoryMenuOpen(false)
-      : setMediumCategoryMenuOpen(false);
-    event.stopPropagation();
-
-    if (bigCategory !== null) {
-      props.setBigCategoryId(bigCategory.id);
-      props.setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        props.setMediumCategoryId(associatedCategory.id);
-        props.setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        props.setMediumCategoryId(null);
-        props.setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   return (
     <EditShoppingListItemModal
       open={open}
@@ -183,13 +148,11 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
       amount={props.amount}
       bigCategoryId={props.bigCategoryId}
       bigCategory={props.bigCategory}
-      bigCategoryIndex={bigCategoryIndex}
       transactionAutoAdd={props.transactionAutoAdd}
       associatedCategory={associatedCategory}
       handlePurchaseChange={handlePurchaseChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      handleChangeCategory={selectCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       openModal={openModal}
@@ -198,10 +161,11 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
       closeDeleteForm={closeDeleteForm}
       unInput={disabledButton()}
       initialPurchase={props.initialPurchase}
-      bigCategoryMenuOpen={bigCategoryMenuOpen}
-      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
-      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
-      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+      setBigCategory={props.setBigCategory}
+      setBigCategoryId={props.setBigCategoryId}
+      setCustomCategoryId={props.setCustomCategoryId}
+      setMediumCategoryId={props.setMediumCategoryId}
+      setAssociatedCategory={setAssociatedCategory}
       shoppingListItemOperation={() => {
         dispatch(
           editShoppingListItem(

@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import './checked-shopping-list-item-modal.scss';
 import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/ShoppingListFormContainer';
 
@@ -13,29 +12,22 @@ interface CheckedShoppingListItemModalProps {
   amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
-  bigCategoryIndex: number;
   transactionAutoAdd: boolean;
   associatedCategory: string;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleCheckedChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
   unInput: boolean;
   shoppingListItemOperation: () => void;
-  bigCategoryMenuOpen: boolean;
-  mediumCategoryMenuOpen: boolean;
-  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
 }
 
 const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) => {
@@ -50,13 +42,11 @@ const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) 
         amount={props.amount}
         bigCategoryId={props.bigCategoryId}
         bigCategory={props.bigCategory}
-        bigCategoryIndex={props.bigCategoryIndex}
         transactionAutoAdd={props.transactionAutoAdd}
         associatedCategory={props.associatedCategory}
         handlePurchaseChange={props.handlePurchaseChange}
         handleDateChange={props.handleDateChange}
         handleAmountChange={props.handleAmountChange}
-        handleChangeCategory={props.handleChangeCategory}
         handleShopChange={props.handleShopChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
         closeModal={props.closeModal}
@@ -64,10 +54,11 @@ const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) 
         minDate={new Date('1900-01-01')}
         shoppingListItemOperation={props.shoppingListItemOperation}
         displayInputAmountMessage={true}
-        bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-        mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-        setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-        setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+        setBigCategory={props.setBigCategory}
+        setBigCategoryId={props.setBigCategoryId}
+        setCustomCategoryId={props.setCustomCategoryId}
+        setMediumCategoryId={props.setMediumCategoryId}
+        setAssociatedCategory={props.setAssociatedCategory}
       />
     </div>
   );

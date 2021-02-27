@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import ShoppingListDeleteForm from '../../../../../shoppingList/modules/form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import EditIcon from '@material-ui/icons/Edit';
 import '../../../../../shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/edit-regular-shopping-list-item-modal.scss';
@@ -28,13 +27,6 @@ interface EditGroupRegularShoppingListItemModalProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleChangeCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -50,6 +42,12 @@ interface EditGroupRegularShoppingListItemModalProps {
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const EditGroupRegularShoppingListItemModal = (
@@ -86,7 +84,6 @@ const EditGroupRegularShoppingListItemModal = (
           handleCycleChange={props.handleCycleChange}
           handlePurchaseChange={props.handlePurchaseChange}
           handleAmountChange={props.handleAmountChange}
-          handleChangeCategory={props.handleChangeCategory}
           handleShopChange={props.handleShopChange}
           handlePaymentUserChange={props.handlePaymentUserChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
@@ -99,6 +96,12 @@ const EditGroupRegularShoppingListItemModal = (
           mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
           setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
           setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+          setBigCategory={props.setBigCategory}
+          setBigCategoryId={props.setBigCategoryId}
+          setCustomCategoryId={props.setCustomCategoryId}
+          setMediumCategoryId={props.setMediumCategoryId}
+          setBigCategoryIndex={props.setBigCategoryIndex}
+          setAssociatedCategory={props.setAssociatedCategory}
         />
       )}
     </div>

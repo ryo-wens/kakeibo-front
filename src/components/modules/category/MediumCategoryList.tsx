@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
 import { AssociatedCategory, Categories, Category } from '../../../reducks/categories/types';
 import MediumIncomeCategoryList from './MediumIncomeCategoryList';
@@ -6,7 +6,7 @@ import MediumExpenseCategoryList from './MediumExpenseCategoryList';
 import '../../../assets/modules/category-input.scss';
 
 interface MediumCategoryListProps {
-  kind: string;
+  transactionType: string;
   bigCategoryId: number;
   bigCategoryIndex: number;
   bigCategory: string | null;
@@ -57,13 +57,6 @@ interface MediumCategoryListProps {
 
 const MediumCategoryList = React.forwardRef(
   (props: MediumCategoryListProps, mediumMenuRef: React.Ref<HTMLDivElement>) => {
-    useEffect(() => {
-      document.addEventListener('click', props.onClickCloseMediumCategoryMenu);
-      return () => {
-        document.removeEventListener('click', props.onClickCloseMediumCategoryMenu);
-      };
-    }, [props.onClickCloseMediumCategoryMenu]);
-
     return (
       <div
         className="category-input__btn-position"
@@ -84,7 +77,7 @@ const MediumCategoryList = React.forwardRef(
           </button>
           {props.mediumCategoryMenuOpen && (
             <ul className="category-input__medium-menu">
-              {props.kind === 'income' ? (
+              {props.transactionType === 'income' ? (
                 <MediumIncomeCategoryList
                   incomeCategories={props.incomeCategories}
                   bigCategoryId={props.bigCategoryId}

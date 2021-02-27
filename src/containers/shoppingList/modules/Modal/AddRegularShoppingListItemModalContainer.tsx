@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { date } from '../../../../lib/constant';
 import { addRegularShoppingListItem } from '../../../../reducks/shoppingList/operations';
 import axios from 'axios';
@@ -44,8 +43,6 @@ const AddRegularShoppingListItemModalContainer = (
   const [cycle, setCycle] = useState<string | null>(initialState.initialCycle);
   const [purchase, setPurchase] = useState<string>(initialState.initialPurchase);
   const [amount, setAmount] = useState<string | null>(initialState.initialAmount);
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [bigCategory, setBigCategory] = useState<string | null>(
     initialState.initialBigCategoryName
@@ -131,37 +128,6 @@ const AddRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleChangeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-    categoryType === 'bigCategory'
-      ? setBigCategoryMenuOpen(false)
-      : setMediumCategoryMenuOpen(false);
-    event.stopPropagation();
-
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(initialState.initialCustomCategoryId);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(initialState.initialMediumCategoryId);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const unInput = () => {
     if (
       expectedPurchaseDate === null ||
@@ -194,7 +160,6 @@ const AddRegularShoppingListItemModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       titleLabel={'定期買い物リストに追加'}
@@ -202,10 +167,12 @@ const AddRegularShoppingListItemModalContainer = (
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput()}
-      bigCategoryMenuOpen={bigCategoryMenuOpen}
-      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
-      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
-      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setBigCategoryId={setBigCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setBigCategory={setBigCategory}
+      setAssociatedCategory={setAssociatedCategory}
       regularShoppingListItemOperation={() => {
         dispatch(
           addRegularShoppingListItem(

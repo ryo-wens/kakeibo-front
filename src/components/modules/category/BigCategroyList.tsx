@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { AssociatedCategory, Categories, Category } from '../../../reducks/categories/types';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
 import BigIncomeCategoryList from './BigIncomeCategoryList';
@@ -6,7 +6,7 @@ import BigExpenseCategoryList from './BigExpenseCategoryList';
 import '../../../assets/modules/category-input.scss';
 
 interface BigCategoryListProps {
-  kind: string;
+  transactionType: string;
   bigCategory: string | null;
   incomeCategories: Categories | GroupCategories;
   expenseCategories: Categories | GroupCategories;
@@ -23,6 +23,7 @@ interface BigCategoryListProps {
     event: React.MouseEvent<HTMLLIElement, MouseEvent>
   ) => void;
   disabled: boolean;
+  incomeStyle: () => { height: string };
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleChangeAddCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeEditCustomCategory: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -53,25 +54,12 @@ interface BigCategoryListProps {
 }
 
 const BigCategoryList = React.forwardRef(
-  (props: BigCategoryListProps, bigCategoryRef: React.Ref<HTMLDivElement>) => {
-    useEffect(() => {
-      document.addEventListener('click', props.onClickCloseBigCategoryMenu);
-      return () => {
-        document.removeEventListener('click', props.onClickCloseBigCategoryMenu);
-      };
-    }, [props.onClickCloseBigCategoryMenu]);
-
-    const incomeStyle = () => {
-      if (props.kind !== 'expense') {
-        return { height: '30px' };
-      }
-    };
-
+  (props: BigCategoryListProps, bigCategoryMenuRef: React.Ref<HTMLDivElement>) => {
     return (
       <div
         className="category-input__btn-position"
-        ref={bigCategoryRef as React.RefObject<HTMLDivElement>}
-        key={props.kind}
+        ref={bigCategoryMenuRef as React.RefObject<HTMLDivElement>}
+        key={props.transactionType}
       >
         <div>
           <button
@@ -87,8 +75,8 @@ const BigCategoryList = React.forwardRef(
             {props.bigCategory === '' ? '大カテゴリー(必須)' : props.bigCategory}
           </button>
           {props.bigCategoryMenuOpen && (
-            <ul style={incomeStyle()} className="category-input__menu">
-              {props.kind === 'income' ? (
+            <ul style={props.incomeStyle()} className="category-input__menu">
+              {props.transactionType === 'income' ? (
                 <BigIncomeCategoryList
                   incomeCategories={props.incomeCategories}
                   associatedIndex={props.associatedIndex}

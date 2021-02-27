@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { date } from '../../../../lib/constant';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -137,37 +136,6 @@ const AddGroupRegularShoppingListModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleChangeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-    categoryType === 'bigCategory'
-      ? setBigCategoryMenuOpen(false)
-      : setMediumCategoryMenuOpen(false);
-    event.stopPropagation();
-
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const unInput = () => {
     if (
       expectedPurchaseDate === null ||
@@ -201,7 +169,6 @@ const AddGroupRegularShoppingListModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
@@ -214,6 +181,12 @@ const AddGroupRegularShoppingListModalContainer = (
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+      setBigCategory={setBigCategory}
+      setBigCategoryId={setBigCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setAssociatedCategory={setAssociatedCategory}
       regularShoppingListItemOperation={() => {
         dispatch(
           addGroupRegularShoppingListItem(

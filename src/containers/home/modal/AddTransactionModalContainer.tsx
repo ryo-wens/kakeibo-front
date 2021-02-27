@@ -15,24 +15,12 @@ import {
   addGroupTransactions,
   fetchGroupYearlyAccountListForModal,
 } from '../../../reducks/groupTransactions/operations';
-import {
-  addCustomCategories,
-  deleteCustomCategories,
-  editCustomCategories,
-  fetchCategories,
-} from '../../../reducks/categories/operations';
+import { fetchCategories } from '../../../reducks/categories/operations';
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
-import { AssociatedCategory, Category } from '../../../reducks/categories/types';
 import { customMonth, year } from '../../../lib/constant';
 import { isValidAmountFormat } from '../../../lib/validation';
 import AddTransactionModal from '../../../components/home/modal/AddTransactionModal';
-import { Action, Dispatch } from 'redux';
-import {
-  addGroupCustomCategories,
-  deleteGroupCustomCategories,
-  editGroupCustomCategories,
-} from '../../../reducks/groupCategories/operations';
 
 interface AddTransactionModalContainerProps {
   open: boolean;
@@ -210,148 +198,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     setAmount(event.target.value);
   };
 
-  const handleChangeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-    categoryType === 'bigCategory'
-      ? setBigCategoryMenuOpen(false)
-      : setMediumCategoryMenuOpen(false);
-    event.stopPropagation();
-
-    if (bigCategory !== null) {
-      setTransactionType(bigCategory.transaction_type);
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
-  const handleCloseBigCategoryMenu = (event: Event) => {
-    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
-    }
-  };
-
-  const handleCloseMediumCategoryMenu = (event: Event) => {
-    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
-    }
-  };
-
-  const handleChangeAddCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setCustomCategoryName(event.target.value);
-  };
-
-  const handleChangeEditCustomCategory = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setEditCustomCategoryName(event.target.value);
-  };
-
-  const categoryOperationSwitching = (
-    operationFunction: (dispatch: Dispatch<Action>) => Promise<void>,
-    groupOperationFunction: (dispatch: Dispatch<Action>) => Promise<void>
-  ) => {
-    if (pathName !== 'group') {
-      dispatch(operationFunction);
-    } else if (pathName === 'group') {
-      dispatch(groupOperationFunction);
-    }
-  };
-
-  const handleOpenEditCustomCategoryField = (
-    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    associatedCategoryName: string,
-    associatedCategoryIndex: number,
-    bigCategoriesIndex: number,
-    categoryType: string
-  ) => {
-    document.removeEventListener(
-      'click',
-      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
-    );
-    event.stopPropagation();
-    setEditCustomCategoryName(associatedCategoryName);
-    setAssociatedIndex(associatedCategoryIndex);
-    setBigEditCategoryIndex(bigCategoriesIndex);
-  };
-
-  const handleAddCustomCategory = (
-    event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
-    bigCategoryId: number,
-    categoryType: string
-  ) => {
-    const signal = axios.CancelToken.source();
-    event.stopPropagation();
-    document.removeEventListener(
-      'click',
-      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
-    );
-    setCustomCategoryName('');
-    categoryOperationSwitching(
-      addCustomCategories(customCategoryName, bigCategoryId, signal),
-      addGroupCustomCategories(customCategoryName, bigCategoryId, Number(group_id), signal)
-    );
-  };
-
-  const handleEditCustomCategory = (
-    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    associatedCategoryId: number,
-    bigCategoryId: number,
-    categoryType: string
-  ) => {
-    const signal = axios.CancelToken.source();
-    event.stopPropagation();
-    document.removeEventListener(
-      'click',
-      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
-    );
-    setEditCustomCategoryName('');
-    setAssociatedIndex(null);
-    setBigEditCategoryIndex(null);
-
-    categoryOperationSwitching(
-      editCustomCategories(associatedCategoryId, editCustomCategoryName, bigCategoryId, signal),
-      editGroupCustomCategories(
-        associatedCategoryId,
-        editCustomCategoryName,
-        bigCategoryId,
-        Number(group_id),
-        signal
-      )
-    );
-  };
-
-  const handleDeleteCustomCategory = (
-    event: React.MouseEvent<SVGSVGElement, MouseEvent>,
-    associatedCategoryId: number,
-    bigCategoryId: number
-  ) => {
-    const signal = axios.CancelToken.source();
-    event.stopPropagation();
-
-    if (window.confirm('カスタムカテゴリーを削除しますか？')) {
-      categoryOperationSwitching(
-        deleteCustomCategories(associatedCategoryId, bigCategoryId, signal),
-        deleteGroupCustomCategories(associatedCategoryId, bigCategoryId, Number(group_id), signal)
-      );
-    }
-  };
-
   const changePayer = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPaymentUserId(event.target.value as string);
   };
@@ -476,8 +322,8 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       paymentUserId={paymentUserId}
       memo={memo}
       shop={shop}
-      bigCategoryRef={bigCategoryRef}
-      mediumMenuRef={mediumMenuRef}
+      bigCategoryMenuRef={bigCategoryRef}
+      mediumCategoryMenuRef={mediumMenuRef}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
@@ -489,9 +335,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       changeTransactionDate={changeTransactionDate}
       changeTransactionType={changeTransactionType}
       changeAmount={changeAmount}
-      handleChangeCategory={handleChangeCategory}
-      closeBigCategoryMenu={handleCloseBigCategoryMenu}
-      closeMediumCategoryMenu={handleCloseMediumCategoryMenu}
       changePayer={changePayer}
       changeShop={changeShop}
       changeMemo={changeMemo}
@@ -504,12 +347,17 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       editCustomCategoryName={editCustomCategoryName}
       associatedIndex={associatedIndex}
       bigEditCategoryIndex={bigEditCategoryIndex}
-      handleChangeAddCustomCategory={handleChangeAddCustomCategory}
-      handleChangeEditCustomCategory={handleChangeEditCustomCategory}
-      handleOpenEditCustomCategoryField={handleOpenEditCustomCategoryField}
-      handleAddCustomCategory={handleAddCustomCategory}
-      handleEditCustomCategory={handleEditCustomCategory}
-      handleDeleteCustomCategory={handleDeleteCustomCategory}
+      setBigCategoryId={setBigCategoryId}
+      setTransactionType={setTransactionType}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setMediumCategoryId={setMediumCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setAssociatedCategory={setAssociatedCategory}
+      setCustomCategoryName={setCustomCategoryName}
+      setBigCategory={setBigCategory}
+      setAssociatedIndex={setAssociatedIndex}
+      setBigEditCategoryIndex={setBigEditCategoryIndex}
+      setEditCustomCategoryName={setEditCustomCategoryName}
     />
   );
 };

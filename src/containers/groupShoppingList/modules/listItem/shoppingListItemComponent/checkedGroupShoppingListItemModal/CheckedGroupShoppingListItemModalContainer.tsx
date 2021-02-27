@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import axios from 'axios';
 import { date } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
@@ -53,10 +52,7 @@ const CheckedGroupShoppingListItemModalContainer = (
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
-  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
 
   const unInput = {
     unInputExpectedPurchaseDate: null,
@@ -156,37 +152,6 @@ const CheckedGroupShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleChangeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-    categoryType === 'bigCategory'
-      ? setBigCategoryMenuOpen(false)
-      : setMediumCategoryMenuOpen(false);
-    event.stopPropagation();
-
-    if (bigCategory !== null) {
-      props.setBigCategoryId(bigCategory.id);
-      props.setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        props.setMediumCategoryId(associatedCategory.id);
-        props.setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        props.setMediumCategoryId(null);
-        props.setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
@@ -229,7 +194,6 @@ const CheckedGroupShoppingListItemModalContainer = (
       amount={props.amount}
       bigCategoryId={props.bigCategoryId}
       bigCategory={props.bigCategory}
-      bigCategoryIndex={bigCategoryIndex}
       paymentUser={props.paymentUser}
       transactionAutoAdd={props.transactionAutoAdd}
       associatedCategory={associatedCategory}
@@ -237,16 +201,16 @@ const CheckedGroupShoppingListItemModalContainer = (
       handleCheckedChange={handleCheckedChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       closeModal={closeModal}
       unInput={disabledButton()}
-      bigCategoryMenuOpen={bigCategoryMenuOpen}
-      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
-      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
-      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+      setBigCategory={props.setBigCategory}
+      setAssociatedCategory={setAssociatedCategory}
+      setBigCategoryId={props.setBigCategoryId}
+      setMediumCategoryId={props.setMediumCategoryId}
+      setCustomCategoryId={props.setCustomCategoryId}
       shoppingListItemOperation={() => {
         dispatch(
           editGroupShoppingListItem(

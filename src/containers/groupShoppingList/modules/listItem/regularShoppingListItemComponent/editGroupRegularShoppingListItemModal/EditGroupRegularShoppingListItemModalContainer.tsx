@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import axios, { CancelTokenSource } from 'axios';
 import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
@@ -177,37 +176,6 @@ const EditGroupRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleChangeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory,
-    categoryType: string,
-    event: React.MouseEvent<HTMLLIElement, MouseEvent>
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-    categoryType === 'bigCategory'
-      ? setBigCategoryMenuOpen(false)
-      : setMediumCategoryMenuOpen(false);
-    event.stopPropagation();
-
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const editRegularShoppingList = () => {
     const signal = axios.CancelToken.source();
 
@@ -257,7 +225,6 @@ const EditGroupRegularShoppingListItemModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      handleChangeCategory={handleChangeCategory}
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
@@ -271,6 +238,12 @@ const EditGroupRegularShoppingListItemModalContainer = (
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+      setBigCategory={setBigCategory}
+      setBigCategoryId={setBigCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setAssociatedCategory={setAssociatedCategory}
       regularShoppingListItemOperation={() => {
         editRegularShoppingList();
       }}

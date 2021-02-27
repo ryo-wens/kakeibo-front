@@ -37,15 +37,11 @@ interface ShoppingListItemComponentProps {
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
-  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   purchaseClassName: string;
   amountClassName: string;
   transactionDataItemClassName: string;
   transactionDataItemKeyClassName: string;
   currentTextStyle: (completeFlag: boolean) => React.CSSProperties;
-  bigCategoryMenuOpen: boolean;
-  mediumCategoryMenuOpen: boolean;
 }
 
 const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
@@ -84,10 +80,6 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           setMediumCategoryId={props.setMediumCategoryId}
           setCustomCategoryId={props.setCustomCategoryId}
           setTransactionAutoAdd={props.setTransactionAutoAdd}
-          bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-          mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-          setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-          setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
         />
       </div>
       <div className="shopping-list-item-component__content">
