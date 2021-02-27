@@ -176,7 +176,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
     <div className="regular-shopping-list-form">
       <div className="regular-shopping-list-form__position">
         <h3>{props.titleLabel}</h3>
-        <button onClick={() => props.handleCloseModal()}>
+        <button onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>
@@ -216,7 +216,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
           <button
             className="regular-shopping-list-form__operation-btn--cancel"
             disabled={false}
-            onClick={() => props.handleCloseModal()}
+            onClick={props.handleCloseModal}
           >
             キャンセル
           </button>
