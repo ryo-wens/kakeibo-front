@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { date } from '../../../../lib/constant';
 import axios from 'axios';
 import { useDispatch } from 'react-redux';
@@ -45,6 +44,8 @@ const AddGroupRegularShoppingListModalContainer = (
   const [cycle, setCycle] = useState<string | null>(initialState.initialCycle);
   const [purchase, setPurchase] = useState<string>(initialState.initialPurchase);
   const [amount, setAmount] = useState<string | null>(initialState.initialAmount);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [bigCategory, setBigCategory] = useState<string | null>(
     initialState.initialBigCategoryName
@@ -135,31 +136,6 @@ const AddGroupRegularShoppingListModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const unInput = () => {
     if (
       expectedPurchaseDate === null ||
@@ -193,7 +169,6 @@ const AddGroupRegularShoppingListModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
@@ -202,6 +177,16 @@ const AddGroupRegularShoppingListModalContainer = (
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput()}
+      bigCategoryMenuOpen={bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
+      setBigCategory={setBigCategory}
+      setBigCategoryId={setBigCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setAssociatedCategory={setAssociatedCategory}
       handleAddRegularShoppingListItem={() => {
         dispatch(
           addGroupRegularShoppingListItem(

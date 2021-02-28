@@ -1,7 +1,6 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
-import { BigCategoryInput, DatePicker, MediumCategoryInput, TextInput } from '../../../../uikit';
-import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
+import { DatePicker, TextInput } from '../../../../uikit';
 import '../../../../shoppingList/modules/form/RegularShoppingListForm/regular-shopping-list-form.scss';
 import ShoppingListPayerSelect from '../../select/shoppingListPayerSelect/ShoppingListPayerSelect';
 import ToolTipIcon from '../../../../shoppingList/modules/toolTip/ToolTipIcon';
@@ -9,6 +8,8 @@ import SelectPurchaseCycleTypeContainer from '../../../../../containers/shopping
 import { Group } from '../../../../../reducks/groups/types';
 import { GroupCategories } from '../../../../../reducks/groupCategories/types';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
+import MediumCategoryListContainer from '../../../../../containers/modules/MediumCategoryListContainer';
+import BigCategoryListContainer from '../../../../../containers/modules/BigCategoryListContainer';
 
 interface GroupRegularShoppingListFormProps {
   titleLabel: string;
@@ -31,11 +32,6 @@ interface GroupRegularShoppingListFormProps {
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -43,17 +39,29 @@ interface GroupRegularShoppingListFormProps {
   unInput: boolean;
   handleRegularShoppingListItem: () => void;
   minDate: Date;
-  bigCategoryRef: React.RefObject<HTMLDivElement>;
-  mediumMenuRef: React.RefObject<HTMLDivElement>;
+  bigCategoryMenuRef: React.RefObject<HTMLDivElement>;
+  mediumCategoryMenuRef: React.RefObject<HTMLDivElement>;
   groupIncomeCategories: GroupCategories;
   groupExpenseCategories: GroupCategories;
   bigCategoryMenuOpen: boolean;
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  onClickCloseBigCategoryMenu: (event: Event) => void;
-  onClickCloseMediumCategoryMenu: (event: Event) => void;
   openDeleteForm?: () => void;
+  bigEditCategoryIndex: number | null;
+  associatedIndex: number | null;
+  customCategoryName: string;
+  editCustomCategoryName: string;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
+  setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setEditCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
+  setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) => {
@@ -77,32 +85,56 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
       key: 'カテゴリ',
       value: (
         <>
-          <BigCategoryInput
-            ref={props.bigCategoryRef}
-            kind={'expense'}
-            bigCategory={props.bigCategory}
+          <BigCategoryListContainer
+            customCategoryName={props.customCategoryName}
+            setCustomCategoryName={props.setCustomCategoryName}
+            bigCategoryMenuRef={props.bigCategoryMenuRef}
+            mediumCategoryMenuRef={props.mediumCategoryMenuRef}
+            transactionType={'expense'}
             bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-            expenseCategories={props.groupExpenseCategories}
-            incomeCategories={props.groupIncomeCategories}
-            onClick={props.selectCategory}
-            onClickCloseBigCategoryMenu={props.onClickCloseBigCategoryMenu}
+            unEditInputForm={false}
+            setBigCategoryId={props.setBigCategoryId}
+            setBigCategoryIndex={props.setBigCategoryIndex}
+            setMediumCategoryId={props.setMediumCategoryId}
+            setCustomCategoryId={props.setCustomCategoryId}
+            setAssociatedCategory={props.setAssociatedCategory}
+            setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+            associatedIndex={props.associatedIndex}
+            bigCategory={props.bigCategory}
+            bigEditCategoryIndex={props.bigEditCategoryIndex}
+            editCustomCategoryName={props.editCustomCategoryName}
+            setAssociatedIndex={props.setAssociatedIndex}
+            setBigCategory={props.setBigCategory}
+            setBigEditCategoryIndex={props.setBigEditCategoryIndex}
+            setEditCustomCategoryName={props.setEditCustomCategoryName}
             setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-            disabled={false}
           />
-          <MediumCategoryInput
-            ref={props.mediumMenuRef}
-            kind={'expense'}
+          <MediumCategoryListContainer
+            transactionType={'expense'}
+            unEditInputForm={false}
             bigCategoryId={props.bigCategoryId}
             bigCategoryIndex={props.bigCategoryIndex}
-            bigCategory={props.bigCategory}
             associatedCategory={props.associatedCategory}
-            expenseCategories={props.groupExpenseCategories}
-            incomeCategories={props.groupIncomeCategories}
+            bigCategoryMenuRef={props.bigCategoryMenuRef}
+            mediumCategoryMenuRef={props.mediumCategoryMenuRef}
             mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-            onClick={props.selectCategory}
-            onClickCloseMediumCategoryMenu={props.onClickCloseMediumCategoryMenu}
+            setBigCategoryId={props.setBigCategoryId}
+            setBigCategoryIndex={props.setBigCategoryIndex}
+            setCustomCategoryId={props.setCustomCategoryId}
+            setMediumCategoryId={props.setMediumCategoryId}
+            setAssociatedCategory={props.setAssociatedCategory}
             setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
-            disabled={false}
+            associatedIndex={props.associatedIndex}
+            bigCategory={props.bigCategory}
+            bigEditCategoryIndex={props.bigCategoryIndex}
+            customCategoryName={props.customCategoryName}
+            editCustomCategoryName={props.editCustomCategoryName}
+            setAssociatedIndex={props.setAssociatedIndex}
+            setBigCategory={props.setBigCategory}
+            setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+            setBigEditCategoryIndex={props.setBigEditCategoryIndex}
+            setCustomCategoryName={props.setCustomCategoryName}
+            setEditCustomCategoryName={props.setEditCustomCategoryName}
           />
         </>
       ),

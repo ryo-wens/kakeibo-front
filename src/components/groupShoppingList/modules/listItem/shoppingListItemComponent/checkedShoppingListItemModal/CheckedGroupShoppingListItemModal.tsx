@@ -1,6 +1,5 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/checked-shopping-list-item-modal.scss';
 import GroupShoppingListFormContainer from '../../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
 
@@ -13,7 +12,6 @@ interface CheckedGroupShoppingListItemModalProps {
   amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
-  bigCategoryIndex: number;
   paymentUser: string | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
@@ -21,17 +19,17 @@ interface CheckedGroupShoppingListItemModalProps {
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
   unInput: boolean;
   shoppingListItemOperation: () => void;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemModalProps) => {
@@ -44,14 +42,12 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
         amount={props.amount}
         bigCategoryId={props.bigCategoryId}
         bigCategory={props.bigCategory}
-        bigCategoryIndex={props.bigCategoryIndex}
         paymentUser={props.paymentUser}
         transactionAutoAdd={props.transactionAutoAdd}
         associatedCategory={props.associatedCategory}
         handlePurchaseChange={props.handlePurchaseChange}
         handleDateChange={props.handleDateChange}
         handleAmountChange={props.handleAmountChange}
-        selectCategory={props.selectCategory}
         handleShopChange={props.handleShopChange}
         handlePaymentUserChange={props.handlePaymentUserChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
@@ -62,6 +58,11 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
         minDate={new Date('1900-01-01')}
         shoppingListItemOperation={props.shoppingListItemOperation}
         displayRequiredInputItemMessage={true}
+        setBigCategory={props.setBigCategory}
+        setAssociatedCategory={props.setAssociatedCategory}
+        setBigCategoryId={props.setBigCategoryId}
+        setMediumCategoryId={props.setMediumCategoryId}
+        setCustomCategoryId={props.setCustomCategoryId}
       />
     </div>
   );

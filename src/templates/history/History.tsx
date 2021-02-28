@@ -3,7 +3,7 @@ import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistoryContainer';
 import GroupWeeklyHistoryContainer from '../../containers/history/weekly/GroupWeeklyHistoryContainer';
 import DailyHistoryContainer from '../../containers/history/daily/DailyHistoryContainer';
-import InputYears from '../../components/uikit/InputYears';
+import InputYears from '../../components/modules/InputYears';
 import HeaderContainer from '../../containers/header/HeaderContainer';
 import './history.scss';
 

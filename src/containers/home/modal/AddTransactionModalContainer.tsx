@@ -18,7 +18,6 @@ import {
 import { fetchCategories } from '../../../reducks/categories/operations';
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
-import { AssociatedCategory, Category } from '../../../reducks/categories/types';
 import { customMonth, year } from '../../../lib/constant';
 import { isValidAmountFormat } from '../../../lib/validation';
 import AddTransactionModal from '../../../components/home/modal/AddTransactionModal';
@@ -70,6 +69,10 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const [editing, setEditing] = useState(false);
   const [firstTransactionDate, setFirstTransactionDate] = useState<Date | null>(transactionDate);
   const [firstTransactionMonth, setFirstTransactionMonth] = useState(0);
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
   const addTransactionDate = {
     addTransactionYear: 0,
@@ -178,6 +181,11 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
     return () => signal.cancel();
   }, [pathName]);
 
+  useEffect(() => {
+    setBigCategory(initialState.initialBigCategory);
+    setAssociatedCategory('');
+  }, [transactionsType]);
+
   const changeTransactionDate = (transactionDate: Date | null) => {
     setTransactionDate(transactionDate as Date);
   };
@@ -188,44 +196,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
 
   const changeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
     setAmount(event.target.value);
-  };
-
-  const changeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      setTransactionType(bigCategory.transaction_type);
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
-  const closeBigCategoryMenu = (event: Event) => {
-    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
-    }
-  };
-
-  const closeMediumCategoryMenu = (event: Event) => {
-    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
-    }
   };
 
   const changePayer = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -352,8 +322,8 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       paymentUserId={paymentUserId}
       memo={memo}
       shop={shop}
-      bigCategoryRef={bigCategoryRef}
-      mediumMenuRef={mediumMenuRef}
+      bigCategoryMenuRef={bigCategoryRef}
+      mediumCategoryMenuRef={mediumMenuRef}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
@@ -365,9 +335,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       changeTransactionDate={changeTransactionDate}
       changeTransactionType={changeTransactionType}
       changeAmount={changeAmount}
-      changeCategory={changeCategory}
-      closeBigCategoryMenu={closeBigCategoryMenu}
-      closeMediumCategoryMenu={closeMediumCategoryMenu}
       changePayer={changePayer}
       changeShop={changeShop}
       changeMemo={changeMemo}
@@ -376,6 +343,21 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       expenseCategories={expenseCategories}
       groupIncomeCategories={groupIncomeCategories}
       groupExpenseCategories={groupExpenseCategories}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      setBigCategoryId={setBigCategoryId}
+      setTransactionType={setTransactionType}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setMediumCategoryId={setMediumCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setAssociatedCategory={setAssociatedCategory}
+      setCustomCategoryName={setCustomCategoryName}
+      setBigCategory={setBigCategory}
+      setAssociatedIndex={setAssociatedIndex}
+      setBigEditCategoryIndex={setBigEditCategoryIndex}
+      setEditCustomCategoryName={setEditCustomCategoryName}
     />
   );
 };

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import { editShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import {
   EditShoppingListItemReq,
@@ -50,7 +49,6 @@ const CheckedShoppingListItemModalContainer = (
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
-  const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [associatedCategory, setAssociatedCategory] = useState('');
 
   const unInput = {
@@ -136,31 +134,6 @@ const CheckedShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      props.setBigCategoryId(bigCategory.id);
-      props.setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        props.setMediumCategoryId(associatedCategory.id);
-        props.setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        props.setMediumCategoryId(null);
-        props.setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
@@ -237,18 +210,21 @@ const CheckedShoppingListItemModalContainer = (
       amount={props.amount}
       bigCategoryId={props.bigCategoryId}
       bigCategory={props.bigCategory}
-      bigCategoryIndex={bigCategoryIndex}
       transactionAutoAdd={props.transactionAutoAdd}
       associatedCategory={associatedCategory}
       handlePurchaseChange={handlePurchaseChange}
       handleCheckedChange={handleCheckedChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       closeModal={closeModal}
       unInput={disabledButton()}
+      setBigCategory={props.setBigCategory}
+      setBigCategoryId={props.setBigCategoryId}
+      setCustomCategoryId={props.setCustomCategoryId}
+      setMediumCategoryId={props.setMediumCategoryId}
+      setAssociatedCategory={setAssociatedCategory}
       handleEditShoppingListItem={() => handleEditShoppingListItem()}
     />
   );

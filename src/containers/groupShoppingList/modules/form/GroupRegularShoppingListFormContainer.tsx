@@ -1,6 +1,5 @@
 import React, { useRef, useState } from 'react';
 import { useSelector } from 'react-redux';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { useParams } from 'react-router';
 import { getApprovedGroups } from '../../../../reducks/groups/selectors';
 import {
@@ -28,11 +27,6 @@ interface GroupRegularShoppingListFormContainerProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -43,6 +37,16 @@ interface GroupRegularShoppingListFormContainerProps {
   handleRegularShoppingListItem: () => void;
   minDate: Date;
   openDeleteForm?: () => void;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const GroupRegularShoppingListFormContainer = (
@@ -56,20 +60,10 @@ const GroupRegularShoppingListFormContainer = (
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
 
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
-
-  const onClickCloseBigCategoryMenu = (event: Event) => {
-    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
-    }
-  };
-
-  const onClickCloseMediumCategoryMenu = (event: Event) => {
-    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
-    }
-  };
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
   const approvedGroup = approvedGroups.filter((group) => group.group_id === Number(group_id));
 
@@ -95,7 +89,6 @@ const GroupRegularShoppingListFormContainer = (
       handlePurchaseChange={props.handlePurchaseChange}
       handleDateChange={props.handleDateChange}
       handleAmountChange={props.handleAmountChange}
-      selectCategory={props.selectCategory}
       handleShopChange={props.handleShopChange}
       handlePaymentUserChange={props.handlePaymentUserChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
@@ -103,17 +96,29 @@ const GroupRegularShoppingListFormContainer = (
       unInput={props.unInput}
       handleRegularShoppingListItem={props.handleRegularShoppingListItem}
       minDate={props.minDate}
-      bigCategoryRef={bigCategoryRef}
-      mediumMenuRef={mediumMenuRef}
+      bigCategoryMenuRef={bigCategoryRef}
+      mediumCategoryMenuRef={mediumMenuRef}
       groupIncomeCategories={groupIncomeCategories}
       groupExpenseCategories={groupExpenseCategories}
-      bigCategoryMenuOpen={bigCategoryMenuOpen}
-      mediumCategoryMenuOpen={mediumCategoryMenuOpen}
-      setBigCategoryMenuOpen={setBigCategoryMenuOpen}
-      setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
-      onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
-      onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
+      bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+      mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+      setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+      setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
       openDeleteForm={props.openDeleteForm}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      setBigCategory={props.setBigCategory}
+      setAssociatedCategory={props.setAssociatedCategory}
+      setCustomCategoryName={setCustomCategoryName}
+      setEditCustomCategoryName={setEditCustomCategoryName}
+      setBigCategoryId={props.setBigCategoryId}
+      setMediumCategoryId={props.setMediumCategoryId}
+      setCustomCategoryId={props.setCustomCategoryId}
+      setAssociatedIndex={setAssociatedIndex}
+      setBigCategoryIndex={props.setBigCategoryIndex}
+      setBigEditCategoryIndex={setBigEditCategoryIndex}
     />
   );
 };

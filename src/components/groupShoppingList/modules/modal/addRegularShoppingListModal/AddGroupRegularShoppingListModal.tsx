@@ -2,7 +2,6 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
 import '../../../../shoppingList/modules/modal/AddShoppingListItemModal/add-shopping-list-item-modal.scss';
-import { AssociatedCategory, Category } from '../../../../../reducks/categories/types';
 import { date } from '../../../../../lib/constant';
 import GroupRegularShoppingListFormContainer from '../../../../../containers/groupShoppingList/modules/form/GroupRegularShoppingListFormContainer';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
@@ -26,11 +25,10 @@ interface AddGroupRegularShoppingListModalProps {
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => void;
+  bigCategoryMenuOpen: boolean;
+  mediumCategoryMenuOpen: boolean;
+  setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
@@ -40,6 +38,12 @@ interface AddGroupRegularShoppingListModalProps {
   closeModal: () => void;
   unInput: boolean;
   handleAddRegularShoppingListItem: () => void;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
 const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModalProps) => {
@@ -63,7 +67,6 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         handleCycleChange={props.handleCycleChange}
         handlePurchaseChange={props.handlePurchaseChange}
         handleAmountChange={props.handleAmountChange}
-        selectCategory={props.selectCategory}
         handleShopChange={props.handleShopChange}
         handlePaymentUserChange={props.handlePaymentUserChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
@@ -73,6 +76,16 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         unInput={props.unInput}
         handleRegularShoppingListItem={props.handleAddRegularShoppingListItem}
         minDate={date}
+        bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+        mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+        setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+        setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+        setBigCategory={props.setBigCategory}
+        setAssociatedCategory={props.setAssociatedCategory}
+        setBigCategoryId={props.setBigCategoryId}
+        setCustomCategoryId={props.setCustomCategoryId}
+        setMediumCategoryId={props.setMediumCategoryId}
+        setBigCategoryIndex={props.setBigCategoryIndex}
       />
     </div>
   );

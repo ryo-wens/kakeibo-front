@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../../../reducks/categories/types';
 import {
   deleteRegularShoppingListItem,
   editRegularShoppingListItem,
@@ -162,31 +161,6 @@ const EditRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const handleEditRegularShoppingListItem = () => {
     const requestData: EditRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
@@ -249,7 +223,6 @@ const EditRegularShoppingListItemModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       handleOpenModal={handleOpenModal}
@@ -258,6 +231,12 @@ const EditRegularShoppingListItemModalContainer = (
       closeDeleteForm={closeDeleteForm}
       unInput={disabledButton()}
       initialPurchase={initialState.initialPurchase}
+      setBigCategory={setBigCategory}
+      setBigCategoryId={setBigCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setAssociatedCategory={setAssociatedCategory}
       handleEditRegularShoppingListItem={() => handleEditRegularShoppingListItem()}
       handleDeleteRegularShoppingListItem={() => handleDeleteRegularShoppingListItem()}
     />

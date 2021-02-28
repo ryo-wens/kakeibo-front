@@ -16,7 +16,6 @@ import {
   addGroupTransactions,
   fetchGroupYearlyAccountList,
 } from '../../../reducks/groupTransactions/operations';
-import { AssociatedCategory, Category } from '../../../reducks/categories/types';
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { isValidAmountFormat } from '../../../lib/validation';
@@ -44,7 +43,7 @@ const InputFormContainer = () => {
   const [transactionsType, setTransactionType] = useState('expense');
   const [amount, setAmount] = useState<string>(initialState.initialAmount);
   const [bigCategory, setBigCategory] = useState<string | null>(initialState.initialBigCategory);
-  const [associatedCategory, setAssociatedCategory] = useState<string>('');
+  const [associatedCategory, setAssociatedCategory] = useState('');
   const [bigCategoryIndex, setBigCategoryIndex] = useState(0);
   const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
   const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(null);
@@ -58,6 +57,10 @@ const InputFormContainer = () => {
   const emptyShop = shop === '' ? null : shop;
   const [memo, setMemo] = useState('');
   const emptyMemo = memo === '' ? null : memo;
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
   const addTransactionDate = {
     addTransactionYear: 0,
@@ -143,44 +146,6 @@ const InputFormContainer = () => {
     setPaymentUserId(event.target.value as string);
   };
 
-  const closeBigCategoryMenu = (event: Event) => {
-    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
-    }
-  };
-
-  const closeMediumCategoryMenu = (event: Event) => {
-    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
-    }
-  };
-
-  const changeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      setTransactionType(bigCategory.transaction_type);
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const changeShop = (event: React.ChangeEvent<HTMLInputElement>) => {
     setShop(event.target.value);
   };
@@ -261,16 +226,13 @@ const InputFormContainer = () => {
       changeTransactionType={changeTransactionType}
       changeAmount={changeAmount}
       changePayer={changePayer}
-      closeBigCategoryMenu={closeBigCategoryMenu}
-      closeMediumCategoryMenu={closeMediumCategoryMenu}
-      changeCategory={changeCategory}
       changeMemo={changeMemo}
       changeShop={changeShop}
       transactionDate={transactionDate}
       transactionsType={transactionsType}
       amount={amount}
-      bigCategoryRef={bigCategoryRef}
-      mediumMenuRef={mediumMenuRef}
+      bigCategoryMenuRef={bigCategoryRef}
+      mediumCategoryMenuRef={mediumMenuRef}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
@@ -284,6 +246,21 @@ const InputFormContainer = () => {
       paymentUserId={paymentUserId}
       shop={shop}
       memo={memo}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      setTransactionType={setTransactionType}
+      setBigCategory={setBigCategory}
+      setAssociatedCategory={setAssociatedCategory}
+      setCustomCategoryName={setCustomCategoryName}
+      setEditCustomCategoryName={setEditCustomCategoryName}
+      setBigCategoryId={setBigCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setAssociatedIndex={setAssociatedIndex}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setBigEditCategoryIndex={setBigEditCategoryIndex}
     />
   );
 };
