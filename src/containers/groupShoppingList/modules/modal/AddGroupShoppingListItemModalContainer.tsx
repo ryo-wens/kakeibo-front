@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { date } from '../../../../lib/constant';
 import { addGroupShoppingListItem } from '../../../../reducks/groupShoppingList/operations';
 import { useParams } from 'react-router';
@@ -115,31 +114,6 @@ const AddGroupShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const unInput =
     expectedPurchaseDate === null ||
     purchase === initialState.initialPurchase ||
@@ -161,13 +135,18 @@ const AddGroupShoppingListItemModalContainer = (
       handlePurchaseChange={handlePurchaseChange}
       handleDateChange={handleDateChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput}
+      setBigCategory={setBigCategory}
+      setBigCategoryId={setBigCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setAssociatedCategory={setAssociatedCategory}
       shoppingListItemOperation={() => {
         dispatch(
           addGroupShoppingListItem(

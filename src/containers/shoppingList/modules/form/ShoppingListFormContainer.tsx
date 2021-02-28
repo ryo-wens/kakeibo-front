@@ -4,7 +4,6 @@ import {
   getExpenseCategories,
   getIncomeCategories,
 } from '../../../../reducks/categories/selectors';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import ShoppingListForm from '../../../../components/shoppingList/modules/form/ShoppingListForm/ShoppingListForm';
 
 interface ShoppingListFormContainerProps {
@@ -16,17 +15,16 @@ interface ShoppingListFormContainerProps {
   amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
-  bigCategoryIndex: number;
   transactionAutoAdd: boolean;
   associatedCategory: string;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectCategory: (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
@@ -43,20 +41,13 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
 
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
-  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState<boolean>(false);
-  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState<boolean>(false);
-
-  const onClickCloseBigCategoryMenu = (event: Event) => {
-    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
-    }
-  };
-
-  const onClickCloseMediumCategoryMenu = (event: Event) => {
-    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
-    }
-  };
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
+  const [bigCategoryMenuOpen, setBigCategoryMenuOpen] = useState(false);
+  const [mediumCategoryMenuOpen, setMediumCategoryMenuOpen] = useState(false);
+  const [bigCategoryIndex, setBigCategoryIndex] = useState<number>(0);
 
   return (
     <ShoppingListForm
@@ -68,31 +59,42 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       amount={props.amount}
       bigCategoryId={props.bigCategoryId}
       bigCategory={props.bigCategory}
-      bigCategoryIndex={props.bigCategoryIndex}
+      bigCategoryIndex={bigCategoryIndex}
       transactionAutoAdd={props.transactionAutoAdd}
       associatedCategory={props.associatedCategory}
       handlePurchaseChange={props.handlePurchaseChange}
       handleDateChange={props.handleDateChange}
       handleAmountChange={props.handleAmountChange}
-      selectCategory={props.selectCategory}
       handleShopChange={props.handleShopChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
       closeModal={props.closeModal}
       unInput={props.unInput}
       minDate={props.minDate}
       shoppingListItemOperation={props.shoppingListItemOperation}
-      bigCategoryRef={bigCategoryRef}
-      mediumMenuRef={mediumMenuRef}
+      bigCategoryMenuRef={bigCategoryRef}
+      mediumCategoryMenuRef={mediumMenuRef}
       incomeCategories={incomeCategories}
       expenseCategories={expenseCategories}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
-      onClickCloseBigCategoryMenu={onClickCloseBigCategoryMenu}
-      onClickCloseMediumCategoryMenu={onClickCloseMediumCategoryMenu}
       displayInputAmountMessage={props.displayInputAmountMessage}
       openDeleteForm={props.openDeleteForm}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      setAssociatedCategory={props.setAssociatedCategory}
+      setAssociatedIndex={setAssociatedIndex}
+      setBigCategory={props.setBigCategory}
+      setBigCategoryId={props.setBigCategoryId}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setBigEditCategoryIndex={setBigEditCategoryIndex}
+      setCustomCategoryId={props.setCustomCategoryId}
+      setCustomCategoryName={setCustomCategoryName}
+      setEditCustomCategoryName={setEditCustomCategoryName}
+      setMediumCategoryId={props.setMediumCategoryId}
     />
   );
 };

@@ -14,7 +14,6 @@ import {
   getGroupIncomeCategories,
 } from '../../../reducks/groupCategories/selectors';
 import { getYearlyAccountListStatusModals } from '../../../reducks/groupTransactions/selectors';
-import { AssociatedCategory, Category } from '../../../reducks/categories/types';
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import EditTransactionModal from '../../../components/home/modal/EditTransactionModal';
@@ -79,6 +78,10 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const [associatedCategory, setAssociatedCategory] = useState<string>(
     props.categoryName.mediumCategory || props.categoryName.customCategory
   );
+  const [customCategoryName, setCustomCategoryName] = useState('');
+  const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
+  const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
+  const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
 
   const editTransactionDate = {
     editTransactionYear: 0,
@@ -221,44 +224,6 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
 
   const changePayer = (event: React.ChangeEvent<{ value: unknown }>) => {
     setPaymentUserId(event.target.value as string);
-  };
-
-  const changeCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      setTransactionType(bigCategory.transaction_type);
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(null);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(null);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
-  const closeBigCategoryMenu = (event: Event) => {
-    if (bigCategoryRef.current && !bigCategoryRef.current.contains(event.target as Node)) {
-      setBigCategoryMenuOpen(false);
-    }
-  };
-
-  const closeMediumCategoryMenu = (event: Event) => {
-    if (mediumMenuRef.current && !mediumMenuRef.current.contains(event.target as Node)) {
-      setMediumCategoryMenuOpen(false);
-    }
   };
 
   const changeMemo = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -412,8 +377,8 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
       associatedCategory={associatedCategory}
       bigCategoryId={bigCategoryId}
       bigCategoryIndex={bigCategoryIndex}
-      bigCategoryRef={bigCategoryRef}
-      mediumMenuRef={mediumMenuRef}
+      bigCategoryMenuRef={bigCategoryRef}
+      mediumCategoryMenuRef={mediumMenuRef}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
@@ -434,11 +399,23 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
       changeTransactionType={changeTransactionType}
       changeAmount={changeAmount}
       changePayer={changePayer}
-      changeCategory={changeCategory}
-      closeBigCategoryMenu={closeBigCategoryMenu}
-      closeMediumCategoryMenu={closeMediumCategoryMenu}
       changeMemo={changeMemo}
       changeShop={changeShop}
+      associatedIndex={associatedIndex}
+      bigEditCategoryIndex={bigEditCategoryIndex}
+      customCategoryName={customCategoryName}
+      editCustomCategoryName={editCustomCategoryName}
+      setTransactionType={setTransactionType}
+      setAssociatedIndex={setAssociatedIndex}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setBigEditCategoryIndex={setBigEditCategoryIndex}
+      setBigCategoryId={setBigCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setBigCategory={setBigCategory}
+      setAssociatedCategory={setAssociatedCategory}
+      setCustomCategoryName={setCustomCategoryName}
+      setEditCustomCategoryName={setEditCustomCategoryName}
     />
   );
 };

@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import { date } from '../../../../lib/constant';
 import { addRegularShoppingListItem } from '../../../../reducks/shoppingList/operations';
 import axios from 'axios';
@@ -129,31 +128,6 @@ const AddRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const selectCategory = (
-    bigCategoryIndex: number,
-    bigCategory: Category | null,
-    associatedCategory: AssociatedCategory
-  ) => {
-    setBigCategoryIndex(bigCategoryIndex);
-    setAssociatedCategory(associatedCategory.name);
-
-    if (bigCategory !== null) {
-      setBigCategoryId(bigCategory.id);
-      setBigCategory(bigCategory.name);
-    }
-
-    switch (associatedCategory.category_type) {
-      case 'MediumCategory':
-        setMediumCategoryId(associatedCategory.id);
-        setCustomCategoryId(initialState.initialCustomCategoryId);
-        break;
-      case 'CustomCategory':
-        setMediumCategoryId(initialState.initialMediumCategoryId);
-        setCustomCategoryId(associatedCategory.id);
-        break;
-    }
-  };
-
   const unInput = () => {
     if (
       expectedPurchaseDate === null ||
@@ -186,7 +160,6 @@ const AddRegularShoppingListItemModalContainer = (
       handleCycleChange={handleCycleChange}
       handlePurchaseChange={handlePurchaseChange}
       handleAmountChange={handleAmountChange}
-      selectCategory={selectCategory}
       handleShopChange={handleShopChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       titleLabel={'定期買い物リストに追加'}
@@ -194,6 +167,12 @@ const AddRegularShoppingListItemModalContainer = (
       openModal={openModal}
       closeModal={closeModal}
       unInput={unInput()}
+      setBigCategoryIndex={setBigCategoryIndex}
+      setBigCategoryId={setBigCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setBigCategory={setBigCategory}
+      setAssociatedCategory={setAssociatedCategory}
       regularShoppingListItemOperation={() => {
         dispatch(
           addRegularShoppingListItem(
