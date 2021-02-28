@@ -10,7 +10,8 @@ import {
 interface GroupTodayScheduleShoppingListAreaProps {
   todayShoppingList: GroupShoppingList;
   todayShoppingListByCategories: GroupShoppingListByCategories;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupTodayScheduleShoppingListArea = (props: GroupTodayScheduleShoppingListAreaProps) => {
@@ -21,14 +22,16 @@ const GroupTodayScheduleShoppingListArea = (props: GroupTodayScheduleShoppingLis
       leftItem={
         <TodayScheduleShoppingListByDate
           shoppingListByDate={props.todayShoppingList}
-          currentYearMonth={props.currentYearMonth}
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
           message={'今日の買い物リストは、登録されていません。'}
         />
       }
       rightItem={
         <TodayScheduleShoppingListByCategories
           shoppingListByCategories={props.todayShoppingListByCategories}
-          currentYearMonth={props.currentYearMonth}
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
           message={'今日の買い物リストは、登録されていません。'}
         />
       }

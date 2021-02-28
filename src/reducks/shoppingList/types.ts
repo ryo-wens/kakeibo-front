@@ -90,7 +90,7 @@ export interface FetchMonthlyShoppingListByCategoriesRes {
 }
 
 export interface AddShoppingListItemReq {
-  expected_purchase_date: Date;
+  expected_purchase_date: Date | null;
   purchase: string;
   shop: string | null;
   amount: number | null;
@@ -120,7 +120,7 @@ export interface AddShoppingListItemRes {
   related_transaction_data: RelatedTransactionData | null;
 }
 
-export interface EditShoppingListReq {
+export interface EditShoppingListItemReq {
   expected_purchase_date: Date | null;
   complete_flag: boolean;
   purchase: string;
@@ -139,7 +139,7 @@ export interface DeleteShoppingListItemRes {
 }
 
 export interface AddRegularShoppingListItemReq {
-  expected_purchase_date: Date;
+  expected_purchase_date: Date | null;
   cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;
@@ -157,7 +157,7 @@ export interface AddRegularShoppingListItemRes {
 }
 
 export interface EditRegularShoppingListItemReq {
-  expected_purchase_date: Date;
+  expected_purchase_date: Date | null;
   cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;

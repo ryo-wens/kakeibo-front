@@ -13,7 +13,6 @@ interface TodayScheduleProps {
   pathName: string;
   currentYear: string;
   currentMonth: string;
-  currentYearMonth: string;
   implementationTodoList: TodoListItem[];
   dueTodoList: TodoListItem[];
 }
@@ -50,9 +49,15 @@ const TodaySchedule = (props: TodayScheduleProps) => {
       <div className="today-schedule__content">
         <h4>買い物リスト</h4>
         {props.pathName === 'group' ? (
-          <GroupTodayScheduleShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
+          <GroupTodayScheduleShoppingListAreaContainer
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
+          />
         ) : (
-          <TodayScheduleShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
+          <TodayScheduleShoppingListAreaContainer
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
+          />
         )}
       </div>
       {props.pathName === 'group' && (

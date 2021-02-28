@@ -28,9 +28,9 @@ interface RegularShoppingListFormContainerProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   titleLabel: string;
   buttonLabel: string;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
+  handleRegularShoppingListItem: () => void;
   minDate: Date;
   openDeleteForm?: () => void;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
@@ -76,10 +76,10 @@ const RegularShoppingListFormContainer = (props: RegularShoppingListFormContaine
       handleAmountChange={props.handleAmountChange}
       handleShopChange={props.handleShopChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-      closeModal={props.closeModal}
+      handleCloseModal={props.handleCloseModal}
       unInput={props.unInput}
       minDate={props.minDate}
-      regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+      handleRegularShoppingListItem={props.handleRegularShoppingListItem}
       bigCategoryMenuRef={bigCategoryRef}
       mediumCategoryMenuRef={mediumMenuRef}
       incomeCategories={incomeCategories}

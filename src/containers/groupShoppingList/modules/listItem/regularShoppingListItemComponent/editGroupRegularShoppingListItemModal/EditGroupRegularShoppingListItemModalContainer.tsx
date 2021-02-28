@@ -244,10 +244,10 @@ const EditGroupRegularShoppingListItemModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      regularShoppingListItemOperation={() => {
+      handleEditRegularShoppingListItem={() => {
         editRegularShoppingList();
       }}
-      deleteOperation={() => {
+      handleDeleteShoppingListItem={() => {
         deleteGroupRegularShoppingListItem(
           Number(group_id),
           props.listItem.id,

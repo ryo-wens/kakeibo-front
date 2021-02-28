@@ -27,9 +27,9 @@ interface ShoppingListFormContainerProps {
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleShoppingListItem: () => void;
   minDate: Date;
   displayInputAmountMessage: boolean;
   openDeleteForm?: () => void;
@@ -67,10 +67,10 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       handleAmountChange={props.handleAmountChange}
       handleShopChange={props.handleShopChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-      closeModal={props.closeModal}
+      handleCloseModal={props.handleCloseModal}
       unInput={props.unInput}
       minDate={props.minDate}
-      shoppingListItemOperation={props.shoppingListItemOperation}
+      handleShoppingListItem={props.handleShoppingListItem}
       bigCategoryMenuRef={bigCategoryRef}
       mediumCategoryMenuRef={mediumMenuRef}
       incomeCategories={incomeCategories}

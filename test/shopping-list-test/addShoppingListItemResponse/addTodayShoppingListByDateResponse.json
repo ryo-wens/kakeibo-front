@@ -1,0 +1,24 @@
+{
+  "regular_shopping_list": [],
+  "shopping_list": [
+    {
+      "id": 1,
+      "posted_date": "2020-12-23T10:00:00Z",
+      "updated_date": "2020-12-23T10:00:00Z",
+      "expected_purchase_date": "2020/12/24(木)",
+      "complete_flag": false,
+      "purchase": "携帯料金",
+      "shop": "auショップ",
+      "amount": 5000,
+      "big_category_id": 9,
+      "big_category_name": "通信費",
+      "medium_category_id": 51,
+      "medium_category_name": "携帯電話",
+      "custom_category_id": null,
+      "custom_category_name": null,
+      "regular_shopping_list_id": null,
+      "transaction_auto_add": true,
+      "related_transaction_data": null
+    }
+  ]
+}

@@ -3,10 +3,10 @@ import axios, { CancelTokenSource } from 'axios';
 import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchGroupTodayShoppingList } from '../../../../../reducks/groupShoppingList/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import ShoppingListByDate from '../../../../../components/shoppingList/modules/list/shoppingListByDate/ShoppingListByDate';
 import { getGroupTodayShoppingList } from '../../../../../reducks/groupShoppingList/selectors';
 import { customMonth, date, year } from '../../../../../lib/constant';
 import { useParams } from 'react-router';
+import GroupShoppingListByDate from '../../../../../components/groupShoppingList/modules/list/shoppingListByDate/GroupShoppingListByDate';
 
 interface GroupTodayShoppingListByDateContainerProps {
   currentYearMonth: string;
@@ -57,7 +57,7 @@ const GroupTodayShoppingListByDateContainer = (
   };
 
   return (
-    <ShoppingListByDate
+    <GroupShoppingListByDate
       shoppingListByDate={groupTodayShoppingList}
       currentYearMonth={props.currentYearMonth}
       message={'今日の買い物リストは、登録されていません。'}

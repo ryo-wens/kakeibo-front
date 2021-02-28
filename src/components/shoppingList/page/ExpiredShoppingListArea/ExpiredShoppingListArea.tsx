@@ -8,7 +8,8 @@ import ShoppingListItemComponentContainer from '../../../../containers/shoppingL
 interface ExpiredShoppingListAreaProps {
   expiredShoppingList: ShoppingList;
   slicedExpiredShoppingList: ShoppingList;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   equalsDisplayDate: (date: string) => boolean;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
@@ -31,7 +32,8 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
                   )}
                   <ShoppingListItemComponentContainer
                     listItem={listItem}
-                    currentYearMonth={props.currentYearMonth}
+                    currentYear={props.currentYear}
+                    currentMonth={props.currentMonth}
                     purchaseClassName={'shopping-list-item-component__item-purchase'}
                     amountClassName={'shopping-list-item-component__item-amount'}
                     transactionDataItemClassName={'related-transaction-data-button__item'}

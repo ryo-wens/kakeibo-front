@@ -26,14 +26,14 @@ interface EditShoppingListItemModalProps {
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  openModal: () => void;
-  closeModal: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
   openDeleteForm: () => void;
   closeDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
-  deleteOperation: () => void;
+  handleEditShoppingListItem: () => void;
+  handleDeleteShoppingListItem: () => void;
 }
 
 const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
@@ -43,9 +43,9 @@ const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
-          closeModal={props.closeModal}
+          handleCloseModal={props.handleCloseModal}
           closeDeleteForm={props.closeDeleteForm}
-          deleteOperation={props.deleteOperation}
+          handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
         />
       ) : (
         <ShoppingListFormContainer
@@ -64,10 +64,10 @@ const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
           handleAmountChange={props.handleAmountChange}
           handleShopChange={props.handleShopChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-          closeModal={props.closeModal}
+          handleCloseModal={props.handleCloseModal}
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
-          shoppingListItemOperation={props.shoppingListItemOperation}
+          handleShoppingListItem={props.handleEditShoppingListItem}
           displayInputAmountMessage={false}
           openDeleteForm={props.openDeleteForm}
           setBigCategory={props.setBigCategory}
@@ -84,11 +84,11 @@ const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
     <>
       <EditIcon
         className="edit-shopping-list-item-modal__edit-icon"
-        onClick={() => props.openModal()}
+        onClick={() => props.handleOpenModal()}
       />
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

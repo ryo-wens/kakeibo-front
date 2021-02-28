@@ -2,7 +2,7 @@ import React, { useEffect } from 'react';
 import axios, { CancelTokenSource } from 'axios';
 import { fetchTodayTodoList } from '../../../reducks/todoList/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import { customMonth, date, year } from '../../../lib/constant';
+import { customDate, customMonth, year } from '../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import {
   getDisplayInHomeDueTodoList,
@@ -44,9 +44,7 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
 
   const todayYear = String(year);
   const todayMonth = customMonth;
-  const todayDate: string = ('0' + date.getDate()).slice(-2);
-
-  const currentYearMonth = `${todayYear}/${todayMonth}`;
+  const todayDate = String(customDate);
 
   const fetchGroupData = (groupId: number, signal: CancelTokenSource) => {
     dispatch(fetchGroupTodayTodoList(groupId, todayYear, todayMonth, todayDate, signal));
@@ -89,7 +87,6 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
       pathName={pathName}
       currentYear={todayYear}
       currentMonth={todayMonth}
-      currentYearMonth={currentYearMonth}
       implementationTodoList={
         pathName === 'group' ? groupImplementationTodoList : implementationTodoList
       }

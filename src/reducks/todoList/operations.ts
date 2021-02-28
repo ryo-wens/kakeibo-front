@@ -362,7 +362,7 @@ export const deleteTodoListItem = (
     dispatch(startDeleteTodoListItemAction());
 
     try {
-      const resultDeleteTodoListItem = await axios.delete<DeleteTodoListItemRes>(
+      const deleteTodoListItemResult = await axios.delete<DeleteTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         {
           withCredentials: true,
@@ -415,7 +415,7 @@ export const deleteTodoListItem = (
           monthlyDuesTodoList
         )
       );
-      dispatch(openTextModalAction(resultDeleteTodoListItem.data.message));
+      dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
     } catch (error) {
       dispatch(
         failedDeleteTodoListItemAction(error.response.status, error.response.data.error.message)
@@ -485,7 +485,7 @@ export const deleteSearchTodoListItem = (
     dispatch(startDeleteSearchTodoListItemAction());
 
     try {
-      const resultDeleteTodoListItem = await axios.delete<DeleteTodoListItemRes>(
+      const deleteTodoListItemResult = await axios.delete<DeleteTodoListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         {
           withCredentials: true,
@@ -510,7 +510,7 @@ export const deleteSearchTodoListItem = (
       );
 
       dispatch(deleteSearchTodoListItemAction(fetchSearchResult.data.search_todo_list));
-      dispatch(openTextModalAction(resultDeleteTodoListItem.data.message));
+      dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
     } catch (error) {
       dispatch(
         failedDeleteSearchTodoListItemAction(

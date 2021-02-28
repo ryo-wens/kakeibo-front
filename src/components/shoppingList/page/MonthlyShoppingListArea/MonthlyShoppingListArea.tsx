@@ -11,13 +11,18 @@ interface MonthlyShoppingListAreaProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
   return (
     <>
       <div className="monthly-shopping-list-area__add-button">
-        <AddShoppingListItemModalContainer />
+        <AddShoppingListItemModalContainer
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
+        />
       </div>
       <div className="monthly-shopping-list-area__switch-item">
         <div className="monthly-shopping-list-area__switch-item--width">
@@ -36,12 +41,16 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
               <MonthlyShoppingListByDateContainer
                 selectedYear={props.selectedYear}
                 selectedMonth={props.selectedMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
               />
             }
             rightItem={
               <MonthlyShoppingListByCategoriesContainer
                 selectedYear={props.selectedYear}
                 selectedMonth={props.selectedMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
               />
             }
           />

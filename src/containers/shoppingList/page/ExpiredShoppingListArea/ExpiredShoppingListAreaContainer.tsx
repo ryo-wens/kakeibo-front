@@ -7,7 +7,8 @@ import ExpiredShoppingListArea from '../../../../components/shoppingList/page/Ex
 import { ShoppingList } from '../../../../reducks/shoppingList/types';
 
 interface ExpiredShoppingListAreaContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContainerProps) => {
@@ -50,7 +51,8 @@ const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContaine
     <ExpiredShoppingListArea
       expiredShoppingList={expiredShoppingList}
       slicedExpiredShoppingList={slicedExpiredShoppingList}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       equalsDisplayDate={equalsDisplayDate}
       readMore={readMore}
       setReadMore={setReadMore}

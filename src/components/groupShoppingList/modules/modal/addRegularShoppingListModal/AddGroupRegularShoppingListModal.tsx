@@ -37,7 +37,7 @@ interface AddGroupRegularShoppingListModalProps {
   openModal: () => void;
   closeModal: () => void;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
+  handleAddRegularShoppingListItem: () => void;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
@@ -74,7 +74,7 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         buttonLabel={'追加'}
         closeModal={props.closeModal}
         unInput={props.unInput}
-        regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+        handleRegularShoppingListItem={props.handleAddRegularShoppingListItem}
         minDate={date}
         bigCategoryMenuOpen={props.bigCategoryMenuOpen}
         mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}

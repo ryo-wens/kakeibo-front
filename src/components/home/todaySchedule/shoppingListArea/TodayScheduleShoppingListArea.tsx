@@ -7,7 +7,8 @@ import { ShoppingList, ShoppingListByCategories } from '../../../../reducks/shop
 interface TodayScheduleShoppingListAreaProps {
   todayShoppingList: ShoppingList;
   todayShoppingListByCategories: ShoppingListByCategories;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const TodayScheduleShoppingListArea = (props: TodayScheduleShoppingListAreaProps) => {
@@ -18,14 +19,16 @@ const TodayScheduleShoppingListArea = (props: TodayScheduleShoppingListAreaProps
       leftItem={
         <TodayScheduleShoppingListByDate
           shoppingListByDate={props.todayShoppingList}
-          currentYearMonth={props.currentYearMonth}
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
           message={'今日の買い物リストは、登録されていません。'}
         />
       }
       rightItem={
         <TodayScheduleShoppingListByCategories
           shoppingListByCategories={props.todayShoppingListByCategories}
-          currentYearMonth={props.currentYearMonth}
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
           message={'今日の買い物リストは、登録されていません。'}
         />
       }

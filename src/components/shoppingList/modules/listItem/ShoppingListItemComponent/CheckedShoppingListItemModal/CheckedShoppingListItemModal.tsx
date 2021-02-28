@@ -22,7 +22,7 @@ interface CheckedShoppingListItemModalProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   closeModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleEditShoppingListItem: () => void;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
@@ -49,10 +49,10 @@ const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) 
         handleAmountChange={props.handleAmountChange}
         handleShopChange={props.handleShopChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-        closeModal={props.closeModal}
+        handleCloseModal={props.closeModal}
         unInput={props.unInput}
         minDate={new Date('1900-01-01')}
-        shoppingListItemOperation={props.shoppingListItemOperation}
+        handleShoppingListItem={props.handleEditShoppingListItem}
         displayInputAmountMessage={true}
         setBigCategory={props.setBigCategory}
         setBigCategoryId={props.setBigCategoryId}

@@ -5,7 +5,8 @@ import ShoppingListItemComponent from '../../../../../components/shoppingList/mo
 
 interface ShoppingListItemComponentContainerProps {
   listItem: ShoppingListItem;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   purchaseClassName: string;
   amountClassName: string;
   transactionDataItemClassName: string;
@@ -60,7 +61,8 @@ const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentCont
   return (
     <ShoppingListItemComponent
       listItem={props.listItem}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       initialExpectedPurchaseDate={initialState.initialExpectedPurchaseDate}
       initialPurchase={initialState.initialPurchase}
       initialShop={initialState.initialShop}
