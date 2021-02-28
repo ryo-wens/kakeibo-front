@@ -6,7 +6,7 @@ import { getGroupLatestTransactions } from '../../../reducks/groupTransactions/s
 import GroupRecentInputBody from '../../../components/home/recentTransaction/recentTransactionBody/GroupRecentInputBody';
 
 const GroupRecentInputBodyContainer = () => {
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const [open, setOpen] = useState(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
   const approvedGroup = useSelector(getApprovedGroups);

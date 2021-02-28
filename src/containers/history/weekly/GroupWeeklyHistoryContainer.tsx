@@ -12,7 +12,7 @@ interface GroupWeeklyHistoryContainerProps {
 }
 
 const GroupWeeklyHistoryContainer = (props: GroupWeeklyHistoryContainerProps) => {
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const path = window.location.pathname;
   const approvedGroup = useSelector(getApprovedGroups);
   const expenseGroupTransactionsList = useSelector(getGroupWeeklyTransaction);

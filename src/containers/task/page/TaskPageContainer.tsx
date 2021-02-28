@@ -25,7 +25,7 @@ import TaskPage from '../../../components/task/page/TaskPage';
 
 const TaskPageContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const [selectedDate, setSelectedDate] = useState<Date | null>(date);
 

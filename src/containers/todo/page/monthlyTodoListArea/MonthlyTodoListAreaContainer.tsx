@@ -24,7 +24,7 @@ interface MonthlyTodoListAreaContainerProps {
 const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));

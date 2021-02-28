@@ -26,7 +26,7 @@ interface TodayTodoAreaContainerProps {
 const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
   const todayDueTodoList = useSelector(getTodayDueTodoList);

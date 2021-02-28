@@ -18,7 +18,7 @@ interface GroupYearlyBudgetsRowContainerProps {
 const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const groupYearlyBudgetsList = useSelector(getGroupYearlyBudgets);
   const [groupYearlyBudgets, setGroupYearlyBudgets] = useState<GroupYearlyBudgetsList>({
     year: '',
