@@ -4,7 +4,6 @@ import './monthly-todo-list-area.scss';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/monthlyTodoListArea/Items/MonthlyImplementationDateTodoListContainer';
 import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/monthlyTodoListArea/Items/MonthlyDueDateTodoListContainer';
-import { date } from '../../../../lib/constant';
 import AddTodoListItemFormContainer from '../../../../containers/todo/modules/form/AddTodoListItemFormContainer';
 
 interface MonthlyTodoListAreaProps {
@@ -22,7 +21,6 @@ const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
     <>
       <div className="monthly-todo-list-area__add-button">
         <AddTodoListItemFormContainer
-          date={date}
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}
         />

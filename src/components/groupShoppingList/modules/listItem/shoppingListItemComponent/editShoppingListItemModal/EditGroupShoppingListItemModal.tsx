@@ -30,7 +30,7 @@ interface EditGroupShoppingListItemModalProps {
   initialPurchase: string;
   unInput: boolean;
   shoppingListItemOperation: () => void;
-  deleteOperation: () => void;
+  handleDeleteShoppingListItem: () => void;
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
@@ -45,9 +45,9 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
-          closeModal={props.closeModal}
+          handleCloseModal={props.closeModal}
           closeDeleteForm={props.closeDeleteForm}
-          deleteOperation={props.deleteOperation}
+          handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
         />
       ) : (
         <GroupShoppingListFormContainer

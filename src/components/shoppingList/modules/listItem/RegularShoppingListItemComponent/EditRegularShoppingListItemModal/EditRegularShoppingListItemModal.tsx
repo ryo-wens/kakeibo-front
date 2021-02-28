@@ -27,14 +27,14 @@ interface EditRegularShoppingListModalProps {
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  openModal: () => void;
-  closeModal: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
   openDeleteForm: () => void;
   closeDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
-  deleteOperation: () => void;
+  handleEditRegularShoppingListItem: () => void;
+  handleDeleteRegularShoppingListItem: () => void;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -50,9 +50,9 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
         <ShoppingListDeleteForm
           titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
-          closeModal={props.closeModal}
+          handleCloseModal={props.handleCloseModal}
           closeDeleteForm={props.closeDeleteForm}
-          deleteOperation={props.deleteOperation}
+          handleDeleteShoppingListItem={props.handleDeleteRegularShoppingListItem}
         />
       ) : (
         <RegularShoppingListFormContainer
@@ -76,10 +76,10 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           handleAmountChange={props.handleAmountChange}
           handleShopChange={props.handleShopChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-          closeModal={props.closeModal}
+          handleCloseModal={props.handleCloseModal}
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
-          regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+          handleRegularShoppingListItem={props.handleEditRegularShoppingListItem}
           openDeleteForm={props.openDeleteForm}
           setBigCategory={props.setBigCategory}
           setAssociatedCategory={props.setAssociatedCategory}
@@ -96,11 +96,11 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
     <>
       <EditIcon
         className="edit-regular-shopping-list-item-modal__edit-icon"
-        onClick={() => props.openModal()}
+        onClick={() => props.handleOpenModal()}
       />
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

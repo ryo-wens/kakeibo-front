@@ -117,11 +117,6 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
-    case Actions.CANCEL_ADD_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.FAILED_ADD_SHOPPING_LIST_ITEM:
       return {
         ...state,
@@ -133,11 +128,6 @@ export const shoppingListReducers = (
         ...action.payload,
       };
     case Actions.EDIT_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.CANCEL_EDIT_SHOPPING_LIST_ITEM:
       return {
         ...state,
         ...action.payload,
@@ -157,11 +147,6 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
-    case Actions.CANCEL_DELETE_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.FAILED_DELETE_SHOPPING_LIST_ITEM:
       return {
         ...state,
@@ -173,11 +158,6 @@ export const shoppingListReducers = (
         ...action.payload,
       };
     case Actions.ADD_REGULAR_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.CANCEL_ADD_REGULAR_SHOPPING_LIST_ITEM:
       return {
         ...state,
         ...action.payload,
@@ -197,11 +177,6 @@ export const shoppingListReducers = (
         ...state,
         ...action.payload,
       };
-    case Actions.CANCEL_EDIT_REGULAR_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.FAILED_EDIT_REGULAR_SHOPPING_LIST_ITEM:
       return {
         ...state,
@@ -213,11 +188,6 @@ export const shoppingListReducers = (
         ...action.payload,
       };
     case Actions.DELETE_REGULAR_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.CANCEL_DELETE_REGULAR_SHOPPING_LIST_ITEM:
       return {
         ...state,
         ...action.payload,

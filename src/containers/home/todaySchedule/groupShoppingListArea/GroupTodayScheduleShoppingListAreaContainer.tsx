@@ -7,7 +7,8 @@ import {
 } from '../../../../reducks/groupShoppingList/selectors';
 
 interface GroupTodayScheduleShoppingListAreaContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupTodayScheduleShoppingListAreaContainer = (
@@ -20,7 +21,8 @@ const GroupTodayScheduleShoppingListAreaContainer = (
     <GroupTodayScheduleShoppingListArea
       todayShoppingList={groupTodayShoppingList}
       todayShoppingListByCategories={groupTodayShoppingListByCategories}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
     />
   );
 };

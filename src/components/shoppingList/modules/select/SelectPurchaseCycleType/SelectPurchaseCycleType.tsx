@@ -9,7 +9,7 @@ interface SelectPurchaseCycleTypeProps {
 const SelectPurchaseCycleType = (props: SelectPurchaseCycleTypeProps) => {
   return (
     <form>
-      <select className="selector__box" onChange={props.selectChange} defaultValue={'weekly'}>
+      <select className="selector__box" onChange={props.selectChange} defaultValue={props.value}>
         <option value="daily">毎日</option>
         <option value="weekly">毎週</option>
         <option value="monthly">毎月</option>

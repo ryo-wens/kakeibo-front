@@ -24,9 +24,9 @@ interface ShoppingListFormProps {
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleShoppingListItem: () => void;
   minDate: Date;
   displayInputAmountMessage: boolean;
   bigCategoryMenuRef: React.RefObject<HTMLDivElement>;
@@ -192,7 +192,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
     <div className="shopping-list-form">
       <div className="shopping-list-form__position">
         <h3>{props.titleLabel}</h3>
-        <button onClick={() => props.closeModal()}>
+        <button onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>
@@ -225,14 +225,14 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           <button
             className="shopping-list-form__operation-btn--add"
             disabled={props.unInput}
-            onClick={props.shoppingListItemOperation}
+            onClick={props.handleShoppingListItem}
           >
             {props.buttonLabel}
           </button>
           <button
             className="shopping-list-form__operation-btn--cancel"
             disabled={false}
-            onClick={() => props.closeModal()}
+            onClick={props.handleCloseModal}
           >
             キャンセル
           </button>

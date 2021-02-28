@@ -7,7 +7,8 @@ import RelatedTransactionDataButtonContainer from '../../../../../containers/sho
 
 interface ShoppingListItemComponentProps {
   listItem: ShoppingListItem;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   initialExpectedPurchaseDate: Date;
   initialPurchase: string;
   initialShop: string | null;
@@ -50,7 +51,8 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
       <div className="shopping-list-item-component__check-box">
         <CheckedShoppingListItemModalContainer
           listItem={props.listItem}
-          currentYearMonth={props.currentYearMonth}
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
           initialExpectedPurchaseDate={props.initialExpectedPurchaseDate}
           initialPurchase={props.initialPurchase}
           initialShop={props.initialShop}
@@ -97,7 +99,8 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           <span className="shopping-list-item-component__edit-icon">
             <EditShoppingListItemModalContainer
               listItem={props.listItem}
-              currentYearMonth={props.currentYearMonth}
+              currentYear={props.currentYear}
+              currentMonth={props.currentMonth}
               initialExpectedPurchaseDate={props.initialExpectedPurchaseDate}
               initialPurchase={props.initialPurchase}
               initialShop={props.initialShop}

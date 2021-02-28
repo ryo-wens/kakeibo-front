@@ -187,7 +187,7 @@ const AddGroupRegularShoppingListModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      regularShoppingListItemOperation={() => {
+      handleAddRegularShoppingListItem={() => {
         dispatch(
           addGroupRegularShoppingListItem(
             Number(group_id),

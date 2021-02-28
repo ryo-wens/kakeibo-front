@@ -34,7 +34,7 @@ interface GroupRegularShoppingListFormContainerProps {
   buttonLabel: string;
   closeModal: () => void;
   unInput: boolean;
-  regularShoppingListItemOperation: () => void;
+  handleRegularShoppingListItem: () => void;
   minDate: Date;
   openDeleteForm?: () => void;
   bigCategoryMenuOpen: boolean;
@@ -94,7 +94,7 @@ const GroupRegularShoppingListFormContainer = (
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
       closeModal={props.closeModal}
       unInput={props.unInput}
-      regularShoppingListItemOperation={props.regularShoppingListItemOperation}
+      handleRegularShoppingListItem={props.handleRegularShoppingListItem}
       minDate={props.minDate}
       bigCategoryMenuRef={bigCategoryRef}
       mediumCategoryMenuRef={mediumMenuRef}

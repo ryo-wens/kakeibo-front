@@ -5,7 +5,8 @@ import ShoppingListItemComponentContainer from '../../../../../containers/shoppi
 
 interface ShoppingListByDateProps {
   shoppingListByDate: ShoppingList;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   message: string;
   equalsDisplayDate: (date: string) => boolean;
 }
@@ -24,7 +25,8 @@ const ShoppingListByDate = (props: ShoppingListByDateProps) => {
               )}
               <ShoppingListItemComponentContainer
                 listItem={listItem}
-                currentYearMonth={props.currentYearMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
                 purchaseClassName={'shopping-list-item-component__item-purchase'}
                 amountClassName={'shopping-list-item-component__item-amount'}
                 transactionDataItemClassName={'related-transaction-data-button__item'}

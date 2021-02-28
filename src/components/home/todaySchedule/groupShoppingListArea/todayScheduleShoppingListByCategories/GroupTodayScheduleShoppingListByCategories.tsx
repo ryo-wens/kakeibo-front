@@ -10,7 +10,8 @@ import {
 
 interface GroupTodayScheduleShoppingListByCategoriesProps {
   shoppingListByCategories: GroupShoppingListByCategories;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   message: string;
 }
 
@@ -42,7 +43,8 @@ const GroupTodayScheduleShoppingListByCategories = (
                       >
                         <ShoppingListItemComponentContainer
                           listItem={shoppingListItem}
-                          currentYearMonth={props.currentYearMonth}
+                          currentYear={props.currentYear}
+                          currentMonth={props.currentMonth}
                           purchaseClassName={
                             'shopping-list-item-component__item-purchase--home-page'
                           }

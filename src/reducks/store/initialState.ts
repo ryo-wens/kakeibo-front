@@ -244,6 +244,10 @@ const initialState = {
       message: '',
       statusCode: 0,
     },
+    shoppingListError: {
+      message: '',
+      statusCode: 0,
+    },
   },
   todoList: {
     expiredTodoList: [],

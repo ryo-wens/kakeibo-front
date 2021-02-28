@@ -8,6 +8,8 @@ import { fetchMonthlyShoppingListByCategories } from '../../../../../reducks/sho
 interface MonthlyShoppingListByCategoriesContainerProps {
   selectedYear: number;
   selectedMonth: number;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const MonthlyShoppingListByCategoriesContainer = (
@@ -16,15 +18,11 @@ const MonthlyShoppingListByCategoriesContainer = (
   const dispatch = useDispatch();
   const monthlyShoppingListByCategories = useSelector(getMonthlyShoppingListByCategories);
 
-  const currentYear = String(props.selectedYear);
-  const currentMonth = (`0` + `${props.selectedMonth}`).slice(-2);
-  const currentYearMonth = `${currentYear}/${currentMonth}`;
-
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    dispatch(fetchMonthlyShoppingListByCategories(currentYear, currentMonth, signal));
+    dispatch(fetchMonthlyShoppingListByCategories(props.currentYear, props.currentMonth, signal));
     return () => signal.cancel();
-  }, [currentYear, currentMonth]);
+  }, [props.currentYear, props.currentMonth]);
 
   const prevData = {
     categoryId: 0,
@@ -46,7 +44,8 @@ const MonthlyShoppingListByCategoriesContainer = (
   return (
     <ShoppingListByCategoriesComponent
       shoppingListByCategories={monthlyShoppingListByCategories}
-      currentYearMonth={currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={`${props.selectedMonth}月の買い物リストは、登録されていません。`}
       equalsDisplayDate={equalsDisplayDate}
     />
