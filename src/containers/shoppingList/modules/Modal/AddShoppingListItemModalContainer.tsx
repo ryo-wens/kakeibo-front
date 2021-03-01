@@ -1,6 +1,5 @@
 import React, { useState } from 'react';
 import { customMonth, date, todayDate, year } from '../../../../lib/constant';
-import { AssociatedCategory, Category } from '../../../../reducks/categories/types';
 import AddShoppingListItemModal from '../../../../components/shoppingList/modules/modal/AddShoppingListItemModal/AddShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';

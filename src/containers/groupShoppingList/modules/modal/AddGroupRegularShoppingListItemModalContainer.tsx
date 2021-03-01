@@ -33,7 +33,7 @@ const AddGroupRegularShoppingListModalContainer = (
   props: AddGroupRegularShoppingListModalContainerProps
 ) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);

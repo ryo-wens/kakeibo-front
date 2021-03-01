@@ -18,7 +18,7 @@ const SelectYears = (props: SelectYearsProps) => {
   const history = useHistory();
   const searchLocation = useLocation().search;
   const queryParams = qs.parse(searchLocation);
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const [itemYear, setItemYear] = useState<number>(props.selectedYear);
   const [selectOpen, setSelectOpen] = useState<boolean>(false);

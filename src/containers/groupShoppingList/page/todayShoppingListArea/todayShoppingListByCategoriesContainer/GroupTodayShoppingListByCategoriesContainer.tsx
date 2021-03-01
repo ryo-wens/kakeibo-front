@@ -16,7 +16,7 @@ const GroupTodayShoppingListByCategoriesContainer = (
   props: GroupTodayShoppingListByCategoriesContainerProps
 ) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const groupTodayShoppingListByCategories = useSelector(getGroupTodayShoppingListByCategories);
 
   const todayYear = String(year);

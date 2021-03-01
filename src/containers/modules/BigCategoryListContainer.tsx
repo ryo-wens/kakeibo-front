@@ -49,7 +49,7 @@ interface BigCategoryListContainerProps {
 
 const BigCategoryListContainer = (props: BigCategoryListContainerProps) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);

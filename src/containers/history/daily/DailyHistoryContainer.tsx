@@ -20,7 +20,7 @@ interface DailyHistoryContainerProps {
 }
 
 const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const approvedGroup = useSelector(getApprovedGroups);
   const transactionsList = useSelector(getTransactions);

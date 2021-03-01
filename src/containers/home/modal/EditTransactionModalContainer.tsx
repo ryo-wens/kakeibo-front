@@ -44,7 +44,7 @@ interface EditTransactionModalContainerProps {
 const EditTransactionModalContainer = (props: EditTransactionModalContainerProps) => {
   const dispatch = useDispatch();
   const transactionId = props.id;
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const groupCurrentPage = useLocation().pathname.split('/')[2];
   const incomeCategories = useSelector(getIncomeCategories);

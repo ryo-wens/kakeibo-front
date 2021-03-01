@@ -30,7 +30,7 @@ const initialState = {
 
 const InputFormContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const userId = useSelector(getUserId);
   const approvedGroups = useSelector(getApprovedGroups);

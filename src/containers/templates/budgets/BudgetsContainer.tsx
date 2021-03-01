@@ -11,7 +11,7 @@ import { useHistory } from 'react-router-dom';
 const BudgetsContainer = () => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const query = useLocation().search.split('&')[0];
   const [budgetsYear, setBudgetsYear] = useState(year);

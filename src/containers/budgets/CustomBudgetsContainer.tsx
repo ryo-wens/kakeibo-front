@@ -16,7 +16,7 @@ interface CustomBudgetsContainerProps {
 const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const searchLocation = useLocation().search;
   const getQuery = new URLSearchParams(searchLocation);
