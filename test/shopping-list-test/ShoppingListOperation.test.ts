@@ -65,176 +65,9 @@ import {
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
-
-const axiosMock = new MockAdapter(axios);
-
 const store = mockStore({ shoppingList: [], modal: [], router: [] });
 
-const getState = () => {
-  return {
-    shoppingList: {
-      regularShoppingListLoading: false,
-      regularShoppingList: [
-        {
-          id: 1,
-          posted_date: '2020-12-20T10:00:00Z',
-          updated_date: '2020-12-20T10:00:00Z',
-          expected_purchase_date: '2020/12/24(木)',
-          cycle_type: 'weekly',
-          cycle: null,
-          purchase: '携帯料金',
-          shop: 'auショップ',
-          amount: 5000,
-          big_category_id: 9,
-          big_category_name: '通信費',
-          medium_category_id: 51,
-          medium_category_name: '携帯電話',
-          custom_category_id: null,
-          custom_category_name: null,
-          transaction_auto_add: true,
-        },
-      ],
-      regularShoppingListError: {
-        message: '',
-        statusCode: 0,
-      },
-      expiredShoppingListLoading: false,
-      expiredShoppingList: [],
-      expiredShoppingListError: {
-        message: '',
-        statusCode: 0,
-      },
-      todayShoppingListLoading: false,
-      todayShoppingList: [
-        {
-          id: 1,
-          posted_date: '2020-12-20T10:00:00Z',
-          updated_date: '2020-12-20T10:00:00Z',
-          expected_purchase_date: '2020/12/24(木)',
-          complete_flag: false,
-          purchase: '携帯料金',
-          shop: 'auショップ',
-          amount: 5000,
-          big_category_id: 9,
-          big_category_name: '通信費',
-          medium_category_id: 51,
-          medium_category_name: '携帯電話',
-          custom_category_id: null,
-          custom_category_name: null,
-          regular_shopping_list_id: 1,
-          transaction_auto_add: true,
-          related_transaction_data: null,
-        },
-      ],
-      todayShoppingListError: {
-        message: '',
-        statusCode: 0,
-      },
-      todayShoppingListByCategoriesLoading: false,
-      todayShoppingListByCategories: [
-        {
-          big_category_name: '通信費',
-          shopping_list: [
-            {
-              id: 1,
-              posted_date: '2020-12-20T10:00:00Z',
-              updated_date: '2020-12-20T10:00:00Z',
-              expected_purchase_date: '2020/12/24(木)',
-              complete_flag: false,
-              purchase: '携帯料金',
-              shop: 'auショップ',
-              amount: 5000,
-              big_category_id: 9,
-              big_category_name: '通信費',
-              medium_category_id: 51,
-              medium_category_name: '携帯電話',
-              custom_category_id: null,
-              custom_category_name: null,
-              regular_shopping_list_id: 1,
-              transaction_auto_add: true,
-              related_transaction_data: null,
-            },
-          ],
-        },
-      ],
-      todayShoppingListByCategoriesError: {
-        message: '',
-        statusCode: 0,
-      },
-      monthlyShoppingListLoading: false,
-      monthlyShoppingList: [
-        {
-          id: 1,
-          posted_date: '2020-12-20T10:00:00Z',
-          updated_date: '2020-12-20T10:00:00Z',
-          expected_purchase_date: '2020/12/24(木)',
-          complete_flag: false,
-          purchase: '携帯料金',
-          shop: 'auショップ',
-          amount: 5000,
-          big_category_id: 9,
-          big_category_name: '通信費',
-          medium_category_id: 51,
-          medium_category_name: '携帯電話',
-          custom_category_id: null,
-          custom_category_name: null,
-          regular_shopping_list_id: 1,
-          transaction_auto_add: true,
-          related_transaction_data: null,
-        },
-      ],
-      monthlyShoppingListError: {
-        message: '',
-        statusCode: 0,
-      },
-      monthlyShoppingListByCategoriesLoading: false,
-      monthlyShoppingListByCategories: [
-        {
-          big_category_name: '通信費',
-          shopping_list: [
-            {
-              id: 1,
-              posted_date: '2020-12-20T10:00:00Z',
-              updated_date: '2020-12-20T10:00:00Z',
-              expected_purchase_date: '2020/12/24(木)',
-              complete_flag: false,
-              purchase: '携帯料金',
-              shop: 'auショップ',
-              amount: 5000,
-              big_category_id: 9,
-              big_category_name: '通信費',
-              medium_category_id: 51,
-              medium_category_name: '携帯電話',
-              custom_category_id: null,
-              custom_category_name: null,
-              regular_shopping_list_id: 1,
-              transaction_auto_add: true,
-              related_transaction_data: null,
-            },
-          ],
-        },
-      ],
-      monthlyShoppingListByCategoriesError: {
-        message: '',
-        statusCode: 0,
-      },
-    },
-    modal: {
-      message: '',
-      open: false,
-    },
-    router: {
-      action: 'PUSH',
-      location: {
-        hash: '',
-        key: 'hogehoge',
-        pathname: '/todo',
-        search: '',
-        state: undefined,
-      },
-    },
-  };
-};
+const axiosMock = new MockAdapter(axios);
 
 describe('async actions shoppingList', () => {
   beforeEach(() => {
@@ -593,7 +426,7 @@ describe('async actions shoppingList', () => {
       currentMonth,
       requestData
       // @ts-ignore
-    )(store.dispatch, getState);
+    )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -668,7 +501,7 @@ describe('async actions shoppingList', () => {
       currentYear,
       currentMonth
       // @ts-ignore
-    )(store.dispatch, getState);
+    )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -757,7 +590,7 @@ describe('async actions shoppingList', () => {
       currentMonth,
       requestData
       // @ts-ignore
-    )(store.dispatch, getState);
+    )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -853,7 +686,7 @@ describe('async actions shoppingList', () => {
       currentMonth,
       requestData
       // @ts-ignore
-    )(store.dispatch, getState);
+    )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
@@ -933,7 +766,7 @@ describe('async actions shoppingList', () => {
       currentYear,
       currentMonth
       // @ts-ignore
-    )(store.dispatch, getState);
+    )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

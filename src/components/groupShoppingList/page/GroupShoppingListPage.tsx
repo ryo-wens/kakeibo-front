@@ -13,9 +13,10 @@ interface GroupShoppingListPageProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
+  currentYear: string;
+  currentMonth: string;
   currentItem: TodayOrMonthly;
   setCurrentItem: React.Dispatch<React.SetStateAction<TodayOrMonthly>>;
-  currentYearMonth: string;
 }
 
 const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
@@ -26,13 +27,20 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
           <SwitchTodayOrMonthlyTabsContainer
             currentItem={props.currentItem}
             setCurrentItems={props.setCurrentItem}
-            leftItem={<GroupTodayShoppingListArea currentYearMonth={props.currentYearMonth} />}
+            leftItem={
+              <GroupTodayShoppingListArea
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
+              />
+            }
             rightItem={
               <GroupMonthlyShoppingListAreaContainer
                 selectedYear={props.selectedYear}
                 selectedMonth={props.selectedMonth}
                 setSelectedYear={props.setSelectedYear}
                 setSelectedMonth={props.setSelectedMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
               />
             }
           />
@@ -41,15 +49,22 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
       <div className="shopping-list-page__right">
         <div className="shopping-list-page__right-content">
           <h4>定期買い物リスト</h4>
-          <AddGroupRegularShoppingListModalContainer currentYearMonth={props.currentYearMonth} />
+          <AddGroupRegularShoppingListModalContainer
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
+          />
           <GroupRegularShoppingListAreaContainer
-            currentYearMonth={props.currentYearMonth}
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
         <div className="shopping-list-page__right-content">
           <h4>期限切れ買い物リスト</h4>
-          <GroupExpiredShoppingListAreaContainer currentYearMonth={props.currentYearMonth} />
+          <GroupExpiredShoppingListAreaContainer
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
+          />
         </div>
       </div>
     </div>

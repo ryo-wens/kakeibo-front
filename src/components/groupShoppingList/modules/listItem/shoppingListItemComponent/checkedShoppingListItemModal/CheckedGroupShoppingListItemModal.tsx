@@ -22,9 +22,9 @@ interface CheckedGroupShoppingListItemModalProps {
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleEditShoppingListItem: () => void;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
@@ -53,10 +53,10 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
         titleLabel={'買い物リストアイテムを編集'}
         buttonLabel={'保存'}
-        closeModal={props.closeModal}
+        handleCloseModal={props.handleCloseModal}
         unInput={props.unInput}
         minDate={new Date('1900-01-01')}
-        shoppingListItemOperation={props.shoppingListItemOperation}
+        handleShoppingListItem={props.handleEditShoppingListItem}
         displayRequiredInputItemMessage={true}
         setBigCategory={props.setBigCategory}
         setAssociatedCategory={props.setAssociatedCategory}
@@ -75,7 +75,7 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
       </label>
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

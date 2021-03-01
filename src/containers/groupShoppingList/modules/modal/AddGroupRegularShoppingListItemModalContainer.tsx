@@ -1,15 +1,18 @@
 import React, { useState } from 'react';
-import { date } from '../../../../lib/constant';
-import axios from 'axios';
+import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { PurchaseCycleType } from '../../../../reducks/shoppingList/types';
 import AddGroupRegularShoppingListModal from '../../../../components/groupShoppingList/modules/modal/addRegularShoppingListModal/AddGroupRegularShoppingListModal';
 import { addGroupRegularShoppingListItem } from '../../../../reducks/groupShoppingList/operations';
-import { AddGroupRegularShoppingListItemModalInitialState } from '../../../../reducks/groupShoppingList/types';
+import {
+  AddGroupRegularShoppingListItemModalInitialState,
+  AddGroupRegularShoppingListItemReq,
+} from '../../../../reducks/groupShoppingList/types';
 
 interface AddGroupRegularShoppingListModalContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const initialState: AddGroupRegularShoppingListItemModalInitialState = {
@@ -34,7 +37,6 @@ const AddGroupRegularShoppingListModalContainer = (
 ) => {
   const dispatch = useDispatch();
   const { group_id } = useParams();
-  const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -68,11 +70,11 @@ const AddGroupRegularShoppingListModalContainer = (
     initialState.initialTransactionAutoAdd
   );
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
     setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
     setCycleType(initialState.initialCycleType);
@@ -149,6 +151,35 @@ const AddGroupRegularShoppingListModalContainer = (
     return false;
   };
 
+  const handleAddRegularShoppingListItem = () => {
+    const requestData: AddGroupRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: typeof cycle === 'string' ? Number(cycle) : cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: typeof amount === 'string' ? Number(amount) : amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      payment_user_id: paymentUser,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    dispatch(
+      addGroupRegularShoppingListItem(
+        Number(group_id),
+        String(year),
+        customMonth,
+        customDate,
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
+  };
+
   return (
     <AddGroupRegularShoppingListModal
       open={open}
@@ -174,8 +205,8 @@ const AddGroupRegularShoppingListModalContainer = (
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       titleLabel={'定期買い物リストに追加'}
       buttonLabel={'追加'}
-      openModal={openModal}
-      closeModal={closeModal}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
       unInput={unInput()}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
@@ -187,28 +218,7 @@ const AddGroupRegularShoppingListModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      handleAddRegularShoppingListItem={() => {
-        dispatch(
-          addGroupRegularShoppingListItem(
-            Number(group_id),
-            date,
-            props.currentYearMonth,
-            expectedPurchaseDate,
-            cycleType,
-            typeof cycle === 'string' ? Number(cycle) : cycle,
-            purchase,
-            shop,
-            typeof amount === 'string' ? Number(amount) : amount,
-            bigCategoryId,
-            mediumCategoryId,
-            customCategoryId,
-            paymentUser,
-            transactionAutoAdd,
-            signal
-          )
-        );
-        setOpen(false);
-      }}
+      handleAddRegularShoppingListItem={() => handleAddRegularShoppingListItem()}
     />
   );
 };

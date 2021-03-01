@@ -34,8 +34,8 @@ interface AddGroupRegularShoppingListModalProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   titleLabel: string;
   buttonLabel: string;
-  openModal: () => void;
-  closeModal: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
   handleAddRegularShoppingListItem: () => void;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
@@ -72,7 +72,7 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
         titleLabel={'定期買い物リストに追加'}
         buttonLabel={'追加'}
-        closeModal={props.closeModal}
+        handleCloseModal={props.handleCloseModal}
         unInput={props.unInput}
         handleRegularShoppingListItem={props.handleAddRegularShoppingListItem}
         minDate={date}
@@ -95,14 +95,14 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
       <button
         className="add-regular-shopping-list-item-modal__button"
         disabled={false}
-        onClick={() => props.openModal()}
+        onClick={props.handleOpenModal}
       >
         <AddIcon />
         定期買い物リストに追加
       </button>
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

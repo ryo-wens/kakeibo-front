@@ -4,7 +4,7 @@ import {
   EditShoppingListItemReq,
   ShoppingListItem,
 } from '../../../../../../reducks/shoppingList/types';
-import { customMonth, todayDate, year } from '../../../../../../lib/constant';
+import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
 import CheckedShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal';
 
@@ -163,7 +163,7 @@ const CheckedShoppingListItemModalContainer = (
         props.listItem.id,
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth,
         requestData
@@ -191,7 +191,7 @@ const CheckedShoppingListItemModalContainer = (
         props.listItem.id,
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth,
         requestData

@@ -9,7 +9,8 @@ import { useParams } from 'react-router';
 import GroupShoppingListByDate from '../../../../../components/groupShoppingList/modules/list/shoppingListByDate/GroupShoppingListByDate';
 
 interface GroupTodayShoppingListByDateContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupTodayShoppingListByDateContainer = (
@@ -59,7 +60,8 @@ const GroupTodayShoppingListByDateContainer = (
   return (
     <GroupShoppingListByDate
       shoppingListByDate={groupTodayShoppingList}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={'今日の買い物リストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
     />

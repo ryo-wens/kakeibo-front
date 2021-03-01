@@ -1,13 +1,14 @@
 import React, { useState } from 'react';
-import { date } from '../../../../lib/constant';
+import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import { addGroupShoppingListItem } from '../../../../reducks/groupShoppingList/operations';
 import { useParams } from 'react-router';
-import axios from 'axios';
 import { useDispatch } from 'react-redux';
 import AddGroupShoppingListItemModal from '../../../../components/groupShoppingList/modules/modal/addShoppingListModal/AddGroupShoppingListItemModal';
+import { AddGroupShoppingListItemReq } from '../../../../reducks/groupShoppingList/types';
 
 interface AddGroupShoppingListItemModalContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const initialState = {
@@ -30,7 +31,6 @@ const AddGroupShoppingListItemModalContainer = (
 ) => {
   const dispatch = useDispatch();
   const { group_id } = useParams();
-  const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -60,7 +60,7 @@ const AddGroupShoppingListItemModalContainer = (
     initialState.initialTransactionAutoAdd
   );
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
     setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
     setPurchase(initialState.initialPurchase);
@@ -75,7 +75,7 @@ const AddGroupShoppingListItemModalContainer = (
     setTransactionAutoAdd(initialState.initialTransactionAutoAdd);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
   };
 
@@ -119,6 +119,33 @@ const AddGroupShoppingListItemModalContainer = (
     purchase === initialState.initialPurchase ||
     bigCategoryId === initialState.initialBigCategoryId;
 
+  const handleAddShoppingListItem = () => {
+    const requestData: AddGroupShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      purchase: purchase,
+      shop: shop,
+      amount: typeof amount === 'string' ? Number(amount) : amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      payment_user_id: paymentUser,
+      transaction_auto_add: transactionAutoAdd,
+    };
+
+    dispatch(
+      addGroupShoppingListItem(
+        Number(group_id),
+        String(year),
+        customMonth,
+        customDate,
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
+  };
+
   return (
     <AddGroupShoppingListItemModal
       open={open}
@@ -138,8 +165,8 @@ const AddGroupShoppingListItemModalContainer = (
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-      openModal={openModal}
-      closeModal={closeModal}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
       unInput={unInput}
       setBigCategory={setBigCategory}
       setBigCategoryId={setBigCategoryId}
@@ -147,26 +174,7 @@ const AddGroupShoppingListItemModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      shoppingListItemOperation={() => {
-        dispatch(
-          addGroupShoppingListItem(
-            Number(group_id),
-            date,
-            props.currentYearMonth,
-            expectedPurchaseDate,
-            purchase,
-            shop,
-            typeof amount === 'string' ? Number(amount) : amount,
-            bigCategoryId,
-            mediumCategoryId,
-            customCategoryId,
-            paymentUser,
-            transactionAutoAdd,
-            signal
-          )
-        );
-        setOpen(false);
-      }}
+      handleAddShoppingListItem={() => handleAddShoppingListItem()}
     />
   );
 };

@@ -9,7 +9,8 @@ import { getGroupTodayShoppingListByCategories } from '../../../../../reducks/gr
 import GroupShoppingListByCategoriesComponent from '../../../../../components/groupShoppingList/modules/list/shoppingListByCategoriesComponent/GroupShoppingListByCategoriesComponent';
 
 interface GroupTodayShoppingListByCategoriesContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupTodayShoppingListByCategoriesContainer = (
@@ -64,7 +65,8 @@ const GroupTodayShoppingListByCategoriesContainer = (
   return (
     <GroupShoppingListByCategoriesComponent
       shoppingListByCategories={groupTodayShoppingListByCategories}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={'今日の買い物リストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
     />

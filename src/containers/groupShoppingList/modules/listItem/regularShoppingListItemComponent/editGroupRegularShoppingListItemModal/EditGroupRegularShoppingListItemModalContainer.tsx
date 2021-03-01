@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
-import axios, { CancelTokenSource } from 'axios';
 import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
-import { GroupRegularShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
+import {
+  EditGroupRegularShoppingListItemReq,
+  GroupRegularShoppingListItem,
+} from '../../../../../../reducks/groupShoppingList/types';
 import { useParams } from 'react-router';
 import {
   deleteGroupRegularShoppingListItem,
@@ -10,11 +12,12 @@ import {
 } from '../../../../../../reducks/groupShoppingList/operations';
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditGroupRegularShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/regularShoppingListItemComponent/editRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
+import { customDate, customMonth, year } from '../../../../../../lib/constant';
 
 interface EditGroupRegularShoppingListItemModalContainerProps {
   listItem: GroupRegularShoppingListItem;
-  currentYearMonth: string;
-  fetchTodayOrMonthlyShoppingList: (groupId: number, signal: CancelTokenSource) => void;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const EditGroupRegularShoppingListItemModalContainer = (
@@ -22,7 +25,6 @@ const EditGroupRegularShoppingListItemModalContainer = (
 ) => {
   const dispatch = useDispatch();
   const { group_id } = useParams();
-  const signal = axios.CancelToken.source();
 
   const initialState = {
     initialExpectedPurchaseDate: dateStringToDate(props.listItem.expected_purchase_date),
@@ -93,7 +95,7 @@ const EditGroupRegularShoppingListItemModalContainer = (
     return false;
   };
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
     if (props.listItem.medium_category_name) {
       setAssociatedCategory(props.listItem.medium_category_name);
@@ -103,7 +105,7 @@ const EditGroupRegularShoppingListItemModalContainer = (
     }
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
     setDeleteForm(false);
     setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
@@ -120,11 +122,11 @@ const EditGroupRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(initialState.initialTransactionAutoAdd);
   };
 
-  const openDeleteForm = () => {
+  const handleOpenDeleteForm = () => {
     setDeleteForm(true);
   };
 
-  const closeDeleteForm = () => {
+  const handleCloseDeleteForm = () => {
     setDeleteForm(false);
   };
 
@@ -176,32 +178,49 @@ const EditGroupRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const editRegularShoppingList = () => {
-    const signal = axios.CancelToken.source();
-
-    const edit = async () => {
-      await dispatch(
-        editGroupRegularShoppingListItem(
-          Number(group_id),
-          props.listItem.id,
-          expectedPurchaseDate,
-          cycleType,
-          typeof cycle === 'string' ? Number(cycle) : cycle,
-          purchase,
-          shop,
-          typeof amount === 'string' ? Number(amount) : amount,
-          bigCategoryId,
-          mediumCategoryId,
-          customCategoryId,
-          paymentUser,
-          transactionAutoAdd,
-          signal
-        )
-      );
-      props.fetchTodayOrMonthlyShoppingList(Number(group_id), signal);
-      setOpen(false);
+  const handleEditRegularShoppingListItem = () => {
+    const requestData: EditGroupRegularShoppingListItemReq = {
+      expected_purchase_date: expectedPurchaseDate,
+      cycle_type: cycleType,
+      cycle: typeof cycle === 'string' ? Number(cycle) : cycle,
+      purchase: purchase,
+      shop: shop,
+      amount: typeof amount === 'string' ? Number(amount) : amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
+      payment_user_id: paymentUser,
+      transaction_auto_add: transactionAutoAdd,
     };
-    edit();
+
+    dispatch(
+      editGroupRegularShoppingListItem(
+        Number(group_id),
+        props.listItem.id,
+        String(year),
+        customMonth,
+        customDate,
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
+  };
+
+  const handleDeleteRegularShoppingListItem = () => {
+    dispatch(
+      deleteGroupRegularShoppingListItem(
+        Number(group_id),
+        props.listItem.id,
+        String(year),
+        customMonth,
+        customDate,
+        props.currentYear,
+        props.currentMonth
+      )
+    );
+    handleCloseDeleteForm();
   };
 
   return (
@@ -228,10 +247,10 @@ const EditGroupRegularShoppingListItemModalContainer = (
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-      openModal={openModal}
-      closeModal={closeModal}
-      openDeleteForm={openDeleteForm}
-      closeDeleteForm={closeDeleteForm}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
+      handleOpenDeleteForm={handleOpenDeleteForm}
+      handleCloseDeleteForm={handleCloseDeleteForm}
       unInput={disabledButton()}
       initialPurchase={initialState.initialPurchase}
       bigCategoryMenuOpen={bigCategoryMenuOpen}
@@ -244,18 +263,8 @@ const EditGroupRegularShoppingListItemModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      handleEditRegularShoppingListItem={() => {
-        editRegularShoppingList();
-      }}
-      handleDeleteShoppingListItem={() => {
-        deleteGroupRegularShoppingListItem(
-          Number(group_id),
-          props.listItem.id,
-          props.listItem.big_category_name,
-          signal
-        );
-        closeDeleteForm();
-      }}
+      handleEditRegularShoppingListItem={() => handleEditRegularShoppingListItem()}
+      handleDeleteShoppingListItem={() => handleDeleteRegularShoppingListItem()}
     />
   );
 };

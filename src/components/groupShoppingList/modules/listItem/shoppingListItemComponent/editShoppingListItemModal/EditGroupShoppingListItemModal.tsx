@@ -23,13 +23,13 @@ interface EditGroupShoppingListItemModalProps {
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  openModal: () => void;
-  closeModal: () => void;
-  openDeleteForm: () => void;
-  closeDeleteForm: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+  handleOpenDeleteForm: () => void;
+  handleCloseDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleEditShoppingListItem: () => void;
   handleDeleteShoppingListItem: () => void;
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
@@ -45,8 +45,8 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
-          handleCloseModal={props.closeModal}
-          closeDeleteForm={props.closeDeleteForm}
+          handleCloseModal={props.handleCloseModal}
+          handleCloseDeleteForm={props.handleCloseDeleteForm}
           handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
         />
       ) : (
@@ -68,12 +68,12 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
           titleLabel={'買い物リストアイテムを編集'}
           buttonLabel={'保存'}
-          closeModal={props.closeModal}
+          handleCloseModal={props.handleCloseModal}
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
-          shoppingListItemOperation={props.shoppingListItemOperation}
+          handleShoppingListItem={props.handleEditShoppingListItem}
           displayRequiredInputItemMessage={false}
-          openDeleteForm={props.openDeleteForm}
+          handleOpenDeleteForm={props.handleOpenDeleteForm}
           setAssociatedCategory={props.setAssociatedCategory}
           setBigCategory={props.setBigCategory}
           setBigCategoryId={props.setBigCategoryId}
@@ -88,11 +88,11 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
     <>
       <EditIcon
         className="edit-shopping-list-item-modal__edit-icon"
-        onClick={() => props.openModal()}
+        onClick={props.handleOpenModal}
       />
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

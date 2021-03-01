@@ -23,10 +23,10 @@ interface AddGroupShoppingListItemModalProps {
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  openModal: () => void;
-  closeModal: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleAddShoppingListItem: () => void;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
@@ -56,10 +56,10 @@ const AddGroupShoppingListItemModal = (props: AddGroupShoppingListItemModalProps
         handleShopChange={props.handleShopChange}
         handlePaymentUserChange={props.handlePaymentUserChange}
         handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-        closeModal={props.closeModal}
+        handleCloseModal={props.handleCloseModal}
         unInput={props.unInput}
         minDate={date}
-        shoppingListItemOperation={props.shoppingListItemOperation}
+        handleShoppingListItem={props.handleAddShoppingListItem}
         displayRequiredInputItemMessage={false}
         setBigCategory={props.setBigCategory}
         setAssociatedCategory={props.setAssociatedCategory}
@@ -75,14 +75,14 @@ const AddGroupShoppingListItemModal = (props: AddGroupShoppingListItemModalProps
       <button
         className="add-shopping-list-item-modal__button"
         disabled={false}
-        onClick={() => props.openModal()}
+        onClick={() => props.handleOpenModal()}
       >
         <AddIcon />
         買い物リストに追加
       </button>
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

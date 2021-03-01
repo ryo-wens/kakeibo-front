@@ -8,7 +8,8 @@ import { GroupShoppingList } from '../../../../reducks/groupShoppingList/types';
 interface GroupExpiredShoppingListAreaProps {
   expiredShoppingList: GroupShoppingList;
   slicedExpiredShoppingList: GroupShoppingList;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   equalsDisplayDate: (date: string) => boolean;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
@@ -32,7 +33,8 @@ const GroupExpiredShoppingListArea = (props: GroupExpiredShoppingListAreaProps) 
                     )}
                     <GroupShoppingListItemComponentContainer
                       listItem={listItem}
-                      currentYearMonth={props.currentYearMonth}
+                      currentYear={props.currentYear}
+                      currentMonth={props.currentMonth}
                       purchaseClassName={'shopping-list-item-component__item-purchase'}
                       amountClassName={'shopping-list-item-component__item-amount'}
                       transactionDataItemClassName={'related-transaction-data-button__item'}

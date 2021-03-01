@@ -30,10 +30,10 @@ interface EditGroupRegularShoppingListItemModalProps {
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  openModal: () => void;
-  closeModal: () => void;
-  openDeleteForm: () => void;
-  closeDeleteForm: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+  handleOpenDeleteForm: () => void;
+  handleCloseDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
   handleEditRegularShoppingListItem: () => void;
@@ -59,8 +59,8 @@ const EditGroupRegularShoppingListItemModal = (
         <ShoppingListDeleteForm
           titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
-          handleCloseModal={props.closeModal}
-          closeDeleteForm={props.closeDeleteForm}
+          handleCloseModal={props.handleCloseModal}
+          handleCloseDeleteForm={props.handleCloseDeleteForm}
           handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
         />
       ) : (
@@ -87,11 +87,11 @@ const EditGroupRegularShoppingListItemModal = (
           handleShopChange={props.handleShopChange}
           handlePaymentUserChange={props.handlePaymentUserChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-          closeModal={props.closeModal}
+          handleCloseModal={props.handleCloseModal}
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
           handleRegularShoppingListItem={props.handleEditRegularShoppingListItem}
-          openDeleteForm={props.openDeleteForm}
+          handleOpenDeleteForm={props.handleOpenDeleteForm}
           bigCategoryMenuOpen={props.bigCategoryMenuOpen}
           mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
           setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
@@ -111,11 +111,11 @@ const EditGroupRegularShoppingListItemModal = (
     <>
       <EditIcon
         className="edit-regular-shopping-list-item-modal__edit-icon"
-        onClick={() => props.openModal()}
+        onClick={props.handleOpenModal}
       />
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >
