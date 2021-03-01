@@ -6,11 +6,11 @@ module.exports = {
     'plugin:prettier/recommended',
     'prettier',
   ],
-  plugins: ['react', 'react-app', '@typescript-eslint'],
+  plugins: ['react', 'react-app', 'react-hooks', '@typescript-eslint'],
   parser: '@typescript-eslint/parser',
   parserOptions: {
     sourceType: 'module',
-    ecmaVersion: 2020,
+    ecmaVersion: 2021,
     ecmaFeatures: {
       jsx: true,
     },
@@ -27,13 +27,24 @@ module.exports = {
     node: true,
   },
   rules: {
+    'react-hooks/rules-of-hooks': 'error',
+    'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    'no-empty-interface': 0,
+    '@typescript-eslint/no-empty-interface': 0,
     'no-undef': 'off',
-    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': [
+      'warn',
+      {
+        vars: 'all',
+        args: 'after-used',
+        argsIgnorePattern: '_',
+        varsIgnorePattern: '_',
+        ignoreRestSiblings: true,
+      },
+    ],
+    'no-console': 'warn',
     'no-dupe-else-if': 'off',
     'prettier/prettier': 0,
     'react/prop-types': 0,
-    '@typescript-eslint/no-empty-interface': 0,
   },
 };
