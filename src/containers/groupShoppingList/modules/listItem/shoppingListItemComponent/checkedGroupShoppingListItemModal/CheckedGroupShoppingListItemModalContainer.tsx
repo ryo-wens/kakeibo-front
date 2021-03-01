@@ -51,7 +51,7 @@ const CheckedGroupShoppingListItemModalContainer = (
   props: CheckedGroupShoppingListItemModalContainerProps
 ) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const [open, setOpen] = useState(false);
   const [associatedCategory, setAssociatedCategory] = useState('');

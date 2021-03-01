@@ -27,7 +27,7 @@ interface PayOffContainerProps {
 
 const PayOffContainer = (props: PayOffContainerProps) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const history = useHistory();
   const signal: CancelTokenSource = axios.CancelToken.source();
   const groupAccountList = useSelector(getGroupAccountList);

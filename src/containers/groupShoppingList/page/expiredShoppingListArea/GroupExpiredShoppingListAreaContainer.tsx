@@ -17,7 +17,7 @@ const GroupExpiredShoppingListAreaContainer = (
 ) => {
   const dispatch = useDispatch();
   const groupExpiredShoppingList = useSelector(getGroupExpiredShoppingList);
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const initialDisplayNumberShoppingList = 3;
 
   const [readMore, setReadMore] = useState(false);

@@ -19,7 +19,7 @@ const GroupMonthlyShoppingListByCategoriesContainer = (
   props: GroupMonthlyShoppingListByCategoriesContainerProps
 ) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const groupMonthlyShoppingListByCategories = useSelector(getGroupMonthlyShoppingListByCategories);
 
   const fetchData = (groupId: number, year: string, month: string, signal: CancelTokenSource) => {

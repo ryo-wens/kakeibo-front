@@ -52,7 +52,7 @@ const EditGroupShoppingListItemModalContainer = (
   props: EditGroupShoppingListItemModalContainerProps
 ) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);

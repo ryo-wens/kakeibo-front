@@ -16,7 +16,7 @@ import GroupStandardBudgets from '../../components/budget/GroupStandardBudgets';
 
 const GroupStandardBudgetsContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const groupStandardBudgetsList = useSelector(getGroupStandardBudgets);
   const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
   const [editing, setEditing] = useState<boolean>(false);

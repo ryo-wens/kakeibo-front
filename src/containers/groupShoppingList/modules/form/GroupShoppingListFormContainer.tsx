@@ -43,7 +43,7 @@ const GroupShoppingListFormContainer = (props: GroupShoppingListFormContainerPro
   const approvedGroups = useSelector(getApprovedGroups);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);

@@ -10,7 +10,7 @@ import { generateZeroPaddingMonth } from '../../../lib/date';
 
 const GroupShoppingListPageContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const [currentItem, setCurrentItem] = useState<TodayOrMonthly>('today');
   const [selectedYear, setSelectedYear] = useState<number>(year);

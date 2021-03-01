@@ -23,7 +23,7 @@ interface AddGroupCustomBudgetsContainerProps {
 const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const searchLocation = useLocation().search;
   const getQuery = new URLSearchParams(searchLocation);
   const queryMonth = getQuery.get('month');

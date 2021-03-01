@@ -38,7 +38,7 @@ const initialState = {
 
 const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const groupCurrentPage = useLocation().pathname.split('/')[2];
   const userId = useSelector(getUserId);
@@ -264,10 +264,12 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
 
     const groupAddTransaction = () => {
       groupCurrentPage === 'home'
-        ? dispatch(addGroupTransactions(group_id, signal, year, customMonth, groupAddRequestData))
+        ? dispatch(
+            addGroupTransactions(Number(group_id), signal, year, customMonth, groupAddRequestData)
+          )
         : dispatch(
             addGroupTransactions(
-              group_id,
+              Number(group_id),
               signal,
               addTransactionDate.addTransactionYear,
               transactionsMonth,

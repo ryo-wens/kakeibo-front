@@ -12,7 +12,7 @@ import YearlyAccount from '../../../templates/account/YearlyAccount';
 
 const YearlyAccountContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const monthIndex = 0;
   const singleDigitMonth = 9;
   const queryParamsLength = 10;

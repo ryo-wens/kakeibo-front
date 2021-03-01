@@ -24,7 +24,7 @@ const EditGroupRegularShoppingListItemModalContainer = (
   props: EditGroupRegularShoppingListItemModalContainerProps
 ) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const initialState = {
     initialExpectedPurchaseDate: dateStringToDate(props.listItem.expected_purchase_date),

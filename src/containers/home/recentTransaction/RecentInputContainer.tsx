@@ -10,7 +10,7 @@ import RecentInput from '../../../components/home/recentTransaction/RecentInput'
 
 const RecentInputContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const latestTransactionsList = useSelector(getLatestTransactions);
   const groupLatestTransactionList = useSelector(getGroupLatestTransactions);

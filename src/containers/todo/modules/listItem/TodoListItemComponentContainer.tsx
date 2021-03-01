@@ -28,7 +28,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
 
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const signal = axios.CancelToken.source();
 
   const inputTodoRef = useRef<HTMLDivElement>(null);

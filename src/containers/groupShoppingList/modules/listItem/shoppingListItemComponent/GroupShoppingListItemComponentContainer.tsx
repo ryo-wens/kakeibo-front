@@ -20,7 +20,7 @@ const GroupShoppingListItemComponentContainer = (
   props: GroupShoppingListItemComponentContainerProps
 ) => {
   const approvedGroups = useSelector(getApprovedGroups);
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
 
   const initialState = {
     initialExpectedPurchaseDate: dateStringToDate(props.listItem.expected_purchase_date),

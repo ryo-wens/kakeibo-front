@@ -19,7 +19,7 @@ interface PayOffBodyContainerProps {
 
 const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const getMonthIndexNumber = 1;
   const currentSelectMonth = props.groupAccountList.month.split('-')[getMonthIndexNumber];
 

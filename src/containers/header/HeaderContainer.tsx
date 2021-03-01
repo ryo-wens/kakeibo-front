@@ -11,7 +11,7 @@ import Header from '../../components/header/Header';
 
 const HeaderContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const currentPath = useLocation().pathname;
   const pathName = useLocation().pathname.split('/')[1];
   const approvedGroups: Groups = useSelector(getApprovedGroups);
@@ -101,7 +101,7 @@ const HeaderContainer = () => {
 
   return (
     <Header
-      group_id={group_id}
+      group_id={Number(group_id)}
       pathName={pathName}
       name={name}
       setName={setName}

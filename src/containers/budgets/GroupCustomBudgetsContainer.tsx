@@ -21,7 +21,7 @@ interface GroupCustomBudgetsContainerProps {
 const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const searchLocation = useLocation().search;
   const getQuery = new URLSearchParams(searchLocation);
   const queryMonth = getQuery.get('month');

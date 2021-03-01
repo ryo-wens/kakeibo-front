@@ -10,7 +10,7 @@ const initialState = {
 
 const AddTaskNameFormContainer = () => {
   const dispatch = useDispatch();
-  const { group_id } = useParams();
+  const { group_id } = useParams<{ group_id: string }>();
   const inputTaskRef = useRef<HTMLDivElement>(null);
 
   const [openForm, setOpenForm] = useState<boolean>(false);
