@@ -5,7 +5,8 @@ import { TodayOrMonthly } from '../../../../reducks/shoppingList/types';
 import GroupRegularShoppingListArea from '../../../../components/groupShoppingList/page/regularShoppingListArea/GroupRegularShoppingListArea';
 
 interface GroupRegularShoppingListAreaContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   currentTodayOrMonthly: TodayOrMonthly;
 }
 
@@ -17,7 +18,8 @@ const GroupRegularShoppingListAreaContainer = (
   return (
     <GroupRegularShoppingListArea
       regularShoppingList={groupRegularShoppingList}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       currentTodayOrMonthly={props.currentTodayOrMonthly}
     />
   );

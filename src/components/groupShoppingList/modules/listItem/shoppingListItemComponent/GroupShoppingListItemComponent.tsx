@@ -10,7 +10,8 @@ interface GroupShoppingListItemComponentProps {
   approvedGroups: Groups;
   groupId: number;
   listItem: GroupShoppingListItem;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   initialExpectedPurchaseDate: Date;
   initialPurchase: string;
   initialShop: string | null;
@@ -57,7 +58,8 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
         <div className="shopping-list-item-component__check-box">
           <CheckedGroupShoppingListItemModalContainer
             listItem={props.listItem}
-            currentYearMonth={props.currentYearMonth}
+            currentYear={props.currentYear}
+            currentMonth={props.currentMonth}
             initialExpectedPurchaseDate={props.initialExpectedPurchaseDate}
             initialPurchase={props.initialPurchase}
             initialShop={props.initialShop}
@@ -109,7 +111,8 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
             <div className="shopping-list-item-component__edit-icon">
               <EditGroupShoppingListItemModalContainer
                 listItem={props.listItem}
-                currentYearMonth={props.currentYearMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
                 initialExpectedPurchaseDate={props.initialExpectedPurchaseDate}
                 initialPurchase={props.initialPurchase}
                 initialShop={props.initialShop}

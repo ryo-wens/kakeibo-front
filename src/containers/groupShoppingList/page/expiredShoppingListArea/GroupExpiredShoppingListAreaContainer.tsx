@@ -8,7 +8,8 @@ import GroupExpiredShoppingListArea from '../../../../components/groupShoppingLi
 import { GroupShoppingList } from '../../../../reducks/groupShoppingList/types';
 
 interface GroupExpiredShoppingListAreaContainerProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupExpiredShoppingListAreaContainer = (
@@ -57,7 +58,8 @@ const GroupExpiredShoppingListAreaContainer = (
     <GroupExpiredShoppingListArea
       expiredShoppingList={groupExpiredShoppingList}
       slicedExpiredShoppingList={slicedExpiredShoppingList}
-      currentYearMonth={props.currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       equalsDisplayDate={equalsDisplayDate}
       readMore={readMore}
       setReadMore={setReadMore}

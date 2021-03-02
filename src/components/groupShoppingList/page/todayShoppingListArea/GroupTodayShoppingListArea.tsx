@@ -6,14 +6,18 @@ import AddGroupShoppingListItemModalContainer from '../../../../containers/group
 import GroupTodayShoppingListByDateContainer from '../../../../containers/groupShoppingList/page/todayShoppingListArea/todayShoppingListByDateContainer/GroupTodayShoppingListByDateContainer';
 
 interface GroupTodayShoppingListAreaProps {
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
   return (
     <>
       <div className="today-shopping-list-area__add-button">
-        <AddGroupShoppingListItemModalContainer currentYearMonth={props.currentYearMonth} />
+        <AddGroupShoppingListItemModalContainer
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
+        />
       </div>
       <div className="today-shopping-list-area__switch-item">
         <div className="today-shopping-list-area__switch-item--width">
@@ -21,11 +25,15 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
             leftButtonLabel={'日別'}
             rightButtonLabel={'カテゴリ別'}
             leftItem={
-              <GroupTodayShoppingListByDateContainer currentYearMonth={props.currentYearMonth} />
+              <GroupTodayShoppingListByDateContainer
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
+              />
             }
             rightItem={
               <GroupTodayShoppingListByCategoriesContainer
-                currentYearMonth={props.currentYearMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
               />
             }
           />

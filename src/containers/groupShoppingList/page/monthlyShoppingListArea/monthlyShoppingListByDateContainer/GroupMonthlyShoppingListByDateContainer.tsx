@@ -11,6 +11,8 @@ import { useParams } from 'react-router';
 interface GroupMonthlyShoppingListByDateContainerProps {
   selectedYear: number;
   selectedMonth: number;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupMonthlyShoppingListByDateContainer = (
@@ -20,26 +22,22 @@ const GroupMonthlyShoppingListByDateContainer = (
   const { group_id } = useParams<{ group_id: string }>();
   const groupMonthlyShoppingList = useSelector(getGroupMonthlyShoppingList);
 
-  const currentYear = String(props.selectedYear);
-  const currentMonth = (`0` + `${props.selectedMonth}`).slice(-2);
-  const currentYearMonth = `${currentYear}/${currentMonth}`;
-
   const fetchData = (groupId: number, year: string, month: string, signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
-    dispatch(fetchGroupMonthlyShoppingList(groupId, currentYear, currentMonth, signal));
+    dispatch(fetchGroupMonthlyShoppingList(groupId, props.currentYear, props.currentMonth, signal));
   };
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    fetchData(Number(group_id), currentYear, currentMonth, signal);
+    fetchData(Number(group_id), props.currentYear, props.currentMonth, signal);
     const interval = setInterval(() => {
-      fetchData(Number(group_id), currentYear, currentMonth, signal);
+      fetchData(Number(group_id), props.currentYear, props.currentMonth, signal);
     }, 3000);
     return () => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, [Number(group_id), currentYear, currentMonth]);
+  }, [Number(group_id), props.currentYear, props.currentMonth]);
 
   let prevDate = '';
 
@@ -54,7 +52,8 @@ const GroupMonthlyShoppingListByDateContainer = (
   return (
     <GroupShoppingListByDate
       shoppingListByDate={groupMonthlyShoppingList}
-      currentYearMonth={currentYearMonth}
+      currentYear={props.currentYear}
+      currentMonth={props.currentMonth}
       message={`${props.selectedMonth}月の買い物リストは、登録されていません。`}
       equalsDisplayDate={equalsDisplayDate}
     />

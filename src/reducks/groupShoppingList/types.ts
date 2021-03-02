@@ -5,7 +5,7 @@ export interface GroupRegularShoppingListItem {
   posted_date: Date;
   updated_date: Date;
   expected_purchase_date: string;
-  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;
   shop: string | null;
@@ -97,7 +97,7 @@ export interface FetchGroupMonthlyShoppingListByCategoriesRes {
 }
 
 export interface AddGroupShoppingListItemReq {
-  expected_purchase_date: Date;
+  expected_purchase_date: Date | null;
   purchase: string;
   shop: string | null;
   amount: number | null;
@@ -109,7 +109,7 @@ export interface AddGroupShoppingListItemReq {
 }
 
 export interface EditGroupShoppingListItemReq {
-  expected_purchase_date: Date;
+  expected_purchase_date: Date | null;
   complete_flag: boolean;
   purchase: string;
   shop: string | null;
@@ -128,8 +128,8 @@ export interface DeleteGroupShoppingListItemRes {
 }
 
 export interface AddGroupRegularShoppingListItemReq {
-  expected_purchase_date: Date;
-  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  expected_purchase_date: Date | null;
+  cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;
   shop: string | null;
@@ -147,8 +147,8 @@ export interface AddGroupRegularShoppingListItemRes {
 }
 
 export interface EditGroupRegularShoppingListItemReq {
-  expected_purchase_date: Date;
-  cycle_type: 'daily' | 'weekly' | 'monthly' | 'custom';
+  expected_purchase_date: Date | null;
+  cycle_type: PurchaseCycleType;
   cycle: number | null;
   purchase: string;
   shop: string | null;

@@ -37,7 +37,6 @@ interface ShoppingListFormProps {
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  openDeleteForm?: () => void;
   bigEditCategoryIndex: number | null;
   associatedIndex: number | null;
   customCategoryName: string;
@@ -52,6 +51,7 @@ interface ShoppingListFormProps {
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  handleOpenDeleteForm?: () => void;
 }
 
 const ShoppingListForm = (props: ShoppingListFormProps) => {
@@ -237,12 +237,10 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             キャンセル
           </button>
         </div>
-        {props.openDeleteForm && (
+        {props.handleOpenDeleteForm && (
           <button
             className="shopping-list-form__operation-btn--delete"
-            onClick={() => {
-              props.openDeleteForm && props.openDeleteForm();
-            }}
+            onClick={props.handleOpenDeleteForm && props.handleOpenDeleteForm}
           >
             削除
           </button>

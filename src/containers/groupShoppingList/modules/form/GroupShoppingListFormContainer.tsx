@@ -26,17 +26,17 @@ interface GroupShoppingListFormContainerProps {
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleShoppingListItem: () => void;
   minDate: Date;
   displayRequiredInputItemMessage: boolean;
-  openDeleteForm?: () => void;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  handleOpenDeleteForm?: () => void;
 }
 
 const GroupShoppingListFormContainer = (props: GroupShoppingListFormContainerProps) => {
@@ -79,10 +79,10 @@ const GroupShoppingListFormContainer = (props: GroupShoppingListFormContainerPro
       handleShopChange={props.handleShopChange}
       handlePaymentUserChange={props.handlePaymentUserChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-      closeModal={props.closeModal}
+      handleCloseModal={props.handleCloseModal}
       unInput={props.unInput}
       minDate={props.minDate}
-      shoppingListItemOperation={props.shoppingListItemOperation}
+      handleShoppingListItem={props.handleShoppingListItem}
       displayRequiredInputItemMessage={props.displayRequiredInputItemMessage}
       bigCategoryMenuRef={bigCategoryRef}
       mediumCategoryMenuRef={mediumMenuRef}
@@ -92,7 +92,6 @@ const GroupShoppingListFormContainer = (props: GroupShoppingListFormContainerPro
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
-      openDeleteForm={props.openDeleteForm}
       associatedIndex={associatedIndex}
       bigEditCategoryIndex={bigEditCategoryIndex}
       customCategoryName={customCategoryName}
@@ -107,6 +106,7 @@ const GroupShoppingListFormContainer = (props: GroupShoppingListFormContainerPro
       setBigCategoryId={props.setBigCategoryId}
       setCustomCategoryId={props.setCustomCategoryId}
       setMediumCategoryId={props.setMediumCategoryId}
+      handleOpenDeleteForm={props.handleOpenDeleteForm}
     />
   );
 };

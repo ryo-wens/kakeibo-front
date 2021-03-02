@@ -11,14 +11,18 @@ interface GroupMonthlyShoppingListAreaProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) => {
   return (
     <>
       <div className="monthly-shopping-list-area__add-button">
-        <AddGroupShoppingListItemModalContainer currentYearMonth={props.currentYearMonth} />
+        <AddGroupShoppingListItemModalContainer
+          currentYear={props.currentYear}
+          currentMonth={props.currentMonth}
+        />
       </div>
       <div className="monthly-shopping-list-area__switch-item">
         <div className="monthly-shopping-list-area__switch-item--width">
@@ -37,12 +41,16 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
               <GroupMonthlyShoppingListByDateContainer
                 selectedMonth={props.selectedMonth}
                 selectedYear={props.selectedYear}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
               />
             }
             rightItem={
               <GroupMonthlyShoppingListByCategoriesContainer
                 selectedMonth={props.selectedMonth}
                 selectedYear={props.selectedYear}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
               />
             }
           />

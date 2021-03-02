@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { addTodoListItem } from '../../../../reducks/todoList/operations';
 import { addGroupTodoListItem } from '../../../../reducks/groupTodoList/operations';
-import { customMonth, date, todayDate, year } from '../../../../lib/constant';
+import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import AddTodoListItemForm from '../../../../components/todo/modules/form/addTodoListItemForm/AddTodoListItemForm';
 import { AddTodoListItemReq } from '../../../../reducks/todoList/types';
@@ -81,7 +81,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
           Number(group_id),
           String(year),
           customMonth,
-          String(todayDate),
+          customDate,
           props.currentYear,
           props.currentMonth,
           addRequestData,
@@ -94,7 +94,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
       addTodoListItem(
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth,
         addRequestData,

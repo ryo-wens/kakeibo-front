@@ -117,11 +117,6 @@ export const groupShoppingListReducers = (
         ...state,
         ...action.payload,
       };
-    case Actions.CANCEL_ADD_GROUP_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.FAILED_ADD_GROUP_SHOPPING_LIST_ITEM:
       return {
         ...state,
@@ -133,11 +128,6 @@ export const groupShoppingListReducers = (
         ...action.payload,
       };
     case Actions.EDIT_GROUP_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.CANCEL_EDIT_GROUP_SHOPPING_LIST_ITEM:
       return {
         ...state,
         ...action.payload,
@@ -157,11 +147,6 @@ export const groupShoppingListReducers = (
         ...state,
         ...action.payload,
       };
-    case Actions.CANCEL_DELETE_GROUP_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.FAILED_DELETE_GROUP_SHOPPING_LIST_ITEM:
       return {
         ...state,
@@ -173,11 +158,6 @@ export const groupShoppingListReducers = (
         ...action.payload,
       };
     case Actions.ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.CANCEL_ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM:
       return {
         ...state,
         ...action.payload,
@@ -197,11 +177,6 @@ export const groupShoppingListReducers = (
         ...state,
         ...action.payload,
       };
-    case Actions.CANCEL_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.FAILED_EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM:
       return {
         ...state,
@@ -213,11 +188,6 @@ export const groupShoppingListReducers = (
         ...action.payload,
       };
     case Actions.DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.CANCEL_DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM:
       return {
         ...state,
         ...action.payload,

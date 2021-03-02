@@ -206,6 +206,10 @@ const initialState = {
       message: '',
       statusCode: 0,
     },
+    shoppingListError: {
+      message: '',
+      statusCode: 0,
+    },
   },
   groupShoppingList: {
     groupRegularShoppingList: [],
@@ -244,7 +248,7 @@ const initialState = {
       message: '',
       statusCode: 0,
     },
-    shoppingListError: {
+    groupShoppingListError: {
       message: '',
       statusCode: 0,
     },

@@ -1,13 +1,12 @@
 import React from 'react';
 import '../../../../shoppingList/modules/listItem/RegularShoppingListItemComponent/regular-shopping-list-item-component.scss';
-import { CancelTokenSource } from 'axios';
 import { GroupRegularShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import EditGroupRegularShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/regularShoppingListItemComponent/editGroupRegularShoppingListItemModal/EditGroupRegularShoppingListItemModalContainer';
 
 interface GroupRegularShoppingListItemComponentProps {
   listItem: GroupRegularShoppingListItem;
-  currentYearMonth: string;
-  fetchGroupTodayOrMonthlyShoppingList: (groupId: number, signal: CancelTokenSource) => void;
+  currentYear: string;
+  currentMonth: string;
 }
 
 const GroupRegularShoppingListItemComponent = (
@@ -24,8 +23,8 @@ const GroupRegularShoppingListItemComponent = (
       <span className="shopping-list-item-component__amount--unit">円</span>
       <EditGroupRegularShoppingListItemModalContainer
         listItem={props.listItem}
-        currentYearMonth={props.currentYearMonth}
-        fetchTodayOrMonthlyShoppingList={props.fetchGroupTodayOrMonthlyShoppingList}
+        currentYear={props.currentYear}
+        currentMonth={props.currentMonth}
       />
     </div>
   );

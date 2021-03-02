@@ -29,9 +29,9 @@ interface GroupShoppingListFormProps {
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
-  shoppingListItemOperation: () => void;
+  handleShoppingListItem: () => void;
   minDate: Date;
   displayRequiredInputItemMessage: boolean;
   bigCategoryMenuRef: React.RefObject<HTMLDivElement>;
@@ -42,7 +42,6 @@ interface GroupShoppingListFormProps {
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  openDeleteForm?: () => void;
   bigEditCategoryIndex: number | null;
   associatedIndex: number | null;
   customCategoryName: string;
@@ -57,6 +56,7 @@ interface GroupShoppingListFormProps {
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  handleOpenDeleteForm?: () => void;
 }
 
 const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
@@ -222,7 +222,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
     <div className="shopping-list-form">
       <div className="shopping-list-form__position">
         <h3>{props.titleLabel}</h3>
-        <button onClick={() => props.closeModal()}>
+        <button onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>
@@ -255,24 +255,22 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           <button
             className="shopping-list-form__operation-btn--add"
             disabled={props.unInput}
-            onClick={props.shoppingListItemOperation}
+            onClick={props.handleShoppingListItem}
           >
             {props.buttonLabel}
           </button>
           <button
             className="shopping-list-form__operation-btn--cancel"
             disabled={false}
-            onClick={() => props.closeModal()}
+            onClick={props.handleCloseModal}
           >
             キャンセル
           </button>
         </div>
-        {props.openDeleteForm && (
+        {props.handleOpenDeleteForm && (
           <button
             className="shopping-list-form__operation-btn--delete"
-            onClick={() => {
-              props.openDeleteForm && props.openDeleteForm();
-            }}
+            onClick={props.handleOpenDeleteForm && props.handleOpenDeleteForm}
           >
             削除
           </button>

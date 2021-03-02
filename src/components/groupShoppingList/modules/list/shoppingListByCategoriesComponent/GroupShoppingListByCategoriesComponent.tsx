@@ -10,7 +10,8 @@ import GroupShoppingListItemComponentContainer from '../../../../../containers/g
 
 interface GroupShoppingListByCategoriesComponentProps {
   shoppingListByCategories: GroupShoppingListByCategories;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   message: string;
   equalsDisplayDate: (categoryId: number, date: string) => boolean;
 }
@@ -51,7 +52,8 @@ const GroupShoppingListByCategoriesComponent = (
                         )}
                         <GroupShoppingListItemComponentContainer
                           listItem={shoppingListItem}
-                          currentYearMonth={props.currentYearMonth}
+                          currentYear={props.currentYear}
+                          currentMonth={props.currentMonth}
                           purchaseClassName={'shopping-list-item-component__item-purchase'}
                           amountClassName={'shopping-list-item-component__item-amount'}
                           transactionDataItemClassName={'related-transaction-data-button__item'}

@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { customMonth, date, todayDate, year } from '../../../../lib/constant';
+import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import { addRegularShoppingListItem } from '../../../../reducks/shoppingList/operations';
 import { useDispatch } from 'react-redux';
 import AddRegularShoppingListItemModal from '../../../../components/shoppingList/modules/modal/AddRegularShoppingListItemModal/AddRegularShoppingListItemModal';
@@ -157,7 +157,7 @@ const AddRegularShoppingListItemModalContainer = (
       addRegularShoppingListItem(
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth,
         requestData

@@ -35,7 +35,7 @@ interface GroupRegularShoppingListFormProps {
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
   handleRegularShoppingListItem: () => void;
   minDate: Date;
@@ -47,7 +47,6 @@ interface GroupRegularShoppingListFormProps {
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  openDeleteForm?: () => void;
   bigEditCategoryIndex: number | null;
   associatedIndex: number | null;
   customCategoryName: string;
@@ -62,6 +61,7 @@ interface GroupRegularShoppingListFormProps {
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  handleOpenDeleteForm?: () => void;
 }
 
 const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) => {
@@ -224,7 +224,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
     <div className="regular-shopping-list-form">
       <div className="regular-shopping-list-form__position">
         <h3>{props.titleLabel}</h3>
-        <button onClick={() => props.closeModal()}>
+        <button onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>
@@ -264,7 +264,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
           <button
             className="regular-shopping-list-form__operation-btn--cancel"
             disabled={false}
-            onClick={() => props.closeModal()}
+            onClick={props.handleCloseModal}
           >
             キャンセル
           </button>
@@ -272,11 +272,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
         {props.titleLabel === '定期買い物リストアイテムを編集' && (
           <button
             className="regular-shopping-list-form__operation-btn--delete"
-            onClick={() => {
-              if (props.openDeleteForm) {
-                props.openDeleteForm();
-              }
-            }}
+            onClick={props.handleOpenDeleteForm && props.handleOpenDeleteForm}
           >
             削除
           </button>
