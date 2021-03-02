@@ -43,7 +43,7 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 ## 使用技術
 ### 【 _Frontend_ 】
 **<ins>Language</ins>**
-- TypeScript v4.1.2
+- TypeScript v4.2.2
 - Sass
 
 **<ins>Library/Framework</ins>**
@@ -55,19 +55,19 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 - react-router-dom v5.2.0
 - history v4.10.1
 - axios v0.21.1
-- node-sass v4.14.1
+- node-sass v5.0.0
 - recharts v1.8.5
 
 ### 【 _Backend_ 】
 **<ins>Language</ins>**
-- Go v1.15.5
+- Go v1.16.0
 
 ### 【 _Infrastructure_ 】
 **<ins>Cloud Service</ins>**
 - AWS
 
 **<ins>Infrastructure as Code</ins>**
-- Terraform v0.13.5
+- Terraform v0.14.7
     - VPC
     - Subnet
     - Route Table
@@ -88,7 +88,7 @@ https://github.com/paypay3/kakeibo-app-kubernetes
     - IAM
 
 **<ins>Container</ins>**
-- docker v19.03.13
+- docker v20.10.2
 - docker-compose v1.27.4（開発環境Database用）
 
 **<ins>Container Orchestration</ins>**
@@ -102,13 +102,13 @@ https://github.com/paypay3/kakeibo-app-kubernetes
     - external-secrets
     - initialize-rds-job
     - metrics-server
-- Kustomize v3.8.7
+- Kustomize v4.0.4
 
 **<ins>CI/CD</ins>**
 - GitHub Actions
 - ArgoCD
 
 ## 課題と今後実装したい機能
+- React, Reduxのパフォーマンスチューニング
 - レスポンシブデザインの実装。
 - E2Eテストの実装。 
-- Middlewareで実行する非同期関数をCRUDのみのシンプルな実装に修正。

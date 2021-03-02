@@ -62,7 +62,7 @@ export const addCustomCategories = (
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const data: CrudCustomCategoryReq = {
-      name: name,
+      name: name.trim(),
       big_category_id: bigCategoryId,
     };
 
@@ -110,7 +110,7 @@ export const editCustomCategories = (
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const data: CrudCustomCategoryReq = {
-      name: name,
+      name: name.trim(),
       big_category_id: bigCategoryId,
     };
 

@@ -99,6 +99,12 @@ export const getCurrentMonthBudgets = createSelector(
         currentTotalExpense.dayTotalExpense
     );
 
+    const weekBudgetForThisMonth = Math.round(
+      (currentMonthBudgets / remainingDays.weekRemaining) * 7
+    );
+
+    const todayBudgetForThisMonth = currentMonthBudgets / lastDayRemainingDays;
+
     const currentMonthBudgetStatus = {
       label: '今月',
       totalExpense: currentTotalExpense.monthTotalExpense,
@@ -110,14 +116,14 @@ export const getCurrentMonthBudgets = createSelector(
       label: '今週',
       totalExpense: currentTotalExpense.weekTotalExpense,
       remainingBudget: currentWeekBudgets - currentTotalExpense.weekTotalExpense,
-      percentage: Math.round((currentTotalExpense.weekTotalExpense / currentWeekBudgets) * 100),
+      percentage: Math.round((currentTotalExpense.weekTotalExpense / weekBudgetForThisMonth) * 100),
     };
 
     const currentDayBudgetStatus = {
       label: '今日',
       totalExpense: currentTotalExpense.dayTotalExpense,
       remainingBudget: currentDayBudget,
-      percentage: Math.round((currentTotalExpense.dayTotalExpense / currentDayBudget) * 100),
+      percentage: Math.round((currentTotalExpense.dayTotalExpense / todayBudgetForThisMonth) * 100),
     };
 
     const currentBudgetStatusList: CurrentMonthBudgetStatusList = [
