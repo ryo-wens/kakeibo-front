@@ -70,10 +70,10 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
     groupTodoList: DisplayTodoList
   ) => {
     if (pathName === 'group') {
-      return todoList;
+      return groupTodoList;
     }
 
-    return groupTodoList;
+    return todoList;
   };
 
   const todoList: DisplayTodoList = determineTodoList(

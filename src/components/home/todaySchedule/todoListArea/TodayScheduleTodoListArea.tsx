@@ -26,7 +26,7 @@ const TodayScheduleTodoListArea = (props: TodayScheduleTodoListAreaProps) => {
                   currentYear={props.currentYear}
                   currentMonth={props.currentMonth}
                   setEditing={props.setEditing}
-                  inputTodoClassName={'todo-list-item-component__input-todo--home-page'}
+                  inputTodoClassName={'todo-list-item-component__input-todo--max-width'}
                 />
               </li>
             );
