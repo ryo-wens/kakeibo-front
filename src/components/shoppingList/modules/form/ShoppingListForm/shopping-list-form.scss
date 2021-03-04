@@ -42,6 +42,10 @@
     }
   }
 
+  &__select-category {
+    width: 200px;
+  }
+
   &__required-input-item-message {
     color: $danger-color;
     font-size: 0.85rem;
