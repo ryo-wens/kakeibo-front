@@ -84,7 +84,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
     {
       key: 'カテゴリ',
       value: (
-        <>
+        <div className="regular-shopping-list-form__select-category">
           <BigCategoryListContainer
             customCategoryName={props.customCategoryName}
             setCustomCategoryName={props.setCustomCategoryName}
@@ -136,7 +136,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
             setCustomCategoryName={props.setCustomCategoryName}
             setEditCustomCategoryName={props.setEditCustomCategoryName}
           />
-        </>
+        </div>
       ),
     },
     {
