@@ -98,7 +98,7 @@ const AddRegularShoppingListItemModalContainer = (
     setCycleType(event.target.value as PurchaseCycleType);
 
     if (event.target.value !== 'custom') {
-      setCycle(initialState.initialCycleType);
+      setCycle(initialState.initialCycle);
     }
   };
 

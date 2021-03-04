@@ -71,9 +71,15 @@ const TodoListItemForm = React.forwardRef(
                 disabled={false}
                 minDate={new Date('1900-01-01')}
                 onOpen={() =>
-                  document.removeEventListener('click', props.onClickCloseInputTodoForm)
+                  document.removeEventListener('click', props.onClickCloseInputTodoForm, {
+                    capture: true,
+                  })
                 }
-                onClose={() => document.addEventListener('click', props.onClickCloseInputTodoForm)}
+                onClose={() =>
+                  document.addEventListener('click', props.onClickCloseInputTodoForm, {
+                    capture: true,
+                  })
+                }
               />
             </div>
             <div
@@ -92,9 +98,15 @@ const TodoListItemForm = React.forwardRef(
                 disabled={false}
                 minDate={props.implementationDate}
                 onOpen={() =>
-                  document.removeEventListener('click', props.onClickCloseInputTodoForm)
+                  document.removeEventListener('click', props.onClickCloseInputTodoForm, {
+                    capture: true,
+                  })
                 }
-                onClose={() => document.addEventListener('click', props.onClickCloseInputTodoForm)}
+                onClose={() =>
+                  document.addEventListener('click', props.onClickCloseInputTodoForm, {
+                    capture: true,
+                  })
+                }
               />
             </div>
           </div>
@@ -114,7 +126,9 @@ const TodoListItemForm = React.forwardRef(
               disabled={false}
               onClick={() => {
                 props.closeInputTodoForm();
-                document.removeEventListener('click', props.onClickCloseInputTodoForm);
+                document.removeEventListener('click', props.onClickCloseInputTodoForm, {
+                  capture: true,
+                });
               }}
             >
               キャンセル
