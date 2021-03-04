@@ -74,7 +74,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
     {
       key: 'カテゴリー',
       value: (
-        <>
+        <div className="shopping-list-form__select-category">
           <BigCategoryListContainer
             customCategoryName={props.customCategoryName}
             setCustomCategoryName={props.setCustomCategoryName}
@@ -126,7 +126,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
             setCustomCategoryName={props.setCustomCategoryName}
             setEditCustomCategoryName={props.setEditCustomCategoryName}
           />
-        </>
+        </div>
       ),
     },
     {

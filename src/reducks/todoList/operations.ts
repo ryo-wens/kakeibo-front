@@ -465,8 +465,9 @@ export const editSearchTodoListItem = (
         }
       );
 
-      const message = fetchSearchResult.data.message;
-      const searchTodoList = message ? [] : fetchSearchResult.data.search_todo_list;
+      const searchTodoList = fetchSearchResult.data.message
+        ? []
+        : fetchSearchResult.data.search_todo_list;
 
       dispatch(editSearchTodoListItemAction(searchTodoList));
     } catch (error) {
@@ -509,7 +510,11 @@ export const deleteSearchTodoListItem = (
         }
       );
 
-      dispatch(deleteSearchTodoListItemAction(fetchSearchResult.data.search_todo_list));
+      const searchTodoList: TodoList = fetchSearchResult.data.message
+        ? []
+        : fetchSearchResult.data.search_todo_list;
+
+      dispatch(deleteSearchTodoListItemAction(searchTodoList));
       dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
     } catch (error) {
       dispatch(

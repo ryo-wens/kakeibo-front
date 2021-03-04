@@ -79,7 +79,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
     {
       key: 'カテゴリ',
       value: (
-        <>
+        <div className="regular-shopping-list-form__select-category">
           <BigCategoryListContainer
             customCategoryName={props.customCategoryName}
             setCustomCategoryName={props.setCustomCategoryName}
@@ -131,7 +131,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
             setCustomCategoryName={props.setCustomCategoryName}
             setEditCustomCategoryName={props.setEditCustomCategoryName}
           />
-        </>
+        </div>
       ),
     },
     {
@@ -158,16 +158,18 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
               selectChange={props.handleCycleTypeChange}
             />
             {props.cycleType === 'custom' && (
-              <TextInput
-                value={props.cycle}
-                type={'tel'}
-                id={'cycle'}
-                label={'必須'}
-                onChange={props.handleCycleChange}
-                required={false}
-                fullWidth={false}
-                disabled={false}
-              />
+              <span className="regular-shopping-list-form__input-date-interval">
+                <TextInput
+                  value={props.cycle}
+                  type={'tel'}
+                  id={'cycle'}
+                  label={'必須'}
+                  onChange={props.handleCycleChange}
+                  required={false}
+                  fullWidth={false}
+                  disabled={false}
+                />
+              </span>
             )}
           </div>
         </>

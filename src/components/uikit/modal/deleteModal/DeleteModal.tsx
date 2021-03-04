@@ -25,14 +25,14 @@ const DeleteModal = (props: DeleteModalProps) => {
   const openModal = () => {
     setOpen(true);
     if (props.onClickCloseInputTodoForm) {
-      document.removeEventListener('click', props.onClickCloseInputTodoForm);
+      document.removeEventListener('click', props.onClickCloseInputTodoForm, { capture: true });
     }
   };
 
   const closeModal = () => {
     setOpen(false);
     if (props.onClickCloseInputTodoForm) {
-      document.addEventListener('click', props.onClickCloseInputTodoForm);
+      document.addEventListener('click', props.onClickCloseInputTodoForm, { capture: true });
     }
   };
 
