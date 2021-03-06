@@ -32,7 +32,7 @@ interface ShoppingListFormContainerProps {
   handleShoppingListItem: () => void;
   minDate: Date;
   displayInputAmountMessage: boolean;
-  openDeleteForm?: () => void;
+  handleOpenDeleteForm?: () => void;
 }
 
 const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
@@ -80,7 +80,7 @@ const ShoppingListFormContainer = (props: ShoppingListFormContainerProps) => {
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
       displayInputAmountMessage={props.displayInputAmountMessage}
-      openDeleteForm={props.openDeleteForm}
+      handleOpenDeleteForm={props.handleOpenDeleteForm}
       associatedIndex={associatedIndex}
       bigEditCategoryIndex={bigEditCategoryIndex}
       customCategoryName={customCategoryName}

@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
-import axios from 'axios';
-import { GroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/types';
+import {
+  EditGroupShoppingListItemReq,
+  GroupShoppingListItem,
+} from '../../../../../../reducks/groupShoppingList/types';
 import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import EditGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/editShoppingListItemModal/EditGroupShoppingListItemModal';
-import { date } from '../../../../../../lib/constant';
+import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import {
   deleteGroupShoppingListItem,
   editGroupShoppingListItem,
@@ -12,7 +14,8 @@ import {
 
 interface EditGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   initialExpectedPurchaseDate: Date;
   initialPurchase: string;
   initialShop: string | null;
@@ -50,7 +53,6 @@ const EditGroupShoppingListItemModalContainer = (
 ) => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
-  const signal = axios.CancelToken.source();
 
   const [open, setOpen] = useState(false);
   const [deleteForm, setDeleteForm] = useState(false);
@@ -88,7 +90,7 @@ const EditGroupShoppingListItemModalContainer = (
       );
   };
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
     if (props.listItem.medium_category_name) {
       setAssociatedCategory(props.listItem.medium_category_name);
@@ -98,7 +100,7 @@ const EditGroupShoppingListItemModalContainer = (
     }
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
     setDeleteForm(false);
     props.setExpectedPurchaseDate(props.initialExpectedPurchaseDate);
@@ -113,11 +115,11 @@ const EditGroupShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(props.initialTransactionAutoAdd);
   };
 
-  const openDeleteForm = () => {
+  const handleOpenDeleteForm = () => {
     setDeleteForm(true);
   };
 
-  const closeDeleteForm = () => {
+  const handleCloseDeleteForm = () => {
     setDeleteForm(false);
   };
 
@@ -158,6 +160,52 @@ const EditGroupShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
+  const handleEditShoppingListItem = () => {
+    const requestData: EditGroupShoppingListItemReq = {
+      expected_purchase_date: props.expectedPurchaseDate,
+      complete_flag: props.listItem.complete_flag,
+      purchase: props.purchase,
+      shop: props.shop,
+      amount: typeof props.amount === 'string' ? Number(props.amount) : props.amount,
+      big_category_id: props.bigCategoryId,
+      medium_category_id: props.mediumCategoryId,
+      custom_category_id: props.customCategoryId,
+      regular_shopping_list_id: props.listItem.regular_shopping_list_id,
+      payment_user_id: props.paymentUser,
+      transaction_auto_add: props.transactionAutoAdd,
+      related_transaction_data: props.listItem.related_transaction_data,
+    };
+
+    dispatch(
+      editGroupShoppingListItem(
+        Number(group_id),
+        props.listItem.id,
+        String(year),
+        customMonth,
+        customDate,
+        props.currentYear,
+        props.currentMonth,
+        requestData
+      )
+    );
+    setOpen(false);
+  };
+
+  const handleDeleteShoppingListItem = () => {
+    dispatch(
+      deleteGroupShoppingListItem(
+        Number(group_id),
+        props.listItem.id,
+        String(year),
+        customMonth,
+        customDate,
+        props.currentYear,
+        props.currentMonth
+      )
+    );
+    handleCloseDeleteForm();
+  };
+
   return (
     <EditGroupShoppingListItemModal
       open={open}
@@ -177,10 +225,10 @@ const EditGroupShoppingListItemModalContainer = (
       handleShopChange={handleShopChange}
       handlePaymentUserChange={handlePaymentUserChange}
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
-      openModal={openModal}
-      closeModal={closeModal}
-      openDeleteForm={openDeleteForm}
-      closeDeleteForm={closeDeleteForm}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
+      handleOpenDeleteForm={handleOpenDeleteForm}
+      handleCloseDeleteForm={handleCloseDeleteForm}
       unInput={disabledButton()}
       initialPurchase={props.initialPurchase}
       setAssociatedCategory={setAssociatedCategory}
@@ -188,41 +236,8 @@ const EditGroupShoppingListItemModalContainer = (
       setBigCategoryId={props.setBigCategoryId}
       setCustomCategoryId={props.setCustomCategoryId}
       setMediumCategoryId={props.setMediumCategoryId}
-      shoppingListItemOperation={() => {
-        dispatch(
-          editGroupShoppingListItem(
-            Number(group_id),
-            date,
-            props.currentYearMonth,
-            props.listItem.id,
-            props.expectedPurchaseDate,
-            props.listItem.complete_flag,
-            props.purchase,
-            props.shop,
-            typeof props.amount === 'string' ? Number(props.amount) : props.amount,
-            props.bigCategoryId,
-            props.mediumCategoryId,
-            props.customCategoryId,
-            props.listItem.regular_shopping_list_id,
-            props.paymentUser,
-            props.transactionAutoAdd,
-            props.listItem.related_transaction_data,
-            signal
-          )
-        );
-        setOpen(false);
-      }}
-      handleDeleteShoppingListItem={() => {
-        dispatch(
-          deleteGroupShoppingListItem(
-            Number(group_id),
-            props.listItem.id,
-            props.listItem.big_category_name,
-            signal
-          )
-        );
-        closeDeleteForm();
-      }}
+      handleEditShoppingListItem={() => handleEditShoppingListItem()}
+      handleDeleteShoppingListItem={() => handleDeleteShoppingListItem()}
     />
   );
 };

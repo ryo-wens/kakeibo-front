@@ -32,11 +32,10 @@ interface GroupRegularShoppingListFormContainerProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   titleLabel: string;
   buttonLabel: string;
-  closeModal: () => void;
+  handleCloseModal: () => void;
   unInput: boolean;
   handleRegularShoppingListItem: () => void;
   minDate: Date;
-  openDeleteForm?: () => void;
   bigCategoryMenuOpen: boolean;
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -47,6 +46,7 @@ interface GroupRegularShoppingListFormContainerProps {
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  handleOpenDeleteForm?: () => void;
 }
 
 const GroupRegularShoppingListFormContainer = (
@@ -92,7 +92,7 @@ const GroupRegularShoppingListFormContainer = (
       handleShopChange={props.handleShopChange}
       handlePaymentUserChange={props.handlePaymentUserChange}
       handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-      closeModal={props.closeModal}
+      handleCloseModal={props.handleCloseModal}
       unInput={props.unInput}
       handleRegularShoppingListItem={props.handleRegularShoppingListItem}
       minDate={props.minDate}
@@ -104,7 +104,7 @@ const GroupRegularShoppingListFormContainer = (
       mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
-      openDeleteForm={props.openDeleteForm}
+      handleOpenDeleteForm={props.handleOpenDeleteForm}
       associatedIndex={associatedIndex}
       bigEditCategoryIndex={bigEditCategoryIndex}
       customCategoryName={customCategoryName}

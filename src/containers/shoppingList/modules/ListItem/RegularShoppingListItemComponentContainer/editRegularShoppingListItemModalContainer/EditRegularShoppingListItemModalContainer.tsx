@@ -11,7 +11,7 @@ import {
 import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
 import EditRegularShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/EditRegularShoppingListItemModal';
-import { customMonth, todayDate, year } from '../../../../../../lib/constant';
+import { customDate, customMonth, year } from '../../../../../../lib/constant';
 
 interface EditRegularShoppingListItemModalContainerProps {
   listItem: RegularShoppingListItem;
@@ -114,11 +114,11 @@ const EditRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(initialState.initialTransactionAutoAdd);
   };
 
-  const openDeleteForm = () => {
+  const handleOpenDeleteForm = () => {
     setDeleteForm(true);
   };
 
-  const closeDeleteForm = () => {
+  const handleCloseDeleteForm = () => {
     setDeleteForm(false);
   };
 
@@ -180,7 +180,7 @@ const EditRegularShoppingListItemModalContainer = (
         props.listItem.id,
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth,
         requestData
@@ -195,12 +195,12 @@ const EditRegularShoppingListItemModalContainer = (
         props.listItem.id,
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth
       )
     );
-    closeDeleteForm();
+    handleCloseDeleteForm();
   };
 
   return (
@@ -227,8 +227,8 @@ const EditRegularShoppingListItemModalContainer = (
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       handleOpenModal={handleOpenModal}
       handleCloseModal={handleCloseModal}
-      openDeleteForm={openDeleteForm}
-      closeDeleteForm={closeDeleteForm}
+      handleOpenDeleteForm={handleOpenDeleteForm}
+      handleCloseDeleteForm={handleCloseDeleteForm}
       unInput={disabledButton()}
       initialPurchase={initialState.initialPurchase}
       setBigCategory={setBigCategory}

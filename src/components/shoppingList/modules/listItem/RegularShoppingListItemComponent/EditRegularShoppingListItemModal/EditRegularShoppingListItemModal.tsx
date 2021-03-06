@@ -29,8 +29,8 @@ interface EditRegularShoppingListModalProps {
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
-  openDeleteForm: () => void;
-  closeDeleteForm: () => void;
+  handleOpenDeleteForm: () => void;
+  handleCloseDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
   handleEditRegularShoppingListItem: () => void;
@@ -51,7 +51,7 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
           handleCloseModal={props.handleCloseModal}
-          closeDeleteForm={props.closeDeleteForm}
+          handleCloseDeleteForm={props.handleCloseDeleteForm}
           handleDeleteShoppingListItem={props.handleDeleteRegularShoppingListItem}
         />
       ) : (
@@ -80,7 +80,7 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
           handleRegularShoppingListItem={props.handleEditRegularShoppingListItem}
-          openDeleteForm={props.openDeleteForm}
+          handleOpenDeleteForm={props.handleOpenDeleteForm}
           setBigCategory={props.setBigCategory}
           setAssociatedCategory={props.setAssociatedCategory}
           setBigCategoryId={props.setBigCategoryId}

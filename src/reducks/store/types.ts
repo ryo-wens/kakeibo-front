@@ -244,6 +244,10 @@ export interface State {
       message: string;
       statusCode: number;
     };
+    groupShoppingListError: {
+      message: string;
+      statusCode: number;
+    };
   };
   todoList: {
     expiredTodoList: TodoList;

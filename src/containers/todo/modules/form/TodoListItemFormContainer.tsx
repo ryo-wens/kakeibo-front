@@ -23,9 +23,9 @@ const TodoListItemFormContainer = (props: TodoListItemFormContainerProps) => {
   const pathName = useLocation().pathname.split('/')[1];
 
   useEffect(() => {
-    document.addEventListener('click', props.onClickCloseInputTodoForm);
+    document.addEventListener('click', props.onClickCloseInputTodoForm, { capture: true });
     return () => {
-      document.removeEventListener('click', props.onClickCloseInputTodoForm);
+      document.removeEventListener('click', props.onClickCloseInputTodoForm, { capture: true });
     };
   }, [props.onClickCloseInputTodoForm]);
 

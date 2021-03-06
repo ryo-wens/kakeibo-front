@@ -16,9 +16,9 @@ interface InputTaskNameFormContainerProps {
 
 const InputTaskNameFormContainer = (props: InputTaskNameFormContainerProps) => {
   useEffect(() => {
-    document.addEventListener('click', props.onClickCloseInputTaskNameForm);
+    document.addEventListener('click', props.onClickCloseInputTaskNameForm, { capture: true });
     return () => {
-      document.removeEventListener('click', props.onClickCloseInputTaskNameForm);
+      document.removeEventListener('click', props.onClickCloseInputTaskNameForm, { capture: true });
     };
   }, [props.onClickCloseInputTaskNameForm]);
 

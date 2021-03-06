@@ -5,7 +5,8 @@ import GroupShoppingListItemComponentContainer from '../../../../../containers/g
 
 interface GroupShoppingListByDateProps {
   shoppingListByDate: GroupShoppingList;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   message: string;
   equalsDisplayDate: (date: string) => boolean;
 }
@@ -24,7 +25,8 @@ const GroupShoppingListByDate = (props: GroupShoppingListByDateProps) => {
               )}
               <GroupShoppingListItemComponentContainer
                 listItem={listItem}
-                currentYearMonth={props.currentYearMonth}
+                currentYear={props.currentYear}
+                currentMonth={props.currentMonth}
                 purchaseClassName={'shopping-list-item-component__item-purchase'}
                 amountClassName={'shopping-list-item-component__item-amount'}
                 transactionDataItemClassName={'related-transaction-data-button__item'}

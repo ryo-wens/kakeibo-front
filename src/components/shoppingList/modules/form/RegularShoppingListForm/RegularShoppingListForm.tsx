@@ -42,12 +42,10 @@ interface RegularShoppingListFormProps {
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  openDeleteForm?: () => void;
   bigEditCategoryIndex: number | null;
   associatedIndex: number | null;
   customCategoryName: string;
   editCustomCategoryName: string;
-  // setTransactionType: React.Dispatch<React.SetStateAction<string>>;
   setCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
@@ -58,6 +56,7 @@ interface RegularShoppingListFormProps {
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  handleOpenDeleteForm?: () => void;
 }
 
 const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
@@ -80,7 +79,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
     {
       key: 'カテゴリ',
       value: (
-        <>
+        <div className="regular-shopping-list-form__select-category">
           <BigCategoryListContainer
             customCategoryName={props.customCategoryName}
             setCustomCategoryName={props.setCustomCategoryName}
@@ -132,7 +131,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
             setCustomCategoryName={props.setCustomCategoryName}
             setEditCustomCategoryName={props.setEditCustomCategoryName}
           />
-        </>
+        </div>
       ),
     },
     {
@@ -159,16 +158,18 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
               selectChange={props.handleCycleTypeChange}
             />
             {props.cycleType === 'custom' && (
-              <TextInput
-                value={props.cycle}
-                type={'tel'}
-                id={'cycle'}
-                label={'必須'}
-                onChange={props.handleCycleChange}
-                required={false}
-                fullWidth={false}
-                disabled={false}
-              />
+              <span className="regular-shopping-list-form__input-date-interval">
+                <TextInput
+                  value={props.cycle}
+                  type={'tel'}
+                  id={'cycle'}
+                  label={'必須'}
+                  onChange={props.handleCycleChange}
+                  required={false}
+                  fullWidth={false}
+                  disabled={false}
+                />
+              </span>
             )}
           </div>
         </>
@@ -258,11 +259,7 @@ const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
         {props.titleLabel === '定期買い物リストアイテムを編集' && (
           <button
             className="regular-shopping-list-form__operation-btn--delete"
-            onClick={() => {
-              if (props.openDeleteForm) {
-                props.openDeleteForm();
-              }
-            }}
+            onClick={() => props.handleOpenDeleteForm && props.handleOpenDeleteForm()}
           >
             削除
           </button>

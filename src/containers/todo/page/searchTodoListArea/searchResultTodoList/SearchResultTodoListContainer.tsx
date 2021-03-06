@@ -44,10 +44,10 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
 
   const determineTodoList = (pathName: string, todoList: TodoList, groupTodoList: TodoList) => {
     if (pathName === 'group') {
-      return todoList;
+      return groupTodoList;
     }
 
-    return groupTodoList;
+    return todoList;
   };
 
   const todoList: TodoList = determineTodoList(pathName, searchTodoList, groupSearchTodoList);

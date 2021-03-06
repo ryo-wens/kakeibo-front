@@ -7,7 +7,7 @@ interface ShoppingListDeleteFormProps {
   titleLabel: string;
   purchase: string;
   handleCloseModal: () => void;
-  closeDeleteForm: () => void;
+  handleCloseDeleteForm: () => void;
   handleDeleteShoppingListItem: () => void;
 }
 
@@ -17,15 +17,12 @@ const ShoppingListDeleteForm = (props: ShoppingListDeleteFormProps) => {
       <div className="shopping-list-delete-form__position">
         <button
           className="shopping-list-delete-form__back-btn"
-          onClick={() => props.closeDeleteForm()}
+          onClick={props.handleCloseDeleteForm}
         >
           <ChevronLeftIcon />
         </button>
         <h3 className="shopping-list-delete-form__title">{props.titleLabel}</h3>
-        <button
-          className="shopping-list-delete-form__close-btn"
-          onClick={() => props.handleCloseModal()}
-        >
+        <button className="shopping-list-delete-form__close-btn" onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>

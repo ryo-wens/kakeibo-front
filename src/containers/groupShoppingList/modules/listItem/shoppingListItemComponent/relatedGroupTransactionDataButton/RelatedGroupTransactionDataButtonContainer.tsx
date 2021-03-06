@@ -29,9 +29,9 @@ const RelatedGroupTransactionDataButtonContainer = (
 
   useEffect(() => {
     if (open) {
-      document.addEventListener('click', onClickCloseTransactionData);
+      document.addEventListener('click', onClickCloseTransactionData, { capture: true });
       return () => {
-        document.removeEventListener('click', onClickCloseTransactionData);
+        document.removeEventListener('click', onClickCloseTransactionData, { capture: true });
       };
     }
   }, [onClickCloseTransactionData]);

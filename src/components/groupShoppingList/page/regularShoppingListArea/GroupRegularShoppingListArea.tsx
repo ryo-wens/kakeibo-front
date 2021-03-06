@@ -9,7 +9,8 @@ import GroupRegularShoppingListItemComponentContainer from '../../../../containe
 
 interface GroupRegularShoppingListAreaProps {
   regularShoppingList: GroupRegularShoppingList;
-  currentYearMonth: string;
+  currentYear: string;
+  currentMonth: string;
   currentTodayOrMonthly: TodayOrMonthly;
 }
 
@@ -23,7 +24,8 @@ const GroupRegularShoppingListArea = (props: GroupRegularShoppingListAreaProps) 
               <div className="regular-shopping-list-area__list-item" key={listItem.id}>
                 <GroupRegularShoppingListItemComponentContainer
                   listItem={listItem}
-                  currentYearMonth={props.currentYearMonth}
+                  currentYear={props.currentYear}
+                  currentMonth={props.currentMonth}
                   currentTodayOrMonthly={props.currentTodayOrMonthly}
                 />
               </div>

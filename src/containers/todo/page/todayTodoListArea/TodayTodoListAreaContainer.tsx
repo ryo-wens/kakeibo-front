@@ -6,15 +6,10 @@ import {
 } from '../../../../reducks/groupTodoList/operations';
 import { fetchGroups } from '../../../../reducks/groups/operations';
 import { fetchTodayTodoList } from '../../../../reducks/todoList/operations';
-import { useDispatch, useSelector } from 'react-redux';
-import {
-  getTodayDueTodoList,
-  getTodayImplementationTodoList,
-} from '../../../../reducks/todoList/selectors';
+import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import { customMonth, year } from '../../../../lib/constant';
+import { customDate, customMonth, year } from '../../../../lib/constant';
 import TodayTodoListArea from '../../../../components/todo/page/TodayTodoListArea/TodayTodoListArea';
-import moment from 'moment';
 
 interface TodayTodoAreaContainerProps {
   currentYear: string;
@@ -28,12 +23,9 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams<{ group_id: string }>();
 
-  const todayImplementationTodoList = useSelector(getTodayImplementationTodoList);
-  const todayDueTodoList = useSelector(getTodayDueTodoList);
-
   const todayYear = String(year);
   const todayMonth = customMonth;
-  const todayDate = moment().format('DD');
+  const todayDate = customDate;
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
@@ -56,7 +48,7 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
   }, [todayYear, todayMonth, todayDate, props.editing]);
 
   useEffect(() => {
-    if (pathName !== 'group' && !todayImplementationTodoList.length && !todayDueTodoList.length) {
+    if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
       dispatch(fetchTodayTodoList(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();

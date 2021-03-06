@@ -32,13 +32,13 @@ interface RegularShoppingListFormContainerProps {
   unInput: boolean;
   handleRegularShoppingListItem: () => void;
   minDate: Date;
-  openDeleteForm?: () => void;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  handleOpenDeleteForm?: () => void;
 }
 
 const RegularShoppingListFormContainer = (props: RegularShoppingListFormContainerProps) => {
@@ -88,7 +88,7 @@ const RegularShoppingListFormContainer = (props: RegularShoppingListFormContaine
       mediumCategoryMenuOpen={mediumCategoryMenuOpen}
       setBigCategoryMenuOpen={setBigCategoryMenuOpen}
       setMediumCategoryMenuOpen={setMediumCategoryMenuOpen}
-      openDeleteForm={props.openDeleteForm}
+      handleOpenDeleteForm={props.handleOpenDeleteForm}
       associatedIndex={associatedIndex}
       bigEditCategoryIndex={bigEditCategoryIndex}
       customCategoryName={customCategoryName}

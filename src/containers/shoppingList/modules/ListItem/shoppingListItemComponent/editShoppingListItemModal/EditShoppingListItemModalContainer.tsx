@@ -7,7 +7,7 @@ import {
   EditShoppingListItemReq,
   ShoppingListItem,
 } from '../../../../../../reducks/shoppingList/types';
-import { customMonth, todayDate, year } from '../../../../../../lib/constant';
+import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import EditShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/EditShoppingListItemModal/EditShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 
@@ -104,11 +104,11 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
     props.setTransactionAutoAdd(props.initialTransactionAutoAdd);
   };
 
-  const openDeleteForm = () => {
+  const handleOpenDeleteForm = () => {
     setDeleteForm(true);
   };
 
-  const closeDeleteForm = () => {
+  const handleCloseDeleteForm = () => {
     setDeleteForm(false);
   };
 
@@ -160,7 +160,7 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
         props.listItem.id,
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth,
         requestData
@@ -175,12 +175,12 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
         props.listItem.id,
         String(year),
         customMonth,
-        String(todayDate),
+        customDate,
         props.currentYear,
         props.currentMonth
       )
     );
-    closeDeleteForm();
+    handleCloseDeleteForm();
   };
 
   return (
@@ -202,8 +202,8 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
       handleAutoAddTransitionChange={handleAutoAddTransitionChange}
       handleOpenModal={handleOpenModal}
       handleCloseModal={handleCloseModal}
-      openDeleteForm={openDeleteForm}
-      closeDeleteForm={closeDeleteForm}
+      handleOpenDeleteForm={handleOpenDeleteForm}
+      handleCloseDeleteForm={handleCloseDeleteForm}
       unInput={disabledButton()}
       initialPurchase={props.initialPurchase}
       setBigCategory={props.setBigCategory}

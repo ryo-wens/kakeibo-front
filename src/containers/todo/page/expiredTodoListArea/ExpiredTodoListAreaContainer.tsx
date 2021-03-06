@@ -32,7 +32,7 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
   const [readMore, setReadMore] = useState(false);
 
   useEffect(() => {
-    if (pathName !== 'group' && !expiredTodoList.length) {
+    if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
       dispatch(fetchExpiredTodoList(signal));
       return () => signal.cancel();
@@ -70,10 +70,10 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
     groupTodoList: DisplayTodoList
   ) => {
     if (pathName === 'group') {
-      return todoList;
+      return groupTodoList;
     }
 
-    return groupTodoList;
+    return todoList;
   };
 
   const todoList: DisplayTodoList = determineTodoList(
