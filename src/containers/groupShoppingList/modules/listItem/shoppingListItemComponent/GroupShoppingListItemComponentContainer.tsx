@@ -3,7 +3,7 @@ import { dateStringToDate } from '../../../../../lib/date';
 import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import { useSelector } from 'react-redux';
 import { getApprovedGroups } from '../../../../../reducks/groups/selectors';
-import { useParams } from 'react-router';
+import { useLocation, useParams } from 'react-router';
 import GroupShoppingListItemComponent from '../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponent';
 
 interface GroupShoppingListItemComponentContainerProps {
@@ -12,14 +12,14 @@ interface GroupShoppingListItemComponentContainerProps {
   currentMonth: string;
   purchaseClassName: string;
   amountClassName: string;
-  transactionDataItemClassName: string;
-  transactionDataItemKeyClassName: string;
 }
 
 const GroupShoppingListItemComponentContainer = (
   props: GroupShoppingListItemComponentContainerProps
 ) => {
   const approvedGroups = useSelector(getApprovedGroups);
+  const pathNames = useLocation().pathname.split('/');
+  const currentPage = pathNames.slice(-1)[0];
   const { group_id } = useParams<{ group_id: string }>();
 
   const initialState = {
@@ -61,13 +61,6 @@ const GroupShoppingListItemComponentContainer = (
     setChecked(props.listItem.complete_flag);
   }, [props.listItem.complete_flag]);
 
-  const currentTextStyle = (completeFlag: boolean) => {
-    if (completeFlag) {
-      return { opacity: 0.3 };
-    }
-    return { opacity: 1.0 };
-  };
-
   return (
     <GroupShoppingListItemComponent
       approvedGroups={approvedGroups}
@@ -107,11 +100,9 @@ const GroupShoppingListItemComponentContainer = (
       setCustomCategoryId={setCustomCategoryId}
       setPaymentUser={setPaymentUser}
       setTransactionAutoAdd={setTransactionAutoAdd}
+      currentPage={currentPage}
       purchaseClassName={props.purchaseClassName}
       amountClassName={props.amountClassName}
-      transactionDataItemClassName={props.transactionDataItemClassName}
-      transactionDataItemKeyClassName={props.transactionDataItemKeyClassName}
-      currentTextStyle={currentTextStyle}
     />
   );
 };

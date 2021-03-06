@@ -5,6 +5,7 @@ import { getTodayShoppingListByCategories } from '../../../../../reducks/shoppin
 import axios from 'axios';
 import { fetchTodayShoppingListByCategories } from '../../../../../reducks/shoppingList/operations';
 import { customMonth, date, year } from '../../../../../lib/constant';
+import { useLocation } from 'react-router';
 
 interface TodayShoppingListByCategoriesContainerProps {
   currentYear: string;
@@ -15,6 +16,7 @@ const TodayShoppingListByCategoriesContainer = (
   props: TodayShoppingListByCategoriesContainerProps
 ) => {
   const dispatch = useDispatch();
+  const pathName = useLocation().pathname.split('/')[1];
   const todayShoppingListByCategories = useSelector(getTodayShoppingListByCategories);
 
   const todayYear = String(year);
@@ -53,6 +55,7 @@ const TodayShoppingListByCategoriesContainer = (
       currentMonth={props.currentMonth}
       message={'今日の買い物リストは、登録されていません。'}
       equalsDisplayDate={equalsDisplayDate}
+      pathName={pathName}
     />
   );
 };

@@ -1,11 +1,11 @@
 import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import TodayScheduleShoppingListByDate from '../shoppingListArea/todayScheduleShoppingListByDate/TodayScheduleShoppingListByDate';
-import TodayScheduleShoppingListByCategories from '../shoppingListArea/todayScheduleShoppingListByCategories/TodayScheduleShoppingListByCategories';
 import {
   GroupShoppingList,
   GroupShoppingListByCategories,
 } from '../../../../reducks/groupShoppingList/types';
+import GroupTodayScheduleShoppingListByDate from './todayScheduleShoppingListByDate/GroupTodayScheduleShoppingListByDate';
+import GroupTodayScheduleShoppingListByCategories from './todayScheduleShoppingListByCategories/GroupTodayScheduleShoppingListByCategories';
 
 interface GroupTodayScheduleShoppingListAreaProps {
   todayShoppingList: GroupShoppingList;
@@ -20,7 +20,7 @@ const GroupTodayScheduleShoppingListArea = (props: GroupTodayScheduleShoppingLis
       leftButtonLabel={'日別'}
       rightButtonLabel={'カテゴリ別'}
       leftItem={
-        <TodayScheduleShoppingListByDate
+        <GroupTodayScheduleShoppingListByDate
           shoppingListByDate={props.todayShoppingList}
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}
@@ -28,7 +28,7 @@ const GroupTodayScheduleShoppingListArea = (props: GroupTodayScheduleShoppingLis
         />
       }
       rightItem={
-        <TodayScheduleShoppingListByCategories
+        <GroupTodayScheduleShoppingListByCategories
           shoppingListByCategories={props.todayShoppingListByCategories}
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}

@@ -46,14 +46,10 @@ const TodayScheduleShoppingListByCategories = (
                           currentYear={props.currentYear}
                           currentMonth={props.currentMonth}
                           purchaseClassName={
-                            'shopping-list-item-component__item-purchase--home-page'
+                            'today-schedule-shopping-list-by-categories__child-purchase'
                           }
-                          amountClassName={'shopping-list-item-component__item-amount--home-page'}
-                          transactionDataItemClassName={
-                            'related-transaction-data-button__item--home-page'
-                          }
-                          transactionDataItemKeyClassName={
-                            'related-transaction-data-button__item-key--home-page'
+                          amountClassName={
+                            'today-schedule-shopping-list-by-categories__child-amount'
                           }
                         />
                       </div>

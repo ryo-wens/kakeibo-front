@@ -26,29 +26,6 @@
     padding-top: 3px;
   }
 
-  &__item-purchase {
-    display: inline-block;
-    width: calc((100% - 116px));
-
-    &--home-page {
-      display: block;
-      width: 100%;
-    }
-  }
-
-  &__item-amount {
-    display: inline-block;
-    width: 90px;
-    text-align: right;
-    padding-right: 10px;
-
-    &--home-page {
-      display: inline-block;
-      padding-right: 10px;
-      margin-top: 8px;
-    }
-  }
-
   &__edit-icon {
     display: inline;
     height: 0;
@@ -81,5 +58,56 @@
 
   &__related-transaction-data {
     margin-top: 16px;
+  }
+
+  &__complete {
+    opacity: 0.3;
+  }
+
+  &__child-transaction-data-item {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    font-size: 1.0rem;
+    margin: 0;
+
+    > dt {
+      width: 20%;
+      margin-bottom: 10px;
+      font-weight: bold;
+
+      &:last-of-type {
+        margin-bottom: 0;
+      }
+    }
+
+    > dd {
+      width: 80%;
+      margin: 0 0 10px;
+
+      &:last-of-type {
+        margin: 0;
+      }
+    }
+  }
+
+  &__child-transaction-data-item-cr-home-page {
+    display: block;
+    font-size: 1.0rem;
+    margin: 0;
+
+    > dt {
+      display: block;
+      font-size: 1.0rem;
+      font-weight: bold;
+    }
+
+    > dd {
+      margin: 0 0 15px;
+
+      &:last-of-type {
+        margin: 0;
+      }
+    }
   }
 }

@@ -21,12 +21,8 @@ const TodayScheduleShoppingListByDate = (props: TodayScheduleShoppingListByDateP
                 listItem={listItem}
                 currentYear={props.currentYear}
                 currentMonth={props.currentMonth}
-                purchaseClassName={'shopping-list-item-component__item-purchase--home-page'}
-                amountClassName={'shopping-list-item-component__item-amount--home-page'}
-                transactionDataItemClassName={'related-transaction-data-button__item--home-page'}
-                transactionDataItemKeyClassName={
-                  'related-transaction-data-button__item-key--home-page'
-                }
+                purchaseClassName={'today-schedule-shopping-list-by-date__child-purchase'}
+                amountClassName={'today-schedule-shopping-list-by-date__child-amount'}
               />
             </div>
           );

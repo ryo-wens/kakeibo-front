@@ -20,20 +20,20 @@ const TodoListComponent = (props: TodoListComponentProps) => {
         <ol className="todo-list-component__list-by-date">
           {props.todoList.map((displayTodolistItem) => {
             return (
-              <li key={displayTodolistItem.date}>
+              <li className="todo-list-component__list-item-by-date" key={displayTodolistItem.date}>
                 <p className="todo-list-component__date">{displayTodolistItem.date}</p>
                 <ol className="todo-list-component__todo-list">
                   {displayTodolistItem.list.map((item) => {
                     return (
-                      <li className="todo-list-component__todo-list-item" key={item.id}>
-                        <TodoListItemComponentContainer
-                          listItem={item}
-                          currentYear={props.currentYear}
-                          currentMonth={props.currentMonth}
-                          setEditing={props.setEditing}
-                          inputTodoClassName={'todo-list-item-component__input-todo'}
-                        />
-                      </li>
+                      <TodoListItemComponentContainer
+                        listItem={item}
+                        currentYear={props.currentYear}
+                        currentMonth={props.currentMonth}
+                        setEditing={props.setEditing}
+                        listItemStyle={'todo-list-component__todo-list-item'}
+                        inputTodoClassName={'todo-list-component__todo-list-item-form'}
+                        key={item.id}
+                      />
                     );
                   })}
                 </ol>

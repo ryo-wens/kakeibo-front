@@ -1,12 +1,12 @@
 import React from 'react';
 import '../../shoppingListArea/todayScheduleShoppingListByCategories/today-schedule-shopping-list-by-categories.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
-import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 import {
   GroupShoppingListByCategories,
   GroupShoppingListItem,
   GroupShoppingListItemByCategories,
 } from '../../../../../reducks/groupShoppingList/types';
+import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
 
 interface GroupTodayScheduleShoppingListByCategoriesProps {
   shoppingListByCategories: GroupShoppingListByCategories;
@@ -41,7 +41,7 @@ const GroupTodayScheduleShoppingListByCategories = (
                         className="today-schedule-shopping-list-by-categories__item"
                         key={shoppingListItem.id}
                       >
-                        <ShoppingListItemComponentContainer
+                        <GroupShoppingListItemComponentContainer
                           listItem={shoppingListItem}
                           currentYear={props.currentYear}
                           currentMonth={props.currentMonth}
@@ -49,12 +49,6 @@ const GroupTodayScheduleShoppingListByCategories = (
                             'shopping-list-item-component__item-purchase--home-page'
                           }
                           amountClassName={'shopping-list-item-component__item-amount--home-page'}
-                          transactionDataItemClassName={
-                            'related-transaction-data-button__item--home-page'
-                          }
-                          transactionDataItemKeyClassName={
-                            'related-transaction-data-button__item-key--home-page'
-                          }
                         />
                       </div>
                     );

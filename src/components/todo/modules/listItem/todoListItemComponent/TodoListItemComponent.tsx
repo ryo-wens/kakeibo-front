@@ -3,6 +3,7 @@ import { TodoListItem } from '../../../../../reducks/todoList/types';
 import EditIcon from '@material-ui/icons/Edit';
 import './todo-list-item-component.scss';
 import TodoListItemFormContainer from '../../../../../containers/todo/modules/form/TodoListItemFormContainer';
+import cn from 'classnames';
 
 interface TodoListItemComponentProps {
   openEditTodoForm: boolean;
@@ -21,40 +22,39 @@ interface TodoListItemComponentProps {
   disabledButton: boolean;
   handleEditTodoListItem: () => void;
   handleDeleteTodoListItem: () => void;
+  currentPage: string;
+  listItemStyle: string;
   inputTodoClassName: string;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
   inputTodoRef: React.RefObject<HTMLDivElement>;
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
-  const currentTextStyle = (completeFlag: boolean) => {
-    if (completeFlag) {
-      return { opacity: 0.3 };
-    }
-    return { opacity: 1.0 };
-  };
+  const listItemClassName = cn('todo-list-item-component', props.listItemStyle);
+
+  const contentClassName = cn('todo-list-item-component__content', {
+    'todo-list-item-component__complete': props.checked,
+  });
+
+  const childDatePickersClassName = cn({
+    'todo-list-item-component__child-date-pickers': props.currentPage !== 'home',
+    'todo-list-item-component__child-date-pickers-cr-home-page': props.currentPage === 'home',
+  });
 
   return (
     <>
       {!props.openEditTodoForm ? (
-        <div className="todo-list-item-component">
+        <li className={listItemClassName}>
           <label className="todo-list-item-component__check">
             <input type="checkbox" checked={props.checked} onChange={props.handleChangeChecked} />
             <span />
           </label>
-          <span
-            className="todo-list-item-component__content"
-            style={currentTextStyle(props.checked)}
-          >
-            {props.listItem.todo_content}
-          </span>
+          <span className={contentClassName}>{props.listItem.todo_content}</span>
           <EditIcon
             className="todo-list-item-component__edit-icon"
-            onClick={() => {
-              props.handleOpenEditTodoForm();
-            }}
+            onClick={() => props.handleOpenEditTodoForm()}
           />
-        </div>
+        </li>
       ) : (
         <div className={props.inputTodoClassName}>
           <TodoListItemFormContainer
@@ -71,6 +71,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
             onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
             disabledButton={props.disabledButton}
             handleDeleteTodoListItem={props.handleDeleteTodoListItem}
+            datePickersClassName={childDatePickersClassName}
             inputTodoRef={props.inputTodoRef}
           />
         </div>

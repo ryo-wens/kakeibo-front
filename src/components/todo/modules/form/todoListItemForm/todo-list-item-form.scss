@@ -33,25 +33,6 @@
     margin-bottom: 20px;
   }
 
-  &__date {
-    display: flex;
-
-    &--home-page {
-      display: block;
-    }
-  }
-
-  &__date-picker {
-
-    &:last-child {
-      margin-left: 20px;
-    }
-
-    &--home-page {
-      margin-bottom: 20px;
-    }
-  }
-
   &__btn {
     display: flex;
     justify-content: space-between;

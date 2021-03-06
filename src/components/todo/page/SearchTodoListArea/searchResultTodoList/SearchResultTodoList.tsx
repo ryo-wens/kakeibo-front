@@ -25,7 +25,7 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
         <ol className="search-result-todo-list__list-by-date">
           {props.searchTodoList.map((listItem) => {
             return (
-              <li className="search-result-todo-list__list-item" key={listItem.id}>
+              <>
                 {props.equalsDisplayDate(listItem) && (
                   <p className="search-result-todo-list__list-item-date">
                     {props.displayDate(listItem)}
@@ -35,10 +35,12 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
                   listItem={listItem}
                   currentYear={String(year)}
                   currentMonth={customMonth}
-                  inputTodoClassName={'todo-list-item-component__input-todo'}
+                  inputTodoClassName={'search-result-todo-list__todo-list-item-form'}
+                  listItemStyle={'search-result-todo-list__list-item'}
                   fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}
+                  key={listItem.id}
                 />
-              </li>
+              </>
             );
           })}
         </ol>

@@ -24,4 +24,17 @@
     text-align: center;
     margin-bottom: 10px;
   }
+
+
+  &__child-purchase {
+    display: inline-block;
+    width: calc((100% - 116px));
+  }
+
+  &__child-amount {
+    display: inline-block;
+    width: 90px;
+    text-align: right;
+    padding-right: 10px;
+  }
 }

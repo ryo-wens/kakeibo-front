@@ -19,8 +19,8 @@ const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContaine
   const [readMore, setReadMore] = useState(false);
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
     if (!expiredShoppingList.length) {
-      const signal = axios.CancelToken.source();
       dispatch(fetchExpiredShoppingList(signal));
       return () => signal.cancel();
     }

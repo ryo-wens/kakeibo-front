@@ -10,7 +10,7 @@ export const shoppingListReducers = (
     case Actions.START_FETCH_EXPIRED_SHOPPING_LIST:
       return {
         ...state,
-        expiredShoppingList: { loading: action.payload },
+        ...action.payload,
       };
     case Actions.FETCH_EXPIRED_SHOPPING_LIST:
       return {

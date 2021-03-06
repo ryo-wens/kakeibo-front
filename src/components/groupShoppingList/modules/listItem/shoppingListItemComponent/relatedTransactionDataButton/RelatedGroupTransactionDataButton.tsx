@@ -15,8 +15,7 @@ interface RelatedGroupTransactionDataButtonProps {
   associatedCategoryName: string;
   openTransactionData: () => void;
   getPaymentUserName: (approvedGroups: Groups, userId: string, groupId: number) => string;
-  transactionDataItemClassName: string;
-  transactionDataItemKeyClassName: string;
+  transactionDataListClassName: string;
 }
 
 const RelatedGroupTransactionDataButton = React.forwardRef(
@@ -51,7 +50,7 @@ const RelatedGroupTransactionDataButton = React.forwardRef(
       },
       {
         key: '店名',
-        value: props.transactionData.shop === null ? '-' : props.transactionData.shop,
+        value: props.transactionData.shop ?? '-',
       },
       { key: 'メモ', value: props.transactionData.memo },
     ];
@@ -76,16 +75,16 @@ const RelatedGroupTransactionDataButton = React.forwardRef(
               className="related-transaction-data-button__form"
               ref={transactionDataRef as React.Ref<HTMLDivElement>}
             >
-              {transactionData.map((item) => {
-                return (
-                  <div className={props.transactionDataItemClassName} key={item.key}>
-                    <span className={props.transactionDataItemKeyClassName}>{item.key}</span>
-                    <span className="related-transaction-data-button__item-value">
-                      {item.value}
-                    </span>
-                  </div>
-                );
-              })}
+              <dl className={props.transactionDataListClassName}>
+                {transactionData.map((item) => {
+                  return (
+                    <>
+                      <dt key={item.key}>{item.key}</dt>
+                      <dd>{item.value}</dd>
+                    </>
+                  );
+                })}
+              </dl>
             </div>
           </>
         )}

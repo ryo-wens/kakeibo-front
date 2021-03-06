@@ -54,12 +54,10 @@ const GroupShoppingListByCategoriesComponent = (
                           listItem={shoppingListItem}
                           currentYear={props.currentYear}
                           currentMonth={props.currentMonth}
-                          purchaseClassName={'shopping-list-item-component__item-purchase'}
-                          amountClassName={'shopping-list-item-component__item-amount'}
-                          transactionDataItemClassName={'related-transaction-data-button__item'}
-                          transactionDataItemKeyClassName={
-                            'related-transaction-data-button__item-key'
+                          purchaseClassName={
+                            'shopping-list-by-categories-component__child-purchase'
                           }
+                          amountClassName={'shopping-list-by-categories-component__child-amount'}
                         />
                       </div>
                     );

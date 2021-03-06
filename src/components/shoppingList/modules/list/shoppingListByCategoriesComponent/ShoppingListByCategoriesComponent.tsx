@@ -7,6 +7,7 @@ import {
 import './shopping-list-by-categories-component.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
 import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
+import cn from 'classnames';
 
 interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: ShoppingListByCategories;
@@ -14,9 +15,22 @@ interface ShoppingListByCategoriesComponentProps {
   currentMonth: string;
   message: string;
   equalsDisplayDate: (categoryId: number, date: string) => boolean;
+  pathName: string;
 }
 
 const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesComponentProps) => {
+  const purchaseClassName = cn({
+    'shopping-list-by-categories-component__child-purchase-current-home-page':
+      props.pathName === 'home',
+    'shopping-list-by-categories-component__child-purchase': props.pathName !== 'home',
+  });
+
+  const amountClassName = cn({
+    'shopping-list-by-categories-component__child-amount-current-home-page':
+      props.pathName === 'home',
+    'shopping-list-by-categories-component__child-amount': props.pathName !== 'home',
+  });
+
   return (
     <>
       {props.shoppingListByCategories.length ? (
@@ -52,12 +66,8 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                           listItem={shoppingListItem}
                           currentYear={props.currentYear}
                           currentMonth={props.currentMonth}
-                          purchaseClassName={'shopping-list-item-component__item-purchase'}
-                          amountClassName={'shopping-list-item-component__item-amount'}
-                          transactionDataItemClassName={'related-transaction-data-button__item'}
-                          transactionDataItemKeyClassName={
-                            'related-transaction-data-button__item-key'
-                          }
+                          purchaseClassName={purchaseClassName}
+                          amountClassName={amountClassName}
                         />
                       </div>
                     );

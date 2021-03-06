@@ -4,6 +4,7 @@ import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import CheckedShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedShoppingListItemModalContainer';
 import EditShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/editShoppingListItemModal/EditShoppingListItemModalContainer';
 import RelatedTransactionDataButtonContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/relatedTransactionDataButton/RelatedTransactionDataButtonContainer';
+import cn from 'classnames';
 
 interface ShoppingListItemComponentProps {
   listItem: ShoppingListItem;
@@ -38,14 +39,28 @@ interface ShoppingListItemComponentProps {
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
+  currentPage: string;
   purchaseClassName: string;
   amountClassName: string;
-  transactionDataItemClassName: string;
-  transactionDataItemKeyClassName: string;
-  currentTextStyle: (completeFlag: boolean) => React.CSSProperties;
 }
 
 const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
+  const purchaseClassName = cn(props.purchaseClassName, {
+    'shopping-list-item-component__complete': props.checked,
+  });
+
+  const amountClassName = cn(props.amountClassName, {
+    'shopping-list-item-component__complete': props.checked,
+  });
+
+  const yenClassName = cn({ 'shopping-list-item-component__complete': props.checked });
+
+  const childTransactionDataItemClassName = cn({
+    'shopping-list-item-component__child-transaction-data-item': props.currentPage !== 'home',
+    'shopping-list-item-component__child-transaction-data-item-cr-home-page':
+      props.currentPage === 'home',
+  });
+
   return (
     <div className="shopping-list-item-component">
       <div className="shopping-list-item-component__check-box">
@@ -87,13 +102,9 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
       <div className="shopping-list-item-component__content">
         <div className="shopping-list-item-component__items">
           <div className="shopping-list-item-component__item">
-            <span className={props.purchaseClassName} style={props.currentTextStyle(props.checked)}>
-              {props.listItem.purchase}
-            </span>
-            <span className={props.amountClassName} style={props.currentTextStyle(props.checked)}>
-              {props.listItem.amount === null ? '-' : props.listItem.amount}
-            </span>
-            <span style={props.currentTextStyle(props.checked)}>円</span>
+            <span className={purchaseClassName}>{props.listItem.purchase}</span>
+            <span className={amountClassName}>{props.listItem.amount ?? '-'}</span>
+            <span className={yenClassName}>円</span>
           </div>
 
           <span className="shopping-list-item-component__edit-icon">
@@ -143,8 +154,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           <div className="shopping-list-item-component__related-transaction-data">
             <RelatedTransactionDataButtonContainer
               transactionData={props.listItem.related_transaction_data}
-              transactionDataItemClassName={props.transactionDataItemClassName}
-              transactionDataItemKeyClassName={props.transactionDataItemKeyClassName}
+              transactionDataListClassName={childTransactionDataItemClassName}
             />
           </div>
         )}

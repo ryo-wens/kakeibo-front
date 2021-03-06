@@ -72,6 +72,7 @@
   "devDependencies": {
     "@material-ui/pickers": "^3.2.10",
     "@types/axios": "^0.14.0",
+    "@types/classnames": "^2.2.11",
     "@types/jest": "^26.0.20",
     "@types/moment": "^2.13.0",
     "@types/react": "^17.0.2",

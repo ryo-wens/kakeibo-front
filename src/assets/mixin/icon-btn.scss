@@ -3,6 +3,7 @@
 @mixin icon-btn ($icon-btn_color, $icon-btn-hover_bg-color, $icon-btn-hover_color, $icon-btn-hover_border-radius, $icon-btn-hover_opacity){
   width: 1em;
   height: 1em;
+  background-color: rgba(0,0,0,0);
   color: $icon-btn_color;
   border: none;
   padding: 0;

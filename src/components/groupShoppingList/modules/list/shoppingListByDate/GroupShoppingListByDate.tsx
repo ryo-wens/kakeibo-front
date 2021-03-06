@@ -27,10 +27,8 @@ const GroupShoppingListByDate = (props: GroupShoppingListByDateProps) => {
                 listItem={listItem}
                 currentYear={props.currentYear}
                 currentMonth={props.currentMonth}
-                purchaseClassName={'shopping-list-item-component__item-purchase'}
-                amountClassName={'shopping-list-item-component__item-amount'}
-                transactionDataItemClassName={'related-transaction-data-button__item'}
-                transactionDataItemKeyClassName={'related-transaction-data-button__item-key'}
+                purchaseClassName={'shopping-list-by-date__child-purchase'}
+                amountClassName={'shopping-list-by-date__child-amount'}
               />
             </div>
           );
