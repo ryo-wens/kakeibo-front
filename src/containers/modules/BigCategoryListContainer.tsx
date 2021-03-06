@@ -15,8 +15,13 @@ import {
 } from '../../reducks/groupCategories/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import { getExpenseCategories, getIncomeCategories } from '../../reducks/categories/selectors';
 import {
+  getCategoriesErrorMessage,
+  getExpenseCategories,
+  getIncomeCategories,
+} from '../../reducks/categories/selectors';
+import {
+  getGroupCategoriesErrorMessage,
   getGroupExpenseCategories,
   getGroupIncomeCategories,
 } from '../../reducks/groupCategories/selectors';
@@ -55,6 +60,20 @@ const BigCategoryListContainer = (props: BigCategoryListContainerProps) => {
   const expenseCategories = useSelector(getExpenseCategories);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
+  const categoriesErrorMessage = useSelector(getCategoriesErrorMessage);
+  const groupCategoriesErrorMessage = useSelector(getGroupCategoriesErrorMessage);
+
+  useEffect(() => {
+    if (pathName !== 'group') {
+      if (categoriesErrorMessage.length) {
+        alert(categoriesErrorMessage);
+      }
+    } else {
+      if (groupCategoriesErrorMessage.length) {
+        alert(groupCategoriesErrorMessage);
+      }
+    }
+  }, [categoriesErrorMessage, groupCategoriesErrorMessage]);
 
   const handleCloseBigCategoryMenu = (event: Event) => {
     if (

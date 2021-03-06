@@ -40,6 +40,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -85,6 +90,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -124,6 +134,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -166,6 +181,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -174,12 +194,7 @@ describe('async actions groupCategories', () => {
           groupIncomeCategoriesLoading: false,
           groupExpenseCategoriesLoading: false,
 
-          groupIncomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          groupExpenseCategoriesError: {
+          groupCategoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -217,6 +232,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -225,12 +245,7 @@ describe('async actions groupCategories', () => {
           groupIncomeCategoriesLoading: false,
           groupExpenseCategoriesLoading: false,
 
-          groupIncomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          groupExpenseCategoriesError: {
+          groupCategoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -265,6 +280,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -305,6 +325,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -348,6 +373,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -356,12 +386,7 @@ describe('async actions groupCategories', () => {
           groupIncomeCategoriesLoading: false,
           groupExpenseCategoriesLoading: false,
 
-          groupIncomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          groupExpenseCategoriesError: {
+          groupCategoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -400,6 +425,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -408,12 +438,7 @@ describe('async actions groupCategories', () => {
           groupIncomeCategoriesLoading: false,
           groupExpenseCategoriesLoading: false,
 
-          groupIncomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          groupExpenseCategoriesError: {
+          groupCategoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -446,6 +471,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -454,12 +484,7 @@ describe('async actions groupCategories', () => {
           groupIncomeCategoriesLoading: false,
           groupExpenseCategoriesLoading: false,
 
-          groupIncomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          groupExpenseCategoriesError: {
+          groupCategoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -492,6 +517,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -500,12 +530,7 @@ describe('async actions groupCategories', () => {
           groupIncomeCategoriesLoading: false,
           groupExpenseCategoriesLoading: false,
 
-          groupIncomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          groupExpenseCategoriesError: {
+          groupCategoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -536,6 +561,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -571,6 +601,11 @@ describe('async actions groupCategories', () => {
         payload: {
           groupIncomeCategoriesLoading: true,
           groupExpenseCategoriesLoading: true,
+
+          groupCategoriesError: {
+            statusCode: 0,
+            errorMessage: '',
+          },
         },
       },
       {

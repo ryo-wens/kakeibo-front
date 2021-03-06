@@ -7,7 +7,11 @@ export const getIncomeCategories = createSelector(
   [categoriesSelector],
   (state) => state.incomeList
 );
+
 export const getExpenseCategories = createSelector(
   [categoriesSelector],
   (state) => state.expenseList
 );
+
+export const getCategoriesErrorMessage = (state: State) =>
+  state.categories.categoriesError.errorMessage;

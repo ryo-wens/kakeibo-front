@@ -26,6 +26,11 @@ export const startFetchCategoriesActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: 0,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -71,12 +76,7 @@ export const failedFetchCategoriesActions = (statusCode: number, errorMessage: s
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      expenseCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -91,6 +91,11 @@ export const startAddCustomCategoryActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: 0,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -125,12 +130,7 @@ export const failedAddCustomCategoryActions = (statusCode: number, errorMessage:
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      expenseCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -145,6 +145,11 @@ export const startEditCustomCategoryActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: 0,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -179,12 +184,7 @@ export const failedEditCustomCategoryActions = (statusCode: number, errorMessage
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      expenseCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -199,6 +199,11 @@ export const startDeleteCustomCategoryActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: 0,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -233,12 +238,7 @@ export const failedDeleteCustomCategoryActions = (statusCode: number, errorMessa
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      expenseCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
