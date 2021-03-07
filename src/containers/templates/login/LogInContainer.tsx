@@ -23,7 +23,11 @@ const LogInContainer = () => {
   const [passwordMessage, setPassWordMessage] = useState('');
 
   useEffect(() => {
-    setMessage(errorMessage);
+    if (errorMessage.length) {
+      setMessage(errorMessage);
+    }
+
+    return () => {}; // eslint-disable-line @typescript-eslint/no-empty-function
   }, [errorMessage]);
 
   const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {

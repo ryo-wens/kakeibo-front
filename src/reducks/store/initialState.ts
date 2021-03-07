@@ -16,28 +16,20 @@ const initialState = {
   },
   categories: {
     incomeList: [],
-    incomeCategoriesLoading: false,
-    incomeCategoriesError: {
-      statusCode: 0,
-      errorMessage: '',
-    },
     expenseList: [],
+    incomeCategoriesLoading: false,
     expenseCategoriesLoading: false,
-    expenseCategoriesError: {
+    categoriesError: {
       statusCode: 0,
       errorMessage: '',
     },
   },
   groupCategories: {
     groupIncomeList: [],
-    groupIncomeCategoriesLoading: false,
-    groupIncomeCategoriesError: {
-      statusCode: 0,
-      errorMessage: '',
-    },
     groupExpenseList: [],
+    groupIncomeCategoriesLoading: false,
     groupExpenseCategoriesLoading: false,
-    groupExpenseCategoriesError: {
+    groupCategoriesError: {
       statusCode: 0,
       errorMessage: '',
     },

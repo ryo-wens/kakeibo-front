@@ -41,14 +41,10 @@ export interface State {
   };
   categories: {
     incomeList: Categories;
-    incomeCategoriesLoading: boolean;
-    incomeCategoriesError: {
-      statusCode: number;
-      errorMessage: string;
-    };
     expenseList: Categories;
+    incomeCategoriesLoading: boolean;
     expenseCategoriesLoading: boolean;
-    expenseCategoriesError: {
+    categoriesError: {
       statusCode: number;
       errorMessage: string;
     };
@@ -56,6 +52,12 @@ export interface State {
   groupCategories: {
     groupIncomeList: GroupCategories;
     groupExpenseList: GroupCategories;
+    groupIncomeCategoriesLoading: boolean;
+    groupExpenseCategoriesLoading: boolean;
+    groupCategoriesError: {
+      statusCode: number;
+      errorMessage: string;
+    };
   };
   transactions: {
     latestTransactionsList: TransactionsList;

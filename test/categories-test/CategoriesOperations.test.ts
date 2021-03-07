@@ -39,6 +39,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -83,6 +88,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -121,6 +131,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -162,6 +177,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -170,12 +190,7 @@ describe('async actions categories', () => {
           incomeCategoriesLoading: false,
           expenseCategoriesLoading: false,
 
-          incomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          expenseCategoriesError: {
+          categoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -212,6 +227,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -220,12 +240,7 @@ describe('async actions categories', () => {
           incomeCategoriesLoading: false,
           expenseCategoriesLoading: false,
 
-          incomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          expenseCategoriesError: {
+          categoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -259,6 +274,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -297,6 +317,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -339,6 +364,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -347,12 +377,7 @@ describe('async actions categories', () => {
           incomeCategoriesLoading: false,
           expenseCategoriesLoading: false,
 
-          incomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          expenseCategoriesError: {
+          categoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -390,6 +415,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -398,12 +428,7 @@ describe('async actions categories', () => {
           incomeCategoriesLoading: false,
           expenseCategoriesLoading: false,
 
-          incomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          expenseCategoriesError: {
+          categoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -435,6 +460,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -443,12 +473,7 @@ describe('async actions categories', () => {
           incomeCategoriesLoading: false,
           expenseCategoriesLoading: false,
 
-          incomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          expenseCategoriesError: {
+          categoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -480,6 +505,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -488,12 +518,7 @@ describe('async actions categories', () => {
           incomeCategoriesLoading: false,
           expenseCategoriesLoading: false,
 
-          incomeCategoriesError: {
-            statusCode: errorResponse.status,
-            errorMessage: errorResponse.error.message,
-          },
-
-          expenseCategoriesError: {
+          categoriesError: {
             statusCode: errorResponse.status,
             errorMessage: errorResponse.error.message,
           },
@@ -524,6 +549,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -558,6 +588,11 @@ describe('async actions categories', () => {
         payload: {
           incomeCategoriesLoading: true,
           expenseCategoriesLoading: true,
+
+          categoriesError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
