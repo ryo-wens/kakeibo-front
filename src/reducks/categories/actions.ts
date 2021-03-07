@@ -28,7 +28,7 @@ export const startFetchCategoriesActions = () => {
       expenseCategoriesLoading: true,
 
       categoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },
@@ -93,7 +93,7 @@ export const startAddCustomCategoryActions = () => {
       expenseCategoriesLoading: true,
 
       categoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },
@@ -147,7 +147,7 @@ export const startEditCustomCategoryActions = () => {
       expenseCategoriesLoading: true,
 
       categoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },
@@ -201,7 +201,7 @@ export const startDeleteCustomCategoryActions = () => {
       expenseCategoriesLoading: true,
 
       categoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },

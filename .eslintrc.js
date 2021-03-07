@@ -30,7 +30,6 @@ module.exports = {
     'react-hooks/rules-of-hooks': 'error',
     'react-hooks/exhaustive-deps': 'off',
     '@typescript-eslint/explicit-module-boundary-types': 'off',
-    '@typescript-eslint/no-empty-function': 'off',
     '@typescript-eslint/no-empty-interface': 0,
     'no-undef': 'off',
     '@typescript-eslint/no-unused-vars': [

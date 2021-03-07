@@ -29,7 +29,7 @@ export const startFetchGroupCategoriesActions = () => {
       groupExpenseCategoriesLoading: true,
 
       groupCategoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },
@@ -94,7 +94,7 @@ export const startAddGroupCategoriesActions = () => {
       groupExpenseCategoriesLoading: true,
 
       groupCategoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },
@@ -148,7 +148,7 @@ export const startEditGroupCategoriesActions = () => {
       groupExpenseCategoriesLoading: true,
 
       groupCategoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },
@@ -202,7 +202,7 @@ export const startDeleteGroupCategoriesActions = () => {
       groupExpenseCategoriesLoading: true,
 
       groupCategoriesError: {
-        statusCode: 0,
+        statusCode: null,
         errorMessage: '',
       },
     },

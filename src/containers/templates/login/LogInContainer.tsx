@@ -27,7 +27,7 @@ const LogInContainer = () => {
       setMessage(errorMessage);
     }
 
-    return () => {};
+    return () => {}; // eslint-disable-line @typescript-eslint/no-empty-function
   }, [errorMessage]);
 
   const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {

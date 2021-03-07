@@ -41,7 +41,8 @@
   "scripts": {
     "lint": "eslint src --ext .ts,.tsx",
     "lint:fix": "eslint --fix --ext .ts,.tsx",
-    "start": "HOST=127.0.0.1 REACT_APP_USER_API_HOST=http://127.0.0.1:8080 REACT_APP_ACCOUNT_API_HOST=http://127.0.0.1:8081 REACT_APP_TODO_API_HOST=http://127.0.0.1:8082 react-scripts start",
+    "start": "react-scripts start",
+    "start:development": "env-cmd -f .env.development react-scripts start",
     "build": "react-scripts build",
     "build:development": "env-cmd -f .env react-scripts build",
     "build:production": "env-cmd -f .env.production  react-scripts build",
