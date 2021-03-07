@@ -41,7 +41,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -90,7 +90,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -133,7 +133,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -179,7 +179,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -229,7 +229,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -276,7 +276,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -319,7 +319,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -366,7 +366,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -417,7 +417,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -462,7 +462,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -507,7 +507,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -551,7 +551,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -590,7 +590,7 @@ describe('async actions categories', () => {
           expenseCategoriesLoading: true,
 
           categoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },

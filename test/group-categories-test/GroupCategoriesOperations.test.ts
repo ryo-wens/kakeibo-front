@@ -42,7 +42,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -92,7 +92,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -136,7 +136,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -183,7 +183,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -234,7 +234,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -282,7 +282,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -327,7 +327,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -375,7 +375,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -427,7 +427,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -473,7 +473,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -519,7 +519,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -563,7 +563,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
@@ -603,7 +603,7 @@ describe('async actions groupCategories', () => {
           groupExpenseCategoriesLoading: true,
 
           groupCategoriesError: {
-            statusCode: 0,
+            statusCode: null,
             errorMessage: '',
           },
         },
