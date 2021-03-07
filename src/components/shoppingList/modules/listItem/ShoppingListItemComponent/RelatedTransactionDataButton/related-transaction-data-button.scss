@@ -43,44 +43,6 @@
     margin-bottom: 5px;
   }
 
-  &__item {
-    display: flex;
-    align-items: center;
-    font-size: 1.0rem;
-    margin-bottom: 10px;
-
-    &:last-child {
-      margin-bottom: 0;
-    }
-
-    &--home-page {
-      display: block;
-      font-size: 1.0rem;
-      margin-bottom: 10px;
-
-      &:last-child {
-        margin-bottom: 0;
-      }
-    }
-  }
-
-  &__item-key {
-    width: 20%;
-    color: $task-main_color;
-    font-weight: bold;
-
-    &--home-page {
-      display: block;
-      color: $task-main_color;
-      font-weight: bold;
-      margin-bottom: 3px;
-    }
-  }
-
-  &__item-value {
-    color: #253b66;
-  }
-
   &__item-value-category {
     display: flex;
     align-items: center;

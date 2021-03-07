@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import { dateStringToDate } from '../../../../../lib/date';
 import ShoppingListItemComponent from '../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/ShoppingListItemComponent';
+import { useLocation } from 'react-router';
 
 interface ShoppingListItemComponentContainerProps {
   listItem: ShoppingListItem;
@@ -9,8 +10,6 @@ interface ShoppingListItemComponentContainerProps {
   currentMonth: string;
   purchaseClassName: string;
   amountClassName: string;
-  transactionDataItemClassName: string;
-  transactionDataItemKeyClassName: string;
 }
 
 const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentContainerProps) => {
@@ -25,6 +24,9 @@ const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentCont
     initialCustomCategoryId: props.listItem.custom_category_id,
     initialTransactionAutoAdd: props.listItem.transaction_auto_add,
   };
+
+  const pathNames = useLocation().pathname.split('/');
+  const currentPage = pathNames.slice(-1)[0];
 
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
     initialState.initialExpectedPurchaseDate
@@ -50,13 +52,6 @@ const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentCont
   useEffect(() => {
     setChecked(props.listItem.complete_flag);
   }, [props.listItem.complete_flag]);
-
-  const currentTextStyle = (completeFlag: boolean) => {
-    if (completeFlag) {
-      return { opacity: 0.3 };
-    }
-    return { opacity: 1.0 };
-  };
 
   return (
     <ShoppingListItemComponent
@@ -92,11 +87,9 @@ const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentCont
       setMediumCategoryId={setMediumCategoryId}
       setCustomCategoryId={setCustomCategoryId}
       setTransactionAutoAdd={setTransactionAutoAdd}
+      currentPage={currentPage}
       purchaseClassName={props.purchaseClassName}
       amountClassName={props.amountClassName}
-      transactionDataItemClassName={props.transactionDataItemClassName}
-      transactionDataItemKeyClassName={props.transactionDataItemKeyClassName}
-      currentTextStyle={currentTextStyle}
     />
   );
 };

@@ -17,7 +17,7 @@ interface TodoListItemFormProps {
   disabledButton: boolean;
   closeInputTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
-  pathName: string;
+  datePickersClassName: string;
   handleDeleteTodoListItem?: () => void;
 }
 
@@ -48,20 +48,8 @@ const TodoListItemForm = React.forwardRef(
               disabled={false}
             />
           </div>
-          <div
-            className={
-              props.pathName === 'home'
-                ? 'todo-list-item-form__date--home-page'
-                : 'todo-list-item-form__date'
-            }
-          >
-            <div
-              className={
-                props.pathName === 'home'
-                  ? 'todo-list-item-form__date-picker--home-page'
-                  : 'todo-list-item-form__date-picker'
-              }
-            >
+          <div className={props.datePickersClassName}>
+            <div>
               <DatePicker
                 id={'date'}
                 label={'実施日'}
@@ -82,13 +70,7 @@ const TodoListItemForm = React.forwardRef(
                 }
               />
             </div>
-            <div
-              className={
-                props.pathName === 'home'
-                  ? 'todo-list-item-form__date-picker--home-page'
-                  : 'todo-list-item-form__date-picker'
-              }
-            >
+            <div>
               <DatePicker
                 id={'date'}
                 label={'締切日'}

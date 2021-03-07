@@ -1,7 +1,7 @@
 import React from 'react';
-import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 import '../../shoppingListArea/todayScheduleShoppingListByDate/today-schedule-shopping-list-by-date.scss';
 import { GroupShoppingList } from '../../../../../reducks/groupShoppingList/types';
+import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
 
 interface GroupTodayScheduleShoppingListByDateProps {
   shoppingListByDate: GroupShoppingList;
@@ -17,16 +17,12 @@ const GroupTodayScheduleShoppingListByDate = (props: GroupTodayScheduleShoppingL
         props.shoppingListByDate.map((listItem) => {
           return (
             <div className="today-schedule-shopping-list-by-date__item" key={listItem.id}>
-              <ShoppingListItemComponentContainer
+              <GroupShoppingListItemComponentContainer
                 listItem={listItem}
                 currentYear={props.currentYear}
-                currentMonth={props.currentYear}
-                purchaseClassName={'shopping-list-item-component__item-purchase--home-page'}
-                amountClassName={'shopping-list-item-component__item-amount--home-page'}
-                transactionDataItemClassName={'related-transaction-data-button__item--home-page'}
-                transactionDataItemKeyClassName={
-                  'related-transaction-data-button__item-key--home-page'
-                }
+                currentMonth={props.currentMonth}
+                purchaseClassName={'today-schedule-shopping-list-by-date__child-purchase'}
+                amountClassName={'today-schedule-shopping-list-by-date__child-amount'}
               />
             </div>
           );

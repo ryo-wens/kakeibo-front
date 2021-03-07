@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getMonthlyShoppingListByCategories } from '../../../../../reducks/shoppingList/selectors';
 import axios from 'axios';
 import { fetchMonthlyShoppingListByCategories } from '../../../../../reducks/shoppingList/operations';
+import { useLocation } from 'react-router';
 
 interface MonthlyShoppingListByCategoriesContainerProps {
   selectedYear: number;
@@ -16,6 +17,7 @@ const MonthlyShoppingListByCategoriesContainer = (
   props: MonthlyShoppingListByCategoriesContainerProps
 ) => {
   const dispatch = useDispatch();
+  const pathName = useLocation().pathname.split('/')[1];
   const monthlyShoppingListByCategories = useSelector(getMonthlyShoppingListByCategories);
 
   useEffect(() => {
@@ -48,6 +50,7 @@ const MonthlyShoppingListByCategoriesContainer = (
       currentMonth={props.currentMonth}
       message={`${props.selectedMonth}月の買い物リストは、登録されていません。`}
       equalsDisplayDate={equalsDisplayDate}
+      pathName={pathName}
     />
   );
 };

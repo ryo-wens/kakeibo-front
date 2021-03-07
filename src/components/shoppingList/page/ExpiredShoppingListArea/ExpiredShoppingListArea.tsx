@@ -17,10 +17,12 @@ interface ExpiredShoppingListAreaProps {
 }
 
 const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
+  const existExpiredShoppingList = props.expiredShoppingList.length !== 0;
+
   return (
     <div>
       <div className="expired-shopping-list-area">
-        {props.expiredShoppingList.length ? (
+        {existExpiredShoppingList ? (
           <>
             {props.slicedExpiredShoppingList.map((listItem) => {
               return (
@@ -34,10 +36,8 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
                     listItem={listItem}
                     currentYear={props.currentYear}
                     currentMonth={props.currentMonth}
-                    purchaseClassName={'shopping-list-item-component__item-purchase'}
-                    amountClassName={'shopping-list-item-component__item-amount'}
-                    transactionDataItemClassName={'related-transaction-data-button__item'}
-                    transactionDataItemKeyClassName={'related-transaction-data-button__item-key'}
+                    purchaseClassName={'expired-shopping-list-area__child-purchase'}
+                    amountClassName={'expired-shopping-list-area__child-amount'}
                   />
                 </div>
               );

@@ -21,6 +21,8 @@ interface AddTodoListItemFormProps {
 }
 
 const AddTodoListItemForm = (props: AddTodoListItemFormProps) => {
+  const childDatePickersClassName = 'add-todo-list-form__child-date-pickers';
+
   return (
     <>
       {!props.openAddTodoForm ? (
@@ -47,6 +49,7 @@ const AddTodoListItemForm = (props: AddTodoListItemFormProps) => {
             disabledButton={props.disabledButton}
             closeInputTodoForm={props.handleCloseAddTodoForm}
             onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
+            datePickersClassName={childDatePickersClassName}
             inputTodoRef={props.inputTodoRef}
           />
         </div>

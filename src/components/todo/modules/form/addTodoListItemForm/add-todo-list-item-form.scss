@@ -27,4 +27,12 @@
       outline: none;
     }
   }
+
+  &__child-date-pickers {
+    display: flex;
+
+    > div + :last-child {
+      margin-left: 20px;
+    }
+  }
 }

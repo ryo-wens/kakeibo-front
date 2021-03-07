@@ -4,8 +4,7 @@ import RelatedTransactionDataButton from '../../../../../../components/shoppingL
 
 interface RelatedTransactionDataButtonContainerProps {
   transactionData: RelatedTransactionData;
-  transactionDataItemClassName: string;
-  transactionDataItemKeyClassName: string;
+  transactionDataListClassName: string;
 }
 
 const RelatedTransactionDataButtonContainer = (
@@ -53,8 +52,7 @@ const RelatedTransactionDataButtonContainer = (
       transactionData={props.transactionData}
       associatedCategoryName={displayRelatedTransactionData}
       openTransactionData={openTransactionData}
-      transactionDataItemClassName={props.transactionDataItemClassName}
-      transactionDataItemKeyClassName={props.transactionDataItemKeyClassName}
+      transactionDataListClassName={props.transactionDataListClassName}
       ref={transactionDataRef}
     />
   );

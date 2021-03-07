@@ -5,6 +5,7 @@ import EditGroupShoppingListItemModalContainer from '../../../../../containers/g
 import CheckedGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/checkedGroupShoppingListItemModal/CheckedGroupShoppingListItemModalContainer';
 import { Groups } from '../../../../../reducks/groups/types';
 import RelatedGroupTransactionDataButtonContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/relatedGroupTransactionDataButton/RelatedGroupTransactionDataButtonContainer';
+import cn from 'classnames';
 
 interface GroupShoppingListItemComponentProps {
   approvedGroups: Groups;
@@ -44,14 +45,28 @@ interface GroupShoppingListItemComponentProps {
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setPaymentUser: React.Dispatch<React.SetStateAction<string | null>>;
   setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
+  currentPage: string;
   purchaseClassName: string;
   amountClassName: string;
-  transactionDataItemClassName: string;
-  transactionDataItemKeyClassName: string;
-  currentTextStyle: (completeFlag: boolean) => React.CSSProperties;
 }
 
 const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentProps) => {
+  const purchaseClassName = cn(props.purchaseClassName, {
+    'shopping-list-item-component__complete': props.checked,
+  });
+
+  const amountClassName = cn(props.amountClassName, {
+    'shopping-list-item-component__complete': props.checked,
+  });
+
+  const yenClassName = cn({ 'shopping-list-item-component__complete': props.checked });
+
+  const childTransactionDataItemClassName = cn({
+    'shopping-list-item-component__child-transaction-data-item': props.currentPage !== 'home',
+    'shopping-list-item-component__child-transaction-data-item-cr-home-page':
+      props.currentPage === 'home',
+  });
+
   return (
     <>
       <div className="shopping-list-item-component">
@@ -97,16 +112,9 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
         <div className="shopping-list-item-component__content">
           <div className="shopping-list-item-component__items">
             <div className="shopping-list-item-component__item">
-              <span
-                className={props.purchaseClassName}
-                style={props.currentTextStyle(props.checked)}
-              >
-                {props.listItem.purchase}
-              </span>
-              <span className={props.amountClassName} style={props.currentTextStyle(props.checked)}>
-                {props.listItem.amount === null ? '-' : props.listItem.amount}
-              </span>
-              <span style={props.currentTextStyle(props.checked)}>円</span>
+              <span className={purchaseClassName}>{props.listItem.purchase}</span>
+              <span className={amountClassName}>{props.listItem.amount ?? '-'}</span>
+              <span className={yenClassName}>円</span>
             </div>
             <div className="shopping-list-item-component__edit-icon">
               <EditGroupShoppingListItemModalContainer
@@ -161,8 +169,7 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
                 transactionData={props.listItem.related_transaction_data}
                 approvedGroups={props.approvedGroups}
                 groupId={props.groupId}
-                transactionDataItemClassName={props.transactionDataItemClassName}
-                transactionDataItemKeyClassName={props.transactionDataItemKeyClassName}
+                transactionDataListClassName={childTransactionDataItemClassName}
               />
             </div>
           )}

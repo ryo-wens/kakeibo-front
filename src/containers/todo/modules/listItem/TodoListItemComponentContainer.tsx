@@ -15,6 +15,7 @@ interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
   currentMonth: string;
+  listItemStyle: string;
   inputTodoClassName: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -27,7 +28,9 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   };
 
   const dispatch = useDispatch();
-  const pathName = useLocation().pathname.split('/')[1];
+  const pathNames = useLocation().pathname.split('/');
+  const pathName = pathNames[1];
+  const currentPage = pathNames.slice(-1)[0];
   const { group_id } = useParams<{ group_id: string }>();
   const signal = axios.CancelToken.source();
 
@@ -224,6 +227,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       disabledButton={disabledButton()}
       handleEditTodoListItem={() => handleEditTodoListItem()}
       handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
+      currentPage={currentPage}
+      listItemStyle={props.listItemStyle}
       inputTodoClassName={props.inputTodoClassName}
       inputTodoRef={inputTodoRef}
     />

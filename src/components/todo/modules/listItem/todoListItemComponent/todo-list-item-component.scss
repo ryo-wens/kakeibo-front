@@ -19,17 +19,26 @@
     margin-left: 10px;
   }
 
-  &__input-todo {
-    width: 70%;
-    margin-bottom: 20px;
-
-    &--max-width {
-      margin-bottom: 20px;
-    }
-  }
-
   &__edit-icon {
     @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
     padding: 3px;
+  }
+
+  &__complete {
+    opacity: 0.3;
+  }
+
+  &__child-date-pickers {
+    display: flex;
+
+    > div + :last-child {
+      margin-left: 20px;
+    }
+  }
+
+  &__child-date-pickers-cr-home-page {
+    > div {
+      margin-bottom: 20px;
+    }
   }
 }

@@ -27,20 +27,23 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
             <ol className="expired-todo-list-area__list-by-date">
               {props.displayExpiredTodoList.map((displayTodolistItem) => {
                 return (
-                  <li key={displayTodolistItem.date}>
+                  <li
+                    className="expired-todo-list-area__list-item-by-date"
+                    key={displayTodolistItem.date}
+                  >
                     <p className="expired-todo-list-area__date">{displayTodolistItem.date}</p>
                     <ol className="expired-todo-list-area__todo-list">
                       {displayTodolistItem.list.map((item) => {
                         return (
-                          <li className="expired-todo-list-area__todo-list-item" key={item.id}>
-                            <TodoListItemComponentContainer
-                              listItem={item}
-                              currentYear={props.currentYear}
-                              currentMonth={props.currentMonth}
-                              setEditing={props.setEditing}
-                              inputTodoClassName={'todo-list-item-component__input-todo--max-width'}
-                            />
-                          </li>
+                          <TodoListItemComponentContainer
+                            listItem={item}
+                            currentYear={props.currentYear}
+                            currentMonth={props.currentMonth}
+                            setEditing={props.setEditing}
+                            listItemStyle={'expired-todo-list-area__todo-list-item'}
+                            inputTodoClassName={'expired-todo-list-area__todo-list-item-form'}
+                            key={item.id}
+                          />
                         );
                       })}
                     </ol>

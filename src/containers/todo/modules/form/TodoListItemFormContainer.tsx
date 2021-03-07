@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import { useLocation } from 'react-router';
 import TodoListItemForm from '../../../../components/todo/modules/form/todoListItemForm/TodoListItemForm';
 
 interface TodoListItemFormContainerProps {
@@ -15,13 +14,12 @@ interface TodoListItemFormContainerProps {
   disabledButton: boolean;
   closeInputTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
+  datePickersClassName: string;
   inputTodoRef: React.RefObject<HTMLDivElement>;
   handleDeleteTodoListItem?: () => void;
 }
 
 const TodoListItemFormContainer = (props: TodoListItemFormContainerProps) => {
-  const pathName = useLocation().pathname.split('/')[1];
-
   useEffect(() => {
     document.addEventListener('click', props.onClickCloseInputTodoForm, { capture: true });
     return () => {
@@ -43,7 +41,7 @@ const TodoListItemFormContainer = (props: TodoListItemFormContainerProps) => {
       disabledButton={props.disabledButton}
       closeInputTodoForm={props.closeInputTodoForm}
       onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
-      pathName={pathName}
+      datePickersClassName={props.datePickersClassName}
       handleDeleteTodoListItem={props.handleDeleteTodoListItem}
       ref={props.inputTodoRef}
     />
