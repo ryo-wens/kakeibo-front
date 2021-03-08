@@ -18,6 +18,7 @@ export type groupCategoriesActions = ReturnType<
   | typeof deleteIncomeCategory
   | typeof deleteExpenseCategory
   | typeof failedDeleteGroupCategories
+  | typeof resetGroupCategoriesErrorActions
 >;
 
 export const START_FETCH_GROUP_CATEGORIES = 'START_FETCH_GROUP_CATEGORIES';
@@ -242,6 +243,19 @@ export const failedDeleteGroupCategories = (statusCode: number, errorMessage: st
       groupCategoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const RESET_GROUP_CATEGORIES_ERROR = 'RESET_GROUP_CATEGORIES_ERROR';
+export const resetGroupCategoriesErrorActions = () => {
+  return {
+    type: RESET_GROUP_CATEGORIES_ERROR,
+    payload: {
+      groupCategoriesError: {
+        statusCode: null,
+        errorMessage: '',
       },
     },
   };

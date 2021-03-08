@@ -28,6 +28,11 @@ export const startFetchTransactionsActions = () => {
     type: START_FETCH_TRANSACTIONS,
     payload: {
       transactionsListLoading: true,
+
+      transactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -77,6 +82,11 @@ export const startFetchLatestTransactionsActions = () => {
     type: START_FETCH_LATEST_TRANSACTIONS,
     payload: {
       latestTransactionsListLoading: true,
+
+      latestTransactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -123,6 +133,16 @@ export const startAddTransactionsActions = () => {
     payload: {
       transactionsListLoading: true,
       latestTransactionsListLoading: true,
+
+      transactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
+
+      latestTransactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -171,6 +191,16 @@ export const startEditTransactionsActions = () => {
     payload: {
       transactionsListLoading: true,
       latestTransactionsListLoading: true,
+
+      transactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
+
+      latestTransactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -219,6 +249,16 @@ export const startDeleteTransactionsActions = () => {
     payload: {
       transactionsListLoading: true,
       latestTransactionsListLoading: true,
+
+      transactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
+
+      latestTransactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -266,6 +306,11 @@ export const startSearchTransactionsActions = () => {
     type: START_SEARCH_TRANSACTIONS,
     payload: {
       searchTransactionsListLoading: true,
+
+      transactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };

@@ -25,6 +25,8 @@ import {
   getGroupExpenseCategories,
   getGroupIncomeCategories,
 } from '../../reducks/groupCategories/selectors';
+import { resetCategoriesErrorActions } from '../../reducks/categories/actions';
+import { resetGroupCategoriesErrorActions } from '../../reducks/groupCategories/actions';
 
 interface BigCategoryListContainerProps {
   transactionType: string;
@@ -67,10 +69,14 @@ const BigCategoryListContainer = (props: BigCategoryListContainerProps) => {
     if (pathName !== 'group') {
       if (categoriesErrorMessage.length) {
         alert(categoriesErrorMessage);
+
+        dispatch(resetCategoriesErrorActions());
       }
     } else {
       if (groupCategoriesErrorMessage.length) {
         alert(groupCategoriesErrorMessage);
+
+        dispatch(resetGroupCategoriesErrorActions());
       }
     }
   }, [categoriesErrorMessage, groupCategoriesErrorMessage]);

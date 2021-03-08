@@ -68,6 +68,11 @@ describe('async actions groupTransactions', () => {
         type: actionTypes.START_FETCH_GROUP_TRANSACTIONS,
         payload: {
           groupTransactionsListLoading: true,
+
+          groupTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -103,6 +108,11 @@ describe('async actions groupTransactions', () => {
         type: actionTypes.START_FETCH_GROUP_LATEST_TRANSACTIONS,
         payload: {
           groupLatestTransactionsListLoading: true,
+
+          groupLatestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -179,6 +189,16 @@ describe('async actions groupTransactions', () => {
         payload: {
           groupTransactionsListLoading: true,
           groupLatestTransactionsListLoading: true,
+
+          groupTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          groupLatestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -260,6 +280,16 @@ describe('async actions groupTransactions', () => {
         payload: {
           groupTransactionsListLoading: true,
           groupLatestTransactionsListLoading: true,
+
+          groupTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          groupLatestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -309,6 +339,16 @@ describe('async actions groupTransactions', () => {
         payload: {
           groupTransactionsListLoading: true,
           groupLatestTransactionsListLoading: true,
+
+          groupTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          groupLatestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -394,6 +434,16 @@ describe('async actions groupTransactions', () => {
         payload: {
           groupAccountListLoading: true,
           groupYearlyAccountListLoading: true,
+
+          groupAccountListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          groupYearlyAccountListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -449,6 +499,11 @@ describe('async actions groupTransactions', () => {
         type: actionTypes.START_EDIT_GROUP_ACCOUNT,
         payload: {
           groupAccountListLoading: true,
+
+          groupAccountListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -507,6 +562,16 @@ describe('async actions groupTransactions', () => {
         payload: {
           groupAccountListLoading: true,
           groupYearlyAccountListLoading: true,
+
+          groupAccountListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          groupYearlyAccountListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -554,6 +619,11 @@ describe('async actions groupTransactions', () => {
         type: actionTypes.START_SEARCH_GROUP_TRANSACTIONS,
         payload: {
           groupSearchTransactionsListLoading: true,
+
+          groupSearchTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {

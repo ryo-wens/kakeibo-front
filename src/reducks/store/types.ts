@@ -45,7 +45,7 @@ export interface State {
     incomeCategoriesLoading: boolean;
     expenseCategoriesLoading: boolean;
     categoriesError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
   };
@@ -55,7 +55,7 @@ export interface State {
     groupIncomeCategoriesLoading: boolean;
     groupExpenseCategoriesLoading: boolean;
     groupCategoriesError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
   };
@@ -63,19 +63,19 @@ export interface State {
     latestTransactionsList: TransactionsList;
     latestTransactionsListLoading: boolean;
     latestTransactionsListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     transactionsList: TransactionsList;
     transactionsListLoading: boolean;
     transactionsListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     searchTransactionsList: TransactionsList;
     searchTransactionsListLoading: boolean;
     searchTransactionsListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     noTransactionsMessage: string;
@@ -85,37 +85,37 @@ export interface State {
     groupLatestTransactionsList: GroupTransactionsList;
     groupLatestTransactionsListLoading: boolean;
     groupLatestTransactionsListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     groupTransactionsList: GroupTransactionsList;
     groupTransactionsListLoading: boolean;
     groupTransactionsListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     groupSearchTransactionsList: GroupTransactionsList;
     groupSearchTransactionsListLoading: boolean;
     groupSearchTransactionsListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     groupAccountList: GroupAccountList;
     groupAccountListLoading: boolean;
     groupAccountListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     groupYearlyAccountList: GroupYearlyAccountList;
     groupYearlyAccountListLoading: boolean;
     groupYearlyAccountListError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     groupYearlyAccountListForModal: GroupYearlyAccountList;
     groupYearlyAccountListForModalLoading: boolean;
     groupYearlyAccountListForModalError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     notAccountMessage: string;
@@ -125,19 +125,19 @@ export interface State {
     standard_budgets_list: StandardBudgetsList;
     standardBudgetsLoading: boolean;
     standardBudgetsError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     yearly_budgets_list: YearlyBudgetsList;
     yearlyBudgetsLoading: boolean;
     yearlyBudgetsError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     custom_budgets_list: CustomBudgetsList;
     customBudgetsLoading: boolean;
     customBudgetsError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
   };
@@ -145,19 +145,19 @@ export interface State {
     groupStandardBudgetsList: GroupStandardBudgetsList;
     groupStandardBudgetsLoading: boolean;
     groupStandardBudgetsError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     groupCustomBudgetsList: GroupCustomBudgetsList;
     groupCustomBudgetsLoading: boolean;
     groupCustomBudgetsError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
     groupYearlyBudgetsList: GroupYearlyBudgetsList;
     groupYearlyBudgetsLoading: boolean;
     groupYearlyBudgetsError: {
-      statusCode: number;
+      statusCode: number | null;
       errorMessage: string;
     };
   };
