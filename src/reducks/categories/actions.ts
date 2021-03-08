@@ -17,6 +17,7 @@ export type categoriesActions = ReturnType<
   | typeof deleteIncomeCustomCategoryActions
   | typeof deleteExpenseCustomCategoryActions
   | typeof failedDeleteCustomCategoryActions
+  | typeof resetCategoriesErrorActions
 >;
 
 export const START_FETCH_CATEGORIES = 'START_FETCH_CATEGORIES';
@@ -241,6 +242,19 @@ export const failedDeleteCustomCategoryActions = (statusCode: number, errorMessa
       categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const RESET_CATEGORIES_ERROR = 'RESET_CATEGORIES_ERROR';
+export const resetCategoriesErrorActions = () => {
+  return {
+    type: RESET_CATEGORIES_ERROR,
+    payload: {
+      categoriesError: {
+        statusCode: null,
+        errorMessage: '',
       },
     },
   };

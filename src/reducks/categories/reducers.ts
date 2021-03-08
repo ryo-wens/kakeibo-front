@@ -89,6 +89,11 @@ export const categoriesReducer = (state = initialState.categories, action: categ
         ...state,
         ...action.payload,
       };
+    case Actions.RESET_CATEGORIES_ERROR:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
