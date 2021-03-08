@@ -43,6 +43,11 @@ describe('async actions Budgets', () => {
         type: actionTypes.START_FETCH_STANDARD_BUDGETS,
         payload: {
           standardBudgetsLoading: true,
+
+          standardBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -145,6 +150,11 @@ it('Edit standard_budgets if fetch succeeds', async () => {
       type: actionTypes.START_EDIT_STANDARD_BUDGETS,
       payload: {
         standardBudgetsLoading: true,
+
+        standardBudgetsError: {
+          statusCode: null,
+          errorMessage: '',
+        },
       },
     },
     {
@@ -180,6 +190,11 @@ it('Get yearly_budgets if fetch succeeds', async () => {
       type: actionTypes.START_FETCH_YEARLY_BUDGETS,
       payload: {
         yearlyBudgetsLoading: true,
+
+        yearlyBudgetsError: {
+          statusCode: null,
+          errorMessage: '',
+        },
       },
     },
     {
@@ -214,6 +229,11 @@ it('Get custom_budgets if fetch succeeds', async () => {
       type: actionTypes.START_FETCH_CUSTOM_BUDGETS,
       payload: {
         customBudgetsLoading: true,
+
+        customBudgetsError: {
+          statusCode: null,
+          errorMessage: '',
+        },
       },
     },
     {
@@ -324,6 +344,11 @@ it('Add custom_budgets if fetch succeeds', async () => {
       payload: {
         customBudgetsLoading: true,
         yearlyBudgetsLoading: true,
+
+        customBudgetsError: {
+          statusCode: null,
+          errorMessage: '',
+        },
       },
     },
     {
@@ -442,6 +467,11 @@ it('Edit custom_budgets if fetch succeeds', async () => {
       payload: {
         customBudgetsLoading: true,
         yearlyBudgetsLoading: true,
+
+        customBudgetsError: {
+          statusCode: null,
+          errorMessage: '',
+        },
       },
     },
     {
@@ -554,6 +584,11 @@ it('Delete custom_budgets if fetch succeeds', async () => {
       type: START_DELETE_CUSTOM_BUDGETS,
       payload: {
         yearlyBudgetsLoading: true,
+
+        yearlyBudgetsError: {
+          statusCode: null,
+          errorMessage: '',
+        },
       },
     },
     {

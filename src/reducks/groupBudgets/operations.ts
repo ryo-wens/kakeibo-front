@@ -95,7 +95,7 @@ export const editGroupStandardBudgets = (
         }
       );
 
-      const fetchResult = await axios.get<GroupStandardBudgetsListRes>(
+      const fetchResult = axios.get<GroupStandardBudgetsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`,
         {
           cancelToken: signal.token,
@@ -103,9 +103,11 @@ export const editGroupStandardBudgets = (
         }
       );
 
-      const editedGroupStandardBudgetsList = fetchResult.data.standard_budgets;
+      const editedGroupStandardBudgetsList = await fetchResult;
 
-      dispatch(editGroupStandardBudgetsActions(editedGroupStandardBudgetsList));
+      dispatch(
+        editGroupStandardBudgetsActions(editedGroupStandardBudgetsList.data.standard_budgets)
+      );
     } catch (error) {
       dispatch(
         failedEditGroupStandardBudgetsActions(
@@ -234,7 +236,7 @@ export const addGroupCustomBudgets = (
         }
       );
 
-      const fetchCustomResult = await axios.get<GroupCustomBudgetsListRes>(
+      const fetchCustomResult = axios.get<GroupCustomBudgetsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           cancelToken: signal.token,
@@ -242,7 +244,7 @@ export const addGroupCustomBudgets = (
         }
       );
 
-      const fetchYearlyResult = await axios.get<GroupYearlyBudgetsList>(
+      const fetchYearlyResult = axios.get<GroupYearlyBudgetsList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`,
         {
           cancelToken: signal.token,
@@ -250,11 +252,14 @@ export const addGroupCustomBudgets = (
         }
       );
 
-      const addedGroupCustomBudgetsList = fetchCustomResult.data.custom_budgets;
-      const addedGroupYearlyBudgetsList = fetchYearlyResult.data;
+      const addedGroupCustomBudgetsList = await fetchCustomResult;
+      const addedGroupYearlyBudgetsList = await fetchYearlyResult;
 
       dispatch(
-        addGroupCustomBudgetsActions(addedGroupCustomBudgetsList, addedGroupYearlyBudgetsList)
+        addGroupCustomBudgetsActions(
+          addedGroupCustomBudgetsList.data.custom_budgets,
+          addedGroupYearlyBudgetsList.data
+        )
       );
     } catch (error) {
       dispatch(
@@ -293,7 +298,7 @@ export const editGroupCustomBudgets = (
         }
       );
 
-      const fetchCustomResult = await axios.get<GroupCustomBudgetsListRes>(
+      const fetchCustomResult = axios.get<GroupCustomBudgetsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
         {
           cancelToken: signal.token,
@@ -301,7 +306,7 @@ export const editGroupCustomBudgets = (
         }
       );
 
-      const fetchYearlyResult = await axios.get<GroupYearlyBudgetsList>(
+      const fetchYearlyResult = axios.get<GroupYearlyBudgetsList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`,
         {
           cancelToken: signal.token,
@@ -309,11 +314,14 @@ export const editGroupCustomBudgets = (
         }
       );
 
-      const editedGroupCustomBudgetsList = fetchCustomResult.data.custom_budgets;
-      const editedGroupYearlyBudgetsList = fetchYearlyResult.data;
+      const editedGroupCustomBudgetsList = await fetchCustomResult;
+      const editedGroupYearlyBudgetsList = await fetchYearlyResult;
 
       dispatch(
-        editGroupCustomBudgetsActions(editedGroupCustomBudgetsList, editedGroupYearlyBudgetsList)
+        editGroupCustomBudgetsActions(
+          editedGroupCustomBudgetsList.data.custom_budgets,
+          editedGroupYearlyBudgetsList.data
+        )
       );
     } catch (error) {
       dispatch(
@@ -343,7 +351,7 @@ export const deleteGroupCustomBudgets = (
         }
       );
 
-      const fetchYearlyResult = await axios.get<GroupYearlyBudgetsList>(
+      const fetchYearlyResult = axios.get<GroupYearlyBudgetsList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`,
         {
           cancelToken: signal.token,
@@ -351,9 +359,9 @@ export const deleteGroupCustomBudgets = (
         }
       );
 
-      const deletedGroupYearlyBudgetsList = fetchYearlyResult.data;
+      const deletedGroupYearlyBudgetsList = await fetchYearlyResult;
 
-      dispatch(deleteGroupCustomBudgetsActions(deletedGroupYearlyBudgetsList));
+      dispatch(deleteGroupCustomBudgetsActions(deletedGroupYearlyBudgetsList.data));
     } catch (error) {
       dispatch(
         failedDeleteGroupCustomBudgetsActions(

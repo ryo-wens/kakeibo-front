@@ -53,6 +53,11 @@ describe('async actions transactions', () => {
         type: actionTypes.START_FETCH_TRANSACTIONS,
         payload: {
           transactionsListLoading: true,
+
+          transactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -81,6 +86,11 @@ describe('async actions transactions', () => {
         type: actionTypes.START_FETCH_LATEST_TRANSACTIONS,
         payload: {
           latestTransactionsListLoading: true,
+
+          latestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -147,6 +157,16 @@ describe('async actions transactions', () => {
         payload: {
           transactionsListLoading: true,
           latestTransactionsListLoading: true,
+
+          transactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          latestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -218,6 +238,16 @@ describe('async actions transactions', () => {
         payload: {
           transactionsListLoading: true,
           latestTransactionsListLoading: true,
+
+          transactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          latestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -258,6 +288,16 @@ describe('async actions transactions', () => {
         payload: {
           transactionsListLoading: true,
           latestTransactionsListLoading: true,
+
+          transactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+
+          latestTransactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -296,6 +336,11 @@ describe('async actions transactions', () => {
         type: actionTypes.START_SEARCH_TRANSACTIONS,
         payload: {
           searchTransactionsListLoading: true,
+
+          transactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {

@@ -44,6 +44,11 @@ describe('async actions groupBudgets', () => {
         type: actionTypes.START_FETCH_GROUP_STANDARD_BUDGETS,
         payload: {
           groupStandardBudgetsLoading: true,
+
+          groupStandardBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -147,6 +152,11 @@ describe('async actions groupBudgets', () => {
         type: actionTypes.START_EDIT_GROUP_STANDARD_BUDGETS,
         payload: {
           groupStandardBudgetsLoading: true,
+
+          groupStandardBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -185,6 +195,11 @@ describe('async actions groupBudgets', () => {
         type: actionTypes.START_FETCH_GROUP_YEARLY_BUDGETS,
         payload: {
           groupYearlyBudgetsLoading: true,
+
+          groupYearlyBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -222,6 +237,11 @@ describe('async actions groupBudgets', () => {
         type: actionTypes.START_FETCH_GROUP_CUSTOM_BUDGETS,
         payload: {
           groupCustomBudgetsLoading: true,
+
+          groupCustomBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -330,6 +350,11 @@ describe('async actions groupBudgets', () => {
         payload: {
           groupCustomBudgetsLoading: true,
           groupYearlyBudgetsLoading: true,
+
+          groupCustomBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -451,6 +476,11 @@ describe('async actions groupBudgets', () => {
         payload: {
           groupCustomBudgetsLoading: true,
           groupYearlyBudgetsLoading: true,
+
+          groupCustomBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
@@ -571,6 +601,11 @@ describe('async actions groupBudgets', () => {
         type: actionTypes.START_DELETE_GROUP_CUSTOM_BUDGETS,
         payload: {
           groupYearlyBudgetsLoading: true,
+
+          groupCustomBudgetsError: {
+            statusCode: null,
+            errorMessage: '',
+          },
         },
       },
       {
