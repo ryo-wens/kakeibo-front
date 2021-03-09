@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  GroupTasksList,
-  GroupTasksListForEachUser,
-  TasksListItem,
+  GroupTaskList,
+  GroupTaskListForEachUser,
+  TaskListItem,
   TaskUsers,
 } from '../../../../../reducks/groupTasks/types';
 import AssignmentTaskTable from '../../../../../components/task/page/taskTableArea/assignmentTaskTable/AssignmentTaskTable';
@@ -11,9 +11,9 @@ interface AssignmentTaskTableContainerProps {
   participatingTaskUsers: TaskUsers;
   groupId: number;
   selectedDate: Date | null;
-  groupTaskList: GroupTasksList;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
-  tasksListItem: TasksListItem;
+  groupTaskList: GroupTaskList;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
+  tasksListItem: TaskListItem;
 }
 
 const AssignmentTaskTableContainer = (props: AssignmentTaskTableContainerProps) => {

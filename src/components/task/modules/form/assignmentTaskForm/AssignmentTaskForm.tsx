@@ -1,10 +1,11 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import './assignment-task-form.scss';
-import { DatePicker, InputInteger } from '../../../../uikit';
+import { DatePicker } from '../../../../uikit';
 import { TaskCycleType, TaskUsers } from '../../../../../reducks/groupTasks/types';
 import SelectTaskCycleType from '../../select/SelectTaskCycleType';
 import SelectTaskUser from '../../select/SelectTaskUser';
+import InputTaskCycle from '../../input/inputTaskCycle/InputTaskCycle';
 
 interface AssignmentTaskFormProps {
   participatingTaskUsers: TaskUsers;
@@ -15,14 +16,14 @@ interface AssignmentTaskFormProps {
   cycle: number;
   taskUserId: number;
   handleDateChange: (date: Date | null) => void;
-  selectCycleType: (event: React.ChangeEvent<{ value: string }>) => void;
-  inputTaskCycle: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  assignmentTask: () => void;
-  closeModal: () => void;
+  handleCycleTypeChange: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleTaskUserChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleAssignTaskItem: () => void;
+  handleCloseModal: () => void;
   disabledButton: boolean;
   message: string;
-  releaseAssignmentTask?: () => void;
+  handleReleaseTaskItem?: () => void;
 }
 
 const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
@@ -48,16 +49,19 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
     {
       key: 'サイクルタイプ',
       value: (
-        <SelectTaskCycleType cycleType={props.cycleType} selectCycleType={props.selectCycleType} />
+        <SelectTaskCycleType
+          cycleType={props.cycleType}
+          handleCycleTypeChange={props.handleCycleTypeChange}
+        />
       ),
     },
     {
       key: 'サイクル日数',
       value: (
         <>
-          <InputInteger
+          <InputTaskCycle
             value={props.cycle}
-            inputTaskCycle={props.inputTaskCycle}
+            handleCycleChange={props.handleCycleChange}
             cycleType={props.cycleType}
           />
           <p className="assignment-task-form__message">{props.message}</p>
@@ -70,7 +74,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
         <SelectTaskUser
           participatingTaskUsers={props.participatingTaskUsers}
           taskUserId={props.taskUserId}
-          selectTaskUser={props.selectTaskUser}
+          handleTaskUserChange={props.handleTaskUserChange}
         />
       ),
     },
@@ -80,7 +84,10 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
     <div className="assignment-task-form">
       <div className="assignment-task-form__position">
         <h3 className="assignment-task-form__title">タスクの割り当て</h3>
-        <button className="assignment-task-form__btn-position" onClick={() => props.closeModal()}>
+        <button
+          className="assignment-task-form__btn-position"
+          onClick={() => props.handleCloseModal()}
+        >
           <CloseIcon />
         </button>
       </div>
@@ -103,21 +110,21 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
           <button
             className="assignment-task-form__operation-btn--add"
             disabled={props.disabledButton}
-            onClick={props.assignmentTask}
+            onClick={props.handleAssignTaskItem}
           >
             {props.buttonLabel}
           </button>
           <button
             className="assignment-task-form__operation-btn--cancel"
-            onClick={() => props.closeModal()}
+            onClick={() => props.handleCloseModal()}
           >
             キャンセル
           </button>
         </div>
-        {props.releaseAssignmentTask && (
+        {props.handleReleaseTaskItem && (
           <button
             className="assignment-task-form__operation-btn--release"
-            onClick={props.releaseAssignmentTask}
+            onClick={props.handleReleaseTaskItem}
           >
             解除
           </button>

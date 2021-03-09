@@ -9,11 +9,11 @@ interface AddTaskNameFormProps {
   openForm: boolean;
   taskName: string;
   handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
-  openInputTaskForm: () => void;
-  closeInputTaskForm: () => void;
   disabledButton: boolean;
-  taskNameOperation: () => void;
+  handleOpenInputTaskForm: () => void;
+  handleCloseInputTaskForm: () => void;
   onClickCloseInputTaskNameForm: (event: Event) => void;
+  handleAddTaskItem: () => void;
   inputTaskRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -21,7 +21,7 @@ const AddTaskNameForm = (props: AddTaskNameFormProps) => {
   return (
     <>
       {!props.openForm ? (
-        <button className="add-task-name-form__btn" onClick={() => props.openInputTaskForm()}>
+        <button className="add-task-name-form__btn" onClick={() => props.handleOpenInputTaskForm()}>
           <AddIcon />
           タスクを追加
         </button>
@@ -32,8 +32,8 @@ const AddTaskNameForm = (props: AddTaskNameFormProps) => {
           handleTaskNameChange={props.handleTaskNameChange}
           disabledButton={props.disabledButton}
           taskName={props.taskName}
-          closeInputTaskForm={props.closeInputTaskForm}
-          taskNameOperation={props.taskNameOperation}
+          handleCloseInputTaskForm={props.handleCloseInputTaskForm}
+          handleTaskItem={props.handleAddTaskItem}
           onClickCloseInputTaskNameForm={props.onClickCloseInputTaskNameForm}
           inputTaskRef={props.inputTaskRef}
         />

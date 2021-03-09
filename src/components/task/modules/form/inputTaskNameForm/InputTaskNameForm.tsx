@@ -10,9 +10,10 @@ interface InputTaskNameFormProps {
   taskName: string;
   handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
   disabledButton: boolean;
-  closeInputTaskForm: () => void;
-  taskNameOperation: () => void;
-  deleteOperation?: () => void;
+  handleCloseInputTaskForm: () => void;
+  handleTaskItem: () => void;
+  handleDeleteTaskItem?: () => void;
+  onClickCloseInputTaskNameForm?: (event: Event) => void;
 }
 
 const InputTaskNameForm = React.forwardRef(
@@ -23,7 +24,7 @@ const InputTaskNameForm = React.forwardRef(
           <p className="input-task-name-form__title--text">{props.titleLabel}</p>
           <button
             className="input-task-name-form__title--close-btn"
-            onClick={() => props.closeInputTaskForm()}
+            onClick={() => props.handleCloseInputTaskForm()}
           >
             <CloseIcon />
           </button>
@@ -45,24 +46,25 @@ const InputTaskNameForm = React.forwardRef(
             <button
               className="input-task-name-form__btn--add"
               disabled={props.disabledButton}
-              onClick={props.taskNameOperation}
+              onClick={props.handleTaskItem}
             >
               {props.buttonLabel}
             </button>
             <button
               className="input-task-name-form__btn--cancel"
-              onClick={() => props.closeInputTaskForm()}
+              onClick={() => props.handleCloseInputTaskForm()}
             >
               キャンセル
             </button>
           </div>
-          {props.deleteOperation && (
+          {props.handleDeleteTaskItem && (
             <DeleteModal
               title={'タスクを削除'}
               buttonLabel={'削除'}
               contentName={props.taskName}
               disabled={false}
-              onClickDelete={props.deleteOperation}
+              onClickDelete={props.handleDeleteTaskItem}
+              onClickCloseInputForm={props.onClickCloseInputTaskNameForm}
             />
           )}
         </div>

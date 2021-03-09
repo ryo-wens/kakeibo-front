@@ -1,11 +1,12 @@
 import React from 'react';
-import { GroupTasksList, TasksListItem } from '../../../../reducks/groupTasks/types';
+import { GroupTaskList, TaskListItem } from '../../../../reducks/groupTasks/types';
 import './task-list-area.scss';
 import AddTaskNameFormContainer from '../../../../containers/task/modules/form/AddTaskNameFormContainer';
 import TaskListItemComponentContainer from '../../../../containers/task/modules/listItem/TaskListItemComponentContainer';
 
 interface TaskListAreaProps {
-  taskList: GroupTasksList;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  taskList: GroupTaskList;
 }
 
 const TaskListArea = (props: TaskListAreaProps) => {
@@ -14,11 +15,14 @@ const TaskListArea = (props: TaskListAreaProps) => {
       <h3 className="task-list-area__title">タスクリスト</h3>
       {props.taskList.length !== 0 ? (
         <div className="task-list-area__items">
-          {props.taskList.map((listItem: TasksListItem) => {
+          {props.taskList.map((listItem: TaskListItem) => {
             if (listItem.cycle_type === null) {
               return (
                 <div className="task-list-area__item" key={listItem.id}>
-                  <TaskListItemComponentContainer listItem={listItem} />
+                  <TaskListItemComponentContainer
+                    setEditing={props.setEditing}
+                    listItem={listItem}
+                  />
                 </div>
               );
             }

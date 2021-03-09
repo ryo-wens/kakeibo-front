@@ -1,15 +1,17 @@
 import React, { useState } from 'react';
 import {
   AssignmentTaskModalInitialState,
+  EditTaskItemReq,
   TaskCycleType,
   TaskUsers,
 } from '../../../../../reducks/groupTasks/types';
 import { date } from '../../../../../lib/constant';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroupTasksList } from '../../../../../reducks/groupTasks/selectors';
+import { getGroupTaskList } from '../../../../../reducks/groupTasks/selectors';
 import AssignmentTaskModal from '../../../../../components/task/page/taskTableArea/assignmentTaskModal/AssignmentTaskModal';
 import SelectTaskName from '../../../../../components/task/modules/select/SelectTaskName';
 import { editTaskItem } from '../../../../../reducks/groupTasks/operations';
+import { executeAfterAsyncProcess } from '../../../../../lib/function';
 
 interface AssignmentTaskModalContainerProps {
   participatingTaskUsers: TaskUsers;
@@ -27,7 +29,7 @@ const initialState: AssignmentTaskModalInitialState = {
 
 const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) => {
   const dispatch = useDispatch();
-  const taskList = useSelector(getGroupTasksList);
+  const taskList = useSelector(getGroupTaskList);
 
   const [open, setOpen] = useState<boolean>(false);
   const [taskItemId, setTaskItemId] = useState<number>(initialState.initialTaskItemId);
@@ -38,7 +40,7 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
   const [taskUserId, setTaskUserId] = useState<number>(initialState.initialUserId);
   const [message, setMessage] = useState<string>('');
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
     setTaskItemId(initialState.initialTaskItemId);
     setTaskName(initialState.initialTaskName);
@@ -48,7 +50,7 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     setTaskUserId(initialState.initialUserId);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
   };
 
@@ -56,7 +58,7 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     setBaseDate(selectedDate as Date);
   };
 
-  const selectTaskName = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTaskNameChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     if (event.target.value !== String(0)) {
       const idx = taskList.findIndex(
         (taskListItem) => taskListItem.id === Number(event.target.value)
@@ -68,14 +70,14 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     setTaskItemId(Number(event.target.value));
   };
 
-  const selectCycleType = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleCycleTypeChange = (event: React.ChangeEvent<{ value: string }>) => {
     setCycleType(event.target.value as TaskCycleType);
     if (event.target.value === 'none') {
       setCycle(Number(1));
     }
   };
 
-  const inputTaskCycle = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCycleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (isNaN(Number(event.target.value))) {
       setMessage('※ 半角数字のみ入力可能です');
     } else {
@@ -84,8 +86,23 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     }
   };
 
-  const selectTaskUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleTaskUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setTaskUserId(Number(event.target.value));
+  };
+
+  const handleAssignTaskItem = () => {
+    const requestData: EditTaskItemReq = {
+      base_date: baseDate,
+      cycle_type: cycleType,
+      cycle: cycle,
+      task_name: taskName,
+      group_tasks_users_id: taskUserId,
+    };
+
+    return executeAfterAsyncProcess(
+      dispatch(editTaskItem(props.groupId, taskItemId, requestData)),
+      () => setOpen(false)
+    );
   };
 
   const disabledButton =
@@ -98,25 +115,20 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     <AssignmentTaskModal
       participatingTaskUsers={props.participatingTaskUsers}
       taskNameFormElement={
-        <SelectTaskName selectTaskName={selectTaskName} groupTasksList={taskList} />
+        <SelectTaskName handleTaskNameChange={handleTaskNameChange} groupTasksList={taskList} />
       }
       open={open}
       baseDate={baseDate}
       cycleType={cycleType}
       cycle={cycle}
       taskUserId={taskUserId}
-      openModal={openModal}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
       handleDateChange={handleDateChange}
-      selectCycleType={selectCycleType}
-      inputTaskCycle={inputTaskCycle}
-      selectTaskUser={selectTaskUser}
-      assignmentTask={() => {
-        dispatch(
-          editTaskItem(props.groupId, taskItemId, baseDate, cycleType, cycle, taskName, taskUserId)
-        );
-        setOpen(false);
-      }}
-      closeModal={closeModal}
+      handleCycleTypeChange={handleCycleTypeChange}
+      handleCycleChange={handleCycleChange}
+      handleTaskUserChange={handleTaskUserChange}
+      handleAssignTaskItem={() => handleAssignTaskItem()}
       disabledButton={disabledButton}
       message={message}
     />

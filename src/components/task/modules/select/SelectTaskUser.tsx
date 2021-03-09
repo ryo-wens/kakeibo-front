@@ -5,7 +5,7 @@ import '../../../../assets/modules/selector.scss';
 interface SelectTaskUserProps {
   participatingTaskUsers: TaskUsers;
   taskUserId: number;
-  selectTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleTaskUserChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
 }
 
 const SelectTaskUser = (props: SelectTaskUserProps) => {
@@ -15,7 +15,7 @@ const SelectTaskUser = (props: SelectTaskUserProps) => {
         className="selector__box"
         name={'select-task-user'}
         required={true}
-        onChange={props.selectTaskUser}
+        onChange={props.handleTaskUserChange}
         defaultValue={props.taskUserId}
       >
         <option value={0}>ユーザーを選択</option>

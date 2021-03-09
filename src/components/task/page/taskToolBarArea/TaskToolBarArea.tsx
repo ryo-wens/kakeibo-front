@@ -4,7 +4,7 @@ import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 import ArrowLeftIcon from '@material-ui/icons/ArrowLeft';
 import './task-tool-bar-area.scss';
 import { Group } from '../../../../reducks/groups/types';
-import { GroupTasksListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
+import { GroupTaskListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
 import EditTaskUserModalContainer from '../../../../containers/task/page/taskToolBarArea/editTaskUserModalContainer/EditTaskUserModalContainer';
 
 interface TaskToolBarAreaProps {
@@ -17,7 +17,7 @@ interface TaskToolBarAreaProps {
   weekStartDate: Date;
   weekLastDate: Date;
   approvedGroup: Group;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
 }
 

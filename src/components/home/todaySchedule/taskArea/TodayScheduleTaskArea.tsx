@@ -1,9 +1,9 @@
 import React from 'react';
 import './today-schedule-task-area.scss';
-import { UserTasksListItem } from '../../../../reducks/groupTasks/types';
+import { UserTaskListItem } from '../../../../reducks/groupTasks/types';
 
 interface TodayScheduleTaskAreaProps {
-  userTaskListItem: UserTasksListItem | undefined;
+  userTaskListItem: UserTaskListItem | undefined;
   existAssignTask: boolean | undefined;
 }
 

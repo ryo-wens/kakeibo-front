@@ -1,6 +1,6 @@
 import React from 'react';
 import { getWeekStartDate } from '../../../../../lib/date';
-import { TaskCycleType, TasksListItem, TaskUsers } from '../../../../../reducks/groupTasks/types';
+import { TaskCycleType, TaskListItem, TaskUsers } from '../../../../../reducks/groupTasks/types';
 import './assignment-task-table.scss';
 import EditAssignmentTaskModalContainer from '../../../../../containers/task/page/taskTableArea/assignmentTaskTable/editAssignmentTaskModal/EditAssignmentTaskModalContainer';
 
@@ -9,7 +9,7 @@ interface AssignmentTaskTableProps {
   groupId: number;
   baseDay: number;
   selectedDate: Date;
-  tasksListItem: TasksListItem;
+  tasksListItem: TaskListItem;
   cycleType: TaskCycleType | null;
   cycle: number;
   assignTaskForUser: (differenceDay: number, baseDay: number, currentDay: number) => boolean;

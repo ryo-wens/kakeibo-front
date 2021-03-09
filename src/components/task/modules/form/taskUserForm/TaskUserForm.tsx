@@ -9,11 +9,11 @@ interface TaskUserFormProps {
   buttonLabel: string;
   checkedUserIds: string[];
   displayTaskUserList: ApprovedGroupUsers;
-  operateTaskUsers: () => void;
-  closeTaskUserOperation: () => void;
-  closeModal: () => void;
+  handleCloseModal: () => void;
+  handleCloseTaskUserForm: () => void;
   handleChangeChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
   existsDisplayTaskUsers: boolean;
+  handleTaskUsers: () => void;
   message: string;
   buttonClassName: string;
 }
@@ -22,11 +22,14 @@ const TaskUserForm = (props: TaskUserFormProps) => {
   return (
     <>
       <div className="task-user-form__position">
-        <button className="task-user-form__back-btn" onClick={() => props.closeTaskUserOperation()}>
+        <button
+          className="task-user-form__back-btn"
+          onClick={() => props.handleCloseTaskUserForm()}
+        >
           <ChevronLeftIcon />
         </button>
         <h3 className="task-user-form__title">{props.title}</h3>
-        <button className="task-user-form__close-btn" onClick={() => props.closeModal()}>
+        <button className="task-user-form__close-btn" onClick={() => props.handleCloseModal()}>
           <CloseIcon />
         </button>
       </div>
@@ -53,7 +56,7 @@ const TaskUserForm = (props: TaskUserFormProps) => {
           <button
             className={props.buttonClassName}
             disabled={props.checkedUserIds.length === 0}
-            onClick={props.operateTaskUsers}
+            onClick={props.handleTaskUsers}
           >
             {props.buttonLabel}
           </button>

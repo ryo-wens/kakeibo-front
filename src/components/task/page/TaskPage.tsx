@@ -2,8 +2,8 @@ import React from 'react';
 import { Group } from '../../../reducks/groups/types';
 import './task-page.scss';
 import {
-  GroupTasksList,
-  GroupTasksListForEachUser,
+  GroupTaskList,
+  GroupTaskListForEachUser,
   TaskUsers,
 } from '../../../reducks/groupTasks/types';
 import TaskListArea from './taskListArea/TaskListArea';
@@ -11,12 +11,13 @@ import TaskToolBarAreaContainer from '../../../containers/task/page/taskToolBarA
 import TaskTableArea from './taskTableArea/TaskTableArea';
 
 interface TaskPageProps {
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   selectedDate: Date | null;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   approvedGroup: Group;
-  taskListForUser: GroupTasksListForEachUser;
+  taskListForUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
-  taskList: GroupTasksList;
+  taskList: GroupTaskList;
   groupId: number;
 }
 
@@ -30,7 +31,7 @@ const TaskPage = (props: TaskPageProps) => {
         groupTasksListForEachUser={props.taskListForUser}
         participatingTaskUsers={props.participatingTaskUsers}
       />
-      <TaskListArea taskList={props.taskList} />
+      <TaskListArea taskList={props.taskList} setEditing={props.setEditing} />
       <TaskTableArea
         selectedDate={props.selectedDate}
         setSelectedDate={props.setSelectedDate}

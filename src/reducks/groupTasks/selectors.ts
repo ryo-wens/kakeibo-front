@@ -3,17 +3,17 @@ import { State } from '../store/types';
 
 const groupTasksSelector = (state: State) => state.groupTasks;
 
-export const getGroupTasksListForEachUser = createSelector(
+export const getGroupTaskListForEachUser = createSelector(
   [groupTasksSelector],
-  (state) => state.groupTasksListForEachUser
+  (state) => state.groupTaskListForEachUser
 );
 
-export const getGroupTasksList = createSelector(
+export const getGroupTaskList = createSelector(
   [groupTasksSelector],
-  (state) => state.groupTasksList
+  (state) => state.groupTaskList
 );
 
-const tasksListForEachUser = (state: State) => state.groupTasks.groupTasksListForEachUser;
+const tasksListForEachUser = (state: State) => state.groupTasks.groupTaskListForEachUser;
 const userId = (state: State) => state.users.user_id;
 
 export const getUserTaskListItem = createSelector(

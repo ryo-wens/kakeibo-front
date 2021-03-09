@@ -1,12 +1,10 @@
 export { default as DatePicker } from './DatePicker';
 export { default as GenericButton } from './GenericButton';
 export { default as GenericModal } from './GenericModal';
-export { default as InputInteger } from '../task/modules/input/inputTaskCycle/InputTaskCycle';
 export { default as InputYears } from '../modules/InputYears';
 export { default as InvalidMessage } from './InvalidMessage';
 export { default as KindSelectBox } from './KindSelectBox';
 export { default as ModalInform } from './ModalInform';
-export { default as SaveButton } from './SaveButton';
 export { default as SelectMenu } from './SelectMenu';
 export { default as TextInput } from './TextInput';
 export { default as SelectPayer } from './SelectPayer';

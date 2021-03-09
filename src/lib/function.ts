@@ -1,4 +1,5 @@
 import { colors } from './colorConstant';
+import { Action, Dispatch } from 'redux';
 
 export const bigCategoryColor = (bigCategoryName: string) => {
   if (bigCategoryName === '食費') {
@@ -33,5 +34,18 @@ export const bigCategoryColor = (bigCategoryName: string) => {
     return { backgroundColor: colors[14] };
   } else if (bigCategoryName === 'その他') {
     return { backgroundColor: colors[15] };
+  }
+};
+
+export const executeAfterAsyncProcess = async (
+  operation: (dispatch: Dispatch<Action>) => Promise<void>,
+  result?: () => void
+) => {
+  try {
+    await operation;
+
+    result && result();
+  } catch (error) {
+    alert(error);
   }
 };

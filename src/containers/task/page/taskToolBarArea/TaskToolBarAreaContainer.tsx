@@ -1,14 +1,14 @@
 import React from 'react';
 import { date } from '../../../../lib/constant';
 import { Group } from '../../../../reducks/groups/types';
-import { GroupTasksListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
+import { GroupTaskListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
 import TaskToolBarArea from '../../../../components/task/page/taskToolBarArea/TaskToolBarArea';
 
 interface TaskToolBarAreaContainerProps {
   selectedDate: Date | null;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   approvedGroup: Group;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
 }
 

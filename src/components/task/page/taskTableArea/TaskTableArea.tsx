@@ -1,8 +1,8 @@
 import React from 'react';
 import {
-  GroupTasksList,
-  GroupTasksListForEachUser,
-  TasksListItem,
+  GroupTaskList,
+  GroupTaskListForEachUser,
+  TaskListItem,
   TaskUsers,
 } from '../../../../reducks/groupTasks/types';
 import './task-table-area.scss';
@@ -15,8 +15,8 @@ interface TaskTableAreaProps {
   groupId: number;
   selectedDate: Date | null;
   setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  taskListForUser: GroupTasksListForEachUser;
-  taskList: GroupTasksList;
+  taskListForUser: GroupTaskListForEachUser;
+  taskList: GroupTaskList;
 }
 
 const TaskTableArea = (props: TaskTableAreaProps) => {
@@ -27,7 +27,7 @@ const TaskTableArea = (props: TaskTableAreaProps) => {
           <WeeklyTableContainer selectedDate={props.selectedDate} />
         </thead>
         <tbody>
-          {props.taskList.map((tasksListItem: TasksListItem) => {
+          {props.taskList.map((tasksListItem: TaskListItem) => {
             if (
               tasksListItem.cycle_type !== null &&
               props.taskListForUser.length &&

@@ -15,7 +15,7 @@ import {
 } from '../groupBudgets/types';
 import { TodoList } from '../todoList/types';
 import { GroupTodoList } from '../groupTodoList/types';
-import { GroupTasksList, GroupTasksListForEachUser } from '../groupTasks/types';
+import { GroupTaskList, GroupTaskListForEachUser } from '../groupTasks/types';
 import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
 import {
   GroupRegularShoppingList,
@@ -160,8 +160,18 @@ export interface State {
     };
   };
   groupTasks: {
-    groupTasksListForEachUser: GroupTasksListForEachUser;
-    groupTasksList: GroupTasksList;
+    groupTaskListForEachUser: GroupTaskListForEachUser;
+    groupTaskListForEachUserLoading: boolean;
+    groupTaskListForEachUserError: {
+      statusCode: number | null;
+      errorMessage: string;
+    };
+    groupTaskList: GroupTaskList;
+    groupTaskListLoading: boolean;
+    groupTaskListError: {
+      statusCode: number | null;
+      errorMessage: string;
+    };
   };
   shoppingList: {
     regularShoppingList: RegularShoppingList;

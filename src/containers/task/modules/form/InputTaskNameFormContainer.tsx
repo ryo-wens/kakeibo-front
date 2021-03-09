@@ -7,16 +7,17 @@ interface InputTaskNameFormContainerProps {
   taskName: string;
   handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
   disabledButton: boolean;
-  closeInputTaskForm: () => void;
-  taskNameOperation: () => void;
-  onClickCloseInputTaskNameForm: (event: Event) => void;
+  handleCloseInputTaskForm: () => void;
+  handleTaskItem: () => void;
   inputTaskRef: React.RefObject<HTMLDivElement>;
-  deleteOperation?: () => void;
+  onClickCloseInputTaskNameForm: (event: Event) => void;
+  handleDeleteTaskItem?: () => void;
 }
 
 const InputTaskNameFormContainer = (props: InputTaskNameFormContainerProps) => {
   useEffect(() => {
     document.addEventListener('click', props.onClickCloseInputTaskNameForm, { capture: true });
+
     return () => {
       document.removeEventListener('click', props.onClickCloseInputTaskNameForm, { capture: true });
     };
@@ -29,9 +30,10 @@ const InputTaskNameFormContainer = (props: InputTaskNameFormContainerProps) => {
       taskName={props.taskName}
       handleTaskNameChange={props.handleTaskNameChange}
       disabledButton={props.disabledButton}
-      closeInputTaskForm={props.closeInputTaskForm}
-      taskNameOperation={props.taskNameOperation}
-      deleteOperation={props.deleteOperation}
+      handleCloseInputTaskForm={props.handleCloseInputTaskForm}
+      handleTaskItem={props.handleTaskItem}
+      handleDeleteTaskItem={props.handleDeleteTaskItem}
+      onClickCloseInputTaskNameForm={props.onClickCloseInputTaskNameForm}
       ref={props.inputTaskRef}
     />
   );

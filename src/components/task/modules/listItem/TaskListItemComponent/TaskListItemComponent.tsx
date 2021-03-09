@@ -10,11 +10,11 @@ interface TaskListItemComponentProps {
   initialTaskName: string;
   taskName: string;
   handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
-  openInputTaskForm: () => void;
-  closeInputTaskForm: () => void;
+  handleOpenInputTaskForm: () => void;
+  handleCloseInputTaskForm: () => void;
   disabledButton: boolean;
-  taskNameOperation: () => void;
-  deleteOperation: () => void;
+  handleEditTaskItem: () => void;
+  handleDeleteTaskItem: () => void;
   onClickCloseInputTaskNameForm: (event: Event) => void;
   inputTaskRef: React.RefObject<HTMLDivElement>;
 }
@@ -27,7 +27,7 @@ const TaskListItemComponent = (props: TaskListItemComponentProps) => {
           <span className="task-list-item-component__text">{props.initialTaskName}</span>
           <EditIcon
             className="task-list-item-component__edit-icon"
-            onClick={() => props.openInputTaskForm()}
+            onClick={() => props.handleOpenInputTaskForm()}
           />
         </li>
       ) : (
@@ -37,11 +37,11 @@ const TaskListItemComponent = (props: TaskListItemComponentProps) => {
           handleTaskNameChange={props.handleTaskNameChange}
           disabledButton={props.disabledButton}
           taskName={props.taskName}
-          closeInputTaskForm={props.closeInputTaskForm}
-          taskNameOperation={props.taskNameOperation}
-          deleteOperation={props.deleteOperation}
+          handleCloseInputTaskForm={props.handleCloseInputTaskForm}
+          handleTaskItem={props.handleEditTaskItem}
           onClickCloseInputTaskNameForm={props.onClickCloseInputTaskNameForm}
           inputTaskRef={props.inputTaskRef}
+          handleDeleteTaskItem={props.handleDeleteTaskItem}
         />
       )}
     </>

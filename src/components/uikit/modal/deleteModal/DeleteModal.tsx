@@ -13,7 +13,7 @@ interface DeleteModalProps {
   contentName: string;
   disabled: boolean;
   onClickDelete: () => void;
-  onClickCloseInputTodoForm?: (event: Event) => void;
+  onClickCloseInputForm?: (event: Event) => void;
 }
 
 const DeleteModal = (props: DeleteModalProps) => {
@@ -24,15 +24,15 @@ const DeleteModal = (props: DeleteModalProps) => {
 
   const openModal = () => {
     setOpen(true);
-    if (props.onClickCloseInputTodoForm) {
-      document.removeEventListener('click', props.onClickCloseInputTodoForm, { capture: true });
+    if (props.onClickCloseInputForm) {
+      document.removeEventListener('click', props.onClickCloseInputForm, { capture: true });
     }
   };
 
   const closeModal = () => {
     setOpen(false);
-    if (props.onClickCloseInputTodoForm) {
-      document.addEventListener('click', props.onClickCloseInputTodoForm, { capture: true });
+    if (props.onClickCloseInputForm) {
+      document.addEventListener('click', props.onClickCloseInputForm, { capture: true });
     }
   };
 
