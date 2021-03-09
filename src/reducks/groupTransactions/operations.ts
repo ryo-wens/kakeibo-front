@@ -171,7 +171,7 @@ export const addGroupTransactions = (
         }
       );
 
-      const fetchGroupTransactionsResult = await axios.get<FetchGroupTransactionsRes>(
+      const fetchGroupTransactionsResult = axios.get<FetchGroupTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${addTransactionYear}-${addTransactionMonth}`,
         {
           cancelToken: signal.token,
@@ -179,7 +179,7 @@ export const addGroupTransactions = (
         }
       );
 
-      const fetchGroupLatestTransactionsResult = await axios.get<GroupLatestTransactionsListRes>(
+      const fetchGroupLatestTransactionsResult = axios.get<GroupLatestTransactionsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
         {
           cancelToken: signal.token,
@@ -187,12 +187,14 @@ export const addGroupTransactions = (
         }
       );
 
-      const addedGroupTransactionsList = fetchGroupTransactionsResult.data.transactions_list;
-      const addedGroupLatestTransactionsList =
-        fetchGroupLatestTransactionsResult.data.transactions_list;
+      const addedGroupTransactionsList = await fetchGroupTransactionsResult;
+      const addedGroupLatestTransactionsList = await fetchGroupLatestTransactionsResult;
 
       dispatch(
-        addGroupTransactionsAction(addedGroupTransactionsList, addedGroupLatestTransactionsList)
+        addGroupTransactionsAction(
+          addedGroupTransactionsList.data.transactions_list,
+          addedGroupLatestTransactionsList.data.transactions_list
+        )
       );
     } catch (error) {
       dispatch(
@@ -240,7 +242,7 @@ export const editGroupTransactions = (
         }
       );
 
-      const fetchGroupTransactionsResult = await axios.get<FetchGroupTransactionsRes>(
+      const fetchGroupTransactionsResult = axios.get<FetchGroupTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`,
         {
           cancelToken: signal.token,
@@ -248,7 +250,7 @@ export const editGroupTransactions = (
         }
       );
 
-      const fetchGroupLatestTransactionsResult = await axios.get<GroupLatestTransactionsListRes>(
+      const fetchGroupLatestTransactionsResult = axios.get<GroupLatestTransactionsListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/latest`,
         {
           cancelToken: signal.token,
@@ -256,12 +258,14 @@ export const editGroupTransactions = (
         }
       );
 
-      const editedGroupTransactionsList = fetchGroupTransactionsResult.data.transactions_list;
-      const editedGroupLatestTransactionsList =
-        fetchGroupLatestTransactionsResult.data.transactions_list;
+      const editedGroupTransactionsList = await fetchGroupTransactionsResult;
+      const editedGroupLatestTransactionsList = await fetchGroupLatestTransactionsResult;
 
       dispatch(
-        editGroupTransactionsAction(editedGroupTransactionsList, editedGroupLatestTransactionsList)
+        editGroupTransactionsAction(
+          editedGroupTransactionsList.data.transactions_list,
+          editedGroupLatestTransactionsList.data.transactions_list
+        )
       );
     } catch (error) {
       dispatch(
@@ -289,7 +293,7 @@ export const deleteGroupTransactions = (
         }
       );
 
-      const fetchGroupTransactionsResult = await axios.get<FetchGroupTransactionsRes>(
+      const fetchGroupTransactionsResult = axios.get<FetchGroupTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`,
         {
           cancelToken: signal.token,
@@ -306,14 +310,14 @@ export const deleteGroupTransactions = (
       );
 
       const deletedGroupTransactionsList =
-        fetchGroupTransactionsResult.data.transactions_list === undefined
+        (await fetchGroupTransactionsResult).data.transactions_list === undefined
           ? []
-          : fetchGroupTransactionsResult.data.transactions_list;
+          : (await fetchGroupTransactionsResult).data.transactions_list;
 
       const deletedGroupLatestTransactionsList =
-        fetchGroupLatestTransactionsResult.data.transactions_list === undefined
+        (await fetchGroupLatestTransactionsResult).data.transactions_list === undefined
           ? []
-          : fetchGroupLatestTransactionsResult.data.transactions_list;
+          : (await fetchGroupLatestTransactionsResult).data.transactions_list;
 
       dispatch(
         deleteGroupTransactionsAction(
@@ -448,7 +452,7 @@ export const addGroupAccount = (
         }
       );
 
-      const fetchAccountResult = await axios.get<GroupAccountListRes>(
+      const fetchAccountResult = axios.get<GroupAccountListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
         {
           cancelToken: signal.token,
@@ -456,7 +460,7 @@ export const addGroupAccount = (
         }
       );
 
-      const fetchYearlyAccountResult = await axios.get<GroupYearlyAccountList>(
+      const fetchYearlyAccountResult = axios.get<GroupYearlyAccountList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
         {
           cancelToken: signal.token,
@@ -464,10 +468,10 @@ export const addGroupAccount = (
         }
       );
 
-      const addedGroupAccountList = fetchAccountResult.data;
-      const addedGroupYearlyAccountList = fetchYearlyAccountResult.data;
+      const addedGroupAccountList = await fetchAccountResult;
+      const addedGroupYearlyAccountList = await fetchYearlyAccountResult;
 
-      dispatch(addGroupAccountAction(addedGroupYearlyAccountList, addedGroupAccountList));
+      dispatch(addGroupAccountAction(addedGroupYearlyAccountList.data, addedGroupAccountList.data));
     } catch (error) {
       dispatch(
         failedAddGroupAccountAction(error.response.status, error.response.data.error.message)
@@ -493,7 +497,7 @@ export const editGroupAccount = (
         { withCredentials: true }
       );
 
-      const fetchAccountResult = await axios.get<GroupAccountListRes>(
+      const fetchAccountResult = axios.get<GroupAccountListRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}-${customMonth}/account`,
         {
           cancelToken: signal.token,
@@ -501,9 +505,9 @@ export const editGroupAccount = (
         }
       );
 
-      const editedAccountList = fetchAccountResult.data;
+      const editedAccountList = await fetchAccountResult;
 
-      dispatch(editGroupAccountAction(editedAccountList));
+      dispatch(editGroupAccountAction(editedAccountList.data));
     } catch (error) {
       dispatch(
         failedEditGroupAccountAction(error.response.status, error.response.data.error.message)
@@ -529,7 +533,7 @@ export const deleteGroupAccount = (
         }
       );
 
-      const fetchYearlyAccountResult = await axios.get<GroupYearlyAccountList>(
+      const fetchYearlyAccountResult = axios.get<GroupYearlyAccountList>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${year}/account`,
         {
           cancelToken: signal.token,
@@ -537,7 +541,7 @@ export const deleteGroupAccount = (
         }
       );
       const deletedMessage = result.data.message;
-      const deletedYearlyAccountList = fetchYearlyAccountResult.data;
+      const deletedYearlyAccountList = await fetchYearlyAccountResult;
       const emptyGroupAccountList: GroupAccountList = {
         group_id: 0,
         month: '',
@@ -548,7 +552,11 @@ export const deleteGroupAccount = (
       };
 
       dispatch(
-        deleteGroupAccountAction(emptyGroupAccountList, deletedYearlyAccountList, deletedMessage)
+        deleteGroupAccountAction(
+          emptyGroupAccountList,
+          deletedYearlyAccountList.data,
+          deletedMessage
+        )
       );
     } catch (error) {
       dispatch(

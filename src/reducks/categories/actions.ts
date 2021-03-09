@@ -17,6 +17,7 @@ export type categoriesActions = ReturnType<
   | typeof deleteIncomeCustomCategoryActions
   | typeof deleteExpenseCustomCategoryActions
   | typeof failedDeleteCustomCategoryActions
+  | typeof resetCategoriesErrorActions
 >;
 
 export const START_FETCH_CATEGORIES = 'START_FETCH_CATEGORIES';
@@ -26,6 +27,11 @@ export const startFetchCategoriesActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -71,12 +77,7 @@ export const failedFetchCategoriesActions = (statusCode: number, errorMessage: s
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      expenseCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -91,6 +92,11 @@ export const startAddCustomCategoryActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -125,12 +131,7 @@ export const failedAddCustomCategoryActions = (statusCode: number, errorMessage:
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      expenseCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -145,6 +146,11 @@ export const startEditCustomCategoryActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -179,12 +185,7 @@ export const failedEditCustomCategoryActions = (statusCode: number, errorMessage
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      expenseCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -199,6 +200,11 @@ export const startDeleteCustomCategoryActions = () => {
     payload: {
       incomeCategoriesLoading: true,
       expenseCategoriesLoading: true,
+
+      categoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -233,14 +239,22 @@ export const failedDeleteCustomCategoryActions = (statusCode: number, errorMessa
       incomeCategoriesLoading: false,
       expenseCategoriesLoading: false,
 
-      incomeCategoriesError: {
+      categoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
+    },
+  };
+};
 
-      expenseCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
+export const RESET_CATEGORIES_ERROR = 'RESET_CATEGORIES_ERROR';
+export const resetCategoriesErrorActions = () => {
+  return {
+    type: RESET_CATEGORIES_ERROR,
+    payload: {
+      categoriesError: {
+        statusCode: null,
+        errorMessage: '',
       },
     },
   };

@@ -33,6 +33,11 @@ export const startFetchStandardBudgetsAction = () => {
     type: START_FETCH_STANDARD_BUDGETS,
     payload: {
       standardBudgetsLoading: true,
+
+      standardBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -78,6 +83,11 @@ export const startEditStandardBudgetsAction = () => {
     type: START_EDIT_STANDARD_BUDGETS,
     payload: {
       standardBudgetsLoading: true,
+
+      standardBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -113,6 +123,11 @@ export const startFetchCustomBudgetsActions = () => {
     type: START_FETCH_CUSTOM_BUDGETS,
     payload: {
       customBudgetsLoading: true,
+
+      customBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -159,6 +174,11 @@ export const startAddCustomBudgetsActions = () => {
     payload: {
       customBudgetsLoading: true,
       yearlyBudgetsLoading: true,
+
+      customBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -201,6 +221,11 @@ export const startEditCustomBudgetsActions = () => {
     payload: {
       customBudgetsLoading: true,
       yearlyBudgetsLoading: true,
+
+      customBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -242,6 +267,11 @@ export const startDeleteCustomBudgetsActions = () => {
     type: START_DELETE_CUSTOM_BUDGETS,
     payload: {
       yearlyBudgetsLoading: true,
+
+      yearlyBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -287,6 +317,11 @@ export const startFetchYearlyBudgetsActions = () => {
     type: START_FETCH_YEARLY_BUDGETS,
     payload: {
       yearlyBudgetsLoading: true,
+
+      yearlyBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };

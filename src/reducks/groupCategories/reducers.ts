@@ -92,6 +92,11 @@ export const groupCategoriesReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.RESET_GROUP_CATEGORIES_ERROR:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }

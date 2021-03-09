@@ -34,6 +34,11 @@ export const startFetchGroupStandardBudgetsActions = () => {
     type: START_FETCH_GROUP_STANDARD_BUDGETS,
     payload: {
       groupStandardBudgetsLoading: true,
+
+      groupStandardBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -84,6 +89,11 @@ export const startEditGroupStandardBudgetsActions = () => {
     type: START_EDIT_GROUP_STANDARD_BUDGETS,
     payload: {
       groupStandardBudgetsLoading: true,
+
+      groupStandardBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -121,6 +131,11 @@ export const startFetchGroupCustomBudgetsActions = () => {
     type: START_FETCH_GROUP_CUSTOM_BUDGETS,
     payload: {
       groupCustomBudgetsLoading: true,
+
+      groupCustomBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -167,6 +182,11 @@ export const startAddGroupCustomBudgetsActions = () => {
     payload: {
       groupCustomBudgetsLoading: true,
       groupYearlyBudgetsLoading: true,
+
+      groupCustomBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -209,6 +229,11 @@ export const startEditGroupCustomBudgetsActions = () => {
     payload: {
       groupCustomBudgetsLoading: true,
       groupYearlyBudgetsLoading: true,
+
+      groupCustomBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -260,6 +285,11 @@ export const startDeleteGroupCustomBudgetsActions = () => {
     type: START_DELETE_GROUP_CUSTOM_BUDGETS,
     payload: {
       groupYearlyBudgetsLoading: true,
+
+      groupCustomBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -295,6 +325,11 @@ export const startFetchGroupYearlyBudgetsActions = () => {
     type: START_FETCH_GROUP_YEARLY_BUDGETS,
     payload: {
       groupYearlyBudgetsLoading: true,
+
+      groupYearlyBudgetsError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };

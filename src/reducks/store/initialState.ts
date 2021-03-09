@@ -16,29 +16,21 @@ const initialState = {
   },
   categories: {
     incomeList: [],
-    incomeCategoriesLoading: false,
-    incomeCategoriesError: {
-      statusCode: 0,
-      errorMessage: '',
-    },
     expenseList: [],
+    incomeCategoriesLoading: false,
     expenseCategoriesLoading: false,
-    expenseCategoriesError: {
-      statusCode: 0,
+    categoriesError: {
+      statusCode: null,
       errorMessage: '',
     },
   },
   groupCategories: {
     groupIncomeList: [],
-    groupIncomeCategoriesLoading: false,
-    groupIncomeCategoriesError: {
-      statusCode: 0,
-      errorMessage: '',
-    },
     groupExpenseList: [],
+    groupIncomeCategoriesLoading: false,
     groupExpenseCategoriesLoading: false,
-    groupExpenseCategoriesError: {
-      statusCode: 0,
+    groupCategoriesError: {
+      statusCode: null,
       errorMessage: '',
     },
   },
@@ -46,19 +38,19 @@ const initialState = {
     latestTransactionsList: [],
     latestTransactionsListLoading: false,
     latestTransactionsListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     transactionsList: [],
     transactionsListLoading: false,
     transactionsListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     searchTransactionsList: [],
     searchTransactionsListLoading: false,
     searchTransactionsListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     noTransactionsMessage: '',
@@ -68,19 +60,19 @@ const initialState = {
     groupLatestTransactionsList: [],
     groupLatestTransactionsListLoading: false,
     groupLatestTransactionsListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     groupTransactionsList: [],
     groupTransactionsListLoading: false,
     groupTransactionsListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     groupSearchTransactionsList: [],
     groupSearchTransactionsListLoading: false,
     groupSearchTransactionsListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     notHistoryMessage: '',
@@ -95,7 +87,7 @@ const initialState = {
     },
     groupAccountListLoading: false,
     groupAccountListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     groupYearlyAccountList: {
@@ -104,7 +96,7 @@ const initialState = {
     },
     groupYearlyAccountListLoading: false,
     groupYearlyAccountListError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     groupYearlyAccountListForModal: {
@@ -113,7 +105,7 @@ const initialState = {
     },
     groupYearlyAccountListForModalLoading: false,
     groupYearlyAccountListForModalError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
   },
@@ -121,23 +113,23 @@ const initialState = {
     standard_budgets_list: [],
     standardBudgetsLoading: false,
     standardBudgetsError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     yearly_budgets_list: {
       year: '',
-      yearly_total_budget: 0,
+      yearly_total_budget: null,
       monthly_budgets: [],
     },
     yearlyBudgetsLoading: false,
     yearlyBudgetsError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     custom_budgets_list: [],
     customBudgetsLoading: false,
     customBudgetsError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
   },
@@ -145,23 +137,23 @@ const initialState = {
     groupStandardBudgetsList: [],
     groupStandardBudgetsLoading: false,
     groupStandardBudgetsError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     groupCustomBudgetsList: [],
     groupCustomBudgetsLoading: false,
     groupCustomBudgetsError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
     groupYearlyBudgetsList: {
       year: '',
-      yearly_total_budget: 0,
+      yearly_total_budget: null,
       monthly_budgets: [],
     },
     groupYearlyBudgetsLoading: false,
     groupYearlyBudgetsError: {
-      statusCode: 0,
+      statusCode: null,
       errorMessage: '',
     },
   },

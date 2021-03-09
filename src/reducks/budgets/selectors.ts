@@ -115,7 +115,7 @@ export const getCurrentMonthBudgets = createSelector(
     const currentWeekBudgetStatus = {
       label: '今週',
       totalExpense: currentTotalExpense.weekTotalExpense,
-      remainingBudget: currentWeekBudgets - currentTotalExpense.weekTotalExpense,
+      remainingBudget: currentWeekBudgets,
       percentage: Math.round((currentTotalExpense.weekTotalExpense / weekBudgetForThisMonth) * 100),
     };
 

@@ -146,7 +146,7 @@ export const addTransactions = (
         }
       );
 
-      const fetchTransactionsResult = await axios.get<FetchTransactionsRes>(
+      const fetchTransactionsResult = axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${addTransactionYear}-${addTransactionMonth}`,
         {
           cancelToken: signal.token,
@@ -154,7 +154,7 @@ export const addTransactions = (
         }
       );
 
-      const fetchLatestTransactionsResult = await axios.get<FetchLatestTransactionsRes>(
+      const fetchLatestTransactionsResult = axios.get<FetchLatestTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
         {
           cancelToken: signal.token,
@@ -162,10 +162,15 @@ export const addTransactions = (
         }
       );
 
-      const addedTransactionsList = fetchTransactionsResult.data.transactions_list;
-      const addedLatestTransactionsList = fetchLatestTransactionsResult.data.transactions_list;
+      const addedTransactionsList = await fetchTransactionsResult;
+      const addedLatestTransactionsList = await fetchLatestTransactionsResult;
 
-      dispatch(addTransactionsActions(addedTransactionsList, addedLatestTransactionsList));
+      dispatch(
+        addTransactionsActions(
+          addedTransactionsList.data.transactions_list,
+          addedLatestTransactionsList.data.transactions_list
+        )
+      );
     } catch (error) {
       dispatch(
         failedAddTransactionsActions(error.response.status, error.response.data.error.message)
@@ -212,7 +217,7 @@ export const editTransactions = (
         }
       );
 
-      const fetchTransactionsResult = await axios.get<FetchTransactionsRes>(
+      const fetchTransactionsResult = axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${editTransactionYear}-${editTransactionMonth}`,
         {
           cancelToken: signal.token,
@@ -220,7 +225,7 @@ export const editTransactions = (
         }
       );
 
-      const fetchLatestTransactionsResult = await axios.get<FetchLatestTransactionsRes>(
+      const fetchLatestTransactionsResult = axios.get<FetchLatestTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
         {
           cancelToken: signal.token,
@@ -228,10 +233,15 @@ export const editTransactions = (
         }
       );
 
-      const editedTransactionsList = fetchTransactionsResult.data.transactions_list;
-      const editedLatestTransactionsList = fetchLatestTransactionsResult.data.transactions_list;
+      const editedTransactionsList = await fetchTransactionsResult;
+      const editedLatestTransactionsList = await fetchLatestTransactionsResult;
 
-      dispatch(editTransactionsActions(editedTransactionsList, editedLatestTransactionsList));
+      dispatch(
+        editTransactionsActions(
+          editedTransactionsList.data.transactions_list,
+          editedLatestTransactionsList.data.transactions_list
+        )
+      );
     } catch (error) {
       dispatch(
         failedEditTransactionsActions(error.response.status, error.response.data.error.message)
@@ -257,7 +267,7 @@ export const deleteTransactions = (
         }
       );
 
-      const fetchTransactionsResult = await axios.get<FetchTransactionsRes>(
+      const fetchTransactionsResult = axios.get<FetchTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${editTransactionYear}-${editTransactionMonth}`,
         {
           cancelToken: signal.token,
@@ -265,7 +275,7 @@ export const deleteTransactions = (
         }
       );
 
-      const fetchLatestTransactionsResult = await axios.get<FetchLatestTransactionsRes>(
+      const fetchLatestTransactionsResult = axios.get<FetchLatestTransactionsRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
         {
           cancelToken: signal.token,
@@ -274,14 +284,14 @@ export const deleteTransactions = (
       );
 
       const deletedTransactionsList =
-        fetchTransactionsResult.data.transactions_list === undefined
+        (await fetchTransactionsResult).data.transactions_list === undefined
           ? []
-          : fetchTransactionsResult.data.transactions_list;
+          : (await fetchTransactionsResult).data.transactions_list;
 
       const deletedLatestTransactionsList =
-        fetchLatestTransactionsResult.data.transactions_list === undefined
+        fetchLatestTransactionsResult === undefined
           ? []
-          : fetchLatestTransactionsResult.data.transactions_list;
+          : (await fetchLatestTransactionsResult).data.transactions_list;
 
       dispatch(deleteTransactionsActions(deletedTransactionsList, deletedLatestTransactionsList));
     } catch (error) {

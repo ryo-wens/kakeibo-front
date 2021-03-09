@@ -18,6 +18,7 @@ export type groupCategoriesActions = ReturnType<
   | typeof deleteIncomeCategory
   | typeof deleteExpenseCategory
   | typeof failedDeleteGroupCategories
+  | typeof resetGroupCategoriesErrorActions
 >;
 
 export const START_FETCH_GROUP_CATEGORIES = 'START_FETCH_GROUP_CATEGORIES';
@@ -27,6 +28,11 @@ export const startFetchGroupCategoriesActions = () => {
     payload: {
       groupIncomeCategoriesLoading: true,
       groupExpenseCategoriesLoading: true,
+
+      groupCategoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -72,12 +78,7 @@ export const failedFetchGroupCategories = (statusCode: number, errorMessage: str
       groupIncomeCategoriesLoading: false,
       groupExpenseCategoriesLoading: false,
 
-      groupIncomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      groupExpenseCategoriesError: {
+      groupCategoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -92,6 +93,11 @@ export const startAddGroupCategoriesActions = () => {
     payload: {
       groupIncomeCategoriesLoading: true,
       groupExpenseCategoriesLoading: true,
+
+      groupCategoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -126,12 +132,7 @@ export const failedAddGroupCategoriesActions = (statusCode: number, errorMessage
       groupIncomeCategoriesLoading: false,
       groupExpenseCategoriesLoading: false,
 
-      groupIncomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      groupExpenseCategoriesError: {
+      groupCategoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -146,6 +147,11 @@ export const startEditGroupCategoriesActions = () => {
     payload: {
       groupIncomeCategoriesLoading: true,
       groupExpenseCategoriesLoading: true,
+
+      groupCategoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -180,12 +186,7 @@ export const failedEditGroupCategories = (statusCode: number, errorMessage: stri
       groupIncomeCategoriesLoading: false,
       groupExpenseCategoriesLoading: false,
 
-      groupIncomeCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-
-      groupExpenseCategoriesError: {
+      groupCategoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
@@ -200,6 +201,11 @@ export const startDeleteGroupCategoriesActions = () => {
     payload: {
       groupIncomeCategoriesLoading: true,
       groupExpenseCategoriesLoading: true,
+
+      groupCategoriesError: {
+        statusCode: null,
+        errorMessage: '',
+      },
     },
   };
 };
@@ -234,14 +240,22 @@ export const failedDeleteGroupCategories = (statusCode: number, errorMessage: st
       groupIncomeCategoriesLoading: false,
       groupExpenseCategoriesLoading: false,
 
-      groupIncomeCategoriesError: {
+      groupCategoriesError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
+    },
+  };
+};
 
-      groupExpenseCategoriesError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
+export const RESET_GROUP_CATEGORIES_ERROR = 'RESET_GROUP_CATEGORIES_ERROR';
+export const resetGroupCategoriesErrorActions = () => {
+  return {
+    type: RESET_GROUP_CATEGORIES_ERROR,
+    payload: {
+      groupCategoriesError: {
+        statusCode: null,
+        errorMessage: '',
       },
     },
   };
