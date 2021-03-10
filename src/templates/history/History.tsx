@@ -8,7 +8,7 @@ import HeaderContainer from '../../containers/header/HeaderContainer';
 import './history.scss';
 
 interface HistoryProps {
-  path: string;
+  query: string;
   pathName: string;
   groupId: string;
   openSearchField: boolean;
@@ -35,24 +35,10 @@ const History = (props: HistoryProps) => {
             className="switch-item-tabs__buttons  history__top-button"
             aria-label="small outlined button group"
           >
-            <button
-              style={props.currentPageColor(
-                props.pathName !== 'group'
-                  ? '/daily/history'
-                  : `/group/${props.groupId}/daily/history`
-              )}
-              onClick={props.routingDailyHistory}
-            >
+            <button style={props.currentPageColor('?daily')} onClick={props.routingDailyHistory}>
               日ごと
             </button>
-            <button
-              style={props.currentPageColor(
-                props.pathName !== 'group'
-                  ? '/weekly/history'
-                  : `/group/${props.groupId}/weekly/history`
-              )}
-              onClick={props.routingWeeklyHistory}
-            >
+            <button style={props.currentPageColor('?weekly')} onClick={props.routingWeeklyHistory}>
               週ごと
             </button>
           </div>
@@ -67,8 +53,7 @@ const History = (props: HistoryProps) => {
           )}
         </div>
 
-        {(props.path === '/daily/history' ||
-          props.path === `/group/${props.groupId}/daily/history`) && (
+        {props.query === '?daily' && (
           <div className="history__table-size">
             <DailyHistoryContainer
               selectYear={props.selectedYear}
@@ -81,13 +66,13 @@ const History = (props: HistoryProps) => {
           </div>
         )}
 
-        {props.path === '/weekly/history' && (
+        {props.query === '?weekly' && (
           <div className="history__table-size">
             <WeeklyHistoryContainer month={props.selectedMonth} year={props.selectedYear} />
           </div>
         )}
 
-        {props.path === `/group/${props.groupId}/weekly/history` && (
+        {props.query === '?weekly' && (
           <div className="history__table-size">
             <GroupWeeklyHistoryContainer month={props.selectedMonth} year={props.selectedYear} />
           </div>

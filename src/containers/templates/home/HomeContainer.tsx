@@ -3,6 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
 import { fetchYearlyBudgets } from '../../../reducks/budgets/operations';
+import { fetchCategories } from '../../../reducks/categories/operations';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { fetchGroupYearlyBudgets } from '../../../reducks/groupBudgets/operations';
 import { fetchGroupTransactionsList } from '../../../reducks/groupTransactions/operations';
@@ -41,6 +42,7 @@ const HomeContainer = () => {
     if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
       dispatch(fetchYearlyBudgets(year, signal));
+      dispatch(fetchCategories(signal));
       return () => {
         signal.cancel();
       };

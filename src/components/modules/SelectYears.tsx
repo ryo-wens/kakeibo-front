@@ -65,6 +65,17 @@ const SelectYears = (props: SelectYearsProps) => {
   };
 
   const onClickChangeYear = () => {
+    if (!budgetsPage) {
+      const newNextYearQuery = { ...queryParams, '?year': itemYear };
+
+      history.push({
+        search: decodeURIComponent(qs.stringify(newNextYearQuery)),
+      });
+    } else if (pathName === 'group') {
+      history.push({ pathname: `/group/${group_id}/budgets`, search: `?yearly&year=${itemYear}` });
+    } else {
+      history.push({ pathname: '/budgets', search: `?yearly&year=${itemYear}` });
+    }
     props.setSelectedYear(itemYear);
     setSelectOpen(false);
   };

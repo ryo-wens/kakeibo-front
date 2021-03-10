@@ -16,13 +16,11 @@ const Router = (): JSX.Element => {
       <Route exact path={'/signup'} component={SignUpContainer} />
       <Route exact path={'/login'} component={LogInContainer} />
       <Route exact path={'/home'} component={HomeContainer} />
-      <Route exact path={'/daily/history'} component={HistoryContainer} />
-      <Route exact path={'/weekly/history'} component={HistoryContainer} />
+      <Route exact path={'/history'} component={HistoryContainer} />
       <Route exact path={'/budgets'} component={BudgetsContainer} />
       <Route exact path={'/todo'} component={TodoContainer} />
       <Route exact path={'/group/:group_id/home'} component={HomeContainer} />
-      <Route exact path={'/group/:group_id/daily/history'} component={HistoryContainer} />
-      <Route exact path={'/group/:group_id/weekly/history'} component={HistoryContainer} />
+      <Route exact path={'/group/:group_id/history'} component={HistoryContainer} />
       <Route exact path={'/group/:group_id/budgets'} component={BudgetsContainer} />
       <Route exact path={'/group/:group_id/accounting'} component={YearlyAccountContainer} />
       <Route exact path={'/group/:group_id/task'} component={Task} />

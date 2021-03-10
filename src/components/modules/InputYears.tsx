@@ -68,81 +68,69 @@ const InputYears = (props: InputYearsProps) => {
 
   return (
     <>
-      {(() => {
-        if (!openSelectYears) {
-          return (
-            <div className="history history__top-button">
-              <button className="history__prev-btn" onClick={() => updatePrevYears()}>
-                <ArrowLeftIcon />
-              </button>
-              <button
-                className="input-years__btn__jump-years"
-                onClick={() => setOpenSelectYears(true)}
-              >
-                {props.selectedYear} 年 {props.selectedMonth} 月
-                <ExpandMoreIcon className="input-years__icon" />
-              </button>
-              <button className="history__next-btn" onClick={() => updateNextYears()}>
-                <ArrowRightIcon />
-              </button>
-            </div>
-          );
-        } else if (openSelectYears) {
-          return (
-            <div className="input-years">
-              <button className="input-years__btn__close" onClick={() => setOpenSelectYears(false)}>
-                <CloseIcon />
-              </button>
-              <form className="input-years__select-position">
-                <select
-                  defaultValue={props.selectedYear}
-                  onChange={changeItemYear}
-                  className="input-years__select"
-                >
-                  {years.map((year, index) => (
-                    <option key={index} value={year}>
-                      {year}
-                    </option>
-                  ))}
-                </select>
-                年
-                <select
-                  defaultValue={props.selectedMonth}
-                  className="input-years__select"
-                  onChange={changeItemMonth}
-                >
-                  {months.map((month, index) => (
-                    <option key={index} value={month}>
-                      {month}
-                    </option>
-                  ))}
-                </select>
-                月
-              </form>
-              <div className="input-years__btn">
-                <button className="input-years__btn__display" onClick={() => onClickDisplayYears()}>
-                  表示
-                </button>
-              </div>
-            </div>
-          );
-        }
-      })()}
-      {(() => {
-        if (props.selectedYear !== year || props.selectedMonth !== month) {
-          return (
-            <>
-              <div className="history__spacer" />
-              <button
-                className="input-years__now-btn input-years__btn__display"
-                onClick={() => onClickNowYears()}
-              >
-                現在
-              </button>
-            </>
-          );
-        }
-      })()}
+      {!openSelectYears ? (
+        <div className="history history__top-button">
+          <button className="history__prev-btn" onClick={() => updatePrevYears()}>
+            <ArrowLeftIcon />
+          </button>
+          <button className="input-years__btn__jump-years" onClick={() => setOpenSelectYears(true)}>
+            {props.selectedYear} 年 {props.selectedMonth} 月
+            <ExpandMoreIcon className="input-years__icon" />
+          </button>
+          <button className="history__next-btn" onClick={() => updateNextYears()}>
+            <ArrowRightIcon />
+          </button>
+        </div>
+      ) : (
+        <div className="input-years">
+          <button className="input-years__btn__close" onClick={() => setOpenSelectYears(false)}>
+            <CloseIcon />
+          </button>
+          <form className="input-years__select-position">
+            <select
+              defaultValue={props.selectedYear}
+              onChange={changeItemYear}
+              className="input-years__select"
+            >
+              {years.map((year, index) => (
+                <option key={index} value={year}>
+                  {year}
+                </option>
+              ))}
+            </select>
+            年
+            <select
+              defaultValue={props.selectedMonth}
+              className="input-years__select"
+              onChange={changeItemMonth}
+            >
+              {months.map((month, index) => (
+                <option key={index} value={month}>
+                  {month}
+                </option>
+              ))}
+            </select>
+            月
+          </form>
+          <div className="input-years__btn">
+            <button className="input-years__btn__display" onClick={() => onClickDisplayYears()}>
+              表示
+            </button>
+          </div>
+        </div>
+      )}
+
+      {(props.selectedYear !== year || props.selectedMonth !== month) && (
+        <>
+          <div className="history__spacer" />
+          <button
+            className="input-years__now-btn input-years__btn__display"
+            onClick={() => onClickNowYears()}
+          >
+            現在
+          </button>
+        </>
+      )}
     </>
   );
 };

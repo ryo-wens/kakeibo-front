@@ -36,7 +36,7 @@
   &__btn {
 
     &__display {
-      @include display-btn(linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%));
+      @include display-btn($display-btn-main_color);
       color: white;
       margin-top: 5px;
       margin-bottom: 15px;

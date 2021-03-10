@@ -18,10 +18,15 @@ export const getStandardBudgets = createSelector(
   [budgetsSelector],
   (state) => state.standard_budgets_list
 );
+
 export const getYearlyBudgets = createSelector(
   [budgetsSelector],
   (state) => state.yearly_budgets_list
 );
+
+export const getYearlyTotalBudgets = (state: State) =>
+  state.budgets.yearly_budgets_list.yearly_total_budget;
+
 export const getCustomBudgets = createSelector(
   [budgetsSelector],
   (state) => state.custom_budgets_list

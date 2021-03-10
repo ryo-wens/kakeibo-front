@@ -1,12 +1,13 @@
 @import "src/assets/variable.scss";
 
 .btn--primary {
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: none;
   background-color: #ff6600;
-  border-radius: 4px;
+  border-radius: 0.4rem;
   color: white;
   cursor: pointer;
   font-weight: bolder;
+  outline: none;
 
   width: 100px;
   height: 40px;
