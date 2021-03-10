@@ -5,8 +5,8 @@ import AddTaskNameFormContainer from '../../../../containers/task/modules/form/A
 import TaskListItemComponentContainer from '../../../../containers/task/modules/listItem/TaskListItemComponentContainer';
 
 interface TaskListAreaProps {
-  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   taskList: GroupTaskList;
+  handleStopPolling: (value: boolean) => void;
 }
 
 const TaskListArea = (props: TaskListAreaProps) => {
@@ -14,20 +14,17 @@ const TaskListArea = (props: TaskListAreaProps) => {
     <div className="task-list-area">
       <h3 className="task-list-area__title">タスクリスト</h3>
       {props.taskList.length !== 0 ? (
-        <div className="task-list-area__items">
+        <ul className="task-list-area__list">
           {props.taskList.map((listItem: TaskListItem) => {
-            if (listItem.cycle_type === null) {
-              return (
-                <div className="task-list-area__item" key={listItem.id}>
-                  <TaskListItemComponentContainer
-                    setEditing={props.setEditing}
-                    listItem={listItem}
-                  />
-                </div>
-              );
-            }
+            return (
+              <TaskListItemComponentContainer
+                handleStopPolling={props.handleStopPolling}
+                listItem={listItem}
+                key={listItem.id}
+              />
+            );
           })}
-        </div>
+        </ul>
       ) : (
         <p className="task-list-area__message">タスクは登録されていません。</p>
       )}

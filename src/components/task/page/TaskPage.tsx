@@ -11,14 +11,14 @@ import TaskToolBarAreaContainer from '../../../containers/task/page/taskToolBarA
 import TaskTableArea from './taskTableArea/TaskTableArea';
 
 interface TaskPageProps {
-  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   approvedGroup: Group;
   taskListForUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
   taskList: GroupTaskList;
   groupId: number;
+  handleChangeSelectedDate: (date: Date | null) => void;
+  handleStopPolling: (value: boolean) => void;
 }
 
 const TaskPage = (props: TaskPageProps) => {
@@ -26,15 +26,14 @@ const TaskPage = (props: TaskPageProps) => {
     <div className="task-page">
       <TaskToolBarAreaContainer
         selectedDate={props.selectedDate}
-        setSelectedDate={props.setSelectedDate}
+        handleChangeSelectedDate={props.handleChangeSelectedDate}
         approvedGroup={props.approvedGroup}
         groupTasksListForEachUser={props.taskListForUser}
         participatingTaskUsers={props.participatingTaskUsers}
       />
-      <TaskListArea taskList={props.taskList} setEditing={props.setEditing} />
+      <TaskListArea taskList={props.taskList} handleStopPolling={props.handleStopPolling} />
       <TaskTableArea
         selectedDate={props.selectedDate}
-        setSelectedDate={props.setSelectedDate}
         taskListForUser={props.taskListForUser}
         participatingTaskUsers={props.participatingTaskUsers}
         taskList={props.taskList}

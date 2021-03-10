@@ -8,7 +8,7 @@ interface AddTaskNameFormProps {
   buttonLabel: string;
   openForm: boolean;
   taskName: string;
-  handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleChangeTaskName: (event: React.ChangeEvent<{ value: string }>) => void;
   disabledButton: boolean;
   handleOpenInputTaskForm: () => void;
   handleCloseInputTaskForm: () => void;
@@ -29,7 +29,7 @@ const AddTaskNameForm = (props: AddTaskNameFormProps) => {
         <InputTaskNameFormContainer
           titleLabel={'タスクを追加'}
           buttonLabel={'追加'}
-          handleTaskNameChange={props.handleTaskNameChange}
+          handleChangeTaskName={props.handleChangeTaskName}
           disabledButton={props.disabledButton}
           taskName={props.taskName}
           handleCloseInputTaskForm={props.handleCloseInputTaskForm}

@@ -6,8 +6,8 @@ import { deleteTaskItem, editTaskItem } from '../../../../reducks/groupTasks/ope
 import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface TaskListItemComponentContainerProps {
-  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   listItem: TaskListItem;
+  handleStopPolling: (value: boolean) => void;
 }
 
 const TaskListItemComponentContainer = (props: TaskListItemComponentContainerProps) => {
@@ -23,15 +23,16 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
 
   const handleOpenInputTaskForm = () => {
     setOpenForm(true);
-    props.setEditing(true);
+    props.handleStopPolling(true);
   };
 
   const handleCloseInputTaskForm = () => {
     setOpenForm(false);
     setTaskName(initialState.initialTaskName);
+    props.handleStopPolling(false);
   };
 
-  const handleTaskNameChange = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleChangeTaskName = (event: React.ChangeEvent<{ value: string }>) => {
     setTaskName(event.target.value as string);
   };
 
@@ -69,7 +70,7 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
       titleLabel={'タスク名を編集'}
       buttonLabel={'保存'}
       openForm={openForm}
-      handleTaskNameChange={handleTaskNameChange}
+      handleChangeTaskName={handleChangeTaskName}
       initialTaskName={initialState.initialTaskName}
       taskName={taskName}
       handleOpenInputTaskForm={handleOpenInputTaskForm}

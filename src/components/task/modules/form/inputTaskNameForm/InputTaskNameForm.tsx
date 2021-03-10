@@ -8,7 +8,7 @@ interface InputTaskNameFormProps {
   titleLabel: string;
   buttonLabel: string;
   taskName: string;
-  handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleChangeTaskName: (event: React.ChangeEvent<{ value: string }>) => void;
   disabledButton: boolean;
   handleCloseInputTaskForm: () => void;
   handleTaskItem: () => void;
@@ -24,7 +24,7 @@ const InputTaskNameForm = React.forwardRef(
           <p className="input-task-name-form__title--text">{props.titleLabel}</p>
           <button
             className="input-task-name-form__title--close-btn"
-            onClick={() => props.handleCloseInputTaskForm()}
+            onClick={props.handleCloseInputTaskForm}
           >
             <CloseIcon />
           </button>
@@ -34,7 +34,7 @@ const InputTaskNameForm = React.forwardRef(
             id="task-name"
             label={''}
             value={props.taskName}
-            onChange={props.handleTaskNameChange}
+            onChange={props.handleChangeTaskName}
             required={true}
             type={'text'}
             fullWidth={false}
@@ -52,7 +52,7 @@ const InputTaskNameForm = React.forwardRef(
             </button>
             <button
               className="input-task-name-form__btn--cancel"
-              onClick={() => props.handleCloseInputTaskForm()}
+              onClick={props.handleCloseInputTaskForm}
             >
               キャンセル
             </button>

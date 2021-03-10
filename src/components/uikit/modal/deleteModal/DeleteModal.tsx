@@ -40,7 +40,7 @@ const DeleteModal = (props: DeleteModalProps) => {
     <div className="delete-modal">
       <div className="delete-modal__position">
         <h3 className="delete-modal__title">{props.title}</h3>
-        <button className="delete-modal__close-btn" onClick={() => closeModal()}>
+        <button className="delete-modal__close-btn" onClick={closeModal}>
           <CloseIcon />
         </button>
       </div>
@@ -53,7 +53,7 @@ const DeleteModal = (props: DeleteModalProps) => {
         >
           {props.buttonLabel}
         </button>
-        <button className="delete-modal__btn--cancel" onClick={() => closeModal()}>
+        <button className="delete-modal__btn--cancel" onClick={closeModal}>
           キャンセル
         </button>
       </div>

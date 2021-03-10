@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { State } from '../../../reducks/store/types';
 import { getApprovedGroups } from '../../../reducks/groups/selectors';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { Group, Groups } from '../../../reducks/groups/types';
@@ -27,12 +26,11 @@ const TaskPageContainer = () => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
 
-  const [selectedDate, setSelectedDate] = useState<Date | null>(date);
+  const approvedGroups = useSelector(getApprovedGroups);
+  const groupTasksListForEachUser = useSelector(getGroupTaskListForEachUser);
+  const groupTasksList = useSelector(getGroupTaskList);
 
-  const selector = useSelector((state: State) => state);
-  const approvedGroups = getApprovedGroups(selector);
-  const groupTasksListForEachUser = getGroupTaskListForEachUser(selector);
-  const groupTasksList = getGroupTaskList(selector);
+  const [selectedDate, setSelectedDate] = useState<Date | null>(date);
   const [taskListForUser, setTaskListForUser] = useState<GroupTaskListForEachUser>([]);
   const [taskList, setTaskList] = useState<GroupTaskList>([]);
   const [groups, setGroups] = useState<Groups>([]);
@@ -103,16 +101,24 @@ const TaskPageContainer = () => {
 
   const participatingTaskUsers = generateParticipatingTaskUsers(approvedGroup);
 
+  const handleStopPolling = (value: boolean) => {
+    setEditing(value);
+  };
+
+  const handleChangeSelectedDate = (date: Date | null) => {
+    setSelectedDate(date);
+  };
+
   return (
     <TaskPage
-      setEditing={setEditing}
       selectedDate={selectedDate}
-      setSelectedDate={setSelectedDate}
       approvedGroup={approvedGroup}
       taskListForUser={taskListForUser}
       participatingTaskUsers={participatingTaskUsers}
       taskList={taskList}
       groupId={Number(group_id)}
+      handleChangeSelectedDate={handleChangeSelectedDate}
+      handleStopPolling={handleStopPolling}
     />
   );
 };

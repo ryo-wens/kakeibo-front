@@ -9,16 +9,15 @@ import EditTaskUserModalContainer from '../../../../containers/task/page/taskToo
 
 interface TaskToolBarAreaProps {
   selectedDate: Date | null;
-  existsSelectDate: Date;
-  handleDateChange: (selectDate: Date | null) => void;
-  getTodayDate: () => void;
-  getPrevWeek: (selectDate: Date) => void;
-  getNextWeek: (selectDate: Date) => void;
   weekStartDate: Date;
   weekLastDate: Date;
   approvedGroup: Group;
   groupTasksListForEachUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
+  handleChangeDate: (selectDate: Date | null) => void;
+  handleGetToday: () => void;
+  handleGetPrevWeek: (selectDate: Date | null) => void;
+  handleGetNextWeek: (selectDate: Date | null) => void;
 }
 
 const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
@@ -27,7 +26,7 @@ const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
       <div className="task-tool-bar-area__date-picker">
         <DatePicker
           value={props.selectedDate}
-          onChange={props.handleDateChange}
+          onChange={props.handleChangeDate}
           id={'date-picker-dialog'}
           label={''}
           required={false}
@@ -38,7 +37,7 @@ const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
       <div className="task-tool-bar-area__display-week">
         <button
           className="task-tool-bar-area__prev-btn"
-          onClick={() => props.getPrevWeek(props.existsSelectDate)}
+          onClick={() => props.handleGetPrevWeek(props.selectedDate)}
         >
           <ArrowLeftIcon />
         </button>
@@ -63,7 +62,7 @@ const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
         </div>
         <button
           className="task-tool-bar-area__next-btn"
-          onClick={() => props.getNextWeek(props.existsSelectDate)}
+          onClick={() => props.handleGetNextWeek(props.selectedDate)}
         >
           <ArrowRightIcon />
         </button>
@@ -71,7 +70,7 @@ const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
       <button
         className="task-tool-bar-area__today-btn"
         disabled={false}
-        onClick={() => props.getTodayDate()}
+        onClick={props.handleGetToday}
       >
         今日
       </button>

@@ -5,7 +5,7 @@ interface InputTaskNameFormContainerProps {
   titleLabel: string;
   buttonLabel: string;
   taskName: string;
-  handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleChangeTaskName: (event: React.ChangeEvent<{ value: string }>) => void;
   disabledButton: boolean;
   handleCloseInputTaskForm: () => void;
   handleTaskItem: () => void;
@@ -28,7 +28,7 @@ const InputTaskNameFormContainer = (props: InputTaskNameFormContainerProps) => {
       titleLabel={props.titleLabel}
       buttonLabel={props.buttonLabel}
       taskName={props.taskName}
-      handleTaskNameChange={props.handleTaskNameChange}
+      handleChangeTaskName={props.handleChangeTaskName}
       disabledButton={props.disabledButton}
       handleCloseInputTaskForm={props.handleCloseInputTaskForm}
       handleTaskItem={props.handleTaskItem}

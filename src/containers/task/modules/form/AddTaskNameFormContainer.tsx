@@ -27,7 +27,7 @@ const AddTaskNameFormContainer = () => {
     setOpenForm(false);
   };
 
-  const handleTaskNameChange = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleChangeTaskName = (event: React.ChangeEvent<{ value: string }>) => {
     setTaskName(event.target.value as string);
   };
 
@@ -54,7 +54,7 @@ const AddTaskNameFormContainer = () => {
       titleLabel={'タスクを追加'}
       buttonLabel={'追加'}
       openForm={openForm}
-      handleTaskNameChange={handleTaskNameChange}
+      handleChangeTaskName={handleChangeTaskName}
       disabledButton={disabledButton}
       taskName={taskName}
       handleOpenInputTaskForm={handleOpenInputTaskForm}

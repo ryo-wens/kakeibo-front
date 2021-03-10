@@ -15,10 +15,10 @@ interface AssignmentTaskFormProps {
   cycleType: TaskCycleType;
   cycle: number;
   taskUserId: number;
-  handleDateChange: (date: Date | null) => void;
-  handleCycleTypeChange: (event: React.ChangeEvent<{ value: string }>) => void;
-  handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleTaskUserChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleChangeDate: (date: Date | null) => void;
+  handleChangeCycleType: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleChangeCycle: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleAssignTaskItem: () => void;
   handleCloseModal: () => void;
   disabledButton: boolean;
@@ -37,7 +37,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
       value: (
         <DatePicker
           value={props.baseDate}
-          onChange={props.handleDateChange}
+          onChange={props.handleChangeDate}
           id={'date-picker-dialog'}
           label={''}
           required={false}
@@ -51,7 +51,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
       value: (
         <SelectTaskCycleType
           cycleType={props.cycleType}
-          handleCycleTypeChange={props.handleCycleTypeChange}
+          handleChangeCycleType={props.handleChangeCycleType}
         />
       ),
     },
@@ -61,7 +61,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
         <>
           <InputTaskCycle
             value={props.cycle}
-            handleCycleChange={props.handleCycleChange}
+            handleChangeCycle={props.handleChangeCycle}
             cycleType={props.cycleType}
           />
           <p className="assignment-task-form__message">{props.message}</p>
@@ -74,7 +74,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
         <SelectTaskUser
           participatingTaskUsers={props.participatingTaskUsers}
           taskUserId={props.taskUserId}
-          handleTaskUserChange={props.handleTaskUserChange}
+          handleChangeTaskUser={props.handleChangeTaskUser}
         />
       ),
     },
@@ -84,10 +84,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
     <div className="assignment-task-form">
       <div className="assignment-task-form__position">
         <h3 className="assignment-task-form__title">タスクの割り当て</h3>
-        <button
-          className="assignment-task-form__btn-position"
-          onClick={() => props.handleCloseModal()}
-        >
+        <button className="assignment-task-form__btn-position" onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>
@@ -116,7 +113,7 @@ const AssignmentTaskForm = (props: AssignmentTaskFormProps) => {
           </button>
           <button
             className="assignment-task-form__operation-btn--cancel"
-            onClick={() => props.handleCloseModal()}
+            onClick={props.handleCloseModal}
           >
             キャンセル
           </button>

@@ -53,22 +53,22 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
     setOpen(false);
   };
 
-  const inputTaskName = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeTaskName = (event: React.ChangeEvent<HTMLInputElement>) => {
     setTaskName(event.target.value as string);
   };
 
-  const handleDateChange = (selectedDate: Date | null) => {
+  const handleChangeDate = (selectedDate: Date | null) => {
     setBaseDate(selectedDate as Date);
   };
 
-  const handleCycleTypeChange = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleChangeCycleType = (event: React.ChangeEvent<{ value: string }>) => {
     setCycleType(event.target.value as TaskCycleType);
     if (event.target.value === 'none') {
       setCycle(Number(1));
     }
   };
 
-  const handleCycleChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleChangeCycle = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (isNaN(Number(event.target.value))) {
       setMessage('※ 半角数字のみ入力可能です');
     } else {
@@ -77,7 +77,7 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
     }
   };
 
-  const handleTaskUserChange = (event: React.ChangeEvent<HTMLSelectElement>) => {
+  const handleChangeTaskUser = (event: React.ChangeEvent<HTMLSelectElement>) => {
     setTaskUserId(Number(event.target.value));
   };
 
@@ -133,7 +133,7 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
           required={true}
           type={'text'}
           value={taskName}
-          onChange={inputTaskName}
+          onChange={handleChangeTaskName}
         />
       }
       initialTaskName={initialState.initialTaskName}
@@ -144,10 +144,10 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
       taskUserId={taskUserId}
       handleOpenModal={handleOpenModal}
       handleCloseModal={handleCloseModal}
-      handleDateChange={handleDateChange}
-      handleCycleTypeChange={handleCycleTypeChange}
-      handleCycleChange={handleCycleChange}
-      handleTaskUserChange={handleTaskUserChange}
+      handleChangeDate={handleChangeDate}
+      handleChangeCycleType={handleChangeCycleType}
+      handleChangeCycle={handleChangeCycle}
+      handleChangeTaskUser={handleChangeTaskUser}
       handleEditAssignTaskItem={() => handleEditAssignTaskItem()}
       disabledButton={disabledButton()}
       message={message}

@@ -9,7 +9,7 @@ interface TaskListItemComponentProps {
   openForm: boolean;
   initialTaskName: string;
   taskName: string;
-  handleTaskNameChange: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleChangeTaskName: (event: React.ChangeEvent<{ value: string }>) => void;
   handleOpenInputTaskForm: () => void;
   handleCloseInputTaskForm: () => void;
   disabledButton: boolean;
@@ -27,14 +27,14 @@ const TaskListItemComponent = (props: TaskListItemComponentProps) => {
           <span className="task-list-item-component__text">{props.initialTaskName}</span>
           <EditIcon
             className="task-list-item-component__edit-icon"
-            onClick={() => props.handleOpenInputTaskForm()}
+            onClick={props.handleOpenInputTaskForm}
           />
         </li>
       ) : (
         <InputTaskNameFormContainer
           titleLabel={props.titleLabel}
           buttonLabel={props.buttonLabel}
-          handleTaskNameChange={props.handleTaskNameChange}
+          handleChangeTaskName={props.handleChangeTaskName}
           disabledButton={props.disabledButton}
           taskName={props.taskName}
           handleCloseInputTaskForm={props.handleCloseInputTaskForm}

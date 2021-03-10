@@ -22,14 +22,11 @@ const TaskUserForm = (props: TaskUserFormProps) => {
   return (
     <>
       <div className="task-user-form__position">
-        <button
-          className="task-user-form__back-btn"
-          onClick={() => props.handleCloseTaskUserForm()}
-        >
+        <button className="task-user-form__back-btn" onClick={props.handleCloseTaskUserForm}>
           <ChevronLeftIcon />
         </button>
         <h3 className="task-user-form__title">{props.title}</h3>
-        <button className="task-user-form__close-btn" onClick={() => props.handleCloseModal()}>
+        <button className="task-user-form__close-btn" onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>

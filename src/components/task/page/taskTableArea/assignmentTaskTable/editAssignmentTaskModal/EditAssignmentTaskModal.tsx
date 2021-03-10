@@ -15,10 +15,10 @@ interface EditAssignmentTaskModalProps {
   taskUserId: number;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
-  handleDateChange: (date: Date | null) => void;
-  handleCycleTypeChange: (event: React.ChangeEvent<{ value: string }>) => void;
-  handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleTaskUserChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleChangeDate: (date: Date | null) => void;
+  handleChangeCycleType: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleChangeCycle: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   handleEditAssignTaskItem: () => void;
   handleReleaseTaskItem: () => void;
   disabledButton: boolean;
@@ -40,10 +40,10 @@ const EditAssignmentTaskModal = (props: EditAssignmentTaskModalProps) => {
           cycleType={props.cycleType}
           cycle={props.cycle}
           taskUserId={props.taskUserId}
-          handleDateChange={props.handleDateChange}
-          handleCycleTypeChange={props.handleCycleTypeChange}
-          handleCycleChange={props.handleCycleChange}
-          handleTaskUserChange={props.handleTaskUserChange}
+          handleChangeDate={props.handleChangeDate}
+          handleChangeCycleType={props.handleChangeCycleType}
+          handleChangeCycle={props.handleChangeCycle}
+          handleChangeTaskUser={props.handleChangeTaskUser}
           handleCloseModal={props.handleCloseModal}
           handleAssignTaskItem={props.handleEditAssignTaskItem}
           disabledButton={props.disabledButton}

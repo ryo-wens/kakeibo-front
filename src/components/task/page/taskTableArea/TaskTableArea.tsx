@@ -14,7 +14,6 @@ interface TaskTableAreaProps {
   participatingTaskUsers: TaskUsers;
   groupId: number;
   selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   taskListForUser: GroupTaskListForEachUser;
   taskList: GroupTaskList;
 }

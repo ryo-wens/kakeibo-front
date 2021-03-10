@@ -32,10 +32,7 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
         <>
           <div className="edit-task-user-modal__position">
             <h3 className="edit-task-user-modal__title">タスクユーザーリスト</h3>
-            <button
-              className="edit-task-user-modal__btn-position"
-              onClick={() => props.handleCloseModal()}
-            >
+            <button className="edit-task-user-modal__btn-position" onClick={props.handleCloseModal}>
               <CloseIcon />
             </button>
           </div>
@@ -57,14 +54,14 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
             )}
             <div
               className="edit-task-user-modal__choice-position"
-              onClick={() => props.handleOpenAddTaskUserForm()}
+              onClick={props.handleOpenAddTaskUserForm}
             >
               <span className="edit-task-user-modal__choice">タスクユーザーを追加</span>
               <ChevronRightIcon className="edit-task-user-modal__choice-icon" />
             </div>
             <div
               className="edit-task-user-modal__choice-position"
-              onClick={() => props.handleOpenDeleteTaskUserForm()}
+              onClick={props.handleOpenDeleteTaskUserForm}
             >
               <span className="edit-task-user-modal__choice">タスクユーザーを削除</span>
               <ChevronRightIcon className="edit-task-user-modal__choice-icon" />
@@ -95,7 +92,7 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
 
   return (
     <div>
-      <button className="task--btn" disabled={false} onClick={() => props.handleOpenModal()}>
+      <button className="task--btn" disabled={false} onClick={props.handleOpenModal}>
         タスクユーザーを編集
       </button>
       <Modal

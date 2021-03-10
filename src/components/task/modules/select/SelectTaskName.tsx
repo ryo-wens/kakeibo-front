@@ -3,7 +3,7 @@ import { GroupTaskList, TaskListItem } from '../../../../reducks/groupTasks/type
 import '../../../../assets/modules/selector.scss';
 
 interface SelectTaskNameProps {
-  handleTaskNameChange: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleChangeTaskName: (event: React.ChangeEvent<HTMLSelectElement>) => void;
   groupTasksList: GroupTaskList;
 }
 
@@ -14,7 +14,7 @@ const SelectTaskName = (props: SelectTaskNameProps) => {
         className="selector__box"
         name={'select-task-name'}
         required={true}
-        onChange={props.handleTaskNameChange}
+        onChange={props.handleChangeTaskName}
       >
         <option value={0}>タスク名を選択</option>
         {props.groupTasksList.map(
