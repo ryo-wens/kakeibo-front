@@ -65,6 +65,10 @@
     margin: 0 auto;
     padding: 5px;
     width: 250px;
+
+    &__date {
+      width: 300px;
+    }
   }
 
   &__total-budget {

@@ -84,14 +84,13 @@
 
     &--arrow::after {
       top: 33px;
-      left: -80px
     }
 
     &--arrow:after{
       content: "";
       position: relative;
       top: 30px;
-      left: -72px;
+      left: -85px;
       height: 0;
       width: 0;
       border: 8px solid transparent;

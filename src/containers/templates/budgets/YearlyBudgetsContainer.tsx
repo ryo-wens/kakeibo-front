@@ -1,7 +1,7 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
-import { getYearlyBudgets } from '../../../reducks/budgets/selectors';
+import { getYearlyTotalBudgets } from '../../../reducks/budgets/selectors';
 import { getGroupYearlyBudgets } from '../../../reducks/groupBudgets/selectors';
 import YearlyBudgets from '../../../templates/budgets/YearlyBudgets';
 
@@ -12,7 +12,7 @@ interface YearlyBudgetsContainerProps {
 
 const YearlyBudgetsContainer = (props: YearlyBudgetsContainerProps) => {
   const pathName = useLocation().pathname.split('/')[1];
-  const totalBudget = useSelector(getYearlyBudgets).yearly_total_budget;
+  const totalBudget = useSelector(getYearlyTotalBudgets);
   const totalGroupBudget = useSelector(getGroupYearlyBudgets).yearly_total_budget;
 
   return (

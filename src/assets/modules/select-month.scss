@@ -11,7 +11,7 @@
   }
 
   &__display-btn {
-    @include indicate-btn($display-btn-sub_color, $display-btn-main_color, #c58668);
+    @include indicate-btn($display-btn-main_color);
     width: 35%;
 
     &:hover {

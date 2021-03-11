@@ -35,7 +35,7 @@ const YearlyBudgetsRow = (props: YearlyBudgetsRowProps) => {
             {selectMonth}月
           </td>
           <td className="budget__td">{budgetsType()}</td>
-          <td className="budget__td" align="center">
+          <td className="budget__td budget__td__date" align="center">
             {budget.month}
             {'01'}日〜{budget.month}
             {lastDate}日

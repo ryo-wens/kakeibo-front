@@ -32,8 +32,10 @@ const Header = (props: HeaderProps) => {
     <div className="header__header--position">
       <header className="header__header">
         <div className="header__upper-content">
-          <h1 className="header__title" onClick={() => props.homeButtonClick()}>
-            <a>Tukecholl</a>
+          <h1>
+            <a className="header__title" onClick={() => props.homeButtonClick()}>
+              Tukecholl
+            </a>
           </h1>
         </div>
         <div>
@@ -53,11 +55,9 @@ const Header = (props: HeaderProps) => {
             <li
               className="header__global-menu--item"
               style={props.currentPage(
-                props.pathName !== 'group'
-                  ? '/daily/history'
-                  : `/group/${props.group_id}/daily/history`
+                props.pathName !== 'group' ? '/history' : `/group/${props.group_id}/history`
               )}
-              onClick={() => props.existsGroupWhenRouting('/daily/history')}
+              onClick={() => props.existsGroupWhenRouting('/history?daily')}
             >
               <a>
                 <HistoryIcon className="header__icon" />

@@ -15,7 +15,6 @@ import {
   addGroupTransactions,
   fetchGroupYearlyAccountListForModal,
 } from '../../../reducks/groupTransactions/operations';
-import { fetchCategories } from '../../../reducks/categories/operations';
 import { TransactionsReq } from '../../../reducks/transactions/types';
 import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { customMonth, year } from '../../../lib/constant';
@@ -170,16 +169,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   useEffect(() => {
     setPaymentUserId(userId);
   }, [userId]);
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-
-    if (pathName !== 'group') {
-      dispatch(fetchCategories(signal));
-    }
-
-    return () => signal.cancel();
-  }, [pathName]);
 
   useEffect(() => {
     setBigCategory(initialState.initialBigCategory);

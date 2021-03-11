@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import { push } from 'connected-react-router';
 import axios, { CancelTokenSource } from 'axios';
 import { getGroupTransactions } from '../../../reducks/groupTransactions/selectors';
 import { getExpenseCategories, getIncomeCategories } from '../../../reducks/categories/selectors';
@@ -13,11 +12,13 @@ import { fetchGroups } from '../../../reducks/groups/operations';
 import { month, year } from '../../../lib/constant';
 import { SelectYears } from '../../../lib/date';
 import History from '../../../templates/history/History';
+import { useHistory } from 'react-router-dom';
 
 const HistoryContainer = () => {
   const dispatch = useDispatch();
+  const history = useHistory();
+  const query = useLocation().search;
   const { group_id } = useParams<{ group_id: string }>();
-  const path = window.location.pathname;
   const pathName = useLocation().pathname.split('/')[1];
   const groupTransactionsList = useSelector(getGroupTransactions);
   const incomeCategories = useSelector(getIncomeCategories);
@@ -87,8 +88,8 @@ const HistoryContainer = () => {
     };
   }, [pathName, selectedYear, selectedMonth]);
 
-  const currentPageColor = (currentPath: string) => {
-    if (path === currentPath) {
+  const currentPageColor = (currentQuery: string) => {
+    if (query === currentQuery) {
       return {
         backgroundColor: '#ff802b',
         color: '#fff',
@@ -108,7 +109,7 @@ const HistoryContainer = () => {
 
   return (
     <History
-      path={path}
+      query={query}
       pathName={pathName}
       groupId={group_id}
       openSearchField={openSearchField}
@@ -123,13 +124,13 @@ const HistoryContainer = () => {
       setSelectedMonth={setSelectedMonth}
       routingDailyHistory={() => {
         pathName !== 'group'
-          ? dispatch(push('/daily/history'))
-          : dispatch(push(`/group/${group_id}/daily/history`));
+          ? history.push({ pathname: '/history', search: '?daily' })
+          : history.push({ pathname: `/group/${group_id}/history`, search: '?daily' });
       }}
       routingWeeklyHistory={() => {
         pathName !== 'group'
-          ? dispatch(push('/weekly/history'))
-          : dispatch(push(`/group/${group_id}/weekly/history`));
+          ? history.push({ pathname: '/history', search: '?weekly' })
+          : history.push({ pathname: `/group/${group_id}/history`, search: '?weekly' });
       }}
     />
   );

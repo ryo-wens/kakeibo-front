@@ -29,6 +29,9 @@ export const getGroupYearlyBudgets = createSelector(
   (state) => state.groupYearlyBudgetsList
 );
 
+export const getGroupYearlyTotalBudgets = (state: State) =>
+  state.groupBudgets.groupYearlyBudgetsList.yearly_total_budget;
+
 const groupYearlyBudgets = (state: State) => state.groupBudgets.groupYearlyBudgetsList;
 const groupTransactionsList = (state: State) => state.groupTransactions.groupTransactionsList;
 

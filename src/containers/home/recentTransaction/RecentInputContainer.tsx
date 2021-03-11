@@ -31,7 +31,7 @@ const RecentInputContainer = () => {
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    if (pathName !== 'group' && !latestTransactionsList.length) {
+    if (pathName !== 'group') {
       dispatch(fetchLatestTransactionsList(signal));
       return () => signal.cancel();
     }

@@ -23,8 +23,8 @@ const YearlyBudgets = (props: YearlyBudgetsProps) => {
           <h2>
             総額 ¥{' '}
             {props.pathName !== 'group'
-              ? props.totalBudget.toLocaleString()
-              : props.totalGroupBudget.toLocaleString()}
+              ? props.totalBudget !== null && props.totalBudget.toLocaleString()
+              : props.totalGroupBudget !== null && props.totalGroupBudget.toLocaleString()}
           </h2>
           <table className="yearly-budgets__background__table">
             <tbody>
