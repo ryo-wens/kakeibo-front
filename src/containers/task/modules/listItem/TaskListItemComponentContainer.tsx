@@ -1,11 +1,13 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { TasksListItem } from '../../../../reducks/groupTasks/types';
+import { EditTaskItemReq, TaskListItem } from '../../../../reducks/groupTasks/types';
 import TaskListItemComponent from '../../../../components/task/modules/listItem/TaskListItemComponent/TaskListItemComponent';
 import { deleteTaskItem, editTaskItem } from '../../../../reducks/groupTasks/operations';
+import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface TaskListItemComponentContainerProps {
-  listItem: TasksListItem;
+  listItem: TaskListItem;
+  handleStopPolling: (value: boolean) => void;
 }
 
 const TaskListItemComponentContainer = (props: TaskListItemComponentContainerProps) => {
@@ -19,23 +21,46 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
   const [openForm, setOpenForm] = useState(false);
   const [taskName, setTaskName] = useState<string>(initialState.initialTaskName);
 
-  const openEditInputTask = () => {
+  const handleOpenInputTaskForm = () => {
     setOpenForm(true);
+    props.handleStopPolling(true);
   };
 
-  const closeEditInputTask = () => {
+  const handleCloseInputTaskForm = () => {
     setOpenForm(false);
     setTaskName(initialState.initialTaskName);
+    props.handleStopPolling(false);
   };
 
-  const handleTaskNameChange = (event: React.ChangeEvent<{ value: string }>) => {
+  const handleChangeTaskName = (event: React.ChangeEvent<{ value: string }>) => {
     setTaskName(event.target.value as string);
   };
 
   const onClickCloseInputTaskNameForm = (event: Event) => {
     if (inputTaskRef.current && !inputTaskRef.current.contains(event.target as Node)) {
-      closeEditInputTask();
+      handleCloseInputTaskForm();
     }
+  };
+
+  const handleEditTaskItem = () => {
+    const requestData: EditTaskItemReq = {
+      base_date: props.listItem.base_date,
+      cycle_type: props.listItem.cycle_type,
+      cycle: props.listItem.cycle,
+      task_name: taskName,
+      group_tasks_users_id: props.listItem.group_tasks_users_id,
+    };
+
+    return executeAfterAsyncProcess(
+      dispatch(editTaskItem(props.listItem.group_id, props.listItem.id, requestData)),
+      () => setOpenForm(false)
+    );
+  };
+
+  const handleDeleteTaskItem = () => {
+    return executeAfterAsyncProcess(
+      dispatch(deleteTaskItem(props.listItem.group_id, props.listItem.id))
+    );
   };
 
   const disabledButton = taskName === initialState.initialTaskName || taskName === '';
@@ -45,31 +70,15 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
       titleLabel={'タスク名を編集'}
       buttonLabel={'保存'}
       openForm={openForm}
-      handleTaskNameChange={handleTaskNameChange}
+      handleChangeTaskName={handleChangeTaskName}
       initialTaskName={initialState.initialTaskName}
       taskName={taskName}
-      openInputTaskForm={openEditInputTask}
-      closeInputTaskForm={closeEditInputTask}
+      handleOpenInputTaskForm={handleOpenInputTaskForm}
+      handleCloseInputTaskForm={handleCloseInputTaskForm}
       disabledButton={disabledButton}
       onClickCloseInputTaskNameForm={onClickCloseInputTaskNameForm}
-      taskNameOperation={() => {
-        dispatch(
-          editTaskItem(
-            props.listItem.group_id,
-            props.listItem.id,
-            props.listItem.base_date,
-            props.listItem.cycle_type,
-            props.listItem.cycle,
-            taskName,
-            props.listItem.group_tasks_users_id
-          )
-        );
-        setOpenForm(false);
-      }}
-      deleteOperation={() => {
-        dispatch(deleteTaskItem(props.listItem.group_id, props.listItem.id));
-        setOpenForm(false);
-      }}
+      handleEditTaskItem={() => handleEditTaskItem()}
+      handleDeleteTaskItem={() => handleDeleteTaskItem()}
       inputTaskRef={inputTaskRef}
     />
   );

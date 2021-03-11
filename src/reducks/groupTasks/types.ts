@@ -2,14 +2,14 @@ import { ApprovedGroupUsers } from '../groups/types';
 
 export type TaskCycleType = 'every' | 'consecutive' | 'none';
 
-export interface UserTasksListItem {
+export interface UserTaskListItem {
   id: number;
   user_id: string;
   group_id: number;
-  tasks_list: TasksListForEachUser;
+  tasks_list: TaskListForEachUser;
 }
 
-export interface TasksListItem {
+export interface TaskListItem {
   id: number;
   base_date: Date | null;
   cycle_type: TaskCycleType | null;
@@ -19,39 +19,39 @@ export interface TasksListItem {
   group_tasks_users_id: number | null;
 }
 
-export interface GroupTasksListForEachUser extends Array<UserTasksListItem> {}
-export interface TasksListForEachUser extends Array<TasksListItem> {}
-export interface GroupTasksList extends Array<TasksListItem> {}
+export interface GroupTaskListForEachUser extends Array<UserTaskListItem> {}
+export interface TaskListForEachUser extends Array<TaskListItem> {}
+export interface GroupTaskList extends Array<TaskListItem> {}
 
-export interface fetchGroupTasksListEachUserRes {
-  group_tasks_list_for_each_user: GroupTasksListForEachUser;
+export interface FetchGroupTaskListForEachUserRes {
+  group_tasks_list_for_each_user: GroupTaskListForEachUser;
 }
 
-export interface addGroupTasksUsersReq {
+export interface AddGroupTaskUsersReq {
   users_list: Array<string>;
 }
 
-export interface addGroupTasksUsersRes {
-  group_tasks_list_for_each_user: GroupTasksListForEachUser;
+export interface AddGroupTaskUsersRes {
+  group_tasks_list_for_each_user: GroupTaskListForEachUser;
 }
 
-export interface deleteGroupTasksUsersReq {
+export interface DeleteGroupTaskUsersReq {
   users_list: Array<string>;
 }
 
-export interface deleteGroupTasksUsersRes {
+export interface DeleteGroupTaskUsersRes {
   message: string;
 }
 
-export interface fetchGroupTasksListRes {
-  group_tasks_list: GroupTasksList;
+export interface FetchGroupTaskListRes {
+  group_tasks_list: GroupTaskList;
 }
 
-export interface addTaskItemReq {
+export interface AddTaskItemReq {
   task_name: string;
 }
 
-export interface addTaskItemRes {
+export interface AddTaskItemRes {
   id: number;
   base_date: Date | null;
   cycle_type: TaskCycleType | null;
@@ -61,7 +61,7 @@ export interface addTaskItemRes {
   group_tasks_users_id: number | null;
 }
 
-export interface editTaskItemReq {
+export interface EditTaskItemReq {
   base_date: Date | null;
   cycle_type: TaskCycleType | null;
   cycle: number | null;
@@ -69,7 +69,7 @@ export interface editTaskItemReq {
   group_tasks_users_id: number | null;
 }
 
-export interface editTaskItemRes {
+export interface EditTaskItemRes {
   id: number;
   base_date: Date | null;
   cycle_type: TaskCycleType | null;
@@ -79,7 +79,7 @@ export interface editTaskItemRes {
   group_tasks_users_id: number | null;
 }
 
-export interface deleteTaskItemRes {
+export interface DeleteTaskItemRes {
   message: string;
 }
 

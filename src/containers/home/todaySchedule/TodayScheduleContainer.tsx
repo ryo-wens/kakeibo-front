@@ -23,8 +23,8 @@ import {
 } from '../../../reducks/groupShoppingList/operations';
 import TodaySchedule from '../../../components/home/todaySchedule/TodaySchedule';
 import {
-  fetchGroupTasksList,
-  fetchGroupTasksListEachUser,
+  fetchGroupTaskList,
+  fetchGroupTaskListForEachUser,
 } from '../../../reducks/groupTasks/operations';
 
 interface TodayScheduleContainerProps {
@@ -52,8 +52,8 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
     dispatch(
       fetchGroupTodayShoppingListByCategories(groupId, todayYear, todayMonth, todayDate, signal)
     );
-    dispatch(fetchGroupTasksList(groupId, signal));
-    dispatch(fetchGroupTasksListEachUser(groupId, signal));
+    dispatch(fetchGroupTaskList(groupId, signal));
+    dispatch(fetchGroupTaskListForEachUser(groupId, signal));
   };
 
   useEffect(() => {

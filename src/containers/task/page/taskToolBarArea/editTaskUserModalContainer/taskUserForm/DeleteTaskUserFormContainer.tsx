@@ -1,18 +1,20 @@
 import React, { useState } from 'react';
 import { ApprovedGroupUsers, Group } from '../../../../../../reducks/groups/types';
 import {
-  GroupTasksListForEachUser,
+  DeleteGroupTaskUsersReq,
+  GroupTaskListForEachUser,
   ParticipatingTaskUsers,
 } from '../../../../../../reducks/groupTasks/types';
 import { useDispatch } from 'react-redux';
 import TaskUserForm from '../../../../../../components/task/modules/form/taskUserForm/TaskUserForm';
-import { deleteGroupTasksUsers } from '../../../../../../reducks/groupTasks/operations';
+import { deleteTaskUsers } from '../../../../../../reducks/groupTasks/operations';
+import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface DeleteTaskUserFormContainerProps {
   approvedGroup: Group;
-  closeTaskUserOperation: () => void;
-  closeModal: () => void;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  handleCloseModal: () => void;
+  handleCloseDeleteTaskUserForm: () => void;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
 }
 
 const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) => {
@@ -29,7 +31,7 @@ const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) =>
 
   const getParticipatingTaskUsers = (
     approvedUserList: ApprovedGroupUsers,
-    participatingTaskUsers: GroupTasksListForEachUser
+    participatingTaskUsers: GroupTaskListForEachUser
   ) => {
     const notExistsParticipatingTaskUsers = participatingTaskUsers.length === 0;
     const participatingUsers: ParticipatingTaskUsers = {
@@ -56,18 +58,26 @@ const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) =>
     props.groupTasksListForEachUser
   );
 
+  const handleDeleteTaskUsers = () => {
+    const requestData: DeleteGroupTaskUsersReq = {
+      users_list: checkedUserIds,
+    };
+
+    return executeAfterAsyncProcess(
+      dispatch(deleteTaskUsers(props.approvedGroup.group_id, requestData)),
+      () => props.handleCloseDeleteTaskUserForm()
+    );
+  };
+
   return (
     <TaskUserForm
       title={'タスクユーザーを削除'}
       buttonLabel={'削除'}
       checkedUserIds={checkedUserIds}
-      closeTaskUserOperation={props.closeTaskUserOperation}
-      closeModal={props.closeModal}
+      handleCloseModal={props.handleCloseModal}
+      handleCloseTaskUserForm={props.handleCloseDeleteTaskUserForm}
       displayTaskUserList={participatingTaskUsers}
-      operateTaskUsers={() => {
-        dispatch(deleteGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds));
-        props.closeTaskUserOperation();
-      }}
+      handleTaskUsers={() => handleDeleteTaskUsers()}
       handleChangeChecked={handleChangeChecked}
       existsDisplayTaskUsers={participatingTaskUsers.length !== 0}
       message={'現在、タスクに参加しているメンバーはいません。'}

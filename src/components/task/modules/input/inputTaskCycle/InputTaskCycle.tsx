@@ -4,7 +4,7 @@ import { TaskCycleType } from '../../../../../reducks/groupTasks/types';
 
 interface InputTaskCycleProps {
   value: number;
-  inputTaskCycle: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeCycle: (event: React.ChangeEvent<HTMLInputElement>) => void;
   cycleType: TaskCycleType;
 }
 
@@ -18,7 +18,7 @@ const InputTaskCycle = (props: InputTaskCycleProps) => {
           inputMode="numeric"
           name="cycle"
           value={props.value}
-          onChange={props.inputTaskCycle}
+          onChange={props.handleChangeCycle}
           required={true}
           pattern="^\d*$"
         />

@@ -13,13 +13,13 @@ interface AssignmentTaskModalProps {
   cycleType: TaskCycleType;
   cycle: number;
   taskUserId: number;
-  openModal: () => void;
-  handleDateChange: (date: Date | null) => void;
-  selectCycleType: (event: React.ChangeEvent<{ value: string }>) => void;
-  inputTaskCycle: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  selectTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
-  assignmentTask: () => void;
-  closeModal: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+  handleChangeDate: (date: Date | null) => void;
+  handleChangeCycleType: (event: React.ChangeEvent<{ value: string }>) => void;
+  handleChangeCycle: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleChangeTaskUser: (event: React.ChangeEvent<HTMLSelectElement>) => void;
+  handleAssignTaskItem: () => void;
   disabledButton: boolean;
   message: string;
 }
@@ -27,11 +27,11 @@ interface AssignmentTaskModalProps {
 const AssignmentTaskModal = (props: AssignmentTaskModalProps) => {
   return (
     <>
-      <button className="assignment-task-modal__btn" onClick={() => props.openModal()}>
+      <button className="assignment-task-modal__btn" onClick={() => props.handleOpenModal()}>
         <AddIcon />
         タスクを割り当てる
       </button>
-      <Modal open={props.open} onClose={props.closeModal}>
+      <Modal open={props.open} onClose={props.handleCloseModal}>
         <AssignmentTaskForm
           participatingTaskUsers={props.participatingTaskUsers}
           taskNameFormElement={props.taskNameFormElement}
@@ -40,12 +40,12 @@ const AssignmentTaskModal = (props: AssignmentTaskModalProps) => {
           cycleType={props.cycleType}
           cycle={props.cycle}
           taskUserId={props.taskUserId}
-          handleDateChange={props.handleDateChange}
-          selectCycleType={props.selectCycleType}
-          inputTaskCycle={props.inputTaskCycle}
-          selectTaskUser={props.selectTaskUser}
-          assignmentTask={props.assignmentTask}
-          closeModal={props.closeModal}
+          handleChangeDate={props.handleChangeDate}
+          handleChangeCycleType={props.handleChangeCycleType}
+          handleChangeCycle={props.handleChangeCycle}
+          handleChangeTaskUser={props.handleChangeTaskUser}
+          handleAssignTaskItem={props.handleAssignTaskItem}
+          handleCloseModal={props.handleCloseModal}
           disabledButton={props.disabledButton}
           message={props.message}
         />

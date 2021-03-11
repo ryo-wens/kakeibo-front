@@ -1,86 +1,54 @@
 import React from 'react';
 import { date } from '../../../../lib/constant';
 import { Group } from '../../../../reducks/groups/types';
-import { GroupTasksListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
+import { GroupTaskListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
 import TaskToolBarArea from '../../../../components/task/page/taskToolBarArea/TaskToolBarArea';
+import moment from 'moment';
 
 interface TaskToolBarAreaContainerProps {
   selectedDate: Date | null;
-  setSelectedDate: React.Dispatch<React.SetStateAction<Date | null>>;
   approvedGroup: Group;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
+  handleChangeSelectedDate: (date: Date | null) => void;
 }
 
 const TaskToolBarAreaContainer = (props: TaskToolBarAreaContainerProps) => {
-  const selectDate = {
-    existsSelectDate: date,
+  const handleChangeDate = (selectDate: Date | null) => {
+    props.handleChangeSelectedDate(selectDate);
   };
 
-  if (props.selectedDate !== null) {
-    selectDate.existsSelectDate = props.selectedDate;
-  }
-
-  const handleDateChange = (selectDate: Date | null) => {
-    props.setSelectedDate(selectDate);
+  const handleGetToday = () => {
+    props.handleChangeSelectedDate(date);
   };
 
-  const getTodayDate = () => {
-    props.setSelectedDate(date);
+  const handleGetPrevWeek = (selectDate: Date | null) => {
+    const prevWeek = moment(selectDate).add(-7, 'd').toDate();
+
+    props.handleChangeSelectedDate(prevWeek);
   };
 
-  const getNextWeek = (selectDate: Date) => {
-    const nextWeek = new Date(
-      selectDate.getFullYear(),
-      selectDate.getMonth(),
-      selectDate.getDate() + 7
-    );
+  const handleGetNextWeek = (selectDate: Date | null) => {
+    const nextWeek = moment(selectDate).add(7, 'd').toDate();
 
-    props.setSelectedDate(nextWeek);
+    props.handleChangeSelectedDate(nextWeek);
   };
 
-  const getPrevWeek = (selectDate: Date) => {
-    const previousWeek = new Date(
-      selectDate.getFullYear(),
-      selectDate.getMonth(),
-      selectDate.getDate() - 7
-    );
-
-    props.setSelectedDate(previousWeek);
-  };
-
-  const getWeekStartDate = (selectDate: Date, todayDay: number) => {
-    return new Date(
-      selectDate.getFullYear(),
-      selectDate.getMonth(),
-      selectDate.getDate() - todayDay
-    );
-  };
-
-  const getWeekLastDate = (selectDate: Date, todayDay: number) => {
-    return new Date(
-      selectDate.getFullYear(),
-      selectDate.getMonth(),
-      selectDate.getDate() - todayDay + 6
-    );
-  };
-
-  const weekStartDate: Date = getWeekStartDate(selectDate.existsSelectDate, date.getDay());
-  const weekLastDate: Date = getWeekLastDate(selectDate.existsSelectDate, date.getDay());
+  const weekStartDate: Date = moment(props.selectedDate).startOf('week').toDate();
+  const weekLastDate: Date = moment(props.selectedDate).endOf('week').toDate();
 
   return (
     <TaskToolBarArea
       selectedDate={props.selectedDate}
-      existsSelectDate={selectDate.existsSelectDate}
-      handleDateChange={handleDateChange}
-      getTodayDate={getTodayDate}
-      getPrevWeek={getPrevWeek}
-      getNextWeek={getNextWeek}
       weekStartDate={weekStartDate}
       weekLastDate={weekLastDate}
       approvedGroup={props.approvedGroup}
       groupTasksListForEachUser={props.groupTasksListForEachUser}
       participatingTaskUsers={props.participatingTaskUsers}
+      handleChangeDate={handleChangeDate}
+      handleGetToday={handleGetToday}
+      handleGetPrevWeek={handleGetPrevWeek}
+      handleGetNextWeek={handleGetNextWeek}
     />
   );
 };

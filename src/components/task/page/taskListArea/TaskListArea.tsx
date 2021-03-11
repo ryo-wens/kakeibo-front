@@ -1,11 +1,12 @@
 import React from 'react';
-import { GroupTasksList, TasksListItem } from '../../../../reducks/groupTasks/types';
+import { GroupTaskList, TaskListItem } from '../../../../reducks/groupTasks/types';
 import './task-list-area.scss';
 import AddTaskNameFormContainer from '../../../../containers/task/modules/form/AddTaskNameFormContainer';
 import TaskListItemComponentContainer from '../../../../containers/task/modules/listItem/TaskListItemComponentContainer';
 
 interface TaskListAreaProps {
-  taskList: GroupTasksList;
+  taskList: GroupTaskList;
+  handleStopPolling: (value: boolean) => void;
 }
 
 const TaskListArea = (props: TaskListAreaProps) => {
@@ -13,17 +14,17 @@ const TaskListArea = (props: TaskListAreaProps) => {
     <div className="task-list-area">
       <h3 className="task-list-area__title">タスクリスト</h3>
       {props.taskList.length !== 0 ? (
-        <div className="task-list-area__items">
-          {props.taskList.map((listItem: TasksListItem) => {
-            if (listItem.cycle_type === null) {
-              return (
-                <div className="task-list-area__item" key={listItem.id}>
-                  <TaskListItemComponentContainer listItem={listItem} />
-                </div>
-              );
-            }
+        <ul className="task-list-area__list">
+          {props.taskList.map((listItem: TaskListItem) => {
+            return (
+              <TaskListItemComponentContainer
+                handleStopPolling={props.handleStopPolling}
+                listItem={listItem}
+                key={listItem.id}
+              />
+            );
           })}
-        </div>
+        </ul>
       ) : (
         <p className="task-list-area__message">タスクは登録されていません。</p>
       )}

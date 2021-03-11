@@ -158,8 +158,18 @@ const initialState = {
     },
   },
   groupTasks: {
-    groupTasksListForEachUser: [],
-    groupTasksList: [],
+    groupTaskListForEachUser: [],
+    groupTaskListForEachUserLoading: false,
+    groupTaskListForEachUserError: {
+      statusCode: null,
+      errorMessage: '',
+    },
+    groupTaskList: [],
+    groupTaskListLoading: false,
+    groupTaskListError: {
+      statusCode: null,
+      errorMessage: '',
+    },
   },
   shoppingList: {
     regularShoppingList: [],

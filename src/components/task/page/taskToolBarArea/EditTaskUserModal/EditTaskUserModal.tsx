@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import './edit-task-user-modal.scss';
 import '../../../../../assets/modules/task-btn.scss';
-import { GroupTasksListForEachUser, TaskUsers } from '../../../../../reducks/groupTasks/types';
+import { GroupTaskListForEachUser, TaskUsers } from '../../../../../reducks/groupTasks/types';
 import { Group } from '../../../../../reducks/groups/types';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
 import CloseIcon from '@material-ui/icons/Close';
@@ -14,14 +14,14 @@ interface EditTaskUserModalProps {
   openEditUserForm: boolean;
   openAddUserForm: boolean;
   openDeleteUserForm: boolean;
-  openModal: () => void;
-  closeModal: () => void;
-  openAddTaskUser: () => void;
-  openDeleteTaskUser: () => void;
-  closeAddTaskUser: () => void;
-  closeDeleteTaskUser: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+  handleOpenAddTaskUserForm: () => void;
+  handleCloseAddTaskUserForm: () => void;
+  handleOpenDeleteTaskUserForm: () => void;
+  handleCloseDeleteTaskUserForm: () => void;
   approvedGroup: Group;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
 }
 
@@ -32,10 +32,7 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
         <>
           <div className="edit-task-user-modal__position">
             <h3 className="edit-task-user-modal__title">タスクユーザーリスト</h3>
-            <button
-              className="edit-task-user-modal__btn-position"
-              onClick={() => props.closeModal()}
-            >
+            <button className="edit-task-user-modal__btn-position" onClick={props.handleCloseModal}>
               <CloseIcon />
             </button>
           </div>
@@ -57,14 +54,14 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
             )}
             <div
               className="edit-task-user-modal__choice-position"
-              onClick={() => props.openAddTaskUser()}
+              onClick={props.handleOpenAddTaskUserForm}
             >
               <span className="edit-task-user-modal__choice">タスクユーザーを追加</span>
               <ChevronRightIcon className="edit-task-user-modal__choice-icon" />
             </div>
             <div
               className="edit-task-user-modal__choice-position"
-              onClick={() => props.openDeleteTaskUser()}
+              onClick={props.handleOpenDeleteTaskUserForm}
             >
               <span className="edit-task-user-modal__choice">タスクユーザーを削除</span>
               <ChevronRightIcon className="edit-task-user-modal__choice-icon" />
@@ -76,8 +73,8 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
       return (
         <AddTaskUserFormContainer
           approvedGroup={props.approvedGroup}
-          closeTaskUserOperation={props.closeAddTaskUser}
-          closeModal={props.closeModal}
+          handleCloseAddTaskUserForm={props.handleCloseAddTaskUserForm}
+          handleCloseModal={props.handleCloseModal}
           groupTasksListForEachUser={props.groupTasksListForEachUser}
         />
       );
@@ -85,8 +82,8 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
       return (
         <DeleteTaskUserFormContainer
           approvedGroup={props.approvedGroup}
-          closeTaskUserOperation={props.closeDeleteTaskUser}
-          closeModal={props.closeModal}
+          handleCloseDeleteTaskUserForm={props.handleCloseDeleteTaskUserForm}
+          handleCloseModal={props.handleCloseModal}
           groupTasksListForEachUser={props.groupTasksListForEachUser}
         />
       );
@@ -95,12 +92,12 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
 
   return (
     <div>
-      <button className="task--btn" disabled={false} onClick={() => props.openModal()}>
+      <button className="task--btn" disabled={false} onClick={props.handleOpenModal}>
         タスクユーザーを編集
       </button>
       <Modal
         open={props.open}
-        onClose={props.closeModal}
+        onClose={props.handleCloseModal}
         aria-labelledby="simple-modal-title"
         aria-describedby="simple-modal-description"
       >

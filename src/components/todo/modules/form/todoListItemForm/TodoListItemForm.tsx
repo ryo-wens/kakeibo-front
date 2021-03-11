@@ -123,7 +123,7 @@ const TodoListItemForm = React.forwardRef(
               disabled={false}
               contentName={props.todoContent}
               onClickDelete={props.handleDeleteTodoListItem}
-              onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
+              onClickCloseInputForm={props.onClickCloseInputTodoForm}
             />
           )}
         </div>

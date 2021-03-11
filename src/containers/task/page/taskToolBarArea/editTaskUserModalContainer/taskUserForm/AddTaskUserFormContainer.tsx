@@ -1,15 +1,19 @@
 import React, { useState } from 'react';
 import { ApprovedGroupUsers, Group } from '../../../../../../reducks/groups/types';
-import { GroupTasksListForEachUser } from '../../../../../../reducks/groupTasks/types';
+import {
+  AddGroupTaskUsersReq,
+  GroupTaskListForEachUser,
+} from '../../../../../../reducks/groupTasks/types';
 import { useDispatch } from 'react-redux';
 import TaskUserForm from '../../../../../../components/task/modules/form/taskUserForm/TaskUserForm';
-import { addGroupTasksUsers } from '../../../../../../reducks/groupTasks/operations';
+import { addTaskUsers } from '../../../../../../reducks/groupTasks/operations';
+import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface AddTaskUserFormContainerProps {
   approvedGroup: Group;
-  closeTaskUserOperation: () => void;
-  closeModal: () => void;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  handleCloseAddTaskUserForm: () => void;
+  handleCloseModal: () => void;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
 }
 
 const AddTaskUserFormContainer = (props: AddTaskUserFormContainerProps) => {
@@ -26,7 +30,7 @@ const AddTaskUserFormContainer = (props: AddTaskUserFormContainerProps) => {
 
   const getNotParticipatingTaskUsers = (
     approvedUserList: ApprovedGroupUsers,
-    participatingTaskUsers: GroupTasksListForEachUser
+    participatingTaskUsers: GroupTaskListForEachUser
   ) => {
     const existsParticipatingTaskUsers = participatingTaskUsers.length !== 0;
 
@@ -47,18 +51,26 @@ const AddTaskUserFormContainer = (props: AddTaskUserFormContainerProps) => {
     props.groupTasksListForEachUser
   );
 
+  const handleAddTaskUsers = () => {
+    const requestData: AddGroupTaskUsersReq = {
+      users_list: checkedUserIds,
+    };
+
+    return executeAfterAsyncProcess(
+      dispatch(addTaskUsers(props.approvedGroup.group_id, requestData)),
+      () => props.handleCloseAddTaskUserForm()
+    );
+  };
+
   return (
     <TaskUserForm
       title={'タスクユーザーを追加'}
       buttonLabel={'追加'}
       checkedUserIds={checkedUserIds}
-      closeTaskUserOperation={props.closeTaskUserOperation}
-      closeModal={props.closeModal}
+      handleCloseModal={props.handleCloseModal}
+      handleCloseTaskUserForm={props.handleCloseAddTaskUserForm}
       displayTaskUserList={notParticipatingTaskUsers}
-      operateTaskUsers={() => {
-        dispatch(addGroupTasksUsers(props.approvedGroup.group_id, checkedUserIds));
-        props.closeTaskUserOperation();
-      }}
+      handleTaskUsers={() => handleAddTaskUsers()}
       handleChangeChecked={handleChangeChecked}
       existsDisplayTaskUsers={notParticipatingTaskUsers.length !== 0}
       message={'グループメンバー全員がタスクに参加しています。'}

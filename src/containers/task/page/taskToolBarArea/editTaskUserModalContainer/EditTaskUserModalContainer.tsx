@@ -1,11 +1,11 @@
 import React, { useState } from 'react';
 import { Group } from '../../../../../reducks/groups/types';
-import { GroupTasksListForEachUser, TaskUsers } from '../../../../../reducks/groupTasks/types';
+import { GroupTaskListForEachUser, TaskUsers } from '../../../../../reducks/groupTasks/types';
 import EditTaskUserModal from '../../../../../components/task/page/taskToolBarArea/EditTaskUserModal/EditTaskUserModal';
 
 interface EditTaskUserModalContainerProps {
   approvedGroup: Group;
-  groupTasksListForEachUser: GroupTasksListForEachUser;
+  groupTasksListForEachUser: GroupTaskListForEachUser;
   participatingTaskUsers: TaskUsers;
 }
 
@@ -15,32 +15,32 @@ const EditTaskUserModalContainer = (props: EditTaskUserModalContainerProps) => {
   const [openAddUserForm, setOpenAddUserFrom] = useState(false);
   const [openDeleteUserForm, setOpenDeleteUserForm] = useState(false);
 
-  const openModal = () => {
+  const handleOpenModal = () => {
     setOpen(true);
     setOpenEditUserForm(true);
   };
 
-  const closeModal = () => {
+  const handleCloseModal = () => {
     setOpen(false);
     setOpenAddUserFrom(false);
   };
 
-  const openAddTaskUser = () => {
+  const handleOpenAddTaskUserForm = () => {
     setOpenEditUserForm(false);
     setOpenAddUserFrom(true);
   };
 
-  const closeAddTaskUser = () => {
+  const handleCloseAddTaskUserForm = () => {
     setOpenEditUserForm(true);
     setOpenAddUserFrom(false);
   };
 
-  const openDeleteTaskUser = () => {
+  const handleOpenDeleteTaskUserForm = () => {
     setOpenEditUserForm(false);
     setOpenDeleteUserForm(true);
   };
 
-  const closeDeleteTaskUser = () => {
+  const handleCloseDeleteTaskUserForm = () => {
     setOpenEditUserForm(true);
     setOpenDeleteUserForm(false);
   };
@@ -51,12 +51,12 @@ const EditTaskUserModalContainer = (props: EditTaskUserModalContainerProps) => {
       openEditUserForm={openEditUserForm}
       openAddUserForm={openAddUserForm}
       openDeleteUserForm={openDeleteUserForm}
-      openModal={openModal}
-      closeModal={closeModal}
-      openAddTaskUser={openAddTaskUser}
-      openDeleteTaskUser={openDeleteTaskUser}
-      closeAddTaskUser={closeAddTaskUser}
-      closeDeleteTaskUser={closeDeleteTaskUser}
+      handleOpenModal={handleOpenModal}
+      handleCloseModal={handleCloseModal}
+      handleOpenAddTaskUserForm={handleOpenAddTaskUserForm}
+      handleCloseAddTaskUserForm={handleCloseAddTaskUserForm}
+      handleOpenDeleteTaskUserForm={handleOpenDeleteTaskUserForm}
+      handleCloseDeleteTaskUserForm={handleCloseDeleteTaskUserForm}
       approvedGroup={props.approvedGroup}
       groupTasksListForEachUser={props.groupTasksListForEachUser}
       participatingTaskUsers={props.participatingTaskUsers}
