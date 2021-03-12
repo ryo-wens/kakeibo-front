@@ -197,3 +197,10 @@ export interface AddRegularShoppingListItemModalInitialState {
   initialShop: string | null;
   initialTransactionAutoAdd: boolean;
 }
+
+export interface DisplayShoppingListItemByDate {
+  date: string;
+  list: ShoppingList;
+}
+
+export interface DisplayShoppingListByDate extends Array<DisplayShoppingListItemByDate> {}

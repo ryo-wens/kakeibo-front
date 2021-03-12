@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../../shoppingList/modules/list/shoppingListByDate/shopping-list-by-date.scss';
+import '../../../../shoppingList/modules/list/shoppingListByDate/ShoppingListByDate.module.scss';
 import { GroupShoppingList } from '../../../../../reducks/groupShoppingList/types';
 import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
 
