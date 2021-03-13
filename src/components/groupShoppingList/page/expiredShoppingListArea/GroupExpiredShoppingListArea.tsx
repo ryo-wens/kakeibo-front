@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../shoppingList/page/ExpiredShoppingListArea/expired-shopping-list-area.scss';
+import '../../../shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListArea.module.scss';
 import GroupShoppingListItemComponentContainer from '../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';

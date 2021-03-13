@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ShoppingListByDate from '../../../../../components/shoppingList/modules/list/shoppingListByDate/ShoppingListByDate';
 import { useDispatch, useSelector } from 'react-redux';
-import { getTodayShoppingList } from '../../../../../reducks/shoppingList/selectors';
+import { getDisplayTodayShoppingListByDate } from '../../../../../reducks/shoppingList/selectors';
 import axios from 'axios';
 import { fetchTodayShoppingList } from '../../../../../reducks/shoppingList/operations';
 import { customMonth, date, year } from '../../../../../lib/constant';
@@ -13,39 +13,28 @@ interface TodayShoppingListByDateContainerProps {
 
 const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContainerProps) => {
   const dispatch = useDispatch();
-  const todayShoppingList = useSelector(getTodayShoppingList);
+  const displayTodayShoppingList = useSelector(getDisplayTodayShoppingListByDate);
 
   const todayYear = String(year);
   const todayMonth = customMonth;
   const todayDate: string = ('0' + date.getDate()).slice(-2);
 
   useEffect(() => {
+    const notExistsTodayShoppingListByDate = displayTodayShoppingList.length === 0;
     const signal = axios.CancelToken.source();
-    if (!todayShoppingList.length) {
+
+    if (notExistsTodayShoppingListByDate) {
       dispatch(fetchTodayShoppingList(todayYear, todayMonth, todayDate, signal));
       return () => signal.cancel();
     }
   }, []);
 
-  const prevData = {
-    expectedPurchaseDate: '',
-  };
-
-  const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevData.expectedPurchaseDate !== expectedPurchaseDate) {
-      prevData.expectedPurchaseDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <ShoppingListByDate
-      shoppingListByDate={todayShoppingList}
+      shoppingListByDate={displayTodayShoppingList}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       message={'今日の買い物リストは、登録されていません。'}
-      equalsDisplayDate={equalsDisplayDate}
     />
   );
 };

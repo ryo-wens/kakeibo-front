@@ -1,0 +1,22 @@
+@import "../../../../assets/variable";
+@import "../../../../assets/modules/task-btn";
+
+.addButton {
+  margin: 20px 0;
+}
+
+.switchItem {
+  background-color: #F4F5F7;
+  border-radius: 0.6rem;
+  padding: 25px 0;
+  height: auto;
+
+  &__width {
+    width: 60%;
+    margin: auto;
+  }
+}
+
+.childTabsBtn {
+  margin-bottom: 30px;
+}

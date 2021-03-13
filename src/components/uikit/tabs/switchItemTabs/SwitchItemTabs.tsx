@@ -1,11 +1,13 @@
 import React, { useState } from 'react';
 import './switch-item-tabs.scss';
+import cn from 'classnames';
 
 interface SwitchItemTabsProps {
   leftButtonLabel: string;
   rightButtonLabel: string;
   leftItem: JSX.Element;
   rightItem: JSX.Element;
+  tabsBtnClassName?: string;
 }
 
 const SwitchItemTabs = (props: SwitchItemTabsProps) => {
@@ -26,7 +28,7 @@ const SwitchItemTabs = (props: SwitchItemTabsProps) => {
 
   return (
     <div>
-      <div className="switch-item-tabs__buttons">
+      <div className={cn('switch-item-tabs__buttons', props.tabsBtnClassName)}>
         <button onClick={() => switchItem(0)} style={currentButtonStyle(0)}>
           {props.leftButtonLabel}
         </button>

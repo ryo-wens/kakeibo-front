@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../shoppingList/page/shopping-list-page.scss';
+import '../../shoppingList/page/ShoppingListPage.module.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import GroupTodayShoppingListArea from './todayShoppingListArea/GroupTodayShoppingListArea';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
