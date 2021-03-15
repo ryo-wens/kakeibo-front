@@ -18,15 +18,15 @@ interface MonthlyShoppingListAreaProps {
 const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
   return (
     <>
-      <div className={styles._addButton}>
+      <div className={styles.addButton}>
         <AddShoppingListItemModalContainer
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}
         />
       </div>
-      <div className={styles._switchItem}>
-        <div className={styles._switchItem__width}>
-          <div className={styles._inputYears}>
+      <div className={styles.switchItem}>
+        <div className={styles.switchItem__width}>
+          <div className={styles.inputYears}>
             <InputYears
               selectedYear={props.selectedYear}
               selectedMonth={props.selectedMonth}
@@ -53,7 +53,7 @@ const MonthlyShoppingListArea = (props: MonthlyShoppingListAreaProps) => {
                 currentMonth={props.currentMonth}
               />
             }
-            tabsBtnClassName={styles._childTabsBtn}
+            tabsBtnClassName={styles.childTabsBtn}
           />
         </div>
       </div>

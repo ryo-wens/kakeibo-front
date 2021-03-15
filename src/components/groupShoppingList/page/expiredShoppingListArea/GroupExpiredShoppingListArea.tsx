@@ -3,64 +3,67 @@ import '../../../shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListAr
 import GroupShoppingListItemComponentContainer from '../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import { GroupShoppingList } from '../../../../reducks/groupShoppingList/types';
+import { GroupDisplayShoppingListByDate } from '../../../../reducks/groupShoppingList/types';
+import styles from '../../../shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListArea.module.scss';
+import cn from 'classnames';
 
 interface GroupExpiredShoppingListAreaProps {
-  expiredShoppingList: GroupShoppingList;
-  slicedExpiredShoppingList: GroupShoppingList;
+  expiredShoppingList: GroupDisplayShoppingListByDate;
+  displayExpiredShoppingList: GroupDisplayShoppingListByDate;
   currentYear: string;
   currentMonth: string;
-  equalsDisplayDate: (date: string) => boolean;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   initialDisplayNumberShoppingList: number;
+  readMoreBtnClassName: string;
 }
 
 const GroupExpiredShoppingListArea = (props: GroupExpiredShoppingListAreaProps) => {
   const existExpiredShoppingList = props.expiredShoppingList.length !== 0;
 
   return (
-    <>
-      <div>
-        <div className="expired-shopping-list-area">
-          {existExpiredShoppingList ? (
-            <>
-              {props.slicedExpiredShoppingList.map((listItem) => {
+    <div>
+      <div className={styles.wrapper}>
+        {existExpiredShoppingList ? (
+          <>
+            <ol className={styles.listByDate}>
+              {props.displayExpiredShoppingList.map((displayShoppingListItem) => {
                 return (
-                  <div className="expired-shopping-list-area__item" key={listItem.id}>
-                    {props.equalsDisplayDate(listItem.expected_purchase_date) && (
-                      <p className="expired-shopping-list-area__item-date">
-                        {listItem.expected_purchase_date}
-                      </p>
-                    )}
-                    <GroupShoppingListItemComponentContainer
-                      listItem={listItem}
-                      currentYear={props.currentYear}
-                      currentMonth={props.currentMonth}
-                      purchaseClassName={'expired-shopping-list-area__child-purchase'}
-                      amountClassName={'expired-shopping-list-area__child-amount'}
-                    />
-                  </div>
+                  <li className={styles.listItemByDate} key={displayShoppingListItem.date}>
+                    <p className={styles.date}>{displayShoppingListItem.date}</p>
+                    <ol className={styles.shoppingList}>
+                      {displayShoppingListItem.shoppingList.map((item) => {
+                        return (
+                          <GroupShoppingListItemComponentContainer
+                            listItem={item}
+                            currentYear={props.currentYear}
+                            currentMonth={props.currentMonth}
+                            purchaseClassName={styles.childPurchase}
+                            amountClassName={styles.childAmount}
+                            key={item.id}
+                          />
+                        );
+                      })}
+                    </ol>
+                  </li>
                 );
               })}
-              {props.expiredShoppingList.length > props.initialDisplayNumberShoppingList && (
-                <button
-                  className="expired-shopping-list-area__read-more-button"
-                  onClick={() => props.setReadMore(!props.readMore)}
-                >
-                  {props.readMore ? 'close' : 'Read More'}
-                  {props.readMore ? <KeyboardArrowUpIcon /> : <KeyboardArrowRightIcon />}
-                </button>
-              )}
-            </>
-          ) : (
-            <p className="expired-shopping-list-area__message">
-              期限切れの買い物リストはありません。
-            </p>
-          )}
-        </div>
+            </ol>
+            {props.expiredShoppingList.length > props.initialDisplayNumberShoppingList && (
+              <button
+                className={cn(styles.readMoreBtn, props.readMoreBtnClassName)}
+                onClick={() => props.setReadMore(!props.readMore)}
+              >
+                {props.readMore ? 'close' : 'Read More'}
+                {props.readMore ? <KeyboardArrowUpIcon /> : <KeyboardArrowRightIcon />}
+              </button>
+            )}
+          </>
+        ) : (
+          <p className={styles.message}>期限切れの買い物リストはありません。</p>
+        )}
       </div>
-    </>
+    </div>
   );
 };
 

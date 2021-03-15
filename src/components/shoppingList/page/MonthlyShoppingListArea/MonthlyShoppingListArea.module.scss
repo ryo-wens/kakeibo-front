@@ -1,15 +1,14 @@
-@import "../../../../assets/variable";
 @import "../../../../assets/modules/task-btn";
 
-._addButton {
+.addButton {
   margin: 20px 0;
 }
 
-._inputYears {
+.inputYears {
   margin-bottom: 20px;
 }
 
-._switchItem {
+.switchItem {
   background-color: #F4F5F7;
   border-radius: 0.6rem;
   padding: 25px 0;
@@ -21,6 +20,6 @@
   }
 }
 
-._childTabsBtn {
+.childTabsBtn {
   margin-bottom: 30px;
 }
