@@ -1,0 +1,77 @@
+@import "../../../../assets/variable";
+
+.wrapper {
+  padding: 25px;
+}
+
+.listByDate {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItemByDate {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.date {
+  color: $task-main_color;
+  font-size: 1.0rem;
+  margin: 0 0 20px 0;
+}
+
+.todoList {
+  list-style-type: none;
+  padding: 0;
+
+  > div, li {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.readMoreBtn {
+  display: flex;
+  align-items: center;
+  background-color: $task-main_color;
+  background-image: linear-gradient(270deg, $task-main_color 53%, #7d869e 100%);
+  color: white;
+  font-size: 0.8rem;
+  border: none;
+  border-radius: 0.6rem;
+  padding: 2px 5px 2px 15px;
+  cursor: pointer;
+  outline: none;
+}
+
+.message {
+  color: $task-main_color;
+  font-size: 1.0rem;
+  font-weight: bold;
+  text-align: center;
+  padding: 10px 0;
+  margin: 0;
+}
+
+.childListItem {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.childListItemForm {
+  margin-bottom: 20px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}

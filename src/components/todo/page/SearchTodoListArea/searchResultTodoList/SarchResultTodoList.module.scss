@@ -1,0 +1,40 @@
+@import "../../../../../assets/variable";
+
+.wrapper {
+  background-color: $task-bg_color;
+  border-radius: 0.6rem;
+  margin: 0 20px;
+}
+
+.listByDate {
+  width: 60%;
+  list-style-type: none;
+  padding: 20px 0;
+  margin: 0 auto;
+
+  > div, li {
+    margin-bottom: 20px;
+
+    &:last-child {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.date {
+  color: $task-main_color;
+  font-size: 1.0rem;
+  margin: 0 0 20px 0;
+}
+
+.message {
+  color: $task-main_color;
+  font-size: 1.0rem;
+  font-weight: bold;
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.childFormClassName {
+  width: 70%;
+}

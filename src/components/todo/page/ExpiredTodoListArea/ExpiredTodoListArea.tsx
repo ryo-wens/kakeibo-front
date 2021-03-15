@@ -1,9 +1,10 @@
 import React from 'react';
-import './expired-todo-list-area.scss';
+import styles from './ExpiredTodoListArea.module.scss';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import TodoListItemComponentContainer from '../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
 import { DisplayTodoListItem } from '../../../../reducks/todoList/types';
+import cn from 'classnames';
 
 interface ExpiredTodoListAreaProps {
   expiredTodoList: DisplayTodoListItem[];
@@ -13,6 +14,7 @@ interface ExpiredTodoListAreaProps {
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  readMoreBtnClassName: string;
 }
 
 const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
@@ -21,18 +23,15 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
 
   return (
     <div>
-      <div className="expired-todo-list-area">
+      <div className={styles.wrapper}>
         {existExpiredTodoList ? (
           <>
-            <ol className="expired-todo-list-area__list-by-date">
+            <ol className={styles.listByDate}>
               {props.displayExpiredTodoList.map((displayTodolistItem) => {
                 return (
-                  <li
-                    className="expired-todo-list-area__list-item-by-date"
-                    key={displayTodolistItem.date}
-                  >
-                    <p className="expired-todo-list-area__date">{displayTodolistItem.date}</p>
-                    <ol className="expired-todo-list-area__todo-list">
+                  <li className={styles.listItemByDate} key={displayTodolistItem.date}>
+                    <p className={styles.date}>{displayTodolistItem.date}</p>
+                    <ol className={styles.todoList}>
                       {displayTodolistItem.list.map((item) => {
                         return (
                           <TodoListItemComponentContainer
@@ -40,8 +39,6 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
                             currentYear={props.currentYear}
                             currentMonth={props.currentMonth}
                             setEditing={props.setEditing}
-                            listItemStyle={'expired-todo-list-area__todo-list-item'}
-                            inputTodoClassName={'expired-todo-list-area__todo-list-item-form'}
                             key={item.id}
                           />
                         );
@@ -53,7 +50,7 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
             </ol>
             {props.expiredTodoList.length > initialDisplayNumberTodoList && (
               <button
-                className="expired-todo-list-area__read-more-button"
+                className={cn(styles.readMoreBtn, props.readMoreBtnClassName)}
                 onClick={() => props.setReadMore(!props.readMore)}
               >
                 {props.readMore ? 'close' : 'Read More'}
@@ -62,7 +59,7 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
             )}
           </>
         ) : (
-          <p className="expired-todo-list-area__message">期限切れのToDoリストはありません。</p>
+          <p className={styles.message}>期限切れのToDoリストはありません。</p>
         )}
       </div>
     </div>

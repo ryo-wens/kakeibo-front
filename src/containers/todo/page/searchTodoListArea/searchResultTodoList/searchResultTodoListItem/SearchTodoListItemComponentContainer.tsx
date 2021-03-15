@@ -20,9 +20,8 @@ interface SearchTodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
   currentMonth: string;
-  listItemStyle: string;
-  inputTodoClassName: string;
   fetchSearchTodoListRequestData: SearchTodoRequestData;
+  formClassName: string;
 }
 
 const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponentContainerProps) => {
@@ -183,8 +182,7 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       handleEditTodoListItem={() => handleEditTodoListItem()}
       handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
       currentPage={currentPage}
-      listItemStyle={props.listItemStyle}
-      inputTodoClassName={props.inputTodoClassName}
+      formClassName={props.formClassName}
       inputTodoRef={inputTodoRef}
     />
   );

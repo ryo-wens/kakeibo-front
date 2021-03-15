@@ -5,10 +5,14 @@ import { useParams } from 'react-router';
 import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
 import {
   getGroupDisplayExpiredShoppingList,
+  getGroupExpiredShoppingList,
   getGroupSlicedExpiredShoppingList,
 } from '../../../../reducks/groupShoppingList/selectors';
 import GroupExpiredShoppingListArea from '../../../../components/groupShoppingList/page/expiredShoppingListArea/GroupExpiredShoppingListArea';
-import { GroupDisplayShoppingListByDate } from '../../../../reducks/groupShoppingList/types';
+import {
+  GroupDisplayShoppingListByDate,
+  GroupShoppingList,
+} from '../../../../reducks/groupShoppingList/types';
 
 interface GroupExpiredShoppingListAreaContainerProps {
   currentYear: string;
@@ -20,7 +24,8 @@ const GroupExpiredShoppingListAreaContainer = (
   props: GroupExpiredShoppingListAreaContainerProps
 ) => {
   const dispatch = useDispatch();
-  const groupExpiredShoppingList = useSelector(getGroupDisplayExpiredShoppingList);
+  const groupExpiredShoppingList = useSelector(getGroupExpiredShoppingList);
+  const groupDisplayExpiredShoppingList = useSelector(getGroupDisplayExpiredShoppingList);
   const groupSlicedExpiredShoppingList = useSelector(getGroupSlicedExpiredShoppingList);
   const { group_id } = useParams<{ group_id: string }>();
   const initialDisplayNumberShoppingList = 3;
@@ -42,7 +47,8 @@ const GroupExpiredShoppingListAreaContainer = (
   }, []);
 
   const selectDisplayShoppingList = (
-    expiredShoppingList: GroupDisplayShoppingListByDate,
+    expiredShoppingList: GroupShoppingList,
+    displayExpiredShoppingList: GroupDisplayShoppingListByDate,
     slicedShoppingList: GroupDisplayShoppingListByDate,
     readMore: boolean
   ) => {
@@ -52,11 +58,12 @@ const GroupExpiredShoppingListAreaContainer = (
       return slicedShoppingList;
     }
 
-    return expiredShoppingList;
+    return displayExpiredShoppingList;
   };
 
   const displayExpiredShoppingList: GroupDisplayShoppingListByDate = selectDisplayShoppingList(
     groupExpiredShoppingList,
+    groupDisplayExpiredShoppingList,
     groupSlicedExpiredShoppingList,
     readMore
   );

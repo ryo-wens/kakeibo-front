@@ -1,7 +1,7 @@
 import React, { useEffect } from 'react';
 import ShoppingListByCategoriesComponent from '../../../../../components/shoppingList/modules/list/shoppingListByCategoriesComponent/ShoppingListByCategoriesComponent';
 import { useDispatch, useSelector } from 'react-redux';
-import { getMonthlyShoppingListByCategories } from '../../../../../reducks/shoppingList/selectors';
+import { getDisplayMonthlyShoppingListByCategories } from '../../../../../reducks/shoppingList/selectors';
 import axios from 'axios';
 import { fetchMonthlyShoppingListByCategories } from '../../../../../reducks/shoppingList/operations';
 import { useLocation } from 'react-router';
@@ -18,7 +18,7 @@ const MonthlyShoppingListByCategoriesContainer = (
 ) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
-  const monthlyShoppingListByCategories = useSelector(getMonthlyShoppingListByCategories);
+  const monthlyShoppingListByCategories = useSelector(getDisplayMonthlyShoppingListByCategories);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -26,30 +26,12 @@ const MonthlyShoppingListByCategoriesContainer = (
     return () => signal.cancel();
   }, [props.currentYear, props.currentMonth]);
 
-  const prevData = {
-    categoryId: 0,
-    expectedPurchaseDate: '',
-  };
-
-  const equalsDisplayDate = (categoryId: number, expectedPurchaseDate: string) => {
-    if (prevData.categoryId !== categoryId) {
-      prevData.categoryId = categoryId;
-      prevData.expectedPurchaseDate = expectedPurchaseDate;
-      return true;
-    } else if (prevData.expectedPurchaseDate !== expectedPurchaseDate) {
-      prevData.expectedPurchaseDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <ShoppingListByCategoriesComponent
       shoppingListByCategories={monthlyShoppingListByCategories}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       message={`${props.selectedMonth}月の買い物リストは、登録されていません。`}
-      equalsDisplayDate={equalsDisplayDate}
       pathName={pathName}
     />
   );

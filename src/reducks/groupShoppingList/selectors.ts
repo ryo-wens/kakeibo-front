@@ -1,9 +1,11 @@
 import { State } from '../store/types';
 import { createSelector } from 'reselect';
 import {
+  GroupDisplayShoppingListByCategories,
   GroupDisplayShoppingListByDate,
   GroupDisplayShoppingListItemByDate,
   GroupShoppingList,
+  GroupShoppingListByCategories,
   GroupShoppingListItem,
 } from './types';
 
@@ -64,6 +66,19 @@ const generateGroupDisplayShoppingListByDate = (shoppingList: GroupShoppingList)
   );
 };
 
+const generateGroupDisplayShoppingListByCategories = (
+  shoppingListByCategories: GroupShoppingListByCategories
+) => {
+  return shoppingListByCategories.map((shoppingListItemByCategories) => {
+    const shoppingListByDate = generateGroupDisplayShoppingListByDate(
+      shoppingListItemByCategories.shopping_list
+    );
+    const bigCategoryName = shoppingListItemByCategories.big_category_name;
+
+    return { bigCategoryName, shoppingListByDate };
+  });
+};
+
 const groupExpiredShoppingList = (state: State) => state.groupShoppingList.groupExpiredShoppingList;
 export const getGroupDisplayExpiredShoppingList = createSelector(
   [groupExpiredShoppingList],
@@ -112,6 +127,31 @@ export const getGroupDisplayMonthlyShoppingListByDate = createSelector(
   [groupMonthlyShoppingListByDate],
   (shoppingList: GroupShoppingList) => {
     const nextShoppingList = generateGroupDisplayShoppingListByDate(shoppingList);
+
+    return nextShoppingList;
+  }
+);
+
+const groupTodayShoppingListByCategories = (state: State) =>
+  state.groupShoppingList.groupTodayShoppingListByCategories;
+export const getGroupDisplayTodayShoppingListByCategories = createSelector(
+  [groupTodayShoppingListByCategories],
+  (shoppingListByCategories) => {
+    const nextShoppingList: GroupDisplayShoppingListByCategories = generateGroupDisplayShoppingListByCategories(
+      shoppingListByCategories
+    );
+
+    return nextShoppingList;
+  }
+);
+const groupMonthlyShoppingListByCategories = (state: State) =>
+  state.groupShoppingList.groupMonthlyShoppingListByCategories;
+export const getGroupDisplayMonthlyShoppingListByCategories = createSelector(
+  [groupMonthlyShoppingListByCategories],
+  (shoppingListByCategories) => {
+    const nextShoppingList: GroupDisplayShoppingListByCategories = generateGroupDisplayShoppingListByCategories(
+      shoppingListByCategories
+    );
 
     return nextShoppingList;
   }
