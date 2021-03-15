@@ -5,7 +5,7 @@ import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchGroupMonthlyShoppingList } from '../../../../../reducks/groupShoppingList/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import GroupShoppingListByDate from '../../../../../components/groupShoppingList/modules/list/shoppingListByDate/GroupShoppingListByDate';
-import { getGroupMonthlyShoppingList } from '../../../../../reducks/groupShoppingList/selectors';
+import { getGroupDisplayMonthlyShoppingListByDate } from '../../../../../reducks/groupShoppingList/selectors';
 import { useParams } from 'react-router';
 
 interface GroupMonthlyShoppingListByDateContainerProps {
@@ -20,7 +20,7 @@ const GroupMonthlyShoppingListByDateContainer = (
 ) => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
-  const groupMonthlyShoppingList = useSelector(getGroupMonthlyShoppingList);
+  const groupMonthlyShoppingList = useSelector(getGroupDisplayMonthlyShoppingListByDate);
 
   const fetchData = (groupId: number, year: string, month: string, signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
@@ -39,23 +39,12 @@ const GroupMonthlyShoppingListByDateContainer = (
     };
   }, [Number(group_id), props.currentYear, props.currentMonth]);
 
-  let prevDate = '';
-
-  const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <GroupShoppingListByDate
       shoppingListByDate={groupMonthlyShoppingList}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       message={`${props.selectedMonth}月の買い物リストは、登録されていません。`}
-      equalsDisplayDate={equalsDisplayDate}
     />
   );
 };

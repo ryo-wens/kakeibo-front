@@ -185,3 +185,10 @@ export interface AddGroupRegularShoppingListItemModalInitialState {
   initialPaymentUser: string | null;
   initialTransactionAutoAdd: boolean;
 }
+
+export interface GroupDisplayShoppingListItemByDate {
+  date: string;
+  shoppingList: GroupShoppingList;
+}
+
+export interface GroupDisplayShoppingListByDate extends Array<GroupDisplayShoppingListItemByDate> {}
