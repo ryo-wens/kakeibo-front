@@ -15,9 +15,8 @@ interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
   currentMonth: string;
-  listItemStyle: string;
-  inputTodoClassName: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  formClassName?: string;
 }
 
 const TodoListItemComponentContainer = (props: TodoListItemComponentContainerProps) => {
@@ -228,8 +227,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       handleEditTodoListItem={() => handleEditTodoListItem()}
       handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
       currentPage={currentPage}
-      listItemStyle={props.listItemStyle}
-      inputTodoClassName={props.inputTodoClassName}
+      formClassName={props.formClassName}
       inputTodoRef={inputTodoRef}
     />
   );

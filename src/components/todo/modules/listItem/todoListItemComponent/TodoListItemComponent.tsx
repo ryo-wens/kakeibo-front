@@ -23,14 +23,13 @@ interface TodoListItemComponentProps {
   handleEditTodoListItem: () => void;
   handleDeleteTodoListItem: () => void;
   currentPage: string;
-  listItemStyle: string;
-  inputTodoClassName: string;
+  formClassName?: string;
   setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
   inputTodoRef: React.RefObject<HTMLDivElement>;
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
-  const listItemClassName = cn('todo-list-item-component', props.listItemStyle);
+  const listItemClassName = cn('todo-list-item-component');
 
   const contentClassName = cn('todo-list-item-component__content', {
     'todo-list-item-component__complete': props.checked,
@@ -56,7 +55,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           />
         </li>
       ) : (
-        <div className={props.inputTodoClassName}>
+        <div className={props.formClassName}>
           <TodoListItemFormContainer
             titleLabel={'ToDoを編集'}
             buttonLabel={'保存'}

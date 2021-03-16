@@ -3,12 +3,15 @@ import '../../../shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListAr
 import GroupShoppingListItemComponentContainer from '../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import { GroupDisplayShoppingListByDate } from '../../../../reducks/groupShoppingList/types';
+import {
+  GroupDisplayShoppingListByDate,
+  GroupShoppingList,
+} from '../../../../reducks/groupShoppingList/types';
 import styles from '../../../shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListArea.module.scss';
 import cn from 'classnames';
 
 interface GroupExpiredShoppingListAreaProps {
-  expiredShoppingList: GroupDisplayShoppingListByDate;
+  expiredShoppingList: GroupShoppingList;
   displayExpiredShoppingList: GroupDisplayShoppingListByDate;
   currentYear: string;
   currentMonth: string;
@@ -20,6 +23,7 @@ interface GroupExpiredShoppingListAreaProps {
 
 const GroupExpiredShoppingListArea = (props: GroupExpiredShoppingListAreaProps) => {
   const existExpiredShoppingList = props.expiredShoppingList.length !== 0;
+  const initialDisplayNumberShoppingList = 3;
 
   return (
     <div>
@@ -49,7 +53,7 @@ const GroupExpiredShoppingListArea = (props: GroupExpiredShoppingListAreaProps) 
                 );
               })}
             </ol>
-            {props.expiredShoppingList.length > props.initialDisplayNumberShoppingList && (
+            {props.expiredShoppingList.length > initialDisplayNumberShoppingList && (
               <button
                 className={cn(styles.readMoreBtn, props.readMoreBtnClassName)}
                 onClick={() => props.setReadMore(!props.readMore)}

@@ -1,0 +1,56 @@
+@import "../../../assets/variable";
+@import "../../../assets/modules/task-btn";
+
+.wrapper {
+  width: 100%;
+  display: flex;
+}
+
+.leftArea {
+  width: calc((100% - 60px) * 0.7);
+  margin-left: 20px;
+}
+
+.leftContent {
+  background-color: white;
+  border-radius: 0.6rem;
+  padding: 20px;
+}
+
+.rightArea {
+  width: calc((100% - 60px) * 0.3);
+  margin: 0 20px;
+}
+
+.rightContent {
+  background-color: white;
+  border-radius: 0.6rem;
+  padding: 15px;
+
+  > h4 {
+    color: $color-lynch;
+    margin: 0 0 10px 0;
+  }
+
+  > div {
+    background-color: $color-athensGray;
+    border-radius: 0.6rem;
+    padding: 10px;
+  }
+}
+
+.switchBtn {
+  position: relative;
+}
+
+.search {
+  @extend .task--btn;
+  position: absolute;
+  top: 0;
+  left: 200px;
+  height: 40px;
+}
+
+.childReadBtn {
+  margin-top: 25px
+}

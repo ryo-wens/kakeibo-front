@@ -1,74 +1,77 @@
 import React from 'react';
-import '../../../../shoppingList/modules/list/shoppingListByCategoriesComponent/shopping-list-by-categories-component.scss';
 import { bigCategoryColor } from '../../../../../lib/function';
 import {
-  GroupShoppingListByCategories,
-  GroupShoppingListItem,
-  GroupShoppingListItemByCategories,
+  GroupDisplayShoppingListByCategories,
+  GroupDisplayShoppingListItemByCategories,
+  GroupDisplayShoppingListItemByDate,
 } from '../../../../../reducks/groupShoppingList/types';
 import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
+import styles from '../../../../shoppingList/modules/list/shoppingListByCategoriesComponent/ShoppingListByCategoriesComponent.module.scss';
 
 interface GroupShoppingListByCategoriesComponentProps {
-  shoppingListByCategories: GroupShoppingListByCategories;
+  shoppingListByCategories: GroupDisplayShoppingListByCategories;
   currentYear: string;
   currentMonth: string;
   message: string;
-  equalsDisplayDate: (categoryId: number, date: string) => boolean;
 }
 
 const GroupShoppingListByCategoriesComponent = (
   props: GroupShoppingListByCategoriesComponentProps
 ) => {
+  const existsShoppingListByCategories = props.shoppingListByCategories.length !== 0;
+
   return (
     <>
-      {props.shoppingListByCategories.length ? (
-        props.shoppingListByCategories.map(
-          (shoppingListItemByCategories: GroupShoppingListItemByCategories) => {
-            return (
-              <div key={shoppingListItemByCategories.big_category_name}>
-                <div className="shopping-list-by-categories-component__category">
-                  <span
-                    className="shopping-list-by-categories-component__category-color"
-                    style={bigCategoryColor(shoppingListItemByCategories.big_category_name)}
-                  />
-                  <h4 className="shopping-list-by-categories-component__category-name">
-                    {shoppingListItemByCategories.big_category_name}
-                  </h4>
-                </div>
-                {shoppingListItemByCategories.shopping_list.map(
-                  (shoppingListItem: GroupShoppingListItem) => {
-                    return (
-                      <div
-                        className="shopping-list-by-categories-component__item"
-                        key={shoppingListItem.id}
-                      >
-                        {props.equalsDisplayDate(
-                          shoppingListItem.big_category_id,
-                          shoppingListItem.expected_purchase_date
-                        ) && (
-                          <p className="shopping-list-by-categories-component__item-date">
-                            {shoppingListItem.expected_purchase_date}
-                          </p>
-                        )}
-                        <GroupShoppingListItemComponentContainer
-                          listItem={shoppingListItem}
-                          currentYear={props.currentYear}
-                          currentMonth={props.currentMonth}
-                          purchaseClassName={
-                            'shopping-list-by-categories-component__child-purchase'
-                          }
-                          amountClassName={'shopping-list-by-categories-component__child-amount'}
-                        />
-                      </div>
-                    );
-                  }
-                )}
-              </div>
-            );
-          }
-        )
+      {existsShoppingListByCategories ? (
+        <ol className={styles.listByCategory}>
+          {props.shoppingListByCategories.map(
+            (shoppingListItemByCategories: GroupDisplayShoppingListItemByCategories) => {
+              return (
+                <li
+                  className={styles.listItemByCategory}
+                  key={shoppingListItemByCategories.bigCategoryName}
+                >
+                  <div className={styles.category}>
+                    <span
+                      className={styles.categoryColor}
+                      style={bigCategoryColor(shoppingListItemByCategories.bigCategoryName)}
+                    />
+                    <h4 className={styles.categoryName}>
+                      {shoppingListItemByCategories.bigCategoryName}
+                    </h4>
+                  </div>
+                  <ol className={styles.listByDate}>
+                    {shoppingListItemByCategories.shoppingListByDate.map(
+                      (shoppingListItemByDate: GroupDisplayShoppingListItemByDate) => {
+                        return (
+                          <li className={styles.listItemByDate} key={shoppingListItemByDate.date}>
+                            <p className={styles.date}>{shoppingListItemByDate.date}</p>
+                            <ol className={styles.shoppingList}>
+                              {shoppingListItemByDate.shoppingList.map((item) => {
+                                return (
+                                  <GroupShoppingListItemComponentContainer
+                                    listItem={item}
+                                    currentYear={props.currentYear}
+                                    currentMonth={props.currentMonth}
+                                    purchaseClassName={styles.childPurchase}
+                                    amountClassName={styles.childAmount}
+                                    key={item.id}
+                                  />
+                                );
+                              })}
+                            </ol>
+                          </li>
+                        );
+                      }
+                    )}
+                  </ol>
+                </li>
+              );
+            }
+          )}
+        </ol>
       ) : (
-        <p className="shopping-list-by-date__message">{props.message}</p>
+        <p className={styles.message}>{props.message}</p>
       )}
     </>
   );

@@ -2,12 +2,12 @@ import React from 'react';
 import styles from './ExpiredShoppingListArea.module.scss';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { DisplayShoppingListByDate } from '../../../../reducks/shoppingList/types';
+import { DisplayShoppingListByDate, ShoppingList } from '../../../../reducks/shoppingList/types';
 import ShoppingListItemComponentContainer from '../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 import cn from 'classnames';
 
 interface ExpiredShoppingListAreaProps {
-  expiredShoppingList: DisplayShoppingListByDate;
+  expiredShoppingList: ShoppingList;
   displayExpiredShoppingList: DisplayShoppingListByDate;
   currentYear: string;
   currentMonth: string;
@@ -31,7 +31,7 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
                   <li className={styles.listItemByDate} key={displayShoppingListItem.date}>
                     <p className={styles.date}>{displayShoppingListItem.date}</p>
                     <ol className={styles.shoppingList}>
-                      {displayShoppingListItem.list.map((item) => {
+                      {displayShoppingListItem.shoppingList.map((item) => {
                         return (
                           <ShoppingListItemComponentContainer
                             listItem={item}

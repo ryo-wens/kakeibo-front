@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react';
-import '../../../../../components/shoppingList/modules/list/shoppingListByCategoriesComponent/shopping-list-by-categories-component.scss';
+import '../../../../../components/shoppingList/modules/list/shoppingListByCategoriesComponent/ShoppingListByCategoriesComponent.module.scss';
 import axios, { CancelTokenSource } from 'axios';
 import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchGroupMonthlyShoppingList } from '../../../../../reducks/groupShoppingList/operations';

@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { getDisplayTodayShoppingListByDate } from '../../../../../reducks/shoppingList/selectors';
 import axios from 'axios';
 import { fetchTodayShoppingList } from '../../../../../reducks/shoppingList/operations';
-import { customMonth, date, year } from '../../../../../lib/constant';
+import { customDate, customMonth, year } from '../../../../../lib/constant';
 
 interface TodayShoppingListByDateContainerProps {
   currentYear: string;
@@ -13,14 +13,14 @@ interface TodayShoppingListByDateContainerProps {
 
 const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContainerProps) => {
   const dispatch = useDispatch();
-  const displayTodayShoppingList = useSelector(getDisplayTodayShoppingListByDate);
+  const todayShoppingListByDate = useSelector(getDisplayTodayShoppingListByDate);
 
   const todayYear = String(year);
   const todayMonth = customMonth;
-  const todayDate: string = ('0' + date.getDate()).slice(-2);
+  const todayDate = customDate;
 
   useEffect(() => {
-    const notExistsTodayShoppingListByDate = displayTodayShoppingList.length === 0;
+    const notExistsTodayShoppingListByDate = todayShoppingListByDate.length === 0;
     const signal = axios.CancelToken.source();
 
     if (notExistsTodayShoppingListByDate) {
@@ -31,7 +31,7 @@ const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContaine
 
   return (
     <ShoppingListByDate
-      shoppingListByDate={displayTodayShoppingList}
+      shoppingListByDate={todayShoppingListByDate}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       message={'今日の買い物リストは、登録されていません。'}

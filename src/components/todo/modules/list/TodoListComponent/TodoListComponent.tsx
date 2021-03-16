@@ -1,5 +1,5 @@
 import React from 'react';
-import './todo-list-component.scss';
+import styles from './TodoListComponent.module.scss';
 import { DisplayTodoListItem } from '../../../../../reducks/todoList/types';
 import TodoListItemComponentContainer from '../../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
 
@@ -15,14 +15,14 @@ const TodoListComponent = (props: TodoListComponentProps) => {
   const existTodoList = props.todoList.length !== 0;
 
   return (
-    <div className="todo-list-component">
+    <div className={styles.wrapper}>
       {existTodoList ? (
-        <ol className="todo-list-component__list-by-date">
+        <ol className={styles.listByDate}>
           {props.todoList.map((displayTodolistItem) => {
             return (
-              <li className="todo-list-component__list-item-by-date" key={displayTodolistItem.date}>
-                <p className="todo-list-component__date">{displayTodolistItem.date}</p>
-                <ol className="todo-list-component__todo-list">
+              <li className={styles.listItemByDate} key={displayTodolistItem.date}>
+                <p className={styles.date}>{displayTodolistItem.date}</p>
+                <ol className={styles.todoList}>
                   {displayTodolistItem.list.map((item) => {
                     return (
                       <TodoListItemComponentContainer
@@ -30,8 +30,7 @@ const TodoListComponent = (props: TodoListComponentProps) => {
                         currentYear={props.currentYear}
                         currentMonth={props.currentMonth}
                         setEditing={props.setEditing}
-                        listItemStyle={'todo-list-component__todo-list-item'}
-                        inputTodoClassName={'todo-list-component__todo-list-item-form'}
+                        formClassName={styles.childFormClassName}
                         key={item.id}
                       />
                     );
@@ -42,7 +41,7 @@ const TodoListComponent = (props: TodoListComponentProps) => {
           })}
         </ol>
       ) : (
-        <p className="todo-list-component__message">{props.message}</p>
+        <p className={styles.message}>{props.message}</p>
       )}
     </div>
   );

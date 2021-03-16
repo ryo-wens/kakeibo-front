@@ -1,9 +1,48 @@
 @import "../../../../../assets/variable";
 
+.listByCategory {
+  list-style-type: none;
+  padding: 0;
+  margin: 0;
+}
+
+.listItemByCategory {
+  margin-bottom: 40px;
+
+  &:last-child {
+    margin-bottom: 0;
+  }
+}
+
+.category {
+  display: flex;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.categoryColor {
+  display: inline-block;
+  width: 10px;
+  height: 1.6rem;
+  border-radius: 0.7rem;
+}
+
+.categoryName {
+  color: $color-lynch;
+  font-size: 1.3rem;
+  margin: 0 0 0 10px;
+}
+
 .listByDate {
   list-style-type: none;
   padding: 0;
   margin: 0;
+}
+
+.date {
+  color: $color-lynch;
+  font-size: 1.0rem;
+  margin: 0 0 20px 0;
 }
 
 .listItemByDate {
@@ -12,12 +51,6 @@
   &:last-child {
     margin-bottom: 0;
   }
-}
-
-.date {
-  color: $color-lynch;
-  font-size: 1.0rem;
-  margin: 0 0 20px 0;
 }
 
 .shoppingList {

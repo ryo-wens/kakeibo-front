@@ -3,11 +3,12 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import {
   getDisplayExpiredShoppingList,
+  getExpiredShoppingList,
   getSlicedExpiredShoppingList,
 } from '../../../../reducks/shoppingList/selectors';
 import { fetchExpiredShoppingList } from '../../../../reducks/shoppingList/operations';
 import ExpiredShoppingListArea from '../../../../components/shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListArea';
-import { DisplayShoppingListByDate } from '../../../../reducks/shoppingList/types';
+import { DisplayShoppingListByDate, ShoppingList } from '../../../../reducks/shoppingList/types';
 
 interface ExpiredShoppingListAreaContainerProps {
   currentYear: string;
@@ -17,7 +18,8 @@ interface ExpiredShoppingListAreaContainerProps {
 
 const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContainerProps) => {
   const dispatch = useDispatch();
-  const expiredShoppingList = useSelector(getDisplayExpiredShoppingList);
+  const expiredShoppingList = useSelector(getExpiredShoppingList);
+  const displayExpiredShoppingList = useSelector(getDisplayExpiredShoppingList);
   const slicedExpiredShoppingList = useSelector(getSlicedExpiredShoppingList);
   const initialDisplayNumberShoppingList = 3;
 
@@ -34,7 +36,8 @@ const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContaine
   }, []);
 
   const selectDisplayShoppingList = (
-    expiredShoppingList: DisplayShoppingListByDate,
+    expiredShoppingList: ShoppingList,
+    displayExpiredShoppingList: DisplayShoppingListByDate,
     slicedShoppingList: DisplayShoppingListByDate,
     readMore: boolean
   ) => {
@@ -44,11 +47,12 @@ const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContaine
       return slicedShoppingList;
     }
 
-    return expiredShoppingList;
+    return displayExpiredShoppingList;
   };
 
-  const displayExpiredShoppingList: DisplayShoppingListByDate = selectDisplayShoppingList(
+  const displayShoppingList: DisplayShoppingListByDate = selectDisplayShoppingList(
     expiredShoppingList,
+    displayExpiredShoppingList,
     slicedExpiredShoppingList,
     readMore
   );
@@ -56,7 +60,7 @@ const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContaine
   return (
     <ExpiredShoppingListArea
       expiredShoppingList={expiredShoppingList}
-      displayExpiredShoppingList={displayExpiredShoppingList}
+      displayExpiredShoppingList={displayShoppingList}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       readMore={readMore}

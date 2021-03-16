@@ -200,7 +200,15 @@ export interface AddRegularShoppingListItemModalInitialState {
 
 export interface DisplayShoppingListItemByDate {
   date: string;
-  list: ShoppingList;
+  shoppingList: ShoppingList;
 }
 
 export interface DisplayShoppingListByDate extends Array<DisplayShoppingListItemByDate> {}
+
+export interface DisplayShoppingListItemByCategories {
+  bigCategoryName: string;
+  shoppingListByDate: DisplayShoppingListByDate;
+}
+
+export interface DisplayShoppingListByCategories
+  extends Array<DisplayShoppingListItemByCategories> {}

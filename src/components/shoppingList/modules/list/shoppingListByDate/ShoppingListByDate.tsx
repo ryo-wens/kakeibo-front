@@ -22,7 +22,7 @@ const ShoppingListByDate = (props: ShoppingListByDateProps) => {
               <li className={styles.listItemByDate} key={displayShoppingListItem.date}>
                 <p className={styles.date}>{displayShoppingListItem.date}</p>
                 <ol className={styles.shoppingList}>
-                  {displayShoppingListItem.list.map((item) => {
+                  {displayShoppingListItem.shoppingList.map((item) => {
                     return (
                       <ShoppingListItemComponentContainer
                         listItem={item}

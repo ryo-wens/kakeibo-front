@@ -53,6 +53,7 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
                 currentMonth={props.currentMonth}
               />
             }
+            tabsBtnClassName={styles.childTabsBtn}
           />
         </div>
       </div>

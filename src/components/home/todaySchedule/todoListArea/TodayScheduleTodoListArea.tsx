@@ -25,8 +25,6 @@ const TodayScheduleTodoListArea = (props: TodayScheduleTodoListAreaProps) => {
                 currentYear={props.currentYear}
                 currentMonth={props.currentMonth}
                 setEditing={props.setEditing}
-                listItemStyle={'today-schedule-todo-list-area__todo-list-item'}
-                inputTodoClassName={'today-schedule-todo-list-area__todo-list-item-form'}
                 key={listItem.id}
               />
             );
