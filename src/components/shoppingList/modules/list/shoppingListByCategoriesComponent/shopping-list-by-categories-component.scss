@@ -15,7 +15,7 @@
   }
 
   &__category-name {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 1.3rem;
     margin: 0 0 0 10px;
   }
@@ -29,13 +29,13 @@
   }
 
   &__item-date {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 1.0rem;
     margin: 0 0 20px 0;
   }
 
   &__message {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 1.0rem;
     font-weight: bold;
     text-align: center;

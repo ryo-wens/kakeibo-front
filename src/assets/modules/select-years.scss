@@ -6,7 +6,7 @@
 
   &__selector {
     background-color: white;
-    border: $task-border_color solid 1px;
+    border: $color-geyser solid 1px;
     cursor: pointer;
     font-size: 1rem;
     text-align: center;
@@ -20,7 +20,7 @@
 
     &__year-btn {
       &:hover{
-        background-color: $display-btn-main_color;
+        background-color: $color-crusta;
         color: white;
       }
 
@@ -44,9 +44,9 @@
   }
 
   &__select-box {
-    background-color: $main_background_color;
+    background-color: $color-whiteLilac;
     border-radius: $task-border_radius;
-    border: $task-border_color solid 1px;
+    border: $color-geyser solid 1px;
     text-align: center;
     height:auto;
     padding: 10px;
@@ -54,16 +54,16 @@
 
   &__icon {
     vertical-align: middle;
-    color: $task-main_color;
+    color: $color-lynch;
   }
 
   &__close-btn {
-    @include close-btn($main_background_color, $task-main_color);
+    @include close-btn($color-whiteLilac, $color-lynch);
     float: right;
   }
 
   &__display-btn {
-   @include indicate-btn($display-btn-main_color);
+   @include indicate-btn($color-crusta);
 
     &--small {
       width: 15%;

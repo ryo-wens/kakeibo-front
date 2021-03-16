@@ -11,18 +11,18 @@
   &__title {
     display: flex;
     justify-content: space-between;
-    border-bottom: $task-border_color solid 1px;
+    border-bottom: $color-geyser solid 1px;
     padding: 0 10px 10px 10px;
 
     &--text {
       font-size: $task-title-font_size;
       font-weight: bold;
-      color: $task-main_color;
+      color: $color-lynch;
       margin: 0;
     }
 
     &--close-btn {
-      @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+      @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
     }
   }
 
@@ -36,16 +36,16 @@
     margin: 0 20px;
 
     &--add {
-      @include operation-btn($task-add-color, white, $task-add-color);
+      @include operation-btn($color-sushi, white, $color-sushi);
     }
 
     &--cancel {
-      @include operation-btn(white, $task-main_color,$task-border_color);
+      @include operation-btn(white, $color-lynch,$color-geyser);
       margin: 0 0 0 10px;
     }
 
     &--delete {
-      @include operation-btn($danger-color, white,$danger-color);
+      @include operation-btn($color-cinnabar, white,$color-cinnabar);
     }
   }
 }

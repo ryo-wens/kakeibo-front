@@ -8,25 +8,25 @@
 
   &__position {
     display: flex;
-    border-bottom: $task-border_color solid 1px;
+    border-bottom: $color-geyser solid 1px;
     justify-content: space-between;
     padding: 0 0 10px 0;
     margin: 0 0 25px 0;
 
     > h3 {
-      color: $task-main_color;
+      color: $color-lynch;
       font-size: $task-title-font_size;
       margin: 0;
     }
   }
 
   &__back-btn {
-    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
     margin-left: 10px;
   }
 
   &__close-btn {
-    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
     margin-right: 10px;
   }
 
@@ -36,7 +36,7 @@
   }
 
   &__delete-btn {
-    @include operation-btn($danger-color, white, $danger-color);
+    @include operation-btn($color-cinnabar, white, $color-cinnabar);
     margin-left: 20px;
   }
 }

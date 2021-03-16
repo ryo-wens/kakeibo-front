@@ -25,8 +25,8 @@
 
   &__th {
     align-self: center;
-    background-color: $main_background_color;
-    border: solid 1px $border_color;
+    background-color: $color-whiteLilac;
+    border: solid 1px $color-iron;
     font-weight: $large-font_weight;
     font-size: $medium-font_size;
     height: 40px;
@@ -74,7 +74,7 @@
   }
 
   &__td {
-    border: solid 1px $border_color;
+    border: solid 1px $color-iron;
     border-collapse: collapse;
     empty-cells: show;
     text-align: center;
@@ -82,7 +82,7 @@
   }
 
   &__search-btn {
-    @include search-btn($display-btn-main_color);
+    @include search-btn($color-dodgerBlue);
     color: white;
   }
 

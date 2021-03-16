@@ -4,19 +4,19 @@
 .task-list-item-component {
   display: flex;
   align-items: center;
-  background-color: $list-item-bg-color;
+  background-color: $color-zircon;
   border-radius: 0.6rem;
   padding: 5px 10px;
 
   &__text {
     width: 100%;
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 1.2rem;
     padding: 0 0 0 10px;
   }
 
   &__edit-icon {
-    @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
+    @include icon-btn($color-lynch, $color-mariner, white, 0.2rem, 1.0);
     padding: 3px;
   }
 }

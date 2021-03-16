@@ -1,13 +1,13 @@
 @import "../../../../assets/variable";
 
 .task-list-area {
-  background-color: $task-bg_color;
+  background-color: $color-athensGray;
   border-radius: 0.5rem;
   padding: 10px 20px 20px 20px;
   margin-bottom: 20px;
 
   &__title {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 1.2rem;
     margin: 0 0 20px;
   }
@@ -39,7 +39,7 @@
   }
 
   &__message {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 0.9rem;
     font-weight: bold;
     padding: 0 0 20px 0;

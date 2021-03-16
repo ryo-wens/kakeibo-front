@@ -10,7 +10,7 @@
 
   &__position {
     display: flex;
-    border-bottom: $task-border_color solid 1px;
+    border-bottom: $color-geyser solid 1px;
     justify-content: center;
     position: relative;
     padding: 0 0 10px 0;
@@ -18,20 +18,20 @@
   }
 
   &__btn-position{
-    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
     position: absolute;
     right: 0;
     margin: 0 20px 0 0;
   }
 
   &__title {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: $task-title-font_size;
     margin: 0;
   }
 
   &__message {
-    color: $danger-color;
+    color: $color-cinnabar;
     font-size: 0.85rem;
     margin: 8px 0;
   }
@@ -44,7 +44,7 @@
 
     &--key {
       width: 180px;
-      color: $task-main_color;
+      color: $color-lynch;
       font-size: $task-title-font_size;
       font-weight: bold;
       margin: 0 0 25px 20px;
@@ -58,16 +58,16 @@
     margin: 0 20px;
 
     &--add {
-      @include operation-btn($task-add-color, white, $task-add-color);
+      @include operation-btn($color-sushi, white, $color-sushi);
     }
 
     &--cancel {
-      @include operation-btn(white, $task-main_color,$task-border_color);
+      @include operation-btn(white, $color-lynch,$color-geyser);
       margin: 0 0 0 10px;
     }
 
     &--release {
-      @include operation-btn($task-delete-color, white, $task-delete-color);
+      @include operation-btn($color-cinnabar, white, $color-cinnabar);
     }
   }
 }

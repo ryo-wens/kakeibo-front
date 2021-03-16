@@ -8,6 +8,7 @@
   display: table;
   height: auto;
   width: 100%;
+  box-shadow: $section-box_shadow;
 
   &__spacer {
     display: block;
@@ -23,7 +24,7 @@
   }
 
   &__text {
-    border: solid 1px $border_color;
+    border: solid 1px $color-iron;
   }
 
   &__dl {
@@ -36,8 +37,8 @@
   }
 
   &__thead {
-    border: solid 1px $border_color;
-    background-color: $main_background_color;
+    border: solid 1px $color-iron;
+    background-color: $color-whiteLilac;
     display: table-row;
     font-weight: 400;
     height:60px;
@@ -52,7 +53,7 @@
   }
 
   &__record-second{
-    border: solid 1px $border_color;
+    border: solid 1px $color-iron;
     padding: 6px;
     height: 350px;
     vertical-align: top;
@@ -60,13 +61,13 @@
   }
 
   &__record-third {
-    border: solid 1px $border_color;
+    border: solid 1px $color-iron;
     height: 60px;
     width: 130px;
   }
 
   &__record-fourth{
-    border: solid 1px $border_color;
+    border: solid 1px $color-iron;
     font-size: $medium-font_size;
     font-weight: $large-font_weight;
     height: 45px;

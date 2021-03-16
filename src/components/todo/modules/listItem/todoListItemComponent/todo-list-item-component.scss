@@ -5,12 +5,12 @@
 .todo-list-item-component {
   display: flex;
   align-items: center;
-  background-color: $list-item-bg-color;
+  background-color: $color-zircon;
   border-radius: 0.6rem;
   padding: 10px 15px;
 
   &__check {
-    @include check-box($task-add-color)
+    @include check-box($color-sushi)
   }
 
   &__content {
@@ -20,7 +20,7 @@
   }
 
   &__edit-icon {
-    @include icon-btn($task-main_color, $task-sub_color, white, 0.2rem, 1.0);
+    @include icon-btn($color-lynch, $color-mariner, white, 0.2rem, 1.0);
     padding: 3px;
   }
 
