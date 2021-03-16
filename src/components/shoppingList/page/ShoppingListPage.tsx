@@ -1,5 +1,5 @@
 import React from 'react';
-import './shopping-list-page.scss';
+import styles from './ShoppingListPage.module.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import TodayShoppingListAreaContainer from '../../../containers/shoppingList/page/TodayShoppingListArea/TodayShoppingListAreaContainer';
 import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/page/MonthlyShoppingListArea/MonthlyShoppingListAreaContainer';
@@ -21,9 +21,9 @@ interface ShoppingListPageProps {
 
 const ShoppingListPage = (props: ShoppingListPageProps) => {
   return (
-    <div className="shopping-list-page">
-      <div className="shopping-list-page__left">
-        <div className="shopping-list-page__left-content">
+    <div className={styles.wrapper}>
+      <div className={styles.leftArea}>
+        <div className={styles.leftContent}>
           <SwitchTodayOrMonthlyTabsContainer
             currentItem={props.currentItem}
             setCurrentItems={props.setCurrentItem}
@@ -46,8 +46,8 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           />
         </div>
       </div>
-      <div className="shopping-list-page__right">
-        <div className="shopping-list-page__right-content">
+      <div className={styles.rightArea}>
+        <div className={styles.rightContent}>
           <h4>定期買い物リスト</h4>
           <AddRegularShoppingListItemModalContainer
             selectedYear={props.selectedYear}
@@ -61,11 +61,12 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
-        <div className="shopping-list-page__right-content">
+        <div className={styles.rightContent}>
           <h4>期限切れ買い物リスト</h4>
           <ExpiredShoppingListAreaContainer
             currentYear={props.currentYear}
             currentMonth={props.currentMonth}
+            readMoreBtnClassName={styles.childReadBtn}
           />
         </div>
       </div>

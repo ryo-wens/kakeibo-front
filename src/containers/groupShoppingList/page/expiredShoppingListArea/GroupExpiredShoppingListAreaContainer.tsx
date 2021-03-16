@@ -3,20 +3,25 @@ import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useParams } from 'react-router';
 import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
-import { getGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/selectors';
+import {
+  getGroupDisplayExpiredShoppingList,
+  getGroupSlicedExpiredShoppingList,
+} from '../../../../reducks/groupShoppingList/selectors';
 import GroupExpiredShoppingListArea from '../../../../components/groupShoppingList/page/expiredShoppingListArea/GroupExpiredShoppingListArea';
-import { GroupShoppingList } from '../../../../reducks/groupShoppingList/types';
+import { GroupDisplayShoppingListByDate } from '../../../../reducks/groupShoppingList/types';
 
 interface GroupExpiredShoppingListAreaContainerProps {
   currentYear: string;
   currentMonth: string;
+  readMoreBtnClassName: string;
 }
 
 const GroupExpiredShoppingListAreaContainer = (
   props: GroupExpiredShoppingListAreaContainerProps
 ) => {
   const dispatch = useDispatch();
-  const groupExpiredShoppingList = useSelector(getGroupExpiredShoppingList);
+  const groupExpiredShoppingList = useSelector(getGroupDisplayExpiredShoppingList);
+  const groupSlicedExpiredShoppingList = useSelector(getGroupSlicedExpiredShoppingList);
   const { group_id } = useParams<{ group_id: string }>();
   const initialDisplayNumberShoppingList = 3;
 
@@ -36,34 +41,36 @@ const GroupExpiredShoppingListAreaContainer = (
     };
   }, []);
 
-  let prevDate = '';
-  const equalsDisplayDate = (expectedPurchaseDate: string) => {
-    if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
-      return true;
+  const selectDisplayShoppingList = (
+    expiredShoppingList: GroupDisplayShoppingListByDate,
+    slicedShoppingList: GroupDisplayShoppingListByDate,
+    readMore: boolean
+  ) => {
+    const initialDisplayNumberTodoList = 3;
+
+    if (expiredShoppingList.length > initialDisplayNumberTodoList && !readMore) {
+      return slicedShoppingList;
     }
-    return false;
+
+    return expiredShoppingList;
   };
 
-  const sliceShoppingList = (shoppingList: GroupShoppingList, currentReadMore: boolean) => {
-    if (shoppingList.length > initialDisplayNumberShoppingList && !currentReadMore) {
-      return shoppingList.slice(0, 3);
-    }
-    return shoppingList;
-  };
-
-  const slicedExpiredShoppingList = sliceShoppingList(groupExpiredShoppingList, readMore);
+  const displayExpiredShoppingList: GroupDisplayShoppingListByDate = selectDisplayShoppingList(
+    groupExpiredShoppingList,
+    groupSlicedExpiredShoppingList,
+    readMore
+  );
 
   return (
     <GroupExpiredShoppingListArea
       expiredShoppingList={groupExpiredShoppingList}
-      slicedExpiredShoppingList={slicedExpiredShoppingList}
+      displayExpiredShoppingList={displayExpiredShoppingList}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
-      equalsDisplayDate={equalsDisplayDate}
       readMore={readMore}
       setReadMore={setReadMore}
       initialDisplayNumberShoppingList={initialDisplayNumberShoppingList}
+      readMoreBtnClassName={props.readMoreBtnClassName}
     />
   );
 };

@@ -62,7 +62,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
   });
 
   return (
-    <div className="shopping-list-item-component">
+    <li className="shopping-list-item-component">
       <div className="shopping-list-item-component__check-box">
         <CheckedShoppingListItemModalContainer
           listItem={props.listItem}
@@ -159,7 +159,7 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           </div>
         )}
       </div>
-    </div>
+    </li>
   );
 };
 

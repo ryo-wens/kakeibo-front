@@ -1,10 +1,10 @@
 import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import '../../../shoppingList/page/MonthlyShoppingListArea/monthly-shopping-list-area.scss';
 import InputYears from '../../../modules/InputYears';
 import AddGroupShoppingListItemModalContainer from '../../../../containers/groupShoppingList/modules/modal/AddGroupShoppingListItemModalContainer';
 import GroupMonthlyShoppingListByDateContainer from '../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByDateContainer/GroupMonthlyShoppingListByDateContainer';
 import GroupMonthlyShoppingListByCategoriesContainer from '../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/GroupMonthlyShoppingListByCategoriesContainer';
+import styles from '../../../shoppingList/page/MonthlyShoppingListArea/MonthlyShoppingListArea.module.scss';
 
 interface GroupMonthlyShoppingListAreaProps {
   selectedYear: number;
@@ -18,15 +18,15 @@ interface GroupMonthlyShoppingListAreaProps {
 const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) => {
   return (
     <>
-      <div className="monthly-shopping-list-area__add-button">
+      <div className={styles.addButton}>
         <AddGroupShoppingListItemModalContainer
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}
         />
       </div>
-      <div className="monthly-shopping-list-area__switch-item">
-        <div className="monthly-shopping-list-area__switch-item--width">
-          <div className="monthly-shopping-list-area__input-years">
+      <div className={styles.switchItem}>
+        <div className={styles.switchItem__width}>
+          <div className={styles.inputYears}>
             <InputYears
               selectedYear={props.selectedYear}
               selectedMonth={props.selectedMonth}

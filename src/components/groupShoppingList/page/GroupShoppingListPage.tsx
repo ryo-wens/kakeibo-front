@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../shoppingList/page/shopping-list-page.scss';
+import styles from '../../shoppingList/page/ShoppingListPage.module.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import GroupTodayShoppingListArea from './todayShoppingListArea/GroupTodayShoppingListArea';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
@@ -21,9 +21,9 @@ interface GroupShoppingListPageProps {
 
 const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
   return (
-    <div className="shopping-list-page">
-      <div className="shopping-list-page__left">
-        <div className="shopping-list-page__left-content">
+    <div className={styles.wrapper}>
+      <div className={styles.leftArea}>
+        <div className={styles.leftContent}>
           <SwitchTodayOrMonthlyTabsContainer
             currentItem={props.currentItem}
             setCurrentItems={props.setCurrentItem}
@@ -46,8 +46,8 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
           />
         </div>
       </div>
-      <div className="shopping-list-page__right">
-        <div className="shopping-list-page__right-content">
+      <div className={styles.rightArea}>
+        <div className={styles.rightContent}>
           <h4>定期買い物リスト</h4>
           <AddGroupRegularShoppingListModalContainer
             currentYear={props.currentYear}
@@ -59,11 +59,12 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
-        <div className="shopping-list-page__right-content">
+        <div className={styles.rightContent}>
           <h4>期限切れ買い物リスト</h4>
           <GroupExpiredShoppingListAreaContainer
             currentYear={props.currentYear}
             currentMonth={props.currentMonth}
+            readMoreBtnClassName={styles.childReadBtn}
           />
         </div>
       </div>

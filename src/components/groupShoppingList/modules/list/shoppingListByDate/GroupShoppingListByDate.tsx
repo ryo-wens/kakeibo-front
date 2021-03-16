@@ -1,42 +1,49 @@
 import React from 'react';
-import '../../../../shoppingList/modules/list/shoppingListByDate/shopping-list-by-date.scss';
-import { GroupShoppingList } from '../../../../../reducks/groupShoppingList/types';
+import '../../../../shoppingList/modules/list/shoppingListByDate/ShoppingListByDate.module.scss';
+import { GroupDisplayShoppingListByDate } from '../../../../../reducks/groupShoppingList/types';
 import GroupShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
+import styles from '../../../../shoppingList/modules/list/shoppingListByDate/ShoppingListByDate.module.scss';
 
 interface GroupShoppingListByDateProps {
-  shoppingListByDate: GroupShoppingList;
+  shoppingListByDate: GroupDisplayShoppingListByDate;
   currentYear: string;
   currentMonth: string;
   message: string;
-  equalsDisplayDate: (date: string) => boolean;
 }
 
 const GroupShoppingListByDate = (props: GroupShoppingListByDateProps) => {
+  const existsShoppingListByDate = props.shoppingListByDate.length !== 0;
+
   return (
-    <div className="shopping-list-by-date">
-      {props.shoppingListByDate.length ? (
-        props.shoppingListByDate.map((listItem) => {
-          return (
-            <div className="shopping-list-by-date__item" key={listItem.id}>
-              {props.equalsDisplayDate(listItem.expected_purchase_date) && (
-                <p className="shopping-list-by-date__item-date">
-                  {listItem.expected_purchase_date}
-                </p>
-              )}
-              <GroupShoppingListItemComponentContainer
-                listItem={listItem}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
-                purchaseClassName={'shopping-list-by-date__child-purchase'}
-                amountClassName={'shopping-list-by-date__child-amount'}
-              />
-            </div>
-          );
-        })
+    <>
+      {existsShoppingListByDate ? (
+        <ol className={styles.listByDate}>
+          {props.shoppingListByDate.map((displayShoppingListItem) => {
+            return (
+              <li className={styles.listItemByDate} key={displayShoppingListItem.date}>
+                <p className={styles.date}>{displayShoppingListItem.date}</p>
+                <ol className={styles.shoppingList}>
+                  {displayShoppingListItem.shoppingList.map((item) => {
+                    return (
+                      <GroupShoppingListItemComponentContainer
+                        listItem={item}
+                        currentYear={props.currentYear}
+                        currentMonth={props.currentMonth}
+                        purchaseClassName={styles.childPurchase}
+                        amountClassName={styles.childAmount}
+                        key={item.id}
+                      />
+                    );
+                  })}
+                </ol>
+              </li>
+            );
+          })}
+        </ol>
       ) : (
-        <p className="shopping-list-by-date__message">{props.message}</p>
+        <p className={styles.message}>{props.message}</p>
       )}
-    </div>
+    </>
   );
 };
 

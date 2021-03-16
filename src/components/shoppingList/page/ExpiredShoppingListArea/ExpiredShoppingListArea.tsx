@@ -1,50 +1,57 @@
 import React from 'react';
-import './expired-shopping-list-area.scss';
+import styles from './ExpiredShoppingListArea.module.scss';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
-import { ShoppingList } from '../../../../reducks/shoppingList/types';
+import { DisplayShoppingListByDate } from '../../../../reducks/shoppingList/types';
 import ShoppingListItemComponentContainer from '../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
+import cn from 'classnames';
 
 interface ExpiredShoppingListAreaProps {
-  expiredShoppingList: ShoppingList;
-  slicedExpiredShoppingList: ShoppingList;
+  expiredShoppingList: DisplayShoppingListByDate;
+  displayExpiredShoppingList: DisplayShoppingListByDate;
   currentYear: string;
   currentMonth: string;
-  equalsDisplayDate: (date: string) => boolean;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   initialDisplayNumberShoppingList: number;
+  readMoreBtnClassName: string;
 }
 
 const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
-  const existExpiredShoppingList = props.expiredShoppingList.length !== 0;
+  const existsExpiredShoppingList = props.expiredShoppingList.length !== 0;
 
   return (
     <div>
-      <div className="expired-shopping-list-area">
-        {existExpiredShoppingList ? (
+      <div className={styles.wrapper}>
+        {existsExpiredShoppingList ? (
           <>
-            {props.slicedExpiredShoppingList.map((listItem) => {
-              return (
-                <div className="expired-shopping-list-area__item" key={listItem.id}>
-                  {props.equalsDisplayDate(listItem.expected_purchase_date) && (
-                    <p className="expired-shopping-list-area__item-date">
-                      {listItem.expected_purchase_date}
-                    </p>
-                  )}
-                  <ShoppingListItemComponentContainer
-                    listItem={listItem}
-                    currentYear={props.currentYear}
-                    currentMonth={props.currentMonth}
-                    purchaseClassName={'expired-shopping-list-area__child-purchase'}
-                    amountClassName={'expired-shopping-list-area__child-amount'}
-                  />
-                </div>
-              );
-            })}
+            <ol className={styles.listByDate}>
+              {props.displayExpiredShoppingList.map((displayShoppingListItem) => {
+                return (
+                  <li className={styles.listItemByDate} key={displayShoppingListItem.date}>
+                    <p className={styles.date}>{displayShoppingListItem.date}</p>
+                    <ol className={styles.shoppingList}>
+                      {displayShoppingListItem.list.map((item) => {
+                        return (
+                          <ShoppingListItemComponentContainer
+                            listItem={item}
+                            currentYear={props.currentYear}
+                            currentMonth={props.currentMonth}
+                            purchaseClassName={styles.childPurchase}
+                            amountClassName={styles.childAmount}
+                            key={item.id}
+                          />
+                        );
+                      })}
+                    </ol>
+                  </li>
+                );
+              })}
+            </ol>
+
             {props.expiredShoppingList.length > props.initialDisplayNumberShoppingList && (
               <button
-                className="expired-shopping-list-area__read-more-button"
+                className={cn(styles.readMoreBtn, props.readMoreBtnClassName)}
                 onClick={() => props.setReadMore(!props.readMore)}
               >
                 {props.readMore ? 'close' : 'Read More'}
@@ -53,9 +60,7 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
             )}
           </>
         ) : (
-          <p className="expired-shopping-list-area__message">
-            期限切れの買い物リストはありません。
-          </p>
+          <p className={styles.message}>期限切れの買い物リストはありません。</p>
         )}
       </div>
     </div>
