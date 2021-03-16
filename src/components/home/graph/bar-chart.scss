@@ -46,19 +46,19 @@
   &__label {
 
     &--month {
-      color: $month-bar-color;
+      color: $color-christi;
     }
 
     &--week {
-      color: $week-bar-color;
+      color: $color-mySin;
     }
 
     &--day {
-      color: $day-bar-color;
+      color: $color-flamingo;
     }
 
     &--expense {
-      background-color: $light-black;
+      background-color: $color-tundora;
       color: white;
     }
   }

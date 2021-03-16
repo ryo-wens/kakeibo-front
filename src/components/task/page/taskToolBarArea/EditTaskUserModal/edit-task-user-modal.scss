@@ -11,20 +11,20 @@
 
   &__position {
     display: flex;
-    border-bottom: $task-border_color solid 1px;
+    border-bottom: $color-geyser solid 1px;
     justify-content: center;
     position: relative;
     padding: 0 0 10px 0;
     margin: 0 0 25px 0;
 
     > h3 {
-      color: $task-main_color;
+      color: $color-lynch;
       font-size: $task-title-font_size;
       margin: 0;
     }
 
     > button {
-      @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+      @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
       position: absolute;
       right: 0;
       margin-right: 10px;
@@ -37,7 +37,7 @@
 
   &__message {
     text-align: center;
-    color: $task-main_color;
+    color: $color-lynch;
     font-weight: bold;
     margin: 0 0 40px 0;
   }
@@ -50,7 +50,7 @@
 
   &__user-list-item {
     margin: 0 0 20px 25px;
-    color: $task-sub_color;
+    color: $color-mariner;
     font-size: 1.0rem;
     font-weight: bolder;
     letter-spacing: 0.05rem;
@@ -63,7 +63,7 @@
   &__choice-position {
     display: flex;
     justify-content: space-between;
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 0.9rem;
     font-weight: bold;
     border-radius: 0.2rem;
@@ -77,12 +77,12 @@
     }
 
     &:hover{
-      background-color: $task-border_color;
+      background-color: $color-geyser;
       opacity: 0.7;
     }
   }
 
   &__choice-icon {
-    @include icon-btn($task-main_color, none, none, none, 1.0);
+    @include icon-btn($color-lynch, none, none, none, 1.0);
   }
 }

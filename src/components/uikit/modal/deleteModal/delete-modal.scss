@@ -13,21 +13,21 @@
 
   &__position {
     display: flex;
-    border-bottom: $task-border_color solid 1px;
+    border-bottom: $color-geyser solid 1px;
     justify-content: center;
     position: relative;
     padding: 0 0 10px 0;
     margin: 0 0 25px 0;
 
     > h3 {
-      color: $task-main_color;
+      color: $color-lynch;
       font-size: $task-title-font_size;
       margin: 0;
     }
   }
 
   &__close-btn {
-    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
     position: absolute;
     right: 0;
     margin-right: 10px;
@@ -35,7 +35,7 @@
 
   &__title {
     margin: 0;
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: $task-title-font_size;
   }
 
@@ -51,12 +51,12 @@
     margin-left: 20px;
 
     &--delete {
-      @include operation-btn($task-delete-color, white, $task-delete-color);
+      @include operation-btn($color-cinnabar, white, $color-cinnabar);
 
     }
 
     &--cancel {
-      @include operation-btn(white, $task-main_color,$task-border_color);
+      @include operation-btn(white, $color-lynch,$color-geyser);
       margin: 0 0 0 10px;
     }
   }

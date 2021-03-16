@@ -10,7 +10,7 @@
 
   &__position {
     display: flex;
-    border-bottom: $task-border_color solid 1px;
+    border-bottom: $color-geyser solid 1px;
     justify-content: center;
     position: relative;
     padding: 0 0 10px 0;
@@ -18,7 +18,7 @@
   }
 
   &__btn-position{
-    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
     font-size: 1.8rem;
     position: absolute;
     left: 0;
@@ -26,7 +26,7 @@
   }
 
   &__title {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: $task-title-font_size;
     margin: 0;
   }
@@ -37,7 +37,7 @@
 
     &--key {
       width: 180px;
-      color: $task-main_color;
+      color: $color-lynch;
       font-size: $task-title-font_size;
       font-weight: bold;
       margin: 0 0 0 20px;

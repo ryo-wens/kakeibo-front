@@ -2,12 +2,13 @@
 
 .input-form {
   background: white;
-  border: 1px solid rgba(0, 0, 0, 0.3);
+  border: none;
   border-radius: 5px;
   box-sizing: border-box;
   height: auto;
   padding: 0.9rem;
   width: 100%;
+  box-shadow: $section-box_shadow;
 
   &__column {
     align-items: center;
@@ -17,13 +18,14 @@
   }
 
   &__sub-heading {
+    color: #7c7c7c;
     font-size: 1rem;
     font-weight: bold;
     padding-bottom: 4px;
   }
 
   &__message {
-    color: $day-bar-color;
+    color: $color-flamingo;
     text-align: center;
     padding-bottom: 10px;
 

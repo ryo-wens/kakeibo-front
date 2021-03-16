@@ -3,7 +3,7 @@
 @mixin jump-years($jump-years-btn-bg-color ) {
   background-color: $jump-years-btn-bg-color;
   border-collapse: collapse;
-  border: 2px solid $task-border_color;
+  border: 2px solid $color-geyser;
   cursor: pointer;
   font-size: $large-font_size;
   height: 45px;

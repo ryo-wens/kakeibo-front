@@ -8,6 +8,6 @@
   outline: none;
 
   &__check {
-    @include check-box($task-add-color)
+    @include check-box($color-sushi)
   }
 }

@@ -3,13 +3,13 @@
 
 .shopping-list-item-component {
   display: flex;
-  background-color: $list-item-bg-color;
+  background-color: $color-zircon;
   border-radius: 0.6rem;
   padding: 10px 15px;
 
   &__content {
     width: 100%;
-    color: $list-item-text-color;
+    color: $color-cello;
     margin-left: 10px;
   }
 

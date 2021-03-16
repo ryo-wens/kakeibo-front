@@ -3,13 +3,13 @@
 .add-todo-list-form {
   width: 45%;
   padding: 1px;
-  background-color: $task-border_color;
+  background-color: $color-geyser;
   border-radius: 0.65rem;
 
   &__button {
     display: flex;
     align-items: center;
-    background-color: $task-sub_color;
+    background-color: $color-mariner;
     color: white;
     border: none;
     border-radius: 0.8rem;

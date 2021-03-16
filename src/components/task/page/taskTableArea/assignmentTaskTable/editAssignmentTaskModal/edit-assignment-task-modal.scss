@@ -3,7 +3,7 @@
 .edit-assignment-task-modal {
 
   &__task-name{
-    color: $task-sub_color;
+    color: $color-mariner;
     border-left: #F4F5F7 solid 2.5px;
     width: calc(100%/8);
     height: 40px;
@@ -12,7 +12,7 @@
     vertical-align: middle;
 
     &:hover {
-      background-color: $task-table-bg-color;
+      background-color: $color-tropicalBlue;
     }
   }
 }

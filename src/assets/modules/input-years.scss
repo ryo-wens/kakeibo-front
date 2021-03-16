@@ -7,7 +7,7 @@
   align-self: center;
   background-color: white;
   border-radius: $task-border_radius;
-  border: $task-border_color solid 1px;
+  border: $color-geyser solid 1px;
   text-align: center;
   padding-bottom: 20px;
   margin: 0 auto;
@@ -29,14 +29,14 @@
 
   &__icon {
     vertical-align: middle;
-    color: $task-main_color;
+    color: $color-lynch;
   }
 
 
   &__btn {
 
     &__display {
-      @include display-btn($display-btn-main_color);
+      @include display-btn($color-crusta);
       color: white;
       margin-top: 5px;
       margin-bottom: 15px;
@@ -44,7 +44,7 @@
     }
 
     &__close {
-      @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+      @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
       float: right;
 
     }

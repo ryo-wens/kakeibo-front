@@ -18,7 +18,7 @@
 
   &__title {
     cursor: pointer;
-    color: $main_color;
+    color: $color-christine;
     text-decoration: none;
   }
 
@@ -41,7 +41,7 @@
       }
 
       &:hover{
-        color: $main_color;
+        color: $color-christine;
       }
     }
   }
@@ -52,7 +52,7 @@
 
     &--exit {
       &:hover {
-        color: $main_color;
+        color: $color-christine;
       }
     }
   }

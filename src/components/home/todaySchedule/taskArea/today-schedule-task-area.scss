@@ -3,7 +3,7 @@
 .today-schedule-task-area {
 
   &__item {
-    background-color: $list-item-bg-color;
+    background-color: $color-zircon;
     border-radius: 0.6rem;
     padding: 10px 15px;
     margin-bottom: 20px;
@@ -14,11 +14,11 @@
   }
 
   &__item-text {
-    color: $list-item-text-color
+    color: $color-cello
   }
 
   &__message {
-    color: $task-main_color;
+    color: $color-lynch;
     font-size: 0.9rem;
     font-weight: bold;
     text-align: center;

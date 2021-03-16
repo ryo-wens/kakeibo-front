@@ -7,7 +7,7 @@
   box-shadow: none;
   margin: 0 auto;
   margin-top: 10px;
-  border: 1px solid $task-border_color;
+  border: 1px solid $color-geyser;
   padding: 2px;
 
   &--title {
@@ -30,12 +30,12 @@
   }
 
   &__close-button {
-    @include icon-btn($task-main_color, $task-border_color, $task-main_color, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
     float: right;
   }
 
   &__message {
-    color: $danger-color;
+    color: $color-cinnabar;
     text-align: center;
     padding-bottom: 10px;
 
