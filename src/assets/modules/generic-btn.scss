@@ -2,7 +2,7 @@
 
 .generic-btn {
 
-  background-color: $display-btn-main_color;;
+  background-color: $color-dodgerBlue;
   border-radius: 0.4rem;
   border: none;
   color: white;
@@ -15,10 +15,14 @@
     opacity: 0.7;
   }
 
+  &:enabled {
+    box-shadow: $btn-box_shadow;
+  }
+
   &:disabled{
     background-color: white;
-    color: $disable-color;
-    border: 1px solid $disable-color;
+    color: $color-mercury;
+    border: 1px solid $color-mercury;
   }
 
 }

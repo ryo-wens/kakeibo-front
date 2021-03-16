@@ -7,14 +7,14 @@
   &__item{
     width: calc(100%/8);
     background-color: white;
-    color: $task-sub_color;
+    color: $color-mariner;
     border-left: #F4F5F7 solid 2.5px;
     padding: 5px 0;
 
     &--today {
       width: calc(100%/8);
-      background-color: $task-table-bg-color;
-      color: $task-sub_color;
+      background-color: $color-tropicalBlue;
+      color: $color-mariner;
       border-left: #F4F5F7 solid 2.5px;
       padding: 5px 0;
     }

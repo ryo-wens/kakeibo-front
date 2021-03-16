@@ -31,14 +31,14 @@
 
   &__yearly-table {
     box-shadow: 0 2px 6px rgba(0,0,0,0.2);
-    border: $task-border_color solid 1px;
+    border: $color-geyser solid 1px;
     border-radius: 0.3rem;
     margin: 0 auto;
     height: 85%;
     width: 100%;
 
     &--top {
-      background-color: $main_background_color;
+      background-color: $color-whiteLilac;
     }
   }
 
@@ -55,8 +55,8 @@
   }
 
   &__payoff-link {
-    border-bottom: 1px solid $link-color;
-    color: $link-color;
+    border-bottom: 1px solid $color-pureBlue;
+    color: $color-pureBlue;
     cursor: pointer;
 
     &:hover {

@@ -1,7 +1,7 @@
 @import "../../../../../assets/variable";
 
 .wrapper {
-  background-color: $task-bg_color;
+  background-color: $color-athensGray;
   border-radius: 0.6rem;
   margin: 0 20px;
 }
@@ -22,13 +22,13 @@
 }
 
 .date {
-  color: $task-main_color;
+  color: $color-lynch;
   font-size: 1.0rem;
   margin: 0 0 20px 0;
 }
 
 .message {
-  color: $task-main_color;
+  color: $color-lynch;
   font-size: 1.0rem;
   font-weight: bold;
   text-align: center;

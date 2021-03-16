@@ -19,7 +19,7 @@
 }
 
 .date {
-  color: $task-main_color;
+  color: $color-lynch;
   font-size: 1.0rem;
   margin: 0 0 20px 0;
 }
@@ -40,8 +40,8 @@
 .readMoreBtn {
   display: flex;
   align-items: center;
-  background-color: $task-main_color;
-  background-image: linear-gradient(270deg, $task-main_color 53%, #7d869e 100%);
+  background-color: $color-lynch;
+  background-image: linear-gradient(270deg, $color-lynch 53%, #7d869e 100%);
   color: white;
   font-size: 0.8rem;
   border: none;
@@ -52,7 +52,7 @@
 }
 
 .message {
-  color: $task-main_color;
+  color: $color-lynch;
   font-size: 1.0rem;
   font-weight: bold;
   text-align: center;

@@ -2,7 +2,8 @@
 
 .btn--primary {
   border: none;
-  background-color: #ff6600;
+  background-color: $color-dodgerBlue;
+  box-shadow: 0 3px 6px rgba(44, 40, 40, 0.2);
   border-radius: 0.4rem;
   color: white;
   cursor: pointer;
