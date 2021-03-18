@@ -4,8 +4,8 @@ import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchGroupTodayShoppingListByCategories } from '../../../../../reducks/groupShoppingList/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useParams } from 'react-router';
-import { customMonth, date, year } from '../../../../../lib/constant';
-import { getGroupTodayShoppingListByCategories } from '../../../../../reducks/groupShoppingList/selectors';
+import { customDate, customMonth, year } from '../../../../../lib/constant';
+import { getGroupDisplayTodayShoppingListByCategories } from '../../../../../reducks/groupShoppingList/selectors';
 import GroupShoppingListByCategoriesComponent from '../../../../../components/groupShoppingList/modules/list/shoppingListByCategoriesComponent/GroupShoppingListByCategoriesComponent';
 
 interface GroupTodayShoppingListByCategoriesContainerProps {
@@ -18,11 +18,13 @@ const GroupTodayShoppingListByCategoriesContainer = (
 ) => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
-  const groupTodayShoppingListByCategories = useSelector(getGroupTodayShoppingListByCategories);
+  const groupTodayShoppingListByCategories = useSelector(
+    getGroupDisplayTodayShoppingListByCategories
+  );
 
   const todayYear = String(year);
   const todayMonth = customMonth;
-  const todayDate: string = ('0' + date.getDate()).slice(-2);
+  const todayDate = customDate;
 
   const fetchData = (
     groupId: number,
@@ -47,28 +49,12 @@ const GroupTodayShoppingListByCategoriesContainer = (
     };
   }, [group_id, todayYear, todayMonth, todayDate]);
 
-  let prevDate = '';
-  let prevCategoryId = 0;
-
-  const equalsDisplayDate = (categoryId: number, expectedPurchaseDate: string) => {
-    if (prevCategoryId !== categoryId) {
-      prevCategoryId = categoryId;
-      prevDate = expectedPurchaseDate;
-      return true;
-    } else if (prevDate !== expectedPurchaseDate) {
-      prevDate = expectedPurchaseDate;
-      return true;
-    }
-    return false;
-  };
-
   return (
     <GroupShoppingListByCategoriesComponent
       shoppingListByCategories={groupTodayShoppingListByCategories}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
       message={'今日の買い物リストは、登録されていません。'}
-      equalsDisplayDate={equalsDisplayDate}
     />
   );
 };

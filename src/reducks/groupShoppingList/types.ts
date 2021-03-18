@@ -192,3 +192,11 @@ export interface GroupDisplayShoppingListItemByDate {
 }
 
 export interface GroupDisplayShoppingListByDate extends Array<GroupDisplayShoppingListItemByDate> {}
+
+export interface GroupDisplayShoppingListItemByCategories {
+  bigCategoryName: string;
+  shoppingListByDate: GroupDisplayShoppingListByDate;
+}
+
+export interface GroupDisplayShoppingListByCategories
+  extends Array<GroupDisplayShoppingListItemByCategories> {}

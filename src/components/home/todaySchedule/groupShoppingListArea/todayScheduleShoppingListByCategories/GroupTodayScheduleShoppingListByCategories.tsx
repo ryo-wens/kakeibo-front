@@ -46,9 +46,11 @@ const GroupTodayScheduleShoppingListByCategories = (
                           currentYear={props.currentYear}
                           currentMonth={props.currentMonth}
                           purchaseClassName={
-                            'shopping-list-item-component__item-purchase--home-page'
+                            'today-schedule-shopping-list-by-categories__child-purchase'
                           }
-                          amountClassName={'shopping-list-item-component__item-amount--home-page'}
+                          amountClassName={
+                            'today-schedule-shopping-list-by-categories__child-amount'
+                          }
                         />
                       </div>
                     );

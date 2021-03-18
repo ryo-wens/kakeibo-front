@@ -1,5 +1,5 @@
 import React from 'react';
-import './search-result-todo-list.scss';
+import styles from './SarchResultTodoList.module.scss';
 import {
   SearchTodoRequestData,
   TodoList,
@@ -20,24 +20,21 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
   const existSearchTodoList = props.searchTodoList.length !== 0;
 
   return (
-    <div className="search-result-todo-list">
+    <div className={styles.wrapper}>
       {existSearchTodoList ? (
-        <ol className="search-result-todo-list__list-by-date">
+        <ol className={styles.listByDate}>
           {props.searchTodoList.map((listItem) => {
             return (
               <>
                 {props.equalsDisplayDate(listItem) && (
-                  <p className="search-result-todo-list__list-item-date">
-                    {props.displayDate(listItem)}
-                  </p>
+                  <p className={styles.date}>{props.displayDate(listItem)}</p>
                 )}
                 <SearchTodoListItemComponentContainer
                   listItem={listItem}
                   currentYear={String(year)}
                   currentMonth={customMonth}
-                  inputTodoClassName={'search-result-todo-list__todo-list-item-form'}
-                  listItemStyle={'search-result-todo-list__list-item'}
                   fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}
+                  formClassName={styles.childFormClassName}
                   key={listItem.id}
                 />
               </>
@@ -45,7 +42,7 @@ const SearchResultTodoList = (props: SearchResultTodoListProps) => {
           })}
         </ol>
       ) : (
-        <p className="search-result-todo-list__message">{props.message}</p>
+        <p className={styles.message}>{props.message}</p>
       )}
     </div>
   );

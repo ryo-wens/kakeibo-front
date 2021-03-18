@@ -18,6 +18,7 @@ interface ExpiredTodoListAreaContainerProps {
   currentYear: string;
   currentMonth: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
+  readMoreBtnClassName: string;
 }
 
 const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) => {
@@ -97,6 +98,7 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
       readMore={readMore}
       setReadMore={setReadMore}
       setEditing={props.setEditing}
+      readMoreBtnClassName={props.readMoreBtnClassName}
     />
   );
 };

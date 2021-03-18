@@ -1,5 +1,9 @@
 @import "../../../../../assets/variable";
 
+.wrapper {
+  margin-top: 30px;
+}
+
 .listByDate {
   list-style-type: none;
   padding: 0;
@@ -20,17 +24,21 @@
   margin: 0 0 20px 0;
 }
 
-.shoppingList {
+.todoList {
   list-style-type: none;
   padding: 0;
 
-  > li {
+  > div, li {
     margin-bottom: 20px;
 
-    &:last-of-type {
+    &:last-child {
       margin-bottom: 0;
     }
   }
+}
+
+.childFormClassName {
+  width: 70%;
 }
 
 .message {
@@ -38,17 +46,6 @@
   font-size: 1.0rem;
   font-weight: bold;
   text-align: center;
-  margin: 0;
+  margin-bottom: 10px;
 }
 
-.childPurchase {
-  display: inline-block;
-  width: calc((100% - 116px));
-}
-
-.childAmount {
-  display: inline-block;
-  width: 90px;
-  text-align: right;
-  padding-right: 10px;
-}

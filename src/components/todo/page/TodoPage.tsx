@@ -1,5 +1,5 @@
 import React from 'react';
-import './todo-page.scss';
+import styles from './TodoPage.module.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
 import ExpiredTodoListAreaContainer from '../../../containers/todo/page/expiredTodoListArea/ExpiredTodoListAreaContainer';
@@ -30,11 +30,11 @@ const TodoPage = (props: TodoPageProps) => {
   return (
     <>
       {!props.openSearchTodoList ? (
-        <div className="todo-page">
-          <div className="todo-page__left">
-            <div className="todo-page__left-content">
-              <div className="todo-page__switch-btn">
-                <button className="todo-page__search" onClick={() => props.handleOpenSearch()}>
+        <div className={styles.wrapper}>
+          <div className={styles.leftArea}>
+            <div className={styles.leftContent}>
+              <div className={styles.switchBtn}>
+                <button className={styles.search} onClick={() => props.handleOpenSearch()}>
                   検索
                 </button>
                 <SwitchTodayOrMonthlyTabsContainer
@@ -64,13 +64,14 @@ const TodoPage = (props: TodoPageProps) => {
               </div>
             </div>
           </div>
-          <div className="todo-page__right">
-            <div className="todo-page__right-content">
+          <div className={styles.rightArea}>
+            <div className={styles.rightContent}>
               <h4>期限切れToDoリスト</h4>
               <ExpiredTodoListAreaContainer
                 currentYear={props.currentYear}
                 currentMonth={props.currentMonth}
                 setEditing={props.setEditing}
+                readMoreBtnClassName={styles.childReadBtn}
               />
             </div>
           </div>
