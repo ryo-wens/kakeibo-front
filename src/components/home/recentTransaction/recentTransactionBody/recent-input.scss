@@ -12,8 +12,9 @@
     box-shadow: 0 4px 6px rgba(0,0,0,0.2);
     border-radius: 5px;
     cursor: pointer;
-    padding: 3px;
-    width: 240px;
+    padding: 4px 14px;
+    width: 280px;
+    margin: 10px 0 10px 0;
   }
 
   &__recent-text {
@@ -29,7 +30,7 @@
 
   &__item-font {
     font-size: 14px;
-    padding-right: 1rem;
+    padding-right: 4px;
   }
 
   &__border-spacer {

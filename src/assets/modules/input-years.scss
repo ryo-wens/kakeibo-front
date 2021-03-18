@@ -36,7 +36,8 @@
   &__btn {
 
     &__display {
-      @include display-btn($color-crusta);
+      @include display-btn($color-dodgerBlue);
+      box-shadow: $btn-box_shadow;
       color: white;
       margin-top: 5px;
       margin-bottom: 15px;

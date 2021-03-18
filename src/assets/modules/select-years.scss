@@ -19,10 +19,6 @@
     }
 
     &__year-btn {
-      &:hover{
-        background-color: $color-crusta;
-        color: white;
-      }
 
       &:focus {
         outline: none;
@@ -63,7 +59,7 @@
   }
 
   &__display-btn {
-   @include indicate-btn($color-crusta);
+   @include indicate-btn($color-dodgerBlue);
 
     &--small {
       width: 15%;

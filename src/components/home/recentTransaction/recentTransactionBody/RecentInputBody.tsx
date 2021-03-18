@@ -26,7 +26,7 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
       return (
         <div key={index}>
           <dl className="recent-input__recent-box" onClick={() => props.openModal(transaction.id)}>
-            <dt className="recent-input__recent-text">{transaction.transaction_date}</dt>
+            <dt className="recent-input__recent-text"> {transaction.transaction_date}</dt>
             <dt className="recent-input__recent-text">
               <span
                 style={bigCategoryColor(transaction.big_category_name)}
@@ -36,12 +36,20 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
             </dt>
             <dt className="recent-input__recent-text">￥ {transaction.amount.toLocaleString()}</dt>
             <dt>
-              <span className="recent-input__item-font">店名: </span>{' '}
-              {transaction.shop !== null ? transaction.shop : '-'}
+              <span className="recent-input__item-font">店名: </span>
+              {transaction.shop !== null
+                ? transaction.shop.length > 13
+                  ? transaction.shop.substring(0, 12) + '...'
+                  : transaction.shop
+                : '-'}
             </dt>
             <dt>
               <span className="recent-input__item-font">メモ: </span>
-              {transaction.memo !== null ? transaction.memo : '-'}
+              {transaction.memo !== null
+                ? transaction.memo.length > 13
+                  ? transaction.memo.substring(0, 12) + '...'
+                  : transaction.memo
+                : '-'}
             </dt>
           </dl>
           <EditTransactionModalContainer
