@@ -67,7 +67,7 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 
 ### 【 _Backend_ 】
 **<ins>Language</ins>**
-- Go v1.16.0
+- Go v1.16.22
 
 ### 【 _Infrastructure_ 】
 **<ins>Cloud Service</ins>**

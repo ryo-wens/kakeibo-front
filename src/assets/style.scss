@@ -1,4 +1,9 @@
 @import "variable";
+@import url(//fonts.googleapis.com/earlyaccess/notosansjapanese.css);
+
+html[lang="ja"] {
+  font-family: 'Noto Sans Japanese', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+}
 
 /******* Module Spacer *******/
 .module-spacer--bit-small {

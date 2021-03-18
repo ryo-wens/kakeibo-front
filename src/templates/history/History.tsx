@@ -1,7 +1,6 @@
 import React from 'react';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistoryContainer';
-import GroupWeeklyHistoryContainer from '../../containers/history/weekly/GroupWeeklyHistoryContainer';
 import DailyHistoryContainer from '../../containers/history/daily/DailyHistoryContainer';
 import InputYears from '../../components/modules/InputYears';
 import HeaderContainer from '../../containers/header/HeaderContainer';
@@ -76,12 +75,6 @@ const History = (props: HistoryProps) => {
         {props.query === '?weekly' && (
           <div className="history__table-size">
             <WeeklyHistoryContainer month={props.selectedMonth} year={props.selectedYear} />
-          </div>
-        )}
-
-        {props.query === '?weekly' && (
-          <div className="history__table-size">
-            <GroupWeeklyHistoryContainer month={props.selectedMonth} year={props.selectedYear} />
           </div>
         )}
       </main>
