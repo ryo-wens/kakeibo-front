@@ -1,0 +1,35 @@
+@import "../../../../../assets/variable";
+
+.wrapper {
+  width: 40%;
+}
+
+.btn {
+  display: flex;
+  align-items: center;
+  background-color: $color-denim;
+  color: white;
+  border: none;
+  border-radius: 0.8rem;
+  font-size: 0.9rem;
+  font-weight: bolder;
+  padding: 0 15px 0 10px;
+  margin: 20px 0;
+  cursor: pointer;
+
+  &:hover {
+    opacity: 0.9;
+  }
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.childDatePickers {
+  display: flex;
+
+  > div + :last-child {
+    margin-left: 20px;
+  }
+}

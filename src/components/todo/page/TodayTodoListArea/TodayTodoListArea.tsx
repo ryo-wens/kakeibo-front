@@ -2,7 +2,7 @@ import React from 'react';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import TodayImplementationDateTodoListContainer from '../../../../containers/todo/page/todayTodoListArea/Items/TodayImplementationDateTodoListContainer';
 import TodayDueDateTodoListContainer from '../../../../containers/todo/page/todayTodoListArea/Items/TodayDueDateTodoListContainer';
-import './today-todo-list-area.scss';
+import styles from './TodayTodoListArea.module.scss';
 import AddTodoListItemFormContainer from '../../../../containers/todo/modules/form/AddTodoListItemFormContainer';
 
 interface TodayTodoListAreaProps {
@@ -15,14 +15,14 @@ interface TodayTodoListAreaProps {
 const TodayTodoListArea = (props: TodayTodoListAreaProps) => {
   return (
     <>
-      <div className="today-todo-list-area__add-button">
+      <div className={styles.addButton}>
         <AddTodoListItemFormContainer
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}
         />
       </div>
-      <div className="today-todo-list-area__switch-item">
-        <div className="today-todo-list-area__switch-item--width">
+      <div className={styles.switchItem}>
+        <div className={styles.switchItem__width}>
           <SwitchItemTabs
             leftButtonLabel={'実施予定のToDo'}
             rightButtonLabel={'締切予定のToDo'}
@@ -40,6 +40,7 @@ const TodayTodoListArea = (props: TodayTodoListAreaProps) => {
                 setEditing={props.setEditing}
               />
             }
+            tabsBtnClassName={styles.childTabsBtn}
           />
         </div>
       </div>

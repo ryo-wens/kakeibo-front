@@ -1,0 +1,29 @@
+@import "../../assets/variable";
+
+.tabs {
+  display: flex;
+  justify-content: center;
+  background-color: $color-athensGrays;
+  border-radius: 1.0rem;
+
+  &__btn {
+    width: 100%;
+    background-color: $color-athensGrays;
+    color: $color-regentGray;
+    border: none;
+    font-size: 0.8rem;
+    padding: 6px 18px;
+    cursor: pointer;
+    border-radius: 1.0rem;
+
+    &:focus {
+      outline: none;
+    }
+  }
+
+  &__crBtn {
+    background-color: $color-neonCarrot;
+    color: white;
+    box-shadow: 0 4px 6px rgba(255, 150, 64, 0.4);
+  }
+}

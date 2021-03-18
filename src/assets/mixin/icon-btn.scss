@@ -1,6 +1,6 @@
 @import "../variable";
 
-@mixin icon-btn ($icon-btn_color, $icon-btn-hover_bg-color, $icon-btn-hover_color, $icon-btn-hover_border-radius, $icon-btn-hover_opacity){
+@mixin icon-btn ($icon-btn_color, $icon-btn-hover_border-radius, $icon-btn-hover_opacity){
   width: 1em;
   height: 1em;
   background-color: rgba(0,0,0,0);
@@ -13,10 +13,9 @@
 
 
   &:hover{
-    background-color: $icon-btn-hover_bg-color;
-    color: $icon-btn-hover_color;
     border-radius: $icon-btn-hover_border-radius;
     opacity: $icon-btn-hover_opacity;
+    box-shadow: 0 0 5px rgba(180, 180, 180, 0.8);
   }
 
   &:focus {

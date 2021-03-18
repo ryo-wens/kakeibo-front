@@ -1,0 +1,44 @@
+@import "../../../../../assets/mixin/check-box";
+@import "../../../../../assets/mixin/icon-btn";
+
+.wrapper{
+  display: flex;
+  align-items: center;
+  background-color: $color-blackSqueeze;
+  border-radius: 0.6rem;
+  padding: 10px 15px;
+  box-shadow: 0 1px 6px rgba(200, 200, 200, 0.7);
+}
+
+.check {
+  @include check-box($color-sushi)
+}
+
+.content {
+  width: calc(100% - 68px);
+  color: $color-tundora;
+  margin-left: 10px;
+}
+
+.editIcon {
+  @include icon-btn($color-scorpion, 0.5rem, 0.7);
+  padding: 3px;
+}
+
+.complete {
+  opacity: 0.3;
+}
+
+.childDatePickers {
+  display: flex;
+
+  > div + :last-child {
+    margin-left: 20px;
+  }
+}
+
+.childDatePickersCrHomePage {
+  > div {
+    margin-bottom: 20px;
+  }
+}

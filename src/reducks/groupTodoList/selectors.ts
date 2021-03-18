@@ -18,40 +18,22 @@ const generateTodoListItem = (groupTodoListItem: GroupTodoListItem) => {
 };
 
 const generateDisplayTodoList = (todoList: GroupTodoList, displayDate: string) => {
-  const displayTodoList: DisplayTodoList = [];
-  const notFound = -1;
+  return todoList.reduce((displayTodoList: DisplayTodoList, curItem: GroupTodoListItem) => {
+    const curTodoListItem: TodoListItem = generateTodoListItem(curItem);
+    const notExistsDisplayTodoList = displayTodoList.length === 0;
+    const lastIdx = displayTodoList.length === 0 ? 0 : displayTodoList.length - 1;
+    const itemDate = displayDate === 'dueDate' ? curItem.due_date : curItem.implementation_date;
 
-  for (const item of todoList) {
-    const groupTodoListItem: TodoListItem = generateTodoListItem(item);
-    const itemDate = displayDate === 'dueDate' ? item.due_date : item.implementation_date;
-    const idx = displayTodoList.findIndex(
-      (displayTodoListItem) => displayTodoListItem.date === itemDate
-    );
-
-    if (idx !== notFound) {
-      if (displayTodoList[idx].date !== itemDate) {
-        const displayTodoListItem: DisplayTodoListItem = {
-          date: itemDate,
-          list: [groupTodoListItem],
-        };
-
-        displayTodoList.push(displayTodoListItem);
-        continue;
-      }
-
-      displayTodoList[idx].list.push(groupTodoListItem);
-      continue;
+    if (notExistsDisplayTodoList || displayTodoList[lastIdx].date !== itemDate) {
+      const date = itemDate;
+      const todoList = [curTodoListItem];
+      const displayTodoListItem: DisplayTodoListItem = { date, todoList };
+      return displayTodoList.concat(displayTodoListItem);
     }
 
-    const displayTodoListItem: DisplayTodoListItem = {
-      date: itemDate,
-      list: [groupTodoListItem],
-    };
-
-    displayTodoList.push(displayTodoListItem);
-  }
-
-  return displayTodoList;
+    displayTodoList[lastIdx].todoList = displayTodoList[lastIdx].todoList.concat(curTodoListItem);
+    return displayTodoList;
+  }, []);
 };
 
 const groupTodayImplementationTodoListSelector = (state: State) =>

@@ -2,6 +2,7 @@
 @import "../../assets/modules/input-years";
 @import "../../assets/mixin/switching-btn";
 @import "../../assets/modules/task-btn";
+@import "../../components/uikit/tabs/switchItemTabs/SwitchItemTabs.module";
 
 .history{
   display: flex;
@@ -17,7 +18,19 @@
   }
 
   &__top-button {
-    width: 600px;
+    @extend .tabs;
+    background-color: white;
+  }
+
+  &__switch-btn {
+    @extend .tabs__btn;
+    background-color: white;
+
+  }
+
+  &__switch-cr-btn {
+    @extend .tabs__crBtn;
+    background-color: $color-neonCarrot;;
   }
 
   &__selector {

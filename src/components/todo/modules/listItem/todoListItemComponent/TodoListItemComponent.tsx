@@ -1,7 +1,7 @@
 import React from 'react';
 import { TodoListItem } from '../../../../../reducks/todoList/types';
 import EditIcon from '@material-ui/icons/Edit';
-import './todo-list-item-component.scss';
+import styles from './TodoListItemComponent.module.scss';
 import TodoListItemFormContainer from '../../../../../containers/todo/modules/form/TodoListItemFormContainer';
 import cn from 'classnames';
 
@@ -29,30 +29,25 @@ interface TodoListItemComponentProps {
 }
 
 const TodoListItemComponent = (props: TodoListItemComponentProps) => {
-  const listItemClassName = cn('todo-list-item-component');
-
-  const contentClassName = cn('todo-list-item-component__content', {
-    'todo-list-item-component__complete': props.checked,
+  const contentClassName = cn(styles.content, {
+    [styles.complete]: props.checked,
   });
 
   const childDatePickersClassName = cn({
-    'todo-list-item-component__child-date-pickers': props.currentPage !== 'home',
-    'todo-list-item-component__child-date-pickers-cr-home-page': props.currentPage === 'home',
+    [styles.childDatePickers]: props.currentPage !== 'home',
+    [styles.childDatePickersCrHomePage]: props.currentPage === 'home',
   });
 
   return (
     <>
       {!props.openEditTodoForm ? (
-        <li className={listItemClassName}>
-          <label className="todo-list-item-component__check">
+        <li className={styles.wrapper}>
+          <label className={styles.check}>
             <input type="checkbox" checked={props.checked} onChange={props.handleChangeChecked} />
             <span />
           </label>
           <span className={contentClassName}>{props.listItem.todo_content}</span>
-          <EditIcon
-            className="todo-list-item-component__edit-icon"
-            onClick={() => props.handleOpenEditTodoForm()}
-          />
+          <EditIcon className={styles.editIcon} onClick={() => props.handleOpenEditTodoForm()} />
         </li>
       ) : (
         <div className={props.formClassName}>

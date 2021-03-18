@@ -1,5 +1,5 @@
 import React from 'react';
-import './todo-list-item-form.scss';
+import styles from './TodoListItemForm.module.scss';
 import { DatePicker, TextInput } from '../../../../uikit';
 import CloseIcon from '@material-ui/icons/Close';
 import DeleteModal from '../../../../uikit/modal/deleteModal/DeleteModal';
@@ -24,19 +24,16 @@ interface TodoListItemFormProps {
 const TodoListItemForm = React.forwardRef(
   (props: TodoListItemFormProps, inputTodoRef: React.Ref<HTMLDivElement>) => {
     return (
-      <div className="todo-list-item-form" ref={inputTodoRef as React.RefObject<HTMLDivElement>}>
-        <div className="todo-list-item-form__title">
-          <p className="todo-list-item-form__title--text">{props.titleLabel}</p>
-          <button
-            className="todo-list-item-form__title--close-btn"
-            onClick={() => props.closeInputTodoForm()}
-          >
+      <div className={styles.wrapper} ref={inputTodoRef as React.RefObject<HTMLDivElement>}>
+        <div className={styles.title}>
+          <p className={styles.title__text}>{props.titleLabel}</p>
+          <button className={styles.title__closeBtn} onClick={() => props.closeInputTodoForm()}>
             <CloseIcon />
           </button>
         </div>
 
-        <div className="todo-list-item-form__items">
-          <div className="todo-list-item-form__text-input">
+        <div className={styles.items}>
+          <div className={styles.textInput}>
             <TextInput
               value={props.todoContent}
               type={'text'}
@@ -94,17 +91,17 @@ const TodoListItemForm = React.forwardRef(
           </div>
         </div>
 
-        <div className="todo-list-item-form__btn">
+        <div className={styles.btn}>
           <div>
             <button
-              className="todo-list-item-form__btn--save"
+              className={styles.btn__save}
               disabled={props.disabledButton}
               onClick={props.handleTodoListItem}
             >
               {props.buttonLabel}
             </button>
             <button
-              className="todo-list-item-form__btn--cancel"
+              className={styles.btn__cancel}
               disabled={false}
               onClick={() => {
                 props.closeInputTodoForm();

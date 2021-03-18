@@ -24,7 +24,7 @@
     }
 
     > button {
-      @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
+      @include icon-btn($color-lynch, 0.8rem, 0.5);
       position: absolute;
       right: 0;
       margin-right: 10px;
@@ -50,7 +50,7 @@
 
   &__user-list-item {
     margin: 0 0 20px 25px;
-    color: $color-mariner;
+    color: $color-denim;
     font-size: 1.0rem;
     font-weight: bolder;
     letter-spacing: 0.05rem;
@@ -83,6 +83,6 @@
   }
 
   &__choice-icon {
-    @include icon-btn($color-lynch, none, none, none, 1.0);
+    @include icon-btn($color-lynch, none, 1.0);
   }
 }

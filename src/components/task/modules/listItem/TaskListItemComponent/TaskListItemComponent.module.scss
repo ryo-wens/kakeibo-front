@@ -1,0 +1,22 @@
+@import "../../../../../assets/mixin/icon-btn";
+
+.wrapper{
+  display: flex;
+  align-items: center;
+  background-color: $color-blackSqueeze;
+  border-radius: 0.6rem;
+  padding: 5px 10px;
+  box-shadow: $list-item-box_shadow;
+}
+
+.text {
+  width: 100%;
+  color: $color-scorpion;
+  font-size: 1.2rem;
+  padding: 0 0 0 10px;
+}
+
+.editIcon {
+  @include icon-btn($color-scorpion, 0.5rem, 0.7);
+  padding: 3px;
+}

@@ -1,0 +1,50 @@
+@import "../../../../../assets/mixin/operation-btn";
+@import "../../../../../assets/mixin/icon-btn";
+
+.wrapper {
+  background-color: white;
+  border: $color-geyser solid 1px;
+  border-radius: 0.6rem;
+  padding: 0 0 15px;
+  box-shadow: $section-box_shadow;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  background-color: $color-blackSqueeze;
+  border-top-left-radius: 0.6rem;
+  border-top-right-radius: 0.6rem;
+  border-bottom: $color-geyser solid 1px;
+  padding: 10px;
+
+  &__text {
+    font-size: $task-title-font_size;
+    font-weight: bold;
+    color: $color-scorpion;
+    margin: 0;
+  }
+
+  &__closeBtn {
+    @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  }
+}
+
+.textInput {
+  margin: 20px 20px 25px;
+}
+
+.btn {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 20px;
+
+  &__add {
+    @include operation-btn($color-sushi, white, $color-sushi);
+  }
+
+  &__cancel {
+    @include operation-btn(white, $color-scorpion, $color-geyser);
+    margin: 0 0 0 10px;
+  }
+}

@@ -7,14 +7,14 @@
   &__item{
     width: calc(100%/8);
     background-color: white;
-    color: $color-mariner;
+    color: $color-denim;
     border-left: #F4F5F7 solid 2.5px;
     padding: 5px 0;
 
     &--today {
       width: calc(100%/8);
       background-color: $color-tropicalBlue;
-      color: $color-mariner;
+      color: $color-denim;
       border-left: #F4F5F7 solid 2.5px;
       padding: 5px 0;
     }

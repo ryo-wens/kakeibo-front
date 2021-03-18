@@ -1,0 +1,24 @@
+@import "../../../../assets/variable";
+
+.addButton {
+  margin: 20px 0;
+}
+
+.switchItem {
+  border-radius: 0.6rem;
+  padding: 25px 0;
+  height: auto;
+
+  &__width {
+    width: 60%;
+    margin: auto;
+  }
+}
+
+.inputYears {
+  margin-bottom: 20px;
+}
+
+.childTabsBtn {
+  margin-bottom: 30px;
+}

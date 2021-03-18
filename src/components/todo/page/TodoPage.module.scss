@@ -15,6 +15,7 @@
   background-color: white;
   border-radius: 0.6rem;
   padding: 20px;
+  box-shadow: $section-box_shadow;
 }
 
 .rightArea {
@@ -25,17 +26,12 @@
 .rightContent {
   background-color: white;
   border-radius: 0.6rem;
-  padding: 15px;
+  padding: 20px 25px 25px;
+  box-shadow: $section-box_shadow;
 
   > h4 {
-    color: $color-lynch;
-    margin: 0 0 10px 0;
-  }
-
-  > div {
-    background-color: $color-athensGray;
-    border-radius: 0.6rem;
-    padding: 10px;
+    color: $color-scorpion;
+    margin: 0 0 30px 0;
   }
 }
 

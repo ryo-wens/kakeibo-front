@@ -21,7 +21,7 @@
     }
 
     > button {
-      @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
+      @include icon-btn($color-lynch, 0.8rem, 0.5);
       position: absolute;
       right: 0;
       margin: 0 20px 0 0;
@@ -107,8 +107,8 @@
     }
 
     > input:checked + span {
-      background: $color-mariner;
-      border-color: $color-mariner;
+      background: $color-denim;
+      border-color: $color-denim;
     }
   }
 

@@ -20,12 +20,12 @@
   }
 
   &__back-btn {
-    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, 0.8rem, 0.5);
     margin-left: 10px;
   }
 
   &__close-btn {
-    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, 0.8rem, 0.5);
     margin-right: 10px;
   }
 
@@ -59,7 +59,7 @@
   }
 
   &__check {
-    @include check-box($color-mariner)
+    @include check-box($color-denim)
   }
 
   &__user-name {

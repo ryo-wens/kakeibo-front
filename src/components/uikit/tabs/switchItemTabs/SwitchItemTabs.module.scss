@@ -1,0 +1,14 @@
+@import "../../../../assets/variable";
+@import "../../../../assets/modules/tabs";
+
+.wrapper {
+  @extend .tabs
+}
+
+.btn {
+  @extend .tabs__btn
+}
+
+.crBtn {
+  @extend .tabs__crBtn
+}

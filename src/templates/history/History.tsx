@@ -6,6 +6,7 @@ import DailyHistoryContainer from '../../containers/history/daily/DailyHistoryCo
 import InputYears from '../../components/modules/InputYears';
 import HeaderContainer from '../../containers/header/HeaderContainer';
 import './history.scss';
+import cn from 'classnames';
 
 interface HistoryProps {
   query: string;
@@ -20,7 +21,6 @@ interface HistoryProps {
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
   searchFieldOpen: () => void;
   searchFieldClose: () => void;
-  currentPageColor: (currentPath: string) => { backgroundColor: string; color: string } | undefined;
   routingDailyHistory: () => void;
   routingWeeklyHistory: () => void;
 }
@@ -31,14 +31,21 @@ const History = (props: HistoryProps) => {
       <HeaderContainer />
       <main className="section__container">
         <div className="history__position">
-          <div
-            className="switch-item-tabs__buttons  history__top-button"
-            aria-label="small outlined button group"
-          >
-            <button style={props.currentPageColor('?daily')} onClick={props.routingDailyHistory}>
+          <div className="history__top-button" aria-label="small outlined button group">
+            <button
+              className={cn('budget__switch-btn', {
+                'budget__switch-cr-btn': props.query === '?daily',
+              })}
+              onClick={props.routingDailyHistory}
+            >
               日ごと
             </button>
-            <button style={props.currentPageColor('?weekly')} onClick={props.routingWeeklyHistory}>
+            <button
+              className={cn('budget__switch-btn', {
+                'budget__switch-cr-btn': props.query === '?weekly',
+              })}
+              onClick={props.routingWeeklyHistory}
+            >
               週ごと
             </button>
           </div>

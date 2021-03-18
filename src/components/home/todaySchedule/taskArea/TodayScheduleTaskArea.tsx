@@ -1,5 +1,5 @@
 import React from 'react';
-import './today-schedule-task-area.scss';
+import styles from './TodayScheduleTaskArea.module.scss';
 import { UserTaskListItem } from '../../../../reducks/groupTasks/types';
 
 interface TodayScheduleTaskAreaProps {
@@ -13,13 +13,13 @@ const TodayScheduleTaskArea = (props: TodayScheduleTaskAreaProps) => {
       {props.userTaskListItem && props.existAssignTask ? (
         props.userTaskListItem.tasks_list.map((listItem) => {
           return (
-            <div className="today-schedule-task-area__item" key={listItem.id}>
-              <span className="today-schedule-task-area__item-text">{listItem.task_name}</span>
+            <div className={styles.item} key={listItem.id}>
+              <span className={styles.itemText}>{listItem.task_name}</span>
             </div>
           );
         })
       ) : (
-        <p className="today-schedule-task-area__message">割り当てられたタスクはありません。</p>
+        <p className={styles.message}>割り当てられたタスクはありません。</p>
       )}
     </>
   );

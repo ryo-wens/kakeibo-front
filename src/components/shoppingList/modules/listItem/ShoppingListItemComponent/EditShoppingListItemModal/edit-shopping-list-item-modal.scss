@@ -8,7 +8,7 @@
   outline: none;
 
   &__edit-icon {
-    @include icon-btn($color-lynch, $color-mariner, white, 0.2rem, 1.0);
+    @include icon-btn($color-lynch, 0.2rem, 1.0);
     padding: 3px;
   }
 }
