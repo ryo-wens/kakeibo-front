@@ -2,10 +2,11 @@ import React from 'react';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowLeftIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowDownIcon from '@material-ui/icons/KeyboardArrowDown';
-import '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/RelatedTransactionDataButton/related-transaction-data-button.scss';
+import styles from '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/RelatedTransactionDataButton/RelatedTransactionDataButton.module.scss';
 import { bigCategoryColor } from '../../../../../../lib/function';
 import { GroupRelatedTransactionData } from '../../../../../../reducks/groupShoppingList/types';
 import { Groups } from '../../../../../../reducks/groups/types';
+import cn from 'classnames';
 
 interface RelatedGroupTransactionDataButtonProps {
   open: boolean;
@@ -15,7 +16,8 @@ interface RelatedGroupTransactionDataButtonProps {
   associatedCategoryName: string;
   openTransactionData: () => void;
   getPaymentUserName: (approvedGroups: Groups, userId: string, groupId: number) => string;
-  transactionDataListClassName: string;
+  categoryDataClassName: string;
+  displayTermClassName: string;
 }
 
 const RelatedGroupTransactionDataButton = React.forwardRef(
@@ -23,67 +25,59 @@ const RelatedGroupTransactionDataButton = React.forwardRef(
     props: RelatedGroupTransactionDataButtonProps,
     transactionDataRef: React.Ref<HTMLDivElement>
   ) => {
-    const transactionData = [
-      { key: '購入日', value: props.transactionData.transaction_date },
-      {
-        key: 'カテゴリー',
-        value: (
-          <div className="related-transaction-data-button__item-value-category">
-            <span
-              className="related-transaction-data-button__item-value-category-color"
-              style={bigCategoryColor(props.transactionData.big_category_name)}
-            />
-            <span>{props.transactionData.big_category_name}</span>
-            <KeyboardArrowLeftIcon />
-            <span>{props.associatedCategoryName}</span>
-          </div>
-        ),
-      },
-      { key: '金額', value: `${props.transactionData.amount} 円` },
-      {
-        key: '支払人',
-        value: props.getPaymentUserName(
-          props.approvedGroups,
-          props.transactionData.payment_user_id,
-          props.groupId
-        ),
-      },
-      {
-        key: '店名',
-        value: props.transactionData.shop ?? '-',
-      },
-      { key: 'メモ', value: props.transactionData.memo },
-    ];
-
     return (
       <>
         {!props.open ? (
-          <button
-            className="related-transaction-data-button__is-close"
-            onClick={() => props.openTransactionData()}
-          >
+          <button className={styles.isClose} onClick={props.openTransactionData}>
             関連する取引データ
             <KeyboardArrowRightIcon />
           </button>
         ) : (
           <>
-            <button className="related-transaction-data-button__is-open">
+            <button className={styles.isOpen}>
               関連する取引データ
               <KeyboardArrowDownIcon />
             </button>
-            <div
-              className="related-transaction-data-button__form"
-              ref={transactionDataRef as React.Ref<HTMLDivElement>}
-            >
-              <dl className={props.transactionDataListClassName}>
-                {transactionData.map((item) => {
-                  return (
-                    <>
-                      <dt key={item.key}>{item.key}</dt>
-                      <dd>{item.value}</dd>
-                    </>
-                  );
-                })}
+            <div className={styles.form} ref={transactionDataRef as React.Ref<HTMLDivElement>}>
+              <dl className={styles.dataList}>
+                <dt>購入日</dt>
+                <dd>{props.transactionData.transaction_date}</dd>
+                <dt>カテゴリー</dt>
+                <dd className={cn(styles.categoryData, props.categoryDataClassName)}>
+                  <div>
+                    <span
+                      className={styles.itemValueCategoryColor}
+                      style={bigCategoryColor(props.transactionData.big_category_name)}
+                    />
+                    <span>{props.transactionData.big_category_name}</span>
+                  </div>
+                  <div>
+                    <KeyboardArrowLeftIcon />
+                    <span>{props.associatedCategoryName}</span>
+                  </div>
+                </dd>
+                <dt>金額</dt>
+                <dd>￥ {props.transactionData.amount}</dd>
+                <div className={props.displayTermClassName}>
+                  <dt>
+                    <span className={styles.term}>支払人</span>
+                  </dt>
+                  <dd>
+                    {props.getPaymentUserName(
+                      props.approvedGroups,
+                      props.transactionData.payment_user_id,
+                      props.groupId
+                    )}
+                  </dd>
+                  <dt>
+                    <span className={styles.term}>店名</span>
+                  </dt>
+                  <dd>{props.transactionData.shop ?? '-'}</dd>
+                  <dt>
+                    <span className={styles.term}>メモ</span>
+                  </dt>
+                  <dd>{props.transactionData.memo}</dd>
+                </div>
               </dl>
             </div>
           </>

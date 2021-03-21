@@ -1,5 +1,5 @@
 import React from 'react';
-import InputYears from '../../../modules/InputYears';
+import InputYears from '../../../modules/inputYears/InputYears';
 import styles from './MonthlyTodoListArea.module.scss';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/monthlyTodoListArea/Items/MonthlyImplementationDateTodoListContainer';
@@ -33,6 +33,7 @@ const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
               selectedMonth={props.selectedMonth}
               setSelectedMonth={props.setSelectedMonth}
               setSelectedYear={props.setSelectedYear}
+              btnClassName={styles.childInputYearsBtn}
             />
           </div>
           <SwitchItemTabs

@@ -1,0 +1,95 @@
+@import "../../../assets/modules/task-btn";
+@import "../../../assets/modules/primaly-btn";
+@import "../../../assets/modules/selector";
+@import "../../../assets/mixin/icon-btn";
+
+
+.skipYearsBtn {
+  display: flex;
+  margin: 0 auto 15px;
+}
+
+.prevBtn {
+  @extend .task--btn;
+  background-color: white;
+  border-radius: 0.5rem 0 0 0.5rem;
+  border-right: none;
+  padding-top: 8px;
+
+  &:hover{
+    background-color: $color-porcelain;
+  }
+}
+
+.jumpYears {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: white;
+  border: 1.5px solid $color-geyser;
+  color: $color-tundora;
+  font-size: $large-font_size;
+  width: 100%;
+  height: 45px;
+  cursor: pointer;
+
+  &:hover{
+    background-color: $color-porcelain;
+  }
+
+  &:focus{
+    outline: none;
+  }
+}
+
+.jumpYearsIcon {
+  display: inline-block;
+  margin: 5px 0 0 10px;
+}
+
+.nextBtn {
+  @extend .task--btn;
+  background-color: white;
+  border-radius: 0 0.5rem 0.5rem 0;
+  border-left: none;
+  padding-top: 8px;
+
+  &:hover{
+    background-color: $color-porcelain;
+  }
+}
+
+.selectWrapper {
+  background-color: white;
+  border-radius: 0.5rem;
+  border: $color-geyser solid 1px;
+  text-align: center;
+  height:auto;
+  padding: 12px;
+  margin: 0 auto;
+  width: 15%;
+}
+
+.selector {
+  @extend .selector__box;
+  font-size: 0.95rem;
+  width: 50%;
+  margin-bottom: 15px;
+}
+
+.closeBtn {
+  @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  display: block;
+  margin: 0 0 0 auto;
+}
+
+.displayBtn {
+  @extend .btn--primary;
+  font-weight: 500;
+  padding: 5px 10px;
+}
+
+.displayThisYearBtn {
+  @extend .displayBtn;
+  margin-bottom: 15px;
+}

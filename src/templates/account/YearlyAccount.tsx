@@ -33,6 +33,7 @@ const YearlyAccount = (props: YearlyAccountProps) => {
               <SelectYears
                 selectedYear={props.selectedYear}
                 setSelectedYear={props.setSelectedYear}
+                skipYearsClassName={'yearly-account__child-select-years'}
               />
             </div>
             <div className="yearly-account__backGround">

@@ -115,7 +115,7 @@ const TodoListItemForm = React.forwardRef(
           </div>
           {props.handleDeleteTodoListItem && (
             <DeleteModal
-              title={'Todoを削除'}
+              title={'ToDoを削除'}
               buttonLabel={'削除'}
               disabled={false}
               contentName={props.todoContent}

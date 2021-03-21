@@ -1,28 +1,29 @@
 import React from 'react';
-import './switch-today-or-monthly-tabs.scss';
+import styles from './SwitchTodayOrMonthlyTabs.module.scss';
 import { TodayOrMonthly } from '../../../../reducks/shoppingList/types';
+import cn from 'classnames';
 
 interface SwitchTodayOrMonthlyTabsProps {
   currentItem: TodayOrMonthly;
   setCurrentItems: React.Dispatch<React.SetStateAction<TodayOrMonthly>>;
   leftItem: JSX.Element;
   rightItem: JSX.Element;
-  currentButtonStyle: (value: TodayOrMonthly) => string;
   switchItem: (value: TodayOrMonthly) => void;
 }
 
 const SwitchTodayOrMonthlyTabs = (props: SwitchTodayOrMonthlyTabsProps) => {
+  const currentBtnClassName = (value: TodayOrMonthly) => {
+    return cn(styles.btn, { [styles.crPageBtn]: props.currentItem === value });
+  };
+
   return (
     <div>
-      <div className="switch-today-or-monthly-tabs">
-        <button
-          className={props.currentButtonStyle('today')}
-          onClick={() => props.switchItem('today')}
-        >
+      <div className={styles.wrapper}>
+        <button className={currentBtnClassName('today')} onClick={() => props.switchItem('today')}>
           今日
         </button>
         <button
-          className={props.currentButtonStyle('monthly')}
+          className={currentBtnClassName('monthly')}
           onClick={() => props.switchItem('monthly')}
         >
           月間

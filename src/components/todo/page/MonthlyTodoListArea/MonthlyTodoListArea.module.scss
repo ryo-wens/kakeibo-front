@@ -19,6 +19,14 @@
   margin-bottom: 20px;
 }
 
+.childInputYearsBtn {
+  background-color: $color-porcelain;
+
+  &:hover{
+    background-color: $color-athensGray;
+  }
+}
+
 .childTabsBtn {
   margin-bottom: 30px;
 }

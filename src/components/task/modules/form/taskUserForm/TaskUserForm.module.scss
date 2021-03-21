@@ -1,0 +1,75 @@
+@import "../../../../../assets/mixin/icon-btn";
+@import "../../../../../assets/mixin/operation-btn";
+@import "../../../../../assets/mixin/check-box";
+
+.position {
+  display: flex;
+  border-bottom: $color-geyser solid 1px;
+  justify-content: space-between;
+  padding: 0 0 10px 0;
+  margin: 0 0 25px 0;
+
+  > h3 {
+    color: $color-scorpion;
+    font-weight: 500;
+    font-size: 1.0rem;
+    margin: 0;
+  }
+}
+
+.backBtn {
+  @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  margin-left: 10px;
+}
+
+.closeBtn {
+  @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  margin-right: 10px;
+}
+
+.position {
+  display: flex;
+  padding: 0 0 10px 0;
+  margin: 0 0 30px 0;
+  border-bottom: $color-geyser solid 1px;
+  justify-content: space-between;
+}
+
+.title {
+  margin: 0;
+  color: $color-scorpion;
+  font-size: $task-title-font_size;
+}
+
+.items {
+  padding: 0;
+  margin-left: 20px;
+}
+
+.item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+
+  &:last-child {
+    margin-bottom: 25px;
+  }
+}
+
+.check {
+  @include check-box($color-denim)
+}
+
+.userName {
+  color: $color-scorpion;
+  margin-left: 10px;
+}
+
+.message {
+  text-align: center;
+  color: $color-scorpion;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin: 0 20px 20px;
+}
+

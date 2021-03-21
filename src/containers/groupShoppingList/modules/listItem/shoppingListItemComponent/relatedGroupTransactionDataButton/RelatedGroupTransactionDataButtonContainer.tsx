@@ -7,7 +7,8 @@ interface RelatedGroupTransactionDataButtonContainerProps {
   transactionData: GroupRelatedTransactionData;
   approvedGroups: Groups;
   groupId: number;
-  transactionDataListClassName: string;
+  categoryDataClassName: string;
+  displayTermClassName: string;
 }
 
 const RelatedGroupTransactionDataButtonContainer = (
@@ -64,8 +65,9 @@ const RelatedGroupTransactionDataButtonContainer = (
       associatedCategoryName={displayRelatedTransactionData}
       openTransactionData={openTransactionData}
       getPaymentUserName={getPaymentUserName}
-      transactionDataListClassName={props.transactionDataListClassName}
       ref={transactionDataRef}
+      categoryDataClassName={props.categoryDataClassName}
+      displayTermClassName={props.displayTermClassName}
     />
   );
 };

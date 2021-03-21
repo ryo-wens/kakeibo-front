@@ -1,18 +1,18 @@
 @import "../variable.scss";
 
 .task--btn {
-  background-color: white;
-  border: 2px solid $color-geyser ;
-  border-radius: $task-border_radius;
-  color: $color-lynch;
+  background-color: $color-porcelain;
+  border: 1.5px solid $color-geyser ;
+  border-radius: 0.5rem;
+  color: $color-scorpion;
   cursor: pointer;
+  font-family: 'Noto Sans Japanese', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
   font-size: 1.0rem;
-  padding: 5px 20px 5px 20px;
+  letter-spacing: 0.05em;
+  padding: 3px 13px;
 
   &:hover{
-    background-color: $color-lynch;
-    border: 2px solid $color-geyser ;
-    color: white;
+    background-color: $color-athensGray;
   }
 
   &:focus {

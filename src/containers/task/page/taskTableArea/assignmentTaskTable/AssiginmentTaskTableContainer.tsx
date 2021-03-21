@@ -5,7 +5,7 @@ import {
   TaskListItem,
   TaskUsers,
 } from '../../../../../reducks/groupTasks/types';
-import AssignmentTaskTable from '../../../../../components/task/page/taskTableArea/assignmentTaskTable/AssignmentTaskTable';
+import AssignTaskTable from '../../../../../components/task/modules/area/taskTableArea/assignTaskTable/AssignTaskTable';
 
 interface AssignmentTaskTableContainerProps {
   participatingTaskUsers: TaskUsers;
@@ -35,7 +35,7 @@ const AssignmentTaskTableContainer = (props: AssignmentTaskTableContainerProps) 
   };
 
   return (
-    <AssignmentTaskTable
+    <AssignTaskTable
       groupId={props.groupId}
       participatingTaskUsers={props.participatingTaskUsers}
       tasksListItem={props.tasksListItem}

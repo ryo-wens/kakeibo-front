@@ -2,7 +2,7 @@ import React from 'react';
 import { GroupTransactionsList } from '../../reducks/groupTransactions/types';
 import WeeklyHistoryContainer from '../../containers/history/weekly/WeeklyHistoryContainer';
 import DailyHistoryContainer from '../../containers/history/daily/DailyHistoryContainer';
-import InputYears from '../../components/modules/InputYears';
+import InputYears from '../../components/modules/inputYears/InputYears';
 import HeaderContainer from '../../containers/header/HeaderContainer';
 import './history.scss';
 import cn from 'classnames';
@@ -55,6 +55,8 @@ const History = (props: HistoryProps) => {
               selectedMonth={props.selectedMonth}
               setSelectedMonth={props.setSelectedMonth}
               setSelectedYear={props.setSelectedYear}
+              btnClassName={'history__child-input-years-btn'}
+              selectWrapperClassName={'history__child-select-wrapper'}
             />
           )}
         </div>

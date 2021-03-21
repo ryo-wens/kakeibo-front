@@ -4,11 +4,14 @@ import { getUserTaskListItem } from '../../../../reducks/groupTasks/selectors';
 import TodayScheduleTaskArea from '../../../../components/home/todaySchedule/taskArea/TodayScheduleTaskArea';
 
 const TodayScheduleTaskAreaContainer = () => {
-  const userTaskListItem = useSelector(getUserTaskListItem);
-  const existAssignTask = userTaskListItem && userTaskListItem.tasks_list.length !== 0;
+  const todayUserTaskList = useSelector(getUserTaskListItem);
+  const existsTodayUserTaskList = todayUserTaskList && todayUserTaskList.length !== 0;
 
   return (
-    <TodayScheduleTaskArea userTaskListItem={userTaskListItem} existAssignTask={existAssignTask} />
+    <TodayScheduleTaskArea
+      todayUserTaskList={todayUserTaskList}
+      existsTodayUserTaskList={existsTodayUserTaskList}
+    />
   );
 };
 

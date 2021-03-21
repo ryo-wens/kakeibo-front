@@ -3,7 +3,7 @@ import Modal from '@material-ui/core/Modal';
 import ShoppingListDeleteForm from '../../../form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditIcon from '@material-ui/icons/Edit';
-import './edit-regular-shopping-list-item-modal.scss';
+import styles from './EditRegularShoppingListItemModal.module.scss';
 import RegularShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/RegularShoppingListFormContainer';
 
 interface EditRegularShoppingListModalProps {
@@ -45,7 +45,7 @@ interface EditRegularShoppingListModalProps {
 
 const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalProps) => {
   const body = (
-    <div className="edit-regular-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       {props.deleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'定期買い物リストアイテムを削除'}
@@ -94,10 +94,7 @@ const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalPro
 
   return (
     <>
-      <EditIcon
-        className="edit-regular-shopping-list-item-modal__edit-icon"
-        onClick={() => props.handleOpenModal()}
-      />
+      <EditIcon className={styles.editIcon} onClick={() => props.handleOpenModal()} />
       <Modal
         open={props.open}
         onClose={props.handleCloseModal}

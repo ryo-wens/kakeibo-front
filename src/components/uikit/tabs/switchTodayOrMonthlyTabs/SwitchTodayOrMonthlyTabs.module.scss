@@ -1,0 +1,46 @@
+@import "../../../../assets/mixin/main-btn";
+
+.wrapper {
+  display: flex;
+  height: 100%;
+
+  & button {
+    &:first-child {
+      border-radius: 0.5rem 0 0 0.5rem;
+    }
+
+    &:last-child {
+      border-radius: 0 0.5rem 0.5rem 0;
+    }
+  }
+}
+
+.btn {
+  background-color: $color-porcelain;
+  border: 1.5px solid $color-geyser ;
+  color: $color-silver;
+  font-family: 'Noto Sans Japanese', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  font-weight: 400;
+  font-size: 1.0rem;
+  cursor: pointer;
+  padding: 3px 13px;
+  height: 2.5rem;
+  outline: none;
+
+  &:hover{
+    color: $color-scorpion;
+  }
+}
+
+.crPageBtn {
+  background-color: $color-lynch;
+  border-color: $color-lynch;
+  font-weight: 400;
+  color:white;
+
+
+  &:hover {
+    background-color: $color-lynch;
+    color: white;
+  }
+}

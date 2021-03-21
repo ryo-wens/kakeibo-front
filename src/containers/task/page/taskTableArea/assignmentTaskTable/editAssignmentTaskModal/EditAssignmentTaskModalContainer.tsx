@@ -8,7 +8,7 @@ import {
 } from '../../../../../../reducks/groupTasks/types';
 import { useDispatch } from 'react-redux';
 import { editTaskItem } from '../../../../../../reducks/groupTasks/operations';
-import EditAssignmentTaskModal from '../../../../../../components/task/page/taskTableArea/assignmentTaskTable/editAssignmentTaskModal/EditAssignmentTaskModal';
+import EditAssignmentTaskModal from '../../../../../../components/task/modules/area/taskTableArea/assignTaskTable/editAssignTaskModal/EditAssignTaskModal';
 import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditAssignmentTaskModalContainerProps {

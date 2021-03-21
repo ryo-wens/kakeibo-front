@@ -1,9 +1,9 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/EditShoppingListItemModal/edit-shopping-list-item-modal.scss';
 import EditIcon from '@material-ui/icons/Edit';
 import ShoppingListDeleteForm from '../../../../../shoppingList/modules/form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import GroupShoppingListFormContainer from '../../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
+import styles from '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/EditShoppingListItemModal/EditShoppingListItemModal.module.scss';
 
 interface EditGroupShoppingListItemModalProps {
   open: boolean;
@@ -40,7 +40,7 @@ interface EditGroupShoppingListItemModalProps {
 
 const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalProps) => {
   const body = (
-    <div className="edit-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       {props.deleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
@@ -86,10 +86,7 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
 
   return (
     <>
-      <EditIcon
-        className="edit-shopping-list-item-modal__edit-icon"
-        onClick={props.handleOpenModal}
-      />
+      <EditIcon className={styles.editIcon} onClick={props.handleOpenModal} />
       <Modal
         open={props.open}
         onClose={props.handleCloseModal}

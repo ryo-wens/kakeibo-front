@@ -1,0 +1,21 @@
+@import "../../../../../assets/mixin/icon-btn";
+
+.wrapper {
+  display: flex;
+  align-items: center;
+  background-color: $color-blackSqueeze;
+  color: $color-scorpion;
+  border-radius: 0.6rem;
+  padding: 10px 15px;
+  box-shadow: 0 1px 6px rgba(200, 200, 200, 0.7);
+}
+
+.purchase {
+  width: calc(100% - 100px);
+  margin-left: 5px;
+}
+
+.amount {
+  width: 100px;
+  text-align: right;
+}

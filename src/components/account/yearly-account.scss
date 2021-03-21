@@ -27,6 +27,11 @@
   &__year-position {
     text-align: center;
     width: 100%;
+    margin: 0 auto 15px;
+  }
+
+  &__child-select-years {
+    width: 30%;
   }
 
   &__yearly-table {

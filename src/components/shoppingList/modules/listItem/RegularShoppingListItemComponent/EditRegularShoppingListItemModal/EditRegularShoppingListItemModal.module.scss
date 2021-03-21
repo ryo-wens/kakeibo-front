@@ -1,0 +1,14 @@
+@import "../../../../../../assets/mixin/icon-btn";
+
+.modalWrapper {
+  width: 550px;
+  margin: 20px auto auto auto;
+  background-color: white;
+  outline: none;
+}
+
+.editIcon {
+  @include icon-btn($color-scorpion, 0.5rem, 0.7);
+  padding: 3px;
+  margin-left: 15px;
+}

@@ -2,9 +2,10 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
 import { date } from '../../../../../lib/constant';
-import './add-regular-shopping-list-item-modal.scss';
+import styles from './AddRegularShoppingListItemModal.module.scss';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
 import RegularShoppingListFormContainer from '../../../../../containers/shoppingList/modules/form/RegularShoppingListFormContainer';
+import cn from 'classnames';
 
 interface AddRegularShoppingListModalProps {
   open: boolean;
@@ -38,11 +39,12 @@ interface AddRegularShoppingListModalProps {
   handleCloseModal: () => void;
   unInput: boolean;
   handleAddRegularShoppingListItem: () => void;
+  addBtnClassName?: string;
 }
 
 const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps) => {
   const body = (
-    <div className="add-regular-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       <RegularShoppingListFormContainer
         expectedPurchaseDate={props.expectedPurchaseDate}
         cycleType={props.cycleType}
@@ -81,9 +83,9 @@ const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps
   return (
     <>
       <button
-        className="add-regular-shopping-list-item-modal__button"
+        className={cn(styles.btn, props.addBtnClassName)}
         disabled={false}
-        onClick={() => props.handleOpenModal()}
+        onClick={props.handleOpenModal}
       >
         <AddIcon />
         定期買い物リストに追加

@@ -1,41 +1,68 @@
 import React from 'react';
-import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
+import { bigCategoryColor } from '../../../../lib/function';
 import {
-  GroupShoppingList,
   GroupShoppingListByCategories,
+  GroupShoppingListItem,
+  GroupShoppingListItemByCategories,
 } from '../../../../reducks/groupShoppingList/types';
-import GroupTodayScheduleShoppingListByDate from './todayScheduleShoppingListByDate/GroupTodayScheduleShoppingListByDate';
-import GroupTodayScheduleShoppingListByCategories from './todayScheduleShoppingListByCategories/GroupTodayScheduleShoppingListByCategories';
+import GroupShoppingListItemComponentContainer from '../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/GroupShoppingListItemComponentContainer';
+import styles from '../shoppingListArea/TodayScheduleShoppingListArea.module.scss';
 
-interface GroupTodayScheduleShoppingListAreaProps {
-  todayShoppingList: GroupShoppingList;
-  todayShoppingListByCategories: GroupShoppingListByCategories;
+interface GroupTodayScheduleShoppingListByCategoriesProps {
+  shoppingListByCategories: GroupShoppingListByCategories;
   currentYear: string;
   currentMonth: string;
+  message: string;
 }
 
-const GroupTodayScheduleShoppingListArea = (props: GroupTodayScheduleShoppingListAreaProps) => {
+const GroupTodayScheduleShoppingListArea = (
+  props: GroupTodayScheduleShoppingListByCategoriesProps
+) => {
+  const existsShoppingList = props.shoppingListByCategories.length !== 0;
+
   return (
-    <SwitchItemTabs
-      leftButtonLabel={'日別'}
-      rightButtonLabel={'カテゴリ別'}
-      leftItem={
-        <GroupTodayScheduleShoppingListByDate
-          shoppingListByDate={props.todayShoppingList}
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
-          message={'今日の買い物リストは、登録されていません。'}
-        />
-      }
-      rightItem={
-        <GroupTodayScheduleShoppingListByCategories
-          shoppingListByCategories={props.todayShoppingListByCategories}
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
-          message={'今日の買い物リストは、登録されていません。'}
-        />
-      }
-    />
+    <>
+      {existsShoppingList ? (
+        <ol className={styles.listByCategory}>
+          {props.shoppingListByCategories.map(
+            (shoppingListItemByCategories: GroupShoppingListItemByCategories) => {
+              return (
+                <li key={shoppingListItemByCategories.big_category_name}>
+                  <div className={styles.category}>
+                    <span
+                      className={styles.categoryColor}
+                      style={bigCategoryColor(shoppingListItemByCategories.big_category_name)}
+                    />
+                    <h4 className={styles.categoryName}>
+                      {shoppingListItemByCategories.big_category_name}
+                    </h4>
+                  </div>
+                  <ol className={styles.shoppingList}>
+                    {shoppingListItemByCategories.shopping_list.map(
+                      (shoppingListItem: GroupShoppingListItem) => {
+                        return (
+                          <GroupShoppingListItemComponentContainer
+                            listItem={shoppingListItem}
+                            currentYear={props.currentYear}
+                            currentMonth={props.currentMonth}
+                            purchaseClassName={styles.childPurchase}
+                            amountClassName={styles.childAmount}
+                            key={shoppingListItem.id}
+                          />
+                        );
+                      }
+                    )}
+                  </ol>
+                </li>
+              );
+            }
+          )}
+        </ol>
+      ) : (
+        <p className={styles.message}>{props.message}</p>
+      )}
+    </>
   );
 };
+
 export default GroupTodayScheduleShoppingListArea;

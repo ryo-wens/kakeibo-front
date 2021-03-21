@@ -17,7 +17,11 @@ const YearlyBudgets = (props: YearlyBudgetsProps) => {
     <>
       <div className="yearly-budgets__yearly-table-position">
         <div className="yearly-budgets__select-year">
-          <SelectYears selectedYear={props.budgetsYear} setSelectedYear={props.setBudgetsYear} />
+          <SelectYears
+            selectedYear={props.budgetsYear}
+            setSelectedYear={props.setBudgetsYear}
+            skipYearsClassName={'yearly-budgets__child-select-years'}
+          />
         </div>
         <div className="yearly-budgets__background">
           <h2>

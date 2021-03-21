@@ -1,9 +1,9 @@
 @import "../variable";
 
-@mixin check-box ($checked-color) {
+@mixin check-box ($checked-color, $text-color: $color-scorpion) {
   display: inline-block;
   position: relative;
-  color: #333;
+  color: $text-color;
   margin: 0 0 22px 0;
   padding-left: 28px;
   cursor: pointer;
@@ -15,7 +15,7 @@
 
   > span {
     position: absolute;
-    top: 0;
+    top: 1px;
     left: 0;
     height: 22px;
     width: 22px;

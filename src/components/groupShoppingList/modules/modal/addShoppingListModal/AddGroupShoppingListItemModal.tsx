@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
-import '../../../../shoppingList/modules/modal/AddShoppingListItemModal/add-shopping-list-item-modal.scss';
+import styles from '../../../../shoppingList/modules/modal/AddShoppingListItemModal/AddShoppingListItemModal.module.scss';
 import { date } from '../../../../../lib/constant';
 import GroupShoppingListFormContainer from '../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
 
@@ -37,7 +37,7 @@ interface AddGroupShoppingListItemModalProps {
 
 const AddGroupShoppingListItemModal = (props: AddGroupShoppingListItemModalProps) => {
   const body = (
-    <div className="add-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       <GroupShoppingListFormContainer
         titleLabel={'買い物リストに追加'}
         buttonLabel={'追加'}
@@ -72,11 +72,7 @@ const AddGroupShoppingListItemModal = (props: AddGroupShoppingListItemModalProps
 
   return (
     <>
-      <button
-        className="add-shopping-list-item-modal__button"
-        disabled={false}
-        onClick={() => props.handleOpenModal()}
-      >
+      <button className={styles.btn} disabled={false} onClick={props.handleOpenModal}>
         <AddIcon />
         買い物リストに追加
       </button>

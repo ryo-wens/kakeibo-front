@@ -58,7 +58,7 @@ const SearchResultTodoListContainer = (props: SearchResultTodoListContainerProps
       equalsDisplayDate={equalsDisplayDate}
       displayDate={displayDate}
       fetchSearchTodoListRequestData={props.fetchSearchTodoListRequestData}
-      message={'条件に一致するtodoは見つかりませんでした。'}
+      message={'条件に一致するToDoは見つかりませんでした。'}
     />
   );
 };

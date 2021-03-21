@@ -1,5 +1,6 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
+import moment from 'moment';
 
 const groupTasksSelector = (state: State) => state.groupTasks;
 
@@ -19,6 +20,9 @@ const userId = (state: State) => state.users.user_id;
 export const getUserTaskListItem = createSelector(
   [tasksListForEachUser, userId],
   (tasksListForEachUser, userId) => {
-    return tasksListForEachUser.find((listItem) => listItem.user_id === userId);
+    const taskList = tasksListForEachUser.find((listItem) => listItem.user_id === userId);
+    return (
+      taskList && taskList.tasks_list.filter((item) => moment().isSame(item.base_date, 'date'))
+    );
   }
 );
