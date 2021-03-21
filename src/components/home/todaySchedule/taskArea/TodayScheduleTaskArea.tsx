@@ -1,25 +1,25 @@
 import React from 'react';
-import './today-schedule-task-area.scss';
-import { UserTaskListItem } from '../../../../reducks/groupTasks/types';
+import styles from './TodayScheduleTaskArea.module.scss';
+import { TaskListItem } from '../../../../reducks/groupTasks/types';
 
 interface TodayScheduleTaskAreaProps {
-  userTaskListItem: UserTaskListItem | undefined;
-  existAssignTask: boolean | undefined;
+  todayUserTaskList: TaskListItem[] | undefined;
+  existsTodayUserTaskList: boolean | undefined;
 }
 
 const TodayScheduleTaskArea = (props: TodayScheduleTaskAreaProps) => {
   return (
     <>
-      {props.userTaskListItem && props.existAssignTask ? (
-        props.userTaskListItem.tasks_list.map((listItem) => {
+      {props.todayUserTaskList && props.existsTodayUserTaskList ? (
+        props.todayUserTaskList.map((listItem) => {
           return (
-            <div className="today-schedule-task-area__item" key={listItem.id}>
-              <span className="today-schedule-task-area__item-text">{listItem.task_name}</span>
+            <div className={styles.item} key={listItem.id}>
+              <span className={styles.itemText}>{listItem.task_name}</span>
             </div>
           );
         })
       ) : (
-        <p className="today-schedule-task-area__message">割り当てられたタスクはありません。</p>
+        <p className={styles.message}>割り当てられたタスクはありません。</p>
       )}
     </>
   );

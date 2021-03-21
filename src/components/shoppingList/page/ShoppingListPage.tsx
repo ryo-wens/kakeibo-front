@@ -48,12 +48,13 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
       </div>
       <div className={styles.rightArea}>
         <div className={styles.rightContent}>
-          <h4>定期買い物リスト</h4>
+          <h3>定期買い物リスト</h3>
           <AddRegularShoppingListItemModalContainer
             selectedYear={props.selectedYear}
             selectedMonth={props.selectedMonth}
             currentYear={props.currentYear}
             currentMonth={props.currentMonth}
+            addBtnClassName={styles.childAddRegularBtn}
           />
           <RegularShoppingListAreaContainer
             currentYear={props.currentYear}
@@ -62,7 +63,7 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           />
         </div>
         <div className={styles.rightContent}>
-          <h4>期限切れ買い物リスト</h4>
+          <h3>期限切れ買い物リスト</h3>
           <ExpiredShoppingListAreaContainer
             currentYear={props.currentYear}
             currentMonth={props.currentMonth}

@@ -1,5 +1,5 @@
 import React from 'react';
-import './shopping-list-item-component.scss';
+import styles from './ShoppingListItemComponent.module.scss';
 import { ShoppingListItem } from '../../../../../reducks/shoppingList/types';
 import CheckedShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedShoppingListItemModalContainer';
 import EditShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/editShoppingListItemModal/EditShoppingListItemModalContainer';
@@ -46,24 +46,26 @@ interface ShoppingListItemComponentProps {
 
 const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
   const purchaseClassName = cn(props.purchaseClassName, {
-    'shopping-list-item-component__complete': props.checked,
+    [styles.complete]: props.checked,
   });
 
   const amountClassName = cn(props.amountClassName, {
-    'shopping-list-item-component__complete': props.checked,
+    [styles.complete]: props.checked,
   });
 
-  const yenClassName = cn({ 'shopping-list-item-component__complete': props.checked });
+  const childCategoryDataClassName = cn({
+    [styles.childCategoryData]: props.currentPage !== 'home',
+    [styles.childCategoryDataCrHomePage]: props.currentPage === 'home',
+  });
 
-  const childTransactionDataItemClassName = cn({
-    'shopping-list-item-component__child-transaction-data-item': props.currentPage !== 'home',
-    'shopping-list-item-component__child-transaction-data-item-cr-home-page':
-      props.currentPage === 'home',
+  const childDisplayTermClassName = cn({
+    [styles.childDisplayTerm]: props.currentPage !== 'home',
+    [styles.childDisplayTermCrHomePage]: props.currentPage === 'home',
   });
 
   return (
-    <li className="shopping-list-item-component">
-      <div className="shopping-list-item-component__check-box">
+    <li className={styles.wrapper}>
+      <div className={styles.checkBox}>
         <CheckedShoppingListItemModalContainer
           listItem={props.listItem}
           currentYear={props.currentYear}
@@ -99,15 +101,13 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           setTransactionAutoAdd={props.setTransactionAutoAdd}
         />
       </div>
-      <div className="shopping-list-item-component__content">
-        <div className="shopping-list-item-component__items">
-          <div className="shopping-list-item-component__item">
+      <div className={styles.content}>
+        <div className={styles.items}>
+          <div className={styles.item}>
             <span className={purchaseClassName}>{props.listItem.purchase}</span>
-            <span className={amountClassName}>{props.listItem.amount ?? '-'}</span>
-            <span className={yenClassName}>円</span>
+            <span className={amountClassName}>{`￥  ${props.listItem.amount ?? '-'}`}</span>
           </div>
-
-          <span className="shopping-list-item-component__edit-icon">
+          <span className={styles.editIcon}>
             <EditShoppingListItemModalContainer
               listItem={props.listItem}
               currentYear={props.currentYear}
@@ -142,19 +142,20 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
             />
           </span>
         </div>
-        <div className="shopping-list-item-component__tag">
+        <div className={styles.tag}>
           {props.listItem.regular_shopping_list_id !== null && (
-            <span className="shopping-list-item-component__tag--red">定期</span>
+            <span className={styles.tag__red}>定期</span>
           )}
           {props.listItem.transaction_auto_add && (
-            <span className="shopping-list-item-component__tag--blue">家計簿へ自動追加</span>
+            <span className={styles.tag__blue}>家計簿へ自動追加</span>
           )}
         </div>
         {props.listItem.related_transaction_data !== null && (
-          <div className="shopping-list-item-component__related-transaction-data">
+          <div className={styles.relatedTransactionData}>
             <RelatedTransactionDataButtonContainer
               transactionData={props.listItem.related_transaction_data}
-              transactionDataListClassName={childTransactionDataItemClassName}
+              categoryDataClassName={childCategoryDataClassName}
+              displayTermClassName={childDisplayTermClassName}
             />
           </div>
         )}

@@ -22,47 +22,45 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
   const initialDisplayNumberTodoList = 3;
 
   return (
-    <div>
-      <div className={styles.wrapper}>
-        {existExpiredTodoList ? (
-          <>
-            <ol className={styles.listByDate}>
-              {props.displayExpiredTodoList.map((displayTodolistItem) => {
-                return (
-                  <li className={styles.listItemByDate} key={displayTodolistItem.date}>
-                    <p className={styles.date}>{displayTodolistItem.date}</p>
-                    <ol className={styles.todoList}>
-                      {displayTodolistItem.list.map((item) => {
-                        return (
-                          <TodoListItemComponentContainer
-                            listItem={item}
-                            currentYear={props.currentYear}
-                            currentMonth={props.currentMonth}
-                            setEditing={props.setEditing}
-                            key={item.id}
-                          />
-                        );
-                      })}
-                    </ol>
-                  </li>
-                );
-              })}
-            </ol>
-            {props.expiredTodoList.length > initialDisplayNumberTodoList && (
-              <button
-                className={cn(styles.readMoreBtn, props.readMoreBtnClassName)}
-                onClick={() => props.setReadMore(!props.readMore)}
-              >
-                {props.readMore ? 'close' : 'Read More'}
-                {props.readMore ? <KeyboardArrowUpIcon /> : <KeyboardArrowRightIcon />}
-              </button>
-            )}
-          </>
-        ) : (
-          <p className={styles.message}>期限切れのToDoリストはありません。</p>
-        )}
-      </div>
-    </div>
+    <>
+      {existExpiredTodoList ? (
+        <>
+          <ol className={styles.listByDate}>
+            {props.displayExpiredTodoList.map((displayTodolistItem) => {
+              return (
+                <li className={styles.listItemByDate} key={displayTodolistItem.date}>
+                  <p className={styles.date}>{displayTodolistItem.date}</p>
+                  <ol className={styles.todoList}>
+                    {displayTodolistItem.todoList.map((item) => {
+                      return (
+                        <TodoListItemComponentContainer
+                          listItem={item}
+                          currentYear={props.currentYear}
+                          currentMonth={props.currentMonth}
+                          setEditing={props.setEditing}
+                          key={item.id}
+                        />
+                      );
+                    })}
+                  </ol>
+                </li>
+              );
+            })}
+          </ol>
+          {props.expiredTodoList.length > initialDisplayNumberTodoList && (
+            <button
+              className={cn(styles.readMoreBtn, props.readMoreBtnClassName)}
+              onClick={() => props.setReadMore(!props.readMore)}
+            >
+              {props.readMore ? 'close' : 'Read More'}
+              {props.readMore ? <KeyboardArrowUpIcon /> : <KeyboardArrowRightIcon />}
+            </button>
+          )}
+        </>
+      ) : (
+        <p className={styles.message}>期限切れのToDoリストはありません。</p>
+      )}
+    </>
   );
 };
 

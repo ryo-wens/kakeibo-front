@@ -1,10 +1,7 @@
 import React from 'react';
-import GroupTodayScheduleShoppingListArea from '../../../../components/home/todaySchedule/groupShoppingListArea/GroupTodayScheduleShoppingListArea';
 import { useSelector } from 'react-redux';
-import {
-  getGroupTodayShoppingList,
-  getGroupTodayShoppingListByCategories,
-} from '../../../../reducks/groupShoppingList/selectors';
+import { getGroupTodayShoppingListByCategories } from '../../../../reducks/groupShoppingList/selectors';
+import GroupTodayScheduleShoppingListArea from '../../../../components/home/todaySchedule/groupShoppingListArea/GroupTodayScheduleShoppingListArea';
 
 interface GroupTodayScheduleShoppingListAreaContainerProps {
   currentYear: string;
@@ -14,15 +11,14 @@ interface GroupTodayScheduleShoppingListAreaContainerProps {
 const GroupTodayScheduleShoppingListAreaContainer = (
   props: GroupTodayScheduleShoppingListAreaContainerProps
 ) => {
-  const groupTodayShoppingList = useSelector(getGroupTodayShoppingList);
   const groupTodayShoppingListByCategories = useSelector(getGroupTodayShoppingListByCategories);
 
   return (
     <GroupTodayScheduleShoppingListArea
-      todayShoppingList={groupTodayShoppingList}
-      todayShoppingListByCategories={groupTodayShoppingListByCategories}
+      shoppingListByCategories={groupTodayShoppingListByCategories}
       currentYear={props.currentYear}
       currentMonth={props.currentMonth}
+      message={'今日の買い物リストは、登録されていません。'}
     />
   );
 };

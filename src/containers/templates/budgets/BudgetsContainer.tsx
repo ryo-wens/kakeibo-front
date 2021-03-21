@@ -30,41 +30,11 @@ const BudgetsContainer = () => {
     };
   }, []);
 
-  const currentStandardColor = () => {
-    const style = {
-      background: '',
-      color: '',
-    };
-
-    if (query === '?standard') {
-      style.background = '#ff802b';
-      style.color = '#fff';
-    }
-
-    return style;
-  };
-
-  const currentYearlyColor = () => {
-    const style = {
-      background: '',
-      color: '',
-    };
-
-    if (query === '?yearly') {
-      style.background = '#ff802b';
-      style.color = '#fff';
-    }
-
-    return style;
-  };
-
   return (
     <Budgets
       query={query}
       budgetsYear={budgetsYear}
       setBudgetsYear={setBudgetsYear}
-      currentStandardColor={currentStandardColor}
-      currentYearlyColor={currentYearlyColor}
       routingStandard={() =>
         pathName !== 'group'
           ? dispatch(push('/budgets?standard'))

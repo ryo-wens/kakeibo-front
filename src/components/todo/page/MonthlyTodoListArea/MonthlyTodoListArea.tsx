@@ -1,6 +1,6 @@
 import React from 'react';
-import InputYears from '../../../modules/InputYears';
-import './monthly-todo-list-area.scss';
+import InputYears from '../../../modules/inputYears/InputYears';
+import styles from './MonthlyTodoListArea.module.scss';
 import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import MonthlyImplementationDateTodoListContainer from '../../../../containers/todo/page/monthlyTodoListArea/Items/MonthlyImplementationDateTodoListContainer';
 import MonthlyDueDateTodoListContainer from '../../../../containers/todo/page/monthlyTodoListArea/Items/MonthlyDueDateTodoListContainer';
@@ -19,20 +19,21 @@ interface MonthlyTodoListAreaProps {
 const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
   return (
     <>
-      <div className="monthly-todo-list-area__add-button">
+      <div className={styles.addButton}>
         <AddTodoListItemFormContainer
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}
         />
       </div>
-      <div className="monthly-todo-list-area__switch-item">
-        <div className="monthly-todo-list-area__switch-item--width">
-          <div className="monthly-todo-list-area__input-years">
+      <div className={styles.switchItem}>
+        <div className={styles.switchItem__width}>
+          <div className={styles.inputYears}>
             <InputYears
               selectedYear={props.selectedYear}
               selectedMonth={props.selectedMonth}
               setSelectedMonth={props.setSelectedMonth}
               setSelectedYear={props.setSelectedYear}
+              btnClassName={styles.childInputYearsBtn}
             />
           </div>
           <SwitchItemTabs
@@ -54,6 +55,7 @@ const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
                 setEditing={props.setEditing}
               />
             }
+            tabsBtnClassName={styles.childTabsBtn}
           />
         </div>
       </div>

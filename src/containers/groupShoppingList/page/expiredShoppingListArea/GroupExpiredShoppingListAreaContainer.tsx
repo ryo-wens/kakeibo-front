@@ -8,7 +8,7 @@ import {
   getGroupExpiredShoppingList,
   getGroupSlicedExpiredShoppingList,
 } from '../../../../reducks/groupShoppingList/selectors';
-import GroupExpiredShoppingListArea from '../../../../components/groupShoppingList/page/expiredShoppingListArea/GroupExpiredShoppingListArea';
+import GroupExpiredShoppingListArea from '../../../../components/groupShoppingList/modules/area/expiredShoppingListArea/GroupExpiredShoppingListArea';
 import {
   GroupDisplayShoppingListByDate,
   GroupShoppingList,

@@ -70,7 +70,7 @@
   &__amount-available {
     align-items: center;
     align-content: center;
-    background-color: #ff9740;
+    background-color: $color-neonCarrot;
     border: 1px solid;
     border-radius: $task-border_radius;
     color: white;
@@ -94,7 +94,7 @@
       height: 0;
       width: 0;
       border: 8px solid transparent;
-      border-top: 8px solid #ff9740;
+      border-top: 8px solid $color-neonCarrot;
     }
 
     &--empty-arrow::after {
@@ -110,7 +110,7 @@
       height: 0;
       width: 0;
       border: 8px solid transparent;
-      border-top: 8px solid #ff9740;
+      border-top: 8px solid $color-neonCarrot;
     }
   }
 

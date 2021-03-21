@@ -1,5 +1,5 @@
 import React from 'react';
-import TodayShoppingListArea from '../../../../components/shoppingList/page/TodayShoppingListArea/TodayShoppingListArea';
+import TodayShoppingListArea from '../../../../components/shoppingList/modules/area/TodayShoppingListArea/TodayShoppingListArea';
 
 interface TodayShoppingListAreaContainerProps {
   currentYear: string;

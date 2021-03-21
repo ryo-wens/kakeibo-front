@@ -1,0 +1,93 @@
+@import "../../../assets/mixin/display-btn";
+@import "../../../assets/mixin/icon-btn";
+@import "../../../assets/modules/task-btn";
+@import "../../../assets/modules/primaly-btn";
+@import "../../../assets/modules/selector";
+
+.skipDateBtn {
+  display: flex;
+}
+
+.prevBtn {
+  @extend .task--btn;
+  border-radius: 0.5rem 0 0 0.5rem;
+  border-right: none;
+  padding-top: 8px;
+}
+
+.jumpYears {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1.5px solid $color-geyser;
+  color: $color-tundora;
+  font-size: $large-font_size;
+  width: 100%;
+  height: 45px;
+  cursor: pointer;
+
+  &:focus{
+    outline: none;
+  }
+}
+
+.jumpYearsIcon {
+  display: inline-block;
+  margin: 5px 0 0 10px;
+}
+
+.nextBtn {
+  @extend .task--btn;
+  border-radius: 0 0.5rem 0.5rem 0;
+  border-left: none;
+  padding-top: 8px;
+}
+
+.wrapper {
+  background-color: $color-porcelain;
+  border-radius: 0.5rem;
+  border: $color-geyser solid 1px;
+  color: $color-tundora;
+  text-align: center;
+  width: 50%;
+  padding: 12px;
+  margin: 0 auto;
+}
+
+.closeBtn {
+  @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  display: block;
+  margin: 0 0 10px auto;
+}
+
+.selectPosition {
+  display: flex;
+  align-items: center;
+  width: 80%;
+  margin: 0 auto 15px;
+
+  > select {
+    margin: 0 5px;
+  }
+}
+
+.select {
+  @extend .selector__box;
+  font-size: 0.95rem;
+}
+
+.displayBtn {
+  @include display-btn($color-dodgerBlue);
+  box-shadow: $btn-box_shadow;
+  color: white;
+  border: none;
+  margin: 0;
+}
+
+.nowBtn {
+  @extend .btn--primary;
+  font-family: 'Noto Sans Japanese', 'Hiragino Kaku Gothic ProN', Meiryo, sans-serif;
+  font-weight: 500;
+  font-size: 1.0rem;
+  margin-top: 30px;
+}

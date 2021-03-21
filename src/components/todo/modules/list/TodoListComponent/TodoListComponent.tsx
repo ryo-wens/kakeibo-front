@@ -15,7 +15,7 @@ const TodoListComponent = (props: TodoListComponentProps) => {
   const existTodoList = props.todoList.length !== 0;
 
   return (
-    <div className={styles.wrapper}>
+    <>
       {existTodoList ? (
         <ol className={styles.listByDate}>
           {props.todoList.map((displayTodolistItem) => {
@@ -23,7 +23,7 @@ const TodoListComponent = (props: TodoListComponentProps) => {
               <li className={styles.listItemByDate} key={displayTodolistItem.date}>
                 <p className={styles.date}>{displayTodolistItem.date}</p>
                 <ol className={styles.todoList}>
-                  {displayTodolistItem.list.map((item) => {
+                  {displayTodolistItem.todoList.map((item) => {
                     return (
                       <TodoListItemComponentContainer
                         listItem={item}
@@ -43,7 +43,7 @@ const TodoListComponent = (props: TodoListComponentProps) => {
       ) : (
         <p className={styles.message}>{props.message}</p>
       )}
-    </div>
+    </>
   );
 };
 

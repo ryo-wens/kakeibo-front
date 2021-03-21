@@ -1,0 +1,23 @@
+@import "../../../../../assets/variable";
+
+.input {
+  width: 20%;
+  border: $color-geyser 1px solid;
+  border-radius: 0.3rem;
+  color: #444;
+  font-size: 0.9rem;
+  text-align: center;
+  padding: 3px 8px;
+  cursor: pointer;
+
+  &:focus {
+    border: $color-denim solid 2px;
+    outline: none;
+  }
+
+  &:disabled {
+    opacity: 0.6;
+    background-color: #efefef;
+    cursor: default;
+  }
+}

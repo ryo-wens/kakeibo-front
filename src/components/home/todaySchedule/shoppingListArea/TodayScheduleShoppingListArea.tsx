@@ -1,38 +1,66 @@
 import React from 'react';
-import SwitchItemTabs from '../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import TodayScheduleShoppingListByDate from '../shoppingListArea/todayScheduleShoppingListByDate/TodayScheduleShoppingListByDate';
-import TodayScheduleShoppingListByCategories from '../shoppingListArea/todayScheduleShoppingListByCategories/TodayScheduleShoppingListByCategories';
-import { ShoppingList, ShoppingListByCategories } from '../../../../reducks/shoppingList/types';
+import {
+  ShoppingListByCategories,
+  ShoppingListItem,
+  ShoppingListItemByCategories,
+} from '../../../../reducks/shoppingList/types';
+import styles from './TodayScheduleShoppingListArea.module.scss';
+import { bigCategoryColor } from '../../../../lib/function';
+import ShoppingListItemComponentContainer from '../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 
-interface TodayScheduleShoppingListAreaProps {
-  todayShoppingList: ShoppingList;
-  todayShoppingListByCategories: ShoppingListByCategories;
+interface TodayScheduleShoppingListByCategoriesProps {
+  shoppingListByCategories: ShoppingListByCategories;
   currentYear: string;
   currentMonth: string;
+  message: string;
 }
 
-const TodayScheduleShoppingListArea = (props: TodayScheduleShoppingListAreaProps) => {
+const TodayScheduleShoppingListArea = (props: TodayScheduleShoppingListByCategoriesProps) => {
+  const existsShoppingList = props.shoppingListByCategories.length !== 0;
+
   return (
-    <SwitchItemTabs
-      leftButtonLabel={'日別'}
-      rightButtonLabel={'カテゴリ別'}
-      leftItem={
-        <TodayScheduleShoppingListByDate
-          shoppingListByDate={props.todayShoppingList}
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
-          message={'今日の買い物リストは、登録されていません。'}
-        />
-      }
-      rightItem={
-        <TodayScheduleShoppingListByCategories
-          shoppingListByCategories={props.todayShoppingListByCategories}
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
-          message={'今日の買い物リストは、登録されていません。'}
-        />
-      }
-    />
+    <>
+      {existsShoppingList ? (
+        <ol className={styles.listByCategory}>
+          {props.shoppingListByCategories.map(
+            (shoppingListItemByCategories: ShoppingListItemByCategories) => {
+              return (
+                <li key={shoppingListItemByCategories.big_category_name}>
+                  <div className={styles.category}>
+                    <span
+                      className={styles.categoryColor}
+                      style={bigCategoryColor(shoppingListItemByCategories.big_category_name)}
+                    />
+                    <h4 className={styles.categoryName}>
+                      {shoppingListItemByCategories.big_category_name}
+                    </h4>
+                  </div>
+                  <ol className={styles.shoppingList}>
+                    {shoppingListItemByCategories.shopping_list.map(
+                      (shoppingListItem: ShoppingListItem) => {
+                        return (
+                          <ShoppingListItemComponentContainer
+                            listItem={shoppingListItem}
+                            currentYear={props.currentYear}
+                            currentMonth={props.currentMonth}
+                            purchaseClassName={styles.childPurchase}
+                            amountClassName={styles.childAmount}
+                            key={shoppingListItem.id}
+                          />
+                        );
+                      }
+                    )}{' '}
+                  </ol>
+                </li>
+              );
+            }
+          )}
+        </ol>
+      ) : (
+        <p className={styles.message}>{props.message}</p>
+      )}
+    </>
   );
 };
+
 export default TodayScheduleShoppingListArea;

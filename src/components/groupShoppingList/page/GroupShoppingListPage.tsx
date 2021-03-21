@@ -1,7 +1,7 @@
 import React from 'react';
 import styles from '../../shoppingList/page/ShoppingListPage.module.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
-import GroupTodayShoppingListArea from './todayShoppingListArea/GroupTodayShoppingListArea';
+import GroupTodayShoppingListArea from '../modules/area/todayShoppingListArea/GroupTodayShoppingListArea';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
 import AddGroupRegularShoppingListModalContainer from '../../../containers/groupShoppingList/modules/modal/AddGroupRegularShoppingListItemModalContainer';
 import GroupRegularShoppingListAreaContainer from '../../../containers/groupShoppingList/page/regularShoppingListArea/GroupRegularShoppingListAreaContainer';
@@ -48,10 +48,11 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
       </div>
       <div className={styles.rightArea}>
         <div className={styles.rightContent}>
-          <h4>定期買い物リスト</h4>
+          <h3>定期買い物リスト</h3>
           <AddGroupRegularShoppingListModalContainer
             currentYear={props.currentYear}
             currentMonth={props.currentMonth}
+            addBtnClassName={styles.childAddRegularBtn}
           />
           <GroupRegularShoppingListAreaContainer
             currentYear={props.currentYear}
@@ -60,7 +61,7 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
           />
         </div>
         <div className={styles.rightContent}>
-          <h4>期限切れ買い物リスト</h4>
+          <h3>期限切れ買い物リスト</h3>
           <GroupExpiredShoppingListAreaContainer
             currentYear={props.currentYear}
             currentMonth={props.currentMonth}

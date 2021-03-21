@@ -1,41 +1,23 @@
 import { State } from '../store/types';
 import { createSelector } from 'reselect';
-import { DisplayTodoList, DisplayTodoListItem, TodoList } from './types';
+import { DisplayTodoList, DisplayTodoListItem, TodoList, TodoListItem } from './types';
 
 const generateDisplayTodoList = (todoList: TodoList, displayDate: string) => {
-  const displayTodoList: DisplayTodoList = [];
-  const notFound = -1;
+  return todoList.reduce((displayTodoList: DisplayTodoList, curItem: TodoListItem) => {
+    const notExistsDisplayTodoList = displayTodoList.length === 0;
+    const lastIdx = displayTodoList.length === 0 ? 0 : displayTodoList.length - 1;
+    const itemDate = displayDate === 'dueDate' ? curItem.due_date : curItem.implementation_date;
 
-  for (const item of todoList) {
-    const itemDate = displayDate === 'dueDate' ? item.due_date : item.implementation_date;
-    const idx = displayTodoList.findIndex(
-      (displayTodoListItem) => displayTodoListItem.date === itemDate
-    );
-
-    if (idx !== notFound) {
-      if (displayTodoList[idx].date !== itemDate) {
-        const displayTodoListItem: DisplayTodoListItem = {
-          date: itemDate,
-          list: [item],
-        };
-
-        displayTodoList.push(displayTodoListItem);
-        continue;
-      }
-
-      displayTodoList[idx].list.push(item);
-      continue;
+    if (notExistsDisplayTodoList || displayTodoList[lastIdx].date !== itemDate) {
+      const date = itemDate;
+      const todoList = [curItem];
+      const displayTodoListItem: DisplayTodoListItem = { date, todoList };
+      return displayTodoList.concat(displayTodoListItem);
     }
 
-    const displayTodoListItem: DisplayTodoListItem = {
-      date: itemDate,
-      list: [item],
-    };
-
-    displayTodoList.push(displayTodoListItem);
-  }
-
-  return displayTodoList;
+    displayTodoList[lastIdx].todoList = displayTodoList[lastIdx].todoList.concat(curItem);
+    return displayTodoList;
+  }, []);
 };
 
 const todayImplementationDateTodoListSelector = (state: State) =>

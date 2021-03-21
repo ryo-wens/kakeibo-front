@@ -1,0 +1,77 @@
+@import "../../../../../assets/mixin/icon-btn";
+@import "../../../../../assets/mixin/operation-btn";
+
+.modalWrapper {
+  width: 400px;
+  background-color: white;
+  padding: 20px 0;
+  margin: 20px auto auto auto;
+}
+
+.position {
+  display: flex;
+  border-bottom: $color-geyser solid 1px;
+  justify-content: center;
+  position: relative;
+  padding: 0 0 10px 0;
+  margin: 0 0 25px 0;
+}
+
+.btnPosition{
+  @include icon-btn($color-scorpion, 0.8rem, 0.7);
+  position: absolute;
+  right: 0;
+  margin: 0 20px 0 0;
+}
+
+.title {
+  color: $color-scorpion;
+  font-size: 1.0rem;
+  font-weight: 500;
+  margin: 0;
+}
+
+.message {
+  color: $color-cinnabar;
+  font-size: 0.85rem;
+  margin: 8px 0;
+}
+
+.selectContent {
+  display: flex;
+
+  &:last-child {
+    margin: 0 0 30px 0;
+  }
+
+  > dt {
+    width: 180px;
+    color: $color-scorpion;
+    font-size: 1.0rem;
+    font-weight: 500;
+    margin: 0 0 25px 20px;
+  }
+
+  > dd {
+    margin: 0;
+  }
+}
+
+.operationBtn {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 20px;
+
+  &__add {
+    @include operation-btn($color-sushi, white, $color-sushi);
+  }
+
+  &__cancel {
+    @include operation-btn(white, $color-scorpion,$color-geyser);
+    margin: 0 0 0 10px;
+  }
+
+  &__release {
+    @include operation-btn($color-cinnabar, white, $color-cinnabar);
+  }
+}

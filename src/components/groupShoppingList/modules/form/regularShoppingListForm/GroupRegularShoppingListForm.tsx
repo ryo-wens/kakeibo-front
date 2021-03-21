@@ -1,7 +1,7 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { DatePicker, TextInput } from '../../../../uikit';
-import '../../../../shoppingList/modules/form/RegularShoppingListForm/regular-shopping-list-form.scss';
+import styles from '../../../../shoppingList/modules/form/RegularShoppingListForm/RegularShoppingListForm.module.scss';
 import ShoppingListPayerSelect from '../../select/shoppingListPayerSelect/ShoppingListPayerSelect';
 import ToolTipIcon from '../../../../shoppingList/modules/toolTip/ToolTipIcon';
 import SelectPurchaseCycleTypeContainer from '../../../../../containers/shoppingList/modules/Select/SelectPurchaseCycleTypeContainer/SelectPurchaseCycleTypeContainer';
@@ -65,183 +65,170 @@ interface GroupRegularShoppingListFormProps {
 }
 
 const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) => {
-  const inputItems = [
-    {
-      key: '購入するもの',
-      value: (
-        <TextInput
-          value={props.purchase}
-          type={'text'}
-          id={'purchase'}
-          label={'必須'}
-          onChange={props.handlePurchaseChange}
-          required={false}
-          fullWidth={false}
-          disabled={false}
-        />
-      ),
-    },
-    {
-      key: 'カテゴリ',
-      value: (
-        <div className="regular-shopping-list-form__select-category">
-          <BigCategoryListContainer
-            customCategoryName={props.customCategoryName}
-            setCustomCategoryName={props.setCustomCategoryName}
-            bigCategoryMenuRef={props.bigCategoryMenuRef}
-            mediumCategoryMenuRef={props.mediumCategoryMenuRef}
-            transactionType={'expense'}
-            bigCategoryMenuOpen={props.bigCategoryMenuOpen}
-            unEditInputForm={false}
-            setBigCategoryId={props.setBigCategoryId}
-            setBigCategoryIndex={props.setBigCategoryIndex}
-            setMediumCategoryId={props.setMediumCategoryId}
-            setCustomCategoryId={props.setCustomCategoryId}
-            setAssociatedCategory={props.setAssociatedCategory}
-            setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
-            associatedIndex={props.associatedIndex}
-            bigCategory={props.bigCategory}
-            bigEditCategoryIndex={props.bigEditCategoryIndex}
-            editCustomCategoryName={props.editCustomCategoryName}
-            setAssociatedIndex={props.setAssociatedIndex}
-            setBigCategory={props.setBigCategory}
-            setBigEditCategoryIndex={props.setBigEditCategoryIndex}
-            setEditCustomCategoryName={props.setEditCustomCategoryName}
-            setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-          />
-          <MediumCategoryListContainer
-            transactionType={'expense'}
-            unEditInputForm={false}
-            bigCategoryId={props.bigCategoryId}
-            bigCategoryIndex={props.bigCategoryIndex}
-            associatedCategory={props.associatedCategory}
-            bigCategoryMenuRef={props.bigCategoryMenuRef}
-            mediumCategoryMenuRef={props.mediumCategoryMenuRef}
-            mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
-            setBigCategoryId={props.setBigCategoryId}
-            setBigCategoryIndex={props.setBigCategoryIndex}
-            setCustomCategoryId={props.setCustomCategoryId}
-            setMediumCategoryId={props.setMediumCategoryId}
-            setAssociatedCategory={props.setAssociatedCategory}
-            setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
-            associatedIndex={props.associatedIndex}
-            bigCategory={props.bigCategory}
-            bigEditCategoryIndex={props.bigCategoryIndex}
-            customCategoryName={props.customCategoryName}
-            editCustomCategoryName={props.editCustomCategoryName}
-            setAssociatedIndex={props.setAssociatedIndex}
-            setBigCategory={props.setBigCategory}
-            setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
-            setBigEditCategoryIndex={props.setBigEditCategoryIndex}
-            setCustomCategoryName={props.setCustomCategoryName}
-            setEditCustomCategoryName={props.setEditCustomCategoryName}
-          />
-        </div>
-      ),
-    },
-    {
-      key: '購入予定日',
-      value: (
-        <DatePicker
-          id={'date'}
-          label={'必須'}
-          value={props.expectedPurchaseDate}
-          onChange={props.handleDateChange}
-          required={true}
-          disabled={false}
-          minDate={props.minDate}
-        />
-      ),
-    },
-    {
-      key: '周期',
-      value: (
-        <>
-          <div className="regular-shopping-list-form__select-content-value--flex">
-            <SelectPurchaseCycleTypeContainer
-              value={props.cycleType}
-              selectChange={props.handleCycleTypeChange}
-            />
-            {props.cycleType === 'custom' && (
-              <span className="regular-shopping-list-form__input-date-interval">
-                <TextInput
-                  value={props.cycle}
-                  type={'tel'}
-                  id={'cycle'}
-                  label={'必須'}
-                  onChange={props.handleCycleChange}
-                  required={false}
-                  fullWidth={false}
-                  disabled={false}
-                />
-              </span>
-            )}
-          </div>
-        </>
-      ),
-    },
-    {
-      key: '金額',
-      value: (
-        <TextInput
-          value={props.amount}
-          type={'tel'}
-          id={'amount'}
-          label={'任意'}
-          onChange={props.handleAmountChange}
-          required={false}
-          fullWidth={false}
-          disabled={false}
-        />
-      ),
-    },
-    {
-      key: '店名',
-      value: (
-        <TextInput
-          value={props.shop}
-          type={'text'}
-          id={'shop'}
-          label={'任意'}
-          onChange={props.handleShopChange}
-          required={false}
-          fullWidth={false}
-          disabled={false}
-        />
-      ),
-    },
-    {
-      key: '支払人',
-      value: (
-        <ShoppingListPayerSelect
-          value={props.paymentUser === null ? '' : props.paymentUser}
-          approvedGroup={props.approvedGroup}
-          onChange={props.handlePaymentUserChange}
-        />
-      ),
-    },
-  ];
-
   return (
-    <div className="regular-shopping-list-form">
-      <div className="regular-shopping-list-form__position">
+    <div className={styles.wrapper}>
+      <div className={styles.position}>
         <h3>{props.titleLabel}</h3>
         <button onClick={props.handleCloseModal}>
           <CloseIcon />
         </button>
       </div>
-      <div>
-        {inputItems.map((item) => {
-          return (
-            <div className="regular-shopping-list-form__select-contents" key={item.key}>
-              <span className="regular-shopping-list-form__select-content-key">{item.key}</span>
-              <span>{item.value}</span>
+      <dl>
+        <div className={styles.selectContent}>
+          <dt>購入品</dt>
+          <dd>
+            <TextInput
+              value={props.purchase}
+              type={'text'}
+              id={'purchase'}
+              label={'必須'}
+              onChange={props.handlePurchaseChange}
+              required={false}
+              fullWidth={false}
+              disabled={false}
+            />
+          </dd>
+        </div>
+        <div className={styles.selectContent}>
+          <dt>カテゴリ</dt>
+          <dd>
+            <div className={styles.selectCategory}>
+              <BigCategoryListContainer
+                customCategoryName={props.customCategoryName}
+                setCustomCategoryName={props.setCustomCategoryName}
+                bigCategoryMenuRef={props.bigCategoryMenuRef}
+                mediumCategoryMenuRef={props.mediumCategoryMenuRef}
+                transactionType={'expense'}
+                bigCategoryMenuOpen={props.bigCategoryMenuOpen}
+                unEditInputForm={false}
+                setBigCategoryId={props.setBigCategoryId}
+                setBigCategoryIndex={props.setBigCategoryIndex}
+                setMediumCategoryId={props.setMediumCategoryId}
+                setCustomCategoryId={props.setCustomCategoryId}
+                setAssociatedCategory={props.setAssociatedCategory}
+                setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+                associatedIndex={props.associatedIndex}
+                bigCategory={props.bigCategory}
+                bigEditCategoryIndex={props.bigEditCategoryIndex}
+                editCustomCategoryName={props.editCustomCategoryName}
+                setAssociatedIndex={props.setAssociatedIndex}
+                setBigCategory={props.setBigCategory}
+                setBigEditCategoryIndex={props.setBigEditCategoryIndex}
+                setEditCustomCategoryName={props.setEditCustomCategoryName}
+                setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+              />
+              <MediumCategoryListContainer
+                transactionType={'expense'}
+                unEditInputForm={false}
+                bigCategoryId={props.bigCategoryId}
+                bigCategoryIndex={props.bigCategoryIndex}
+                associatedCategory={props.associatedCategory}
+                bigCategoryMenuRef={props.bigCategoryMenuRef}
+                mediumCategoryMenuRef={props.mediumCategoryMenuRef}
+                mediumCategoryMenuOpen={props.mediumCategoryMenuOpen}
+                setBigCategoryId={props.setBigCategoryId}
+                setBigCategoryIndex={props.setBigCategoryIndex}
+                setCustomCategoryId={props.setCustomCategoryId}
+                setMediumCategoryId={props.setMediumCategoryId}
+                setAssociatedCategory={props.setAssociatedCategory}
+                setMediumCategoryMenuOpen={props.setMediumCategoryMenuOpen}
+                associatedIndex={props.associatedIndex}
+                bigCategory={props.bigCategory}
+                bigEditCategoryIndex={props.bigCategoryIndex}
+                customCategoryName={props.customCategoryName}
+                editCustomCategoryName={props.editCustomCategoryName}
+                setAssociatedIndex={props.setAssociatedIndex}
+                setBigCategory={props.setBigCategory}
+                setBigCategoryMenuOpen={props.setBigCategoryMenuOpen}
+                setBigEditCategoryIndex={props.setBigEditCategoryIndex}
+                setCustomCategoryName={props.setCustomCategoryName}
+                setEditCustomCategoryName={props.setEditCustomCategoryName}
+              />
             </div>
-          );
-        })}
-      </div>
-      <div className="regular-shopping-list-form__add-transaction">
-        <label className="regular-shopping-list-form__add-transaction-check">
+          </dd>
+        </div>
+        <div className={styles.selectContent}>
+          <dt>購入予定日</dt>
+          <dd>
+            <DatePicker
+              id={'date'}
+              label={'必須'}
+              value={props.expectedPurchaseDate}
+              onChange={props.handleDateChange}
+              required={true}
+              disabled={false}
+              minDate={props.minDate}
+            />
+          </dd>
+        </div>
+        <div className={styles.selectContent}>
+          <dt>周期</dt>
+          <dd>
+            <div className={styles.selectContentValue__flex}>
+              <SelectPurchaseCycleTypeContainer
+                value={props.cycleType}
+                selectChange={props.handleCycleTypeChange}
+              />
+              {props.cycleType === 'custom' && (
+                <span className={styles.inputDateInterval}>
+                  <TextInput
+                    value={props.cycle}
+                    type={'tel'}
+                    id={'cycle'}
+                    label={'必須'}
+                    onChange={props.handleCycleChange}
+                    required={false}
+                    fullWidth={false}
+                    disabled={false}
+                  />
+                </span>
+              )}
+            </div>
+          </dd>
+        </div>
+        <div className={styles.selectContent}>
+          <dt>金額</dt>
+          <dd>
+            <TextInput
+              value={props.amount}
+              type={'tel'}
+              id={'amount'}
+              label={'任意'}
+              onChange={props.handleAmountChange}
+              required={false}
+              fullWidth={false}
+              disabled={false}
+            />
+          </dd>
+        </div>
+        <div className={styles.selectContent}>
+          <dt>店名</dt>
+          <dd>
+            <TextInput
+              value={props.shop}
+              type={'text'}
+              id={'shop'}
+              label={'任意'}
+              onChange={props.handleShopChange}
+              required={false}
+              fullWidth={false}
+              disabled={false}
+            />
+          </dd>
+        </div>
+        <div className={styles.selectContent}>
+          <dt>支払人</dt>
+          <dd>
+            <ShoppingListPayerSelect
+              value={props.paymentUser ?? ''}
+              approvedGroup={props.approvedGroup}
+              onChange={props.handlePaymentUserChange}
+            />
+          </dd>
+        </div>
+      </dl>
+      <div className={styles.addTransaction}>
+        <label className={styles.addTransactionCheck}>
           <input
             type="checkbox"
             checked={props.transactionAutoAdd}
@@ -250,21 +237,21 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
           <span />
           家計簿に自動追加
         </label>
-        <span className="regular-shopping-list-form__tool-tip">
+        <span className={styles.toolTip}>
           <ToolTipIcon />
         </span>
       </div>
-      <div className="regular-shopping-list-form__operation-btn">
+      <div className={styles.operationBtn}>
         <div>
           <button
-            className="regular-shopping-list-form__operation-btn--add"
+            className={styles.operationBtn__add}
             disabled={props.unInput}
             onClick={props.handleRegularShoppingListItem}
           >
             {props.buttonLabel}
           </button>
           <button
-            className="regular-shopping-list-form__operation-btn--cancel"
+            className={styles.operationBtn__cancel}
             disabled={false}
             onClick={props.handleCloseModal}
           >
@@ -273,7 +260,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
         </div>
         {props.titleLabel === '定期買い物リストアイテムを編集' && (
           <button
-            className="regular-shopping-list-form__operation-btn--delete"
+            className={styles.operationBtn__delete}
             onClick={props.handleOpenDeleteForm && props.handleOpenDeleteForm}
           >
             削除

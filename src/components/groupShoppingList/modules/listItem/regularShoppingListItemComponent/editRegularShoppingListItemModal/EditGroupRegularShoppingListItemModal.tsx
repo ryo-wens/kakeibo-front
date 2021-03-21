@@ -2,7 +2,7 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import ShoppingListDeleteForm from '../../../../../shoppingList/modules/form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import EditIcon from '@material-ui/icons/Edit';
-import '../../../../../shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/edit-regular-shopping-list-item-modal.scss';
+import styles from '../../../../../shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/EditRegularShoppingListItemModal.module.scss';
 
 import GroupRegularShoppingListFormContainer from '../../../../../../containers/groupShoppingList/modules/form/GroupRegularShoppingListFormContainer';
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
@@ -54,7 +54,7 @@ const EditGroupRegularShoppingListItemModal = (
   props: EditGroupRegularShoppingListItemModalProps
 ) => {
   const body = (
-    <div className="edit-regular-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       {props.deleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'定期買い物リストアイテムを削除'}
@@ -109,10 +109,7 @@ const EditGroupRegularShoppingListItemModal = (
 
   return (
     <>
-      <EditIcon
-        className="edit-regular-shopping-list-item-modal__edit-icon"
-        onClick={props.handleOpenModal}
-      />
+      <EditIcon className={styles.editIcon} onClick={props.handleOpenModal} />
       <Modal
         open={props.open}
         onClose={props.handleCloseModal}

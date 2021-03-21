@@ -1,5 +1,5 @@
 import React from 'react';
-import './today-schedule-todo-list-area.scss';
+import styles from './TodayScheduleTodoListArea.module.scss';
 import { TodoListItem } from '../../../../reducks/todoList/types';
 import TodoListItemComponentContainer from '../../../../containers/todo/modules/listItem/TodoListItemComponentContainer';
 
@@ -15,9 +15,9 @@ const TodayScheduleTodoListArea = (props: TodayScheduleTodoListAreaProps) => {
   const existTodoList = props.todoList.length !== 0;
 
   return (
-    <div className="today-schedule-todo-list-area">
+    <>
       {existTodoList ? (
-        <ol className="today-schedule-todo-list-area__todo-list">
+        <ol className={styles.todoList}>
           {props.todoList.map((listItem) => {
             return (
               <TodoListItemComponentContainer
@@ -31,9 +31,9 @@ const TodayScheduleTodoListArea = (props: TodayScheduleTodoListAreaProps) => {
           })}
         </ol>
       ) : (
-        <p className="today-schedule-todo-list-area__message">{props.message}</p>
+        <p className={styles.message}>{props.message}</p>
       )}
-    </div>
+    </>
   );
 };
 

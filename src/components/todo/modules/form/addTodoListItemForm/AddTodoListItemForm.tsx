@@ -1,6 +1,6 @@
 import React from 'react';
 import AddIcon from '@material-ui/icons/Add';
-import './add-todo-list-item-form.scss';
+import styles from './AddTodoListItemForm.module.scss';
 import TodoListItemFormContainer from '../../../../../containers/todo/modules/form/TodoListItemFormContainer';
 
 interface AddTodoListItemFormProps {
@@ -21,13 +21,11 @@ interface AddTodoListItemFormProps {
 }
 
 const AddTodoListItemForm = (props: AddTodoListItemFormProps) => {
-  const childDatePickersClassName = 'add-todo-list-form__child-date-pickers';
-
   return (
     <>
       {!props.openAddTodoForm ? (
         <button
-          className="add-todo-list-form__button"
+          className={styles.btn}
           disabled={false}
           onClick={() => props.handleOpenAddTodoForm()}
         >
@@ -35,7 +33,7 @@ const AddTodoListItemForm = (props: AddTodoListItemFormProps) => {
           ToDoを追加
         </button>
       ) : (
-        <div className="add-todo-list-form">
+        <div className={styles.wrapper}>
           <TodoListItemFormContainer
             titleLabel={'ToDoを追加'}
             buttonLabel={'追加'}
@@ -49,7 +47,7 @@ const AddTodoListItemForm = (props: AddTodoListItemFormProps) => {
             disabledButton={props.disabledButton}
             closeInputTodoForm={props.handleCloseAddTodoForm}
             onClickCloseInputTodoForm={props.onClickCloseInputTodoForm}
-            datePickersClassName={childDatePickersClassName}
+            datePickersClassName={styles.childDatePickers}
             inputTodoRef={props.inputTodoRef}
           />
         </div>

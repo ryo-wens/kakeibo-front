@@ -1,5 +1,5 @@
 import React from 'react';
-import '../../../../shoppingList/modules/listItem/ShoppingListItemComponent/shopping-list-item-component.scss';
+import styles from '../../../../shoppingList/modules/listItem/ShoppingListItemComponent/ShoppingListItemComponent.module.scss';
 import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import EditGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/editGroupShoppingListItemModal/EditGroupShoppingListItemModalContainer';
 import CheckedGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/checkedGroupShoppingListItemModal/CheckedGroupShoppingListItemModalContainer';
@@ -52,24 +52,26 @@ interface GroupShoppingListItemComponentProps {
 
 const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentProps) => {
   const purchaseClassName = cn(props.purchaseClassName, {
-    'shopping-list-item-component__complete': props.checked,
+    [styles.complete]: props.checked,
   });
 
   const amountClassName = cn(props.amountClassName, {
-    'shopping-list-item-component__complete': props.checked,
+    [styles.complete]: props.checked,
   });
 
-  const yenClassName = cn({ 'shopping-list-item-component__complete': props.checked });
+  const childCategoryDataClassName = cn({
+    [styles.childCategoryData]: props.currentPage !== 'home',
+    [styles.childCategoryDataCrHomePage]: props.currentPage === 'home',
+  });
 
-  const childTransactionDataItemClassName = cn({
-    'shopping-list-item-component__child-transaction-data-item': props.currentPage !== 'home',
-    'shopping-list-item-component__child-transaction-data-item-cr-home-page':
-      props.currentPage === 'home',
+  const childDisplayTermClassName = cn({
+    [styles.childDisplayTerm]: props.currentPage !== 'home',
+    [styles.childDisplayTermCrHomePage]: props.currentPage === 'home',
   });
 
   return (
-    <li className="shopping-list-item-component">
-      <div className="shopping-list-item-component__check-box">
+    <li className={styles.wrapper}>
+      <div className={styles.checkBox}>
         <CheckedGroupShoppingListItemModalContainer
           listItem={props.listItem}
           currentYear={props.currentYear}
@@ -108,14 +110,13 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
           setTransactionAutoAdd={props.setTransactionAutoAdd}
         />
       </div>
-      <div className="shopping-list-item-component__content">
-        <div className="shopping-list-item-component__items">
-          <div className="shopping-list-item-component__item">
+      <div className={styles.content}>
+        <div className={styles.items}>
+          <div className={styles.item}>
             <span className={purchaseClassName}>{props.listItem.purchase}</span>
-            <span className={amountClassName}>{props.listItem.amount ?? '-'}</span>
-            <span className={yenClassName}>円</span>
+            <span className={amountClassName}>{`￥  ${props.listItem.amount ?? '-'}`}</span>
           </div>
-          <div className="shopping-list-item-component__edit-icon">
+          <div className={styles.editIcon}>
             <EditGroupShoppingListItemModalContainer
               listItem={props.listItem}
               currentYear={props.currentYear}
@@ -154,21 +155,22 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
           </div>
         </div>
 
-        <div className="shopping-list-item-component__tag">
+        <div className={styles.tag}>
           {props.listItem.regular_shopping_list_id !== null && (
-            <span className="shopping-list-item-component__tag--red">定期</span>
+            <span className={styles.tag__red}>定期</span>
           )}
           {props.listItem.transaction_auto_add && (
-            <span className="shopping-list-item-component__tag--blue">家計簿へ自動追加</span>
+            <span className={styles.tag__blue}>家計簿へ自動追加</span>
           )}
         </div>
         {props.listItem.related_transaction_data !== null && (
-          <div className="shopping-list-item-component__related-transaction-data">
+          <div className={styles.relatedTransactionData}>
             <RelatedGroupTransactionDataButtonContainer
               transactionData={props.listItem.related_transaction_data}
               approvedGroups={props.approvedGroups}
               groupId={props.groupId}
-              transactionDataListClassName={childTransactionDataItemClassName}
+              categoryDataClassName={childCategoryDataClassName}
+              displayTermClassName={childDisplayTermClassName}
             />
           </div>
         )}

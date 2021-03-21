@@ -1,5 +1,5 @@
 import React from 'react';
-import './today-schedule.scss';
+import styles from './TodaySchedule.module.scss';
 import SwitchItemTabs from '../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import TodayScheduleTodoListArea from './todoListArea/TodayScheduleTodoListArea';
 import { TodoListItem } from '../../../reducks/todoList/types';
@@ -19,10 +19,10 @@ interface TodayScheduleProps {
 
 const TodaySchedule = (props: TodayScheduleProps) => {
   return (
-    <div className="today-schedule">
-      <h3 className="today-schedule__title">今日の予定</h3>
-      <div className="today-schedule__content">
-        <h4>Todoリスト</h4>
+    <div className={styles.wrapper}>
+      <h3 className={styles.title}>今日の予定</h3>
+      <div className={styles.content}>
+        <h4>ToDoリスト</h4>
         <SwitchItemTabs
           leftButtonLabel={'実施予定のToDo'}
           rightButtonLabel={'締切予定のToDo'}
@@ -44,9 +44,10 @@ const TodaySchedule = (props: TodayScheduleProps) => {
               setEditing={props.setTodoEditing}
             />
           }
+          tabsBtnClassName={styles.childTabsBtn}
         />
       </div>
-      <div className="today-schedule__content">
+      <div className={styles.content}>
         <h4>買い物リスト</h4>
         {props.pathName === 'group' ? (
           <GroupTodayScheduleShoppingListAreaContainer
@@ -61,7 +62,7 @@ const TodaySchedule = (props: TodayScheduleProps) => {
         )}
       </div>
       {props.pathName === 'group' && (
-        <div className="today-schedule__content">
+        <div className={styles.content}>
           <h4>タスク</h4>
           <TodayScheduleTaskAreaContainer />
         </div>

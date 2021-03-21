@@ -1,9 +1,5 @@
 @import "../../../../assets/variable";
 
-.wrapper {
-  padding: 25px;
-}
-
 .listByDate {
   list-style-type: none;
   padding: 0;
@@ -11,7 +7,7 @@
 }
 
 .listItemByDate {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   &:last-child {
     margin-bottom: 0;
@@ -19,7 +15,7 @@
 }
 
 .date {
-  color: $color-lynch;
+  color: $color-scorpion;
   font-size: 1.0rem;
   margin: 0 0 20px 0;
 }
@@ -40,8 +36,7 @@
 .readMoreBtn {
   display: flex;
   align-items: center;
-  background-color: $color-lynch;
-  background-image: linear-gradient(270deg, $color-lynch 53%, #7d869e 100%);
+  background-color: $color-denim;
   color: white;
   font-size: 0.8rem;
   border: none;
@@ -49,12 +44,16 @@
   padding: 2px 5px 2px 15px;
   cursor: pointer;
   outline: none;
+
+  &:hover {
+    opacity: 0.9;
+  }
 }
 
 .message {
-  color: $color-lynch;
-  font-size: 1.0rem;
-  font-weight: bold;
+  color: $color-scorpion;
+  font-size: 0.95rem;
+  font-weight: 500;
   text-align: center;
   padding: 10px 0;
   margin: 0;

@@ -1,0 +1,54 @@
+@import "../../../../../assets/mixin/operation-btn";
+@import "../../../../../assets/mixin/icon-btn";
+
+.wrapper {
+  background-color: white;
+  border-radius: 0.6rem;
+  border: $color-geyser solid 1px;
+  padding: 0 0 10px;
+  box-shadow: $section-box_shadow;
+}
+
+.title {
+  display: flex;
+  justify-content: space-between;
+  background-color: $color-blackSqueeze;
+  border-top-left-radius: 0.6rem;
+  border-top-right-radius: 0.6rem;
+  border-bottom: $color-geyser solid 1px;
+  padding: 10px;
+
+  &__text {
+    font-size: 1.0rem;
+    font-weight: 500;
+    color: $color-scorpion;
+    margin: 0;
+  }
+
+  &__closeBtn {
+    @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  }
+}
+
+.items {
+  margin: 15px 20px;
+}
+
+.textInput {
+  margin-bottom: 20px;
+}
+
+.btn {
+  display: flex;
+  justify-content: space-between;
+  margin: 0 15px 5px;
+
+  &__save {
+    @include operation-btn($color-sushi, white, $color-sushi);
+  }
+
+  &__cancel {
+    @include operation-btn(white, $color-scorpion,$color-geyser);
+    margin: 0 0 0 10px;
+  }
+}

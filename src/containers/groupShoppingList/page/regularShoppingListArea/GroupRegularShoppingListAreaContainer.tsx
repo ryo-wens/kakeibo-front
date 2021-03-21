@@ -2,7 +2,7 @@ import React from 'react';
 import { useSelector } from 'react-redux';
 import { getGroupRegularShoppingList } from '../../../../reducks/groupShoppingList/selectors';
 import { TodayOrMonthly } from '../../../../reducks/shoppingList/types';
-import GroupRegularShoppingListArea from '../../../../components/groupShoppingList/page/regularShoppingListArea/GroupRegularShoppingListArea';
+import GroupRegularShoppingListArea from '../../../../components/groupShoppingList/modules/area/regularShoppingListArea/GroupRegularShoppingListArea';
 
 interface GroupRegularShoppingListAreaContainerProps {
   currentYear: string;

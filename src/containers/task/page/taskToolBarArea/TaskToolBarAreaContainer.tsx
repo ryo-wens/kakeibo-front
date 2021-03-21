@@ -2,7 +2,7 @@ import React from 'react';
 import { date } from '../../../../lib/constant';
 import { Group } from '../../../../reducks/groups/types';
 import { GroupTaskListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
-import TaskToolBarArea from '../../../../components/task/page/taskToolBarArea/TaskToolBarArea';
+import TaskToolBarArea from '../../../../components/task/modules/area/taskToolBarArea/TaskToolBarArea';
 import moment from 'moment';
 
 interface TaskToolBarAreaContainerProps {

@@ -27,7 +27,7 @@
   }
 
   &__close-btn {
-    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, 0.8rem, 0.5);
     position: absolute;
     right: 0;
     margin-right: 10px;

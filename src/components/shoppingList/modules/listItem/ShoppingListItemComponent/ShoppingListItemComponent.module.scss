@@ -1,0 +1,128 @@
+@import "../../../../../assets/mixin/icon-btn";
+
+.wrapper {
+  display: flex;
+  background-color: $color-blackSqueeze;
+  border-radius: 0.6rem;
+  padding: 10px 15px;
+  box-shadow: 0 1px 6px rgba(200, 200, 200, 0.7);
+}
+
+.content {
+  width: 100%;
+  color: $color-scorpion;
+  margin-left: 10px;
+}
+
+.checkBox {
+  margin-top: 4px;
+}
+
+.items {
+  display: flex;
+}
+
+.item {
+  width: 100%;
+  padding-top: 3px;
+}
+
+.editIcon {
+  display: inline;
+  height: 0;
+  margin-left: 20px
+}
+
+.tag {
+  display: flex;
+  font-size: 0.7rem;
+  color: white;
+
+  > span {
+    padding: 2px 10px;
+    border-radius: 0.6rem;
+    margin: 8px 0 0 10px;
+
+    &:first-child {
+      margin-left: 0;
+    }
+  }
+
+  &__red {
+    background-color: $color-seaPink;
+  }
+
+  &__blue {
+    background-color: $color-perano;
+  }
+}
+
+.relatedTransactionData {
+  margin-top: 16px;
+}
+
+.complete {
+  opacity: 0.3;
+}
+
+.childCategoryData {
+  display: flex;
+}
+
+.childCategoryDataCrHomePage {
+  display: block;
+
+  > div {
+    &:last-child {
+      margin: 3px 0 0 10px;
+    }
+  }
+}
+
+.childDisplayTerm {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  font-size: 1.0rem;
+  margin: 0;
+
+  > dt {
+    display: block;
+    width: 15%;
+    margin-bottom: 10px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+
+  > dd {
+    width: calc(100% - 15%);
+    margin: 0 0 10px;
+
+    &:last-of-type {
+      margin-bottom: 0;
+    }
+  }
+}
+
+.childDisplayTermCrHomePage {
+  display: block;
+  font-size: 1.0rem;
+  margin: 0;
+
+  > dt {
+    display: block;
+    font-size: 1.0rem;
+    font-weight: 500;
+    margin-bottom: 5px;
+  }
+
+  > dd {
+    margin: 0 0 15px;
+
+    &:last-of-type {
+      margin: 0;
+    }
+  }
+}

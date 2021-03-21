@@ -1,7 +1,7 @@
 export { default as DatePicker } from './DatePicker';
 export { default as GenericButton } from './GenericButton';
 export { default as GenericModal } from './GenericModal';
-export { default as InputYears } from '../modules/InputYears';
+export { default as InputYears } from '../modules/inputYears/InputYears';
 export { default as InvalidMessage } from './InvalidMessage';
 export { default as KindSelectBox } from './KindSelectBox';
 export { default as ModalInform } from './ModalInform';
@@ -14,5 +14,5 @@ export { default as SelectBigCategory } from './SelectBigCategroy';
 export { default as SelectLimit } from './SelectLimit';
 export { default as TextArea } from './TextArea';
 export { default as ErrorIndication } from './ErrorIndication';
-export { default as SelectYears } from '../modules/SelectYears';
+export { default as SelectYears } from '../modules/SelectYears/SelectYears';
 export { default as SelectMonth } from '../modules/SelectMonth';

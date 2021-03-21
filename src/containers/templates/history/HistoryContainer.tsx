@@ -88,15 +88,6 @@ const HistoryContainer = () => {
     };
   }, [pathName, selectedYear, selectedMonth]);
 
-  const currentPageColor = (currentQuery: string) => {
-    if (query === currentQuery) {
-      return {
-        backgroundColor: '#ff802b',
-        color: '#fff',
-      };
-    }
-  };
-
   const searchFieldOpen = () => {
     setOpenSearchField(true);
     setNotSpecified(true);
@@ -117,7 +108,6 @@ const HistoryContainer = () => {
       groupTransactionsList={groupTransactionsList}
       searchFieldOpen={searchFieldOpen}
       searchFieldClose={searchFieldClose}
-      currentPageColor={currentPageColor}
       selectedYear={selectedYear}
       selectedMonth={selectedMonth}
       setSelectedYear={setSelectedYear}

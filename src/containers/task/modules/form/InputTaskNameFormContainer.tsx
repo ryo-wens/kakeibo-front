@@ -12,6 +12,7 @@ interface InputTaskNameFormContainerProps {
   inputTaskRef: React.RefObject<HTMLDivElement>;
   onClickCloseInputTaskNameForm: (event: Event) => void;
   handleDeleteTaskItem?: () => void;
+  formClassName?: string;
 }
 
 const InputTaskNameFormContainer = (props: InputTaskNameFormContainerProps) => {
@@ -34,6 +35,7 @@ const InputTaskNameFormContainer = (props: InputTaskNameFormContainerProps) => {
       handleTaskItem={props.handleTaskItem}
       handleDeleteTaskItem={props.handleDeleteTaskItem}
       onClickCloseInputTaskNameForm={props.onClickCloseInputTaskNameForm}
+      formClassName={props.formClassName}
       ref={props.inputTaskRef}
     />
   );

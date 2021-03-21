@@ -1,6 +1,6 @@
 import React from 'react';
 import { TodayOrMonthly } from '../../../../reducks/shoppingList/types';
-import SwitchTodayOrMonthlyTabs from '../../../../components/uikit/tabs/SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
+import SwitchTodayOrMonthlyTabs from '../../../../components/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
 
 interface SwitchTodayOrMonthlyTabsContainerProps {
   currentItem: TodayOrMonthly;
@@ -10,14 +10,6 @@ interface SwitchTodayOrMonthlyTabsContainerProps {
 }
 
 const SwitchTodayOrMonthlyTabsContainer = (props: SwitchTodayOrMonthlyTabsContainerProps) => {
-  const currentButtonStyle = (value: TodayOrMonthly) => {
-    if (props.currentItem === value) {
-      return 'switch-today-or-monthly-tabs__button--focus-color';
-    }
-
-    return 'switch-today-or-monthly-tabs__button';
-  };
-
   const switchItem = (value: TodayOrMonthly) => {
     props.setCurrentItems(value);
   };
@@ -28,7 +20,6 @@ const SwitchTodayOrMonthlyTabsContainer = (props: SwitchTodayOrMonthlyTabsContai
       setCurrentItems={props.setCurrentItems}
       leftItem={props.leftItem}
       rightItem={props.rightItem}
-      currentButtonStyle={currentButtonStyle}
       switchItem={switchItem}
     />
   );

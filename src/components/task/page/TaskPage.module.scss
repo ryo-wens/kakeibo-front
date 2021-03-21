@@ -1,0 +1,10 @@
+@import "../../../assets/variable";
+
+.wrapper {
+  background-color: white;
+  border-radius: 0.6rem;
+  border: none;
+  padding: 20px;
+  margin: 0 20px;
+  box-shadow: $section-box_shadow;
+}

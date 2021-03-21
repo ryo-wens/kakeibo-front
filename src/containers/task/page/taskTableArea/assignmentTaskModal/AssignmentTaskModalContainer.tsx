@@ -8,7 +8,7 @@ import {
 import { date } from '../../../../../lib/constant';
 import { useDispatch, useSelector } from 'react-redux';
 import { getGroupTaskList } from '../../../../../reducks/groupTasks/selectors';
-import AssignmentTaskModal from '../../../../../components/task/page/taskTableArea/assignmentTaskModal/AssignmentTaskModal';
+import AssignTaskModal from '../../../../../components/task/modules/area/taskTableArea/assignTaskModal/AssignTaskModal';
 import SelectTaskName from '../../../../../components/task/modules/select/SelectTaskName';
 import { editTaskItem } from '../../../../../reducks/groupTasks/operations';
 import { executeAfterAsyncProcess } from '../../../../../lib/function';
@@ -112,7 +112,7 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     taskUserId === initialState.initialUserId;
 
   return (
-    <AssignmentTaskModal
+    <AssignTaskModal
       participatingTaskUsers={props.participatingTaskUsers}
       taskNameFormElement={
         <SelectTaskName handleChangeTaskName={handleChangeTaskName} groupTasksList={taskList} />
