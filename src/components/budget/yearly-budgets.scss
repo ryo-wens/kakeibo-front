@@ -11,7 +11,7 @@
 
   &__background {
     background-color: white;
-    border: 1px solid $color-iron;
+    box-shadow: $section-box_shadow;
     border-radius: 5px;
     box-sizing: border-box;
     height: auto;
@@ -21,6 +21,7 @@
 
     &__table {
       border: 1px solid $color-iron;
+      border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       margin: 0 auto;
     }

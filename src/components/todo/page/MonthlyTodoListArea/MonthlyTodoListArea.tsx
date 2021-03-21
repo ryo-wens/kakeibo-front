@@ -29,6 +29,7 @@ const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
         <div className="monthly-todo-list-area__switch-item--width">
           <div className="monthly-todo-list-area__input-years">
             <InputYears
+              currentPage={'todo'}
               selectedYear={props.selectedYear}
               selectedMonth={props.selectedMonth}
               setSelectedMonth={props.setSelectedMonth}

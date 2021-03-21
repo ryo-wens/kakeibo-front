@@ -10,6 +10,7 @@ import BigCategoryListContainer from '../../../../../containers/modules/BigCateg
 import MediumCategoryListContainer from '../../../../../containers/modules/MediumCategoryListContainer';
 
 interface GroupShoppingListFormProps {
+  message: string;
   titleLabel: string;
   buttonLabel: string;
   approvedGroup: Group;
@@ -247,7 +248,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           家計簿に自動追加
         </label>
         <span className="shopping-list-form__tool-tip">
-          <ToolTipIcon />
+          <ToolTipIcon message={props.message} />
         </span>
       </div>
       <div className="shopping-list-form__operation-btn">

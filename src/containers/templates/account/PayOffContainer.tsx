@@ -19,9 +19,11 @@ import {
   getStatusNotFoundMessage,
 } from '../../../reducks/groupTransactions/selectors';
 import PayOff from '../../../templates/account/PayOff';
+import moment from 'moment';
 
 interface PayOffContainerProps {
   selectedYear: number;
+  setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setCurrentItem: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -42,27 +44,37 @@ const PayOffContainer = (props: PayOffContainerProps) => {
     return new URLSearchParams(searchLocation);
   };
   const query = getQuery();
+  const selectYear = query.get('year');
   const selectMonth = query.get('month');
   const [selectedMonth, setSelectedMonth] = useState<number>(Number(selectMonth));
   const [subMonth, setSubMonth] = useState<string | null>(selectMonth);
   const [message, setMessage] = useState<string | undefined>(badRequestMessage);
   const getMonthIndexNumber = 1;
-  const currentSelectMonth = groupAccountList.month.split('-')[getMonthIndexNumber];
+  const getYearIndexNumber = 0;
+  const [currentSelectMonth, setCurrentSelectMonth] = useState<string>(
+    groupAccountList.month.split('-')[getMonthIndexNumber]
+  );
+  const [currentSelectYear, setCurrentSelectYear] = useState<string>(
+    groupAccountList.month.split('-')[getYearIndexNumber]
+  );
 
   const displayAmount = (amount: number): boolean => {
-    return amount !== undefined && currentSelectMonth === subMonth;
+    return (
+      amount !== undefined &&
+      currentSelectMonth === String(moment(selectedMonth, 'MM').format('MM'))
+    );
   };
 
   useEffect(() => {
     dispatch(fetchGroups(signal));
-    if (subMonth != null) {
-      dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, subMonth, signal));
+    if (selectMonth != null && selectYear !== null) {
+      dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, selectMonth, signal));
     }
     const interval = setInterval(() => {
       dispatch(fetchGroups(signal));
       if (groupAccountList.group_accounts_list_by_payer) {
-        if (subMonth != null) {
-          dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, subMonth, signal));
+        if (selectMonth != null && selectYear !== null) {
+          dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, selectMonth, signal));
         }
       }
     }, 3000);
@@ -70,7 +82,7 @@ const PayOffContainer = (props: PayOffContainerProps) => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, [subMonth]);
+  }, [selectYear, selectMonth]);
 
   useEffect(() => {
     setMessage(badRequestMessage);
@@ -81,13 +93,41 @@ const PayOffContainer = (props: PayOffContainerProps) => {
   };
 
   for (const account of completeAccountMonth.completeMonth) {
-    if (account === subMonth) {
+    if (account === selectMonth && props.selectedYear === Number(currentSelectYear)) {
       accountedJude.jude = true;
     }
   }
 
+  let noTransactions = false;
+
+  for (const month of monthWithoutSplitList.withoutMonth) {
+    if (month === String(selectMonth) && props.selectedYear === Number(currentSelectYear)) {
+      noTransactions = true;
+    }
+  }
+
+  useEffect(() => {
+    if (
+      groupAccountList.month.split('-')[getMonthIndexNumber] === undefined &&
+      accountedJude.jude
+    ) {
+      setCurrentSelectMonth('0');
+    } else {
+      setCurrentSelectMonth(groupAccountList.month.split('-')[getMonthIndexNumber]);
+    }
+  }, [groupAccountList.month.split('-')[getMonthIndexNumber]]);
+
+  useEffect(() => {
+    if (groupAccountList.month.split('-')[getYearIndexNumber] === undefined && accountedJude.jude) {
+      setCurrentSelectYear('0');
+    } else {
+      setCurrentSelectYear(groupAccountList.month.split('-')[getYearIndexNumber]);
+    }
+  }, [groupAccountList.month.split('-')[getYearIndexNumber]]);
+
   return (
     <PayOff
+      noTransactions={noTransactions}
       message={message}
       setMessage={setMessage}
       subMonth={subMonth}
@@ -95,13 +135,15 @@ const PayOffContainer = (props: PayOffContainerProps) => {
       currentUserId={currentUserId}
       approvedGroup={approvedGroup}
       accountedJude={accountedJude}
-      selectedYear={props.selectedYear}
       setCurrentItem={props.setCurrentItem}
+      selectedYear={props.selectedYear}
       selectedMonth={selectedMonth}
+      setSelectedYear={props.setSelectedYear}
       setSelectedMonth={setSelectedMonth}
-      badRequestMessage={badRequestMessage}
+      badRequestMessage={message}
       remainingTotalAmount={remainingTotalAmount}
       groupAccountList={groupAccountList}
+      currentSelectYear={currentSelectYear}
       currentSelectMonth={currentSelectMonth}
       monthWithoutSplitList={monthWithoutSplitList}
       displayAmount={displayAmount}
@@ -111,13 +153,23 @@ const PayOffContainer = (props: PayOffContainerProps) => {
       addAccountOperation={() => {
         const signal = axios.CancelToken.source();
         dispatch(
-          addGroupAccount(Number(group_id), String(props.selectedYear), String(subMonth), signal)
+          addGroupAccount(
+            Number(group_id),
+            String(props.selectedYear),
+            String(moment(selectedMonth, 'MM').format('MM')),
+            signal
+          )
         );
       }}
       deleteAccountOperation={() => {
         const signal = axios.CancelToken.source();
         dispatch(
-          deleteGroupAccount(Number(group_id), String(props.selectedYear), String(subMonth), signal)
+          deleteGroupAccount(
+            Number(group_id),
+            String(props.selectedYear),
+            String(moment(selectedMonth, 'MM').format('MM')),
+            signal
+          )
         );
       }}
     />

@@ -4,6 +4,7 @@ import { Checkbox, FormControlLabel } from '@material-ui/core';
 import '../../assets/accounting/payoff.scss';
 
 interface PayOffBodyPros {
+  noTransactions: boolean;
   withoutPay: { judgment: boolean };
   groupAccountList: GroupAccountList;
   remainingTotalAmount: number[];
@@ -30,8 +31,12 @@ const PayOffBody = (props: PayOffBodyPros) => {
                 <li className="payoff__account-li payoff__check-box">
                   {groupAccount.payer_user_name}
                 </li>
+
                 <div className="payoff__delimiterLine" />
-                <li className="payoff__account-li payoff__sub-title ">受取人</li>
+
+                <li className="payoff__account-li payoff__sub-title payoff__sub-title--recipient">
+                  受取人
+                </li>
                 <div className="payoff__spacer-small" />
                 {groupAccount.group_accounts_list.map((account) => {
                   return (
@@ -41,7 +46,7 @@ const PayOffBody = (props: PayOffBodyPros) => {
                           {account.recipient_user_name}
                         </li>
                         <li className="payoff__account-li payoff__text-position payoff__check-box">
-                          ￥{account.payment_amount}
+                          ￥{account.payment_amount.toLocaleString()}
                         </li>
                         <li className="payoff__account-li payoff__check-box">
                           <FormControlLabel
@@ -145,13 +150,13 @@ const PayOffBody = (props: PayOffBodyPros) => {
                 })}
                 <div className="payoff__spacer-small" />
                 <li className="payoff__account-li payoff__sub-title payoff__sub-title__color-red">
-                  残支払金額 ￥ {props.remainingTotalAmount[index]}
+                  残支払金額 ￥ {props.remainingTotalAmount[index].toLocaleString()}
                 </li>
               </div>
             </div>
           );
         })}
-      {props.withoutPay.judgment && (
+      {props.noTransactions && (
         <p className="payoff__error-message">今月の支払・受取はありません。</p>
       )}
     </div>

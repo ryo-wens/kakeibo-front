@@ -1,4 +1,6 @@
 import React, { useState } from 'react';
+import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 import { months, year, month } from '../../lib/constant';
 import '../../templates/history/history.scss';
 import CloseIcon from '@material-ui/icons/Close';
@@ -8,6 +10,7 @@ import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
 import ArrowRightIcon from '@material-ui/icons/ArrowRight';
 
 interface InputYearsProps {
+  currentPage: string;
   selectedYear: number;
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
@@ -15,6 +18,7 @@ interface InputYearsProps {
 }
 
 const InputYears = (props: InputYearsProps) => {
+  const history = useHistory();
   const [itemYear, setItemYear] = useState<number>(props.selectedYear);
   const [itemMonth, setItemMonth] = useState<number>(props.selectedMonth);
   const [openSelectYears, setOpenSelectYears] = useState<boolean>(false);
@@ -35,6 +39,20 @@ const InputYears = (props: InputYearsProps) => {
     props.setSelectedMonth(Number(prevYears.selectedMonth));
     setItemYear(Number(prevYears.selectedYear));
     setItemMonth(Number(prevYears.selectedMonth));
+
+    if (props.currentPage === 'account') {
+      history.push({ search: `?year=${prevYears.selectedYear}&month=${prevYears.selectedMonth}` });
+    }
+
+    if (props.currentPage === 'history/?daily') {
+      history.push({
+        search: `?daily&year=${prevYears.selectedYear}&month=${prevYears.selectedMonth}`,
+      });
+    } else if (props.currentPage === 'history/?weekly') {
+      history.push({
+        search: `?weekly&year=${prevYears.selectedYear}&month=${prevYears.selectedMonth}`,
+      });
+    }
   };
 
   const updateNextYears = () => {
@@ -44,6 +62,20 @@ const InputYears = (props: InputYearsProps) => {
     props.setSelectedMonth(Number(nextYears.selectedMonth));
     setItemYear(Number(nextYears.selectedYear));
     setItemMonth(Number(nextYears.selectedMonth));
+
+    if (props.currentPage === 'account') {
+      history.push({ search: `?year=${nextYears.selectedYear}&month=${nextYears.selectedMonth}` });
+    }
+
+    if (props.currentPage === 'history/?daily') {
+      history.push({
+        search: `?daily&year=${nextYears.selectedYear}&month=${nextYears.selectedMonth}`,
+      });
+    } else if (props.currentPage === 'history/?weekly') {
+      history.push({
+        search: `?weekly&year=${nextYears.selectedYear}&month=${nextYears.selectedMonth}`,
+      });
+    }
   };
 
   const changeItemYear = (event: React.ChangeEvent<{ value: unknown }>) => {
@@ -58,12 +90,40 @@ const InputYears = (props: InputYearsProps) => {
     props.setSelectedYear(itemYear);
     props.setSelectedMonth(itemMonth);
     setOpenSelectYears(false);
+
+    if (props.currentPage === 'account') {
+      history.push({ search: `?year=${itemYear}&month=${moment(itemMonth, 'MM').format('MM')}` });
+    }
+
+    if (props.currentPage === 'history/?daily') {
+      history.push({
+        search: `?daily&year=${itemYear}&month=${moment(itemMonth, 'MM').format('MM')}`,
+      });
+    } else if (props.currentPage === 'history/?weekly') {
+      history.push({
+        search: `?weekly&year=${itemYear}&month=${moment(itemMonth, 'MM').format('MM')}`,
+      });
+    }
   };
 
   const onClickNowYears = () => {
     props.setSelectedYear(year);
     props.setSelectedMonth(month);
     setOpenSelectYears(false);
+
+    if (props.currentPage === 'account') {
+      history.push({ search: `?year=${year}&month=${moment(month, 'MM').format('MM')}` });
+    }
+
+    if (props.currentPage === 'history/?daily') {
+      history.push({
+        search: `?daily&year=${year}&month=${moment(month, 'MM').format('MM')}`,
+      });
+    } else if (props.currentPage === 'history/?weekly') {
+      history.push({
+        search: `?weekly&year=${year}&month=${moment(month, 'MM').format('MM')}`,
+      });
+    }
   };
 
   return (
@@ -127,7 +187,7 @@ const InputYears = (props: InputYearsProps) => {
             className="input-years__now-btn input-years__btn__display"
             onClick={() => onClickNowYears()}
           >
-            現在
+            現在を表示
           </button>
         </>
       )}

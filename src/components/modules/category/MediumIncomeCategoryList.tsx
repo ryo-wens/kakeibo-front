@@ -129,7 +129,7 @@ const MediumIncomeCategoryList = (props: MediumIncomeCategoryListProps) => {
                 </div>
               ) : (
                 <li
-                  className="category-input__menu-item"
+                  className="category-input__menu-item category-input__sub-menu__item"
                   value={incomeAssociated.name}
                   onClick={(event) => {
                     props.handleChangeCategory(
@@ -154,14 +154,16 @@ const MediumIncomeCategoryList = (props: MediumIncomeCategoryListProps) => {
                     className="category-input__add-form"
                     value={props.customCategoryName}
                   />
-                  <button
-                    type="button"
-                    disabled={props.customCategoryName === ''}
-                    className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
-                    onClick={(event) => {
-                      props.handleAddCustomCategory(event, props.bigCategoryId, 'mediumCategory');
-                    }}
-                  />
+                  <span className="category-input__add-icon-btn-position">
+                    <button
+                      type="button"
+                      disabled={props.customCategoryName === ''}
+                      className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
+                      onClick={(event) => {
+                        props.handleAddCustomCategory(event, props.bigCategoryId, 'mediumCategory');
+                      }}
+                    />
+                  </span>
                 </div>
               )}
             </div>

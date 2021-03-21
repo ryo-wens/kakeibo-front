@@ -14,7 +14,7 @@
 
   &__background {
     background-color: white;
-    border: 1px solid $color-iron;
+    box-shadow: $section-box_shadow;
     border-radius: 5px;
     box-sizing: border-box;
     height: auto;
@@ -24,6 +24,7 @@
 
     &__table {
       border: 1px solid $color-iron;
+      border-radius: 5px;
       box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
       margin: 0 auto;
     }
@@ -51,7 +52,7 @@
 
   &__th {
     align-self: center;
-    background-color: #f5f5f5;
+    background-color: $color-whiteLilac;
     border: solid 1px $color-iron;
     font-weight: $large-font_weight;
     font-size: $medium-font_size;

@@ -1,6 +1,8 @@
 @import "src/assets/variable";
 
 .yearly-account {
+  width: 100%;
+  margin: 0 auto;
 
   &__spacer {
     display: block;
@@ -9,22 +11,19 @@
     &--medium {
       height: 20px;
     }
-
-    &--large {
-      height: 40px;
-    }
   }
 
   &__backGround {
     background-color: #fff;
+    box-shadow: $section-box_shadow;
     border-radius: 0.6rem;
     padding: 20px;
-    height: auto;
     margin: 0 auto;
-    width: 65%;
+    width: 65%;;
   }
 
   &__year-position {
+    margin: 40px 0 40px 0;
     text-align: center;
     width: 100%;
   }

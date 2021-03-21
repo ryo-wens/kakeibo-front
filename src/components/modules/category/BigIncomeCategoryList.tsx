@@ -149,7 +149,7 @@ const BigIncomeCategoryList = (props: BigIncomeCategoryListProps) => {
                       ) : (
                         <div key={incomeAssociatedCategory.name}>
                           <li
-                            className="category-input__menu-item"
+                            className="category-input__menu-item category-input__sub-menu__item"
                             value={incomeAssociatedCategory.name}
                             onClick={(event) => {
                               props.handleChangeCategory(
@@ -175,18 +175,20 @@ const BigIncomeCategoryList = (props: BigIncomeCategoryListProps) => {
                             className="category-input__add-form"
                             value={props.customCategoryName}
                           />
-                          <button
-                            type="button"
-                            disabled={props.customCategoryName === ''}
-                            className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
-                            onClick={(event) => {
-                              props.handleAddCustomCategory(
-                                event,
-                                incomeCategory.id,
-                                'bigCategory'
-                              );
-                            }}
-                          />
+                          <span className="category-input__add-icon-btn-position">
+                            <button
+                              type="button"
+                              disabled={props.customCategoryName === ''}
+                              className="category-input__add-icon-btn category-input__add-icon-btn--plus-icon"
+                              onClick={(event) => {
+                                props.handleAddCustomCategory(
+                                  event,
+                                  incomeCategory.id,
+                                  'bigCategory'
+                                );
+                              }}
+                            />
+                          </span>
                         </div>
                       )}
                     </div>

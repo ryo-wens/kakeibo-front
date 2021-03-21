@@ -82,6 +82,7 @@ const InputForm = (props: InputFormProps) => {
           minDate={new Date('1900-01-01')}
         />
         <div className="input-form__form-content--spacer-small" />
+        <p className="input-form__form-title">収支タイプ(必須)</p>
         <KindSelectBox
           onChange={props.changeTransactionType}
           required={true}
@@ -103,6 +104,7 @@ const InputForm = (props: InputFormProps) => {
         <div className="input-form__form-content--spacer-medium" />
         {props.pathName === 'group' && (
           <>
+            <p className="input-form__form-title">支払者(必須)</p>
             <SelectPayer
               onChange={props.changePayer}
               required={true}
@@ -116,6 +118,7 @@ const InputForm = (props: InputFormProps) => {
             <div className="input-form__form-content--spacer-medium" />
           </>
         )}
+        <p className="input-form__form-title">カテゴリー(必須)</p>
         <BigCategoryListContainer
           customCategoryName={props.customCategoryName}
           setCustomCategoryName={props.setCustomCategoryName}

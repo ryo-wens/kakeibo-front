@@ -36,4 +36,10 @@
   &__group-text {
     font-weight: bolder;
   }
+
+  &__tooltip {
+    position: absolute;
+    display: inline-block;
+    padding-left: 6px;
+  }
 }

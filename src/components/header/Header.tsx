@@ -1,4 +1,5 @@
 import React from 'react';
+import moment from 'moment';
 import { Groups } from '../../reducks/groups/types';
 import MoneyIcon from '@material-ui/icons/Money';
 import HomeIcon from '@material-ui/icons/Home';
@@ -8,7 +9,7 @@ import CreditCardIcon from '@material-ui/icons/CreditCard';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import { InvitationNotifications } from './index';
 import SwitchEntityContainer from '../../containers/header/group/SwitchEntityContainer';
-import { year } from '../../lib/constant';
+import { month, year } from '../../lib/constant';
 import './header.scss';
 
 interface HeaderProps {
@@ -55,9 +56,13 @@ const Header = (props: HeaderProps) => {
             <li
               className="header__global-menu--item"
               style={props.currentPage(
-                props.pathName !== 'group' ? '/history' : `/group/${props.group_id}/history`
+                props.pathName !== 'group' ? `/history` : `/group/${props.group_id}/history`
               )}
-              onClick={() => props.existsGroupWhenRouting('/history?daily')}
+              onClick={() =>
+                props.existsGroupWhenRouting(
+                  `/history?daily&year=${year}&month=${moment(month, 'MM').format('MM')}`
+                )
+              }
             >
               <a>
                 <HistoryIcon className="header__icon" />
@@ -97,7 +102,7 @@ const Header = (props: HeaderProps) => {
             >
               <a>
                 <PlaylistAddCheckIcon className="header__icon" />
-                TODO
+                ToDo
               </a>
             </li>
             <div className="header__global-menu--sub-menu">

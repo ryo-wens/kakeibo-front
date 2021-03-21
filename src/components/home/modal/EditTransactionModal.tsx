@@ -102,6 +102,7 @@ const EditTransactionModal = (props: InputModalProps) => {
             minDate={new Date('1900-01-01')}
           />
           <div className="transaction-modal__form-content--spacer-small" />
+          <p className="transaction-modal__form-title">収支タイプ</p>
           <KindSelectBox
             value={props.transactionsType}
             onChange={props.changeTransactionType}
@@ -123,6 +124,7 @@ const EditTransactionModal = (props: InputModalProps) => {
           <div className="transaction-modal__form-content--spacer-small" />
           {props.pathName === 'group' && (
             <>
+              <p className="transaction-modal__form-title">支払者</p>
               <SelectPayer
                 approvedGroups={props.approvedGroups}
                 groupId={props.group_id}
@@ -137,6 +139,7 @@ const EditTransactionModal = (props: InputModalProps) => {
             </>
           )}
           <div className="transaction-modal__select-category">
+            <p className="transaction-modal__form-title">カテゴリー</p>
             <BigCategoryListContainer
               customCategoryName={props.customCategoryName}
               setCustomCategoryName={props.setCustomCategoryName}

@@ -3,10 +3,11 @@
 @import "../../../assets/modules/input-years";
 
 .daily-history {
-
+  border-radius: 5px;
   border-collapse: collapse;
   margin: 0 auto;
   height: auto;
+  box-shadow: $section-box_shadow;
 
    &__spacer{
      height: 30px;
@@ -36,14 +37,14 @@
 
   &__background {
     background-color: white;
-    border: 1px solid rgba(0, 0, 0, 0.3);
+    box-shadow: $section-box_shadow;
     border-radius: 5px;
     box-sizing: border-box;
     height: auto;
     margin-top: 40px;
     margin-bottom: 60px;
     width: 90%;
-    padding: 16px;
+    padding: 16px 16px 32px 16px;
   }
 
   &__search-table {

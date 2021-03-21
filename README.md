@@ -49,6 +49,9 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 
 ## 使用技術
 ### 【 _Frontend_ 】
+**<ins>Runtime Environment</ins>**
+- Node.js v14.16.0
+
 **<ins>Language</ins>**
 - TypeScript v4.2.2
 - Sass
@@ -67,7 +70,7 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 
 ### 【 _Backend_ 】
 **<ins>Language</ins>**
-- Go v1.16.22
+- Go v1.16.2
 
 ### 【 _Infrastructure_ 】
 **<ins>Cloud Service</ins>**

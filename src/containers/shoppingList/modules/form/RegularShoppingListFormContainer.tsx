@@ -5,6 +5,7 @@ import {
   getIncomeCategories,
 } from '../../../../reducks/categories/selectors';
 import { PurchaseCycleType } from '../../../../reducks/shoppingList/types';
+import { autoAddTransactionMessage } from '../../../../lib/message';
 import RegularShoppingListForm from '../../../../components/shoppingList/modules/form/RegularShoppingListForm/RegularShoppingListForm';
 
 interface RegularShoppingListFormContainerProps {
@@ -56,6 +57,7 @@ const RegularShoppingListFormContainer = (props: RegularShoppingListFormContaine
 
   return (
     <RegularShoppingListForm
+      message={autoAddTransactionMessage}
       titleLabel={props.titleLabel}
       buttonLabel={props.buttonLabel}
       expectedPurchaseDate={props.expectedPurchaseDate}
