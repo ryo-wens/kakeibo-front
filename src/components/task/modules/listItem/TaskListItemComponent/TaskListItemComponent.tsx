@@ -1,7 +1,8 @@
 import React from 'react';
 import EditIcon from '@material-ui/icons/Edit';
-import './task-list-item-component.scss';
+import styles from './TaskListItemComponent.module.scss';
 import InputTaskNameFormContainer from '../../../../../containers/task/modules/form/InputTaskNameFormContainer';
+import cn from 'classnames';
 
 interface TaskListItemComponentProps {
   titleLabel: string;
@@ -17,18 +18,17 @@ interface TaskListItemComponentProps {
   handleDeleteTaskItem: () => void;
   onClickCloseInputTaskNameForm: (event: Event) => void;
   inputTaskRef: React.RefObject<HTMLDivElement>;
+  listItemClassName?: string;
+  formClassName?: string;
 }
 
 const TaskListItemComponent = (props: TaskListItemComponentProps) => {
   return (
     <>
       {!props.openForm ? (
-        <li className="task-list-item-component">
-          <span className="task-list-item-component__text">{props.initialTaskName}</span>
-          <EditIcon
-            className="task-list-item-component__edit-icon"
-            onClick={props.handleOpenInputTaskForm}
-          />
+        <li className={cn(styles.wrapper, props.listItemClassName)}>
+          <span className={styles.text}>{props.initialTaskName}</span>
+          <EditIcon className={styles.editIcon} onClick={props.handleOpenInputTaskForm} />
         </li>
       ) : (
         <InputTaskNameFormContainer
@@ -42,6 +42,7 @@ const TaskListItemComponent = (props: TaskListItemComponentProps) => {
           onClickCloseInputTaskNameForm={props.onClickCloseInputTaskNameForm}
           inputTaskRef={props.inputTaskRef}
           handleDeleteTaskItem={props.handleDeleteTaskItem}
+          formClassName={props.formClassName}
         />
       )}
     </>

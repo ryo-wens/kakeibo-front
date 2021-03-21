@@ -1,5 +1,5 @@
 import React from 'react';
-import './input-task-cycle.scss';
+import styles from './InputTaskCycle.module.scss';
 import { TaskCycleType } from '../../../../../reducks/groupTasks/types';
 
 interface InputTaskCycleProps {
@@ -13,7 +13,7 @@ const InputTaskCycle = (props: InputTaskCycleProps) => {
     <>
       {props.cycleType !== 'none' ? (
         <input
-          className="input-task-cycle"
+          className={styles.input}
           type="text"
           inputMode="numeric"
           name="cycle"
@@ -24,7 +24,7 @@ const InputTaskCycle = (props: InputTaskCycleProps) => {
         />
       ) : (
         <input
-          className="input-task-cycle"
+          className={styles.input}
           type="text"
           name="disabled-cycle"
           value={'-'}

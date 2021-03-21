@@ -10,21 +10,7 @@ const TodoContainer = () => {
     setCurrentPage(value);
   };
 
-  const currentPageButtonStyle = (value: number) => {
-    if (currentPage === value) {
-      return 'todo__current-page-button';
-    }
-    return 'todo__switch-page-button';
-  };
-
-  return (
-    <Todo
-      currentPage={currentPage}
-      pathName={pathName}
-      switchPage={switchPage}
-      currentPageButtonStyle={currentPageButtonStyle}
-    />
-  );
+  return <Todo currentPage={currentPage} pathName={pathName} switchPage={switchPage} />;
 };
 
 export default TodoContainer;

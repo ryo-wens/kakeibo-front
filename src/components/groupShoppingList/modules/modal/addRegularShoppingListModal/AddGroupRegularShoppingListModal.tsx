@@ -1,10 +1,11 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
-import '../../../../shoppingList/modules/modal/AddShoppingListItemModal/add-shopping-list-item-modal.scss';
 import { date } from '../../../../../lib/constant';
 import GroupRegularShoppingListFormContainer from '../../../../../containers/groupShoppingList/modules/form/GroupRegularShoppingListFormContainer';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
+import cn from 'classnames';
+import styles from '../../../../shoppingList/modules/modal/AddRegularShoppingListItemModal/AddRegularShoppingListItemModal.module.scss';
 
 interface AddGroupRegularShoppingListModalProps {
   open: boolean;
@@ -44,11 +45,12 @@ interface AddGroupRegularShoppingListModalProps {
   setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  addBtnClassName?: string;
 }
 
 const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModalProps) => {
   const body = (
-    <div className="add-regular-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       <GroupRegularShoppingListFormContainer
         expectedPurchaseDate={props.expectedPurchaseDate}
         cycleType={props.cycleType}
@@ -93,7 +95,7 @@ const AddGroupRegularShoppingListModal = (props: AddGroupRegularShoppingListModa
   return (
     <>
       <button
-        className="add-regular-shopping-list-item-modal__button"
+        className={cn(styles.btn, props.addBtnClassName)}
         disabled={false}
         onClick={props.handleOpenModal}
       >

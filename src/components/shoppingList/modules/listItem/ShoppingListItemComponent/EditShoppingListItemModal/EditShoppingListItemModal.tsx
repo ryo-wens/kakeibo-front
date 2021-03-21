@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import './edit-shopping-list-item-modal.scss';
+import styles from './EditShoppingListItemModal.module.scss';
 import EditIcon from '@material-ui/icons/Edit';
 import ShoppingListDeleteForm from '../../../form/ShoppingListDeleteForm/ShoppingListDeleteForm';
 import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/ShoppingListFormContainer';
@@ -38,7 +38,7 @@ interface EditShoppingListItemModalProps {
 
 const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
   const body = (
-    <div className="edit-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       {props.deleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
@@ -82,10 +82,7 @@ const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
 
   return (
     <>
-      <EditIcon
-        className="edit-shopping-list-item-modal__edit-icon"
-        onClick={() => props.handleOpenModal()}
-      />
+      <EditIcon className={styles.editIcon} onClick={() => props.handleOpenModal()} />
       <Modal
         open={props.open}
         onClose={props.handleCloseModal}

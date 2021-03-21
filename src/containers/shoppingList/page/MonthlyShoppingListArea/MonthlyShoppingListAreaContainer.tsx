@@ -1,5 +1,5 @@
 import React from 'react';
-import MonthlyShoppingListArea from '../../../../components/shoppingList/page/MonthlyShoppingListArea/MonthlyShoppingListArea';
+import MonthlyShoppingListArea from '../../../../components/shoppingList/modules/area/MonthlyShoppingListArea/MonthlyShoppingListArea';
 
 interface MonthlyShoppingListAreaContainerProps {
   selectedYear: number;

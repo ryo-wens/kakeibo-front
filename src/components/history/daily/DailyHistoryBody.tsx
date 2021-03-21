@@ -16,7 +16,7 @@ const DailyHistoryBody = (props: DailyHistoryBodyProps) => {
   return (
     <>
       {props.transactionsList.length !== 0 && (
-        <table className="daily-history">
+        <table>
           <tbody>
             <tr>
               <td className="daily-history__th" align="center">

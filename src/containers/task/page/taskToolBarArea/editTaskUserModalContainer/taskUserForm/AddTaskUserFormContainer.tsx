@@ -14,6 +14,7 @@ interface AddTaskUserFormContainerProps {
   handleCloseAddTaskUserForm: () => void;
   handleCloseModal: () => void;
   groupTasksListForEachUser: GroupTaskListForEachUser;
+  btnClassName: string;
 }
 
 const AddTaskUserFormContainer = (props: AddTaskUserFormContainerProps) => {
@@ -74,7 +75,7 @@ const AddTaskUserFormContainer = (props: AddTaskUserFormContainerProps) => {
       handleChangeChecked={handleChangeChecked}
       existsDisplayTaskUsers={notParticipatingTaskUsers.length !== 0}
       message={'グループメンバー全員がタスクに参加しています。'}
-      buttonClassName={'task-user-form__add-btn'}
+      btnClassName={props.btnClassName}
     />
   );
 };

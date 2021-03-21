@@ -1,7 +1,7 @@
 import React from 'react';
 import { Groups } from '../../reducks/groups/types';
 import { GroupAccountList, MonthWithoutSplit } from '../../reducks/groupTransactions/types';
-import InputYears from '../../components/modules/InputYears';
+import InputYears from '../../components/modules/inputYears/InputYears';
 import PayOffBodyContainer from '../../containers/account/PayOffBodyContainer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import '../../assets/accounting/payoff.scss';
@@ -89,6 +89,7 @@ const PayOff = (props: PayOffProps) => {
     <div className="payoff payoff__box-size">
       <div className="payoff__selector-position">
         <InputYears
+          btnClassName={'payoff__child-input-years-btn'}
           currentPage={'account'}
           selectedMonth={props.selectedMonth}
           selectedYear={props.selectedYear}

@@ -8,6 +8,8 @@ import { executeAfterAsyncProcess } from '../../../../lib/function';
 interface TaskListItemComponentContainerProps {
   listItem: TaskListItem;
   handleStopPolling: (value: boolean) => void;
+  listItemClassName?: string;
+  formClassName?: string;
 }
 
 const TaskListItemComponentContainer = (props: TaskListItemComponentContainerProps) => {
@@ -80,6 +82,8 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
       handleEditTaskItem={() => handleEditTaskItem()}
       handleDeleteTaskItem={() => handleDeleteTaskItem()}
       inputTaskRef={inputTaskRef}
+      listItemClassName={props.listItemClassName}
+      formClassName={props.formClassName}
     />
   );
 };

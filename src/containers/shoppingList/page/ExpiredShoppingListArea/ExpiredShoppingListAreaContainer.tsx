@@ -7,7 +7,7 @@ import {
   getSlicedExpiredShoppingList,
 } from '../../../../reducks/shoppingList/selectors';
 import { fetchExpiredShoppingList } from '../../../../reducks/shoppingList/operations';
-import ExpiredShoppingListArea from '../../../../components/shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListArea';
+import ExpiredShoppingListArea from '../../../../components/shoppingList/modules/area/ExpiredShoppingListArea/ExpiredShoppingListArea';
 import { DisplayShoppingListByDate, ShoppingList } from '../../../../reducks/shoppingList/types';
 
 interface ExpiredShoppingListAreaContainerProps {

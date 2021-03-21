@@ -14,6 +14,7 @@ interface AddRegularShoppingListModalContainerProps {
   selectedMonth: number;
   currentYear: string;
   currentMonth: string;
+  addBtnClassName?: string;
 }
 
 const initialState: AddRegularShoppingListItemModalInitialState = {
@@ -199,6 +200,7 @@ const AddRegularShoppingListItemModalContainer = (
       setBigCategory={setBigCategory}
       setAssociatedCategory={setAssociatedCategory}
       handleAddRegularShoppingListItem={() => handleAddRegularShoppingListItem()}
+      addBtnClassName={props.addBtnClassName}
     />
   );
 };

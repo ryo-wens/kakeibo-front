@@ -1,14 +1,14 @@
 import React from 'react';
 import { Group } from '../../../reducks/groups/types';
-import './task-page.scss';
+import styles from './TaskPage.module.scss';
 import {
   GroupTaskList,
   GroupTaskListForEachUser,
   TaskUsers,
 } from '../../../reducks/groupTasks/types';
-import TaskListArea from './taskListArea/TaskListArea';
+import TaskListArea from '../modules/area/taskListArea/TaskListArea';
 import TaskToolBarAreaContainer from '../../../containers/task/page/taskToolBarArea/TaskToolBarAreaContainer';
-import TaskTableArea from './taskTableArea/TaskTableArea';
+import TaskTableArea from '../modules/area/taskTableArea/TaskTableArea';
 
 interface TaskPageProps {
   selectedDate: Date | null;
@@ -23,7 +23,7 @@ interface TaskPageProps {
 
 const TaskPage = (props: TaskPageProps) => {
   return (
-    <div className="task-page">
+    <div className={styles.wrapper}>
       <TaskToolBarAreaContainer
         selectedDate={props.selectedDate}
         handleChangeSelectedDate={props.handleChangeSelectedDate}

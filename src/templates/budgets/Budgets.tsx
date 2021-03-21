@@ -5,6 +5,7 @@ import AddCustomBudgetsContainer from '../../containers/budgets/AddCustomBudgets
 import CustomBudgetsContainer from '../../containers/budgets/CustomBudgetsContainer';
 import YearlyBudgetsContainer from '../../containers/templates/budgets/YearlyBudgetsContainer';
 import '../../components/budget/budget.scss';
+import cn from 'classnames';
 
 interface BudgetsProps {
   query: string;
@@ -12,8 +13,6 @@ interface BudgetsProps {
   routingYearly: () => void;
   budgetsYear: number;
   setBudgetsYear: React.Dispatch<React.SetStateAction<number>>;
-  currentStandardColor: () => { color: string; background: string };
-  currentYearlyColor: () => { color: string; background: string };
 }
 
 const Budgets = (props: BudgetsProps) => {
@@ -23,11 +22,21 @@ const Budgets = (props: BudgetsProps) => {
       <main className="section__container">
         <div className="budget__spacer budget__spacer--medium" />
         {(props.query === '?standard' || props.query === '?yearly') && (
-          <div className="switch-item-tabs__buttons budget__switch-type" aria-label="budgets-kind">
-            <button style={props.currentStandardColor()} onClick={() => props.routingStandard()}>
+          <div className="budget__switch-type" aria-label="budgets-kind">
+            <button
+              className={cn('budget__switch-btn', {
+                'budget__switch-cr-btn': props.query === '?standard',
+              })}
+              onClick={() => props.routingStandard()}
+            >
               標準予算
             </button>
-            <button style={props.currentYearlyColor()} onClick={() => props.routingYearly()}>
+            <button
+              className={cn('budget__switch-btn', {
+                'budget__switch-cr-btn': props.query === '?yearly',
+              })}
+              onClick={() => props.routingYearly()}
+            >
               月別カスタム予算
             </button>
           </div>

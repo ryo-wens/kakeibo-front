@@ -13,6 +13,7 @@ import {
 interface AddGroupRegularShoppingListModalContainerProps {
   currentYear: string;
   currentMonth: string;
+  addBtnClassName?: string;
 }
 
 const initialState: AddGroupRegularShoppingListItemModalInitialState = {
@@ -219,6 +220,7 @@ const AddGroupRegularShoppingListModalContainer = (
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
       handleAddRegularShoppingListItem={() => handleAddRegularShoppingListItem()}
+      addBtnClassName={props.addBtnClassName}
     />
   );
 };

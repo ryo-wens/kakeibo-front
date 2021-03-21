@@ -1,7 +1,7 @@
 import React from 'react';
 import { DatePicker, SelectLimit, SelectSortType, TextInput } from '../../../uikit';
 import SelectDateType from '../../modules/select/SelectDateType';
-import './search-todo-list-area.scss';
+import styles from './SearchTodoListArea.module.scss';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SearchResultTodoListContainer from '../../../../containers/todo/page/searchTodoListArea/searchResultTodoList/SearchResultTodoListContainer';
 import SelectSortItem from '../../modules/select/SelectSortItem';
@@ -38,13 +38,13 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
     {
       key: '日時の指定',
       value: (
-        <div className="search-todo-list-area__date-designation">
+        <div className={styles.dateDesignation}>
           <SelectDateType
             value={props.dateType}
             id={'dateType'}
             selectChange={props.handleSelectDateTypeChange}
           />
-          <div className="search-todo-list-area__date-pickers">
+          <div className={styles.datePickers}>
             <DatePicker
               id={'startDate'}
               label={'開始日'}
@@ -54,7 +54,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
               disabled={false}
               minDate={new Date('1900-01-01')}
             />
-            <span className="search-todo-list-area__date-pickers--space">〜</span>
+            <span className={styles.datePickers__space}>〜</span>
             <DatePicker
               id={'startDate'}
               label={'終了日'}
@@ -79,7 +79,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       ),
     },
     {
-      key: 'Todo名',
+      key: 'ToDo名',
       value: (
         <TextInput
           id="todo-consent"
@@ -114,27 +114,24 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
   ];
 
   return (
-    <div className="search-todo-list-area">
-      <div className="search-todo-list-area__position">
-        <button
-          className="search-todo-list-area__btn-position"
-          onClick={() => props.handleCloseSearch()}
-        >
+    <div className={styles.wrapper}>
+      <div className={styles.position}>
+        <button className={styles.btnPosition} onClick={() => props.handleCloseSearch()}>
           <ChevronLeftIcon />
         </button>
-        <h3 className="search-todo-list-area__title">Todoを検索</h3>
+        <h3 className={styles.title}>ToDoを検索</h3>
       </div>
       {searchItems.map((item) => {
         return (
-          <div className="search-todo-list-area__select-items" key={item.key}>
-            <span className="search-todo-list-area__select-items--key">{item.key}</span>
-            <span className="search-todo-list-area__select-items--value">{item.value}</span>
+          <div className={styles.selectItems} key={item.key}>
+            <span className={styles.selectItems__key}>{item.key}</span>
+            <span className={styles.selectItems__value}>{item.value}</span>
           </div>
         );
       })}
-      <div className="search-todo-list-area__search-btn">
-        <button className="save-btn" onClick={props.getSearchResultTodoList}>
-          この条件で検索
+      <div className={styles.searchBtnPosition}>
+        <button className={styles.searchBtn} onClick={props.getSearchResultTodoList}>
+          この条件で絞り込む
         </button>
       </div>
       {props.openSearchResultTodoList && (

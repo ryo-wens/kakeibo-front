@@ -7,7 +7,7 @@
 }
 
 .listItemByCategory {
-  margin-bottom: 40px;
+  margin-bottom: 50px;
 
   &:last-child {
     margin-bottom: 0;
@@ -28,9 +28,11 @@
 }
 
 .categoryName {
-  color: $color-lynch;
+  color: $color-scorpion;
   font-size: 1.3rem;
+  font-weight: 600;
   margin: 0 0 0 10px;
+  letter-spacing: 0.05rem;
 }
 
 .listByDate {
@@ -40,13 +42,13 @@
 }
 
 .date {
-  color: $color-lynch;
+  color: $color-scorpion;
   font-size: 1.0rem;
   margin: 0 0 20px 0;
 }
 
 .listItemByDate {
-  margin-bottom: 20px;
+  margin-bottom: 30px;
 
   &:last-child {
     margin-bottom: 0;
@@ -67,21 +69,21 @@
 }
 
 .message {
-  color: $color-lynch;
+  color: $color-scorpion;
   font-size: 1.0rem;
-  font-weight: bold;
+  font-weight: 500;
   text-align: center;
+  padding-top: 15px;
   margin: 0;
 }
 
 .childPurchase {
   display: inline-block;
-  width: calc((100% - 116px));
+  width: calc((100% - 100px));
 }
 
 .childAmount {
   display: inline-block;
-  width: 90px;
+  width: 100px;
   text-align: right;
-  padding-right: 10px;
 }

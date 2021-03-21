@@ -1,0 +1,57 @@
+@import "../../../../../assets/variable";
+
+.wrapper {
+  border-radius: 0.5rem;
+  padding: 0 10px;
+}
+
+.table {
+  width: 100%;
+  border-collapse: separate;
+  border: solid 1px $color-geyser;
+  border-radius: 0.5rem;
+  border-spacing: 0;
+  overflow: hidden;
+  margin-bottom: 20px;
+}
+
+.tableHead {
+  th {
+    border-bottom: solid 1.5px $color-geyser;
+    border-left: solid 1.5px $color-geyser;
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+}
+
+.tableBody {
+  th {
+    border-bottom: solid 1.5px $color-geyser;
+    border-left: solid 1.5px $color-geyser;
+    height: 40px;
+    padding: 0 1px;
+
+    tr &:hover {
+      border-top: solid 1.5px $color-geyser;
+
+    }
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+
+  td {
+    border-bottom: solid 1.5px $color-geyser;
+    border-left: solid 1.5px $color-geyser;
+    height: 40px;
+    padding: 0 1px;
+
+
+    &:first-child {
+      border-left: none;
+    }
+  }
+}

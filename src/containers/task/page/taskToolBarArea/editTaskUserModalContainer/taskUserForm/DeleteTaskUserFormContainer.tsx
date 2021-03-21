@@ -15,6 +15,7 @@ interface DeleteTaskUserFormContainerProps {
   handleCloseModal: () => void;
   handleCloseDeleteTaskUserForm: () => void;
   groupTasksListForEachUser: GroupTaskListForEachUser;
+  btnClassName: string;
 }
 
 const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) => {
@@ -81,7 +82,7 @@ const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) =>
       handleChangeChecked={handleChangeChecked}
       existsDisplayTaskUsers={participatingTaskUsers.length !== 0}
       message={'現在、タスクに参加しているメンバーはいません。'}
-      buttonClassName={'task-user-form__delete-btn'}
+      btnClassName={props.btnClassName}
     />
   );
 };

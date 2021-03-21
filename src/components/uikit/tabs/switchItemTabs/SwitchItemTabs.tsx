@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import './switch-item-tabs.scss';
+import styles from './SwitchItemTabs.module.scss';
 import cn from 'classnames';
 
 interface SwitchItemTabsProps {
@@ -11,33 +11,30 @@ interface SwitchItemTabsProps {
 }
 
 const SwitchItemTabs = (props: SwitchItemTabsProps) => {
-  const [currentItems, setCurrentItems] = useState<number>(0);
-
-  const currentButtonStyle = (value: number) => {
-    if (currentItems === value) {
-      return {
-        background: 'linear-gradient(90deg, rgba(245,117,109,1) 0%, rgba(238,62,91,1) 45%)',
-        color: '#fff',
-      };
-    }
-  };
+  const [currentItem, setCurrentItem] = useState<number>(0);
 
   const switchItem = (value: number) => {
-    setCurrentItems(value);
+    setCurrentItem(value);
   };
 
   return (
     <div>
-      <div className={cn('switch-item-tabs__buttons', props.tabsBtnClassName)}>
-        <button onClick={() => switchItem(0)} style={currentButtonStyle(0)}>
+      <div className={cn(styles.wrapper, props.tabsBtnClassName)}>
+        <button
+          className={cn(styles.btn, { [styles.crBtn]: currentItem === 0 })}
+          onClick={() => switchItem(0)}
+        >
           {props.leftButtonLabel}
         </button>
-        <button onClick={() => switchItem(1)} style={currentButtonStyle(1)}>
+        <button
+          className={cn(styles.btn, { [styles.crBtn]: currentItem === 1 })}
+          onClick={() => switchItem(1)}
+        >
           {props.rightButtonLabel}
         </button>
       </div>
-      {currentItems === 0 && props.leftItem}
-      {currentItems === 1 && props.rightItem}
+      {currentItem === 0 && props.leftItem}
+      {currentItem === 1 && props.rightItem}
     </div>
   );
 };

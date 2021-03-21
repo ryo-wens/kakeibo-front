@@ -1,5 +1,5 @@
 @import "src/assets/variable";
-@import "../uikit/tabs/switchItemTabs/switch-item-tabs";
+@import "../uikit/tabs/switchItemTabs/SwitchItemTabs.module";
 
 .budget {
   border-collapse: collapse;
@@ -31,10 +31,22 @@
   }
 
   &__switch-type {
+    @extend .tabs;
+    background-color: white;
     width: 30%;
     height: 34px;
     margin: 0 auto;
+  }
 
+  &__switch-btn {
+    @extend .tabs__btn;
+    background-color: white;
+
+  }
+
+  &__switch-cr-btn {
+    @extend .tabs__crBtn;
+    background-color: $color-neonCarrot;;
   }
 
   &__spacer {

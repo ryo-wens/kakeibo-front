@@ -30,7 +30,7 @@
   }
 
   &__close-button {
-    @include icon-btn($color-lynch, $color-geyser, $color-lynch, 0.8rem, 0.5);
+    @include icon-btn($color-lynch, 0.8rem, 0.5);
     float: right;
   }
 

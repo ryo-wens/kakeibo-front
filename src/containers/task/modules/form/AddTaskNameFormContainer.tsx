@@ -1,7 +1,7 @@
 import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
-import AddTaskNameForm from '../../../../components/task/page/taskListArea/addTaskNameForm/AddTaskNameForm';
+import AddTaskNameForm from '../../../../components/task/modules/area/taskListArea/addTaskNameForm/AddTaskNameForm';
 import { addTaskItem } from '../../../../reducks/groupTasks/operations';
 import { AddTaskItemReq } from '../../../../reducks/groupTasks/types';
 import { executeAfterAsyncProcess } from '../../../../lib/function';

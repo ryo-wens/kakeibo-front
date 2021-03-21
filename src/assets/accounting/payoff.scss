@@ -108,6 +108,14 @@
     }
   }
 
+  &__child-input-years-btn {
+    background-color: white;
+
+    &:hover{
+      background-color: $color-porcelain;
+    }
+  }
+
   &__spacer-small {
     height: $small-spacer;
   }

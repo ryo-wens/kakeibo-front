@@ -23,9 +23,13 @@
   }
 
   &__year-position {
-    margin: 40px 0 40px 0;
+    margin: 50px 0 30px 0;
     text-align: center;
     width: 100%;
+  }
+
+  &__child-select-years {
+    width: 30%;
   }
 
   &__yearly-table {

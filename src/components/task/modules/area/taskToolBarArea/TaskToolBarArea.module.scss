@@ -1,0 +1,66 @@
+@import "../../../../../assets/modules/task-btn";
+
+.wrapper {
+  width: 60%;
+  display: flex;
+  justify-content: space-between;
+  margin: 10px 0 20px 0;
+}
+
+.datePicker {
+  width: 200px;
+}
+
+.displayWeek {
+  display: flex;
+}
+
+.prevBtn {
+  @extend .task--btn;
+  border-radius: 0.5rem 0 0 0.5rem;
+  padding-top: 8px;
+}
+
+.nextBtn {
+  @extend .task--btn;
+  border-radius: 0 0.5rem 0.5rem 0;
+  padding-top: 8px;
+}
+
+.todayBtn {
+  @extend .task--btn;
+  height: 2.5rem;
+}
+
+.displayWeekItems {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  background-color: $color-porcelain;
+  color: $color-scorpion;
+  border: $color-geyser solid 1.5px;
+  border-right: none;
+  border-left: none;
+  padding: 0 13px 0 18px ;
+}
+
+.displayWeekItem {
+  width: 4.0rem;
+  display: flex;
+  flex-direction: column;
+  font-weight: 500;
+  text-align: left;
+
+  &__year {
+    font-size: 0.75rem;
+  }
+
+  &__date {
+    font-size: 0.9rem;
+    display: inline-block;
+  }
+
+  &__tilde {
+    margin: 0 16px 0 10px;
+  }
+}

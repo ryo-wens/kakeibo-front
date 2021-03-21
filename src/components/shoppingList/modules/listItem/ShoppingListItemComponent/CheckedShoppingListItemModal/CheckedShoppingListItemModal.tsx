@@ -1,6 +1,6 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import './checked-shopping-list-item-modal.scss';
+import styles from './CheckedShoppingListItemModal.module.scss';
 import ShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/ShoppingListFormContainer';
 
 interface CheckedShoppingListItemModalProps {
@@ -32,7 +32,7 @@ interface CheckedShoppingListItemModalProps {
 
 const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) => {
   const body = (
-    <div className="checked-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       <ShoppingListFormContainer
         titleLabel={'買い物リストアイテムを編集'}
         buttonLabel={'保存'}
@@ -65,7 +65,7 @@ const CheckedShoppingListItemModal = (props: CheckedShoppingListItemModalProps) 
 
   return (
     <>
-      <label className="checked-shopping-list-item-modal__check">
+      <label className={styles.check}>
         <input type="checkbox" checked={props.checked} onChange={props.handleCheckedChange} />
         <span />
       </label>

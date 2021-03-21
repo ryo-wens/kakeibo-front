@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/checked-shopping-list-item-modal.scss';
 import GroupShoppingListFormContainer from '../../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
+import styles from '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal.module.scss';
 
 interface CheckedGroupShoppingListItemModalProps {
   open: boolean;
@@ -34,7 +34,7 @@ interface CheckedGroupShoppingListItemModalProps {
 
 const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemModalProps) => {
   const body = (
-    <div className="checked-shopping-list-item-modal">
+    <div className={styles.modalWrapper}>
       <GroupShoppingListFormContainer
         expectedPurchaseDate={props.expectedPurchaseDate}
         purchase={props.purchase}
@@ -69,7 +69,7 @@ const CheckedGroupShoppingListItemModal = (props: CheckedGroupShoppingListItemMo
 
   return (
     <>
-      <label className="checked-shopping-list-item-modal__check">
+      <label className={styles.check}>
         <input type="checkbox" checked={props.checked} onChange={props.handleCheckedChange} />
         <span />
       </label>

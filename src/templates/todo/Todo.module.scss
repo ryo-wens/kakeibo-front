@@ -1,0 +1,58 @@
+@import "../../assets/variable";
+@import "../../assets/modules/task-btn";
+
+.wrapper {
+  width: 100%;
+}
+
+.switchPage {
+  display: flex;
+  width: 40%;
+  text-align: center;
+  margin: 15px auto 70px 15%;
+}
+
+.switchPageBtn {
+  background-color: $color-whiteLilac;
+  border: none;
+  color: $color-scorpion;
+  font-size: 0.9rem;
+  margin-left: 60px;
+  cursor: pointer;
+
+  &:hover > span {
+    border-bottom: $color-geyser 2.5px solid;
+    padding-bottom: 6px;
+  }
+
+  &:focus {
+    outline: none;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+}
+
+.crPageBtn {
+  border: none;
+  background-color: $color-whiteLilac;
+  color: $color-tundora;
+  font-size: 0.9rem;
+  font-weight: bold;
+  margin-left: 60px;
+  cursor: pointer;
+
+  &:focus {
+    outline: none;
+  }
+
+  &:first-child {
+    margin-left: 0;
+  }
+
+  > span {
+    border-bottom: $color-neonCarrot 2.5px solid;
+    padding-bottom: 6px;
+  }
+}
