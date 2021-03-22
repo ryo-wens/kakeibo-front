@@ -49,14 +49,12 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 
 ## 使用技術
 ### 【 _Frontend_ 】
-**<ins>Runtime Environment</ins>**
-- Node.js v14.16.0
-
 **<ins>Language</ins>**
 - TypeScript v4.2.2
 - Sass
 
 **<ins>Library/Framework</ins>**
+- Node.js v14.16.0
 - React v17.0.1
 - Redux v4.0.5
 - redux-thunk v2.3.0
