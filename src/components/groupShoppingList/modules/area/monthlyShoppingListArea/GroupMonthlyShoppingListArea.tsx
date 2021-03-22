@@ -28,6 +28,7 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
         <div className={styles.switchItem__width}>
           <div className={styles.inputYears}>
             <InputYears
+              currentPage={'todo'}
               selectedYear={props.selectedYear}
               selectedMonth={props.selectedMonth}
               setSelectedMonth={props.setSelectedMonth}

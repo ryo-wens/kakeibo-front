@@ -33,6 +33,13 @@
     }
   }
 
+  &__form-title {
+    margin: 0;
+    padding-bottom: 2px;
+    color: $color-boulder;
+    font-size: 0.7rem;
+  }
+
   &__form-content{
     width: 270px;
 

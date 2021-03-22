@@ -73,7 +73,7 @@ const MediumCategoryList = React.forwardRef(
                 : props.setMediumCategoryMenuOpen(false);
             }}
           >
-            {props.associatedCategory === '' ? '中カテゴリー(必須)' : props.associatedCategory}
+            {props.associatedCategory === '' ? '中カテゴリー' : props.associatedCategory}
           </button>
           {props.mediumCategoryMenuOpen && (
             <ul className="category-input__medium-menu">

@@ -72,7 +72,7 @@ const BigCategoryList = React.forwardRef(
                 : props.setBigCategoryMenuOpen(false);
             }}
           >
-            {props.bigCategory === '' ? '大カテゴリー(必須)' : props.bigCategory}
+            {props.bigCategory === '' ? '大カテゴリー' : props.bigCategory}
           </button>
           {props.bigCategoryMenuOpen && (
             <ul style={props.incomeStyle()} className="category-input__menu">

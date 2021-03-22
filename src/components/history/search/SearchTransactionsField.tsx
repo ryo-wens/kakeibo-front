@@ -211,7 +211,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
       <div className="search-transaction__search-button">
         <GenericButton
           disabled={false}
-          label={'この条件で絞り込む'}
+          label={'この条件で検索'}
           onClick={() => {
             if (props.pathName !== 'group') {
               props.setSearchSubmit(true);

@@ -51,6 +51,7 @@ const History = (props: HistoryProps) => {
           <div className="history__spacer" />
           {!props.openSearchField && (
             <InputYears
+              currentPage={`history/${props.query}`}
               selectedYear={props.selectedYear}
               selectedMonth={props.selectedMonth}
               setSelectedMonth={props.setSelectedMonth}

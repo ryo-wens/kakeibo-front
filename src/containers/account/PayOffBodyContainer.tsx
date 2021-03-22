@@ -6,15 +6,19 @@ import { GroupAccountList, MonthWithoutSplit } from '../../reducks/groupTransact
 import PayOffBody from '../../components/account/PayOffBody';
 import { editGroupAccount } from '../../reducks/groupTransactions/operations';
 import axios from 'axios';
+import moment from 'moment';
 
 interface PayOffBodyContainerProps {
+  noTransactions: boolean;
   selectYear: string;
-  selectMonth: string | null;
+  selectMonth: number;
   currentUserId: string;
   approvedGroup: Groups;
   remainingTotalAmount: number[];
   groupAccountList: GroupAccountList;
   monthWithoutSplit: MonthWithoutSplit;
+  currentSelectMonth: string;
+  currentSelectYear: string;
 }
 
 const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
@@ -22,19 +26,21 @@ const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
   const { group_id } = useParams<{ group_id: string }>();
   const getMonthIndexNumber = 1;
   const currentSelectMonth = props.groupAccountList.month.split('-')[getMonthIndexNumber];
+  const currentSelectYear = props.groupAccountList.month.split('-')[0];
 
   const withoutPay = {
     judgment: false,
   };
 
   for (const month of props.monthWithoutSplit.withoutMonth) {
-    if (month === props.selectMonth) {
+    if (month === String(moment(props.selectMonth, 'MM').format('MM'))) {
       withoutPay.judgment = true;
     }
   }
 
   const displayAccountList =
-    currentSelectMonth === props.selectMonth &&
+    currentSelectYear === String(props.selectYear) &&
+    currentSelectMonth === String(moment(props.selectMonth, 'MM').format('MM')) &&
     props.groupAccountList.group_accounts_list_by_payer !== undefined &&
     !withoutPay.judgment;
 
@@ -66,6 +72,7 @@ const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
 
   return (
     <PayOffBody
+      noTransactions={props.noTransactions}
       withoutPay={withoutPay}
       currentUserId={props.currentUserId}
       groupAccountList={props.groupAccountList}

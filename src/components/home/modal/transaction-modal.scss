@@ -75,4 +75,11 @@
   &__select-category {
     width: 270px;
   }
+
+  &__form-title {
+    margin: 0;
+    color: $color-boulder;
+    font-size: 0.7rem;
+    padding-bottom: 2px;
+  }
 }

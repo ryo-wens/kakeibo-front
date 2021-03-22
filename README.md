@@ -54,6 +54,7 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 - Sass
 
 **<ins>Library/Framework</ins>**
+- Node.js v14.16.0
 - React v17.0.1
 - Redux v4.0.5
 - redux-thunk v2.3.0
@@ -67,7 +68,7 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 
 ### 【 _Backend_ 】
 **<ins>Language</ins>**
-- Go v1.16.22
+- Go v1.16.2
 
 ### 【 _Infrastructure_ 】
 **<ins>Cloud Service</ins>**

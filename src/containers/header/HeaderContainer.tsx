@@ -87,14 +87,9 @@ const HeaderContainer = () => {
     };
 
     if (path === currentPath) {
-      if (path === '/todo' || path === `/group/${group_id}/todo`) {
-        style.color = '#e2750f';
-        style.borderBottom = '4px solid #e2750f';
-        style.paddingBottom = '13px';
-      } else {
-        style.color = '#e2750f';
-        style.borderBottom = '4px solid #e2750f';
-      }
+      style.color = '#e2750f';
+      style.borderBottom = '4px solid #e2750f';
+      style.paddingBottom = '14px';
     }
     return style;
   };

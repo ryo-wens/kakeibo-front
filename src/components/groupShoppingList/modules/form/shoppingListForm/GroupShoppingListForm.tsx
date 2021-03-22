@@ -11,6 +11,7 @@ import styles from '../../../../shoppingList/modules/form/ShoppingListForm/Shopp
 import cn from 'classnames';
 
 interface GroupShoppingListFormProps {
+  message: string;
   titleLabel: string;
   buttonLabel: string;
   approvedGroup: Group;
@@ -230,7 +231,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           家計簿に自動追加
         </label>
         <span className={styles.toolTip}>
-          <ToolTipIcon />
+          <ToolTipIcon message={props.message} />
         </span>
       </div>
       <div className={styles.operationBtn}>

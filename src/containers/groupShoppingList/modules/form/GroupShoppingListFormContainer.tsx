@@ -6,6 +6,7 @@ import {
   getGroupExpenseCategories,
   getGroupIncomeCategories,
 } from '../../../../reducks/groupCategories/selectors';
+import { autoAddTransactionMessage } from '../../../../lib/message';
 import GroupShoppingListForm from '../../../../components/groupShoppingList/modules/form/shoppingListForm/GroupShoppingListForm';
 
 interface GroupShoppingListFormContainerProps {
@@ -60,6 +61,7 @@ const GroupShoppingListFormContainer = (props: GroupShoppingListFormContainerPro
 
   return (
     <GroupShoppingListForm
+      message={autoAddTransactionMessage}
       titleLabel={props.titleLabel}
       buttonLabel={props.buttonLabel}
       approvedGroup={approvedGroup[0]}

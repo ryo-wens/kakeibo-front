@@ -39,11 +39,11 @@ const YearlyAccountContainer = () => {
       signal.cancel();
       clearInterval(interval);
     };
-  }, [group_id, selectedYear, queryParamsLength]);
+  }, [group_id, queryYear]);
 
   useEffect(() => {
     dispatch(fetchGroupYearlyAccountList(Number(group_id), Number(queryYear), signal));
-  }, [selectedYear]);
+  }, [queryYear]);
 
   useEffect(() => {
     setYearlyAccount(yearlyAccountList);

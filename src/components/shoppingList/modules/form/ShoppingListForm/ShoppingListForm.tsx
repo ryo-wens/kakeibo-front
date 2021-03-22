@@ -9,6 +9,7 @@ import MediumCategoryListContainer from '../../../../../containers/modules/Mediu
 import cn from 'classnames';
 
 interface ShoppingListFormProps {
+  message: string;
   titleLabel: string;
   buttonLabel: string;
   expectedPurchaseDate: Date | null;
@@ -207,7 +208,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           家計簿に自動追加
         </label>
         <span className={styles.toolTip}>
-          <ToolTipIcon />
+          <ToolTipIcon message={props.message} />
         </span>
       </div>
       <div className={styles.operationBtn}>

@@ -13,6 +13,7 @@ import { month, year } from '../../../lib/constant';
 import { SelectYears } from '../../../lib/date';
 import History from '../../../templates/history/History';
 import { useHistory } from 'react-router-dom';
+import moment from 'moment';
 
 const HistoryContainer = () => {
   const dispatch = useDispatch();
@@ -100,7 +101,7 @@ const HistoryContainer = () => {
 
   return (
     <History
-      query={query}
+      query={query.split('&')[0]}
       pathName={pathName}
       groupId={group_id}
       openSearchField={openSearchField}
@@ -114,12 +115,22 @@ const HistoryContainer = () => {
       setSelectedMonth={setSelectedMonth}
       routingDailyHistory={() => {
         pathName !== 'group'
-          ? history.push({ pathname: '/history', search: '?daily' })
+          ? history.push({
+              pathname: '/history',
+              search: `?daily&year=${selectedYear}&month=${moment(selectedMonth, 'MM').format(
+                'MM'
+              )}`,
+            })
           : history.push({ pathname: `/group/${group_id}/history`, search: '?daily' });
       }}
       routingWeeklyHistory={() => {
         pathName !== 'group'
-          ? history.push({ pathname: '/history', search: '?weekly' })
+          ? history.push({
+              pathname: '/history',
+              search: `?weekly&year=${selectedYear}&month=${moment(selectedMonth, 'MM').format(
+                'MM'
+              )}`,
+            })
           : history.push({ pathname: `/group/${group_id}/history`, search: '?weekly' });
       }}
     />

@@ -1,6 +1,6 @@
 import React from 'react';
 import { TodayOrMonthly } from '../../../../reducks/shoppingList/types';
-import SwitchTodayOrMonthlyTabs from '../../../../components/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
+import SwitchTodayOrMonthlyTabs from '../../../../components/uikit/tabs/SwitchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabs';
 
 interface SwitchTodayOrMonthlyTabsContainerProps {
   currentItem: TodayOrMonthly;

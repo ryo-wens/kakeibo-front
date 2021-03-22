@@ -1,18 +1,21 @@
 import React from 'react';
 import { Groups } from '../../reducks/groups/types';
 import { GroupAccountList, MonthWithoutSplit } from '../../reducks/groupTransactions/types';
-import { SelectMonth } from '../../components/uikit';
+import InputYears from '../../components/modules/inputYears/InputYears';
 import PayOffBodyContainer from '../../containers/account/PayOffBodyContainer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import '../../assets/accounting/payoff.scss';
+import moment from 'moment';
 
 interface PayOffProps {
+  noTransactions: boolean;
   currentUserId: string;
   subMonth: string | null;
   setSubMonth: React.Dispatch<React.SetStateAction<string | null>>;
   message: string | undefined;
   setMessage: React.Dispatch<React.SetStateAction<string | undefined>>;
   currentSelectMonth: string;
+  currentSelectYear: string;
   accountedJude: { jude: boolean };
   approvedGroup: Groups;
   remainingTotalAmount: number[];
@@ -22,6 +25,7 @@ interface PayOffProps {
   selectedMonth: number;
   monthWithoutSplitList: MonthWithoutSplit;
   displayAmount: (amount: number) => boolean;
+  setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
   setCurrentItem: React.Dispatch<React.SetStateAction<boolean>>;
   backPageOperation: () => void;
@@ -65,7 +69,7 @@ const PayOff = (props: PayOffProps) => {
         <div className="payoff__account-btn--position">
           <button
             type={'button'}
-            className="payoff__account-btn"
+            className="payoff__account-btn payoff__account-btn__delete"
             onClick={() => {
               if (window.confirm(`${props.selectedMonth}月の精算を削除してもよろしいですか?`)) {
                 props.deleteAccountOperation();
@@ -83,7 +87,16 @@ const PayOff = (props: PayOffProps) => {
 
   return (
     <div className="payoff payoff__box-size">
-      <div className="payoff__spacer-big" />
+      <div className="payoff__selector-position">
+        <InputYears
+          btnClassName={'payoff__child-input-years-btn'}
+          currentPage={'account'}
+          selectedMonth={props.selectedMonth}
+          selectedYear={props.selectedYear}
+          setSelectedMonth={props.setSelectedMonth}
+          setSelectedYear={props.setSelectedYear}
+        />
+      </div>
       <div className="payoff__background">
         <button
           className="payoff__back-btn"
@@ -94,57 +107,59 @@ const PayOff = (props: PayOffProps) => {
         >
           <ChevronLeftIcon />
         </button>
-        <div className="payoff__account-btn--position">
-          <SelectMonth
-            selectedMonth={Number(props.selectedMonth)}
-            setSelectedMonth={props.setSelectedMonth}
-            setSubMonth={props.setSubMonth}
-          />
-        </div>
+        <div className="payoff__account-btn--position" />
         <div className="payoff__spacer-small" />
-        {props.currentSelectMonth === props.subMonth && (
-          <div className="payoff__amount-list">
-            <div className="payoff__account-form">
-              合計支払金額
-              <div className="payoff__amount-position">
-                {props.displayAmount(props.groupAccountList.group_total_payment_amount)
-                  ? props.groupAccountList.group_total_payment_amount.toLocaleString()
-                  : 0}
+        {props.currentSelectMonth === String(moment(props.selectedMonth, 'MM').format('MM')) &&
+          props.currentSelectYear === String(props.selectedYear) && (
+            <div className="payoff__amount-list">
+              <div className="payoff__account-form">
+                合計支払金額
+                <div className="payoff__amount-position">
+                  {props.displayAmount(props.groupAccountList.group_total_payment_amount)
+                    ? props.groupAccountList.group_total_payment_amount.toLocaleString()
+                    : 0}
+                </div>
+              </div>
+
+              <div className="payoff__account-form">
+                1人あたり平均支払金額
+                <div className="payoff__amount-position">
+                  {props.displayAmount(props.groupAccountList.group_average_payment_amount)
+                    ? props.groupAccountList.group_average_payment_amount.toLocaleString()
+                    : 0}
+                </div>
+              </div>
+
+              <div className="payoff__account-form">
+                会計後支払残額
+                <div className="payoff__amount-position">
+                  {props.displayAmount(props.groupAccountList.group_remaining_amount)
+                    ? props.groupAccountList.group_remaining_amount.toLocaleString()
+                    : 0}
+                </div>
               </div>
             </div>
-            <div className="payoff__account-form">
-              1人あたり平均支払金額
-              <div className="payoff__amount-position">
-                {props.displayAmount(props.groupAccountList.group_average_payment_amount)
-                  ? props.groupAccountList.group_average_payment_amount.toLocaleString()
-                  : 0}
-              </div>
-            </div>
-            <div className="payoff__account-form">
-              会計後支払残額
-              <div className="payoff__amount-position">
-                {props.displayAmount(props.groupAccountList.group_remaining_amount)
-                  ? props.groupAccountList.group_remaining_amount.toLocaleString()
-                  : 0}
-              </div>
-            </div>
-          </div>
-        )}
+          )}
         <p className="payoff__error-message">
-          {props.currentSelectMonth === props.subMonth ? '' : props.message}
+          {props.currentSelectMonth === String(moment(props.selectedMonth, 'MM').format('MM')) &&
+          props.accountedJude.jude
+            ? ''
+            : props.message}
         </p>
         {displayAddAccountButton()}
-        {displayDeleteAccountButton()}
-
         <PayOffBodyContainer
+          noTransactions={props.noTransactions}
           groupAccountList={props.groupAccountList}
           approvedGroup={props.approvedGroup}
-          selectMonth={props.subMonth}
+          selectMonth={props.selectedMonth}
           selectYear={String(props.selectedYear)}
           monthWithoutSplit={props.monthWithoutSplitList}
           remainingTotalAmount={props.remainingTotalAmount}
           currentUserId={props.currentUserId}
+          currentSelectYear={props.currentSelectYear}
+          currentSelectMonth={props.currentSelectMonth}
         />
+        {displayDeleteAccountButton()}
       </div>
     </div>
   );

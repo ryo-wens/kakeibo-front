@@ -2,7 +2,7 @@ import React from 'react';
 import { GroupYearlyAccountList } from '../../reducks/groupTransactions/types';
 import qs from 'qs';
 import HeaderContainer from '../../containers/header/HeaderContainer';
-import { SelectYears } from '../../components/uikit';
+import SelectYears from '../../components/modules/SelectYears/SelectYears';
 import PayOffContainer from '../../containers/templates/account/PayOffContainer';
 import '../../components/account/yearly-account.scss';
 
@@ -27,8 +27,7 @@ const YearlyAccount = (props: YearlyAccountProps) => {
       <HeaderContainer />
       <main className="section__container">
         {!props.currentItem && props.searchLocation.length === props.queryParamsLength ? (
-          <>
-            <div className="yearly-account__spacer yearly-account__spacer--large" />
+          <div className="yearly-account">
             <div className="yearly-account__year-position">
               <SelectYears
                 selectedYear={props.selectedYear}
@@ -83,11 +82,12 @@ const YearlyAccount = (props: YearlyAccountProps) => {
                 </tbody>
               </table>
             </div>
-          </>
+          </div>
         ) : (
           <PayOffContainer
             setCurrentItem={props.setCurrentItem}
             selectedYear={props.selectedYear}
+            setSelectedYear={props.setSelectedYear}
           />
         )}
       </main>

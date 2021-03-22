@@ -12,6 +12,7 @@ import MediumCategoryListContainer from '../../../../../containers/modules/Mediu
 import BigCategoryListContainer from '../../../../../containers/modules/BigCategoryListContainer';
 
 interface GroupRegularShoppingListFormProps {
+  message: string;
   titleLabel: string;
   buttonLabel: string;
   approvedGroup: Group;
@@ -238,7 +239,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
           家計簿に自動追加
         </label>
         <span className={styles.toolTip}>
-          <ToolTipIcon />
+          <ToolTipIcon message={props.message} />
         </span>
       </div>
       <div className={styles.operationBtn}>
