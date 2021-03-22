@@ -1,26 +1,31 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { EditTodoListItemReq, TodoListItem } from '../../../../reducks/todoList/types';
-import { useDispatch } from 'react-redux';
-import { deleteTodoListItem, editTodoListItem } from '../../../../reducks/todoList/operations';
 import {
-  deleteGroupTodoListItem,
-  editGroupTodoListItem,
-} from '../../../../reducks/groupTodoList/operations';
-import { dateStringToDate } from '../../../../lib/date';
-import { customDate, customMonth, year } from '../../../../lib/constant';
+  EditTodoListItemReq,
+  SearchTodoRequestData,
+  TodoListItem,
+} from '../../../../../../../reducks/todoList/types';
+import { useDispatch } from 'react-redux';
+import {
+  deleteSearchTodoListItem,
+  editSearchTodoListItem,
+} from '../../../../../../../reducks/todoList/operations';
+import {
+  deleteGroupSearchTodoListItem,
+  editGroupSearchTodoListItem,
+} from '../../../../../../../reducks/groupTodoList/operations';
+import { dateStringToDate } from '../../../../../../../lib/date';
 import { useLocation, useParams } from 'react-router';
-import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
-import axios from 'axios';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
-interface TodoListItemComponentContainerProps {
+import TodoListItemComponent from '../../../../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
+import { executeAfterAsyncProcess } from '../../../../../../../lib/function';
+interface SearchTodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
   currentMonth: string;
-  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
-  formClassName?: string;
+  fetchSearchTodoListRequestData: SearchTodoRequestData;
+  formClassName: string;
 }
 
-const TodoListItemComponentContainer = (props: TodoListItemComponentContainerProps) => {
+const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponentContainerProps) => {
   const initialState = {
     initialImplementationDate: dateStringToDate(props.listItem.implementation_date),
     initialDueDate: dateStringToDate(props.listItem.due_date),
@@ -32,7 +37,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   const pathName = pathNames[1];
   const currentPage = pathNames.slice(-1)[0];
   const { group_id } = useParams<{ group_id: string }>();
-  const signal = axios.CancelToken.source();
 
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
@@ -64,15 +68,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     setTodoContent(initialState.initialTodoContent);
   }, [props.listItem.complete_flag]);
 
-  useEffect(() => {
-    if (!openEditTodoForm) {
-      props.setEditing(false);
-    }
-  }, [openEditTodoForm]);
-
   const handleOpenEditTodoForm = () => {
     setOpenEditTodoForm(true);
-    props.setEditing(true);
   };
 
   const handleCloseEditTodoForm = () => {
@@ -104,7 +101,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
     setChecked(event.target.checked);
 
-    const signal = axios.CancelToken.source();
     const requestData: EditTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -114,30 +110,16 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
 
     if (pathName === 'group') {
       dispatch(
-        editGroupTodoListItem(
+        editGroupSearchTodoListItem(
           Number(group_id),
           props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
           requestData,
-          signal
+          props.fetchSearchTodoListRequestData
         )
       );
     } else if (pathName !== 'group') {
       dispatch(
-        editTodoListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          requestData,
-          signal
-        )
+        editSearchTodoListItem(props.listItem.id, requestData, props.fetchSearchTodoListRequestData)
       );
     }
   };
@@ -153,35 +135,23 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     if (pathName === 'group') {
       return executeAfterAsyncProcess(
         dispatch(
-          editGroupTodoListItem(
+          editGroupSearchTodoListItem(
             Number(group_id),
             props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.currentYear,
-            props.currentMonth,
             requestData,
-            signal
+            props.fetchSearchTodoListRequestData
           )
         ),
+
         () => setOpenEditTodoForm(false)
       );
     }
 
     return executeAfterAsyncProcess(
       dispatch(
-        editTodoListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          requestData,
-          signal
-        )
+        editSearchTodoListItem(props.listItem.id, requestData, props.fetchSearchTodoListRequestData)
       ),
+
       () => setOpenEditTodoForm(false)
     );
   };
@@ -190,32 +160,16 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     if (pathName === 'group') {
       return executeAfterAsyncProcess(
         dispatch(
-          deleteGroupTodoListItem(
+          deleteGroupSearchTodoListItem(
             Number(group_id),
             props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.currentYear,
-            props.currentMonth,
-            signal
+            props.fetchSearchTodoListRequestData
           )
         )
       );
     }
-
     return executeAfterAsyncProcess(
-      dispatch(
-        deleteTodoListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          signal
-        )
-      )
+      dispatch(deleteSearchTodoListItem(props.listItem.id, props.fetchSearchTodoListRequestData))
     );
   };
 
@@ -235,8 +189,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       disabledButton={disabledButton()}
-      handleEditTodoListItem={handleEditTodoListItem}
-      handleDeleteTodoListItem={handleDeleteTodoListItem}
+      handleEditTodoListItem={() => handleEditTodoListItem()}
+      handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
       currentPage={currentPage}
       formClassName={props.formClassName}
       inputTodoRef={inputTodoRef}
@@ -244,4 +198,4 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   );
 };
 
-export default TodoListItemComponentContainer;
+export default SearchTodoListItemComponentContainer;

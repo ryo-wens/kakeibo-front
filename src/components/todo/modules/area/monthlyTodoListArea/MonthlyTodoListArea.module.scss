@@ -1,11 +1,7 @@
-@import "../../../../../assets/modules/task-btn";
+@import "../../../../../assets/variable";
 
 .addButton {
   margin: 20px 0;
-}
-
-.inputYears {
-  margin-bottom: 20px;
 }
 
 .switchItem {
@@ -17,6 +13,10 @@
     width: 60%;
     margin: auto;
   }
+}
+
+.inputYears {
+  margin-bottom: 20px;
 }
 
 .childInputYearsBtn {

@@ -1,25 +1,26 @@
 import React from 'react';
-import SwitchItemTabs from '../../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import InputYears from '../../../../modules/inputYears/InputYears';
-import AddGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/modal/AddGroupShoppingListItemModalContainer';
-import GroupMonthlyShoppingListByDateContainer from '../../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByDateContainer/GroupMonthlyShoppingListByDateContainer';
-import GroupMonthlyShoppingListByCategoriesContainer from '../../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/GroupMonthlyShoppingListByCategoriesContainer';
-import styles from '../../../../shoppingList/modules/area/MonthlyShoppingListArea/MonthlyShoppingListArea.module.scss';
+import InputYears from '../../../../../components/modules/inputYears/InputYears';
+import SwitchItemTabs from '../../../../../components/uikit/tabs/switchItemTabs/SwitchItemTabs';
+import MonthlyImplementationDateTodoListContainer from '../../../../../containers/todo/modules/area/monthlyTodoListArea/Items/MonthlyImplementationDateTodoListContainer';
+import MonthlyDueDateTodoListContainer from '../../../../../containers/todo/modules/area/monthlyTodoListArea/Items/MonthlyDueDateTodoListContainer';
+import AddTodoListItemFormContainer from '../../../../../containers/todo/modules/form/AddTodoListItemFormContainer';
+import styles from './MonthlyTodoListArea.module.scss';
 
-interface GroupMonthlyShoppingListAreaProps {
+interface MonthlyTodoListAreaProps {
   selectedYear: number;
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
   currentYear: string;
   currentMonth: string;
+  setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) => {
+const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
   return (
     <>
       <div className={styles.addButton}>
-        <AddGroupShoppingListItemModalContainer
+        <AddTodoListItemFormContainer
           currentYear={props.currentYear}
           currentMonth={props.currentMonth}
         />
@@ -38,22 +39,22 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
             />
           </div>
           <SwitchItemTabs
-            leftButtonLabel={'日別'}
-            rightButtonLabel={'カテゴリ別'}
+            leftButtonLabel={'実施予定のToDo'}
+            rightButtonLabel={'締切予定のToDo'}
             leftItem={
-              <GroupMonthlyShoppingListByDateContainer
+              <MonthlyImplementationDateTodoListContainer
                 selectedMonth={props.selectedMonth}
-                selectedYear={props.selectedYear}
                 currentYear={props.currentYear}
                 currentMonth={props.currentMonth}
+                setEditing={props.setEditing}
               />
             }
             rightItem={
-              <GroupMonthlyShoppingListByCategoriesContainer
+              <MonthlyDueDateTodoListContainer
                 selectedMonth={props.selectedMonth}
-                selectedYear={props.selectedYear}
                 currentYear={props.currentYear}
                 currentMonth={props.currentMonth}
+                setEditing={props.setEditing}
               />
             }
             tabsBtnClassName={styles.childTabsBtn}
@@ -64,4 +65,4 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
   );
 };
 
-export default GroupMonthlyShoppingListArea;
+export default MonthlyTodoListArea;

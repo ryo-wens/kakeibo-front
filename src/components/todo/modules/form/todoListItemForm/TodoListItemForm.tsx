@@ -2,7 +2,7 @@ import React from 'react';
 import styles from './TodoListItemForm.module.scss';
 import { DatePicker, TextInput } from '../../../../uikit';
 import CloseIcon from '@material-ui/icons/Close';
-import DeleteModal from '../../../../uikit/modal/deleteModal/DeleteModal';
+import DeleteModal from '../../../../../components/uikit/modal/deleteModal/DeleteModal';
 
 interface TodoListItemFormProps {
   titleLabel: string;
