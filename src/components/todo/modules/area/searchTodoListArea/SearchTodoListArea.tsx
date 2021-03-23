@@ -136,7 +136,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       })}
       <div className={styles.searchBtnPosition}>
         <button className={styles.searchBtn} onClick={props.getSearchResultTodoList}>
-          この条件で絞り込む
+          この条件で検索
         </button>
       </div>
       {props.openSearchResultTodoList && (
