@@ -5,7 +5,7 @@ import InputYears from '../../components/modules/inputYears/InputYears';
 import PayOffBodyContainer from '../../containers/account/PayOffBodyContainer';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import '../../assets/accounting/payoff.scss';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 interface PayOffProps {
   noTransactions: boolean;
@@ -109,7 +109,7 @@ const PayOff = (props: PayOffProps) => {
         </button>
         <div className="payoff__account-btn--position" />
         <div className="payoff__spacer-small" />
-        {props.currentSelectMonth === String(moment(props.selectedMonth, 'MM').format('MM')) &&
+        {props.currentSelectMonth === dayjs(String(props.selectedMonth)).format('MM') &&
           props.currentSelectYear === String(props.selectedYear) && (
             <div className="payoff__amount-list">
               <div className="payoff__account-form">
@@ -141,7 +141,7 @@ const PayOff = (props: PayOffProps) => {
             </div>
           )}
         <p className="payoff__error-message">
-          {props.currentSelectMonth === String(moment(props.selectedMonth, 'MM').format('MM')) &&
+          {props.currentSelectMonth === dayjs(String(props.selectedMonth)).format('MM') &&
           props.accountedJude.jude
             ? ''
             : props.message}

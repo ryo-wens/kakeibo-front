@@ -4,6 +4,7 @@ import { Group } from '../../../../reducks/groups/types';
 import { GroupTaskListForEachUser, TaskUsers } from '../../../../reducks/groupTasks/types';
 import TaskToolBarArea from '../../../../components/task/modules/area/taskToolBarArea/TaskToolBarArea';
 import moment from 'moment';
+import dayjs from 'dayjs';
 
 interface TaskToolBarAreaContainerProps {
   selectedDate: Date | null;
@@ -22,20 +23,21 @@ const TaskToolBarAreaContainer = (props: TaskToolBarAreaContainerProps) => {
     props.handleChangeSelectedDate(date);
   };
 
-  const handleGetPrevWeek = (selectDate: Date | null) => {
-    const prevWeek = moment(selectDate).add(-7, 'd').toDate();
+  const handleGetPrevWeek = (selectDate: string) => {
+    const prevWeek = dayjs(selectDate).add(-7, 'd').toDate();
 
     props.handleChangeSelectedDate(prevWeek);
   };
 
-  const handleGetNextWeek = (selectDate: Date | null) => {
+  const handleGetNextWeek = (selectDate: string) => {
     const nextWeek = moment(selectDate).add(7, 'd').toDate();
 
     props.handleChangeSelectedDate(nextWeek);
   };
 
-  const weekStartDate: Date = moment(props.selectedDate).startOf('week').toDate();
-  const weekLastDate: Date = moment(props.selectedDate).endOf('week').toDate();
+  const weekStartDate: Date = dayjs(String(props.selectedDate)).startOf('week').toDate();
+
+  const weekLastDate: Date = dayjs(String(props.selectedDate)).endOf('week').toDate();
 
   return (
     <TaskToolBarArea

@@ -29,7 +29,7 @@ import {
   TransactionsRes,
   DeleteTransactionRes,
 } from './types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { isValidAmountFormat } from '../../lib/validation';
 
 export const fetchTransactionsList = (
@@ -137,7 +137,7 @@ export const addTransactions = (
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -208,7 +208,7 @@ export const editTransactions = (
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
         JSON.stringify(editRequestData, function (key, value) {
           if (key === 'transaction_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -326,11 +326,11 @@ export const searchTransactions = (searchRequestData: {
           params: {
             start_date:
               searchRequestData.start_date !== null
-                ? moment(searchRequestData.start_date).format()
+                ? dayjs(searchRequestData.start_date).format()
                 : null,
             end_date:
               searchRequestData.end_date !== null
-                ? moment(searchRequestData.end_date).format()
+                ? dayjs(searchRequestData.end_date).format()
                 : null,
             transaction_type: searchRequestData.transaction_type,
             low_amount: searchRequestData.low_amount,

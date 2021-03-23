@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useHistory } from 'react-router-dom';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import '../../../templates/history/history.scss';
 import { months, year, month } from '../../../lib/constant';
 import CloseIcon from '@material-ui/icons/Close';
@@ -96,16 +96,16 @@ const InputYears = (props: InputYearsProps) => {
     setOpenSelectYears(false);
 
     if (props.currentPage === 'account') {
-      history.push({ search: `?year=${itemYear}&month=${moment(itemMonth, 'MM').format('MM')}` });
+      history.push({ search: `?year=${itemYear}&month=${dayjs(String(itemMonth)).format('MM')}` });
     }
 
     if (props.currentPage === 'history/?daily') {
       history.push({
-        search: `?daily&year=${itemYear}&month=${moment(itemMonth, 'MM').format('MM')}`,
+        search: `?daily&year=${itemYear}&month=${dayjs(String(itemMonth)).format('MM')}`,
       });
     } else if (props.currentPage === 'history/?weekly') {
       history.push({
-        search: `?weekly&year=${itemYear}&month=${moment(itemMonth, 'MM').format('MM')}`,
+        search: `?weekly&year=${itemYear}&month=${dayjs(String(itemMonth)).format('MM')}`,
       });
     }
   };
@@ -116,16 +116,16 @@ const InputYears = (props: InputYearsProps) => {
     setOpenSelectYears(false);
 
     if (props.currentPage === 'account') {
-      history.push({ search: `?year=${year}&month=${moment(month, 'MM').format('MM')}` });
+      history.push({ search: `?year=${year}&month=${dayjs(String(month)).format('MM')}` });
     }
 
     if (props.currentPage === 'history/?daily') {
       history.push({
-        search: `?daily&year=${year}&month=${moment(month, 'MM').format('MM')}`,
+        search: `?daily&year=${year}&month=${dayjs(String(month)).format('MM')}`,
       });
     } else if (props.currentPage === 'history/?weekly') {
       history.push({
-        search: `?weekly&year=${year}&month=${moment(month, 'MM').format('MM')}`,
+        search: `?weekly&year=${year}&month=${dayjs(String(month)).format('MM')}`,
       });
     }
   };

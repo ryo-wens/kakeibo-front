@@ -19,7 +19,7 @@ import {
   getStatusNotFoundMessage,
 } from '../../../reducks/groupTransactions/selectors';
 import PayOff from '../../../templates/account/PayOff';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 interface PayOffContainerProps {
   selectedYear: number;
@@ -59,10 +59,7 @@ const PayOffContainer = (props: PayOffContainerProps) => {
   );
 
   const displayAmount = (amount: number): boolean => {
-    return (
-      amount !== undefined &&
-      currentSelectMonth === String(moment(selectedMonth, 'MM').format('MM'))
-    );
+    return amount !== undefined && currentSelectMonth === dayjs(String(selectedMonth)).format('MM');
   };
 
   useEffect(() => {
@@ -156,7 +153,7 @@ const PayOffContainer = (props: PayOffContainerProps) => {
           addGroupAccount(
             Number(group_id),
             String(props.selectedYear),
-            String(moment(selectedMonth, 'MM').format('MM')),
+            dayjs(String(selectedMonth)).format('MM'),
             signal
           )
         );
@@ -167,7 +164,7 @@ const PayOffContainer = (props: PayOffContainerProps) => {
           deleteGroupAccount(
             Number(group_id),
             String(props.selectedYear),
-            String(moment(selectedMonth, 'MM').format('MM')),
+            dayjs(String(selectedMonth)).format('MM'),
             signal
           )
         );

@@ -41,7 +41,7 @@ import {
   startFetchGroupTaskListForEachUserAction,
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const fetchGroupTaskListForEachUser = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
@@ -188,7 +188,7 @@ export const editTaskItem = (groupId: number, taskItemId: number, requestData: E
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'base_date' && value !== null) {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
