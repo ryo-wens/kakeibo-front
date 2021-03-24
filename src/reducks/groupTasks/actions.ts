@@ -87,16 +87,22 @@ export const startAddTaskUsersAction = () => {
   return {
     type: START_ADD_TASK_USERS,
     payload: {
+      groupTaskListLoading: true,
       groupTaskListForEachUserLoading: true,
     },
   };
 };
 
 export const ADD_TASK_USERS = 'ADD_TASK_USERS';
-export const addTaskUsersAction = (groupTaskListForEachUser: GroupTaskListForEachUser) => {
+export const addTaskUsersAction = (
+  groupTaskList: GroupTaskList,
+  groupTaskListForEachUser: GroupTaskListForEachUser
+) => {
   return {
     type: ADD_TASK_USERS,
     payload: {
+      groupTaskListLoading: false,
+      groupTaskList: groupTaskList,
       groupTaskListForEachUserLoading: false,
       groupTaskListForEachUser: groupTaskListForEachUser,
     },
@@ -108,6 +114,7 @@ export const failedAddTaskUsersAction = (statusCode: number, errorMessage: strin
   return {
     type: FAILED_ADD_TASK_USERS,
     payload: {
+      groupTaskListLoading: false,
       groupTaskListForEachUserLoading: false,
       groupTaskError: {
         statusCode: statusCode,
@@ -122,16 +129,22 @@ export const startDeleteTaskUsersAction = () => {
   return {
     type: START_DELETE_TASK_USERS,
     payload: {
+      groupTaskListLoading: true,
       groupTaskListForEachUserLoading: true,
     },
   };
 };
 
 export const DELETE_TASK_USERS = 'DELETE_TASK_USERS';
-export const deleteTaskUsersAction = (groupTaskListForEachUser: GroupTaskListForEachUser) => {
+export const deleteTaskUsersAction = (
+  groupTaskList: GroupTaskList,
+  groupTaskListForEachUser: GroupTaskListForEachUser
+) => {
   return {
     type: DELETE_TASK_USERS,
     payload: {
+      groupTaskListLoading: false,
+      groupTaskList: groupTaskList,
       groupTaskListForEachUserLoading: false,
       groupTaskListForEachUser: groupTaskListForEachUser,
     },
@@ -143,6 +156,7 @@ export const failedDeleteTaskUsersAction = (statusCode: number, errorMessage: st
   return {
     type: FAILED_DELETE_TASK_USERS,
     payload: {
+      groupTaskListLoading: false,
       groupTaskListForEachUserLoading: false,
       groupTaskError: {
         statusCode: statusCode,
@@ -242,17 +256,23 @@ export const startEditTaskItemAction = () => {
     type: START_EDIT_TASK_ITEM,
     payload: {
       groupTaskListLoading: true,
+      groupTaskListForEachUserLoading: true,
     },
   };
 };
 
 export const EDIT_TASK_ITEM = 'EDIT_TASK_ITEM';
-export const editTaskItemAction = (groupTaskList: GroupTaskList) => {
+export const editTaskItemAction = (
+  groupTaskList: GroupTaskList,
+  groupTaskListForEachUser: GroupTaskListForEachUser
+) => {
   return {
     type: EDIT_TASK_ITEM,
     payload: {
       groupTaskListLoading: false,
       groupTaskList: groupTaskList,
+      groupTaskListForEachUserLoading: false,
+      groupTaskListForEachUser: groupTaskListForEachUser,
     },
   };
 };
@@ -263,6 +283,7 @@ export const failedEditTaskItemAction = (statusCode: number, errorMessage: strin
     type: FAILED_EDIT_TASK_ITEM,
     payload: {
       groupTaskListLoading: false,
+      groupTaskListForEachUserLoading: false,
       groupTaskError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
@@ -277,17 +298,23 @@ export const startDeleteTaskItemAction = () => {
     type: START_DELETE_TASK_ITEM,
     payload: {
       groupTaskListLoading: true,
+      groupTaskListForEachUserLoading: true,
     },
   };
 };
 
 export const DELETE_TASK_ITEM = 'DELETE_TASK_ITEM';
-export const deleteTaskItemAction = (groupTaskList: GroupTaskList) => {
+export const deleteTaskItemAction = (
+  groupTaskList: GroupTaskList,
+  groupTaskListForEachUser: GroupTaskListForEachUser
+) => {
   return {
     type: DELETE_TASK_ITEM,
     payload: {
       groupTaskListLoading: false,
       groupTaskList: groupTaskList,
+      groupTaskListForEachUserLoading: false,
+      groupTaskListForEachUser: groupTaskListForEachUser,
     },
   };
 };
@@ -298,6 +325,7 @@ export const failedDeleteTaskItemAction = (statusCode: number, errorMessage: str
     type: FAILED_DELETE_TASK_ITEM,
     payload: {
       groupTaskListLoading: false,
+      groupTaskListForEachUserLoading: false,
       groupTaskError: {
         statusCode: statusCode,
         errorMessage: errorMessage,

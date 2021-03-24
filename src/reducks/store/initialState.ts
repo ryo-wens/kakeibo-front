@@ -170,6 +170,10 @@ const initialState = {
       statusCode: null,
       errorMessage: '',
     },
+    groupTaskError: {
+      statusCode: null,
+      errorMessage: '',
+    },
   },
   shoppingList: {
     regularShoppingList: [],

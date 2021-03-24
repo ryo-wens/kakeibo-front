@@ -3,17 +3,21 @@ import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import fetchTaskListForEachUserResponse from './fetchTaskListForEachUserResponse/fetchTaskListForEachUserResponse.json';
-import addTaskUsersResponse from './addTaskUsersResponse/addTaskUsersResponse.json';
-import addGroupTaskListForEachUserResponse from './addTaskUsersResponse/addGroupTaskListForEachUserResponse.json';
+import addTaskUsersResponse from './addTaskUsersResponse/addUsersTaskListForEachUserResponse.json';
+import addUsersTaskListForEachUserResponse from './addTaskUsersResponse/addUsersTaskListForEachUserResponse.json';
+import addUsersTaskListResponse from './addTaskUsersResponse/addUsersTaskListResponse.json';
 import deleteTaskUsersResponse from './deleteTaskUsersResponse/deleteTaskUsersResponse.json';
-import deleteGroupTaskListForEachUserResponse from './deleteTaskUsersResponse/deleteGroupTaskListForEachUserResponse.json';
+import deleteUsersTaskListForEachUserResponse from './deleteTaskUsersResponse/deleteUsersTaskListForEachUserResponse.json';
+import deleteUsersTaskListResponse from './deleteTaskUsersResponse/deleteUsersTaskListResponse.json';
 import fetchTaskListResponse from './fetchTaskListResponse/fetchTaskListResponse.json';
 import addTaskItemResponse from './addTaskItemResponse/addTaskItemResponse.json';
 import addGroupTaskListResponse from './addTaskItemResponse/addGroupTaskListResponse.json';
 import editTaskItemResponse from './editTaskItemResponse/editTaskItemResponse.json';
-import editGroupTaskListResponse from './editTaskItemResponse/editGroupTaskListResponse.json';
+import editTaskItemTaskListResponse from './editTaskItemResponse/editTaskItemTaskListResponse.json';
+import editTaskItemTaskListForEachUserResponse from './editTaskItemResponse/editTaskItemTaskListForEachUserResponse.json';
 import deleteTaskItemResponse from './deleteTaskItemResponse/deleteTaskItemResponse.json';
-import deleteGroupTaskListResponse from './deleteTaskItemResponse/deleteGroupTaskListResponse.json';
+import deleteTaskItemTaskListResponse from './deleteTaskItemResponse/deleteTaskItemTaskListResponse.json';
+import deleteTaskItemTaskListForEachUserResponse from './deleteTaskItemResponse/deleteTaskItemTaskListForEachUserResponse.json';
 import {
   addTaskItem,
   addTaskUsers,
@@ -88,13 +92,15 @@ describe('async actions groupTasks', () => {
     };
 
     const addUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
-    const fetchUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
 
     const expectedAction = [
       {
         type: GroupTasksActions.START_ADD_TASK_USERS,
         payload: {
           groupTaskListForEachUserLoading: true,
+          groupTaskListLoading: true,
         },
       },
       {
@@ -102,13 +108,16 @@ describe('async actions groupTasks', () => {
         payload: {
           groupTaskListForEachUserLoading: false,
           groupTaskListForEachUser:
-            addGroupTaskListForEachUserResponse.group_tasks_list_for_each_user,
+            addUsersTaskListForEachUserResponse.group_tasks_list_for_each_user,
+          groupTaskListLoading: false,
+          groupTaskList: addUsersTaskListResponse.group_tasks_list,
         },
       },
     ];
 
     axiosMock.onPost(addUrl).reply(200, addTaskUsersResponse);
-    axiosMock.onGet(fetchUrl).reply(200, addGroupTaskListForEachUserResponse);
+    axiosMock.onGet(fetchTaskListForEachUserUrl).reply(200, addUsersTaskListForEachUserResponse);
+    axiosMock.onGet(fetchTaskListUrl).reply(200, addUsersTaskListResponse);
 
     await addTaskUsers(groupId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -123,21 +132,25 @@ describe('async actions groupTasks', () => {
     };
 
     const deleteUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
-    const fetchUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
 
     const expectedAction = [
       {
         type: GroupTasksActions.START_DELETE_TASK_USERS,
         payload: {
+          groupTaskListLoading: true,
           groupTaskListForEachUserLoading: true,
         },
       },
       {
         type: GroupTasksActions.DELETE_TASK_USERS,
         payload: {
+          groupTaskListLoading: false,
+          groupTaskList: deleteUsersTaskListResponse.group_tasks_list,
           groupTaskListForEachUserLoading: false,
           groupTaskListForEachUser:
-            deleteGroupTaskListForEachUserResponse.group_tasks_list_for_each_user,
+            deleteUsersTaskListForEachUserResponse.group_tasks_list_for_each_user,
         },
       },
       {
@@ -150,7 +163,8 @@ describe('async actions groupTasks', () => {
     ];
 
     axiosMock.onDelete(deleteUrl).reply(200, deleteTaskUsersResponse);
-    axiosMock.onGet(fetchUrl).reply(200, deleteGroupTaskListForEachUserResponse);
+    axiosMock.onGet(fetchTaskListForEachUserUrl).reply(200, deleteUsersTaskListForEachUserResponse);
+    axiosMock.onGet(fetchTaskListUrl).reply(200, deleteUsersTaskListResponse);
 
     await deleteTaskUsers(groupId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -242,26 +256,34 @@ describe('async actions groupTasks', () => {
     };
 
     const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`;
-    const fetchUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
 
     const expectedAction = [
       {
         type: GroupTasksActions.START_EDIT_TASK_ITEM,
         payload: {
           groupTaskListLoading: true,
+          groupTaskListForEachUserLoading: true,
         },
       },
       {
         type: GroupTasksActions.EDIT_TASK_ITEM,
         payload: {
           groupTaskListLoading: false,
-          groupTaskList: editGroupTaskListResponse.group_tasks_list,
+          groupTaskList: editTaskItemTaskListResponse.group_tasks_list,
+          groupTaskListForEachUserLoading: false,
+          groupTaskListForEachUser:
+            editTaskItemTaskListForEachUserResponse.group_tasks_list_for_each_user,
         },
       },
     ];
 
     axiosMock.onPut(editUrl).reply(200, editTaskItemResponse);
-    axiosMock.onGet(fetchUrl).reply(200, editGroupTaskListResponse);
+    axiosMock.onGet(fetchTaskListUrl).reply(200, editTaskItemTaskListResponse);
+    axiosMock
+      .onGet(fetchTaskListForEachUserUrl)
+      .reply(200, editTaskItemTaskListForEachUserResponse);
 
     await editTaskItem(groupId, taskItemId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -272,20 +294,25 @@ describe('async actions groupTasks', () => {
     const taskItemId = 2;
 
     const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`;
-    const fetchUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
 
     const expectedAction = [
       {
         type: GroupTasksActions.START_DELETE_TASK_ITEM,
         payload: {
           groupTaskListLoading: true,
+          groupTaskListForEachUserLoading: true,
         },
       },
       {
         type: GroupTasksActions.DELETE_TASK_ITEM,
         payload: {
           groupTaskListLoading: false,
-          groupTaskList: deleteGroupTaskListResponse.group_tasks_list,
+          groupTaskList: deleteTaskItemTaskListResponse.group_tasks_list,
+          groupTaskListForEachUserLoading: false,
+          groupTaskListForEachUser:
+            deleteTaskItemTaskListForEachUserResponse.group_tasks_list_for_each_user,
         },
       },
       {
@@ -298,7 +325,10 @@ describe('async actions groupTasks', () => {
     ];
 
     axiosMock.onDelete(editUrl).reply(200, deleteTaskItemResponse);
-    axiosMock.onGet(fetchUrl).reply(200, deleteGroupTaskListResponse);
+    axiosMock.onGet(fetchTaskListUrl).reply(200, deleteTaskItemTaskListResponse);
+    axiosMock
+      .onGet(fetchTaskListForEachUserUrl)
+      .reply(200, deleteTaskItemTaskListForEachUserResponse);
 
     await deleteTaskItem(groupId, taskItemId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);

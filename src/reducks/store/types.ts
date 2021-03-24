@@ -174,6 +174,10 @@ export interface State {
       statusCode: number | null;
       errorMessage: string;
     };
+    groupTaskError: {
+      statusCode: number | null;
+      errorMessage: string;
+    };
   };
   shoppingList: {
     regularShoppingList: RegularShoppingList;
