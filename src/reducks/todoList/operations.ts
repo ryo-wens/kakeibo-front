@@ -46,7 +46,7 @@ import {
   SearchTodoRequestData,
   TodoList,
 } from './types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
 
 export const fetchExpiredTodoList = (signal: CancelTokenSource) => {
@@ -159,8 +159,8 @@ export const fetchSearchTodoList = (searchRequestData: {
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -201,9 +201,9 @@ export const addTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -212,7 +212,7 @@ export const addTodoListItem = (
         }
       );
 
-      const fetchExpiredResult = await axios.get<FetchExpiredTodoListRes>(
+      const fetchExpiredResult = axios.get<FetchExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`,
         {
           cancelToken: signal.token,
@@ -220,7 +220,7 @@ export const addTodoListItem = (
         }
       );
 
-      const fetchTodayResult = await axios.get<FetchTodayTodoListRes>(
+      const fetchTodayResult = axios.get<FetchTodayTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`,
         {
           cancelToken: signal.token,
@@ -228,7 +228,7 @@ export const addTodoListItem = (
         }
       );
 
-      const fetchMonthlyResult = await axios.get<FetchMonthlyTodoListRes>(
+      const fetchMonthlyResult = axios.get<FetchMonthlyTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${currentYear}-${currentMonth}`,
         {
           cancelToken: signal.token,
@@ -236,18 +236,23 @@ export const addTodoListItem = (
         }
       );
 
-      const todayMessage = fetchTodayResult.data.message;
-      const monthlyMessage = fetchMonthlyResult.data.message;
+      const expiredResponse = await fetchExpiredResult;
+      const todayResponse = await fetchTodayResult;
+      const monthlyResponse = await fetchMonthlyResult;
 
-      const expiredTodoList = fetchExpiredResult.data.expired_todo_list;
+      const expiredTodoList = expiredResponse.data.expired_todo_list;
+
+      const todayMessage = todayResponse.data.message;
       const todayImplementationTodoList = todayMessage
         ? []
-        : fetchTodayResult.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : fetchTodayResult.data.due_todo_list;
+        : todayResponse.data.implementation_todo_list;
+      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
+
+      const monthlyMessage = monthlyResponse.data.message;
       const monthlyImplementationTodoList = monthlyMessage
         ? []
-        : fetchMonthlyResult.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : fetchMonthlyResult.data.due_todo_list;
+        : monthlyResponse.data.implementation_todo_list;
+      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
 
       dispatch(
         addTodoListItemAction(
@@ -262,6 +267,7 @@ export const addTodoListItem = (
       dispatch(
         failedAddTodoListItemAction(error.response.status, error.response.data.error.message)
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -284,9 +290,9 @@ export const editTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -295,7 +301,7 @@ export const editTodoListItem = (
         }
       );
 
-      const fetchExpiredResult = await axios.get<FetchExpiredTodoListRes>(
+      const fetchExpiredResult = axios.get<FetchExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`,
         {
           cancelToken: signal.token,
@@ -303,7 +309,7 @@ export const editTodoListItem = (
         }
       );
 
-      const fetchTodayResult = await axios.get<FetchTodayTodoListRes>(
+      const fetchTodayResult = axios.get<FetchTodayTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`,
         {
           cancelToken: signal.token,
@@ -311,7 +317,7 @@ export const editTodoListItem = (
         }
       );
 
-      const fetchMonthlyResult = await axios.get<FetchMonthlyTodoListRes>(
+      const fetchMonthlyResult = axios.get<FetchMonthlyTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${currentYear}-${currentMonth}`,
         {
           cancelToken: signal.token,
@@ -319,18 +325,23 @@ export const editTodoListItem = (
         }
       );
 
-      const todayMessage = fetchTodayResult.data.message;
-      const monthlyMessage = fetchMonthlyResult.data.message;
+      const expiredResponse = await fetchExpiredResult;
+      const todayResponse = await fetchTodayResult;
+      const monthlyResponse = await fetchMonthlyResult;
 
-      const expiredTodoList = fetchExpiredResult.data.expired_todo_list;
+      const expiredTodoList = expiredResponse.data.expired_todo_list;
+
+      const todayMessage = todayResponse.data.message;
       const todayImplementationTodoList = todayMessage
         ? []
-        : fetchTodayResult.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : fetchTodayResult.data.due_todo_list;
+        : todayResponse.data.implementation_todo_list;
+      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
+
+      const monthlyMessage = monthlyResponse.data.message;
       const monthlyImplementationTodoList = monthlyMessage
         ? []
-        : fetchMonthlyResult.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : fetchMonthlyResult.data.due_todo_list;
+        : monthlyResponse.data.implementation_todo_list;
+      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
 
       dispatch(
         editTodoListItemAction(
@@ -345,6 +356,7 @@ export const editTodoListItem = (
       dispatch(
         failedEditTodoListItemAction(error.response.status, error.response.data.error.message)
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -369,7 +381,7 @@ export const deleteTodoListItem = (
         }
       );
 
-      const fetchExpiredResult = await axios.get<FetchExpiredTodoListRes>(
+      const fetchExpiredResult = axios.get<FetchExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`,
         {
           cancelToken: signal.token,
@@ -377,7 +389,7 @@ export const deleteTodoListItem = (
         }
       );
 
-      const fetchTodayResult = await axios.get<FetchTodayTodoListRes>(
+      const fetchTodayResult = axios.get<FetchTodayTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`,
         {
           cancelToken: signal.token,
@@ -385,7 +397,7 @@ export const deleteTodoListItem = (
         }
       );
 
-      const fetchMonthlyResult = await axios.get<FetchMonthlyTodoListRes>(
+      const fetchMonthlyResult = axios.get<FetchMonthlyTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${currentYear}-${currentMonth}`,
         {
           cancelToken: signal.token,
@@ -393,18 +405,23 @@ export const deleteTodoListItem = (
         }
       );
 
-      const todayMessage = fetchTodayResult.data.message;
-      const monthlyMessage = fetchMonthlyResult.data.message;
+      const expiredResponse = await fetchExpiredResult;
+      const todayResponse = await fetchTodayResult;
+      const monthlyResponse = await fetchMonthlyResult;
 
-      const expiredTodoList = fetchExpiredResult.data.expired_todo_list;
+      const expiredTodoList = expiredResponse.data.expired_todo_list;
+
+      const todayMessage = todayResponse.data.message;
       const todayImplementationTodoList = todayMessage
         ? []
-        : fetchTodayResult.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : fetchTodayResult.data.due_todo_list;
+        : todayResponse.data.implementation_todo_list;
+      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
+
+      const monthlyMessage = monthlyResponse.data.message;
       const monthlyImplementationTodoList = monthlyMessage
         ? []
-        : fetchMonthlyResult.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : fetchMonthlyResult.data.due_todo_list;
+        : monthlyResponse.data.implementation_todo_list;
+      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
 
       dispatch(
         deleteTodoListItemAction(
@@ -420,6 +437,7 @@ export const deleteTodoListItem = (
       dispatch(
         failedDeleteTodoListItemAction(error.response.status, error.response.data.error.message)
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -437,9 +455,9 @@ export const editSearchTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -454,8 +472,8 @@ export const editSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -474,6 +492,7 @@ export const editSearchTodoListItem = (
       dispatch(
         failedEditSearchTodoListItemAction(error.response.status, error.response.data.error.message)
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -499,8 +518,8 @@ export const deleteSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -523,6 +542,7 @@ export const deleteSearchTodoListItem = (
           error.response.data.error.message
         )
       );
+      throw error.response.data.error.message;
     }
   };
 };

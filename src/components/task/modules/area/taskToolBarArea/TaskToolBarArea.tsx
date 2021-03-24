@@ -16,8 +16,8 @@ interface TaskToolBarAreaProps {
   participatingTaskUsers: TaskUsers;
   handleChangeDate: (selectDate: Date | null) => void;
   handleGetToday: () => void;
-  handleGetPrevWeek: (selectDate: Date | null) => void;
-  handleGetNextWeek: (selectDate: Date | null) => void;
+  handleGetPrevWeek: (selectDate: string) => void;
+  handleGetNextWeek: (selectDate: string) => void;
 }
 
 const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
@@ -37,7 +37,7 @@ const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
       <div className={styles.displayWeek}>
         <button
           className={styles.prevBtn}
-          onClick={() => props.handleGetPrevWeek(props.selectedDate)}
+          onClick={() => props.handleGetPrevWeek(String(props.selectedDate))}
         >
           <ArrowLeftIcon />
         </button>
@@ -60,7 +60,7 @@ const TaskToolBarArea = (props: TaskToolBarAreaProps) => {
         </div>
         <button
           className={styles.nextBtn}
-          onClick={() => props.handleGetNextWeek(props.selectedDate)}
+          onClick={() => props.handleGetNextWeek(String(props.selectedDate))}
         >
           <ArrowRightIcon />
         </button>

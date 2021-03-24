@@ -1,4 +1,4 @@
-@import "../../../../assets/mixin/main-btn";
+@import "../../../../assets/variable";
 
 .wrapper {
   display: flex;
@@ -33,14 +33,14 @@
 }
 
 .crPageBtn {
-  background-color: $color-lynch;
-  border-color: $color-lynch;
+  background-color: $color-shipCove;
+  border-color: $color-shipCove;
   font-weight: 400;
   color:white;
 
 
   &:hover {
-    background-color: $color-lynch;
+    background-color: $color-shipCove;
     color: white;
   }
 }

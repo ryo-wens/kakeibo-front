@@ -10,10 +10,16 @@
 }
 
 .prevBtn {
-  @extend .task--btn;
+  border: 1.5px solid $color-geyser ;
   border-radius: 0.5rem 0 0 0.5rem;
   border-right: none;
-  padding-top: 8px;
+  color: $color-scorpion;
+  cursor: pointer;
+  padding: 8px 13px 3px;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .jumpYears {
@@ -38,14 +44,19 @@
 }
 
 .nextBtn {
-  @extend .task--btn;
+  border: 1.5px solid $color-geyser ;
   border-radius: 0 0.5rem 0.5rem 0;
   border-left: none;
-  padding-top: 8px;
+  color: $color-scorpion;
+  cursor: pointer;
+  padding: 8px 13px 3px;
+
+  &:focus {
+    outline: none;
+  }
 }
 
 .wrapper {
-  background-color: $color-porcelain;
   border-radius: 0.5rem;
   border: $color-geyser solid 1px;
   color: $color-tundora;
@@ -75,6 +86,7 @@
 .select {
   @extend .selector__box;
   font-size: 0.95rem;
+  width: 90px;
 }
 
 .displayBtn {

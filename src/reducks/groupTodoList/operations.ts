@@ -1,6 +1,6 @@
 import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {
   GroupTodoList,
   FetchGroupTodayTodoListRes,
@@ -178,8 +178,8 @@ export const fetchGroupSearchTodoList = (
           withCredentials: true,
           params: {
             date_type: searchGroupRequestData.date_type,
-            start_date: moment(searchGroupRequestData.start_date).format(),
-            end_date: moment(searchGroupRequestData.end_date).format(),
+            start_date: dayjs(String(searchGroupRequestData.start_date)).format(),
+            end_date: dayjs(String(searchGroupRequestData.end_date)).format(),
             complete_flag: searchGroupRequestData.complete_flag,
             todo_content: searchGroupRequestData.todo_content,
             sort: searchGroupRequestData.sort,
@@ -224,9 +224,9 @@ export const addGroupTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -235,7 +235,7 @@ export const addGroupTodoListItem = (
         }
       );
 
-      const fetchExpiredResult = await axios.get<FetchGroupExpiredTodoListRes>(
+      const fetchExpiredResult = axios.get<FetchGroupExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`,
         {
           cancelToken: signal.token,
@@ -243,7 +243,7 @@ export const addGroupTodoListItem = (
         }
       );
 
-      const fetchTodayResult = await axios.get<FetchGroupTodayTodoListRes>(
+      const fetchTodayResult = axios.get<FetchGroupTodayTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`,
         {
           cancelToken: signal.token,
@@ -251,7 +251,7 @@ export const addGroupTodoListItem = (
         }
       );
 
-      const fetchMonthlyResult = await axios.get<FetchGroupMonthlyTodoListRes>(
+      const fetchMonthlyResult = axios.get<FetchGroupMonthlyTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`,
         {
           cancelToken: signal.token,
@@ -259,18 +259,23 @@ export const addGroupTodoListItem = (
         }
       );
 
-      const todayMessage = fetchTodayResult.data.message;
-      const monthlyMessage = fetchMonthlyResult.data.message;
+      const expiredResponse = await fetchExpiredResult;
+      const todayResponse = await fetchTodayResult;
+      const monthlyResponse = await fetchMonthlyResult;
 
-      const expiredTodoList = fetchExpiredResult.data.expired_group_todo_list;
+      const expiredTodoList = expiredResponse.data.expired_group_todo_list;
+
+      const todayMessage = todayResponse.data.message;
       const todayImplementationTodoList = todayMessage
         ? []
-        : fetchTodayResult.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : fetchTodayResult.data.due_todo_list;
+        : todayResponse.data.implementation_todo_list;
+      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
+
+      const monthlyMessage = monthlyResponse.data.message;
       const monthlyImplementationTodoList = monthlyMessage
         ? []
-        : fetchMonthlyResult.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : fetchMonthlyResult.data.due_todo_list;
+        : monthlyResponse.data.implementation_todo_list;
+      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
 
       dispatch(
         addGroupTodoListItemAction(
@@ -285,6 +290,7 @@ export const addGroupTodoListItem = (
       dispatch(
         failedAddGroupTodoListItemAction(error.response.status, error.response.data.error.message)
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -308,9 +314,9 @@ export const editGroupTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -319,7 +325,7 @@ export const editGroupTodoListItem = (
         }
       );
 
-      const fetchExpiredResult = await axios.get<FetchGroupExpiredTodoListRes>(
+      const fetchExpiredResult = axios.get<FetchGroupExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`,
         {
           cancelToken: signal.token,
@@ -327,7 +333,7 @@ export const editGroupTodoListItem = (
         }
       );
 
-      const fetchTodayResult = await axios.get<FetchGroupTodayTodoListRes>(
+      const fetchTodayResult = axios.get<FetchGroupTodayTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`,
         {
           cancelToken: signal.token,
@@ -335,7 +341,7 @@ export const editGroupTodoListItem = (
         }
       );
 
-      const fetchMonthlyResult = await axios.get<FetchGroupMonthlyTodoListRes>(
+      const fetchMonthlyResult = axios.get<FetchGroupMonthlyTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`,
         {
           cancelToken: signal.token,
@@ -343,18 +349,23 @@ export const editGroupTodoListItem = (
         }
       );
 
-      const todayMessage = fetchTodayResult.data.message;
-      const monthlyMessage = fetchMonthlyResult.data.message;
+      const expiredResponse = await fetchExpiredResult;
+      const todayResponse = await fetchTodayResult;
+      const monthlyResponse = await fetchMonthlyResult;
 
-      const expiredTodoList = fetchExpiredResult.data.expired_group_todo_list;
+      const expiredTodoList = expiredResponse.data.expired_group_todo_list;
+
+      const todayMessage = todayResponse.data.message;
       const todayImplementationTodoList = todayMessage
         ? []
-        : fetchTodayResult.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : fetchTodayResult.data.due_todo_list;
+        : todayResponse.data.implementation_todo_list;
+      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
+
+      const monthlyMessage = monthlyResponse.data.message;
       const monthlyImplementationTodoList = monthlyMessage
         ? []
-        : fetchMonthlyResult.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : fetchMonthlyResult.data.due_todo_list;
+        : monthlyResponse.data.implementation_todo_list;
+      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
 
       dispatch(
         editGroupTodoListItemAction(
@@ -369,6 +380,7 @@ export const editGroupTodoListItem = (
       dispatch(
         failedEditGroupTodoListItemAction(error.response.status, error.response.data.error.message)
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -394,7 +406,7 @@ export const deleteGroupTodoListItem = (
         }
       );
 
-      const fetchExpiredResult = await axios.get<FetchGroupExpiredTodoListRes>(
+      const fetchExpiredResult = axios.get<FetchGroupExpiredTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`,
         {
           cancelToken: signal.token,
@@ -402,7 +414,7 @@ export const deleteGroupTodoListItem = (
         }
       );
 
-      const fetchTodayResult = await axios.get<FetchGroupTodayTodoListRes>(
+      const fetchTodayResult = axios.get<FetchGroupTodayTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`,
         {
           cancelToken: signal.token,
@@ -410,7 +422,7 @@ export const deleteGroupTodoListItem = (
         }
       );
 
-      const fetchMonthlyResult = await axios.get<FetchGroupMonthlyTodoListRes>(
+      const fetchMonthlyResult = axios.get<FetchGroupMonthlyTodoListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`,
         {
           cancelToken: signal.token,
@@ -418,18 +430,23 @@ export const deleteGroupTodoListItem = (
         }
       );
 
-      const todayMessage = fetchTodayResult.data.message;
-      const monthlyMessage = fetchMonthlyResult.data.message;
+      const expiredResponse = await fetchExpiredResult;
+      const todayResponse = await fetchTodayResult;
+      const monthlyResponse = await fetchMonthlyResult;
 
-      const expiredTodoList = fetchExpiredResult.data.expired_group_todo_list;
+      const expiredTodoList = expiredResponse.data.expired_group_todo_list;
+
+      const todayMessage = todayResponse.data.message;
       const todayImplementationTodoList = todayMessage
         ? []
-        : fetchTodayResult.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : fetchTodayResult.data.due_todo_list;
+        : todayResponse.data.implementation_todo_list;
+      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
+
+      const monthlyMessage = monthlyResponse.data.message;
       const monthlyImplementationTodoList = monthlyMessage
         ? []
-        : fetchMonthlyResult.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : fetchMonthlyResult.data.due_todo_list;
+        : monthlyResponse.data.implementation_todo_list;
+      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
 
       dispatch(
         deleteGroupTodoListItemAction(
@@ -448,6 +465,7 @@ export const deleteGroupTodoListItem = (
           error.response.data.error.message
         )
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -466,9 +484,9 @@ export const editGroupSearchTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -483,8 +501,8 @@ export const editGroupSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -506,6 +524,7 @@ export const editGroupSearchTodoListItem = (
           error.response.data.error.message
         )
       );
+      throw error.response.data.error.message;
     }
   };
 };
@@ -532,8 +551,8 @@ export const deleteGroupSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -556,6 +575,7 @@ export const deleteGroupSearchTodoListItem = (
           error.response.data.error.message
         )
       );
+      throw error.response.data.error.message;
     }
   };
 };

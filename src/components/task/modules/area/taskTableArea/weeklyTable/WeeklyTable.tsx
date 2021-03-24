@@ -2,7 +2,7 @@ import React from 'react';
 import { getWeekStartDate } from '../../../../../../lib/date';
 import styles from './WeeklyTable.module.scss';
 import cn from 'classnames';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 interface WeeklyTableProps {
   selectedDate: Date;
@@ -21,7 +21,7 @@ const WeeklyTable = (props: WeeklyTableProps) => {
       weekTableItems.push(
         <th
           className={cn(styles.item, {
-            [styles.crDate]: moment().isSame(date, 'date'),
+            [styles.crDate]: dayjs().isSame(date, 'date'),
           })}
           key={i}
         >

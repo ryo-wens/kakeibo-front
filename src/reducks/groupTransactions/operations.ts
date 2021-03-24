@@ -55,7 +55,7 @@ import {
   GroupYearlyAccountList,
 } from './types';
 import { errorHandling, isValidAmountFormat } from '../../lib/validation';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const fetchGroupTransactionsList = (
   groupId: number,
@@ -162,7 +162,7 @@ export const addGroupTransactions = (
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -233,7 +233,7 @@ export const editGroupTransactions = (
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/transactions/${id}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -593,9 +593,9 @@ export const searchGroupTransactions = (
           withCredentials: true,
           params: {
             start_date:
-              searchRequest.start_date !== null ? moment(searchRequest.start_date).format() : null,
+              searchRequest.start_date !== null ? dayjs(searchRequest.start_date).format() : null,
             end_date:
-              searchRequest.end_date !== null ? moment(searchRequest.end_date).format() : null,
+              searchRequest.end_date !== null ? dayjs(searchRequest.end_date).format() : null,
             transaction_type: searchRequest.transaction_type,
             shop: searchRequest.shop,
             memo: searchRequest.memo,

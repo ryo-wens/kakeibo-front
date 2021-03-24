@@ -6,7 +6,7 @@ import { GroupAccountList, MonthWithoutSplit } from '../../reducks/groupTransact
 import PayOffBody from '../../components/account/PayOffBody';
 import { editGroupAccount } from '../../reducks/groupTransactions/operations';
 import axios from 'axios';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 interface PayOffBodyContainerProps {
   noTransactions: boolean;
@@ -33,14 +33,14 @@ const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
   };
 
   for (const month of props.monthWithoutSplit.withoutMonth) {
-    if (month === String(moment(props.selectMonth, 'MM').format('MM'))) {
+    if (month === dayjs(String(props.selectMonth)).format('MM')) {
       withoutPay.judgment = true;
     }
   }
 
   const displayAccountList =
     currentSelectYear === String(props.selectYear) &&
-    currentSelectMonth === String(moment(props.selectMonth, 'MM').format('MM')) &&
+    currentSelectMonth === dayjs(String(props.selectMonth)).format('MM') &&
     props.groupAccountList.group_accounts_list_by_payer !== undefined &&
     !withoutPay.judgment;
 

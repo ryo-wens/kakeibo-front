@@ -34,6 +34,7 @@ const GroupMonthlyShoppingListArea = (props: GroupMonthlyShoppingListAreaProps) 
               setSelectedMonth={props.setSelectedMonth}
               setSelectedYear={props.setSelectedYear}
               btnClassName={styles.childInputYearsBtn}
+              selectWrapperClassName={styles.childSelectWrapper}
             />
           </div>
           <SwitchItemTabs

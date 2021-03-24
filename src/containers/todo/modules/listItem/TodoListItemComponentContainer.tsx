@@ -11,6 +11,7 @@ import { customDate, customMonth, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
 import axios from 'axios';
+import { executeAfterAsyncProcess } from '../../../../lib/function';
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
@@ -150,9 +151,27 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     };
 
     if (pathName === 'group') {
+      return executeAfterAsyncProcess(
+        dispatch(
+          editGroupTodoListItem(
+            Number(group_id),
+            props.listItem.id,
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth,
+            requestData,
+            signal
+          )
+        ),
+        () => setOpenEditTodoForm(false)
+      );
+    }
+
+    return executeAfterAsyncProcess(
       dispatch(
-        editGroupTodoListItem(
-          Number(group_id),
+        editTodoListItem(
           props.listItem.id,
           String(year),
           customMonth,
@@ -162,29 +181,32 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
           requestData,
           signal
         )
-      );
-      setOpenEditTodoForm(false);
-    }
-    dispatch(
-      editTodoListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData,
-        signal
-      )
+      ),
+      () => setOpenEditTodoForm(false)
     );
-    setOpenEditTodoForm(false);
   };
 
   const handleDeleteTodoListItem = () => {
     if (pathName === 'group') {
+      return executeAfterAsyncProcess(
+        dispatch(
+          deleteGroupTodoListItem(
+            Number(group_id),
+            props.listItem.id,
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth,
+            signal
+          )
+        )
+      );
+    }
+
+    return executeAfterAsyncProcess(
       dispatch(
-        deleteGroupTodoListItem(
-          Number(group_id),
+        deleteTodoListItem(
           props.listItem.id,
           String(year),
           customMonth,
@@ -193,17 +215,6 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
           props.currentMonth,
           signal
         )
-      );
-    }
-    dispatch(
-      deleteTodoListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        signal
       )
     );
   };
@@ -224,8 +235,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       disabledButton={disabledButton()}
-      handleEditTodoListItem={() => handleEditTodoListItem()}
-      handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
+      handleEditTodoListItem={handleEditTodoListItem}
+      handleDeleteTodoListItem={handleDeleteTodoListItem}
       currentPage={currentPage}
       formClassName={props.formClassName}
       inputTodoRef={inputTodoRef}

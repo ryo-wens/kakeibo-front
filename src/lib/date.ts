@@ -1,8 +1,8 @@
 import { year } from './constant';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 export const generateZeroPaddingMonth = (month: number) => {
-  return moment(month, 'MM').format('MM');
+  return dayjs(String(month)).format('MM');
 };
 
 export const dateStringToDate = (date: string) => {

@@ -2,10 +2,10 @@ import React from 'react';
 import styles from './TodoPage.module.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
-import ExpiredTodoListAreaContainer from '../../../containers/todo/page/expiredTodoListArea/ExpiredTodoListAreaContainer';
-import TodayTodoAreaContainer from '../../../containers/todo/page/todayTodoListArea/TodayTodoListAreaContainer';
-import MonthlyTodoListAreaContainer from '../../../containers/todo/page/monthlyTodoListArea/MonthlyTodoListAreaContainer';
-import SearchTodoListAreaContainer from '../../../containers/todo/page/searchTodoListArea/SearchTodoListAreaContainer';
+import ExpiredTodoListAreaContainer from '../../../containers/todo/modules/area/expiredTodoListArea/ExpiredTodoListAreaContainer';
+import TodayTodoAreaContainer from '../../../containers/todo/modules/area/todayTodoListArea/TodayTodoListAreaContainer';
+import MonthlyTodoListAreaContainer from '../../../containers/todo/modules/area/monthlyTodoListArea/MonthlyTodoListAreaContainer';
+import SearchTodoListAreaContainer from '../../../containers/todo/modules/area/searchTodoListArea/SearchTodoListAreaContainer';
 
 interface TodoPageProps {
   selectedYear: number;
