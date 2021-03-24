@@ -7,6 +7,7 @@ import { useLocation, useParams } from 'react-router';
 import AddTodoListItemForm from '../../../../components/todo/modules/form/addTodoListItemForm/AddTodoListItemForm';
 import { AddTodoListItemReq } from '../../../../reducks/todoList/types';
 import axios from 'axios';
+import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddTodoListItemFormContainerProps {
   currentYear: string;
@@ -76,9 +77,26 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     };
 
     if (pathName === 'group') {
+      return executeAfterAsyncProcess(
+        dispatch(
+          addGroupTodoListItem(
+            Number(group_id),
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth,
+            addRequestData,
+            signal
+          )
+        ),
+        () => setOpenAddTodoForm(false)
+      );
+    }
+
+    return executeAfterAsyncProcess(
       dispatch(
-        addGroupTodoListItem(
-          Number(group_id),
+        addTodoListItem(
           String(year),
           customMonth,
           customDate,
@@ -87,21 +105,9 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
           addRequestData,
           signal
         )
-      );
-      setOpenAddTodoForm(false);
-    }
-    dispatch(
-      addTodoListItem(
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        addRequestData,
-        signal
-      )
+      ),
+      () => setOpenAddTodoForm(false)
     );
-    setOpenAddTodoForm(false);
   };
 
   return (
