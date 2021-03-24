@@ -101,7 +101,7 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
       base_date: null,
       cycle_type: null,
       cycle: null,
-      task_name: 'dd',
+      task_name: taskName,
       group_tasks_users_id: null,
     };
 

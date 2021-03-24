@@ -77,21 +77,22 @@ export const addTaskUsers = (groupId: number, requestData: AddGroupTaskUsersReq)
     dispatch(startAddTaskUsersAction());
 
     try {
-      await axios.post<AddGroupTaskUsersRes>(
+      const addTaskListForEachUserResult = await axios.post<AddGroupTaskUsersRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
         JSON.stringify(requestData),
         { withCredentials: true }
       );
 
-      const fetchGroupTaskListForEachUserResult = await axios.get<FetchGroupTaskListForEachUserRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
+      const fetchTaskListResult = await axios.get<FetchGroupTaskListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
         { withCredentials: true }
       );
 
-      const nextGroupTaskListForEachUser: GroupTaskListForEachUser =
-        fetchGroupTaskListForEachUserResult.data.group_tasks_list_for_each_user;
+      const nextTaskListForEachUser: GroupTaskListForEachUser =
+        addTaskListForEachUserResult.data.group_tasks_list_for_each_user ?? [];
+      const nextFetchTaskList: GroupTaskList = fetchTaskListResult.data.group_tasks_list ?? [];
 
-      dispatch(addTaskUsersAction(nextGroupTaskListForEachUser));
+      dispatch(addTaskUsersAction(nextFetchTaskList, nextTaskListForEachUser));
     } catch (error) {
       dispatch(failedAddTaskUsersAction(error.response.status, error.response.data.error.message));
       throw error.response.data.error.message;
@@ -109,15 +110,24 @@ export const deleteTaskUsers = (groupId: number, requestData: DeleteGroupTaskUse
         { data: JSON.stringify(requestData), withCredentials: true }
       );
 
-      const fetchGroupTaskListForEachUserResult = await axios.get<FetchGroupTaskListForEachUserRes>(
+      const fetchTaskListResult = axios.get<FetchGroupTaskListRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
+        { withCredentials: true }
+      );
+
+      const fetchTaskListForEachUserResult = axios.get<FetchGroupTaskListForEachUserRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
         { withCredentials: true }
       );
 
-      const nextGroupTaskListForEachUser: GroupTaskListForEachUser =
-        fetchGroupTaskListForEachUserResult.data.group_tasks_list_for_each_user;
+      const taskListResponse = await fetchTaskListResult;
+      const taskListForEachUserResponse = await fetchTaskListForEachUserResult;
 
-      dispatch(deleteTaskUsersAction(nextGroupTaskListForEachUser));
+      const nextFetchTaskList: GroupTaskList = taskListResponse.data.group_tasks_list ?? [];
+      const nextTaskListForEachUser: GroupTaskListForEachUser =
+        taskListForEachUserResponse.data.group_tasks_list_for_each_user;
+
+      dispatch(deleteTaskUsersAction(nextFetchTaskList, nextTaskListForEachUser));
       dispatch(openTextModalAction(deleteResult.data.message));
     } catch (error) {
       dispatch(
@@ -195,14 +205,24 @@ export const editTaskItem = (groupId: number, taskItemId: number, requestData: E
         { withCredentials: true }
       );
 
-      const fetchResult = await axios.get<FetchGroupTaskListRes>(
+      const fetchTaskListResult = axios.get<FetchGroupTaskListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
         { withCredentials: true }
       );
 
-      const nextFetchTaskList: GroupTaskList = fetchResult.data.group_tasks_list ?? [];
+      const fetchTaskListForEachUserResult = axios.get<FetchGroupTaskListForEachUserRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
+        { withCredentials: true }
+      );
 
-      dispatch(editTaskItemAction(nextFetchTaskList));
+      const taskListResponse = await fetchTaskListResult;
+      const taskListForEachUserResponse = await fetchTaskListForEachUserResult;
+
+      const nextFetchTaskList: GroupTaskList = taskListResponse.data.group_tasks_list ?? [];
+      const nextTaskListForEachUser: GroupTaskListForEachUser =
+        taskListForEachUserResponse.data.group_tasks_list_for_each_user;
+
+      dispatch(editTaskItemAction(nextFetchTaskList, nextTaskListForEachUser));
     } catch (error) {
       dispatch(failedEditTaskItemAction(error.response.status, error.response.data.error.message));
       throw error.response.data.error.message;
@@ -220,14 +240,24 @@ export const deleteTaskItem = (groupId: number, taskItemId: number) => {
         { withCredentials: true }
       );
 
-      const fetchResult = await axios.get<FetchGroupTaskListRes>(
+      const fetchTaskListResult = axios.get<FetchGroupTaskListRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`,
         { withCredentials: true }
       );
 
-      const nextFetchTaskList: GroupTaskList = fetchResult.data.group_tasks_list ?? [];
+      const fetchTaskListForEachUserResult = axios.get<FetchGroupTaskListForEachUserRes>(
+        `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`,
+        { withCredentials: true }
+      );
 
-      dispatch(deleteTaskItemAction(nextFetchTaskList));
+      const taskListResponse = await fetchTaskListResult;
+      const taskListForEachUserResponse = await fetchTaskListForEachUserResult;
+
+      const nextFetchTaskList: GroupTaskList = taskListResponse.data.group_tasks_list ?? [];
+      const nextTaskListForEachUser: GroupTaskListForEachUser =
+        taskListForEachUserResponse.data.group_tasks_list_for_each_user;
+
+      dispatch(deleteTaskItemAction(nextFetchTaskList, nextTaskListForEachUser));
       dispatch(openTextModalAction(deleteResult.data.message));
     } catch (error) {
       dispatch(
