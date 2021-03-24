@@ -1,5 +1,5 @@
 import React from 'react';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { Groups } from '../../reducks/groups/types';
 import MoneyIcon from '@material-ui/icons/Money';
 import HomeIcon from '@material-ui/icons/Home';
@@ -60,7 +60,7 @@ const Header = (props: HeaderProps) => {
               )}
               onClick={() =>
                 props.existsGroupWhenRouting(
-                  `/history?daily&year=${year}&month=${moment(month, 'MM').format('MM')}`
+                  `/history?daily&year=${year}&month=${dayjs(String(month)).format('MM')}`
                 )
               }
             >

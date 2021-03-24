@@ -13,7 +13,7 @@ import { month, year } from '../../../lib/constant';
 import { SelectYears } from '../../../lib/date';
 import History from '../../../templates/history/History';
 import { useHistory } from 'react-router-dom';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const HistoryContainer = () => {
   const dispatch = useDispatch();
@@ -117,7 +117,7 @@ const HistoryContainer = () => {
         pathName !== 'group'
           ? history.push({
               pathname: '/history',
-              search: `?daily&year=${selectedYear}&month=${moment(selectedMonth, 'MM').format(
+              search: `?daily&year=${selectedYear}&month=${dayjs(String(selectedMonth)).format(
                 'MM'
               )}`,
             })
@@ -127,7 +127,7 @@ const HistoryContainer = () => {
         pathName !== 'group'
           ? history.push({
               pathname: '/history',
-              search: `?weekly&year=${selectedYear}&month=${moment(selectedMonth, 'MM').format(
+              search: `?weekly&year=${selectedYear}&month=${dayjs(String(selectedMonth)).format(
                 'MM'
               )}`,
             })

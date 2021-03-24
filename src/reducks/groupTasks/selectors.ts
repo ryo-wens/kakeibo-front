@@ -1,6 +1,6 @@
 import { createSelector } from 'reselect';
 import { State } from '../store/types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 
 const groupTasksSelector = (state: State) => state.groupTasks;
 
@@ -22,7 +22,8 @@ export const getUserTaskListItem = createSelector(
   (tasksListForEachUser, userId) => {
     const taskList = tasksListForEachUser.find((listItem) => listItem.user_id === userId);
     return (
-      taskList && taskList.tasks_list.filter((item) => moment().isSame(item.base_date, 'date'))
+      taskList &&
+      taskList.tasks_list.filter((item) => dayjs().isSame(String(item.base_date), 'date'))
     );
   }
 );

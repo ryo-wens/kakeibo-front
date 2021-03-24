@@ -1,6 +1,6 @@
 import axios, { CancelTokenSource } from 'axios';
 import { Action, Dispatch } from 'redux';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import {
   GroupTodoList,
   FetchGroupTodayTodoListRes,
@@ -178,8 +178,8 @@ export const fetchGroupSearchTodoList = (
           withCredentials: true,
           params: {
             date_type: searchGroupRequestData.date_type,
-            start_date: moment(searchGroupRequestData.start_date).format(),
-            end_date: moment(searchGroupRequestData.end_date).format(),
+            start_date: dayjs(String(searchGroupRequestData.start_date)).format(),
+            end_date: dayjs(String(searchGroupRequestData.end_date)).format(),
             complete_flag: searchGroupRequestData.complete_flag,
             todo_content: searchGroupRequestData.todo_content,
             sort: searchGroupRequestData.sort,
@@ -224,9 +224,9 @@ export const addGroupTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -314,9 +314,9 @@ export const editGroupTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -484,9 +484,9 @@ export const editGroupSearchTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -501,8 +501,8 @@ export const editGroupSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -551,8 +551,8 @@ export const deleteGroupSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,

@@ -46,7 +46,7 @@ import {
   SearchTodoRequestData,
   TodoList,
 } from './types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
 
 export const fetchExpiredTodoList = (signal: CancelTokenSource) => {
@@ -159,8 +159,8 @@ export const fetchSearchTodoList = (searchRequestData: {
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -201,9 +201,9 @@ export const addTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -290,9 +290,9 @@ export const editTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -455,9 +455,9 @@ export const editSearchTodoListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           } else if (key === 'due_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -472,8 +472,8 @@ export const editSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,
@@ -518,8 +518,8 @@ export const deleteSearchTodoListItem = (
           withCredentials: true,
           params: {
             date_type: searchRequestData.date_type,
-            start_date: moment(searchRequestData.start_date).format(),
-            end_date: moment(searchRequestData.end_date).format(),
+            start_date: dayjs(String(searchRequestData.start_date)).format(),
+            end_date: dayjs(String(searchRequestData.end_date)).format(),
             complete_flag: searchRequestData.complete_flag,
             todo_content: searchRequestData.todo_content,
             sort: searchRequestData.sort,

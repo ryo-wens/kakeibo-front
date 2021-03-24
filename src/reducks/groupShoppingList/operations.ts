@@ -59,7 +59,7 @@ import {
   GroupShoppingListByCategories,
   GroupShoppingListItem,
 } from './types';
-import moment from 'moment';
+import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
 
 export const fetchGroupExpiredShoppingList = (groupId: number, signal: CancelTokenSource) => {
@@ -283,7 +283,7 @@ export const addGroupShoppingListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -299,9 +299,7 @@ export const addGroupShoppingListItem = (
         }
       );
 
-      const fetchTodayListByCategoriesResult = await axios.get<
-        FetchGroupTodayShoppingListByCategoriesRes
-      >(
+      const fetchTodayListByCategoriesResult = await axios.get<FetchGroupTodayShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`,
         {
           withCredentials: true,
@@ -315,9 +313,7 @@ export const addGroupShoppingListItem = (
         }
       );
 
-      const fetchMonthlyListByCategoriesResult = await axios.get<
-        FetchGroupMonthlyShoppingListByCategoriesRes
-      >(
+      const fetchMonthlyListByCategoriesResult = await axios.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`,
         {
           withCredentials: true,
@@ -368,7 +364,7 @@ export const editGroupShoppingListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${shoppingListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -391,9 +387,7 @@ export const editGroupShoppingListItem = (
         }
       );
 
-      const fetchTodayListByCategoriesResult = await axios.get<
-        FetchGroupTodayShoppingListByCategoriesRes
-      >(
+      const fetchTodayListByCategoriesResult = await axios.get<FetchGroupTodayShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`,
         {
           withCredentials: true,
@@ -407,9 +401,7 @@ export const editGroupShoppingListItem = (
         }
       );
 
-      const fetchMonthlyListByCategoriesResult = await axios.get<
-        FetchGroupMonthlyShoppingListByCategoriesRes
-      >(
+      const fetchMonthlyListByCategoriesResult = await axios.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`,
         {
           withCredentials: true,
@@ -477,9 +469,7 @@ export const deleteGroupShoppingListItem = (
         }
       );
 
-      const fetchTodayListByCategoriesResult = await axios.get<
-        FetchGroupTodayShoppingListByCategoriesRes
-      >(
+      const fetchTodayListByCategoriesResult = await axios.get<FetchGroupTodayShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`,
         {
           withCredentials: true,
@@ -493,9 +483,7 @@ export const deleteGroupShoppingListItem = (
         }
       );
 
-      const fetchMonthlyListByCategoriesResult = await axios.get<
-        FetchGroupMonthlyShoppingListByCategoriesRes
-      >(
+      const fetchMonthlyListByCategoriesResult = await axios.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`,
         {
           withCredentials: true,
@@ -548,7 +536,7 @@ export const addGroupRegularShoppingListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -564,9 +552,7 @@ export const addGroupRegularShoppingListItem = (
         }
       );
 
-      const fetchTodayListByCategoriesResult = await axios.get<
-        FetchGroupTodayShoppingListByCategoriesRes
-      >(
+      const fetchTodayListByCategoriesResult = await axios.get<FetchGroupTodayShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`,
         {
           withCredentials: true,
@@ -580,9 +566,7 @@ export const addGroupRegularShoppingListItem = (
         }
       );
 
-      const fetchMonthlyListByCategoriesResult = await axios.get<
-        FetchGroupMonthlyShoppingListByCategoriesRes
-      >(
+      const fetchMonthlyListByCategoriesResult = await axios.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`,
         {
           withCredentials: true,
@@ -635,7 +619,7 @@ export const editGroupRegularShoppingListItem = (
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular/${regularShoppingListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
-            return moment(new Date(value)).format();
+            return dayjs(new Date(value)).format();
           }
           return value;
         }),
@@ -658,9 +642,7 @@ export const editGroupRegularShoppingListItem = (
         }
       );
 
-      const fetchTodayListByCategoriesResult = await axios.get<
-        FetchGroupTodayShoppingListByCategoriesRes
-      >(
+      const fetchTodayListByCategoriesResult = await axios.get<FetchGroupTodayShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`,
         {
           withCredentials: true,
@@ -674,9 +656,7 @@ export const editGroupRegularShoppingListItem = (
         }
       );
 
-      const fetchMonthlyListByCategoriesResult = await axios.get<
-        FetchGroupMonthlyShoppingListByCategoriesRes
-      >(
+      const fetchMonthlyListByCategoriesResult = await axios.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`,
         {
           withCredentials: true,
@@ -726,9 +706,7 @@ export const deleteGroupRegularShoppingListItem = (
     dispatch(startDeleteGroupRegularShoppingListItemAction());
 
     try {
-      const deleteRegularShoppingListItemResult = await axios.delete<
-        DeleteGroupRegularShoppingListItemRes
-      >(
+      const deleteRegularShoppingListItemResult = await axios.delete<DeleteGroupRegularShoppingListItemRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/regular/${regularShoppingListItemId}`,
         {
           withCredentials: true,
@@ -748,9 +726,7 @@ export const deleteGroupRegularShoppingListItem = (
         }
       );
 
-      const fetchTodayListByCategoriesResult = await axios.get<
-        FetchGroupTodayShoppingListByCategoriesRes
-      >(
+      const fetchTodayListByCategoriesResult = await axios.get<FetchGroupTodayShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`,
         {
           withCredentials: true,
@@ -764,9 +740,7 @@ export const deleteGroupRegularShoppingListItem = (
         }
       );
 
-      const fetchMonthlyListByCategoriesResult = await axios.get<
-        FetchGroupMonthlyShoppingListByCategoriesRes
-      >(
+      const fetchMonthlyListByCategoriesResult = await axios.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
         `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`,
         {
           withCredentials: true,
