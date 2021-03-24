@@ -13,6 +13,7 @@ import {
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditGroupRegularShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/regularShoppingListItemComponent/editRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
+import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditGroupRegularShoppingListItemModalContainerProps {
   listItem: GroupRegularShoppingListItem;
@@ -193,34 +194,38 @@ const EditGroupRegularShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      editGroupRegularShoppingListItem(
-        Number(group_id),
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        editGroupRegularShoppingListItem(
+          Number(group_id),
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   const handleDeleteRegularShoppingListItem = () => {
-    dispatch(
-      deleteGroupRegularShoppingListItem(
-        Number(group_id),
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        deleteGroupRegularShoppingListItem(
+          Number(group_id),
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth
+        )
+      ),
+      () => setDeleteForm(false)
     );
-    handleCloseDeleteForm();
   };
 
   return (

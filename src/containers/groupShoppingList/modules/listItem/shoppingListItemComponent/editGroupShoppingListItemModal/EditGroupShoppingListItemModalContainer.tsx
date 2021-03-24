@@ -11,6 +11,7 @@ import {
   deleteGroupShoppingListItem,
   editGroupShoppingListItem,
 } from '../../../../../../reducks/groupShoppingList/operations';
+import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
@@ -176,34 +177,38 @@ const EditGroupShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    dispatch(
-      editGroupShoppingListItem(
-        Number(group_id),
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        editGroupShoppingListItem(
+          Number(group_id),
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   const handleDeleteShoppingListItem = () => {
-    dispatch(
-      deleteGroupShoppingListItem(
-        Number(group_id),
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        deleteGroupShoppingListItem(
+          Number(group_id),
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth
+        )
+      ),
+      () => setDeleteForm(false)
     );
-    handleCloseDeleteForm();
   };
 
   return (

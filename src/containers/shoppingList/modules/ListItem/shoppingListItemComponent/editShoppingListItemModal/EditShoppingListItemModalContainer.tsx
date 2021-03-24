@@ -10,6 +10,7 @@ import {
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import EditShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/EditShoppingListItemModal/EditShoppingListItemModal';
 import { useDispatch } from 'react-redux';
+import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
@@ -155,32 +156,36 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    dispatch(
-      editShoppingListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        editShoppingListItem(
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   const handleDeleteShoppingListItem = () => {
-    dispatch(
-      deleteShoppingListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        deleteShoppingListItem(
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth
+        )
+      ),
+      () => setDeleteForm(false)
     );
-    handleCloseDeleteForm();
   };
 
   return (

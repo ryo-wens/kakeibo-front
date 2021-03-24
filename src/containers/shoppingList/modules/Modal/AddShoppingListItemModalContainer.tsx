@@ -4,6 +4,7 @@ import AddShoppingListItemModal from '../../../../components/shoppingList/module
 import { useDispatch } from 'react-redux';
 import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';
 import { AddShoppingListItemReq } from '../../../../reducks/shoppingList/types';
+import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddShoppingListItemFormContainerProps {
   currentYear: string;
@@ -111,17 +112,19 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      addShoppingListItem(
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        addShoppingListItem(
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   const unInput =

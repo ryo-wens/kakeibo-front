@@ -5,6 +5,7 @@ import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import AddGroupShoppingListItemModal from '../../../../components/groupShoppingList/modules/modal/addShoppingListModal/AddGroupShoppingListItemModal';
 import { AddGroupShoppingListItemReq } from '../../../../reducks/groupShoppingList/types';
+import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddGroupShoppingListItemModalContainerProps {
   currentYear: string;
@@ -132,18 +133,20 @@ const AddGroupShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      addGroupShoppingListItem(
-        Number(group_id),
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        addGroupShoppingListItem(
+          Number(group_id),
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   return (

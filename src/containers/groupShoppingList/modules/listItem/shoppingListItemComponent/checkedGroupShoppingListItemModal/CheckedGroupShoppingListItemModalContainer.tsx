@@ -8,6 +8,7 @@ import {
 import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
 import { useParams } from 'react-router';
 import CheckedGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedGroupShoppingListItemModal';
+import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface CheckedGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
@@ -179,16 +180,18 @@ const CheckedGroupShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    dispatch(
-      editGroupShoppingListItem(
-        Number(group_id),
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
+    return executeAfterAsyncProcess(
+      dispatch(
+        editGroupShoppingListItem(
+          Number(group_id),
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
       )
     );
   };
@@ -209,19 +212,21 @@ const CheckedGroupShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    dispatch(
-      editGroupShoppingListItem(
-        Number(group_id),
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        editGroupShoppingListItem(
+          Number(group_id),
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   return (

@@ -12,6 +12,7 @@ import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
 import EditRegularShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/EditRegularShoppingListItemModal';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
+import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditRegularShoppingListItemModalContainerProps {
   listItem: RegularShoppingListItem;
@@ -175,18 +176,20 @@ const EditRegularShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      editRegularShoppingListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        editRegularShoppingListItem(
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   const handleDeleteRegularShoppingListItem = () => {

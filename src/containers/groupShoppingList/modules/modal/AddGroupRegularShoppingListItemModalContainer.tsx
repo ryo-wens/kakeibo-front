@@ -9,6 +9,7 @@ import {
   AddGroupRegularShoppingListItemModalInitialState,
   AddGroupRegularShoppingListItemReq,
 } from '../../../../reducks/groupShoppingList/types';
+import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddGroupRegularShoppingListModalContainerProps {
   currentYear: string;
@@ -167,18 +168,20 @@ const AddGroupRegularShoppingListModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      addGroupRegularShoppingListItem(
-        Number(group_id),
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
+    return executeAfterAsyncProcess(
+      dispatch(
+        addGroupRegularShoppingListItem(
+          Number(group_id),
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      ),
+      () => setOpen(false)
     );
-    setOpen(false);
   };
 
   return (
