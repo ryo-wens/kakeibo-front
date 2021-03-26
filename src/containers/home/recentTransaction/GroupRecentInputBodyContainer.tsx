@@ -24,14 +24,14 @@ const GroupRecentInputBodyContainer = () => {
     setOpenId(undefined);
   };
 
-  const payerColor = (payerUserId: string): React.CSSProperties => {
+  const payerColor = (payerUserId: string, transactionType: string): React.CSSProperties => {
     if (currentGroup) {
       if (currentGroup.approved_users_list) {
         const approvedUser = currentGroup.approved_users_list.find(
           (user) => user.user_id === payerUserId
         );
 
-        if (approvedUser) {
+        if (approvedUser && transactionType === 'expense') {
           return { borderBottom: `2px solid ${approvedUser.color_code}` };
         }
       }

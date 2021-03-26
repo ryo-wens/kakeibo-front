@@ -13,6 +13,21 @@ interface GroupSearchResultTransactionsListProps {
   openModal: (transactionId: number) => void;
   closeModal: () => void;
   payerUser: (payerId: string) => string;
+  submit: boolean;
+  groupSearchRequestData: {
+    transaction_type: string | null;
+    payment_user_id: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
 }
 const GroupSearchResultTransactionsList = (props: GroupSearchResultTransactionsListProps) => {
   return props.searchResults ? (
@@ -59,6 +74,7 @@ const GroupSearchResultTransactionsList = (props: GroupSearchResultTransactionsL
                   <CreateIcon color="primary" />
                 </IconButton>
                 <EditTransactionModalContainer
+                  submitSearch={props.submit}
                   id={transaction.id}
                   onClose={props.closeModal}
                   open={props.openId === transaction.id && props.open}
@@ -71,6 +87,7 @@ const GroupSearchResultTransactionsList = (props: GroupSearchResultTransactionsL
                   bigCategoryId={transaction.big_category_id}
                   mediumCategoryId={transaction.medium_category_id}
                   customCategoryId={transaction.custom_category_id}
+                  groupSearchRequestData={props.groupSearchRequestData}
                 />
               </td>
               <td className="daily-history__td" align="center">

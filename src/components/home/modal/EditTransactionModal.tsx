@@ -122,7 +122,7 @@ const EditTransactionModal = (props: InputModalProps) => {
             disabled={props.unEditInputForm}
           />
           <div className="transaction-modal__form-content--spacer-small" />
-          {props.pathName === 'group' && (
+          {props.pathName === 'group' && props.transactionsType === 'expense' && (
             <>
               <p className="transaction-modal__form-title">支払者</p>
               <SelectPayer

@@ -2,11 +2,18 @@ import React, { useEffect, useState, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import {
-  deleteGroupTransactions,
   editGroupTransactions,
+  editSearchGroupTransactions,
+  deleteGroupTransactions,
+  deleteSearchGroupTransactions,
   fetchGroupYearlyAccountListForModal,
 } from '../../../reducks/groupTransactions/operations';
-import { deleteTransactions, editTransactions } from '../../../reducks/transactions/operations';
+import {
+  editTransactions,
+  editSearchTransactions,
+  deleteTransactions,
+  deleteSearchTransactions,
+} from '../../../reducks/transactions/operations';
 import { getApprovedGroups } from '../../../reducks/groups/selectors';
 import { getExpenseCategories, getIncomeCategories } from '../../../reducks/categories/selectors';
 import {
@@ -39,6 +46,34 @@ interface EditTransactionModalContainerProps {
   };
   transactionsType: string;
   paymentUserId?: string;
+  submitSearch?: boolean;
+  searchRequestData?: {
+    transaction_type: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
+  groupSearchRequestData?: {
+    transaction_type: string | null;
+    payment_user_id: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
 }
 
 const EditTransactionModalContainer = (props: EditTransactionModalContainerProps) => {
@@ -64,7 +99,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const emptyMemo = memo === '' ? null : memo;
   const [shop, setShop] = useState<string | null>(props.shop);
   const emptyShop = shop === '' ? null : shop;
-  const [transactionsType, setTransactionType] = useState<string>(props.transactionsType);
+  const [transactionsType, setTransactionsType] = useState<string>(props.transactionsType);
   const [paymentUserId, setPaymentUserId] = useState(String(props.paymentUserId));
   const bigCategoryRef = useRef<HTMLDivElement>(null);
   const mediumMenuRef = useRef<HTMLDivElement>(null);
@@ -82,6 +117,12 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
+
+  const unEditValue = {
+    unEditBigCategory: '',
+    unAssociatedCategory: '',
+    unEditBigCategoryId: 0,
+  };
 
   const editTransactionDate = {
     editTransactionYear: 0,
@@ -105,7 +146,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     }
   }, [firstTransactionDate]);
 
-  const editTransactionDisabled = () => {
+  const disabledOnPayOff = () => {
     const disabledConditions = {
       editDisabled: false,
       unEditInputForm: false,
@@ -127,7 +168,27 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     return disabledConditions;
   };
 
-  const transactionDisabled = editTransactionDisabled();
+  const editDisabledOnPayOff = disabledOnPayOff();
+
+  const unEditTransaction = () => {
+    if (
+      transactionDate?.getTime() === changeTypeTransactionDate.getTime() &&
+      transactionsType === props.transactionsType &&
+      amount === String(props.amount) &&
+      bigCategory === props.categoryName.bigCategory &&
+      memo == props.memo &&
+      shop === props.shop &&
+      paymentUserId === String(props.paymentUserId) &&
+      associatedCategory ===
+        (props.categoryName.mediumCategory || props.categoryName.customCategory)
+    ) {
+      return true;
+    } else {
+      return !isValidAmountFormat(amount) || bigCategoryId === unEditValue.unEditBigCategoryId;
+    }
+  };
+
+  const editDisabled = unEditTransaction();
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -161,8 +222,9 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
 
   useEffect(() => {
     if (props.open) {
-      setBigCategory('');
-      setAssociatedCategory('');
+      setBigCategory(unEditValue.unEditBigCategory);
+      setAssociatedCategory(unEditValue.unAssociatedCategory);
+      setBigCategoryId(unEditValue.unEditBigCategoryId);
     }
   }, [transactionsType]);
 
@@ -215,7 +277,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   };
 
   const changeTransactionType = (event: React.ChangeEvent<{ value: unknown }>) => {
-    setTransactionType(event.target.value as string);
+    setTransactionsType(event.target.value as string);
   };
 
   const changeAmount = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -274,6 +336,12 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
             transactionsMonth
           )
         );
+
+    props.submitSearch &&
+      props.searchRequestData !== undefined &&
+      dispatch(deleteSearchTransactions(transactionId, props.searchRequestData));
+
+    props.onClose();
   };
 
   const personalEditTransaction = (): void => {
@@ -292,6 +360,13 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
             signal
           )
         );
+
+    props.submitSearch &&
+      props.searchRequestData !== undefined &&
+      dispatch(
+        editSearchTransactions(transactionId, personalEditRequestData, props.searchRequestData)
+      );
+
     props.onClose();
   };
 
@@ -311,6 +386,14 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
             transactionsMonth
           )
         );
+
+    props.submitSearch &&
+      props.groupSearchRequestData !== undefined &&
+      dispatch(
+        deleteSearchGroupTransactions(Number(group_id), transactionId, props.groupSearchRequestData)
+      );
+
+    props.onClose();
   };
 
   const groupEditTransaction = (): void => {
@@ -337,6 +420,18 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
             groupEditRequestData
           )
         );
+
+    props.submitSearch &&
+      props.groupSearchRequestData !== undefined &&
+      dispatch(
+        editSearchGroupTransactions(
+          Number(group_id),
+          transactionId,
+          groupEditRequestData,
+          props.groupSearchRequestData
+        )
+      );
+
     props.onClose();
   };
 
@@ -344,7 +439,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     setMemo(props.memo);
     setShop(props.shop);
     setAmount(String(props.amount));
-    setTransactionType(props.transactionsType);
+    setTransactionsType(props.transactionsType);
     setTransactionDate(changeTypeTransactionDate);
     setBigCategoryId(props.bigCategoryId);
     setMediumCategoryId(props.mediumCategoryId);
@@ -356,13 +451,11 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
     setPaymentUserId(String(props.paymentUserId));
   };
 
-  const unInput = !isValidAmountFormat(amount);
-
   return (
     <EditTransactionModal
-      unInput={unInput}
-      unEditInputForm={transactionDisabled.unEditInputForm}
-      editDisabled={transactionDisabled.editDisabled}
+      unInput={editDisabled}
+      unEditInputForm={editDisabledOnPayOff.unEditInputForm}
+      editDisabled={editDisabledOnPayOff.editDisabled}
       group_id={Number(group_id)}
       pathName={pathName}
       approvedGroups={approvedGroup}
@@ -405,7 +498,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
       bigEditCategoryIndex={bigEditCategoryIndex}
       customCategoryName={customCategoryName}
       editCustomCategoryName={editCustomCategoryName}
-      setTransactionType={setTransactionType}
+      setTransactionType={setTransactionsType}
       setAssociatedIndex={setAssociatedIndex}
       setBigCategoryIndex={setBigCategoryIndex}
       setBigEditCategoryIndex={setBigEditCategoryIndex}

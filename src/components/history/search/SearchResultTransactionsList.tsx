@@ -12,6 +12,20 @@ interface SearchResultTransactionsListProps {
   searchTransaction: TransactionsList;
   closeModal: () => void;
   openModal: (transactionId: number) => void;
+  submit: boolean;
+  searchRequestData: {
+    transaction_type: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
 }
 const SearchResultTransactionsList = (props: SearchResultTransactionsListProps) => {
   return props.searchResults ? (
@@ -54,6 +68,7 @@ const SearchResultTransactionsList = (props: SearchResultTransactionsListProps) 
                   <CreateIcon color="primary" />
                 </IconButton>
                 <EditTransactionModalContainer
+                  submitSearch={props.submit}
                   id={transaction.id}
                   onClose={props.closeModal}
                   open={props.openId === transaction.id && props.open}
@@ -66,6 +81,7 @@ const SearchResultTransactionsList = (props: SearchResultTransactionsListProps) 
                   bigCategoryId={transaction.big_category_id}
                   mediumCategoryId={transaction.medium_category_id}
                   customCategoryId={transaction.custom_category_id}
+                  searchRequestData={props.searchRequestData}
                 />
               </td>
               <td className="daily-history__td" align="center">

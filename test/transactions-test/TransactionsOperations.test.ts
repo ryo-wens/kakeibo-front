@@ -1,5 +1,6 @@
 import * as actionTypes from '../../src/reducks/transactions/actions';
 import axios from 'axios';
+import { accountServiceInstance } from '../../src/reducks/axiosConfig';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
@@ -12,6 +13,8 @@ import {
   editTransactions,
   deleteTransactions,
   searchTransactions,
+  editSearchTransactions,
+  deleteSearchTransactions,
 } from '../../src/reducks/transactions/operations';
 import transactionsList from './transactions.json';
 import latestTransactionsList from './latestTransactions.json';
@@ -23,8 +26,11 @@ import deleteResTransaction from './deleteReponse.json';
 import addLatestTransaction from './addLatestTransactions.json';
 import editLatestTransaction from './editLatestTransactions.json';
 import fetchResSearchTransaction from './fetchSearchTransactionsRes.json';
+import editSearchTransaction from './editSearchTransactionResponse.json';
+import editSearchTransactionsList from './editSearchTransactionsListResponse.json';
+import deleteSearchTransactionsList from './deleteSearchTransactionsListResponse.json';
 
-const axiosMock = new axiosMockAdapter(axios);
+const axiosMock = new axiosMockAdapter(accountServiceInstance);
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
 process.on('unhandledRejection', console.dir);
@@ -43,7 +49,7 @@ describe('async actions transactions', () => {
       selectedYear: '2020',
       selectedMonth: '11',
     };
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${years.selectedYear}-${years.selectedMonth}`;
+    const url = `/transactions/${years.selectedYear}-${years.selectedMonth}`;
 
     const mockResponse = transactionsList;
     const signal = axios.CancelToken.source();
@@ -77,7 +83,7 @@ describe('async actions transactions', () => {
   });
 
   it('Get latestTransactionsList if fetch succeeds', async () => {
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
+    const url = `/transactions/latest`;
     const mockResponse = latestTransactionsList;
     const signal = axios.CancelToken.source();
 
@@ -112,9 +118,9 @@ describe('async actions transactions', () => {
     const year = 2020;
     const month = '11';
     const signal = axios.CancelToken.source();
-    const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`;
-    const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
-    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
+    const addUrl = `/transactions`;
+    const fetchLatestUrl = `/transactions/latest`;
+    const fetchUrl = `/transactions/${year}-${month}`;
 
     let now: Date;
     let spiedDate: Date;
@@ -193,9 +199,9 @@ describe('async actions transactions', () => {
     const month = '11';
     const id = 130;
     const signal = axios.CancelToken.source();
-    const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`;
-    const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
-    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
+    const editUrl = `/transactions/${id}`;
+    const fetchLatestUrl = `/transactions/latest`;
+    const fetchUrl = `/transactions/${year}-${month}`;
 
     let now: Date;
     let spiedDate: Date;
@@ -274,9 +280,9 @@ describe('async actions transactions', () => {
     const year = 2020;
     const month = '11';
     const signal = axios.CancelToken.source();
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`;
-    const fetchLatestUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`;
-    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${year}-${month}`;
+    const url = `/transactions/${id}`;
+    const fetchLatestUrl = `/transactions/latest`;
+    const fetchUrl = `/transactions/${year}-${month}`;
 
     const deletedMessage = deleteResTransaction.message;
     const deletedTransactionsList = transactionsList.transactions_list;
@@ -320,7 +326,7 @@ describe('async actions transactions', () => {
   });
 
   it('Get transactionsList  search criteria match in  if fetch succeeds', async () => {
-    const params = {
+    const searchRequest = {
       transaction_type: 'expense',
       low_amount: 2000,
       high_amount: 10000,
@@ -328,7 +334,7 @@ describe('async actions transactions', () => {
       sort: 'transaction_date',
     };
 
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`;
+    const url = `/transactions/search`;
     const mockResponse = fetchResSearchTransaction;
 
     const expectSearchActions = [
@@ -355,7 +361,108 @@ describe('async actions transactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await searchTransactions(params)(store.dispatch);
+    await searchTransactions(searchRequest)(store.dispatch);
     expect(store.getActions()).toEqual(expectSearchActions);
+  });
+
+  it('Edit SearchTransactionsList if the fetch is successful', async () => {
+    const id = 28;
+    const editUrl = `/transactions/${id}`;
+    const searchUrl = `/transactions/search`;
+    const editResponse = editSearchTransaction;
+    const searchResponse = editSearchTransactionsList;
+
+    const transactionDate = new Date('2020-11-25T17:00:00Z');
+
+    const searchRequest = {
+      transaction_type: 'expense',
+      low_amount: 2000,
+      high_amount: 10000,
+      big_category_id: 2,
+      sort: 'transaction_date',
+    };
+
+    const editRequestData: TransactionsReq = {
+      transaction_type: 'expense',
+      transaction_date: transactionDate,
+      shop: 'スタバ',
+      memo: null,
+      amount: 800,
+      big_category_id: 2,
+      medium_category_id: 11,
+      custom_category_id: null,
+    };
+
+    const expectEditSearchActions = [
+      {
+        type: actionTypes.START_EDIT_SEARCH_TRANSACTIONS,
+        payload: {
+          searchTransactionsListLoading: true,
+
+          transactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+        },
+      },
+      {
+        type: actionTypes.EDIT_SEARCH_TRANSACTIONS,
+        payload: {
+          searchTransactionsList: searchResponse.transactions_list,
+          searchTransactionsListLoading: false,
+          notHistoryMessage: '',
+        },
+      },
+    ];
+
+    axiosMock.onPut(editUrl).reply(200, editResponse);
+    axiosMock.onGet(searchUrl).reply(200, searchResponse);
+
+    await editSearchTransactions(id, editRequestData, searchRequest)(store.dispatch);
+    expect(store.getActions()).toEqual(expectEditSearchActions);
+  });
+
+  it('Delete SearchTransactionsList if the fetch is successful', async () => {
+    const id = 28;
+    const deleteUrl = `/transactions/${id}`;
+    const searchUrl = `/transactions/search`;
+    const deletedMessage = deleteResTransaction.message;
+    const searchResponse = deleteSearchTransactionsList;
+
+    const searchRequest = {
+      transaction_type: 'expense',
+      low_amount: 2000,
+      high_amount: 10000,
+      big_category_id: 2,
+      sort: 'transaction_date',
+    };
+
+    const expectDeleteSearchActions = [
+      {
+        type: actionTypes.START_DELETE_SEARCH_TRANSACTIONS,
+        payload: {
+          searchTransactionsListLoading: true,
+
+          transactionsListError: {
+            statusCode: null,
+            errorMessage: '',
+          },
+        },
+      },
+      {
+        type: actionTypes.DELETE_SEARCH_TRANSACTIONS,
+        payload: {
+          searchTransactionsList: searchResponse.transactions_list,
+          searchTransactionsListLoading: false,
+          notHistoryMessage: '',
+        },
+      },
+    ];
+
+    axiosMock.onDelete(deleteUrl).reply(200, deletedMessage);
+    axiosMock.onGet(searchUrl).reply(200, searchResponse);
+
+    await deleteSearchTransactions(id, searchRequest)(store.dispatch);
+    expect(store.getActions()).toEqual(expectDeleteSearchActions);
   });
 });

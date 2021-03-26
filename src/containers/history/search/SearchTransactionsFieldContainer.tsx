@@ -8,9 +8,9 @@ import { searchGroupTransactions } from '../../../reducks/groupTransactions/oper
 interface SearchTransactionsFieldContainerProps {
   pathName: string;
   groupId: number;
-  openSearchFiled: boolean;
+  openSearchField: boolean;
   openSearch: () => void;
-  closeSearch: () => void;
+  resetSearchTransactionsList: () => void;
   selectStartDateChange: (selectStartDate: Date | null) => void;
   selectEndDateChange: (selectEndDate: Date | null) => void;
   selectTransactionsType: (event: React.ChangeEvent<{ value: unknown }>) => void;
@@ -39,39 +39,37 @@ interface SearchTransactionsFieldContainerProps {
   sortItem: string;
   sortType: string;
   limit: string;
+  searchRequestData: {
+    transaction_type: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
+  groupSearchRequestData: {
+    transaction_type: string | null;
+    payment_user_id: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
 }
 
 const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContainerProps) => {
   const dispatch = useDispatch();
-
-  const searchRequestData = {
-    transaction_type: props.transactionType !== '' ? props.transactionType : null,
-    start_date: props.selectStartDate,
-    end_date: props.selectEndDate,
-    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
-    high_amount: props.highAmount !== '' ? props.highAmount : null,
-    memo: props.memo !== '' ? props.memo : null,
-    shop: props.shop !== '' ? props.shop : null,
-    sort: props.sortItem !== '' ? props.sortItem : null,
-    sort_type: props.sortType !== '' ? props.sortType : null,
-    big_category_id: props.bigCategoryId !== 0 ? props.bigCategoryId : null,
-    limit: props.limit !== '' ? props.limit : null,
-  };
-
-  const groupSearchRequestData = {
-    transaction_type: props.transactionType !== '' ? props.transactionType : null,
-    payment_user_id: props.paymentUserId !== '' ? props.paymentUserId : null,
-    start_date: props.selectStartDate,
-    end_date: props.selectEndDate,
-    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
-    high_amount: props.highAmount !== '' ? props.highAmount : null,
-    memo: props.memo !== '' ? props.memo : null,
-    shop: props.shop !== '' ? props.shop : null,
-    sort: props.sortItem !== '' ? props.sortItem : null,
-    sort_type: props.sortType !== '' ? props.sortType : null,
-    big_category_id: props.bigCategoryId !== 0 ? props.bigCategoryId : null,
-    limit: props.limit !== '' ? props.limit : null,
-  };
 
   return (
     <SearchTransactionsField
@@ -91,10 +89,8 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
       sortItem={props.sortItem}
       sortType={props.sortType}
       limit={props.limit}
-      openSearch={props.openSearch}
       approvedGroup={props.approvedGroup}
-      openSearchFiled={props.openSearchFiled}
-      closeSearch={props.closeSearch}
+      resetSearchTransactionsList={props.resetSearchTransactionsList}
       setSearchSubmit={props.setSearchSubmit}
       selectStartDateChange={props.selectStartDateChange}
       selectEndDateChange={props.selectEndDateChange}
@@ -108,9 +104,9 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
       changeSortItem={props.changeSortItem}
       changeSortType={props.changeSortType}
       selectLimit={props.selectLimit}
-      searchOperation={() => dispatch(searchTransactions(searchRequestData))}
+      searchOperation={() => dispatch(searchTransactions(props.searchRequestData))}
       groupSearchOperation={() =>
-        dispatch(searchGroupTransactions(props.groupId, groupSearchRequestData))
+        dispatch(searchGroupTransactions(props.groupId, props.groupSearchRequestData))
       }
     />
   );

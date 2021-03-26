@@ -1,5 +1,7 @@
 import React from 'react';
 import { Groups } from '../../../reducks/groups/types';
+import { TransactionsList } from '../../../reducks/transactions/types';
+import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
 import SearchTransactionsFieldContainer from '../../../containers/history/search/SearchTransactionsFieldContainer';
 import SearchResultTransactionsListContainer from '../../../containers/history/search/SearchResultTransactionsListContainer';
 import GroupSearchResultTransactionsListContainer from '../../../containers/history/search/GroupSearchResultTransactionsListContainer';
@@ -8,7 +10,12 @@ import './search-transaction.scss';
 interface SearchTransactionProps {
   pathName: string;
   groupId: number;
-  openSearchFiled: boolean;
+  submit: boolean;
+  searchResults: boolean;
+  openSearchField: boolean;
+  searchTransaction: TransactionsList;
+  groupSearchTransaction: GroupTransactionsList;
+  resetSearchTransactionsList: () => void;
   displaySearchTransactionResult: boolean;
   openSearch: () => void;
   closeSearch: () => void;
@@ -40,7 +47,33 @@ interface SearchTransactionProps {
   sortItem: string;
   sortType: string;
   limit: string;
-  submit: boolean;
+  searchRequestData: {
+    transaction_type: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
+  groupSearchRequestData: {
+    transaction_type: string | null;
+    payment_user_id: string | null;
+    start_date: Date | null;
+    end_date: Date | null;
+    low_amount: string | null;
+    high_amount: string | null;
+    memo: string | null;
+    shop: string | null;
+    sort: string | null;
+    sort_type: string | null;
+    big_category_id: number | null;
+    limit: string | null;
+  };
 }
 
 const SearchTransaction = (props: SearchTransactionProps) => {
@@ -48,17 +81,17 @@ const SearchTransaction = (props: SearchTransactionProps) => {
     <>
       <button
         className="daily-history__search-btn"
-        onClick={!props.openSearchFiled ? props.openSearch : props.closeSearch}
+        onClick={!props.openSearchField ? props.openSearch : props.resetSearchTransactionsList}
       >
         検索
       </button>
       <div className="daily-history__spacer" />
 
-      {props.openSearchFiled && (
+      {props.openSearchField && (
         <SearchTransactionsFieldContainer
-          closeSearch={props.closeSearch}
           openSearch={props.openSearch}
-          openSearchFiled={props.openSearchFiled}
+          openSearchField={props.openSearchField}
+          resetSearchTransactionsList={props.resetSearchTransactionsList}
           notSpecified={props.notSpecified}
           pathName={props.pathName}
           inputMemo={props.inputMemo}
@@ -89,16 +122,28 @@ const SearchTransaction = (props: SearchTransactionProps) => {
           limit={props.limit}
           selectLimit={props.selectLimit}
           setSearchSubmit={props.setSearchSubmit}
+          searchRequestData={props.searchRequestData}
+          groupSearchRequestData={props.groupSearchRequestData}
         />
       )}
       <div className="daily-history__spacer" />
 
       {props.displaySearchTransactionResult && props.pathName !== 'group' && (
-        <SearchResultTransactionsListContainer />
+        <SearchResultTransactionsListContainer
+          submit={props.submit}
+          searchResults={props.searchResults}
+          searchRequestData={props.searchRequestData}
+          searchTransaction={props.searchTransaction}
+        />
       )}
 
       {props.displaySearchTransactionResult && props.pathName === 'group' && (
-        <GroupSearchResultTransactionsListContainer />
+        <GroupSearchResultTransactionsListContainer
+          submit={props.submit}
+          searchResults={props.searchResults}
+          groupSearchRequestData={props.groupSearchRequestData}
+          groupSearchTransaction={props.groupSearchTransaction}
+        />
       )}
     </>
   );

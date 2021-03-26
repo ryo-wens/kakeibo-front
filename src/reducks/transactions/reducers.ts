@@ -102,6 +102,36 @@ export const transactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.START_EDIT_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.EDIT_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_EDIT_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_DELETE_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.DELETE_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_DELETE_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     default:
       return state;
   }
