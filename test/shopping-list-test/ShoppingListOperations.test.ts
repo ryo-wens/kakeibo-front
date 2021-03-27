@@ -62,12 +62,13 @@ import {
   EditRegularShoppingListItemReq,
   EditShoppingListItemReq,
 } from '../../src/reducks/shoppingList/types';
+import { todoServiceInstance } from '../../src/reducks/axiosConfig';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore({ shoppingList: [], modal: [], router: [] });
 
-const axiosMock = new MockAdapter(axios);
+const axiosMock = new MockAdapter(todoServiceInstance);
 
 describe('async actions shoppingList', () => {
   beforeEach(() => {
@@ -95,7 +96,7 @@ describe('async actions shoppingList', () => {
   });
 
   it('get expiredShoppingList if fetch succeeds', async () => {
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`;
+    const url = `/shopping-list/expired`;
     const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchExpiredShoppingListResponse);
@@ -127,7 +128,7 @@ describe('async actions shoppingList', () => {
     const year = '2020';
     const month = '12';
     const date = '24';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`;
+    const url = `/shopping-list/${year}-${month}-${date}/daily`;
     const signal = axios.CancelToken.source();
 
     const expectedAction = [
@@ -160,7 +161,7 @@ describe('async actions shoppingList', () => {
     const year = '2020';
     const month = '12';
     const date = '24';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`;
+    const url = `/shopping-list/${year}-${month}-${date}/categories`;
     const signal = axios.CancelToken.source();
 
     const expectedAction = [
@@ -193,7 +194,7 @@ describe('async actions shoppingList', () => {
   it('get monthlyShoppingList and regularShoppingList if fetch succeeds', async () => {
     const year = '2020';
     const month = '12';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`;
+    const url = `/shopping-list/${year}-${month}/daily`;
     const signal = axios.CancelToken.source();
 
     const expectedAction = [
@@ -225,7 +226,7 @@ describe('async actions shoppingList', () => {
   it('get monthlyShoppingListByCategories and regularShoppingList if fetch succeeds', async () => {
     const year = '2020';
     const month = '12';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`;
+    const url = `/shopping-list/${year}-${month}/categories`;
     const signal = axios.CancelToken.source();
 
     const expectedAction = [
@@ -282,11 +283,11 @@ describe('async actions shoppingList', () => {
       transaction_auto_add: transactionAutoAdd,
     };
 
-    const addUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list`;
-    const fetchTodayByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`;
+    const addUrl = `/shopping-list`;
+    const fetchTodayByDateUrl = `/shopping-list/${year}-${month}-${date}/daily`;
+    const fetchTodayByCategoriesUrl = `/shopping-list/${year}-${month}-${date}/categories`;
+    const fetchMonthlyByDateUrl = `/shopping-list/${year}-${month}/daily`;
+    const fetchMonthlyByCategoriesUrl = `/shopping-list/${year}-${month}/categories`;
 
     const expectedAction = [
       {
@@ -369,12 +370,12 @@ describe('async actions shoppingList', () => {
       related_transaction_data: relatedTransactionData,
     };
 
-    const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`;
-    const fetchTodayByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`;
+    const editUrl = `/shopping-list/${shoppingListItemId}`;
+    const fetchExpiredUrl = `/shopping-list/expired`;
+    const fetchTodayByDateUrl = `/shopping-list/${year}-${month}-${date}/daily`;
+    const fetchTodayByCategoriesUrl = `/shopping-list/${year}-${month}-${date}/categories`;
+    const fetchMonthlyByDateUrl = `/shopping-list/${year}-${month}/daily`;
+    const fetchMonthlyByCategoriesUrl = `/shopping-list/${year}-${month}/categories`;
 
     const expectedAction = [
       {
@@ -438,12 +439,12 @@ describe('async actions shoppingList', () => {
     const currentMonth = '12';
     const shoppingListItemId = 1;
 
-    const deleteUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`;
-    const fetchTodayByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`;
+    const deleteUrl = `/shopping-list/${shoppingListItemId}`;
+    const fetchExpiredUrl = `/shopping-list/expired`;
+    const fetchTodayByDateUrl = `/shopping-list/${year}-${month}-${date}/daily`;
+    const fetchTodayByCategoriesUrl = `/shopping-list/${year}-${month}-${date}/categories`;
+    const fetchMonthlyByDateUrl = `/shopping-list/${year}-${month}/daily`;
+    const fetchMonthlyByCategoriesUrl = `/shopping-list/${year}-${month}/categories`;
 
     const expectedAction = [
       {
@@ -536,11 +537,11 @@ describe('async actions shoppingList', () => {
       transaction_auto_add: transactionAutoAdd,
     };
 
-    const addRegularUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular`;
-    const fetchTodayByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`;
+    const addRegularUrl = `/shopping-list/regular`;
+    const fetchTodayByDateUrl = `/shopping-list/${year}-${month}-${date}/daily`;
+    const fetchTodayByCategoriesUrl = `/shopping-list/${year}-${month}-${date}/categories`;
+    const fetchMonthlyByDateUrl = `/shopping-list/${year}-${month}/daily`;
+    const fetchMonthlyByCategoriesUrl = `/shopping-list/${year}-${month}/categories`;
 
     const expectedAction = [
       {
@@ -626,12 +627,12 @@ describe('async actions shoppingList', () => {
       transaction_auto_add: transactionAutoAdd,
     };
 
-    const editRegularUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`;
-    const fetchTodayByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`;
+    const editRegularUrl = `/shopping-list/regular/${regularShoppingListItemId}`;
+    const fetchExpiredUrl = `/shopping-list/expired`;
+    const fetchTodayByDateUrl = `/shopping-list/${year}-${month}-${date}/daily`;
+    const fetchTodayByCategoriesUrl = `/shopping-list/${year}-${month}-${date}/categories`;
+    const fetchMonthlyByDateUrl = `/shopping-list/${year}-${month}/daily`;
+    const fetchMonthlyByCategoriesUrl = `/shopping-list/${year}-${month}/categories`;
 
     const expectedAction = [
       {
@@ -698,12 +699,12 @@ describe('async actions shoppingList', () => {
     const currentMonth = '12';
     const regularShoppingListItemId = 1;
 
-    const deleteRegularUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`;
-    const fetchTodayByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`;
+    const deleteRegularUrl = `/shopping-list/regular/${regularShoppingListItemId}`;
+    const fetchExpiredUrl = `/shopping-list/expired`;
+    const fetchTodayByDateUrl = `/shopping-list/${year}-${month}-${date}/daily`;
+    const fetchTodayByCategoriesUrl = `/shopping-list/${year}-${month}-${date}/categories`;
+    const fetchMonthlyByDateUrl = `/shopping-list/${year}-${month}/daily`;
+    const fetchMonthlyByCategoriesUrl = `/shopping-list/${year}-${month}/categories`;
 
     const expectedAction = [
       {

@@ -62,17 +62,17 @@ import {
 } from './actions';
 import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
+import { todoServiceInstance } from '../axiosConfig';
 
 export const fetchExpiredShoppingList = (signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchExpiredShoppingListAction());
 
     try {
-      const result = await axios.get<FetchExpiredShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`,
+      const result = await todoServiceInstance.get<FetchExpiredShoppingListRes>(
+        `/shopping-list/expired`,
         {
           cancelToken: signal.token,
-          withCredentials: true,
         }
       );
       const expiredShoppingList: ShoppingList = result.data.expired_shopping_list;
@@ -103,11 +103,10 @@ export const fetchTodayShoppingList = (
     dispatch(startFetchTodayShoppingListAction());
 
     try {
-      const result = await axios.get<FetchTodayShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
+      const result = await todoServiceInstance.get<FetchTodayShoppingListRes>(
+        `/shopping-list/${year}-${month}-${date}/daily`,
         {
           cancelToken: signal.token,
-          withCredentials: true,
         }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
@@ -139,11 +138,10 @@ export const fetchTodayShoppingListByCategories = (
     dispatch(startFetchTodayShoppingListByCategoriesAction());
 
     try {
-      const result = await axios.get<FetchTodayShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
+      const result = await todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}-${date}/categories`,
         {
           cancelToken: signal.token,
-          withCredentials: true,
         }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
@@ -177,11 +175,10 @@ export const fetchMonthlyShoppingList = (
     dispatch(startFetchMonthlyShoppingListAction());
 
     try {
-      const result = await axios.get<FetchMonthlyShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/daily`,
+      const result = await todoServiceInstance.get<FetchMonthlyShoppingListRes>(
+        `/shopping-list/${year}-${month}/daily`,
         {
           cancelToken: signal.token,
-          withCredentials: true,
         }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
@@ -212,11 +209,10 @@ export const fetchMonthlyShoppingListByCategories = (
     dispatch(startFetchMonthlyShoppingListByCategoriesAction());
 
     try {
-      const result = await axios.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}/categories`,
+      const result = await todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}/categories`,
         {
           cancelToken: signal.token,
-          withCredentials: true,
         }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
@@ -256,45 +252,30 @@ export const addShoppingListItem = (
     dispatch(startAddShoppingListItemAction());
 
     try {
-      await axios.post<AddShoppingListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list`,
+      await todoServiceInstance.post<AddShoppingListItemRes>(
+        `/shopping-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
             return dayjs(new Date(value)).format();
           }
           return value;
-        }),
-        {
-          withCredentials: true,
-        }
+        })
       );
 
-      const fetchTodayListResult = axios.get<FetchTodayShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
+        `/shopping-list/${year}-${month}-${date}/daily`
       );
 
-      const fetchTodayListByCategoriesResult = axios.get<FetchTodayShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}-${date}/categories`
       );
 
-      const fetchMonthlyListResult = axios.get<FetchMonthlyShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/daily`
       );
 
-      const fetchMonthlyListByCategoriesResult = axios.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/categories`
       );
 
       const todayShoppingListResponse = await fetchTodayListResult;
@@ -332,52 +313,34 @@ export const editShoppingListItem = (
     dispatch(startEditShoppingListItemAction());
 
     try {
-      await axios.put<ShoppingListItem>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`,
+      await todoServiceInstance.put<ShoppingListItem>(
+        `/shopping-list/${shoppingListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
             return dayjs(new Date(value)).format();
           }
           return value;
-        }),
-        {
-          withCredentials: true,
-        }
+        })
       );
 
-      const fetchExpiredListResult = axios.get<FetchExpiredShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`,
-        {
-          withCredentials: true,
-        }
+      const fetchExpiredListResult = todoServiceInstance.get<FetchExpiredShoppingListRes>(
+        `/shopping-list/expired`
       );
 
-      const fetchTodayListResult = axios.get<FetchTodayShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
+        `/shopping-list/${year}-${month}-${date}/daily`
       );
 
-      const fetchTodayListByCategoriesResult = axios.get<FetchTodayShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}-${date}/categories`
       );
 
-      const fetchMonthlyListResult = axios.get<FetchMonthlyShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/daily`
       );
 
-      const fetchMonthlyListByCategoriesResult = axios.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/categories`
       );
 
       const expiredShoppingListResponse = await fetchExpiredListResult;
@@ -416,46 +379,28 @@ export const deleteShoppingListItem = (
     dispatch(startDeleteShoppingListItemAction());
 
     try {
-      const deleteShoppingListItemResult = await axios.delete<DeleteShoppingListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${shoppingListItemId}`,
-        {
-          withCredentials: true,
-        }
+      const deleteShoppingListItemResult = await todoServiceInstance.delete<DeleteShoppingListItemRes>(
+        `/shopping-list/${shoppingListItemId}`
       );
 
-      const fetchExpiredListResult = axios.get<FetchExpiredShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`,
-        {
-          withCredentials: true,
-        }
+      const fetchExpiredListResult = todoServiceInstance.get<FetchExpiredShoppingListRes>(
+        `/shopping-list/expired`
       );
 
-      const fetchTodayListResult = axios.get<FetchTodayShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
+        `/shopping-list/${year}-${month}-${date}/daily`
       );
 
-      const fetchTodayListByCategoriesResult = axios.get<FetchTodayShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}-${date}/categories`
       );
 
-      const fetchMonthlyListResult = axios.get<FetchMonthlyShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/daily`
       );
 
-      const fetchMonthlyListByCategoriesResult = axios.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/categories`
       );
 
       const expiredShoppingListResponse = await fetchExpiredListResult;
@@ -495,45 +440,30 @@ export const addRegularShoppingListItem = (
     dispatch(startAddRegularShoppingListItemAction());
 
     try {
-      await axios.post<AddRegularShoppingListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular`,
+      await todoServiceInstance.post<AddRegularShoppingListItemRes>(
+        `/shopping-list/regular`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
             return dayjs(new Date(value)).format();
           }
           return value;
-        }),
-        {
-          withCredentials: true,
-        }
+        })
       );
 
-      const fetchTodayListResult = axios.get<FetchTodayShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
+        `/shopping-list/${year}-${month}-${date}/daily`
       );
 
-      const fetchTodayListByCategoriesResult = axios.get<FetchTodayShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}-${date}/categories`
       );
 
-      const fetchMonthlyListResult = axios.get<FetchMonthlyShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/daily`
       );
 
-      const fetchMonthlyListByCategoriesResult = axios.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/categories`
       );
 
       const todayShoppingListResponse = await fetchTodayListResult;
@@ -575,52 +505,34 @@ export const editRegularShoppingListItem = (
     dispatch(startEditRegularShoppingListItemAction());
 
     try {
-      await axios.put<EditRegularShoppingListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`,
+      await todoServiceInstance.put<EditRegularShoppingListItemRes>(
+        `/shopping-list/regular/${regularShoppingListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
             return dayjs(new Date(value)).format();
           }
           return value;
-        }),
-        {
-          withCredentials: true,
-        }
+        })
       );
 
-      const fetchExpiredListResult = axios.get<FetchExpiredShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`,
-        {
-          withCredentials: true,
-        }
+      const fetchExpiredListResult = todoServiceInstance.get<FetchExpiredShoppingListRes>(
+        `/shopping-list/expired`
       );
 
-      const fetchTodayListResult = axios.get<FetchTodayShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
+        `/shopping-list/${year}-${month}-${date}/daily`
       );
 
-      const fetchTodayListByCategoriesResult = axios.get<FetchTodayShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}-${date}/categories`
       );
 
-      const fetchMonthlyListResult = axios.get<FetchMonthlyShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/daily`
       );
 
-      const fetchMonthlyListByCategoriesResult = axios.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/categories`
       );
 
       const expiredShoppingListResponse = await fetchExpiredListResult;
@@ -663,46 +575,31 @@ export const deleteRegularShoppingListItem = (
     dispatch(startDeleteRegularShoppingListItemAction());
 
     try {
-      const deleteRegularShoppingListItemResult = await axios.delete<DeleteRegularShoppingListItemRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/regular/${regularShoppingListItemId}`,
+      const deleteRegularShoppingListItemResult = await todoServiceInstance.delete<DeleteRegularShoppingListItemRes>(
+        `/shopping-list/regular/${regularShoppingListItemId}`,
         {
           withCredentials: true,
         }
       );
 
-      const fetchExpiredListResult = axios.get<FetchExpiredShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/expired`,
-        {
-          withCredentials: true,
-        }
+      const fetchExpiredListResult = todoServiceInstance.get<FetchExpiredShoppingListRes>(
+        `/shopping-list/expired`
       );
 
-      const fetchTodayListResult = axios.get<FetchTodayShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
+        `/shopping-list/${year}-${month}-${date}/daily`
       );
 
-      const fetchTodayListByCategoriesResult = axios.get<FetchTodayShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
+        `/shopping-list/${year}-${month}-${date}/categories`
       );
 
-      const fetchMonthlyListResult = axios.get<FetchMonthlyShoppingListRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/daily`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/daily`
       );
 
-      const fetchMonthlyListByCategoriesResult = axios.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `${process.env.REACT_APP_TODO_API_HOST}/shopping-list/${currentYear}-${currentMonth}/categories`,
-        {
-          withCredentials: true,
-        }
+      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
+        `/shopping-list/${currentYear}-${currentMonth}/categories`
       );
 
       const expiredShoppingListResponse = await fetchExpiredListResult;
