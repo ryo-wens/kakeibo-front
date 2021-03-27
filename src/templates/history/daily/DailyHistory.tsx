@@ -34,8 +34,6 @@ interface DailyHistoryProps {
   approvedGroup: Groups;
   transactionsList: TransactionsList;
   groupTransactionsList: GroupTransactionsList;
-  searchTransactionsList: TransactionsList;
-  groupSearchTransactionsList: GroupTransactionsList;
   searchFieldOpen: () => void;
   searchFieldClose: () => void;
   setSubmit: React.Dispatch<React.SetStateAction<boolean>>;
@@ -60,7 +58,7 @@ const DailyHistory = (props: DailyHistoryProps) => {
         <SearchTransactionContainer
           closeSearch={props.searchFieldClose}
           openSearch={props.searchFieldOpen}
-          openSearchFiled={props.openSearchField}
+          openSearchField={props.openSearchField}
           notSpecified={props.notSpecified}
           pathName={props.pathName}
           inputMemo={props.inputMemo}

@@ -1,0 +1,19 @@
+{
+  "id": 20,
+  "transaction_type": "expense",
+  "posted_date": "2020-11-20T15:28:54Z",
+  "updated_date": "2020-11-20T15:28:54Z",
+  "transaction_date": "2020/11/20(金)",
+  "shop": null,
+  "memo": null,
+  "amount": 2000,
+  "posted_user_id": "taira",
+  "updated_user_id": null,
+  "payment_user_id": "taira",
+  "big_category_id": 2,
+  "big_category_name": "食費",
+  "medium_category_id": 9,
+  "medium_category_name": "夕食",
+  "custom_category_id": null,
+  "custom_category_name": null
+}

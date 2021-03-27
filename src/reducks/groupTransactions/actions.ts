@@ -41,7 +41,14 @@ export type groupTransactionsAction = ReturnType<
   | typeof failedDeleteGroupAccountAction
   | typeof startSearchGroupTransactionsAction
   | typeof searchGroupTransactionsAction
+  | typeof cancelSearchGroupTransactionsAction
   | typeof failedSearchGroupTransactionsAction
+  | typeof startEditSearchGroupTransactionsAction
+  | typeof searchEditGroupTransactionsAction
+  | typeof failedEditSearchGroupTransactionsAction
+  | typeof startDeleteSearchGroupTransactionsAction
+  | typeof searchDeleteGroupTransactionsAction
+  | typeof failedDeleteSearchGroupTransactionsAction
 >;
 
 export const START_FETCH_GROUP_TRANSACTIONS = 'START_FETCH_GROUP_TRANSACTIONS';
@@ -641,10 +648,114 @@ export const searchGroupTransactionsAction = (
   };
 };
 
+export const CANCEL_SEARCH_GROUP_TRANSACTIONS = 'CANCEL_SEARCH_GROUP_TRANSACTIONS';
+export const cancelSearchGroupTransactionsAction = () => {
+  return {
+    type: CANCEL_SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: false,
+    },
+  };
+};
+
 export const FAILED_SEARCH_GROUP_TRANSACTIONS = 'FAILED_SEARCH_GROUP_TRANSACTIONS';
 export const failedSearchGroupTransactionsAction = (statusCode: number, errorMessage: string) => {
   return {
     type: FAILED_SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: true,
+      groupSearchTransactionsListError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_EDIT_SEARCH_GROUP_TRANSACTIONS = 'START_EDIT_SEARCH_GROUP_TRANSACTIONS';
+export const startEditSearchGroupTransactionsAction = () => {
+  return {
+    type: START_EDIT_SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: true,
+
+      groupSearchTransactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
+    },
+  };
+};
+
+export const SEARCH_EDIT_GROUP_TRANSACTIONS = 'SEARCH_EDIT_GROUP_TRANSACTIONS';
+export const searchEditGroupTransactionsAction = (
+  groupSearchTransactionsList: GroupTransactionsList,
+  notHistoryMessage: string
+) => {
+  return {
+    type: SEARCH_EDIT_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: false,
+      groupSearchTransactionsList: groupSearchTransactionsList,
+      notHistoryMessage: notHistoryMessage,
+    },
+  };
+};
+
+export const FAILED_EDIT_SEARCH_GROUP_TRANSACTIONS = 'FAILED_EDIT_SEARCH_GROUP_TRANSACTIONS';
+export const failedEditSearchGroupTransactionsAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_EDIT_SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: true,
+      groupSearchTransactionsListError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_DELETE_SEARCH_GROUP_TRANSACTIONS = 'START_DELETE_SEARCH_GROUP_TRANSACTIONS';
+export const startDeleteSearchGroupTransactionsAction = () => {
+  return {
+    type: START_DELETE_SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: true,
+
+      groupSearchTransactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
+    },
+  };
+};
+
+export const SEARCH_DELETE_GROUP_TRANSACTIONS = 'SEARCH_DELETE_GROUP_TRANSACTIONS';
+export const searchDeleteGroupTransactionsAction = (
+  groupSearchTransactionsList: GroupTransactionsList,
+  notHistoryMessage: string
+) => {
+  return {
+    type: SEARCH_DELETE_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: false,
+      groupSearchTransactionsList: groupSearchTransactionsList,
+      notHistoryMessage: notHistoryMessage,
+    },
+  };
+};
+
+export const FAILED_DELETE_SEARCH_GROUP_TRANSACTIONS = 'FAILED_DELETE_SEARCH_GROUP_TRANSACTIONS';
+export const failedDeleteSearchGroupTransactionsAction = (
+  statusCode: number,
+  errorMessage: string
+) => {
+  return {
+    type: FAILED_DELETE_SEARCH_GROUP_TRANSACTIONS,
     payload: {
       groupSearchTransactionsListLoading: true,
       groupSearchTransactionsListError: {

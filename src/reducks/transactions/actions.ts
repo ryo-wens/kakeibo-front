@@ -19,7 +19,14 @@ export type transactionActions = ReturnType<
   | typeof failedDeleteTransactionsActions
   | typeof startSearchTransactionsActions
   | typeof searchTransactionsActions
+  | typeof cancelSearchTransactions
   | typeof failedSearchTransactionsActions
+  | typeof startEditSearchTransactionsActions
+  | typeof editSearchTransactionsActions
+  | typeof failedEditSearchTransactionsActions
+  | typeof startDeleteSearchTransactionsActions
+  | typeof deleteSearchTransactionsActions
+  | typeof failedDeleteSearchTransactionsActions
 >;
 
 export const START_FETCH_TRANSACTIONS = 'START_FETCH_TRANSACTIONS';
@@ -330,10 +337,110 @@ export const searchTransactionsActions = (
   };
 };
 
+export const CANCEL_SEARCH_TRANSACTIONS = 'CANCEL_SEARCH_TRANSACTIONS';
+export const cancelSearchTransactions = () => {
+  return {
+    type: CANCEL_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: false,
+    },
+  };
+};
+
 export const FAILED_SEARCH_TRANSACTIONS = 'FAILED_SEARCH_TRANSACTIONS';
 export const failedSearchTransactionsActions = (statusCode: number, errorMessage: string) => {
   return {
     type: FAILED_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: false,
+
+      transactionsListError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_EDIT_SEARCH_TRANSACTIONS = 'START_EDIT_SEARCH_TRANSACTIONS';
+export const startEditSearchTransactionsActions = () => {
+  return {
+    type: START_EDIT_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: true,
+
+      transactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
+    },
+  };
+};
+
+export const EDIT_SEARCH_TRANSACTIONS = 'EDIT_SEARCH_TRANSACTIONS';
+export const editSearchTransactionsActions = (
+  searchTransactionsList: TransactionsList,
+  notHistoryMessage: string
+) => {
+  return {
+    type: EDIT_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: false,
+      searchTransactionsList: searchTransactionsList,
+      notHistoryMessage: notHistoryMessage,
+    },
+  };
+};
+
+export const FAILED_EDIT_SEARCH_TRANSACTIONS = 'FAILED_EDIT_SEARCH_TRANSACTIONS';
+export const failedEditSearchTransactionsActions = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_EDIT_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: false,
+
+      transactionsListError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_DELETE_SEARCH_TRANSACTIONS = 'START_DELETE_SEARCH_TRANSACTIONS';
+export const startDeleteSearchTransactionsActions = () => {
+  return {
+    type: START_DELETE_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: true,
+
+      transactionsListError: {
+        statusCode: null,
+        errorMessage: '',
+      },
+    },
+  };
+};
+
+export const DELETE_SEARCH_TRANSACTIONS = 'DELETE_SEARCH_TRANSACTIONS';
+export const deleteSearchTransactionsActions = (
+  searchTransactionsList: TransactionsList,
+  notHistoryMessage: string
+) => {
+  return {
+    type: DELETE_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: false,
+      searchTransactionsList: searchTransactionsList,
+      notHistoryMessage: notHistoryMessage,
+    },
+  };
+};
+
+export const FAILED_DELETE_SEARCH_TRANSACTIONS = 'FAILED_DELETE_SEARCH_TRANSACTIONS';
+export const failedDeleteSearchTransactionsActions = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_DELETE_SEARCH_TRANSACTIONS,
     payload: {
       searchTransactionsListLoading: false,
 

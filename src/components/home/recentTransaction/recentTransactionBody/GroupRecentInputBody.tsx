@@ -10,7 +10,7 @@ interface RecentInputBodyProps {
   openId: number | undefined;
   approvedGroup: Groups;
   groupLatestTransactionsList: GroupTransactionsList;
-  payerColor: (payerUserId: string) => React.CSSProperties;
+  payerColor: (payerUserId: string, transactionType: string) => React.CSSProperties;
   openModal: (transactionId: number) => void;
   closeModal: () => void;
 }
@@ -45,7 +45,12 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
               {groupTransaction.medium_category_name || groupTransaction.custom_category_name}
             </dt>
             <dt className="recent-input__recent-text">
-              <span style={props.payerColor(groupTransaction.payment_user_id)}>
+              <span
+                style={props.payerColor(
+                  groupTransaction.payment_user_id,
+                  groupTransaction.transaction_type
+                )}
+              >
                 ￥ {groupTransaction.amount.toLocaleString()}
               </span>
             </dt>

@@ -21,9 +21,9 @@ const WeeklyHistoryContainer = (props: MonthlyHistoryProps) => {
   const expenseGroupTransactionsList = useSelector(getGroupWeeklyTransaction);
   const [open, setOpen] = useState<boolean>(false);
   const [openId, setOpenId] = useState<number | undefined>(undefined);
-  const signal = axios.CancelToken.source();
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
     const years: SelectYears = {
       selectedYear: String(props.year),
       selectedMonth: props.month <= 9 ? '0' + props.month : String(props.month),

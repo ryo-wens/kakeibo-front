@@ -18,9 +18,17 @@ import {
   failedDeleteTransactionsActions,
   startSearchTransactionsActions,
   searchTransactionsActions,
+  cancelSearchTransactions,
   failedSearchTransactionsActions,
+  startEditSearchTransactionsActions,
+  editSearchTransactionsActions,
+  failedEditSearchTransactionsActions,
+  startDeleteSearchTransactionsActions,
+  deleteSearchTransactionsActions,
+  failedDeleteSearchTransactionsActions,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
+import { accountServiceInstance } from '../axiosConfig';
 import { Dispatch, Action } from 'redux';
 import {
   TransactionsList,
@@ -43,13 +51,11 @@ export const fetchTransactionsList = (
     dispatch(startFetchTransactionsActions());
 
     try {
-      const result = await axios.get<FetchTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const result = await accountServiceInstance.get<FetchTransactionsRes>(
+        `/transactions/${selectYears.selectedYear}-${selectYears.selectedMonth}`,
+        { cancelToken: signal.token }
       );
+
       const resMessage = result.data.message;
       const transactionsList = result.data.transactions_list;
 
@@ -79,13 +85,11 @@ export const fetchLatestTransactionsList = (signal: CancelTokenSource) => {
     dispatch(startFetchLatestTransactionsActions());
 
     try {
-      const result = await axios.get<FetchLatestTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const result = await accountServiceInstance.get<FetchLatestTransactionsRes>(
+        '/transactions/latest',
+        { cancelToken: signal.token }
       );
+
       const latestTransactionsList = result.data.transactions_list;
       const emptyTransactionsList: TransactionsList = [];
 
@@ -121,8 +125,7 @@ export const addTransactions = (
     custom_category_id: number | null;
   },
   addTransactionYear: number,
-  addTransactionMonth: string,
-  signal: CancelTokenSource
+  addTransactionMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidAmountFormat(requestData.amount as string)) {
@@ -133,33 +136,22 @@ export const addTransactions = (
     dispatch(startAddTransactionsActions());
 
     try {
-      await axios.post<TransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions`,
+      await accountServiceInstance.post<TransactionsRes>(
+        '/transactions',
         JSON.stringify(requestData, function (key, value) {
           if (key === 'transaction_date') {
             return dayjs(new Date(value)).format();
           }
           return value;
-        }),
-        {
-          withCredentials: true,
-        }
+        })
       );
 
-      const fetchTransactionsResult = axios.get<FetchTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${addTransactionYear}-${addTransactionMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchTransactionsResult = accountServiceInstance.get<FetchTransactionsRes>(
+        `/transactions/${addTransactionYear}-${addTransactionMonth}`
       );
 
-      const fetchLatestTransactionsResult = axios.get<FetchLatestTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchLatestTransactionsResult = accountServiceInstance.get<FetchLatestTransactionsRes>(
+        'transactions/latest'
       );
 
       const addedTransactionsList = await fetchTransactionsResult;
@@ -192,8 +184,7 @@ export const editTransactions = (
     custom_category_id: number | null;
   },
   editTransactionYear: number,
-  editTransactionMonth: string,
-  signal: CancelTokenSource
+  editTransactionMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidAmountFormat(editRequestData.amount as string)) {
@@ -204,33 +195,22 @@ export const editTransactions = (
     dispatch(startEditTransactionsActions());
 
     try {
-      await axios.put<TransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
+      await accountServiceInstance.put<TransactionsRes>(
+        `/transactions/${id}`,
         JSON.stringify(editRequestData, function (key, value) {
           if (key === 'transaction_date') {
             return dayjs(new Date(value)).format();
           }
           return value;
-        }),
-        {
-          withCredentials: true,
-        }
+        })
       );
 
-      const fetchTransactionsResult = axios.get<FetchTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${editTransactionYear}-${editTransactionMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchTransactionsResult = accountServiceInstance.get<FetchTransactionsRes>(
+        `/transactions/${editTransactionYear}-${editTransactionMonth}`
       );
 
-      const fetchLatestTransactionsResult = axios.get<FetchLatestTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchLatestTransactionsResult = accountServiceInstance.get<FetchLatestTransactionsRes>(
+        '/transactions/latest'
       );
 
       const editedTransactionsList = await fetchTransactionsResult;
@@ -252,7 +232,6 @@ export const editTransactions = (
 
 export const deleteTransactions = (
   id: number,
-  signal: CancelTokenSource,
   editTransactionYear: number,
   editTransactionMonth: string
 ) => {
@@ -260,27 +239,14 @@ export const deleteTransactions = (
     dispatch(startDeleteTransactionsActions());
 
     try {
-      await axios.delete<DeleteTransactionRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${id}`,
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.delete<DeleteTransactionRes>(`/transactions/${id}`);
+
+      const fetchTransactionsResult = accountServiceInstance.get<FetchTransactionsRes>(
+        `/transactions/${editTransactionYear}-${editTransactionMonth}`
       );
 
-      const fetchTransactionsResult = axios.get<FetchTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/${editTransactionYear}-${editTransactionMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
-      );
-
-      const fetchLatestTransactionsResult = axios.get<FetchLatestTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/latest`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchLatestTransactionsResult = accountServiceInstance.get<FetchLatestTransactionsRes>(
+        '/transactions/latest'
       );
 
       const deletedTransactionsList =
@@ -302,27 +268,30 @@ export const deleteTransactions = (
   };
 };
 
-export const searchTransactions = (searchRequestData: {
-  transaction_type?: string | null;
-  start_date?: Date | null;
-  end_date?: Date | null;
-  shop?: string | null;
-  memo?: string | null;
-  low_amount?: string | number | null;
-  high_amount?: string | number | null;
-  big_category_id?: number | null;
-  sort?: string | null;
-  sort_type?: string | null;
-  limit?: string | null;
-}) => {
+export const searchTransactions = (
+  signal: CancelTokenSource,
+  searchRequestData: {
+    transaction_type?: string | null;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    shop?: string | null;
+    memo?: string | null;
+    low_amount?: string | number | null;
+    high_amount?: string | number | null;
+    big_category_id?: number | null;
+    sort?: string | null;
+    sort_type?: string | null;
+    limit?: string | null;
+  }
+) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startSearchTransactionsActions());
 
     try {
-      const result = await axios.get<FetchTransactionsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/transactions/search`,
+      const result = await accountServiceInstance.get<FetchTransactionsRes>(
+        `/transactions/search`,
         {
-          withCredentials: true,
+          cancelToken: signal.token,
           params: {
             start_date:
               searchRequestData.start_date !== null
@@ -355,8 +324,163 @@ export const searchTransactions = (searchRequestData: {
         dispatch(searchTransactionsActions(emptySearchTransactionsList, message));
       }
     } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelSearchTransactions());
+      }
       dispatch(
         failedSearchTransactionsActions(error.response.status, error.response.data.error.message)
+      );
+    }
+  };
+};
+
+export const editSearchTransactions = (
+  id: number,
+  editRequestData: {
+    transaction_type: string;
+    transaction_date: Date | null;
+    shop: string | null;
+    memo: string | null;
+    amount: string | number;
+    big_category_id: number;
+    medium_category_id: number | null;
+    custom_category_id: number | null;
+  },
+  searchRequestData: {
+    transaction_type?: string | null;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    shop?: string | null;
+    memo?: string | null;
+    low_amount?: string | number | null;
+    high_amount?: string | number | null;
+    big_category_id?: number | null;
+    sort?: string | null;
+    sort_type?: string | null;
+    limit?: string | null;
+  }
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startEditSearchTransactionsActions());
+
+    try {
+      await accountServiceInstance.put<TransactionsRes>(
+        `/transactions/${id}`,
+        JSON.stringify(editRequestData, function (key, value) {
+          if (key === 'transaction_date') {
+            return dayjs(new Date(value)).format();
+          }
+          return value;
+        })
+      );
+
+      const searchResult = await accountServiceInstance.get<FetchTransactionsRes>(
+        '/transactions/search',
+        {
+          params: {
+            start_date:
+              searchRequestData.start_date !== null
+                ? dayjs(searchRequestData.start_date).format()
+                : null,
+            end_date:
+              searchRequestData.end_date !== null
+                ? dayjs(searchRequestData.end_date).format()
+                : null,
+            transaction_type: searchRequestData.transaction_type,
+            low_amount: searchRequestData.low_amount,
+            high_amount: searchRequestData.high_amount,
+            shop: searchRequestData.shop,
+            memo: searchRequestData.memo,
+            big_category_id: searchRequestData.big_category_id,
+            sort: searchRequestData.sort,
+            sort_type: searchRequestData.sort_type,
+            limit: searchRequestData.limit,
+          },
+        }
+      );
+      const message = searchResult.data.message;
+      const searchTransactionsList: TransactionsList = searchResult.data.transactions_list;
+
+      if (searchTransactionsList !== undefined) {
+        const emptyMessage = '';
+        dispatch(editSearchTransactionsActions(searchTransactionsList, emptyMessage));
+      } else {
+        const emptySearchTransactionsList: TransactionsList = [];
+        dispatch(editSearchTransactionsActions(emptySearchTransactionsList, message));
+      }
+    } catch (error) {
+      dispatch(
+        failedEditSearchTransactionsActions(
+          error.response.status,
+          error.response.data.error.message
+        )
+      );
+    }
+  };
+};
+
+export const deleteSearchTransactions = (
+  id: number,
+  searchRequestData: {
+    transaction_type?: string | null;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    shop?: string | null;
+    memo?: string | null;
+    low_amount?: string | number | null;
+    high_amount?: string | number | null;
+    big_category_id?: number | null;
+    sort?: string | null;
+    sort_type?: string | null;
+    limit?: string | null;
+  }
+) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startDeleteSearchTransactionsActions());
+
+    try {
+      await accountServiceInstance.delete<DeleteTransactionRes>(`/transactions/${id}`);
+
+      const searchResult = await accountServiceInstance.get<FetchTransactionsRes>(
+        '/transactions/search',
+        {
+          params: {
+            start_date:
+              searchRequestData.start_date !== null
+                ? dayjs(searchRequestData.start_date).format()
+                : null,
+            end_date:
+              searchRequestData.end_date !== null
+                ? dayjs(searchRequestData.end_date).format()
+                : null,
+            transaction_type: searchRequestData.transaction_type,
+            low_amount: searchRequestData.low_amount,
+            high_amount: searchRequestData.high_amount,
+            shop: searchRequestData.shop,
+            memo: searchRequestData.memo,
+            big_category_id: searchRequestData.big_category_id,
+            sort: searchRequestData.sort,
+            sort_type: searchRequestData.sort_type,
+            limit: searchRequestData.limit,
+          },
+        }
+      );
+      const message = searchResult.data.message;
+      const searchTransactionsList: TransactionsList = searchResult.data.transactions_list;
+
+      if (searchTransactionsList !== undefined) {
+        const emptyMessage = '';
+        dispatch(deleteSearchTransactionsActions(searchTransactionsList, emptyMessage));
+      } else {
+        const emptySearchTransactionsList: TransactionsList = [];
+        dispatch(deleteSearchTransactionsActions(emptySearchTransactionsList, message));
+      }
+    } catch (error) {
+      dispatch(
+        failedDeleteSearchTransactionsActions(
+          error.response.status,
+          error.response.data.error.message
+        )
       );
     }
   };

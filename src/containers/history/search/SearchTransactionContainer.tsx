@@ -1,11 +1,16 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Groups } from '../../../reducks/groups/types';
 import SearchTransaction from '../../../components/history/search/SearchTransaction';
+import { useSelector } from 'react-redux';
+import { getSearchTransactions } from '../../../reducks/transactions/selectors';
+import { TransactionsList } from '../../../reducks/transactions/types';
+import { getSearchGroupTransactions } from '../../../reducks/groupTransactions/selectors';
+import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
 
 interface SearchTransactionContainerProps {
   pathName: string;
   groupId: number;
-  openSearchFiled: boolean;
+  openSearchField: boolean;
   openSearch: () => void;
   closeSearch: () => void;
   selectStartDateChange: (selectStartDate: Date | null) => void;
@@ -40,12 +45,64 @@ interface SearchTransactionContainerProps {
 }
 
 const SearchTransactionContainer = (props: SearchTransactionContainerProps) => {
-  const displaySearchTransactionResult = props.submit && props.openSearchFiled;
+  const searchTransactions = useSelector(getSearchTransactions);
+  const groupSearchTransactions = useSelector(getSearchGroupTransactions);
+  const [searchTransaction, setSearchTransaction] = useState<TransactionsList>([]);
+  const [groupSearchTransaction, setGroupSearchTransaction] = useState<GroupTransactionsList>([]);
+  const searchResults = searchTransaction.length === 0;
+  const displaySearchTransactionResult = props.submit && props.openSearchField && !searchResults;
+
+  useEffect(() => {
+    setSearchTransaction(searchTransactions);
+  }, [searchTransactions]);
+
+  useEffect(() => {
+    setGroupSearchTransaction(groupSearchTransactions);
+  }, [groupSearchTransactions]);
+
+  useEffect(() => {
+    setSearchTransaction(groupSearchTransactions);
+  }, [groupSearchTransactions, props.openSearchField]);
+
+  const searchRequestData = {
+    transaction_type: props.transactionType !== '' ? props.transactionType : null,
+    start_date: props.selectStartDate,
+    end_date: props.selectEndDate,
+    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
+    high_amount: props.highAmount !== '' ? props.highAmount : null,
+    memo: props.memo !== '' ? props.memo : null,
+    shop: props.shop !== '' ? props.shop : null,
+    sort: props.sortItem !== '' ? props.sortItem : null,
+    sort_type: props.sortType !== '' ? props.sortType : null,
+    big_category_id: props.bigCategoryId !== 0 ? props.bigCategoryId : null,
+    limit: props.limit !== '' ? props.limit : null,
+  };
+
+  const groupSearchRequestData = {
+    transaction_type: props.transactionType !== '' ? props.transactionType : null,
+    payment_user_id: props.paymentUserId !== '' ? props.paymentUserId : null,
+    start_date: props.selectStartDate,
+    end_date: props.selectEndDate,
+    low_amount: props.lowAmount !== '' ? props.lowAmount : null,
+    high_amount: props.highAmount !== '' ? props.highAmount : null,
+    memo: props.memo !== '' ? props.memo : null,
+    shop: props.shop !== '' ? props.shop : null,
+    sort: props.sortItem !== '' ? props.sortItem : null,
+    sort_type: props.sortType !== '' ? props.sortType : null,
+    big_category_id: props.bigCategoryId !== 0 ? props.bigCategoryId : null,
+    limit: props.limit !== '' ? props.limit : null,
+  };
+
+  const resetSearchTransactionsList = () => {
+    props.closeSearch();
+    setSearchTransaction([]);
+  };
 
   return (
     <SearchTransaction
       groupId={props.groupId}
       pathName={props.pathName}
+      searchResults={searchResults}
       notSpecified={props.notSpecified}
       openSearch={props.openSearch}
       closeSearch={props.closeSearch}
@@ -65,7 +122,7 @@ const SearchTransactionContainer = (props: SearchTransactionContainerProps) => {
       sortType={props.sortType}
       limit={props.limit}
       submit={props.submit}
-      openSearchFiled={props.openSearchFiled}
+      openSearchField={props.openSearchField}
       selectStartDateChange={props.selectStartDateChange}
       selectEndDateChange={props.selectEndDateChange}
       selectTransactionsType={props.selectTransactionsType}
@@ -79,6 +136,11 @@ const SearchTransactionContainer = (props: SearchTransactionContainerProps) => {
       inputMemo={props.inputMemo}
       selectLimit={props.selectLimit}
       setSearchSubmit={props.setSearchSubmit}
+      searchRequestData={searchRequestData}
+      groupSearchRequestData={groupSearchRequestData}
+      searchTransaction={searchTransaction}
+      groupSearchTransaction={groupSearchTransaction}
+      resetSearchTransactionsList={resetSearchTransactionsList}
     />
   );
 };
