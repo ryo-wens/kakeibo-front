@@ -117,7 +117,6 @@ describe('async actions transactions', () => {
   it('Add transaction in transactionsList and latestTransactionsList if fetch succeeds', async () => {
     const year = 2020;
     const month = '11';
-    const signal = axios.CancelToken.source();
     const addUrl = `/transactions`;
     const fetchLatestUrl = `/transactions/latest`;
     const fetchUrl = `/transactions/${year}-${month}`;
@@ -190,7 +189,7 @@ describe('async actions transactions', () => {
     axiosMock.onGet(fetchUrl).reply(200, addTransactionsList);
     axiosMock.onGet(fetchLatestUrl).reply(200, addLatestTransaction);
 
-    await addTransactions(requestData, year, month, signal)(store.dispatch);
+    await addTransactions(requestData, year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAddActions);
   });
 
@@ -198,7 +197,6 @@ describe('async actions transactions', () => {
     const year = 2020;
     const month = '11';
     const id = 130;
-    const signal = axios.CancelToken.source();
     const editUrl = `/transactions/${id}`;
     const fetchLatestUrl = `/transactions/latest`;
     const fetchUrl = `/transactions/${year}-${month}`;
@@ -271,7 +269,7 @@ describe('async actions transactions', () => {
     axiosMock.onGet(fetchUrl).reply(200, editTransactionsList);
     axiosMock.onGet(fetchLatestUrl).reply(200, editLatestTransaction);
 
-    await editTransactions(130, requestData, year, month, signal)(store.dispatch);
+    await editTransactions(130, requestData, year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedEditActions);
   });
 
@@ -279,7 +277,6 @@ describe('async actions transactions', () => {
     const id = 130;
     const year = 2020;
     const month = '11';
-    const signal = axios.CancelToken.source();
     const url = `/transactions/${id}`;
     const fetchLatestUrl = `/transactions/latest`;
     const fetchUrl = `/transactions/${year}-${month}`;
@@ -321,7 +318,7 @@ describe('async actions transactions', () => {
     axiosMock.onGet(fetchUrl).reply(200, transactionsList);
     axiosMock.onGet(fetchLatestUrl).reply(200, latestTransactionsList);
 
-    await deleteTransactions(130, signal, year, month)(store.dispatch);
+    await deleteTransactions(130, year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedDeleteActions);
   });
 
@@ -335,6 +332,7 @@ describe('async actions transactions', () => {
     };
 
     const url = `/transactions/search`;
+    const signal = axios.CancelToken.source();
     const mockResponse = fetchResSearchTransaction;
 
     const expectSearchActions = [
@@ -361,7 +359,7 @@ describe('async actions transactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await searchTransactions(searchRequest)(store.dispatch);
+    await searchTransactions(signal, searchRequest)(store.dispatch);
     expect(store.getActions()).toEqual(expectSearchActions);
   });
 

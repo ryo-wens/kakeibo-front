@@ -4,6 +4,7 @@ import { Groups } from '../../../reducks/groups/types';
 import SearchTransactionsField from '../../../components/history/search/SearchTransactionsField';
 import { searchTransactions } from '../../../reducks/transactions/operations';
 import { searchGroupTransactions } from '../../../reducks/groupTransactions/operations';
+import axios from 'axios';
 
 interface SearchTransactionsFieldContainerProps {
   pathName: string;
@@ -104,10 +105,14 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
       changeSortItem={props.changeSortItem}
       changeSortType={props.changeSortType}
       selectLimit={props.selectLimit}
-      searchOperation={() => dispatch(searchTransactions(props.searchRequestData))}
-      groupSearchOperation={() =>
-        dispatch(searchGroupTransactions(props.groupId, props.groupSearchRequestData))
-      }
+      searchOperation={() => {
+        const signal = axios.CancelToken.source();
+        dispatch(searchTransactions(signal, props.searchRequestData));
+      }}
+      groupSearchOperation={() => {
+        const signal = axios.CancelToken.source();
+        dispatch(searchGroupTransactions(props.groupId, signal, props.groupSearchRequestData));
+      }}
     />
   );
 };

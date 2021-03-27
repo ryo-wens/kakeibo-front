@@ -19,6 +19,7 @@ export type transactionActions = ReturnType<
   | typeof failedDeleteTransactionsActions
   | typeof startSearchTransactionsActions
   | typeof searchTransactionsActions
+  | typeof cancelSearchTransactions
   | typeof failedSearchTransactionsActions
   | typeof startEditSearchTransactionsActions
   | typeof editSearchTransactionsActions
@@ -332,6 +333,16 @@ export const searchTransactionsActions = (
       searchTransactionsListLoading: false,
       searchTransactionsList: searchTransactionsList,
       notHistoryMessage: notHistoryMessage,
+    },
+  };
+};
+
+export const CANCEL_SEARCH_TRANSACTIONS = 'CANCEL_SEARCH_TRANSACTIONS';
+export const cancelSearchTransactions = () => {
+  return {
+    type: CANCEL_SEARCH_TRANSACTIONS,
+    payload: {
+      searchTransactionsListLoading: false,
     },
   };
 };

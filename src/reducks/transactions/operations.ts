@@ -18,6 +18,7 @@ import {
   failedDeleteTransactionsActions,
   startSearchTransactionsActions,
   searchTransactionsActions,
+  cancelSearchTransactions,
   failedSearchTransactionsActions,
   startEditSearchTransactionsActions,
   editSearchTransactionsActions,
@@ -124,8 +125,7 @@ export const addTransactions = (
     custom_category_id: number | null;
   },
   addTransactionYear: number,
-  addTransactionMonth: string,
-  signal: CancelTokenSource
+  addTransactionMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidAmountFormat(requestData.amount as string)) {
@@ -147,13 +147,11 @@ export const addTransactions = (
       );
 
       const fetchTransactionsResult = accountServiceInstance.get<FetchTransactionsRes>(
-        `/transactions/${addTransactionYear}-${addTransactionMonth}`,
-        { cancelToken: signal.token }
+        `/transactions/${addTransactionYear}-${addTransactionMonth}`
       );
 
       const fetchLatestTransactionsResult = accountServiceInstance.get<FetchLatestTransactionsRes>(
-        'transactions/latest',
-        { cancelToken: signal.token }
+        'transactions/latest'
       );
 
       const addedTransactionsList = await fetchTransactionsResult;
@@ -186,8 +184,7 @@ export const editTransactions = (
     custom_category_id: number | null;
   },
   editTransactionYear: number,
-  editTransactionMonth: string,
-  signal: CancelTokenSource
+  editTransactionMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     if (!isValidAmountFormat(editRequestData.amount as string)) {
@@ -209,13 +206,11 @@ export const editTransactions = (
       );
 
       const fetchTransactionsResult = accountServiceInstance.get<FetchTransactionsRes>(
-        `/transactions/${editTransactionYear}-${editTransactionMonth}`,
-        { cancelToken: signal.token }
+        `/transactions/${editTransactionYear}-${editTransactionMonth}`
       );
 
       const fetchLatestTransactionsResult = accountServiceInstance.get<FetchLatestTransactionsRes>(
-        '/transactions/latest',
-        { cancelToken: signal.token }
+        '/transactions/latest'
       );
 
       const editedTransactionsList = await fetchTransactionsResult;
@@ -237,7 +232,6 @@ export const editTransactions = (
 
 export const deleteTransactions = (
   id: number,
-  signal: CancelTokenSource,
   editTransactionYear: number,
   editTransactionMonth: string
 ) => {
@@ -248,13 +242,11 @@ export const deleteTransactions = (
       await accountServiceInstance.delete<DeleteTransactionRes>(`/transactions/${id}`);
 
       const fetchTransactionsResult = accountServiceInstance.get<FetchTransactionsRes>(
-        `/transactions/${editTransactionYear}-${editTransactionMonth}`,
-        { cancelToken: signal.token }
+        `/transactions/${editTransactionYear}-${editTransactionMonth}`
       );
 
       const fetchLatestTransactionsResult = accountServiceInstance.get<FetchLatestTransactionsRes>(
-        '/transactions/latest',
-        { cancelToken: signal.token }
+        '/transactions/latest'
       );
 
       const deletedTransactionsList =
@@ -276,19 +268,22 @@ export const deleteTransactions = (
   };
 };
 
-export const searchTransactions = (searchRequestData: {
-  transaction_type?: string | null;
-  start_date?: Date | null;
-  end_date?: Date | null;
-  shop?: string | null;
-  memo?: string | null;
-  low_amount?: string | number | null;
-  high_amount?: string | number | null;
-  big_category_id?: number | null;
-  sort?: string | null;
-  sort_type?: string | null;
-  limit?: string | null;
-}) => {
+export const searchTransactions = (
+  signal: CancelTokenSource,
+  searchRequestData: {
+    transaction_type?: string | null;
+    start_date?: Date | null;
+    end_date?: Date | null;
+    shop?: string | null;
+    memo?: string | null;
+    low_amount?: string | number | null;
+    high_amount?: string | number | null;
+    big_category_id?: number | null;
+    sort?: string | null;
+    sort_type?: string | null;
+    limit?: string | null;
+  }
+) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startSearchTransactionsActions());
 
@@ -296,6 +291,7 @@ export const searchTransactions = (searchRequestData: {
       const result = await accountServiceInstance.get<FetchTransactionsRes>(
         `/transactions/search`,
         {
+          cancelToken: signal.token,
           params: {
             start_date:
               searchRequestData.start_date !== null
@@ -328,6 +324,9 @@ export const searchTransactions = (searchRequestData: {
         dispatch(searchTransactionsActions(emptySearchTransactionsList, message));
       }
     } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelSearchTransactions());
+      }
       dispatch(
         failedSearchTransactionsActions(error.response.status, error.response.data.error.message)
       );

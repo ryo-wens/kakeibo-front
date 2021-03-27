@@ -97,6 +97,11 @@ export const transactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.CANCEL_SEARCH_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FAILED_SEARCH_TRANSACTIONS:
       return {
         ...state,

@@ -41,6 +41,7 @@ export type groupTransactionsAction = ReturnType<
   | typeof failedDeleteGroupAccountAction
   | typeof startSearchGroupTransactionsAction
   | typeof searchGroupTransactionsAction
+  | typeof cancelSearchGroupTransactionsAction
   | typeof failedSearchGroupTransactionsAction
   | typeof startEditSearchGroupTransactionsAction
   | typeof searchEditGroupTransactionsAction
@@ -643,6 +644,16 @@ export const searchGroupTransactionsAction = (
       groupSearchTransactionsListLoading: false,
       groupSearchTransactionsList: groupSearchTransactionsList,
       notHistoryMessage: notHistoryMessage,
+    },
+  };
+};
+
+export const CANCEL_SEARCH_GROUP_TRANSACTIONS = 'CANCEL_SEARCH_GROUP_TRANSACTIONS';
+export const cancelSearchGroupTransactionsAction = () => {
+  return {
+    type: CANCEL_SEARCH_GROUP_TRANSACTIONS,
+    payload: {
+      groupSearchTransactionsListLoading: false,
     },
   };
 };

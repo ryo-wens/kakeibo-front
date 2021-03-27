@@ -18,6 +18,7 @@ import {
   failedDeleteGroupTransactionsAction,
   startSearchGroupTransactionsAction,
   searchGroupTransactionsAction,
+  cancelSearchGroupTransactionsAction,
   failedSearchGroupTransactionsAction,
   startFetchGroupAccountAction,
   fetchGroupAccountAction,
@@ -139,7 +140,6 @@ export const fetchLatestGroupTransactionsList = (groupId: number, signal: Cancel
 
 export const addGroupTransactions = (
   groupId: number,
-  signal: CancelTokenSource,
   addTransactionYear: number,
   addTransactionMonth: string,
   requestData: {
@@ -172,13 +172,11 @@ export const addGroupTransactions = (
       );
 
       const fetchGroupTransactionsResult = accountServiceInstance.get<FetchGroupTransactionsRes>(
-        `/groups/${groupId}/transactions/${addTransactionYear}-${addTransactionMonth}`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/${addTransactionYear}-${addTransactionMonth}`
       );
 
       const fetchGroupLatestTransactionsResult = accountServiceInstance.get<GroupLatestTransactionsListRes>(
-        `/groups/${groupId}/transactions/latest`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/latest`
       );
 
       const addedGroupTransactionsList = await fetchGroupTransactionsResult;
@@ -201,7 +199,6 @@ export const addGroupTransactions = (
 export const editGroupTransactions = (
   id: number,
   groupId: number,
-  signal: CancelTokenSource,
   editTransactionYear: number,
   editTransactionMonth: string,
   requestData: {
@@ -234,13 +231,11 @@ export const editGroupTransactions = (
       );
 
       const fetchGroupTransactionsResult = accountServiceInstance.get<FetchGroupTransactionsRes>(
-        `/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`
       );
 
       const fetchGroupLatestTransactionsResult = accountServiceInstance.get<GroupLatestTransactionsListRes>(
-        `/groups/${groupId}/transactions/latest`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/latest`
       );
 
       const editedGroupTransactionsList = await fetchGroupTransactionsResult;
@@ -263,7 +258,6 @@ export const editGroupTransactions = (
 export const deleteGroupTransactions = (
   id: number,
   groupId: number,
-  signal: CancelTokenSource,
   editTransactionYear: number,
   editTransactionMonth: string
 ) => {
@@ -274,13 +268,11 @@ export const deleteGroupTransactions = (
       await accountServiceInstance.delete<deleteActionRes>(`/groups/${groupId}/transactions/${id}`);
 
       const fetchGroupTransactionsResult = accountServiceInstance.get<FetchGroupTransactionsRes>(
-        `/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/${editTransactionYear}-${editTransactionMonth}`
       );
 
       const fetchGroupLatestTransactionsResult = accountServiceInstance.get<GroupLatestTransactionsListRes>(
-        `/groups/${groupId}/transactions/latest`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/latest`
       );
 
       const deletedGroupTransactionsList =
@@ -400,12 +392,7 @@ export const fetchGroupYearlyAccountListForModal = (
   };
 };
 
-export const addGroupAccount = (
-  groupId: number,
-  year: string,
-  customMonth: string,
-  signal: CancelTokenSource
-) => {
+export const addGroupAccount = (groupId: number, year: string, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startAddGroupAccountAction());
 
@@ -415,13 +402,11 @@ export const addGroupAccount = (
       );
 
       const fetchAccountResult = accountServiceInstance.get<GroupAccountListRes>(
-        `/groups/${groupId}/transactions/${year}-${customMonth}/account`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/${year}-${customMonth}/account`
       );
 
       const fetchYearlyAccountResult = accountServiceInstance.get<GroupYearlyAccountList>(
-        `/groups/${groupId}/transactions/${year}/account`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/${year}/account`
       );
 
       const addedGroupAccountList = await fetchAccountResult;
@@ -440,8 +425,7 @@ export const editGroupAccount = (
   groupAccount: GroupAccount,
   groupId: number,
   year: string,
-  customMonth: string,
-  signal: CancelTokenSource
+  customMonth: string
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startEditGroupAccountAction());
@@ -453,8 +437,7 @@ export const editGroupAccount = (
       );
 
       const fetchAccountResult = accountServiceInstance.get<GroupAccountListRes>(
-        `/groups/${groupId}/transactions/${year}-${customMonth}/account`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/${year}-${customMonth}/account`
       );
 
       const editedAccountList = await fetchAccountResult;
@@ -468,12 +451,7 @@ export const editGroupAccount = (
   };
 };
 
-export const deleteGroupAccount = (
-  groupId: number,
-  year: string,
-  customMonth: string,
-  signal: CancelTokenSource
-) => {
+export const deleteGroupAccount = (groupId: number, year: string, customMonth: string) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startDeleteGroupAccountAction());
 
@@ -483,9 +461,9 @@ export const deleteGroupAccount = (
       );
 
       const fetchYearlyAccountResult = accountServiceInstance.get<GroupYearlyAccountList>(
-        `/groups/${groupId}/transactions/${year}/account`,
-        { cancelToken: signal.token }
+        `/groups/${groupId}/transactions/${year}/account`
       );
+
       const deletedMessage = result.data.message;
       const deletedYearlyAccountList = await fetchYearlyAccountResult;
       const emptyGroupAccountList: GroupAccountList = {
@@ -515,6 +493,7 @@ export const deleteGroupAccount = (
 
 export const searchGroupTransactions = (
   groupId: number,
+  signal: CancelTokenSource,
   searchRequest: {
     transaction_type?: string | null;
     start_date?: Date | null;
@@ -536,6 +515,7 @@ export const searchGroupTransactions = (
       const result = await accountServiceInstance.get<FetchGroupTransactionsRes>(
         `/groups/${groupId}/transactions/search`,
         {
+          cancelToken: signal.token,
           params: {
             start_date:
               searchRequest.start_date !== null ? dayjs(searchRequest.start_date).format() : null,
@@ -568,6 +548,9 @@ export const searchGroupTransactions = (
         );
       }
     } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelSearchGroupTransactionsAction());
+      }
       dispatch(
         failedSearchGroupTransactionsAction(
           error.response.status,

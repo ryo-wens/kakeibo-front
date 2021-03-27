@@ -178,16 +178,12 @@ const InputFormContainer = () => {
   };
 
   const addTransaction = () => {
-    const signal = axios.CancelToken.source();
-    dispatch(addTransactions(personalAddRequestData, year, customMonth, signal));
+    dispatch(addTransactions(personalAddRequestData, year, customMonth));
     resetInputForm();
   };
 
   const addGroupTransaction = () => {
-    const signal = axios.CancelToken.source();
-    dispatch(
-      addGroupTransactions(Number(group_id), signal, year, customMonth, groupAddRequestData)
-    );
+    dispatch(addGroupTransactions(Number(group_id), year, customMonth, groupAddRequestData));
     resetInputForm();
   };
 

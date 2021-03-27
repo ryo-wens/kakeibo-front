@@ -143,7 +143,6 @@ describe('async actions groupTransactions', () => {
     const groupId = 1;
     const year = 2020;
     const month = '11';
-    const signal = axios.CancelToken.source();
     const addUrl = `/groups/${groupId}/transactions`;
     const fetchUrl = `/groups/${groupId}/transactions/${year}-${month}`;
     const fetchLatestUrl = `/groups/${groupId}/transactions/latest`;
@@ -217,7 +216,7 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(fetchUrl).reply(200, addedGroupTransactions);
     axiosMock.onGet(fetchLatestUrl).reply(200, addedGroupLatestTransactions);
 
-    await addGroupTransactions(groupId, signal, year, month, requestData)(store.dispatch);
+    await addGroupTransactions(groupId, year, month, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -246,7 +245,6 @@ describe('async actions groupTransactions', () => {
     const groupId = 1;
     const year = 2020;
     const month = '11';
-    const signal = axios.CancelToken.source();
     const editUrl = `/groups/${groupId}/transactions/${id}`;
     const fetchUrl = `/groups/${groupId}/transactions/${year}-${month}`;
     const fetchLatestUrl = `/groups/${groupId}/transactions/latest`;
@@ -300,7 +298,7 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(fetchUrl).reply(200, editedGroupTransaction);
     axiosMock.onGet(fetchLatestUrl).reply(200, editedGroupLatestTransactions);
 
-    await editGroupTransactions(id, groupId, signal, year, month, requestData)(store.dispatch);
+    await editGroupTransactions(id, groupId, year, month, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -309,7 +307,6 @@ describe('async actions groupTransactions', () => {
     const groupId = 1;
     const year = 2020;
     const month = '11';
-    const signal = axios.CancelToken.source();
     const deleteUrl = `/groups/${groupId}/transactions/${id}`;
     const fetchUrl = `/groups/${groupId}/transactions/${year}-${month}`;
     const fetchLatestUrl = `/groups/${groupId}/transactions/latest`;
@@ -353,7 +350,7 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(fetchLatestUrl).reply(200, deletedGroupLatestTransaction);
 
     // @ts-ignore
-    await deleteGroupTransactions(id, groupId, signal, year, month)(store.dispatch);
+    await deleteGroupTransactions(id, groupId, year, month)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -392,7 +389,6 @@ describe('async actions groupTransactions', () => {
     const groupId = 1;
     const year = '2020';
     const customMonth = '11';
-    const signal = axios.CancelToken.source();
     const addUrl = `/groups/${groupId}/transactions/${year}-${customMonth}/account`;
     const fetchAccountUrl = `/groups/${groupId}/transactions/${year}-${customMonth}/account`;
     const fetchYearlyUrl = `/groups/${groupId}/transactions/${year}/account`;
@@ -434,7 +430,7 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(fetchYearlyUrl).reply(200, groupYearlyAccountListRes);
 
     // @ts-ignore
-    await addGroupAccount(groupId, year, customMonth, signal)(store.dispatch);
+    await addGroupAccount(groupId, year, customMonth)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -443,7 +439,6 @@ describe('async actions groupTransactions', () => {
     const year = '2020';
     const customMonth = '11';
     const editAccountId = 14;
-    const signal = axios.CancelToken.source();
     const editUrl = `/groups/${groupId}/transactions/${year}-${customMonth}/account/${editAccountId}`;
     const fetchUrl = `/groups/${groupId}/transactions/${year}-${customMonth}/account`;
 
@@ -483,7 +478,7 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(fetchUrl).reply(200, editGroupAccountList);
 
     // @ts-ignore
-    await editGroupAccount(requestData, groupId, year, customMonth, signal)(store.dispatch);
+    await editGroupAccount(requestData, groupId, year, customMonth)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -491,7 +486,6 @@ describe('async actions groupTransactions', () => {
     const groupId = 1;
     const year = '2020';
     const customMonth = '11';
-    const signal = axios.CancelToken.source();
     const deleteUrl = `/groups/${groupId}/transactions/${year}-${customMonth}/account`;
     const fetchAccountUrl = `/groups/${groupId}/transactions/${year}-${customMonth}/account`;
     const fetchYearlyUrl = `/groups/${groupId}/transactions/${year}/account`;
@@ -544,12 +538,13 @@ describe('async actions groupTransactions', () => {
     axiosMock.onGet(fetchYearlyUrl).reply(200, deleteGroupYearlyAccountListRes);
 
     // @ts-ignore
-    await deleteGroupAccount(groupId, year, customMonth, signal)(store.dispatch);
+    await deleteGroupAccount(groupId, year, customMonth)(store.dispatch);
     expect(store.getActions()).toEqual(expectActions);
   });
 
   it('Get groupTransactionsList search criteria match in  if fetch succeeds', async () => {
     const groupId = 1;
+    const signal = axios.CancelToken.source();
     const url = `/groups/${groupId}/transactions/search`;
 
     const searchRequest = {
@@ -585,7 +580,7 @@ describe('async actions groupTransactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await searchGroupTransactions(groupId, searchRequest)(store.dispatch);
+    await searchGroupTransactions(groupId, signal, searchRequest)(store.dispatch);
     expect(store.getActions()).toEqual(expectActions);
   });
 

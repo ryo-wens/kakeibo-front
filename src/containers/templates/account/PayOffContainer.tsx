@@ -148,24 +148,20 @@ const PayOffContainer = (props: PayOffContainerProps) => {
         history.replace(`/group/${group_id}/accounting?year=${props.selectedYear}`)
       }
       addAccountOperation={() => {
-        const signal = axios.CancelToken.source();
         dispatch(
           addGroupAccount(
             Number(group_id),
             String(props.selectedYear),
-            dayjs(String(selectedMonth)).format('MM'),
-            signal
+            dayjs(String(selectedMonth)).format('MM')
           )
         );
       }}
       deleteAccountOperation={() => {
-        const signal = axios.CancelToken.source();
         dispatch(
           deleteGroupAccount(
             Number(group_id),
             String(props.selectedYear),
-            dayjs(String(selectedMonth)).format('MM'),
-            signal
+            dayjs(String(selectedMonth)).format('MM')
           )
         );
       }}

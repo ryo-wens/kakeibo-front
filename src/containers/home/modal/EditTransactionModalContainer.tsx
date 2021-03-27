@@ -324,14 +324,11 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
       : String(editTransactionDate.editTransactionMonth);
 
   const personalDeleteTransaction = (): void => {
-    const signal = axios.CancelToken.source();
-
     pathName === 'home'
-      ? dispatch(deleteTransactions(transactionId, signal, year, customMonth))
+      ? dispatch(deleteTransactions(transactionId, year, customMonth))
       : dispatch(
           deleteTransactions(
             transactionId,
-            signal,
             editTransactionDate.editTransactionYear,
             transactionsMonth
           )
@@ -345,19 +342,14 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   };
 
   const personalEditTransaction = (): void => {
-    const signal = axios.CancelToken.source();
-
     pathName === 'home'
-      ? dispatch(
-          editTransactions(transactionId, personalEditRequestData, year, customMonth, signal)
-        )
+      ? dispatch(editTransactions(transactionId, personalEditRequestData, year, customMonth))
       : dispatch(
           editTransactions(
             transactionId,
             personalEditRequestData,
             editTransactionDate.editTransactionYear,
-            transactionsMonth,
-            signal
+            transactionsMonth
           )
         );
 
@@ -371,17 +363,12 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   };
 
   const groupDeleteTransaction = (): void => {
-    const signal = axios.CancelToken.source();
-
     groupCurrentPage === 'home'
-      ? dispatch(
-          deleteGroupTransactions(transactionId, Number(group_id), signal, year, customMonth)
-        )
+      ? dispatch(deleteGroupTransactions(transactionId, Number(group_id), year, customMonth))
       : dispatch(
           deleteGroupTransactions(
             transactionId,
             Number(group_id),
-            signal,
             editTransactionDate.editTransactionYear,
             transactionsMonth
           )
@@ -397,14 +384,11 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   };
 
   const groupEditTransaction = (): void => {
-    const signal = axios.CancelToken.source();
-
     groupCurrentPage === 'home'
       ? dispatch(
           editGroupTransactions(
             Number(group_id),
             transactionId,
-            signal,
             year,
             customMonth,
             groupEditRequestData
@@ -414,7 +398,6 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
           editGroupTransactions(
             transactionId,
             Number(group_id),
-            signal,
             editTransactionDate.editTransactionYear,
             transactionsMonth,
             groupEditRequestData
