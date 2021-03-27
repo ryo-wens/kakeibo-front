@@ -1,0 +1,68 @@
+{
+  "transactions_list": [
+    {
+      "id": 29,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-21T15:55:11Z",
+      "updated_date": "2020-11-21T15:55:11Z",
+      "transaction_date": "2020/11/21(土)",
+      "shop": "コストコ",
+      "memo": "牛肉ブロック購入",
+      "amount": 5000,
+      "big_category_id": 2,
+      "big_category_name": "食費",
+      "medium_category_id": 6,
+      "medium_category_name": "食料品",
+      "custom_category_id": null,
+      "custom_category_name": null
+    },
+    {
+      "id": 28,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-20T14:23:37Z",
+      "updated_date": "2020-11-25T17:00:00Z",
+      "transaction_date": "2020/11/20(金)",
+      "shop": "スタバ",
+      "memo": null,
+      "amount": 800,
+      "big_category_id": 2,
+      "big_category_name": "食費",
+      "medium_category_id": 11,
+      "medium_category_name": "カフェ",
+      "custom_category_id": null,
+      "custom_category_name": null
+    },
+    {
+      "id": 30,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-21T15:56:08Z",
+      "updated_date": "2020-11-21T15:56:08Z",
+      "transaction_date": "2020/11/10(火)",
+      "shop": "ビッグヨーサン",
+      "memo": "鍋食材",
+      "amount": 3000,
+      "big_category_id": 2,
+      "big_category_name": "食費",
+      "medium_category_id": 6,
+      "medium_category_name": "食料品",
+      "custom_category_id": null,
+      "custom_category_name": null
+    },
+    {
+      "id": 1,
+      "transaction_type": "expense",
+      "posted_date": "2020-11-17T13:32:16Z",
+      "updated_date": "2020-11-17T13:32:16Z",
+      "transaction_date": "2020/07/01(水)",
+      "shop": "コストコ",
+      "memo": "セールで牛肉購入",
+      "amount": 4500,
+      "big_category_id": 2,
+      "big_category_name": "食費",
+      "medium_category_id": 6,
+      "medium_category_name": "食料品",
+      "custom_category_id": null,
+      "custom_category_name": null
+    }
+  ]
+}

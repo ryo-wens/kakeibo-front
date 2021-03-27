@@ -229,7 +229,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   };
 
   const switchingAddTransaction = () => {
-    const signal = axios.CancelToken.source();
     const september = 9;
     const transactionsMonth =
       addTransactionDate.addTransactionMonth <= september
@@ -238,13 +237,12 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
 
     const personalAddTransaction = () => {
       pathName === 'home'
-        ? dispatch(addTransactions(personalAddRequestData, year, customMonth, signal))
+        ? dispatch(addTransactions(personalAddRequestData, year, customMonth))
         : dispatch(
             addTransactions(
               personalAddRequestData,
               addTransactionDate.addTransactionYear,
-              String(transactionsMonth),
-              signal
+              String(transactionsMonth)
             )
           );
       props.onClose();
@@ -253,13 +251,10 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
 
     const groupAddTransaction = () => {
       groupCurrentPage === 'home'
-        ? dispatch(
-            addGroupTransactions(Number(group_id), signal, year, customMonth, groupAddRequestData)
-          )
+        ? dispatch(addGroupTransactions(Number(group_id), year, customMonth, groupAddRequestData))
         : dispatch(
             addGroupTransactions(
               Number(group_id),
-              signal,
               addTransactionDate.addTransactionYear,
               transactionsMonth,
               groupAddRequestData

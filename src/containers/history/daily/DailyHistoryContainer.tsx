@@ -1,11 +1,8 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import { getSearchTransactions, getTransactions } from '../../../reducks/transactions/selectors';
-import {
-  getGroupTransactions,
-  getSearchGroupTransactions,
-} from '../../../reducks/groupTransactions/selectors';
+import { getTransactions } from '../../../reducks/transactions/selectors';
+import { getGroupTransactions } from '../../../reducks/groupTransactions/selectors';
 import { getApprovedGroups } from '../../../reducks/groups/selectors';
 import { month, year } from '../../../lib/constant';
 import DailyHistory from '../../../templates/history/daily/DailyHistory';
@@ -25,8 +22,6 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
   const approvedGroup = useSelector(getApprovedGroups);
   const transactionsList = useSelector(getTransactions);
   const groupTransactionsList = useSelector(getGroupTransactions);
-  const searchTransactionsList = useSelector(getSearchTransactions);
-  const groupSearchTransactionsList = useSelector(getSearchGroupTransactions);
   const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
   const [selectEndDate, setEndSelectDate] = useState<Date | null>(new Date(year, month, 0));
   const [memo, setMemo] = useState('');
@@ -43,6 +38,24 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
   const [submit, setSubmit] = useState(false);
   const displayPersonalTransactions = !props.openSearchField && pathName !== 'group';
   const displayGroupTransactions = !props.openSearchField && pathName === 'group';
+
+  useEffect(() => {
+    if (!props.openSearchField) {
+      setStartSelectDate(new Date(year, month - 1, 1));
+      setEndSelectDate(new Date(year, month, 0));
+      setMemo('');
+      setShop('');
+      setCategory('');
+      setBigCategoryId(0);
+      setLowAmount('');
+      setHighAmount('');
+      setTransactionType('');
+      setPaymentUserId('');
+      setSortItem('');
+      setSortType('');
+      setLimit('');
+    }
+  }, [props.openSearchField]);
 
   const selectStartDateChange = (selectStartDate: Date | null) => {
     setStartSelectDate(selectStartDate as Date);
@@ -120,8 +133,6 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
       approvedGroup={approvedGroup}
       transactionsList={transactionsList}
       groupTransactionsList={groupTransactionsList}
-      searchTransactionsList={searchTransactionsList}
-      groupSearchTransactionsList={groupSearchTransactionsList}
       setSubmit={setSubmit}
       searchFieldOpen={props.searchFieldOpen}
       searchFieldClose={props.searchFieldClose}

@@ -197,7 +197,42 @@ export const groupTransactionsReducer = (
         ...state,
         ...action.payload,
       };
+    case Actions.CANCEL_SEARCH_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.FAILED_SEARCH_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_EDIT_SEARCH_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.SEARCH_EDIT_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_EDIT_SEARCH_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.START_DELETE_SEARCH_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.SEARCH_DELETE_GROUP_TRANSACTIONS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_DELETE_SEARCH_GROUP_TRANSACTIONS:
       return {
         ...state,
         ...action.payload,

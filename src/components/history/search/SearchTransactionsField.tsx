@@ -16,9 +16,7 @@ import {
 interface SearchTransactionsFieldProps {
   pathName: string;
   groupId: number;
-  openSearchFiled: boolean;
-  openSearch: () => void;
-  closeSearch: () => void;
+  resetSearchTransactionsList: () => void;
   selectStartDateChange: (selectStartDate: Date | null) => void;
   selectEndDateChange: (selectEndDate: Date | null) => void;
   selectTransactionsType: (event: React.ChangeEvent<{ value: unknown }>) => void;
@@ -54,7 +52,7 @@ interface SearchTransactionsFieldProps {
 const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
   return (
     <div className="search-transaction__back-ground">
-      <button className="input-years__btn__close" onClick={props.closeSearch}>
+      <button className="input-years__btn__close" onClick={props.resetSearchTransactionsList}>
         <CloseIcon />
       </button>
       <div className="search-transaction__select-contents">
