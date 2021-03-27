@@ -314,7 +314,7 @@ export const addShoppingListItem = (
       dispatch(
         failedAddShoppingListItemAction(error.response.status, error.response.data.error.message)
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -399,7 +399,7 @@ export const editShoppingListItem = (
       dispatch(
         failedEditShoppingListItemAction(error.response.status, error.response.data.error.message)
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -478,7 +478,7 @@ export const deleteShoppingListItem = (
       dispatch(
         failedDeleteShoppingListItemAction(error.response.status, error.response.data.error.message)
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -557,7 +557,7 @@ export const addRegularShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -646,7 +646,7 @@ export const editRegularShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -729,7 +729,7 @@ export const deleteRegularShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };

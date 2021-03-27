@@ -7,7 +7,6 @@ import {
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
 import CheckedShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal';
-import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface CheckedShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
@@ -135,7 +134,7 @@ const CheckedShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckedChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
       props.transactionAutoAdd &&
@@ -159,8 +158,8 @@ const CheckedShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         editShoppingListItem(
           props.listItem.id,
           String(year),
@@ -170,11 +169,13 @@ const CheckedShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      )
-    );
+      );
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleEditShoppingListItem = () => {
+  const handleEditShoppingListItem = async () => {
     const requestData: EditShoppingListItemReq = {
       expected_purchase_date: props.expectedPurchaseDate,
       complete_flag: true,
@@ -189,8 +190,8 @@ const CheckedShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         editShoppingListItem(
           props.listItem.id,
           String(year),
@@ -200,9 +201,12 @@ const CheckedShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      ),
-      () => setOpen(false)
-    );
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

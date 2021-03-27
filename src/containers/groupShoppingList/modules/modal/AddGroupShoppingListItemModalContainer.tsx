@@ -5,7 +5,6 @@ import { useParams } from 'react-router';
 import { useDispatch } from 'react-redux';
 import AddGroupShoppingListItemModal from '../../../../components/groupShoppingList/modules/modal/addShoppingListModal/AddGroupShoppingListItemModal';
 import { AddGroupShoppingListItemReq } from '../../../../reducks/groupShoppingList/types';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddGroupShoppingListItemModalContainerProps {
   currentYear: string;
@@ -120,7 +119,7 @@ const AddGroupShoppingListItemModalContainer = (
     purchase === initialState.initialPurchase ||
     bigCategoryId === initialState.initialBigCategoryId;
 
-  const handleAddShoppingListItem = () => {
+  const handleAddShoppingListItem = async () => {
     const requestData: AddGroupShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       purchase: purchase,
@@ -133,8 +132,8 @@ const AddGroupShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         addGroupShoppingListItem(
           Number(group_id),
           String(year),
@@ -144,9 +143,12 @@ const AddGroupShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      ),
-      () => setOpen(false)
-    );
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

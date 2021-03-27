@@ -4,7 +4,6 @@ import AddShoppingListItemModal from '../../../../components/shoppingList/module
 import { useDispatch } from 'react-redux';
 import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';
 import { AddShoppingListItemReq } from '../../../../reducks/shoppingList/types';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddShoppingListItemFormContainerProps {
   currentYear: string;
@@ -100,7 +99,7 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleAddShoppingListItem = () => {
+  const handleAddShoppingListItem = async () => {
     const requestData: AddShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       purchase: purchase,
@@ -112,8 +111,8 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
       transaction_auto_add: transactionAutoAdd,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         addShoppingListItem(
           String(year),
           customMonth,
@@ -122,9 +121,12 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
           props.currentMonth,
           requestData
         )
-      ),
-      () => setOpen(false)
-    );
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   const unInput =

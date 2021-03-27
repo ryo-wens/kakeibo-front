@@ -7,7 +7,7 @@ import ShoppingListFormContainer from '../../../../../../containers/shoppingList
 
 interface EditShoppingListItemModalProps {
   open: boolean;
-  deleteForm: boolean;
+  openDeleteForm: boolean;
   expectedPurchaseDate: Date | null;
   purchase: string;
   shop: string | null;
@@ -39,7 +39,7 @@ interface EditShoppingListItemModalProps {
 const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
   const body = (
     <div className={styles.modalWrapper}>
-      {props.deleteForm ? (
+      {props.openDeleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
           purchase={props.initialPurchase}

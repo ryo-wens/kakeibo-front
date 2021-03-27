@@ -13,7 +13,6 @@ import {
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditGroupRegularShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/regularShoppingListItemComponent/editRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
-import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditGroupRegularShoppingListItemModalContainerProps {
   listItem: GroupRegularShoppingListItem;
@@ -43,7 +42,7 @@ const EditGroupRegularShoppingListItemModalContainer = (
   };
 
   const [open, setOpen] = useState(false);
-  const [deleteForm, setDeleteForm] = useState(false);
+  const [openDeleteForm, setOpenDeleteForm] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
     initialState.initialExpectedPurchaseDate
   );
@@ -108,7 +107,7 @@ const EditGroupRegularShoppingListItemModalContainer = (
 
   const handleCloseModal = () => {
     setOpen(false);
-    setDeleteForm(false);
+    setOpenDeleteForm(false);
     setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
     setCycleType(initialState.initialCycleType);
     setCycle(initialState.initialCycle);
@@ -124,11 +123,11 @@ const EditGroupRegularShoppingListItemModalContainer = (
   };
 
   const handleOpenDeleteForm = () => {
-    setDeleteForm(true);
+    setOpenDeleteForm(true);
   };
 
   const handleCloseDeleteForm = () => {
-    setDeleteForm(false);
+    setOpenDeleteForm(false);
   };
 
   const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -179,7 +178,7 @@ const EditGroupRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleEditRegularShoppingListItem = () => {
+  const handleEditRegularShoppingListItem = async () => {
     const requestData: EditGroupRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       cycle_type: cycleType,
@@ -194,8 +193,8 @@ const EditGroupRegularShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         editGroupRegularShoppingListItem(
           Number(group_id),
           props.listItem.id,
@@ -206,14 +205,17 @@ const EditGroupRegularShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      ),
-      () => setOpen(false)
-    );
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleDeleteRegularShoppingListItem = () => {
-    return executeAfterAsyncProcess(
-      dispatch(
+  const handleDeleteRegularShoppingListItem = async () => {
+    try {
+      await dispatch(
         deleteGroupRegularShoppingListItem(
           Number(group_id),
           props.listItem.id,
@@ -223,15 +225,18 @@ const EditGroupRegularShoppingListItemModalContainer = (
           props.currentYear,
           props.currentMonth
         )
-      ),
-      () => setDeleteForm(false)
-    );
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (
     <EditGroupRegularShoppingListItemModal
       open={open}
-      deleteForm={deleteForm}
+      openDeleteForm={openDeleteForm}
       expectedPurchaseDate={expectedPurchaseDate}
       cycleType={cycleType}
       cycle={cycle}

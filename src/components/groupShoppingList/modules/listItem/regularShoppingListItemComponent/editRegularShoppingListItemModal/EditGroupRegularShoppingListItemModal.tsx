@@ -9,7 +9,7 @@ import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types'
 
 interface EditGroupRegularShoppingListItemModalProps {
   open: boolean;
-  deleteForm: boolean;
+  openDeleteForm: boolean;
   expectedPurchaseDate: Date | null;
   cycleType: PurchaseCycleType;
   cycle: string | null;
@@ -55,7 +55,7 @@ const EditGroupRegularShoppingListItemModal = (
 ) => {
   const body = (
     <div className={styles.modalWrapper}>
-      {props.deleteForm ? (
+      {props.openDeleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.initialPurchase}

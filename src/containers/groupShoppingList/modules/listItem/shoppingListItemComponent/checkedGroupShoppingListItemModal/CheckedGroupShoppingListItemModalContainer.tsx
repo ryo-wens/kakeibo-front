@@ -8,7 +8,6 @@ import {
 import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
 import { useParams } from 'react-router';
 import CheckedGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedGroupShoppingListItemModal';
-import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface CheckedGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
@@ -155,7 +154,7 @@ const CheckedGroupShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckedChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
       props.transactionAutoAdd &&
@@ -180,8 +179,8 @@ const CheckedGroupShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         editGroupShoppingListItem(
           Number(group_id),
           props.listItem.id,
@@ -192,11 +191,13 @@ const CheckedGroupShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      )
-    );
+      );
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleEditShoppingListItem = () => {
+  const handleEditShoppingListItem = async () => {
     const requestData: EditGroupShoppingListItemReq = {
       expected_purchase_date: props.expectedPurchaseDate,
       complete_flag: true,
@@ -212,8 +213,8 @@ const CheckedGroupShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         editGroupShoppingListItem(
           Number(group_id),
           props.listItem.id,
@@ -224,9 +225,12 @@ const CheckedGroupShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      ),
-      () => setOpen(false)
-    );
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

@@ -11,7 +11,6 @@ import {
   deleteGroupShoppingListItem,
   editGroupShoppingListItem,
 } from '../../../../../../reducks/groupShoppingList/operations';
-import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
@@ -56,7 +55,7 @@ const EditGroupShoppingListItemModalContainer = (
   const { group_id } = useParams<{ group_id: string }>();
 
   const [open, setOpen] = useState(false);
-  const [deleteForm, setDeleteForm] = useState(false);
+  const [openDeleteForm, setOpenDeleteForm] = useState(false);
   const [associatedCategory, setAssociatedCategory] = useState('');
 
   const unInput = {
@@ -103,7 +102,7 @@ const EditGroupShoppingListItemModalContainer = (
 
   const handleCloseModal = () => {
     setOpen(false);
-    setDeleteForm(false);
+    setOpenDeleteForm(false);
     props.setExpectedPurchaseDate(props.initialExpectedPurchaseDate);
     props.setPurchase(props.initialPurchase);
     props.setShop(props.initialShop);
@@ -117,11 +116,11 @@ const EditGroupShoppingListItemModalContainer = (
   };
 
   const handleOpenDeleteForm = () => {
-    setDeleteForm(true);
+    setOpenDeleteForm(true);
   };
 
   const handleCloseDeleteForm = () => {
-    setDeleteForm(false);
+    setOpenDeleteForm(false);
   };
 
   const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -161,7 +160,7 @@ const EditGroupShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleEditShoppingListItem = () => {
+  const handleEditShoppingListItem = async () => {
     const requestData: EditGroupShoppingListItemReq = {
       expected_purchase_date: props.expectedPurchaseDate,
       complete_flag: props.listItem.complete_flag,
@@ -177,8 +176,8 @@ const EditGroupShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         editGroupShoppingListItem(
           Number(group_id),
           props.listItem.id,
@@ -189,14 +188,16 @@ const EditGroupShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      ),
-      () => setOpen(false)
-    );
+      );
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleDeleteShoppingListItem = () => {
-    return executeAfterAsyncProcess(
-      dispatch(
+  const handleDeleteShoppingListItem = async () => {
+    try {
+      await dispatch(
         deleteGroupShoppingListItem(
           Number(group_id),
           props.listItem.id,
@@ -206,15 +207,18 @@ const EditGroupShoppingListItemModalContainer = (
           props.currentYear,
           props.currentMonth
         )
-      ),
-      () => setDeleteForm(false)
-    );
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (
     <EditGroupShoppingListItemModal
       open={open}
-      deleteForm={deleteForm}
+      openDeleteForm={openDeleteForm}
       expectedPurchaseDate={props.expectedPurchaseDate}
       purchase={props.purchase}
       shop={props.shop}

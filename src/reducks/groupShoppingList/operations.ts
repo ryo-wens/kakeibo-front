@@ -340,7 +340,7 @@ export const addGroupShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -429,7 +429,7 @@ export const editGroupShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -511,7 +511,7 @@ export const deleteGroupShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -591,7 +591,7 @@ export const addGroupRegularShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -681,7 +681,7 @@ export const editGroupRegularShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };
@@ -764,7 +764,7 @@ export const deleteGroupRegularShoppingListItem = (
           error.response.data.error.message
         )
       );
-      throw error.response.data.error.message;
+      throw error;
     }
   };
 };

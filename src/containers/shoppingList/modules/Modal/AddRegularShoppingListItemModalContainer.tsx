@@ -8,7 +8,6 @@ import {
   AddRegularShoppingListItemReq,
   PurchaseCycleType,
 } from '../../../../reducks/shoppingList/types';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddRegularShoppingListModalContainerProps {
   selectedYear: number;
@@ -141,7 +140,7 @@ const AddRegularShoppingListItemModalContainer = (
     return false;
   };
 
-  const handleAddRegularShoppingListItem = () => {
+  const handleAddRegularShoppingListItem = async () => {
     const requestData: AddRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       cycle_type: cycleType,
@@ -155,8 +154,8 @@ const AddRegularShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(
+    try {
+      await dispatch(
         addRegularShoppingListItem(
           String(year),
           customMonth,
@@ -165,9 +164,12 @@ const AddRegularShoppingListItemModalContainer = (
           props.currentMonth,
           requestData
         )
-      ),
-      () => setOpen(false)
-    );
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (
