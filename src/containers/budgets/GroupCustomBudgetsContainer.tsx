@@ -30,7 +30,6 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
   const groupTotalCustomBudget = useSelector(getTotalGroupCustomBudget);
   const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
   const [editing, setEditing] = useState<boolean>(false);
-  // const unEditCustomBudget = groupCustomBudgets === groupCustomBudgetsList;
 
   useEffect(() => {
     if (!editing) {
