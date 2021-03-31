@@ -134,7 +134,7 @@ const CheckedShoppingListItemModalContainer = (
     props.setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleCheckedChange = (event: React.ChangeEvent<HTMLInputElement>) => {
+  const handleCheckedChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
       props.transactionAutoAdd &&
@@ -158,20 +158,24 @@ const CheckedShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    dispatch(
-      editShoppingListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
-    );
+    try {
+      await dispatch(
+        editShoppingListItem(
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      );
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleEditShoppingListItem = () => {
+  const handleEditShoppingListItem = async () => {
     const requestData: EditShoppingListItemReq = {
       expected_purchase_date: props.expectedPurchaseDate,
       complete_flag: true,
@@ -186,18 +190,23 @@ const CheckedShoppingListItemModalContainer = (
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
-    dispatch(
-      editShoppingListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
-    );
-    setOpen(false);
+    try {
+      await dispatch(
+        editShoppingListItem(
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

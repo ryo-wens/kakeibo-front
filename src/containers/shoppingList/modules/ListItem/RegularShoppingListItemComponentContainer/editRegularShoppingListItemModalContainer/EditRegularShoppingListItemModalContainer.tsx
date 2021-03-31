@@ -161,7 +161,7 @@ const EditRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleEditRegularShoppingListItem = () => {
+  const handleEditRegularShoppingListItem = async () => {
     const requestData: EditRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       cycle_type: cycleType,
@@ -175,32 +175,42 @@ const EditRegularShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      editRegularShoppingListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
-    );
-    setOpen(false);
+    try {
+      await dispatch(
+        editRegularShoppingListItem(
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleDeleteRegularShoppingListItem = () => {
-    dispatch(
-      deleteRegularShoppingListItem(
-        props.listItem.id,
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth
-      )
-    );
-    handleCloseDeleteForm();
+  const handleDeleteRegularShoppingListItem = async () => {
+    try {
+      await dispatch(
+        deleteRegularShoppingListItem(
+          props.listItem.id,
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth
+        )
+      );
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

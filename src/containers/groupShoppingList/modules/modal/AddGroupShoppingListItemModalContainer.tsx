@@ -119,7 +119,7 @@ const AddGroupShoppingListItemModalContainer = (
     purchase === initialState.initialPurchase ||
     bigCategoryId === initialState.initialBigCategoryId;
 
-  const handleAddShoppingListItem = () => {
+  const handleAddShoppingListItem = async () => {
     const requestData: AddGroupShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       purchase: purchase,
@@ -132,18 +132,23 @@ const AddGroupShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      addGroupShoppingListItem(
-        Number(group_id),
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
-    );
-    setOpen(false);
+    try {
+      await dispatch(
+        addGroupShoppingListItem(
+          Number(group_id),
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (
