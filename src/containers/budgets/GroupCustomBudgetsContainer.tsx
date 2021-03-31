@@ -30,7 +30,7 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
   const groupTotalCustomBudget = useSelector(getTotalGroupCustomBudget);
   const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
   const [editing, setEditing] = useState<boolean>(false);
-  const unEditCustomBudget = groupCustomBudgets === groupCustomBudgetsList;
+  // const unEditCustomBudget = groupCustomBudgets === groupCustomBudgetsList;
 
   useEffect(() => {
     if (!editing) {
@@ -59,13 +59,23 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
     setGroupCustomBudgets(groupCustomBudgetsList);
   }, [groupCustomBudgetsList]);
 
+  const totalBudget = () => {
+    let total = 0;
+
+    for (let i = 0; i < groupCustomBudgets.length; i++) {
+      total += Number(groupCustomBudgets[i].budget);
+    }
+
+    return total === groupTotalCustomBudget;
+  };
+
   return (
     <GroupCustomBudgets
       setEditing={setEditing}
       yearsInGroup={yearsInGroup}
       groupCustomBudgets={groupCustomBudgets}
       setGroupCustomBudgets={setGroupCustomBudgets}
-      unEditCustomBudget={unEditCustomBudget}
+      unEditCustomBudget={totalBudget()}
       groupTotalCustomBudget={groupTotalCustomBudget}
       backPageOperation={() =>
         history.push({
@@ -75,13 +85,11 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
       }
       editGroupCustomBudgetOperation={() => {
         if (queryMonth != null) {
-          const signal = axios.CancelToken.source();
           dispatch(
             editGroupCustomBudgets(
               String(props.budgetsYear),
               queryMonth,
               Number(group_id),
-              signal,
               groupCustomBudgets.map((groupBudget) => {
                 const {
                   big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars

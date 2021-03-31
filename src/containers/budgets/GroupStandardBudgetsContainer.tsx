@@ -21,7 +21,6 @@ const GroupStandardBudgetsContainer = () => {
   const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
   const [editing, setEditing] = useState<boolean>(false);
   const [groupStandardBudgets, setGroupStandardBudgets] = useState<GroupStandardBudgetsList>([]);
-  const unEditBudgets = groupStandardBudgets === groupStandardBudgetsList;
 
   const fetchGroupStandardBudgetsData = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
@@ -48,19 +47,27 @@ const GroupStandardBudgetsContainer = () => {
     setGroupStandardBudgets(groupStandardBudgetsList);
   }, [groupStandardBudgetsList]);
 
+  const totalBudget = () => {
+    let total = 0;
+
+    for (let i = 0; i < groupStandardBudgets.length; i++) {
+      total += Number(groupStandardBudgets[i].budget);
+    }
+
+    return total === groupTotalStandardBudget;
+  };
+
   return (
     <GroupStandardBudgets
       setEditing={setEditing}
-      unEditBudgets={unEditBudgets}
+      unEditBudgets={totalBudget()}
       groupStandardBudgets={groupStandardBudgets}
       setGroupStandardBudgets={setGroupStandardBudgets}
       groupTotalStandardBudget={groupTotalStandardBudget}
       editGroupStandardBudgetOperation={() => {
-        const signal = axios.CancelToken.source();
         dispatch(
           editGroupStandardBudgets(
             Number(group_id),
-            signal,
             groupStandardBudgets.map((groupBudget) => {
               const {
                 big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars

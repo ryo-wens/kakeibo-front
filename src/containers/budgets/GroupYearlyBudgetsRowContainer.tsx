@@ -49,8 +49,7 @@ const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerPro
       years={props.budgetsYear}
       groupYearlyBudgets={groupYearlyBudgets}
       deleteCustomBudgets={(selectYear, selectMonth) => {
-        const signal = axios.CancelToken.source();
-        dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(group_id), signal));
+        dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(group_id)));
       }}
       routingEditBudgets={(routingAddress, selectYear, selectMonth) => {
         if (routingAddress === 'custom') {

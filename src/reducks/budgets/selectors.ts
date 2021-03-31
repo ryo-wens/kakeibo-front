@@ -3,13 +3,13 @@ import { State } from '../store/types';
 import { CurrentMonthBudgetStatusList } from './types';
 import { displayWeeks } from '../../lib/date';
 import {
-  year,
-  month,
-  todayDate,
-  todayOfWeek,
-  thisMonthEndDate,
   currentWeekNumber,
   incomeTransactionType,
+  month,
+  thisMonthEndDate,
+  todayDate,
+  todayOfWeek,
+  year,
 } from '../../lib/constant';
 
 const budgetsSelector = (state: State) => state.budgets;
@@ -30,6 +30,22 @@ export const getYearlyTotalBudgets = (state: State) =>
 export const getCustomBudgets = createSelector(
   [budgetsSelector],
   (state) => state.custom_budgets_list
+);
+
+const customBudgetsList = (state: State) => state.budgets.custom_budgets_list;
+const standardBudgetsList = (state: State) => state.budgets.standard_budgets_list;
+
+export const getCopiedCustomBudgets = createSelector(
+  [customBudgetsList, standardBudgetsList],
+  (customBudgetsList, standardBudgetsList) => {
+    return standardBudgetsList.map((standardBudget) => {
+      customBudgetsList.map((customBudget) => {
+        return (customBudget.budget = standardBudget.budget);
+      });
+
+      return standardBudget;
+    });
+  }
 );
 
 const yearlyBudgets = (state: State) => state.budgets.yearly_budgets_list;
@@ -167,8 +183,6 @@ export const getAmountPerDay = createSelector(
   }
 );
 
-const standardBudgetsList = (state: State) => state.budgets.standard_budgets_list;
-
 export const getTotalStandardBudget = createSelector(
   [standardBudgetsList],
   (standardBudgetsList) => {
@@ -183,8 +197,6 @@ export const getTotalStandardBudget = createSelector(
     return totalBudget.totalStandardBudget;
   }
 );
-
-const customBudgetsList = (state: State) => state.budgets.custom_budgets_list;
 
 export const getTotalCustomBudget = createSelector([customBudgetsList], (customBudgetsList) => {
   const totalBudget = {

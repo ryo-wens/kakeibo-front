@@ -13,7 +13,6 @@ const StandardBudgetsContainer = () => {
   const standardBudgets = useSelector(getStandardBudgets);
   const totalStandardBudget = useSelector(getTotalStandardBudget);
   const [budgets, setBudgets] = useState<StandardBudgetsList>([]);
-  const unEditBudgets = budgets === standardBudgets;
 
   useEffect(() => {
     if (!standardBudgets.length && pathName !== 'group') {
@@ -28,15 +27,24 @@ const StandardBudgetsContainer = () => {
     setBudgets(standardBudgets);
   }, [standardBudgets]);
 
+  const totalBudget = () => {
+    let total = 0;
+
+    for (let i = 0; i < budgets.length; i++) {
+      total += Number(budgets[i].budget);
+    }
+
+    return total === totalStandardBudget;
+  };
+
   return (
     <StandardBudgets
       budgets={budgets}
       setBudgets={setBudgets}
       pathName={pathName}
-      unEditBudgets={unEditBudgets}
+      unEditBudgets={totalBudget()}
       totalStandardBudget={totalStandardBudget}
       editStandardBudgetOperation={() => {
-        const signal = axios.CancelToken.source();
         dispatch(
           editStandardBudgets(
             budgets.map((budget) => {
@@ -49,8 +57,7 @@ const StandardBudgetsContainer = () => {
                 big_category_id: rest.big_category_id,
                 budget: Number(rest.budget),
               };
-            }),
-            signal
+            })
           )
         );
       }}

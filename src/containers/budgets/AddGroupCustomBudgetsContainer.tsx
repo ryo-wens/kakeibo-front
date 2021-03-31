@@ -1,17 +1,16 @@
 import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
-import axios, { CancelTokenSource } from 'axios';
+import axios from 'axios';
 import {
-  getGroupCustomBudgets,
   getGroupTotalStandardBudget,
+  getCopiedCustomBudgets,
 } from '../../reducks/groupBudgets/selectors';
 import {
   addGroupCustomBudgets,
-  copyGroupStandardBudgets,
   fetchGroupStandardBudgets,
+  fetchGroupCustomBudgets,
 } from '../../reducks/groupBudgets/operations';
-import { fetchGroups } from '../../reducks/groups/operations';
 import { GroupCustomBudgetsList } from '../../reducks/groupBudgets/types';
 import AddGroupCustomBudgets from '../../components/budget/AddGroupCustomBudgets';
 import { useHistory } from 'react-router-dom';
@@ -28,28 +27,30 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
   const getQuery = new URLSearchParams(searchLocation);
   const queryMonth = getQuery.get('month');
   const yearsInGroup = `${props.budgetsYear}年${queryMonth}月`;
-  const groupCustomBudgetsList = useSelector(getGroupCustomBudgets);
+  const copiedCustomBudget = useSelector(getCopiedCustomBudgets);
   const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
   const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
   const [editing, setEditing] = useState<boolean>(false);
-  const unAddCustomBudgets = groupCustomBudgets === groupCustomBudgetsList;
-
-  const fetchEditGroupStandardBudgetsData = (signal: CancelTokenSource) => {
-    async function fetchGroupBudgets(signal: CancelTokenSource) {
-      await dispatch(fetchGroupStandardBudgets(Number(group_id), signal));
-      dispatch(copyGroupStandardBudgets());
-      dispatch(fetchGroups(signal));
-    }
-    fetchGroupBudgets(signal);
-  };
 
   useEffect(() => {
     if (!editing) {
       const signal = axios.CancelToken.source();
 
-      fetchEditGroupStandardBudgetsData(signal);
+      if (queryMonth != null) {
+        dispatch(
+          fetchGroupCustomBudgets(String(props.budgetsYear), queryMonth, Number(group_id), signal)
+        );
+      }
+      dispatch(fetchGroupStandardBudgets(Number(group_id), signal));
+
       const interval = setInterval(() => {
-        fetchEditGroupStandardBudgetsData(signal);
+        if (queryMonth != null) {
+          dispatch(
+            fetchGroupCustomBudgets(String(props.budgetsYear), queryMonth, Number(group_id), signal)
+          );
+        }
+
+        dispatch(fetchGroupStandardBudgets(Number(group_id), signal));
       }, 3000);
 
       return () => {
@@ -60,14 +61,24 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
   }, [editing]);
 
   useEffect(() => {
-    setGroupCustomBudgets(groupCustomBudgetsList);
-  }, [groupCustomBudgetsList]);
+    setGroupCustomBudgets(copiedCustomBudget);
+  }, [copiedCustomBudget]);
+
+  const totalGroupCustomBudget = () => {
+    let total = 0;
+
+    for (let i = 0; i < groupCustomBudgets.length; i++) {
+      total += Number(groupCustomBudgets[i].budget);
+    }
+
+    return total;
+  };
 
   return (
     <AddGroupCustomBudgets
       setEditing={setEditing}
       yearsInGroup={yearsInGroup}
-      unAddCustomBudgets={unAddCustomBudgets}
+      unAddCustomBudgets={totalGroupCustomBudget() === groupTotalStandardBudget}
       groupCustomBudgets={groupCustomBudgets}
       setGroupCustomBudgets={setGroupCustomBudgets}
       groupTotalStandardBudget={groupTotalStandardBudget}
@@ -79,13 +90,11 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
       }
       addGroupCustomBudgetOperation={() => {
         if (queryMonth != null) {
-          const signal = axios.CancelToken.source();
           dispatch(
             addGroupCustomBudgets(
               String(props.budgetsYear),
               queryMonth,
               Number(group_id),
-              signal,
               groupCustomBudgets.map((groupCustomBudget) => {
                 const {
                   big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars

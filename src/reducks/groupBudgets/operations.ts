@@ -6,7 +6,6 @@ import {
   startEditGroupStandardBudgetsActions,
   editGroupStandardBudgetsActions,
   failedEditGroupStandardBudgetsActions,
-  copyGroupStandardBudgetsActions,
   startFetchGroupCustomBudgetsActions,
   fetchGroupCustomBudgetsActions,
   cancelFetchGroupCustomBudgetsActions,
@@ -26,10 +25,9 @@ import {
   failedFetchGroupYearlyBudgetsActions,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
+import { accountServiceInstance } from '../axiosConfig';
 import { Action, Dispatch } from 'redux';
 import {
-  GroupStandardBudgetsList,
-  GroupCustomBudgetsList,
   GroupStandardBudgetsListRes,
   GroupCustomBudgetsListRes,
   GroupBudgetsReq,
@@ -37,21 +35,19 @@ import {
   DeleteGroupCustomBudgetsRes,
 } from './types';
 import { isValidBudgetFormat } from '../../lib/validation';
-import { State } from '../store/types';
 
 export const fetchGroupStandardBudgets = (groupId: number, signal: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     dispatch(startFetchGroupStandardBudgetsActions());
 
     try {
-      const result = await axios.get<GroupStandardBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const result = await accountServiceInstance.get<GroupStandardBudgetsListRes>(
+        `/groups/${groupId}/standard-budgets`,
+        { cancelToken: signal.token }
       );
+
       const groupStandardBudgetsList = result.data.standard_budgets;
+
       dispatch(fetchGroupStandardBudgetsActions(groupStandardBudgetsList));
     } catch (error) {
       if (axios.isCancel(error)) {
@@ -68,11 +64,7 @@ export const fetchGroupStandardBudgets = (groupId: number, signal: CancelTokenSo
   };
 };
 
-export const editGroupStandardBudgets = (
-  groupId: number,
-  signal: CancelTokenSource,
-  groupBudgets: GroupBudgetsReq
-) => {
+export const editGroupStandardBudgets = (groupId: number, groupBudgets: GroupBudgetsReq) => {
   const data = { standard_budgets: groupBudgets };
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const validBudgets = groupBudgets.every((groupBudget) =>
@@ -87,20 +79,13 @@ export const editGroupStandardBudgets = (
     dispatch(startEditGroupStandardBudgetsActions());
 
     try {
-      await axios.put<GroupStandardBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.put<GroupStandardBudgetsListRes>(
+        `/groups/${groupId}/standard-budgets`,
+        JSON.stringify(data)
       );
 
-      const fetchResult = axios.get<GroupStandardBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchResult = accountServiceInstance.get<GroupStandardBudgetsListRes>(
+        `/groups/${groupId}/standard-budgets`
       );
 
       const editedGroupStandardBudgetsList = await fetchResult;
@@ -128,13 +113,11 @@ export const fetchGroupYearlyBudgets = (
     dispatch(startFetchGroupYearlyBudgetsActions());
 
     try {
-      const result = await axios.get<GroupYearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${year}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const result = await accountServiceInstance.get<GroupYearlyBudgetsList>(
+        `/groups/${groupId}/budgets/${year}`,
+        { cancelToken: signal.token }
       );
+
       const groupYearlyBudgetsList = result.data;
       dispatch(fetchGroupYearlyBudgetsActions(groupYearlyBudgetsList));
     } catch (error) {
@@ -152,26 +135,6 @@ export const fetchGroupYearlyBudgets = (
   };
 };
 
-export const copyGroupStandardBudgets = () => {
-  return (dispatch: Dispatch<Action>, getState: () => State) => {
-    const groupStandardBudgets: GroupStandardBudgetsList = getState().groupBudgets
-      .groupStandardBudgetsList;
-
-    const groupCustomBudgets: GroupCustomBudgetsList = getState().groupBudgets
-      .groupCustomBudgetsList;
-
-    const nextGroupCustomBudgets = groupStandardBudgets.map((groupStandardBudget) => {
-      groupCustomBudgets.map((groupCustomBudget) => {
-        return (groupCustomBudget.budget = groupStandardBudget.budget);
-      });
-
-      return groupStandardBudget;
-    });
-
-    dispatch(copyGroupStandardBudgetsActions(nextGroupCustomBudgets));
-  };
-};
-
 export const fetchGroupCustomBudgets = (
   selectYear: string,
   selectMonth: string,
@@ -182,14 +145,13 @@ export const fetchGroupCustomBudgets = (
     dispatch(startFetchGroupCustomBudgetsActions());
 
     try {
-      const result = await axios.get<GroupCustomBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const result = await accountServiceInstance.get<GroupCustomBudgetsListRes>(
+        `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
+        { cancelToken: signal.token }
       );
-      const groupCustomBudgets = result.data.custom_budgets;
+
+      const groupCustomBudgets =
+        result.data.custom_budgets === null ? [] : result.data.custom_budgets;
 
       dispatch(fetchGroupCustomBudgetsActions(groupCustomBudgets));
     } catch (error) {
@@ -211,7 +173,6 @@ export const addGroupCustomBudgets = (
   selectYear: string,
   selectMonth: string,
   groupId: number,
-  signal: CancelTokenSource,
   groupCustomBudgets: GroupBudgetsReq
 ) => {
   const data = { custom_budgets: groupCustomBudgets };
@@ -228,28 +189,17 @@ export const addGroupCustomBudgets = (
     dispatch(startAddGroupCustomBudgetsActions());
 
     try {
-      await axios.post<GroupCustomBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.post<GroupCustomBudgetsListRes>(
+        `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data)
       );
 
-      const fetchCustomResult = axios.get<GroupCustomBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchCustomResult = accountServiceInstance.get<GroupCustomBudgetsListRes>(
+        `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`
       );
 
-      const fetchYearlyResult = axios.get<GroupYearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchYearlyResult = accountServiceInstance.get<GroupYearlyBudgetsList>(
+        `/groups/${groupId}/budgets/${selectYear}`
       );
 
       const addedGroupCustomBudgetsList = await fetchCustomResult;
@@ -273,7 +223,6 @@ export const editGroupCustomBudgets = (
   selectYear: string,
   selectMonth: string,
   groupId: number,
-  signal: CancelTokenSource,
   groupCustomBudgets: GroupBudgetsReq
 ) => {
   const data = { custom_budgets: groupCustomBudgets };
@@ -290,28 +239,17 @@ export const editGroupCustomBudgets = (
     dispatch(startEditGroupCustomBudgetsActions());
 
     try {
-      await axios.put<GroupCustomBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.put<GroupCustomBudgetsListRes>(
+        `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data)
       );
 
-      const fetchCustomResult = axios.get<GroupCustomBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchCustomResult = accountServiceInstance.get<GroupCustomBudgetsListRes>(
+        `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`
       );
 
-      const fetchYearlyResult = axios.get<GroupYearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchYearlyResult = accountServiceInstance.get<GroupYearlyBudgetsList>(
+        `/groups/${groupId}/budgets/${selectYear}`
       );
 
       const editedGroupCustomBudgetsList = await fetchCustomResult;
@@ -337,26 +275,18 @@ export const editGroupCustomBudgets = (
 export const deleteGroupCustomBudgets = (
   selectYear: string,
   selectMonth: string,
-  groupId: number,
-  signal: CancelTokenSource
+  groupId: number
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     dispatch(startDeleteGroupCustomBudgetsActions());
 
     try {
-      await axios.delete<DeleteGroupCustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.delete<DeleteGroupCustomBudgetsRes>(
+        `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`
       );
 
-      const fetchYearlyResult = axios.get<GroupYearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchYearlyResult = accountServiceInstance.get<GroupYearlyBudgetsList>(
+        `/groups/${groupId}/budgets/${selectYear}`
       );
 
       const deletedGroupYearlyBudgetsList = await fetchYearlyResult;

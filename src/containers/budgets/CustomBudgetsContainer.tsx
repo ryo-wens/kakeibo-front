@@ -25,7 +25,6 @@ const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
   const totalCustomBudget = useSelector(getTotalCustomBudget);
   const yearsInPersonal = `${props.budgetsYear}年${queryMonth}月`;
   const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
-  const unInput = customBudgets === customBudgetsList;
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -48,9 +47,19 @@ const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
     setCustomBudgets(customBudgetsList);
   }, [customBudgetsList]);
 
+  const totalBudget = () => {
+    let total = 0;
+
+    for (let i = 0; i < customBudgets.length; i++) {
+      total += Number(customBudgets[i].budget);
+    }
+
+    return total === totalCustomBudget;
+  };
+
   return (
     <CustomBudgets
-      unInput={unInput}
+      unInput={totalBudget()}
       pathName={pathName}
       budgetsYear={props.budgetsYear}
       customBudgets={customBudgets}
@@ -65,12 +74,10 @@ const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
       }
       editCustomBudgetOperation={() => {
         if (queryMonth != null) {
-          const signal = axios.CancelToken.source();
           dispatch(
             editCustomBudgets(
               String(props.budgetsYear),
               queryMonth,
-              signal,
               customBudgets.map((budget) => {
                 const {
                   big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars

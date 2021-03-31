@@ -20,7 +20,6 @@ export type budgetsActions = ReturnType<
   | typeof startDeleteCustomBudgetsActions
   | typeof deleteCustomBudgetsActions
   | typeof failedDeleteCustomBudgetsActions
-  | typeof copyStandardBudgetsActions
   | typeof startFetchYearlyBudgetsActions
   | typeof fetchYearlyBudgetsActions
   | typeof cancelFetchYearlyBudgetsActions
@@ -297,16 +296,6 @@ export const failedDeleteCustomBudgetsActions = (statusCode: number, errorMessag
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
-    },
-  };
-};
-
-export const COPY_STANDARD_BUDGETS = 'COPY_STANDARD_BUDGETS';
-export const copyStandardBudgetsActions = (custom_budgets_list: CustomBudgetsList) => {
-  return {
-    type: COPY_STANDARD_BUDGETS,
-    payload: {
-      custom_budgets_list: custom_budgets_list,
     },
   };
 };

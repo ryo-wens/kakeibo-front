@@ -33,8 +33,7 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
   }, [props.budgetsYear]);
 
   const deleteCustom = (selectYear: string, selectMonth: string) => {
-    const signal = axios.CancelToken.source();
-    dispatch(deleteCustomBudgets(selectYear, selectMonth, signal));
+    dispatch(deleteCustomBudgets(selectYear, selectMonth));
   };
 
   return (
