@@ -99,7 +99,7 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
     setTransactionAutoAdd(event.target.checked);
   };
 
-  const handleAddShoppingListItem = () => {
+  const handleAddShoppingListItem = async () => {
     const requestData: AddShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       purchase: purchase,
@@ -111,17 +111,22 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      addShoppingListItem(
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
-    );
-    setOpen(false);
+    try {
+      await dispatch(
+        addShoppingListItem(
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   const unInput =

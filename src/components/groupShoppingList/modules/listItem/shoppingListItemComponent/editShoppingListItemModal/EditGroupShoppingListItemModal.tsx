@@ -7,7 +7,7 @@ import styles from '../../../../../shoppingList/modules/listItem/ShoppingListIte
 
 interface EditGroupShoppingListItemModalProps {
   open: boolean;
-  deleteForm: boolean;
+  openDeleteForm: boolean;
   expectedPurchaseDate: Date | null;
   purchase: string;
   shop: string | null;
@@ -41,7 +41,7 @@ interface EditGroupShoppingListItemModalProps {
 const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalProps) => {
   const body = (
     <div className={styles.modalWrapper}>
-      {props.deleteForm ? (
+      {props.openDeleteForm ? (
         <ShoppingListDeleteForm
           titleLabel={'買い物リストアイテムを削除'}
           purchase={props.initialPurchase}

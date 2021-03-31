@@ -140,7 +140,7 @@ const AddRegularShoppingListItemModalContainer = (
     return false;
   };
 
-  const handleAddRegularShoppingListItem = () => {
+  const handleAddRegularShoppingListItem = async () => {
     const requestData: AddRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       cycle_type: cycleType,
@@ -154,17 +154,22 @@ const AddRegularShoppingListItemModalContainer = (
       transaction_auto_add: transactionAutoAdd,
     };
 
-    dispatch(
-      addRegularShoppingListItem(
-        String(year),
-        customMonth,
-        customDate,
-        props.currentYear,
-        props.currentMonth,
-        requestData
-      )
-    );
-    setOpen(false);
+    try {
+      await dispatch(
+        addRegularShoppingListItem(
+          String(year),
+          customMonth,
+          customDate,
+          props.currentYear,
+          props.currentMonth,
+          requestData
+        )
+      );
+
+      handleCloseModal();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (
