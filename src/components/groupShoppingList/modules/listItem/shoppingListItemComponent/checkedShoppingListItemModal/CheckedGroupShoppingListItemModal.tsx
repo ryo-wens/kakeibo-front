@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import GroupShoppingListFormContainer from '../../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
-import styles from '../../../../../shoppingList/modules/listItem/ShoppingListItemComponent/CheckedShoppingListItemModal/CheckedShoppingListItemModal.module.scss';
+import styles from '../../../../../shoppingList/modules/listItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedShoppingListItemModal.module.scss';
 
 interface CheckedGroupShoppingListItemModalProps {
   open: boolean;

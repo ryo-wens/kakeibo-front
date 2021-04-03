@@ -5,7 +5,7 @@ import {
   DisplayShoppingListItemByDate,
 } from '../../../../../reducks/shoppingList/types';
 import { bigCategoryColor } from '../../../../../lib/function';
-import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
+import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/listItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 import styles from './ShoppingListByCategoriesComponent.module.scss';
 
 interface ShoppingListByCategoriesComponentProps {

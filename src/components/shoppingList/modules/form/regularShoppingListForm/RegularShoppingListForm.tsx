@@ -1,21 +1,16 @@
 import React from 'react';
 import CloseIcon from '@material-ui/icons/Close';
 import { DatePicker, TextInput } from '../../../../uikit';
-import styles from '../../../../shoppingList/modules/form/regularShoppingListForm/RegularShoppingListForm.module.scss';
-import ShoppingListPayerSelect from '../../select/shoppingListPayerSelect/ShoppingListPayerSelect';
-import ToolTipIcon from '../../../../shoppingList/modules/toolTip/ToolTipIcon';
+import { Categories } from '../../../../../reducks/categories/types';
+import styles from './RegularShoppingListForm.module.scss';
+import ToolTipIcon from '../../toolTip/ToolTipIcon';
 import SelectPurchaseCycleTypeContainer from '../../../../../containers/shoppingList/modules/select/selectPurchaseCycleTypeContainer/SelectPurchaseCycleTypeContainer';
-import { Group } from '../../../../../reducks/groups/types';
-import { GroupCategories } from '../../../../../reducks/groupCategories/types';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
-import MediumCategoryListContainer from '../../../../../containers/modules/MediumCategoryListContainer';
 import BigCategoryListContainer from '../../../../../containers/modules/BigCategoryListContainer';
+import MediumCategoryListContainer from '../../../../../containers/modules/MediumCategoryListContainer';
 
-interface GroupRegularShoppingListFormProps {
+interface RegularShoppingListFormProps {
   message: string;
-  titleLabel: string;
-  buttonLabel: string;
-  approvedGroup: Group;
   expectedPurchaseDate: Date | null;
   cycleType: PurchaseCycleType;
   cycle: string | null;
@@ -25,25 +20,25 @@ interface GroupRegularShoppingListFormProps {
   bigCategoryId: number;
   bigCategory: string | null;
   bigCategoryIndex: number;
-  paymentUser: string | null;
   transactionAutoAdd: boolean;
   associatedCategory: string;
+  handleDateChange: (expectedPurchaseDate: Date | null) => void;
   handleCycleTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleDateChange: (scheduledDate: Date | null) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  titleLabel: string;
+  buttonLabel: string;
   handleCloseModal: () => void;
   unInput: boolean;
   handleRegularShoppingListItem: () => void;
   minDate: Date;
   bigCategoryMenuRef: React.RefObject<HTMLDivElement>;
   mediumCategoryMenuRef: React.RefObject<HTMLDivElement>;
-  groupIncomeCategories: GroupCategories;
-  groupExpenseCategories: GroupCategories;
+  incomeCategories: Categories;
+  expenseCategories: Categories;
   bigCategoryMenuOpen: boolean;
   mediumCategoryMenuOpen: boolean;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -52,20 +47,20 @@ interface GroupRegularShoppingListFormProps {
   associatedIndex: number | null;
   customCategoryName: string;
   editCustomCategoryName: string;
-  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
-  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
   setCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
-  setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
-  setEditCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
-  setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setEditCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
   setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
+  setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
   handleOpenDeleteForm?: () => void;
 }
 
-const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) => {
+const RegularShoppingListForm = (props: RegularShoppingListFormProps) => {
   return (
     <div className={styles.wrapper}>
       <div className={styles.position}>
@@ -217,16 +212,6 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
             />
           </dd>
         </div>
-        <div className={styles.selectContent}>
-          <dt>支払人</dt>
-          <dd>
-            <ShoppingListPayerSelect
-              value={props.paymentUser ?? ''}
-              approvedGroup={props.approvedGroup}
-              onChange={props.handlePaymentUserChange}
-            />
-          </dd>
-        </div>
       </dl>
       <div className={styles.addTransaction}>
         <label className={styles.addTransactionCheck}>
@@ -262,7 +247,7 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
         {props.titleLabel === '定期買い物リストアイテムを編集' && (
           <button
             className={styles.operationBtn__delete}
-            onClick={props.handleOpenDeleteForm && props.handleOpenDeleteForm}
+            onClick={() => props.handleOpenDeleteForm && props.handleOpenDeleteForm()}
           >
             削除
           </button>
@@ -272,4 +257,4 @@ const GroupRegularShoppingListForm = (props: GroupRegularShoppingListFormProps) 
   );
 };
 
-export default GroupRegularShoppingListForm;
+export default RegularShoppingListForm;

@@ -6,7 +6,7 @@ import {
 } from '../../../../reducks/categories/selectors';
 import { PurchaseCycleType } from '../../../../reducks/shoppingList/types';
 import { autoAddTransactionMessage } from '../../../../lib/message';
-import RegularShoppingListForm from '../../../../components/shoppingList/modules/form/RegularShoppingListForm/RegularShoppingListForm';
+import RegularShoppingListForm from '../../../../components/shoppingList/modules/form/regularShoppingListForm/RegularShoppingListForm';
 
 interface RegularShoppingListFormContainerProps {
   expectedPurchaseDate: Date | null;

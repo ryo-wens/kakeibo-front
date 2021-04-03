@@ -1,5 +1,5 @@
 import React from 'react';
-import styles from '../../../../shoppingList/modules/listItem/ShoppingListItemComponent/ShoppingListItemComponent.module.scss';
+import styles from '../../../../shoppingList/modules/listItem/shoppingListItemComponent/ShoppingListItemComponent.module.scss';
 import { GroupShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import EditGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/editGroupShoppingListItemModal/EditGroupShoppingListItemModalContainer';
 import CheckedGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/listItem/shoppingListItemComponent/checkedGroupShoppingListItemModal/CheckedGroupShoppingListItemModalContainer';

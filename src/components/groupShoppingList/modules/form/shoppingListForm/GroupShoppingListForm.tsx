@@ -7,7 +7,7 @@ import { GroupCategories } from '../../../../../reducks/groupCategories/types';
 import { Group } from '../../../../../reducks/groups/types';
 import BigCategoryListContainer from '../../../../../containers/modules/BigCategoryListContainer';
 import MediumCategoryListContainer from '../../../../../containers/modules/MediumCategoryListContainer';
-import styles from '../../../../shoppingList/modules/form/ShoppingListForm/ShoppingListForm.module.scss';
+import styles from '../../../../shoppingList/modules/form/shoppingListForm/ShoppingListForm.module.scss';
 import cn from 'classnames';
 
 interface GroupShoppingListFormProps {

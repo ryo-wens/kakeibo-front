@@ -1,9 +1,9 @@
 import React from 'react';
 import SwitchItemTabs from '../../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import styles from './TodayShoppingListArea.module.scss';
-import AddShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/Modal/AddShoppingListItemModalContainer';
-import TodayShoppingListByDateContainer from '../../../../../containers/shoppingList/page/TodayShoppingListArea/TodayShoppingListByDateContainer/TodayShoppingListByDateContainer';
-import TodayShoppingListByCategoriesContainer from '../../../../../containers/shoppingList/page/TodayShoppingListArea/TodayShoppingListByCategoriesContainer/TodayShoppingListByCategoriesContainer';
+import AddShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/modal/AddShoppingListItemModalContainer';
+import TodayShoppingListByDateContainer from '../../../../../containers/shoppingList/modules/area/todayShoppingListArea/TodayShoppingListByDateContainer/TodayShoppingListByDateContainer';
+import TodayShoppingListByCategoriesContainer from '../../../../../containers/shoppingList/modules/area/todayShoppingListArea/TodayShoppingListByCategoriesContainer/TodayShoppingListByCategoriesContainer';
 
 interface TodayShoppingListAreaProps {
   currentYear: string;

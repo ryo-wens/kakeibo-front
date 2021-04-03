@@ -2,9 +2,9 @@ import React from 'react';
 import SwitchItemTabs from '../../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import styles from './MonthlyShoppingListArea.module.scss';
 import InputYears from '../../../../modules/inputYears/InputYears';
-import AddShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/Modal/AddShoppingListItemModalContainer';
-import MonthlyShoppingListByDateContainer from '../../../../../containers/shoppingList/page/MonthlyShoppingListArea/monthlyShoppingListByDateContainer/MonthlyShoppingListByDateContainer';
-import MonthlyShoppingListByCategoriesContainer from '../../../../../containers/shoppingList/page/MonthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/MonthlyShoppingListByCategoriesContainer';
+import AddShoppingListItemModalContainer from '../../../../../containers/shoppingList/modules/modal/AddShoppingListItemModalContainer';
+import MonthlyShoppingListByDateContainer from '../../../../../containers/shoppingList/modules/area/monthlyShoppingListArea/monthlyShoppingListByDateContainer/MonthlyShoppingListByDateContainer';
+import MonthlyShoppingListByCategoriesContainer from '../../../../../containers/shoppingList/modules/area/monthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/MonthlyShoppingListByCategoriesContainer';
 
 interface MonthlyShoppingListAreaProps {
   selectedYear: number;

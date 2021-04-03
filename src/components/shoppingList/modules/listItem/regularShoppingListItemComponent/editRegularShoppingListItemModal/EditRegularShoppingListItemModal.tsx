@@ -1,27 +1,31 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
+import ShoppingListDeleteForm from '../../../form/shoppingListDeleteForm/ShoppingListDeleteForm';
+import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditIcon from '@material-ui/icons/Edit';
-import ShoppingListDeleteForm from '../../../../../shoppingList/modules/form/shoppingListDeleteForm/ShoppingListDeleteForm';
-import GroupShoppingListFormContainer from '../../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
-import styles from '../../../../../shoppingList/modules/listItem/shoppingListItemComponent/editShoppingListItemModal/EditShoppingListItemModal.module.scss';
+import styles from './EditRegularShoppingListItemModal.module.scss';
+import RegularShoppingListFormContainer from '../../../../../../containers/shoppingList/modules/form/RegularShoppingListFormContainer';
 
-interface EditGroupShoppingListItemModalProps {
+interface EditRegularShoppingListModalProps {
   open: boolean;
-  openDeleteForm: boolean;
+  deleteForm: boolean;
   expectedPurchaseDate: Date | null;
+  cycleType: PurchaseCycleType;
+  cycle: string | null;
   purchase: string;
   shop: string | null;
   amount: string | null;
   bigCategoryId: number;
   bigCategory: string | null;
-  paymentUser: string | null;
+  bigCategoryIndex: number;
   transactionAutoAdd: boolean;
   associatedCategory: string;
-  handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleDateChange: (scheduledDate: Date | null) => void;
+  handleCycleTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
+  handleCycleChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handlePurchaseChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleAmountChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleShopChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handlePaymentUserChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleAutoAddTransitionChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
@@ -29,56 +33,60 @@ interface EditGroupShoppingListItemModalProps {
   handleCloseDeleteForm: () => void;
   initialPurchase: string;
   unInput: boolean;
-  handleEditShoppingListItem: () => void;
-  handleDeleteShoppingListItem: () => void;
-  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
-  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
+  handleEditRegularShoppingListItem: () => void;
+  handleDeleteRegularShoppingListItem: () => void;
   setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
+  setAssociatedCategory: React.Dispatch<React.SetStateAction<string>>;
+  setBigCategoryIndex: React.Dispatch<React.SetStateAction<number>>;
+  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
   setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
 }
 
-const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalProps) => {
+const EditRegularShoppingListItemModal = (props: EditRegularShoppingListModalProps) => {
   const body = (
     <div className={styles.modalWrapper}>
-      {props.openDeleteForm ? (
+      {props.deleteForm ? (
         <ShoppingListDeleteForm
-          titleLabel={'買い物リストアイテムを削除'}
+          titleLabel={'定期買い物リストアイテムを削除'}
           purchase={props.initialPurchase}
           handleCloseModal={props.handleCloseModal}
           handleCloseDeleteForm={props.handleCloseDeleteForm}
-          handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
+          handleDeleteShoppingListItem={props.handleDeleteRegularShoppingListItem}
         />
       ) : (
-        <GroupShoppingListFormContainer
+        <RegularShoppingListFormContainer
+          titleLabel={'定期買い物リストアイテムを編集'}
+          buttonLabel={'保存'}
           expectedPurchaseDate={props.expectedPurchaseDate}
+          cycleType={props.cycleType}
+          cycle={props.cycle}
           purchase={props.purchase}
           shop={props.shop}
           amount={props.amount}
           bigCategoryId={props.bigCategoryId}
           bigCategory={props.bigCategory}
-          paymentUser={props.paymentUser}
+          bigCategoryIndex={props.bigCategoryIndex}
           transactionAutoAdd={props.transactionAutoAdd}
           associatedCategory={props.associatedCategory}
-          handlePurchaseChange={props.handlePurchaseChange}
           handleDateChange={props.handleDateChange}
+          handleCycleTypeChange={props.handleCycleTypeChange}
+          handleCycleChange={props.handleCycleChange}
+          handlePurchaseChange={props.handlePurchaseChange}
           handleAmountChange={props.handleAmountChange}
           handleShopChange={props.handleShopChange}
-          handlePaymentUserChange={props.handlePaymentUserChange}
           handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-          titleLabel={'買い物リストアイテムを編集'}
-          buttonLabel={'保存'}
           handleCloseModal={props.handleCloseModal}
           unInput={props.unInput}
           minDate={new Date('1900-01-01')}
-          handleShoppingListItem={props.handleEditShoppingListItem}
-          displayRequiredInputItemMessage={false}
+          handleRegularShoppingListItem={props.handleEditRegularShoppingListItem}
           handleOpenDeleteForm={props.handleOpenDeleteForm}
-          setAssociatedCategory={props.setAssociatedCategory}
           setBigCategory={props.setBigCategory}
+          setAssociatedCategory={props.setAssociatedCategory}
           setBigCategoryId={props.setBigCategoryId}
           setCustomCategoryId={props.setCustomCategoryId}
           setMediumCategoryId={props.setMediumCategoryId}
+          setBigCategoryIndex={props.setBigCategoryIndex}
         />
       )}
     </div>
@@ -86,7 +94,7 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
 
   return (
     <>
-      <EditIcon className={styles.editIcon} onClick={props.handleOpenModal} />
+      <EditIcon className={styles.editIcon} onClick={() => props.handleOpenModal()} />
       <Modal
         open={props.open}
         onClose={props.handleCloseModal}
@@ -99,4 +107,4 @@ const EditGroupShoppingListItemModal = (props: EditGroupShoppingListItemModalPro
   );
 };
 
-export default EditGroupShoppingListItemModal;
+export default EditRegularShoppingListItemModal;

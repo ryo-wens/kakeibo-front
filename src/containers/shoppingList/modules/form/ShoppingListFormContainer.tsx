@@ -5,7 +5,7 @@ import {
   getIncomeCategories,
 } from '../../../../reducks/categories/selectors';
 import { autoAddTransactionMessage } from '../../../../lib/message';
-import ShoppingListForm from '../../../../components/shoppingList/modules/form/ShoppingListForm/ShoppingListForm';
+import ShoppingListForm from '../../../../components/shoppingList/modules/form/shoppingListForm/ShoppingListForm';
 
 interface ShoppingListFormContainerProps {
   titleLabel: string;

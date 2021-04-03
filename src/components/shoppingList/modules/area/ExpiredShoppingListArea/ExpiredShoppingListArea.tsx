@@ -3,7 +3,7 @@ import styles from './ExpiredShoppingListArea.module.scss';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 import KeyboardArrowUpIcon from '@material-ui/icons/KeyboardArrowUp';
 import { DisplayShoppingListByDate, ShoppingList } from '../../../../../reducks/shoppingList/types';
-import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
+import ShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/listItem/shoppingListItemComponent/ShoppingListItemComponentContainer';
 import cn from 'classnames';
 
 interface ExpiredShoppingListAreaProps {

@@ -1,12 +1,12 @@
 import React from 'react';
 import styles from './ShoppingListPage.module.scss';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
-import TodayShoppingListAreaContainer from '../../../containers/shoppingList/page/TodayShoppingListArea/TodayShoppingListAreaContainer';
-import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/page/MonthlyShoppingListArea/MonthlyShoppingListAreaContainer';
-import ExpiredShoppingListAreaContainer from '../../../containers/shoppingList/page/ExpiredShoppingListArea/ExpiredShoppingListAreaContainer';
-import RegularShoppingListAreaContainer from '../../../containers/shoppingList/page/regularShoppingListArea/RegularShoppingListAreaContainer';
+import TodayShoppingListAreaContainer from '../../../containers/shoppingList/modules/area/todayShoppingListArea/TodayShoppingListAreaContainer';
+import MonthlyShoppingListAreaContainer from '../../../containers/shoppingList/modules/area/monthlyShoppingListArea/MonthlyShoppingListAreaContainer';
+import ExpiredShoppingListAreaContainer from '../../../containers/shoppingList/modules/area/expiredShoppingListArea/ExpiredShoppingListAreaContainer';
+import RegularShoppingListAreaContainer from '../../../containers/shoppingList/modules/area/regularShoppingListArea/RegularShoppingListAreaContainer';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
-import AddRegularShoppingListItemModalContainer from '../../../containers/shoppingList/modules/Modal/AddRegularShoppingListItemModalContainer';
+import AddRegularShoppingListItemModalContainer from '../../../containers/shoppingList/modules/modal/AddRegularShoppingListItemModalContainer';
 
 interface ShoppingListPageProps {
   selectedYear: number;
