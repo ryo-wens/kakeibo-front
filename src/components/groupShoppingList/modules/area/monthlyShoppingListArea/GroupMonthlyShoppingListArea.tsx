@@ -2,8 +2,8 @@ import React from 'react';
 import SwitchItemTabs from '../../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
 import InputYears from '../../../../modules/inputYears/InputYears';
 import AddGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/modal/AddGroupShoppingListItemModalContainer';
-import GroupMonthlyShoppingListByDateContainer from '../../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByDateContainer/GroupMonthlyShoppingListByDateContainer';
-import GroupMonthlyShoppingListByCategoriesContainer from '../../../../../containers/groupShoppingList/page/monthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/GroupMonthlyShoppingListByCategoriesContainer';
+import GroupMonthlyShoppingListByDateContainer from '../../../../../containers/groupShoppingList/modules/area/monthlyShoppingListArea/monthlyShoppingListByDateContainer/GroupMonthlyShoppingListByDateContainer';
+import GroupMonthlyShoppingListByCategoriesContainer from '../../../../../containers/groupShoppingList/modules/area/monthlyShoppingListArea/monthlyShoppingListByCategoriesContainer/GroupMonthlyShoppingListByCategoriesContainer';
 import styles from '../../../../shoppingList/modules/area/MonthlyShoppingListArea/MonthlyShoppingListArea.module.scss';
 
 interface GroupMonthlyShoppingListAreaProps {

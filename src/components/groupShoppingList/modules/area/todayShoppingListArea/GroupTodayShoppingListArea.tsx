@@ -1,8 +1,8 @@
 import React from 'react';
 import SwitchItemTabs from '../../../../uikit/tabs/switchItemTabs/SwitchItemTabs';
-import GroupTodayShoppingListByCategoriesContainer from '../../../../../containers/groupShoppingList/page/todayShoppingListArea/todayShoppingListByCategoriesContainer/GroupTodayShoppingListByCategoriesContainer';
+import GroupTodayShoppingListByCategoriesContainer from '../../../../../containers/groupShoppingList/modules/area/todayShoppingListArea/todayShoppingListByCategoriesContainer/GroupTodayShoppingListByCategoriesContainer';
 import AddGroupShoppingListItemModalContainer from '../../../../../containers/groupShoppingList/modules/modal/AddGroupShoppingListItemModalContainer';
-import GroupTodayShoppingListByDateContainer from '../../../../../containers/groupShoppingList/page/todayShoppingListArea/todayShoppingListByDateContainer/GroupTodayShoppingListByDateContainer';
+import GroupTodayShoppingListByDateContainer from '../../../../../containers/groupShoppingList/modules/area/todayShoppingListArea/todayShoppingListByDateContainer/GroupTodayShoppingListByDateContainer';
 import styles from '../../../../shoppingList/modules/area/TodayShoppingListArea/TodayShoppingListArea.module.scss';
 
 interface GroupTodayShoppingListAreaProps {

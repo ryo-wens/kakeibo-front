@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import axios, { CancelTokenSource } from 'axios';
-import { fetchGroups } from '../../../../../reducks/groups/operations';
-import { fetchGroupTodayShoppingList } from '../../../../../reducks/groupShoppingList/operations';
+import { fetchGroups } from '../../../../../../reducks/groups/operations';
+import { fetchGroupTodayShoppingList } from '../../../../../../reducks/groupShoppingList/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import { getGroupDisplayTodayShoppingListByDate } from '../../../../../reducks/groupShoppingList/selectors';
-import { customMonth, date, year } from '../../../../../lib/constant';
+import { getGroupDisplayTodayShoppingListByDate } from '../../../../../../reducks/groupShoppingList/selectors';
+import { customMonth, date, year } from '../../../../../../lib/constant';
 import { useParams } from 'react-router';
-import GroupShoppingListByDate from '../../../../../components/groupShoppingList/modules/list/shoppingListByDate/GroupShoppingListByDate';
+import GroupShoppingListByDate from '../../../../../../components/groupShoppingList/modules/list/shoppingListByDate/GroupShoppingListByDate';
 
 interface GroupTodayShoppingListByDateContainerProps {
   currentYear: string;

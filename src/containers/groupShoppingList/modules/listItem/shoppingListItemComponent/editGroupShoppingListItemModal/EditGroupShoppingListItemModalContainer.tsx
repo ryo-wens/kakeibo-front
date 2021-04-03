@@ -11,51 +11,56 @@ import {
   deleteGroupShoppingListItem,
   editGroupShoppingListItem,
 } from '../../../../../../reducks/groupShoppingList/operations';
+import { dateStringToDate } from '../../../../../../lib/date';
+import dayjs from 'dayjs';
 
 interface EditGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
   currentYear: string;
   currentMonth: string;
-  initialExpectedPurchaseDate: Date;
-  initialPurchase: string;
-  initialShop: string | null;
-  initialAmount: string | null;
-  initialBigCategoryId: number;
-  initialBigCategoryName: string;
-  initialMediumCategoryId: number | null;
-  initialCustomCategoryId: number | null;
-  initialPaymentUser: string | null;
-  initialTransactionAutoAdd: boolean;
-  expectedPurchaseDate: Date | null;
-  purchase: string;
-  shop: string | null;
-  amount: string | null;
-  bigCategoryId: number;
-  bigCategory: string | null;
-  mediumCategoryId: number | null;
-  customCategoryId: number | null;
-  paymentUser: string | null;
-  transactionAutoAdd: boolean;
-  setExpectedPurchaseDate: React.Dispatch<React.SetStateAction<Date | null>>;
-  setPurchase: React.Dispatch<React.SetStateAction<string>>;
-  setShop: React.Dispatch<React.SetStateAction<string | null>>;
-  setAmount: React.Dispatch<React.SetStateAction<string | null>>;
-  setBigCategoryId: React.Dispatch<React.SetStateAction<number>>;
-  setBigCategory: React.Dispatch<React.SetStateAction<string | null>>;
-  setMediumCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
-  setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
-  setPaymentUser: React.Dispatch<React.SetStateAction<string | null>>;
-  setTransactionAutoAdd: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 const EditGroupShoppingListItemModalContainer = (
   props: EditGroupShoppingListItemModalContainerProps
 ) => {
+  const initialState = {
+    initialExpectedPurchaseDate: dateStringToDate(props.listItem.expected_purchase_date),
+    initialPurchase: props.listItem.purchase,
+    initialShop: props.listItem.shop,
+    initialAmount: props.listItem.amount === null ? null : String(props.listItem.amount),
+    initialBigCategoryId: props.listItem.big_category_id,
+    initialBigCategoryName: props.listItem.big_category_name,
+    initialMediumCategoryId: props.listItem.medium_category_id,
+    initialCustomCategoryId: props.listItem.custom_category_id,
+    initialPaymentUser: props.listItem.payment_user_id,
+    initialTransactionAutoAdd: props.listItem.transaction_auto_add,
+  };
+
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
 
   const [open, setOpen] = useState(false);
   const [openDeleteForm, setOpenDeleteForm] = useState(false);
+  const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
+    initialState.initialExpectedPurchaseDate
+  );
+  const [purchase, setPurchase] = useState<string>(initialState.initialPurchase);
+  const [shop, setShop] = useState<string | null>(initialState.initialShop);
+  const [amount, setAmount] = useState<string | null>(initialState.initialAmount);
+  const [bigCategoryId, setBigCategoryId] = useState<number>(initialState.initialBigCategoryId);
+  const [bigCategory, setBigCategory] = useState<string | null>(
+    initialState.initialBigCategoryName
+  );
+  const [mediumCategoryId, setMediumCategoryId] = useState<number | null>(
+    initialState.initialMediumCategoryId
+  );
+  const [customCategoryId, setCustomCategoryId] = useState<number | null>(
+    initialState.initialCustomCategoryId
+  );
+  const [paymentUser, setPaymentUser] = useState<string | null>(initialState.initialPaymentUser);
+  const [transactionAutoAdd, setTransactionAutoAdd] = useState<boolean>(
+    initialState.initialTransactionAutoAdd
+  );
   const [associatedCategory, setAssociatedCategory] = useState('');
 
   const unInput = {
@@ -69,50 +74,50 @@ const EditGroupShoppingListItemModalContainer = (
 
   const disabledButton = () => {
     if (
-      props.expectedPurchaseDate !== null &&
-      props.initialExpectedPurchaseDate.getTime() === props.expectedPurchaseDate.getTime() &&
-      props.initialPurchase === props.purchase &&
-      props.initialShop === props.shop &&
-      props.initialAmount === props.amount &&
-      props.initialBigCategoryId === props.bigCategoryId &&
-      props.initialBigCategoryName === props.bigCategory &&
-      props.initialMediumCategoryId === props.mediumCategoryId &&
-      props.initialCustomCategoryId === props.customCategoryId &&
-      props.initialPaymentUser === props.paymentUser &&
-      props.initialTransactionAutoAdd === props.transactionAutoAdd
+      expectedPurchaseDate !== null &&
+      dayjs(initialState.initialExpectedPurchaseDate).isSame(expectedPurchaseDate, 'date') &&
+      initialState.initialPurchase === purchase &&
+      initialState.initialShop === shop &&
+      initialState.initialAmount === amount &&
+      initialState.initialBigCategoryId === bigCategoryId &&
+      initialState.initialBigCategoryName === bigCategory &&
+      initialState.initialMediumCategoryId === mediumCategoryId &&
+      initialState.initialCustomCategoryId === customCategoryId &&
+      initialState.initialPaymentUser === paymentUser &&
+      initialState.initialTransactionAutoAdd === transactionAutoAdd
     ) {
       return true;
     } else
       return (
-        props.expectedPurchaseDate === unInput.unInputExpectedPurchaseDate ||
-        props.purchase === unInput.unInputPurchase ||
-        props.bigCategoryId === unInput.unInputBigCategoryId
+        expectedPurchaseDate === unInput.unInputExpectedPurchaseDate ||
+        purchase === unInput.unInputPurchase ||
+        bigCategoryId === unInput.unInputBigCategoryId
       );
   };
 
   const handleOpenModal = () => {
-    setOpen(true);
     if (props.listItem.medium_category_name) {
       setAssociatedCategory(props.listItem.medium_category_name);
     }
     if (props.listItem.custom_category_name) {
       setAssociatedCategory(props.listItem.custom_category_name);
     }
+    setExpectedPurchaseDate(initialState.initialExpectedPurchaseDate);
+    setPurchase(initialState.initialPurchase);
+    setShop(initialState.initialShop);
+    setAmount(initialState.initialAmount);
+    setBigCategoryId(initialState.initialBigCategoryId);
+    setBigCategory(initialState.initialBigCategoryName);
+    setMediumCategoryId(initialState.initialMediumCategoryId);
+    setCustomCategoryId(initialState.initialCustomCategoryId);
+    setPaymentUser(initialState.initialPaymentUser);
+    setTransactionAutoAdd(initialState.initialTransactionAutoAdd);
+    setOpen(true);
   };
 
   const handleCloseModal = () => {
     setOpen(false);
     setOpenDeleteForm(false);
-    props.setExpectedPurchaseDate(props.initialExpectedPurchaseDate);
-    props.setPurchase(props.initialPurchase);
-    props.setShop(props.initialShop);
-    props.setAmount(props.initialAmount);
-    props.setBigCategoryId(props.initialBigCategoryId);
-    props.setBigCategory(props.initialBigCategoryName);
-    props.setMediumCategoryId(props.initialMediumCategoryId);
-    props.setCustomCategoryId(props.initialCustomCategoryId);
-    props.setPaymentUser(props.initialPaymentUser);
-    props.setTransactionAutoAdd(props.initialTransactionAutoAdd);
   };
 
   const handleOpenDeleteForm = () => {
@@ -124,55 +129,55 @@ const EditGroupShoppingListItemModalContainer = (
   };
 
   const handlePurchaseChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setPurchase(event.target.value);
+    setPurchase(event.target.value);
   };
 
   const handleDateChange = (expectedPurchaseDate: Date | null) => {
-    props.setExpectedPurchaseDate(expectedPurchaseDate);
+    setExpectedPurchaseDate(expectedPurchaseDate);
   };
 
   const handleAmountChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') {
-      props.setAmount(unInput.unInputAmount);
+      setAmount(unInput.unInputAmount);
     } else {
-      props.setAmount(event.target.value);
+      setAmount(event.target.value);
     }
   };
 
   const handleShopChange = (event: React.ChangeEvent<HTMLInputElement>) => {
     if (event.target.value === '') {
-      props.setShop(unInput.unInputShop);
+      setShop(unInput.unInputShop);
     } else {
-      props.setShop(event.target.value);
+      setShop(event.target.value);
     }
   };
 
   const handlePaymentUserChange = (event: React.ChangeEvent<{ value: unknown }>) => {
     if (typeof event.target.value === 'string' && event.target.value === '') {
-      return props.setPaymentUser(unInput.unInputPaymentUser);
+      return setPaymentUser(unInput.unInputPaymentUser);
     }
     if (typeof event.target.value === 'string') {
-      return props.setPaymentUser(event.target.value);
+      return setPaymentUser(event.target.value);
     }
   };
 
   const handleAutoAddTransitionChange = (event: React.ChangeEvent<HTMLInputElement>) => {
-    props.setTransactionAutoAdd(event.target.checked);
+    setTransactionAutoAdd(event.target.checked);
   };
 
   const handleEditShoppingListItem = async () => {
     const requestData: EditGroupShoppingListItemReq = {
-      expected_purchase_date: props.expectedPurchaseDate,
+      expected_purchase_date: expectedPurchaseDate,
       complete_flag: props.listItem.complete_flag,
-      purchase: props.purchase,
-      shop: props.shop,
-      amount: typeof props.amount === 'string' ? Number(props.amount) : props.amount,
-      big_category_id: props.bigCategoryId,
-      medium_category_id: props.mediumCategoryId,
-      custom_category_id: props.customCategoryId,
+      purchase: purchase,
+      shop: shop,
+      amount: typeof amount === 'string' ? Number(amount) : amount,
+      big_category_id: bigCategoryId,
+      medium_category_id: mediumCategoryId,
+      custom_category_id: customCategoryId,
       regular_shopping_list_id: props.listItem.regular_shopping_list_id,
-      payment_user_id: props.paymentUser,
-      transaction_auto_add: props.transactionAutoAdd,
+      payment_user_id: paymentUser,
+      transaction_auto_add: transactionAutoAdd,
       related_transaction_data: props.listItem.related_transaction_data,
     };
 
@@ -219,14 +224,14 @@ const EditGroupShoppingListItemModalContainer = (
     <EditGroupShoppingListItemModal
       open={open}
       openDeleteForm={openDeleteForm}
-      expectedPurchaseDate={props.expectedPurchaseDate}
-      purchase={props.purchase}
-      shop={props.shop}
-      amount={props.amount}
-      bigCategoryId={props.bigCategoryId}
-      bigCategory={props.bigCategory}
-      paymentUser={props.paymentUser}
-      transactionAutoAdd={props.transactionAutoAdd}
+      expectedPurchaseDate={expectedPurchaseDate}
+      purchase={purchase}
+      shop={shop}
+      amount={amount}
+      bigCategoryId={bigCategoryId}
+      bigCategory={bigCategory}
+      paymentUser={paymentUser}
+      transactionAutoAdd={transactionAutoAdd}
       associatedCategory={associatedCategory}
       handlePurchaseChange={handlePurchaseChange}
       handleDateChange={handleDateChange}
@@ -239,12 +244,12 @@ const EditGroupShoppingListItemModalContainer = (
       handleOpenDeleteForm={handleOpenDeleteForm}
       handleCloseDeleteForm={handleCloseDeleteForm}
       unInput={disabledButton()}
-      initialPurchase={props.initialPurchase}
+      initialPurchase={initialState.initialPurchase}
       setAssociatedCategory={setAssociatedCategory}
-      setBigCategory={props.setBigCategory}
-      setBigCategoryId={props.setBigCategoryId}
-      setCustomCategoryId={props.setCustomCategoryId}
-      setMediumCategoryId={props.setMediumCategoryId}
+      setBigCategory={setBigCategory}
+      setBigCategoryId={setBigCategoryId}
+      setCustomCategoryId={setCustomCategoryId}
+      setMediumCategoryId={setMediumCategoryId}
       handleEditShoppingListItem={() => handleEditShoppingListItem()}
       handleDeleteShoppingListItem={() => handleDeleteShoppingListItem()}
     />
