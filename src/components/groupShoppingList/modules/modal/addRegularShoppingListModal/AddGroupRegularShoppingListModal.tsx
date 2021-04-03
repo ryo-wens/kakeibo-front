@@ -5,7 +5,7 @@ import { date } from '../../../../../lib/constant';
 import GroupRegularShoppingListFormContainer from '../../../../../containers/groupShoppingList/modules/form/GroupRegularShoppingListFormContainer';
 import { PurchaseCycleType } from '../../../../../reducks/shoppingList/types';
 import cn from 'classnames';
-import styles from '../../../../shoppingList/modules/modal/AddRegularShoppingListItemModal/AddRegularShoppingListItemModal.module.scss';
+import styles from '../../../../shoppingList/modules/modal/addRegularShoppingListItemModal/AddRegularShoppingListItemModal.module.scss';
 
 interface AddGroupRegularShoppingListModalProps {
   open: boolean;

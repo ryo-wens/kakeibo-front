@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import ShoppingListDeleteForm from '../../../../../shoppingList/modules/form/ShoppingListDeleteForm/ShoppingListDeleteForm';
+import ShoppingListDeleteForm from '../../../../../shoppingList/modules/form/shoppingListDeleteForm/ShoppingListDeleteForm';
 import EditIcon from '@material-ui/icons/Edit';
-import styles from '../../../../../shoppingList/modules/listItem/RegularShoppingListItemComponent/EditRegularShoppingListItemModal/EditRegularShoppingListItemModal.module.scss';
+import styles from '../../../../../shoppingList/modules/listItem/regularShoppingListItemComponent/editRegularShoppingListItemModal/EditRegularShoppingListItemModal.module.scss';
 
 import GroupRegularShoppingListFormContainer from '../../../../../../containers/groupShoppingList/modules/form/GroupRegularShoppingListFormContainer';
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';

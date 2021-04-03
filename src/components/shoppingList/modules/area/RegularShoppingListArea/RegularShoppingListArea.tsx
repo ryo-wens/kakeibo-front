@@ -5,7 +5,7 @@ import {
   TodayOrMonthly,
 } from '../../../../../reducks/shoppingList/types';
 import styles from './RegularShoppingListArea.module.scss';
-import RegularShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/ListItem/RegularShoppingListItemComponentContainer/RegularShoppingListItemComponentContainer';
+import RegularShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/listItem/regularShoppingListItemComponentContainer/RegularShoppingListItemComponentContainer';
 
 interface RegularShoppingListAreaProps {
   currentYear: string;

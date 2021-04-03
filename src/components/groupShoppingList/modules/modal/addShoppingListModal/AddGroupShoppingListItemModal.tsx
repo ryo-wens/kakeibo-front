@@ -1,7 +1,7 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import AddIcon from '@material-ui/icons/Add';
-import styles from '../../../../shoppingList/modules/modal/AddShoppingListItemModal/AddShoppingListItemModal.module.scss';
+import styles from '../../../../shoppingList/modules/modal/addShoppingListItemModal/AddShoppingListItemModal.module.scss';
 import { date } from '../../../../../lib/constant';
 import GroupShoppingListFormContainer from '../../../../../containers/groupShoppingList/modules/form/GroupShoppingListFormContainer';
 
