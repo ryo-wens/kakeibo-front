@@ -17,10 +17,13 @@ import GroupStandardBudgets from '../../components/budget/GroupStandardBudgets';
 const GroupStandardBudgetsContainer = () => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
-  const groupStandardBudgetsList = useSelector(getGroupStandardBudgets);
+  const groupStandardBudgets = useSelector(getGroupStandardBudgets);
   const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
   const [editing, setEditing] = useState<boolean>(false);
-  const [groupStandardBudgets, setGroupStandardBudgets] = useState<GroupStandardBudgetsList>([]);
+  const [
+    groupStandardBudgetsList,
+    setGroupStandardBudgetsList,
+  ] = useState<GroupStandardBudgetsList>([]);
 
   const fetchGroupStandardBudgetsData = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
@@ -44,14 +47,14 @@ const GroupStandardBudgetsContainer = () => {
   }, [editing]);
 
   useEffect(() => {
-    setGroupStandardBudgets(groupStandardBudgetsList);
-  }, [groupStandardBudgetsList]);
+    setGroupStandardBudgetsList(groupStandardBudgets);
+  }, [groupStandardBudgets]);
 
   const totalBudget = () => {
     let total = 0;
 
-    for (let i = 0; i < groupStandardBudgets.length; i++) {
-      total += Number(groupStandardBudgets[i].budget);
+    for (let i = 0; i < groupStandardBudgetsList.length; i++) {
+      total += Number(groupStandardBudgetsList[i].budget);
     }
 
     return total === groupTotalStandardBudget;
@@ -61,14 +64,14 @@ const GroupStandardBudgetsContainer = () => {
     <GroupStandardBudgets
       setEditing={setEditing}
       unEditBudgets={totalBudget()}
-      groupStandardBudgets={groupStandardBudgets}
-      setGroupStandardBudgets={setGroupStandardBudgets}
+      groupStandardBudgets={groupStandardBudgetsList}
+      setGroupStandardBudgets={setGroupStandardBudgetsList}
       groupTotalStandardBudget={groupTotalStandardBudget}
       editGroupStandardBudgetOperation={() => {
         dispatch(
           editGroupStandardBudgets(
             Number(group_id),
-            groupStandardBudgets.map((groupBudget) => {
+            groupStandardBudgetsList.map((groupBudget) => {
               const {
                 big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
                 last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars

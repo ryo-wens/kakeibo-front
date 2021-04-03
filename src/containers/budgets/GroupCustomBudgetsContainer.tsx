@@ -26,9 +26,9 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
   const getQuery = new URLSearchParams(searchLocation);
   const queryMonth = getQuery.get('month');
   const yearsInGroup = `${props.budgetsYear}年${queryMonth}月`;
-  const groupCustomBudgetsList = useSelector(getGroupCustomBudgets);
+  const groupCustomBudgets = useSelector(getGroupCustomBudgets);
   const groupTotalCustomBudget = useSelector(getTotalGroupCustomBudget);
-  const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
+  const [groupCustomBudgetsList, setGroupCustomBudgetsList] = useState<GroupCustomBudgetsList>([]);
   const [editing, setEditing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -55,14 +55,14 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
   }, [editing]);
 
   useEffect(() => {
-    setGroupCustomBudgets(groupCustomBudgetsList);
-  }, [groupCustomBudgetsList]);
+    setGroupCustomBudgetsList(groupCustomBudgets);
+  }, [groupCustomBudgets]);
 
   const totalBudget = () => {
     let total = 0;
 
-    for (let i = 0; i < groupCustomBudgets.length; i++) {
-      total += Number(groupCustomBudgets[i].budget);
+    for (let i = 0; i < groupCustomBudgetsList.length; i++) {
+      total += Number(groupCustomBudgetsList[i].budget);
     }
 
     return total === groupTotalCustomBudget;
@@ -72,8 +72,8 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
     <GroupCustomBudgets
       setEditing={setEditing}
       yearsInGroup={yearsInGroup}
-      groupCustomBudgets={groupCustomBudgets}
-      setGroupCustomBudgets={setGroupCustomBudgets}
+      groupCustomBudgets={groupCustomBudgetsList}
+      setGroupCustomBudgets={setGroupCustomBudgetsList}
       unEditCustomBudget={totalBudget()}
       groupTotalCustomBudget={groupTotalCustomBudget}
       backPageOperation={() =>
@@ -89,7 +89,7 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
               String(props.budgetsYear),
               queryMonth,
               Number(group_id),
-              groupCustomBudgets.map((groupBudget) => {
+              groupCustomBudgetsList.map((groupBudget) => {
                 const {
                   big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
                   last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars

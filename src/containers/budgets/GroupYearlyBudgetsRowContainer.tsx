@@ -19,16 +19,16 @@ const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerPro
   const dispatch = useDispatch();
   const history = useHistory();
   const { group_id } = useParams<{ group_id: string }>();
-  const groupYearlyBudgetsList = useSelector(getGroupYearlyBudgets);
-  const [groupYearlyBudgets, setGroupYearlyBudgets] = useState<GroupYearlyBudgetsList>({
+  const groupYearlyBudgets = useSelector(getGroupYearlyBudgets);
+  const [groupYearlyBudgetsList, setGroupYearlyBudgetsList] = useState<GroupYearlyBudgetsList>({
     year: '',
     yearly_total_budget: 0,
     monthly_budgets: [],
   });
 
   useEffect(() => {
-    setGroupYearlyBudgets(groupYearlyBudgetsList);
-  }, [groupYearlyBudgetsList]);
+    setGroupYearlyBudgetsList(groupYearlyBudgets);
+  }, [groupYearlyBudgets]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -47,7 +47,7 @@ const GroupYearlyBudgetsRowContainer = (props: GroupYearlyBudgetsRowContainerPro
   return (
     <GroupYearlyBudgetsRow
       years={props.budgetsYear}
-      groupYearlyBudgets={groupYearlyBudgets}
+      groupYearlyBudgets={groupYearlyBudgetsList}
       deleteCustomBudgets={(selectYear, selectMonth) => {
         dispatch(deleteGroupCustomBudgets(selectYear, selectMonth, Number(group_id)));
       }}

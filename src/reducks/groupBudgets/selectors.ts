@@ -32,7 +32,7 @@ export const getGroupYearlyBudgets = createSelector(
 const groupStandardBudgetsList = (state: State) => state.groupBudgets.groupStandardBudgetsList;
 const groupCustomBudgetsList = (state: State) => state.groupBudgets.groupCustomBudgetsList;
 
-export const getCopiedCustomBudgets = createSelector(
+export const getInitialGroupCustomBudgets = createSelector(
   [groupStandardBudgetsList, groupCustomBudgetsList],
   (groupStandardBudgetsList, groupCustomBudgetsList) => {
     return groupStandardBudgetsList.map((groupStandardBudget) => {

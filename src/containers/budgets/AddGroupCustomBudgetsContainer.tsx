@@ -4,7 +4,7 @@ import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
 import {
   getGroupTotalStandardBudget,
-  getCopiedCustomBudgets,
+  getInitialGroupCustomBudgets,
 } from '../../reducks/groupBudgets/selectors';
 import {
   addGroupCustomBudgets,
@@ -27,9 +27,12 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
   const getQuery = new URLSearchParams(searchLocation);
   const queryMonth = getQuery.get('month');
   const yearsInGroup = `${props.budgetsYear}年${queryMonth}月`;
-  const copiedCustomBudget = useSelector(getCopiedCustomBudgets);
+  const initialGroupCustomBudgets = useSelector(getInitialGroupCustomBudgets);
   const groupTotalStandardBudget = useSelector(getGroupTotalStandardBudget);
-  const [groupCustomBudgets, setGroupCustomBudgets] = useState<GroupCustomBudgetsList>([]);
+  const [
+    initialGroupCustomBudgetsList,
+    setInitialGroupCustomBudgetsList,
+  ] = useState<GroupCustomBudgetsList>([]);
   const [editing, setEditing] = useState<boolean>(false);
 
   useEffect(() => {
@@ -41,6 +44,7 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
           fetchGroupCustomBudgets(String(props.budgetsYear), queryMonth, Number(group_id), signal)
         );
       }
+
       dispatch(fetchGroupStandardBudgets(Number(group_id), signal));
 
       const interval = setInterval(() => {
@@ -61,26 +65,26 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
   }, [editing]);
 
   useEffect(() => {
-    setGroupCustomBudgets(copiedCustomBudget);
-  }, [copiedCustomBudget]);
+    setInitialGroupCustomBudgetsList(initialGroupCustomBudgets);
+  }, [initialGroupCustomBudgets]);
 
   const totalGroupCustomBudget = () => {
     let total = 0;
 
-    for (let i = 0; i < groupCustomBudgets.length; i++) {
-      total += Number(groupCustomBudgets[i].budget);
+    for (let i = 0; i < initialGroupCustomBudgetsList.length; i++) {
+      total += Number(initialGroupCustomBudgetsList[i].budget);
     }
 
-    return total;
+    return total === groupTotalStandardBudget;
   };
 
   return (
     <AddGroupCustomBudgets
       setEditing={setEditing}
       yearsInGroup={yearsInGroup}
-      unAddCustomBudgets={totalGroupCustomBudget() === groupTotalStandardBudget}
-      groupCustomBudgets={groupCustomBudgets}
-      setGroupCustomBudgets={setGroupCustomBudgets}
+      unAddCustomBudgets={totalGroupCustomBudget()}
+      groupCustomBudgets={initialGroupCustomBudgetsList}
+      setGroupCustomBudgets={setInitialGroupCustomBudgetsList}
       groupTotalStandardBudget={groupTotalStandardBudget}
       backPageOperation={() =>
         history.push({
@@ -95,7 +99,7 @@ const AddGroupCustomBudgetsContainer = (props: AddGroupCustomBudgetsContainerPro
               String(props.budgetsYear),
               queryMonth,
               Number(group_id),
-              groupCustomBudgets.map((groupCustomBudget) => {
+              initialGroupCustomBudgetsList.map((groupCustomBudget) => {
                 const {
                   big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
                   last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars

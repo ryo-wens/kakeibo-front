@@ -3,7 +3,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { useLocation } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { getTotalStandardBudget, getCopiedCustomBudgets } from '../../reducks/budgets/selectors';
+import { getTotalStandardBudget, getInitialCustomBudgets } from '../../reducks/budgets/selectors';
 import {
   addCustomBudgets,
   fetchCustomBudgets,
@@ -23,9 +23,9 @@ const AddCustomBudgetsContainer = (props: AddCustomBudgetsContainerProps) => {
   const searchLocation = useLocation().search;
   const getQuery = new URLSearchParams(searchLocation);
   const queryMonth = getQuery.get('month');
-  const copiedCustomBudgetsList = useSelector(getCopiedCustomBudgets);
+  const initialCustomBudgets = useSelector(getInitialCustomBudgets);
   const totalStandardBudget = useSelector(getTotalStandardBudget);
-  const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
+  const [initialCustomBudgetsList, setInitialCustomBudgetsList] = useState<CustomBudgetsList>([]);
   const yearsInPersonal = `${props.budgetsYear}年${queryMonth}月`;
 
   useEffect(() => {
@@ -42,14 +42,14 @@ const AddCustomBudgetsContainer = (props: AddCustomBudgetsContainerProps) => {
   }, []);
 
   useEffect(() => {
-    setCustomBudgets(copiedCustomBudgetsList);
-  }, [copiedCustomBudgetsList]);
+    setInitialCustomBudgetsList(initialCustomBudgets);
+  }, [initialCustomBudgets]);
 
   const totalCustomBudget = () => {
     let total = 0;
 
-    for (let i = 0; i < customBudgets.length; i++) {
-      total += Number(customBudgets[i].budget);
+    for (let i = 0; i < initialCustomBudgetsList.length; i++) {
+      total += Number(initialCustomBudgetsList[i].budget);
     }
 
     return total === totalStandardBudget;
@@ -59,8 +59,8 @@ const AddCustomBudgetsContainer = (props: AddCustomBudgetsContainerProps) => {
     <AddCustomBudgets
       pathName={pathName}
       budgetsYear={props.budgetsYear}
-      customBudgets={customBudgets}
-      setCustomBudgets={setCustomBudgets}
+      customBudgets={initialCustomBudgetsList}
+      setCustomBudgets={setInitialCustomBudgetsList}
       unInputBudgets={totalCustomBudget()}
       totalStandardBudget={totalStandardBudget}
       yearsInPersonal={yearsInPersonal}
@@ -76,7 +76,7 @@ const AddCustomBudgetsContainer = (props: AddCustomBudgetsContainerProps) => {
             addCustomBudgets(
               String(props.budgetsYear),
               queryMonth,
-              customBudgets.map((budget) => {
+              initialCustomBudgetsList.map((budget) => {
                 const {
                   big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
                   last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars

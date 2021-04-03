@@ -15,14 +15,14 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const yearlyBudgets = useSelector(getYearlyBudgets);
-  const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
+  const [yearBudgetsList, setYearBudgetsList] = useState<YearlyBudgetsList>({
     year: '',
     yearly_total_budget: 0,
     monthly_budgets: [],
   });
 
   useEffect(() => {
-    setYearBudget(yearlyBudgets);
+    setYearBudgetsList(yearlyBudgets);
   }, [yearlyBudgets]);
 
   useEffect(() => {
@@ -39,7 +39,7 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
   return (
     <YearlyBudgetsRow
       budgetsYear={props.budgetsYear}
-      yearBudget={yearBudget}
+      yearBudget={yearBudgetsList}
       deleteCustomBudgets={deleteCustom}
       routingEditCustomBudgets={(routingAddress, selectYear, selectMonth) => {
         if (routingAddress === 'custom') {

@@ -12,7 +12,7 @@ const StandardBudgetsContainer = () => {
   const pathName = useLocation().pathname.split('/')[1];
   const standardBudgets = useSelector(getStandardBudgets);
   const totalStandardBudget = useSelector(getTotalStandardBudget);
-  const [budgets, setBudgets] = useState<StandardBudgetsList>([]);
+  const [standardBudgetsList, setStandardBudgetsList] = useState<StandardBudgetsList>([]);
 
   useEffect(() => {
     if (!standardBudgets.length && pathName !== 'group') {
@@ -24,14 +24,14 @@ const StandardBudgetsContainer = () => {
   }, []);
 
   useEffect(() => {
-    setBudgets(standardBudgets);
+    setStandardBudgetsList(standardBudgets);
   }, [standardBudgets]);
 
   const totalBudget = () => {
     let total = 0;
 
-    for (let i = 0; i < budgets.length; i++) {
-      total += Number(budgets[i].budget);
+    for (let i = 0; i < standardBudgetsList.length; i++) {
+      total += Number(standardBudgetsList[i].budget);
     }
 
     return total === totalStandardBudget;
@@ -39,15 +39,15 @@ const StandardBudgetsContainer = () => {
 
   return (
     <StandardBudgets
-      budgets={budgets}
-      setBudgets={setBudgets}
+      budgets={standardBudgetsList}
+      setBudgets={setStandardBudgetsList}
       pathName={pathName}
       unEditBudgets={totalBudget()}
       totalStandardBudget={totalStandardBudget}
       editStandardBudgetOperation={() => {
         dispatch(
           editStandardBudgets(
-            budgets.map((budget) => {
+            standardBudgetsList.map((budget) => {
               const {
                 big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
                 last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars

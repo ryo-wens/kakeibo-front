@@ -35,7 +35,7 @@ export const getCustomBudgets = createSelector(
 const customBudgetsList = (state: State) => state.budgets.custom_budgets_list;
 const standardBudgetsList = (state: State) => state.budgets.standard_budgets_list;
 
-export const getCopiedCustomBudgets = createSelector(
+export const getInitialCustomBudgets = createSelector(
   [customBudgetsList, standardBudgetsList],
   (customBudgetsList, standardBudgetsList) => {
     return standardBudgetsList.map((standardBudget) => {

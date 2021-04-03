@@ -21,10 +21,10 @@ const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
   const searchLocation = useLocation().search;
   const getQuery = new URLSearchParams(searchLocation);
   const queryMonth = getQuery.get('month');
-  const customBudgetsList = useSelector(getCustomBudgets);
+  const customBudgets = useSelector(getCustomBudgets);
   const totalCustomBudget = useSelector(getTotalCustomBudget);
   const yearsInPersonal = `${props.budgetsYear}年${queryMonth}月`;
-  const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
+  const [customBudgetsList, setCustomBudgetsList] = useState<CustomBudgetsList>([]);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -44,14 +44,14 @@ const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
   }, []);
 
   useEffect(() => {
-    setCustomBudgets(customBudgetsList);
-  }, [customBudgetsList]);
+    setCustomBudgetsList(customBudgets);
+  }, [customBudgets]);
 
   const totalBudget = () => {
     let total = 0;
 
-    for (let i = 0; i < customBudgets.length; i++) {
-      total += Number(customBudgets[i].budget);
+    for (let i = 0; i < customBudgetsList.length; i++) {
+      total += Number(customBudgetsList[i].budget);
     }
 
     return total === totalCustomBudget;
@@ -62,8 +62,8 @@ const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
       unInput={totalBudget()}
       pathName={pathName}
       budgetsYear={props.budgetsYear}
-      customBudgets={customBudgets}
-      setCustomBudgets={setCustomBudgets}
+      customBudgets={customBudgetsList}
+      setCustomBudgets={setCustomBudgetsList}
       yearsInPersonal={yearsInPersonal}
       totalCustomBudget={totalCustomBudget}
       backPageOperation={() =>
@@ -78,7 +78,7 @@ const CustomBudgetsContainer = (props: CustomBudgetsContainerProps) => {
             editCustomBudgets(
               String(props.budgetsYear),
               queryMonth,
-              customBudgets.map((budget) => {
+              customBudgetsList.map((budget) => {
                 const {
                   big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
                   last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
