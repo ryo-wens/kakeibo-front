@@ -1,11 +1,11 @@
 import React, { useEffect } from 'react';
-import '../../../../../components/shoppingList/modules/list/shoppingListByCategoriesComponent/ShoppingListByCategoriesComponent.module.scss';
+import '../../../../../../components/shoppingList/modules/list/shoppingListByCategoriesComponent/ShoppingListByCategoriesComponent.module.scss';
 import axios, { CancelTokenSource } from 'axios';
-import { fetchGroups } from '../../../../../reducks/groups/operations';
-import { fetchGroupMonthlyShoppingListByCategories } from '../../../../../reducks/groupShoppingList/operations';
+import { fetchGroups } from '../../../../../../reducks/groups/operations';
+import { fetchGroupMonthlyShoppingListByCategories } from '../../../../../../reducks/groupShoppingList/operations';
 import { useDispatch, useSelector } from 'react-redux';
-import GroupShoppingListByCategoriesComponent from '../../../../../components/groupShoppingList/modules/list/shoppingListByCategoriesComponent/GroupShoppingListByCategoriesComponent';
-import { getGroupDisplayMonthlyShoppingListByCategories } from '../../../../../reducks/groupShoppingList/selectors';
+import GroupShoppingListByCategoriesComponent from '../../../../../../components/groupShoppingList/modules/list/shoppingListByCategoriesComponent/GroupShoppingListByCategoriesComponent';
+import { getGroupDisplayMonthlyShoppingListByCategories } from '../../../../../../reducks/groupShoppingList/selectors';
 import { useParams } from 'react-router';
 
 interface GroupMonthlyShoppingListByCategoriesContainerProps {

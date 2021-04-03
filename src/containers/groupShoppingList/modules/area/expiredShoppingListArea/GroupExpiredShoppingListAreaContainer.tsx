@@ -2,17 +2,17 @@ import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
 import { useParams } from 'react-router';
-import { fetchGroupExpiredShoppingList } from '../../../../reducks/groupShoppingList/operations';
+import { fetchGroupExpiredShoppingList } from '../../../../../reducks/groupShoppingList/operations';
 import {
   getGroupDisplayExpiredShoppingList,
   getGroupExpiredShoppingList,
   getGroupSlicedExpiredShoppingList,
-} from '../../../../reducks/groupShoppingList/selectors';
-import GroupExpiredShoppingListArea from '../../../../components/groupShoppingList/modules/area/expiredShoppingListArea/GroupExpiredShoppingListArea';
+} from '../../../../../reducks/groupShoppingList/selectors';
+import GroupExpiredShoppingListArea from '../../../../../components/groupShoppingList/modules/area/expiredShoppingListArea/GroupExpiredShoppingListArea';
 import {
   GroupDisplayShoppingListByDate,
   GroupShoppingList,
-} from '../../../../reducks/groupShoppingList/types';
+} from '../../../../../reducks/groupShoppingList/types';
 
 interface GroupExpiredShoppingListAreaContainerProps {
   currentYear: string;

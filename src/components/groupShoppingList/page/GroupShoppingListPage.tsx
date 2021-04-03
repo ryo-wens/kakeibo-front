@@ -4,9 +4,9 @@ import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import GroupTodayShoppingListArea from '../modules/area/todayShoppingListArea/GroupTodayShoppingListArea';
 import SwitchTodayOrMonthlyTabsContainer from '../../../containers/uikit/tabs/switchTodayOrMonthlyTabs/SwitchTodayOrMonthlyTabsContainer';
 import AddGroupRegularShoppingListModalContainer from '../../../containers/groupShoppingList/modules/modal/AddGroupRegularShoppingListItemModalContainer';
-import GroupRegularShoppingListAreaContainer from '../../../containers/groupShoppingList/page/regularShoppingListArea/GroupRegularShoppingListAreaContainer';
-import GroupMonthlyShoppingListAreaContainer from '../../../containers/groupShoppingList/page/monthlyShoppingListArea/GroupMonthlyShoppingListAreaContainer';
-import GroupExpiredShoppingListAreaContainer from '../../../containers/groupShoppingList/page/expiredShoppingListArea/GroupExpiredShoppingListAreaContainer';
+import GroupRegularShoppingListAreaContainer from '../../../containers/groupShoppingList/modules/area/regularShoppingListArea/GroupRegularShoppingListAreaContainer';
+import GroupMonthlyShoppingListAreaContainer from '../../../containers/groupShoppingList/modules/area/monthlyShoppingListArea/GroupMonthlyShoppingListAreaContainer';
+import GroupExpiredShoppingListAreaContainer from '../../../containers/groupShoppingList/modules/area/expiredShoppingListArea/GroupExpiredShoppingListAreaContainer';
 
 interface GroupShoppingListPageProps {
   selectedYear: number;
