@@ -35,12 +35,13 @@ import editSearchTodoListItemResponse from './editSearchTodoListItemResponse/edi
 import editSearchTodoListResponse from './editSearchTodoListItemResponse/editSearchTodoListResponse.json';
 import deleteSearchTodoListResponse from './deleteSearchTodoListItemResponse/deleteSearchTodoListResponse.json';
 import { AddTodoListItemReq, EditTodoListItemReq } from '../../src/reducks/todoList/types';
+import { todoServiceInstance } from '../../src/reducks/axiosConfig';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore({ todoList: [], modal: [] });
 
-const axiosMock = new MockAdapter(axios);
+const axiosMock = new MockAdapter(todoServiceInstance);
 
 describe('async actions todoLists', () => {
   beforeEach(() => {
@@ -68,7 +69,7 @@ describe('async actions todoLists', () => {
   });
 
   it('get expiredTodoList if fetch succeeds.', async () => {
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`;
+    const url = `/todo-list/expired`;
     const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchExpiredTodoListResponse);
@@ -99,7 +100,7 @@ describe('async actions todoLists', () => {
     const year = '2020';
     const month = '09';
     const date = '27';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
+    const url = `/todo-list/${year}-${month}-${date}`;
     const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchTodayTodoListResponse);
@@ -131,7 +132,7 @@ describe('async actions todoLists', () => {
   it('get monthlyImplementationTodoList and monthlyDueTodoList if fetch succeeds.', async () => {
     const year = '2020';
     const month = '09';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}`;
+    const url = `/todo-list/${year}-${month}`;
     const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchMonthlyTodoListResponse);
@@ -161,7 +162,7 @@ describe('async actions todoLists', () => {
   });
 
   it('get searchTodoList if fetch succeeds.', async () => {
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/search`;
+    const url = `/todo-list/search`;
 
     const params = {
       date_type: 'implementation_date',
@@ -200,7 +201,6 @@ describe('async actions todoLists', () => {
     const date = '27';
     const currentYear = '2020';
     const currentMonth = '09';
-    const signal = axios.CancelToken.source();
 
     const implementationDate = new Date('2020-09-28T00:00:00Z');
     const dueDate = new Date('2020-09-29T00:00:00Z');
@@ -212,10 +212,10 @@ describe('async actions todoLists', () => {
       todo_content: todoContent,
     };
 
-    const addUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`;
-    const fetchTodayUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${currentYear}-${currentMonth}`;
+    const addUrl = `/todo-list`;
+    const fetchExpiredUrl = `/todo-list/expired`;
+    const fetchTodayUrl = `/todo-list/${year}-${month}-${date}`;
+    const fetchMonthlyUrl = `/todo-list/${currentYear}-${currentMonth}`;
 
     const expectedAction = [
       {
@@ -252,8 +252,7 @@ describe('async actions todoLists', () => {
       date,
       currentYear,
       currentMonth,
-      requestData,
-      signal
+      requestData
       // @ts-ignore
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -267,7 +266,6 @@ describe('async actions todoLists', () => {
     const date = '27';
     const currentYear = '2020';
     const currentMonth = '09';
-    const signal = axios.CancelToken.source();
 
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
@@ -281,10 +279,10 @@ describe('async actions todoLists', () => {
       complete_flag: completeFlag,
     };
 
-    const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`;
-    const fetchTodayUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${currentYear}-${currentMonth}`;
+    const editUrl = `/todo-list/${todoListItemId}`;
+    const fetchExpiredUrl = `/todo-list/expired`;
+    const fetchTodayUrl = `/todo-list/${year}-${month}-${date}`;
+    const fetchMonthlyUrl = `/todo-list/${currentYear}-${currentMonth}`;
 
     const expectedAction = [
       {
@@ -322,8 +320,7 @@ describe('async actions todoLists', () => {
       date,
       currentYear,
       currentMonth,
-      requestData,
-      signal
+      requestData
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
@@ -336,12 +333,11 @@ describe('async actions todoLists', () => {
     const date = '27';
     const currentYear = '2020';
     const currentMonth = '09';
-    const signal = axios.CancelToken.source();
 
-    const deleteUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/expired`;
-    const fetchTodayUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${currentYear}-${currentMonth}`;
+    const deleteUrl = `/todo-list/${todoListItemId}`;
+    const fetchExpiredUrl = `/todo-list/expired`;
+    const fetchTodayUrl = `/todo-list/${year}-${month}-${date}`;
+    const fetchMonthlyUrl = `/todo-list/${currentYear}-${currentMonth}`;
 
     const expectedAction = [
       {
@@ -386,8 +382,7 @@ describe('async actions todoLists', () => {
       month,
       date,
       currentYear,
-      currentMonth,
-      signal
+      currentMonth
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
@@ -414,8 +409,8 @@ describe('async actions todoLists', () => {
       sort_type: 'desc',
     };
 
-    const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
-    const fetchSearchUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/search`;
+    const editUrl = `/todo-list/${todoListItemId}`;
+    const fetchSearchUrl = `/todo-list/search`;
 
     const expectedAction = [
       {
@@ -451,8 +446,8 @@ describe('async actions todoLists', () => {
       sort_type: 'desc',
     };
 
-    const deleteUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/${todoListItemId}`;
-    const fetchSearchUrl = `${process.env.REACT_APP_TODO_API_HOST}/todo-list/search`;
+    const deleteUrl = `/todo-list/${todoListItemId}`;
+    const fetchSearchUrl = `/todo-list/search`;
 
     const expectedAction = [
       {

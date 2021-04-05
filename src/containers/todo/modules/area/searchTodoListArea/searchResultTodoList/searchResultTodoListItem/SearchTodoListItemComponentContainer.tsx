@@ -16,7 +16,7 @@ import {
 import { dateStringToDate } from '../../../../../../../lib/date';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
-import { executeAfterAsyncProcess } from '../../../../../../../lib/function';
+
 interface SearchTodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
@@ -37,7 +37,7 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
   const pathName = pathNames[1];
   const currentPage = pathNames.slice(-1)[0];
   const { group_id } = useParams<{ group_id: string }>();
-
+  const unmountRef = useRef(false);
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
   const [openEditTodoForm, setOpenEditTodoForm] = useState<boolean>(false);
@@ -47,6 +47,12 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
   );
   const [dueDate, setDueDate] = useState<Date | null>(initialState.initialDueDate);
   const [todoContent, setTodoContent] = useState<string>(initialState.initialTodoContent);
+
+  useEffect(() => {
+    return () => {
+      unmountRef.current = true;
+    };
+  }, []);
 
   const disabledButton = () => {
     if (
@@ -98,9 +104,7 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     }
   };
 
-  const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-
+  const handleChangeChecked = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const requestData: EditTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -109,22 +113,38 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     };
 
     if (pathName === 'group') {
-      dispatch(
-        editGroupSearchTodoListItem(
-          Number(group_id),
-          props.listItem.id,
-          requestData,
-          props.fetchSearchTodoListRequestData
-        )
-      );
-    } else if (pathName !== 'group') {
-      dispatch(
-        editSearchTodoListItem(props.listItem.id, requestData, props.fetchSearchTodoListRequestData)
-      );
+      try {
+        await dispatch(
+          editGroupSearchTodoListItem(
+            Number(group_id),
+            props.listItem.id,
+            requestData,
+            props.fetchSearchTodoListRequestData
+          )
+        );
+
+        setChecked(event.target.checked);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    } else {
+      try {
+        await dispatch(
+          editSearchTodoListItem(
+            props.listItem.id,
+            requestData,
+            props.fetchSearchTodoListRequestData
+          )
+        );
+
+        setChecked(event.target.checked);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
     }
   };
 
-  const handleEditTodoListItem = () => {
+  const handleEditTodoListItem = async () => {
     const requestData: EditTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -133,44 +153,57 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     };
 
     if (pathName === 'group') {
-      return executeAfterAsyncProcess(
-        dispatch(
+      try {
+        await dispatch(
           editGroupSearchTodoListItem(
             Number(group_id),
             props.listItem.id,
             requestData,
             props.fetchSearchTodoListRequestData
           )
-        ),
+        );
 
-        () => setOpenEditTodoForm(false)
-      );
+        setOpenEditTodoForm(false);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    } else {
+      try {
+        await dispatch(
+          editSearchTodoListItem(
+            props.listItem.id,
+            requestData,
+            props.fetchSearchTodoListRequestData
+          )
+        );
+
+        setOpenEditTodoForm(false);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
     }
-
-    return executeAfterAsyncProcess(
-      dispatch(
-        editSearchTodoListItem(props.listItem.id, requestData, props.fetchSearchTodoListRequestData)
-      ),
-
-      () => setOpenEditTodoForm(false)
-    );
   };
 
   const handleDeleteTodoListItem = () => {
     if (pathName === 'group') {
-      return executeAfterAsyncProcess(
+      try {
         dispatch(
           deleteGroupSearchTodoListItem(
             Number(group_id),
             props.listItem.id,
             props.fetchSearchTodoListRequestData
           )
-        )
-      );
+        );
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    } else {
+      try {
+        dispatch(deleteSearchTodoListItem(props.listItem.id, props.fetchSearchTodoListRequestData));
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
     }
-    return executeAfterAsyncProcess(
-      dispatch(deleteSearchTodoListItem(props.listItem.id, props.fetchSearchTodoListRequestData))
-    );
   };
 
   return (

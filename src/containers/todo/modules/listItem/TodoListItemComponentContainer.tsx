@@ -10,8 +10,6 @@ import { dateStringToDate } from '../../../../lib/date';
 import { customDate, customMonth, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
-import axios from 'axios';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
@@ -32,8 +30,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   const pathName = pathNames[1];
   const currentPage = pathNames.slice(-1)[0];
   const { group_id } = useParams<{ group_id: string }>();
-  const signal = axios.CancelToken.source();
-
+  const unmountRef = useRef(false);
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
   const [openEditTodoForm, setOpenEditTodoForm] = useState<boolean>(false);
@@ -43,6 +40,12 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   );
   const [dueDate, setDueDate] = useState<Date | null>(initialState.initialDueDate);
   const [todoContent, setTodoContent] = useState<string>(initialState.initialTodoContent);
+
+  useEffect(() => {
+    return () => {
+      unmountRef.current = true;
+    };
+  }, []);
 
   const disabledButton = () => {
     if (
@@ -101,10 +104,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     }
   };
 
-  const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
-    setChecked(event.target.checked);
-
-    const signal = axios.CancelToken.source();
+  const handleChangeChecked = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const requestData: EditTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -113,46 +113,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     };
 
     if (pathName === 'group') {
-      dispatch(
-        editGroupTodoListItem(
-          Number(group_id),
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          requestData,
-          signal
-        )
-      );
-    } else if (pathName !== 'group') {
-      dispatch(
-        editTodoListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          requestData,
-          signal
-        )
-      );
-    }
-  };
-
-  const handleEditTodoListItem = () => {
-    const requestData: EditTodoListItemReq = {
-      implementation_date: implementationDate,
-      due_date: dueDate,
-      todo_content: todoContent,
-      complete_flag: checked,
-    };
-
-    if (pathName === 'group') {
-      return executeAfterAsyncProcess(
-        dispatch(
+      try {
+        await dispatch(
           editGroupTodoListItem(
             Number(group_id),
             props.listItem.id,
@@ -161,34 +123,85 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             customDate,
             props.currentYear,
             props.currentMonth,
-            requestData,
-            signal
+            requestData
           )
-        ),
-        () => setOpenEditTodoForm(false)
-      );
-    }
+        );
 
-    return executeAfterAsyncProcess(
-      dispatch(
-        editTodoListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          requestData,
-          signal
-        )
-      ),
-      () => setOpenEditTodoForm(false)
-    );
+        setChecked(event.target.checked);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    } else {
+      try {
+        dispatch(
+          editTodoListItem(
+            props.listItem.id,
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth,
+            requestData
+          )
+        );
+
+        setChecked(event.target.checked);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    }
+  };
+
+  const handleEditTodoListItem = async () => {
+    const requestData: EditTodoListItemReq = {
+      implementation_date: implementationDate,
+      due_date: dueDate,
+      todo_content: todoContent,
+      complete_flag: checked,
+    };
+
+    if (pathName === 'group') {
+      try {
+        await dispatch(
+          editGroupTodoListItem(
+            Number(group_id),
+            props.listItem.id,
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth,
+            requestData
+          )
+        );
+        setOpenEditTodoForm(false);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    } else {
+      try {
+        dispatch(
+          editTodoListItem(
+            props.listItem.id,
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth,
+            requestData
+          )
+        );
+
+        setOpenEditTodoForm(false);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    }
   };
 
   const handleDeleteTodoListItem = () => {
     if (pathName === 'group') {
-      return executeAfterAsyncProcess(
+      try {
         dispatch(
           deleteGroupTodoListItem(
             Number(group_id),
@@ -197,26 +210,28 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             customMonth,
             customDate,
             props.currentYear,
-            props.currentMonth,
-            signal
+            props.currentMonth
           )
-        )
-      );
+        );
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    } else {
+      try {
+        dispatch(
+          deleteTodoListItem(
+            props.listItem.id,
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth
+          )
+        );
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
     }
-
-    return executeAfterAsyncProcess(
-      dispatch(
-        deleteTodoListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          signal
-        )
-      )
-    );
   };
 
   return (
