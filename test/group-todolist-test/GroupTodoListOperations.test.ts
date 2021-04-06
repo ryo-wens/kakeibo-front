@@ -39,12 +39,13 @@ import {
   AddGroupTodoListItemReq,
   EditGroupTodoListItemReq,
 } from '../../src/reducks/groupTodoList/types';
+import { todoServiceInstance } from '../../src/reducks/axiosConfig';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 const store = mockStore({ groupTodoLists: [], modal: [] });
 
-const axiosMock = new MockAdapter(axios);
+const axiosMock = new MockAdapter(todoServiceInstance);
 
 describe('async actions groupTodoLists', () => {
   beforeEach(() => {
@@ -73,7 +74,7 @@ describe('async actions groupTodoLists', () => {
 
   it('get groupExpiredTodoList if fetch succeeds.', async () => {
     const groupId = 1;
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`;
+    const url = `/groups/${groupId}/todo-list/expired`;
     const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchGroupExpiredTodoListResponse);
@@ -105,7 +106,7 @@ describe('async actions groupTodoLists', () => {
     const year = '2020';
     const month = '09';
     const date = '27';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`;
+    const url = `/groups/${groupId}/todo-list/${year}-${month}-${date}`;
     const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchGroupTodayTodoListResponse);
@@ -139,7 +140,7 @@ describe('async actions groupTodoLists', () => {
     const groupId = 1;
     const year = '2020';
     const month = '09';
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}`;
+    const url = `/groups/${groupId}/todo-list/${year}-${month}`;
     const signal = axios.CancelToken.source();
 
     const mockResponse = JSON.stringify(fetchGroupMonthlyTodoListResponse);
@@ -171,7 +172,7 @@ describe('async actions groupTodoLists', () => {
 
   it('get groupSearchTodoList if fetch succeeds.', async () => {
     const groupId = 1;
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/search`;
+    const url = `/groups/${groupId}/todo-list/search`;
 
     const params = {
       date_type: 'implementation_date',
@@ -211,7 +212,6 @@ describe('async actions groupTodoLists', () => {
     const date = '27';
     const currentYear = '2020';
     const currentMonth = '09';
-    const signal = axios.CancelToken.source();
 
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-29T00:00:00');
@@ -223,10 +223,10 @@ describe('async actions groupTodoLists', () => {
       todo_content: todoContent,
     };
 
-    const addUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`;
-    const fetchTodayUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
+    const addUrl = `/groups/${groupId}/todo-list`;
+    const fetchExpiredUrl = `/groups/${groupId}/todo-list/expired`;
+    const fetchTodayUrl = `/groups/${groupId}/todo-list/${year}-${month}-${date}`;
+    const fetchMonthlyUrl = `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
 
     const expectedAction = [
       {
@@ -265,8 +265,7 @@ describe('async actions groupTodoLists', () => {
       date,
       currentYear,
       currentMonth,
-      requestData,
-      signal
+      requestData
       // @ts-ignore
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -280,7 +279,6 @@ describe('async actions groupTodoLists', () => {
     const date = '27';
     const currentYear = '2020';
     const currentMonth = '09';
-    const signal = axios.CancelToken.source();
 
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
@@ -294,10 +292,10 @@ describe('async actions groupTodoLists', () => {
       complete_flag: completeFlag,
     };
 
-    const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`;
-    const fetchTodayUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
+    const editUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
+    const fetchExpiredUrl = `/groups/${groupId}/todo-list/expired`;
+    const fetchTodayUrl = `/groups/${groupId}/todo-list/${year}-${month}-${date}`;
+    const fetchMonthlyUrl = `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
 
     const expectedAction = [
       {
@@ -337,8 +335,7 @@ describe('async actions groupTodoLists', () => {
       date,
       currentYear,
       currentMonth,
-      requestData,
-      signal
+      requestData
       // @ts-ignore
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -352,12 +349,11 @@ describe('async actions groupTodoLists', () => {
     const date = '27';
     const currentYear = '2020';
     const currentMonth = '09';
-    const signal = axios.CancelToken.source();
 
-    const deleteUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/expired`;
-    const fetchTodayUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
+    const deleteUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
+    const fetchExpiredUrl = `/groups/${groupId}/todo-list/expired`;
+    const fetchTodayUrl = `/groups/${groupId}/todo-list/${year}-${month}-${date}`;
+    const fetchMonthlyUrl = `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
 
     const expectedAction = [
       {
@@ -404,8 +400,7 @@ describe('async actions groupTodoLists', () => {
       month,
       date,
       currentYear,
-      currentMonth,
-      signal
+      currentMonth
       // @ts-ignore
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -435,8 +430,8 @@ describe('async actions groupTodoLists', () => {
       sort_type: 'desc',
     };
 
-    const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchSearchUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/search`;
+    const editUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
+    const fetchSearchUrl = `/groups/${groupId}/todo-list/search`;
 
     const expectedAction = [
       {
@@ -479,8 +474,8 @@ describe('async actions groupTodoLists', () => {
       sort_type: 'desc',
     };
 
-    const deleteUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchSearchUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/todo-list/search`;
+    const deleteUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
+    const fetchSearchUrl = `/groups/${groupId}/todo-list/search`;
 
     const expectedAction = [
       {

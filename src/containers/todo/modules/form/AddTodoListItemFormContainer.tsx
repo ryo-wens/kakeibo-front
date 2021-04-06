@@ -6,8 +6,6 @@ import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import AddTodoListItemForm from '../../../../components/todo/modules/form/addTodoListItemForm/AddTodoListItemForm';
 import { AddTodoListItemReq } from '../../../../reducks/todoList/types';
-import axios from 'axios';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface AddTodoListItemFormContainerProps {
   currentYear: string;
@@ -24,7 +22,6 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams<{ group_id: string }>();
-  const signal = axios.CancelToken.source();
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
   const [openAddTodoForm, setOpenAddTodoForm] = useState(false);
@@ -69,7 +66,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     dueDate === null ||
     todoContent === initialState.initialTodoContent;
 
-  const handleAddTodoListItem = () => {
+  const handleAddTodoListItem = async () => {
     const addRequestData: AddTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -77,8 +74,8 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     };
 
     if (pathName === 'group') {
-      return executeAfterAsyncProcess(
-        dispatch(
+      try {
+        await dispatch(
           addGroupTodoListItem(
             Number(group_id),
             String(year),
@@ -86,28 +83,30 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
             customDate,
             props.currentYear,
             props.currentMonth,
-            addRequestData,
-            signal
+            addRequestData
           )
-        ),
-        () => setOpenAddTodoForm(false)
-      );
+        );
+        setOpenAddTodoForm(false);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
+    } else {
+      try {
+        await dispatch(
+          addTodoListItem(
+            String(year),
+            customMonth,
+            customDate,
+            props.currentYear,
+            props.currentMonth,
+            addRequestData
+          )
+        );
+        setOpenAddTodoForm(false);
+      } catch (error) {
+        alert(error.response.data.error.message.toString());
+      }
     }
-
-    return executeAfterAsyncProcess(
-      dispatch(
-        addTodoListItem(
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          addRequestData,
-          signal
-        )
-      ),
-      () => setOpenAddTodoForm(false)
-    );
   };
 
   return (
