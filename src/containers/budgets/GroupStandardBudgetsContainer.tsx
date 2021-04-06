@@ -50,41 +50,42 @@ const GroupStandardBudgetsContainer = () => {
     setGroupStandardBudgetsList(groupStandardBudgets);
   }, [groupStandardBudgets]);
 
-  const totalBudget = () => {
-    let total = 0;
+  const disabledEditGroupStandardBudget = () => {
+    const totalStandardBudget = groupStandardBudgetsList.reduce(
+      (prevBudget, currentBudget) => prevBudget + Number(currentBudget.budget),
+      0
+    );
 
-    for (let i = 0; i < groupStandardBudgetsList.length; i++) {
-      total += Number(groupStandardBudgetsList[i].budget);
-    }
+    return totalStandardBudget === groupTotalStandardBudget;
+  };
 
-    return total === groupTotalStandardBudget;
+  const handleEditGroupStandardBudget = () => {
+    dispatch(
+      editGroupStandardBudgets(
+        Number(group_id),
+        groupStandardBudgetsList.map((groupBudget) => {
+          const {
+            big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
+            last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
+            ...rest
+          } = groupBudget;
+          return {
+            big_category_id: rest.big_category_id,
+            budget: Number(rest.budget),
+          };
+        })
+      )
+    );
   };
 
   return (
     <GroupStandardBudgets
       setEditing={setEditing}
-      unEditBudgets={totalBudget()}
+      unEditBudgets={disabledEditGroupStandardBudget()}
       groupStandardBudgets={groupStandardBudgetsList}
       setGroupStandardBudgets={setGroupStandardBudgetsList}
       groupTotalStandardBudget={groupTotalStandardBudget}
-      editGroupStandardBudgetOperation={() => {
-        dispatch(
-          editGroupStandardBudgets(
-            Number(group_id),
-            groupStandardBudgetsList.map((groupBudget) => {
-              const {
-                big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
-                last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
-                ...rest
-              } = groupBudget;
-              return {
-                big_category_id: rest.big_category_id,
-                budget: Number(rest.budget),
-              };
-            })
-          )
-        );
-      }}
+      editGroupStandardBudgetOperation={handleEditGroupStandardBudget}
     />
   );
 };

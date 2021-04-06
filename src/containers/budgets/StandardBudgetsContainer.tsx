@@ -27,14 +27,31 @@ const StandardBudgetsContainer = () => {
     setStandardBudgetsList(standardBudgets);
   }, [standardBudgets]);
 
-  const totalBudget = () => {
-    let total = 0;
+  const disabledEditStandardBudget = () => {
+    const totalBudget = standardBudgetsList.reduce(
+      (prevBudget, currentBudget) => prevBudget + Number(currentBudget.budget),
+      0
+    );
 
-    for (let i = 0; i < standardBudgetsList.length; i++) {
-      total += Number(standardBudgetsList[i].budget);
-    }
+    return totalBudget === totalStandardBudget;
+  };
 
-    return total === totalStandardBudget;
+  const handleEditStandardBudget = () => {
+    dispatch(
+      editStandardBudgets(
+        standardBudgetsList.map((budget) => {
+          const {
+            big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
+            last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
+            ...rest
+          } = budget;
+          return {
+            big_category_id: rest.big_category_id,
+            budget: Number(rest.budget),
+          };
+        })
+      )
+    );
   };
 
   return (
@@ -42,25 +59,9 @@ const StandardBudgetsContainer = () => {
       budgets={standardBudgetsList}
       setBudgets={setStandardBudgetsList}
       pathName={pathName}
-      unEditBudgets={totalBudget()}
+      unEditBudgets={disabledEditStandardBudget()}
       totalStandardBudget={totalStandardBudget}
-      editStandardBudgetOperation={() => {
-        dispatch(
-          editStandardBudgets(
-            standardBudgetsList.map((budget) => {
-              const {
-                big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
-                last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
-                ...rest
-              } = budget;
-              return {
-                big_category_id: rest.big_category_id,
-                budget: Number(rest.budget),
-              };
-            })
-          )
-        );
-      }}
+      editStandardBudgetOperation={handleEditStandardBudget}
     />
   );
 };

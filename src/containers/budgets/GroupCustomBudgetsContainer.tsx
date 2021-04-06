@@ -22,9 +22,8 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
   const dispatch = useDispatch();
   const history = useHistory();
   const { group_id } = useParams<{ group_id: string }>();
-  const searchLocation = useLocation().search;
-  const getQuery = new URLSearchParams(searchLocation);
-  const queryMonth = getQuery.get('month');
+  const searchQuery = new URLSearchParams(useLocation().search);
+  const queryMonth = searchQuery.get('month');
   const yearsInGroup = `${props.budgetsYear}年${queryMonth}月`;
   const groupCustomBudgets = useSelector(getGroupCustomBudgets);
   const groupTotalCustomBudget = useSelector(getTotalGroupCustomBudget);
@@ -34,17 +33,24 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
   useEffect(() => {
     if (!editing) {
       const signal = axios.CancelToken.source();
-      if (queryMonth != null) {
-        dispatch(
-          fetchGroupCustomBudgets(String(props.budgetsYear), queryMonth, Number(group_id), signal)
-        );
-      }
+      dispatch(
+        fetchGroupCustomBudgets(
+          String(props.budgetsYear),
+          String(queryMonth),
+          Number(group_id),
+          signal
+        )
+      );
+
       const interval = setInterval(() => {
-        if (queryMonth != null) {
-          dispatch(
-            fetchGroupCustomBudgets(String(props.budgetsYear), queryMonth, Number(group_id), signal)
-          );
-        }
+        dispatch(
+          fetchGroupCustomBudgets(
+            String(props.budgetsYear),
+            String(queryMonth),
+            Number(group_id),
+            signal
+          )
+        );
       }, 3000);
 
       return () => {
@@ -58,14 +64,41 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
     setGroupCustomBudgetsList(groupCustomBudgets);
   }, [groupCustomBudgets]);
 
-  const totalBudget = () => {
-    let total = 0;
+  const disabledGroupEditCustomBudget = () => {
+    const totalCustomBudget = groupCustomBudgetsList.reduce(
+      (prevBudget, currentBudget) => prevBudget + Number(currentBudget.budget),
+      0
+    );
 
-    for (let i = 0; i < groupCustomBudgetsList.length; i++) {
-      total += Number(groupCustomBudgetsList[i].budget);
-    }
+    return totalCustomBudget === groupTotalCustomBudget || queryMonth === null;
+  };
 
-    return total === groupTotalCustomBudget;
+  const handleBackPage = () => {
+    history.push({
+      pathname: `/group/${group_id}/budgets`,
+      search: `?yearly&year=${props.budgetsYear}`,
+    });
+  };
+
+  const handleEditCustomBudget = () => {
+    dispatch(
+      editGroupCustomBudgets(
+        String(props.budgetsYear),
+        String(queryMonth),
+        Number(group_id),
+        groupCustomBudgetsList.map((groupBudget) => {
+          const {
+            big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
+            last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
+            ...rest
+          } = groupBudget;
+          return {
+            big_category_id: rest.big_category_id,
+            budget: Number(rest.budget),
+          };
+        })
+      )
+    );
   };
 
   return (
@@ -74,36 +107,10 @@ const GroupCustomBudgetsContainer = (props: GroupCustomBudgetsContainerProps) =>
       yearsInGroup={yearsInGroup}
       groupCustomBudgets={groupCustomBudgetsList}
       setGroupCustomBudgets={setGroupCustomBudgetsList}
-      unEditCustomBudget={totalBudget()}
+      unEditCustomBudget={disabledGroupEditCustomBudget()}
       groupTotalCustomBudget={groupTotalCustomBudget}
-      backPageOperation={() =>
-        history.push({
-          pathname: `/group/${group_id}/budgets`,
-          search: `?yearly&year=${props.budgetsYear}`,
-        })
-      }
-      editGroupCustomBudgetOperation={() => {
-        if (queryMonth != null) {
-          dispatch(
-            editGroupCustomBudgets(
-              String(props.budgetsYear),
-              queryMonth,
-              Number(group_id),
-              groupCustomBudgetsList.map((groupBudget) => {
-                const {
-                  big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
-                  last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
-                  ...rest
-                } = groupBudget;
-                return {
-                  big_category_id: rest.big_category_id,
-                  budget: Number(rest.budget),
-                };
-              })
-            )
-          );
-        }
-      }}
+      backPageOperation={handleBackPage}
+      editGroupCustomBudgetOperation={handleEditCustomBudget}
     />
   );
 };
