@@ -7,7 +7,6 @@ import {
 import { useDispatch } from 'react-redux';
 import TaskUserForm from '../../../../../../components/task/modules/form/taskUserForm/TaskUserForm';
 import { addTaskUsers } from '../../../../../../reducks/groupTasks/operations';
-import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface AddTaskUserFormContainerProps {
   approvedGroup: Group;
@@ -52,15 +51,18 @@ const AddTaskUserFormContainer = (props: AddTaskUserFormContainerProps) => {
     props.groupTasksListForEachUser
   );
 
-  const handleAddTaskUsers = () => {
+  const handleAddTaskUsers = async () => {
     const requestData: AddGroupTaskUsersReq = {
       users_list: checkedUserIds,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(addTaskUsers(props.approvedGroup.group_id, requestData)),
-      () => props.handleCloseAddTaskUserForm()
-    );
+    try {
+      await dispatch(addTaskUsers(props.approvedGroup.group_id, requestData));
+
+      props.handleCloseAddTaskUserForm();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

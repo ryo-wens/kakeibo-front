@@ -4,7 +4,6 @@ import { useParams } from 'react-router';
 import AddTaskNameForm from '../../../../components/task/modules/area/taskListArea/addTaskNameForm/AddTaskNameForm';
 import { addTaskItem } from '../../../../reducks/groupTasks/operations';
 import { AddTaskItemReq } from '../../../../reducks/groupTasks/types';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 const initialState = {
   initialTodoContent: '',
@@ -39,14 +38,18 @@ const AddTaskNameFormContainer = () => {
 
   const disabledButton = taskName === initialState.initialTodoContent;
 
-  const handleAddTaskItem = () => {
+  const handleAddTaskItem = async () => {
     const requestData: AddTaskItemReq = {
       task_name: taskName,
     };
 
-    return executeAfterAsyncProcess(dispatch(addTaskItem(Number(group_id), requestData)), () =>
-      setOpenForm(false)
-    );
+    try {
+      await dispatch(addTaskItem(Number(group_id), requestData));
+
+      setOpenForm(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

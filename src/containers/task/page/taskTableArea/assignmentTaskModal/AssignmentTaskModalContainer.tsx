@@ -11,7 +11,6 @@ import { getGroupTaskList } from '../../../../../reducks/groupTasks/selectors';
 import AssignTaskModal from '../../../../../components/task/modules/area/taskTableArea/assignTaskModal/AssignTaskModal';
 import SelectTaskName from '../../../../../components/task/modules/select/SelectTaskName';
 import { editTaskItem } from '../../../../../reducks/groupTasks/operations';
-import { executeAfterAsyncProcess } from '../../../../../lib/function';
 
 interface AssignmentTaskModalContainerProps {
   participatingTaskUsers: TaskUsers;
@@ -90,7 +89,7 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     setTaskUserId(Number(event.target.value));
   };
 
-  const handleAssignTaskItem = () => {
+  const handleAssignTaskItem = async () => {
     const requestData: EditTaskItemReq = {
       base_date: baseDate,
       cycle_type: cycleType,
@@ -99,10 +98,13 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
       group_tasks_users_id: taskUserId,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(editTaskItem(props.groupId, taskItemId, requestData)),
-      () => setOpen(false)
-    );
+    try {
+      await dispatch(editTaskItem(props.groupId, taskItemId, requestData));
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   const disabledButton =

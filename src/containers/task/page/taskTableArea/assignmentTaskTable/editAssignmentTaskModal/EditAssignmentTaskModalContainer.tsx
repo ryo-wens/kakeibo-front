@@ -9,7 +9,6 @@ import {
 import { useDispatch } from 'react-redux';
 import { editTaskItem } from '../../../../../../reducks/groupTasks/operations';
 import EditAssignmentTaskModal from '../../../../../../components/task/modules/area/taskTableArea/assignTaskTable/editAssignTaskModal/EditAssignTaskModal';
-import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface EditAssignmentTaskModalContainerProps {
   participatingTaskUsers: TaskUsers;
@@ -81,7 +80,7 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
     setTaskUserId(Number(event.target.value));
   };
 
-  const handleEditAssignTaskItem = () => {
+  const handleEditAssignTaskItem = async () => {
     const requestData: EditTaskItemReq = {
       base_date: baseDate,
       cycle_type: cycleType,
@@ -90,13 +89,16 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
       group_tasks_users_id: taskUserId,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(editTaskItem(props.groupId, taskItemId, requestData)),
-      () => setOpen(false)
-    );
+    try {
+      await dispatch(editTaskItem(props.groupId, taskItemId, requestData));
+
+      setOpen(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleReleaseTaskItem = () => {
+  const handleReleaseTaskItem = async () => {
     const requestData: EditTaskItemReq = {
       base_date: null,
       cycle_type: null,
@@ -105,7 +107,11 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
       group_tasks_users_id: null,
     };
 
-    return executeAfterAsyncProcess(dispatch(editTaskItem(props.groupId, taskItemId, requestData)));
+    try {
+      await dispatch(editTaskItem(props.groupId, taskItemId, requestData));
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   const disabledButton = () => {

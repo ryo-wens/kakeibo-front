@@ -35,6 +35,7 @@ import {
   DeleteGroupTaskUsersReq,
   EditTaskItemReq,
 } from '../../src/reducks/groupTasks/types';
+import { todoServiceInstance } from '../../src/reducks/axiosConfig';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -45,7 +46,7 @@ const store = mockStore({
   router: [],
 });
 
-const axiosMock = new MockAdapter(axios);
+const axiosMock = new MockAdapter(todoServiceInstance);
 
 describe('async actions groupTasks', () => {
   beforeEach(() => {
@@ -54,7 +55,7 @@ describe('async actions groupTasks', () => {
 
   it('get groupTaskListForEachUser if fetch succeeds.', async () => {
     const groupId = 1;
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const url = `/groups/${groupId}/tasks/users`;
     const signal = axios.CancelToken.source();
 
     const expectedAction = [
@@ -91,9 +92,9 @@ describe('async actions groupTasks', () => {
       users_list: users,
     };
 
-    const addUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
-    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
-    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const addUrl = `/groups/${groupId}/tasks/users`;
+    const fetchTaskListUrl = `/groups/${groupId}/tasks`;
+    const fetchTaskListForEachUserUrl = `/groups/${groupId}/tasks/users`;
 
     const expectedAction = [
       {
@@ -106,18 +107,18 @@ describe('async actions groupTasks', () => {
       {
         type: GroupTasksActions.ADD_TASK_USERS,
         payload: {
+          groupTaskListLoading: false,
+          groupTaskList: addUsersTaskListResponse.group_tasks_list,
           groupTaskListForEachUserLoading: false,
           groupTaskListForEachUser:
             addUsersTaskListForEachUserResponse.group_tasks_list_for_each_user,
-          groupTaskListLoading: false,
-          groupTaskList: addUsersTaskListResponse.group_tasks_list,
         },
       },
     ];
 
     axiosMock.onPost(addUrl).reply(200, addTaskUsersResponse);
-    axiosMock.onGet(fetchTaskListForEachUserUrl).reply(200, addUsersTaskListForEachUserResponse);
     axiosMock.onGet(fetchTaskListUrl).reply(200, addUsersTaskListResponse);
+    axiosMock.onGet(fetchTaskListForEachUserUrl).reply(200, addUsersTaskListForEachUserResponse);
 
     await addTaskUsers(groupId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
@@ -131,9 +132,9 @@ describe('async actions groupTasks', () => {
       users_list: users,
     };
 
-    const deleteUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
-    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
-    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const deleteUrl = `/groups/${groupId}/tasks/users`;
+    const fetchTaskListForEachUserUrl = `/groups/${groupId}/tasks/users`;
+    const fetchTaskListUrl = `/groups/${groupId}/tasks`;
 
     const expectedAction = [
       {
@@ -174,7 +175,7 @@ describe('async actions groupTasks', () => {
     const groupId = 1;
     const signal = axios.CancelToken.source();
 
-    const url = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const url = `/groups/${groupId}/tasks`;
 
     const expectedAction = [
       {
@@ -210,8 +211,8 @@ describe('async actions groupTasks', () => {
       task_name: taskName,
     };
 
-    const addUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
-    const fetchUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
+    const addUrl = `/groups/${groupId}/tasks`;
+    const fetchUrl = `/groups/${groupId}/tasks`;
 
     const expectedAction = [
       {
@@ -255,9 +256,9 @@ describe('async actions groupTasks', () => {
       group_tasks_users_id: groupTasksUsersId,
     };
 
-    const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`;
-    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
-    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const editUrl = `/groups/${groupId}/tasks/${taskItemId}`;
+    const fetchTaskListUrl = `/groups/${groupId}/tasks`;
+    const fetchTaskListForEachUserUrl = `/groups/${groupId}/tasks/users`;
 
     const expectedAction = [
       {
@@ -293,9 +294,9 @@ describe('async actions groupTasks', () => {
     const groupId = 1;
     const taskItemId = 2;
 
-    const editUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/${taskItemId}`;
-    const fetchTaskListUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks`;
-    const fetchTaskListForEachUserUrl = `${process.env.REACT_APP_TODO_API_HOST}/groups/${groupId}/tasks/users`;
+    const editUrl = `/groups/${groupId}/tasks/${taskItemId}`;
+    const fetchTaskListUrl = `/groups/${groupId}/tasks`;
+    const fetchTaskListForEachUserUrl = `/groups/${groupId}/tasks/users`;
 
     const expectedAction = [
       {
