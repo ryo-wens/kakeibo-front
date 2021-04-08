@@ -8,7 +8,6 @@ import {
 import { useDispatch } from 'react-redux';
 import TaskUserForm from '../../../../../../components/task/modules/form/taskUserForm/TaskUserForm';
 import { deleteTaskUsers } from '../../../../../../reducks/groupTasks/operations';
-import { executeAfterAsyncProcess } from '../../../../../../lib/function';
 
 interface DeleteTaskUserFormContainerProps {
   approvedGroup: Group;
@@ -59,15 +58,18 @@ const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) =>
     props.groupTasksListForEachUser
   );
 
-  const handleDeleteTaskUsers = () => {
+  const handleDeleteTaskUsers = async () => {
     const requestData: DeleteGroupTaskUsersReq = {
       users_list: checkedUserIds,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(deleteTaskUsers(props.approvedGroup.group_id, requestData)),
-      () => props.handleCloseDeleteTaskUserForm()
-    );
+    try {
+      await dispatch(deleteTaskUsers(props.approvedGroup.group_id, requestData));
+
+      props.handleCloseDeleteTaskUserForm();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (

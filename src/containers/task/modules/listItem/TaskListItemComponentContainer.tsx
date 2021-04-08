@@ -3,7 +3,6 @@ import { useDispatch } from 'react-redux';
 import { EditTaskItemReq, TaskListItem } from '../../../../reducks/groupTasks/types';
 import TaskListItemComponent from '../../../../components/task/modules/listItem/TaskListItemComponent/TaskListItemComponent';
 import { deleteTaskItem, editTaskItem } from '../../../../reducks/groupTasks/operations';
-import { executeAfterAsyncProcess } from '../../../../lib/function';
 
 interface TaskListItemComponentContainerProps {
   listItem: TaskListItem;
@@ -44,7 +43,7 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
     }
   };
 
-  const handleEditTaskItem = () => {
+  const handleEditTaskItem = async () => {
     const requestData: EditTaskItemReq = {
       base_date: props.listItem.base_date,
       cycle_type: props.listItem.cycle_type,
@@ -53,16 +52,21 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
       group_tasks_users_id: props.listItem.group_tasks_users_id,
     };
 
-    return executeAfterAsyncProcess(
-      dispatch(editTaskItem(props.listItem.group_id, props.listItem.id, requestData)),
-      () => setOpenForm(false)
-    );
+    try {
+      await dispatch(editTaskItem(props.listItem.group_id, props.listItem.id, requestData));
+
+      setOpenForm(false);
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleDeleteTaskItem = () => {
-    return executeAfterAsyncProcess(
-      dispatch(deleteTaskItem(props.listItem.group_id, props.listItem.id))
-    );
+  const handleDeleteTaskItem = async () => {
+    try {
+      await dispatch(deleteTaskItem(props.listItem.group_id, props.listItem.id));
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   const disabledButton = taskName === initialState.initialTaskName || taskName === '';
