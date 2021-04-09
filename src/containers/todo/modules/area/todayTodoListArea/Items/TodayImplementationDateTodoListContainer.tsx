@@ -7,8 +7,8 @@ import { useLocation } from 'react-router';
 import { DisplayTodoList } from '../../../../../../reducks/todoList/types';
 
 interface TodayImplementationDateTodoListContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -40,8 +40,8 @@ const TodayImplementationDateTodoListContainer = (
   return (
     <TodoListComponent
       todoList={todoList}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={props.selectedYearParam}
+      selectedMonthParam={props.selectedMonthParam}
       message={'今日の実施予定のToDoリストは、登録されていません。'}
       setEditing={props.setEditing}
     />

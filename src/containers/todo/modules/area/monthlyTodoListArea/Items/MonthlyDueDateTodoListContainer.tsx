@@ -8,8 +8,8 @@ import { DisplayTodoList } from '../../../../../../reducks/todoList/types';
 
 interface MonthlyDueDateTodoListContainerProps {
   selectedMonth: number;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -40,8 +40,8 @@ const MonthlyDueDateTodoListContainer = (props: MonthlyDueDateTodoListContainerP
   return (
     <TodoListComponent
       todoList={todoList}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={props.selectedYearParam}
+      selectedMonthParam={props.selectedMonthParam}
       message={`${props.selectedMonth}月の締切予定のToDoリストは、登録されていません。`}
       setEditing={props.setEditing}
     />

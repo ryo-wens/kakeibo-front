@@ -35,7 +35,6 @@ import {
 } from './actions';
 import {
   AddTodoListItemReq,
-  AddTodoListItemRes,
   DeleteTodoListItemRes,
   EditTodoListItemReq,
   EditTodoListItemRes,
@@ -45,6 +44,7 @@ import {
   FetchTodayTodoListRes,
   SearchTodoRequestData,
   TodoList,
+  TodoListItem,
 } from './types';
 import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
@@ -175,19 +175,12 @@ export const fetchSearchTodoList = (searchRequestData: {
   };
 };
 
-export const addTodoListItem = (
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string,
-  requestData: AddTodoListItemReq
-) => {
+export const addTodoListItem = (requestData: AddTodoListItemReq) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startAddTodoListItemAction());
 
     try {
-      await todoServiceInstance.post<AddTodoListItemRes>(
+      const res = await todoServiceInstance.post<TodoListItem>(
         `/todo-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
@@ -199,45 +192,7 @@ export const addTodoListItem = (
         })
       );
 
-      const fetchExpiredResult = todoServiceInstance.get<FetchExpiredTodoListRes>(
-        `/todo-list/expired`
-      );
-
-      const fetchTodayResult = todoServiceInstance.get<FetchTodayTodoListRes>(
-        `/todo-list/${year}-${month}-${date}`
-      );
-
-      const fetchMonthlyResult = todoServiceInstance.get<FetchMonthlyTodoListRes>(
-        `/todo-list/${currentYear}-${currentMonth}`
-      );
-
-      const expiredResponse = await fetchExpiredResult;
-      const todayResponse = await fetchTodayResult;
-      const monthlyResponse = await fetchMonthlyResult;
-
-      const expiredTodoList = expiredResponse.data.expired_todo_list;
-
-      const todayMessage = todayResponse.data.message;
-      const todayImplementationTodoList = todayMessage
-        ? []
-        : todayResponse.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
-
-      const monthlyMessage = monthlyResponse.data.message;
-      const monthlyImplementationTodoList = monthlyMessage
-        ? []
-        : monthlyResponse.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
-
-      dispatch(
-        addTodoListItemAction(
-          expiredTodoList,
-          todayImplementationTodoList,
-          todayDuesTodoList,
-          monthlyImplementationTodoList,
-          monthlyDuesTodoList
-        )
-      );
+      dispatch(addTodoListItemAction(res.data));
     } catch (error) {
       dispatch(
         failedAddTodoListItemAction(error.response.status, error.response.data.error.message)

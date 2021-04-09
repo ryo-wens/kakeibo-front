@@ -290,6 +290,15 @@ export interface State {
       message: string;
       statusCode: number;
     };
+    todoListItem: {
+      id: number;
+      posted_date: Date | null;
+      updated_date: Date | null;
+      implementation_date: string;
+      due_date: string;
+      todo_content: string;
+      complete_flag: boolean;
+    };
     todoListError: {
       message: string;
       statusCode: number;

@@ -196,12 +196,6 @@ describe('async actions todoLists', () => {
   });
 
   it('add todoList if fetch succeeds.', async () => {
-    const year = '2020';
-    const month = '09';
-    const date = '27';
-    const currentYear = '2020';
-    const currentMonth = '09';
-
     const implementationDate = new Date('2020-09-28T00:00:00Z');
     const dueDate = new Date('2020-09-29T00:00:00Z');
     const todoContent = '買い物へゆく';
@@ -212,10 +206,7 @@ describe('async actions todoLists', () => {
       todo_content: todoContent,
     };
 
-    const addUrl = `/todo-list`;
-    const fetchExpiredUrl = `/todo-list/expired`;
-    const fetchTodayUrl = `/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `/todo-list/${currentYear}-${currentMonth}`;
+    const url = `/todo-list`;
 
     const expectedAction = [
       {
@@ -229,32 +220,14 @@ describe('async actions todoLists', () => {
       {
         type: TodoListActions.ADD_TODO_LIST_ITEM,
         payload: {
-          expiredTodoListLoading: false,
-          expiredTodoList: addExpiredTodoListResponse.expired_todo_list,
-          todayTodoListLoading: false,
-          todayImplementationTodoList: addTodayTodoListResponse.implementation_todo_list,
-          todayDueTodoList: addTodayTodoListResponse.due_todo_list,
-          monthlyTodoListLoading: false,
-          monthlyImplementationTodoList: addMonthlyTodoListResponse.implementation_todo_list,
-          monthlyDueTodoList: addMonthlyTodoListResponse.due_todo_list,
+          todoListItem: addTodoListItemResponse,
         },
       },
     ];
 
-    axiosMock.onPost(addUrl).reply(200, addTodoListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, addExpiredTodoListResponse);
-    axiosMock.onGet(fetchTodayUrl).reply(200, addTodayTodoListResponse);
-    axiosMock.onGet(fetchMonthlyUrl).reply(200, addMonthlyTodoListResponse);
+    axiosMock.onPost(url).reply(200, addTodoListItemResponse);
 
-    await addTodoListItem(
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth,
-      requestData
-      // @ts-ignore
-    )(store.dispatch);
+    await addTodoListItem(requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

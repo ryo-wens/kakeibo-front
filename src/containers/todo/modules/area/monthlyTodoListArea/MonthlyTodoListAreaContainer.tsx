@@ -9,14 +9,13 @@ import {
 import { fetchGroups } from '../../../../../reducks/groups/operations';
 import { fetchMonthlyTodoList } from '../../../../../reducks/todoList/operations';
 import MonthlyTodoListArea from '../../../../../components/todo/modules/area/monthlyTodoListArea/MonthlyTodoListArea';
+import { generateZeroPaddingMonth } from '../../../../../lib/date';
 
 interface MonthlyTodoListAreaContainerProps {
   selectedYear: number;
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentYear: string;
-  currentMonth: string;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -26,11 +25,14 @@ const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) 
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams<{ group_id: string }>();
 
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
+
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
     dispatch(fetchGroupExpiredTodoList(Number(group_id), signal));
     dispatch(
-      fetchGroupMonthlyTodoList(Number(group_id), props.currentYear, props.currentMonth, signal)
+      fetchGroupMonthlyTodoList(Number(group_id), selectedYearParam, selectedMonthParam, signal)
     );
   };
 
@@ -51,7 +53,7 @@ const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) 
   useEffect(() => {
     if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
-      dispatch(fetchMonthlyTodoList(props.currentYear, props.currentMonth, signal));
+      dispatch(fetchMonthlyTodoList(selectedYearParam, selectedMonthParam, signal));
       return () => signal.cancel();
     }
   }, [props.selectedYear, props.selectedMonth]);
@@ -62,8 +64,8 @@ const MonthlyTodoListAreaContainer = (props: MonthlyTodoListAreaContainerProps) 
       selectedMonth={props.selectedMonth}
       setSelectedYear={props.setSelectedYear}
       setSelectedMonth={props.setSelectedMonth}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       setEditing={props.setEditing}
     />
   );

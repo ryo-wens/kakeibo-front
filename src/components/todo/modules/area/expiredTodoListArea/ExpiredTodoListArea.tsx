@@ -9,8 +9,8 @@ import cn from 'classnames';
 interface ExpiredTodoListAreaProps {
   expiredTodoList: DisplayTodoListItem[];
   displayExpiredTodoList: DisplayTodoListItem[];
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
@@ -35,8 +35,8 @@ const ExpiredTodoListArea = (props: ExpiredTodoListAreaProps) => {
                       return (
                         <TodoListItemComponentContainer
                           listItem={item}
-                          currentYear={props.currentYear}
-                          currentMonth={props.currentMonth}
+                          selectedYearParam={props.selectedYearParam}
+                          selectedMonthParam={props.selectedMonthParam}
                           setEditing={props.setEditing}
                           key={item.id}
                         />

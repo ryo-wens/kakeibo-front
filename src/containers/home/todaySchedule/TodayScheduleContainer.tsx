@@ -85,8 +85,8 @@ const TodayScheduleContainer = (props: TodayScheduleContainerProps) => {
       todoEditing={props.todoEditing}
       setTodoEditing={props.setTodoEditing}
       pathName={pathName}
-      currentYear={todayYear}
-      currentMonth={todayMonth}
+      selectedYearParam={todayYear}
+      selectedMonthParam={todayMonth}
       implementationTodoList={
         pathName === 'group' ? groupImplementationTodoList : implementationTodoList
       }
