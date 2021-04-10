@@ -19,15 +19,14 @@ import {
   startDeleteCustomBudgetsActions,
   deleteCustomBudgetsActions,
   failedDeleteCustomBudgetsActions,
-  copyStandardBudgetsActions,
   startFetchYearlyBudgetsActions,
   fetchYearlyBudgetsActions,
   cancelFetchYearlyBudgetsActions,
   failedFetchYearlyBudgetsActions,
 } from './actions';
 import axios, { CancelTokenSource } from 'axios';
+import { accountServiceInstance } from '../axiosConfig';
 import { Action, Dispatch } from 'redux';
-import { State } from '../store/types';
 import { isValidBudgetFormat } from '../../lib/validation';
 import {
   BudgetsReq,
@@ -44,12 +43,9 @@ export const fetchStandardBudgets = (signal: CancelTokenSource) => {
     dispatch(startFetchStandardBudgetsAction());
 
     try {
-      const result = await axios.get<fetchStandardBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const result = await accountServiceInstance.get<fetchStandardBudgetsRes>(
+        '/standard-budgets',
+        { cancelToken: signal.token }
       );
       const standardBudgetsList = result.data.standard_budgets;
 
@@ -66,7 +62,7 @@ export const fetchStandardBudgets = (signal: CancelTokenSource) => {
   };
 };
 
-export const editStandardBudgets = (budgets: BudgetsReq, signal: CancelTokenSource) => {
+export const editStandardBudgets = (budgets: BudgetsReq) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const validBudgets = budgets.every((budget) => isValidBudgetFormat(budget.budget));
     if (!validBudgets) {
@@ -78,25 +74,16 @@ export const editStandardBudgets = (budgets: BudgetsReq, signal: CancelTokenSour
     const data = { standard_budgets: budgets };
 
     try {
-      await axios.put<StandardBudgetsListRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.put<StandardBudgetsListRes>(
+        '/standard-budgets',
+        JSON.stringify(data)
       );
 
-      const fetchResult = await axios.get<fetchStandardBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/standard-budgets`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
-      );
+      const fetchResult = accountServiceInstance.get<fetchStandardBudgetsRes>('/standard-budgets');
 
-      const editedStandardBudgetsList = fetchResult.data.standard_budgets;
+      const editedStandardBudgetsList = await fetchResult;
 
-      dispatch(editStandardBudgetsActions(editedStandardBudgetsList));
+      dispatch(editStandardBudgetsActions(editedStandardBudgetsList.data.standard_budgets));
     } catch (error) {
       dispatch(
         failedEditStandardBudgetsAction(error.response.status, error.response.data.error.message)
@@ -110,13 +97,9 @@ export const fetchYearlyBudgets = (year: number, signal: CancelTokenSource) => {
     dispatch(startFetchYearlyBudgetsActions());
 
     try {
-      const result = await axios.get<YearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${year}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
-      );
+      const result = await accountServiceInstance.get<YearlyBudgetsList>(`/budgets/${year}`, {
+        cancelToken: signal.token,
+      });
       const yearlyBudgetsList = result.data;
 
       dispatch(fetchYearlyBudgetsActions(yearlyBudgetsList));
@@ -141,14 +124,12 @@ export const fetchCustomBudgets = (
     dispatch(startFetchCustomBudgetsActions());
 
     try {
-      const result = await axios.get<fetchCustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const result = await accountServiceInstance.get<fetchCustomBudgetsRes>(
+        `/custom-budgets/${selectYear}-${selectMonth}`,
+        { cancelToken: signal.token }
       );
-      const customBudgetsList = result.data.custom_budgets;
+      const customBudgetsList =
+        result.data.custom_budgets === null ? [] : result.data.custom_budgets;
 
       dispatch(fetchCustomBudgetsActions(customBudgetsList));
     } catch (error) {
@@ -164,26 +145,9 @@ export const fetchCustomBudgets = (
   };
 };
 
-export const copyStandardBudgets = () => {
-  return (dispatch: Dispatch<Action>, getState: () => State) => {
-    const standardBudgets = getState().budgets.standard_budgets_list;
-    const customBudgets = getState().budgets.custom_budgets_list;
-
-    const nextBudgets = standardBudgets.map((standardBudget) => {
-      customBudgets.map((customBudget) => {
-        return (customBudget.budget = standardBudget.budget);
-      });
-      return standardBudget;
-    });
-
-    dispatch(copyStandardBudgetsActions(nextBudgets));
-  };
-};
-
 export const addCustomBudgets = (
   selectYear: string,
   selectMonth: string,
-  signal: CancelTokenSource,
   customBudgets: BudgetsReq
 ) => {
   const data = { custom_budgets: customBudgets };
@@ -197,28 +161,17 @@ export const addCustomBudgets = (
     dispatch(startAddCustomBudgetsActions());
 
     try {
-      await axios.post<CustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.post<CustomBudgetsRes>(
+        `/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data)
       );
 
-      const fetchCustomBudgetsResult = axios.get<fetchCustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchCustomBudgetsResult = accountServiceInstance.get<fetchCustomBudgetsRes>(
+        `/custom-budgets/${selectYear}-${selectMonth}`
       );
 
-      const fetchYearlyBudgetsResult = axios.get<YearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${selectYear}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchYearlyBudgetsResult = accountServiceInstance.get<YearlyBudgetsList>(
+        `/budgets/${selectYear}`
       );
 
       const addedCustomBudgetsList = await fetchCustomBudgetsResult;
@@ -241,7 +194,6 @@ export const addCustomBudgets = (
 export const editCustomBudgets = (
   selectYear: string,
   selectMonth: string,
-  signal: CancelTokenSource,
   customBudgets: BudgetsReq
 ) => {
   const data = { custom_budgets: customBudgets };
@@ -255,28 +207,17 @@ export const editCustomBudgets = (
     dispatch(startEditCustomBudgetsActions());
 
     try {
-      await axios.put<CustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.put<CustomBudgetsRes>(
+        `/custom-budgets/${selectYear}-${selectMonth}`,
+        JSON.stringify(data)
       );
 
-      const fetchCustomBudgetsResult = axios.get<fetchCustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchCustomBudgetsResult = accountServiceInstance.get<fetchCustomBudgetsRes>(
+        `/custom-budgets/${selectYear}-${selectMonth}`
       );
 
-      const fetchYearlyBudgetsResult = axios.get<YearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${selectYear}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchYearlyBudgetsResult = accountServiceInstance.get<YearlyBudgetsList>(
+        `/budgets/${selectYear}`
       );
 
       const editedCustomBudgetsList = await fetchCustomBudgetsResult;
@@ -296,28 +237,17 @@ export const editCustomBudgets = (
   };
 };
 
-export const deleteCustomBudgets = (
-  selectYear: string,
-  selectMonth: string,
-  signal: CancelTokenSource
-) => {
+export const deleteCustomBudgets = (selectYear: string, selectMonth: string) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     dispatch(startDeleteCustomBudgetsActions());
 
     try {
-      await axios.delete<DeleteCustomBudgetsRes>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/custom-budgets/${selectYear}-${selectMonth}`,
-        {
-          withCredentials: true,
-        }
+      await accountServiceInstance.delete<DeleteCustomBudgetsRes>(
+        `/custom-budgets/${selectYear}-${selectMonth}`
       );
 
-      const fetchYearlyBudgetsResult = axios.get<YearlyBudgetsList>(
-        `${process.env.REACT_APP_ACCOUNT_API_HOST}/budgets/${selectYear}`,
-        {
-          cancelToken: signal.token,
-          withCredentials: true,
-        }
+      const fetchYearlyBudgetsResult = accountServiceInstance.get<YearlyBudgetsList>(
+        `/budgets/${selectYear}`
       );
 
       const deletedYearlyBudgetsList = await fetchYearlyBudgetsResult;
