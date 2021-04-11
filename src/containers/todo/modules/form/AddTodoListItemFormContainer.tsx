@@ -62,7 +62,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     }
   };
 
-  const { getFetchTodoList } = useFetchTodoList();
+  const { fetchTodoList } = useFetchTodoList();
 
   const disabledButton =
     implementationDate === null ||
@@ -104,7 +104,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     } else {
       try {
         await dispatch(addTodoListItem(addRequestData));
-        await getFetchTodoList(params);
+        await fetchTodoList(params);
 
         setOpenAddTodoForm(false);
       } catch (error) {

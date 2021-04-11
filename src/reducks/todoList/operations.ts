@@ -50,14 +50,17 @@ import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
 import { todoServiceInstance } from '../axiosConfig';
 
-export const fetchExpiredTodoList = (signal: CancelTokenSource) => {
+export const fetchExpiredTodoList = (signal?: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchExpiredTodoListAction());
 
     try {
-      const result = await todoServiceInstance.get<FetchExpiredTodoListRes>(`/todo-list/expired`, {
-        cancelToken: signal.token,
-      });
+      const result = await todoServiceInstance.get<FetchExpiredTodoListRes>(
+        `/todo-list/expired`,
+        signal && {
+          cancelToken: signal.token,
+        }
+      );
       const expiredTodoList: TodoList = result.data.expired_todo_list;
 
       dispatch(fetchExpiredTodoListAction(expiredTodoList));
@@ -77,7 +80,7 @@ export const fetchTodayTodoList = (
   year: string,
   month: string,
   date: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchTodayTodoListAction());
@@ -85,7 +88,7 @@ export const fetchTodayTodoList = (
     try {
       const result = await todoServiceInstance.get<FetchTodayTodoListRes>(
         `/todo-list/${year}-${month}-${date}`,
-        {
+        signal && {
           cancelToken: signal.token,
         }
       );
@@ -106,14 +109,14 @@ export const fetchTodayTodoList = (
   };
 };
 
-export const fetchMonthlyTodoList = (year: string, month: string, signal: CancelTokenSource) => {
+export const fetchMonthlyTodoList = (year: string, month: string, signal?: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchMonthlyTodoListAction());
 
     try {
       const result = await todoServiceInstance.get<FetchMonthlyTodoListRes>(
         `/todo-list/${year}-${month}`,
-        {
+        signal && {
           cancelToken: signal.token,
         }
       );
