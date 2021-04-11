@@ -2,13 +2,13 @@ import { createSelector } from 'reselect';
 import { State } from '../store/types';
 import { CurrentMonthBudgetGroupStatusList } from './types';
 import {
-  todayDate,
-  thisMonthEndDate,
-  todayOfWeek,
+  currentWeekNumber,
   incomeTransactionType,
   month,
+  thisMonthEndDate,
+  todayDate,
+  todayOfWeek,
   year,
-  currentWeekNumber,
 } from '../../lib/constant';
 import { displayWeeks } from '../../lib/date';
 
@@ -27,6 +27,22 @@ export const getGroupCustomBudgets = createSelector(
 export const getGroupYearlyBudgets = createSelector(
   [groupBudgetsSelector],
   (state) => state.groupYearlyBudgetsList
+);
+
+const groupStandardBudgetsList = (state: State) => state.groupBudgets.groupStandardBudgetsList;
+const groupCustomBudgetsList = (state: State) => state.groupBudgets.groupCustomBudgetsList;
+
+export const getInitialGroupCustomBudgets = createSelector(
+  [groupStandardBudgetsList, groupCustomBudgetsList],
+  (groupStandardBudgetsList, groupCustomBudgetsList) => {
+    return groupStandardBudgetsList.map((groupStandardBudget) => {
+      groupCustomBudgetsList.map((groupCustomBudget) => {
+        return (groupCustomBudget.budget = groupStandardBudget.budget);
+      });
+
+      return groupStandardBudget;
+    });
+  }
 );
 
 export const getGroupYearlyTotalBudgets = (state: State) =>
@@ -169,8 +185,6 @@ export const getGroupAmountPerDay = createSelector(
   }
 );
 
-const groupStandardBudgetsList = (state: State) => state.groupBudgets.groupStandardBudgetsList;
-
 export const getGroupTotalStandardBudget = createSelector(
   [groupStandardBudgetsList],
   (groupStandardBudgetsList) => {
@@ -185,8 +199,6 @@ export const getGroupTotalStandardBudget = createSelector(
     return currentTotalBudget.standardTotalBudget;
   }
 );
-
-const groupCustomBudgetsList = (state: State) => state.groupBudgets.groupCustomBudgetsList;
 
 export const getTotalGroupCustomBudget = createSelector(
   [groupCustomBudgetsList],

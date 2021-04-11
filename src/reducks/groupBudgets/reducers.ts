@@ -82,11 +82,6 @@ export const groupBudgetsReducer = (
         ...state,
         ...action.payload,
       };
-    case Actions.COPY_GROUP_STANDARD_BUDGETS:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.START_ADD_GROUP_CUSTOM_BUDGETS:
       return {
         ...state,

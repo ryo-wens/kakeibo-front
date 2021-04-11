@@ -15,14 +15,14 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
   const yearlyBudgets = useSelector(getYearlyBudgets);
-  const [yearBudget, setYearBudget] = useState<YearlyBudgetsList>({
+  const [yearBudgetsList, setYearBudgetsList] = useState<YearlyBudgetsList>({
     year: '',
     yearly_total_budget: 0,
     monthly_budgets: [],
   });
 
   useEffect(() => {
-    setYearBudget(yearlyBudgets);
+    setYearBudgetsList(yearlyBudgets);
   }, [yearlyBudgets]);
 
   useEffect(() => {
@@ -32,29 +32,34 @@ const YearlyBudgetsRowContainer = (props: YearlyBudgetsRowContainerProps) => {
     return () => signal.cancel();
   }, [props.budgetsYear]);
 
-  const deleteCustom = (selectYear: string, selectMonth: string) => {
-    const signal = axios.CancelToken.source();
-    dispatch(deleteCustomBudgets(selectYear, selectMonth, signal));
+  const deleteCustomBudget = (selectYear: string, selectMonth: string) => {
+    dispatch(deleteCustomBudgets(selectYear, selectMonth));
+  };
+
+  const routingEditGroupCustomBudgetPage = (
+    routingAddress: string,
+    selectYear: string,
+    selectMonth: string
+  ) => {
+    if (routingAddress === 'custom') {
+      history.push({
+        pathname: '/budgets',
+        search: `?edit_custom&year=${props.budgetsYear}&month=${selectMonth}`,
+      });
+    } else {
+      history.push({
+        pathname: '/budgets',
+        search: `?add_custom&year=${props.budgetsYear}&month=${selectMonth}`,
+      });
+    }
   };
 
   return (
     <YearlyBudgetsRow
       budgetsYear={props.budgetsYear}
-      yearBudget={yearBudget}
-      deleteCustomBudgets={deleteCustom}
-      routingEditCustomBudgets={(routingAddress, selectYear, selectMonth) => {
-        if (routingAddress === 'custom') {
-          history.push({
-            pathname: '/budgets',
-            search: `?edit_custom&year=${props.budgetsYear}&month=${selectMonth}`,
-          });
-        } else {
-          history.push({
-            pathname: '/budgets',
-            search: `?add_custom&year=${props.budgetsYear}&month=${selectMonth}`,
-          });
-        }
-      }}
+      yearBudget={yearBudgetsList}
+      deleteCustomBudgets={deleteCustomBudget}
+      routingEditCustomBudgets={routingEditGroupCustomBudgetPage}
     />
   );
 };

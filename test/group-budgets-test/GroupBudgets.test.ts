@@ -1,5 +1,6 @@
 import * as actionTypes from '../../src/reducks/groupBudgets/actions';
 import axios from 'axios';
+import { accountServiceInstance } from '../../src/reducks/axiosConfig';
 import axiosMockAdapter from 'axios-mock-adapter';
 import thunk from 'redux-thunk';
 import configureStore from 'redux-mock-store';
@@ -22,21 +23,27 @@ import editGroupCustomBudgetPayload from './editGroupCustomBudgetsPayload.json';
 import groupEditedCustomBudgets from './editGroupCustomBudgetsResponse.json';
 import groupDeletedCustomBudgets from './deleteGroupCustomBudgetsResponse.json';
 
-const axiosMock = new axiosMockAdapter(axios);
+const axiosMock = new axiosMockAdapter(accountServiceInstance);
 const middlewares = [thunk];
 const mockStore = configureStore(middlewares);
+const store = mockStore({
+  groupBudgets: {
+    groupStandardBudgetsList: [],
+    groupCustomBudgetsList: [],
+    groupYearlyBudgetsList: {},
+  },
+});
 process.on('unhandledRejection', console.dir);
 
 describe('async actions groupBudgets', () => {
-  it('Get groupStandardBudgetsList if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
+  beforeEach(() => {
+    store.clearActions();
+  });
 
-    const store = mockStore({ groupBudgets: { groupStandardBudgetsList: [] } });
+  it('Get groupStandardBudgetsList if fetch succeeds', async () => {
     const groupId = 1;
     const signal = axios.CancelToken.source();
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`;
+    const url = `/groups/${groupId}/standard-budgets`;
     const fetchedGroupStandardBudgetsList = groupStandardBudgets;
 
     const expectedActions = [
@@ -67,15 +74,9 @@ describe('async actions groupBudgets', () => {
   });
 
   it('Edit groupStandard_budgets if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-    const store = mockStore({ groupStandardBudgets });
-
     const groupId = 1;
-    const signal = axios.CancelToken.source();
-    const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`;
-    const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/standard-budgets`;
+    const editUrl = `/groups/${groupId}/standard-budgets`;
+    const fetchUrl = `/groups/${groupId}/standard-budgets`;
 
     const mockRequest = {
       standard_budgets: [
@@ -171,22 +172,16 @@ describe('async actions groupBudgets', () => {
     axiosMock.onPut(editUrl, mockRequest).reply(200, editedGroupStandardBudgetsList);
     axiosMock.onGet(fetchUrl).reply(200, editedGroupStandardBudgetsList);
 
-    await editGroupStandardBudgets(groupId, signal, mockRequest.standard_budgets)(store.dispatch);
+    await editGroupStandardBudgets(groupId, mockRequest.standard_budgets)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
   it('Get groupYearlyBudgets if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-    const store = mockStore({ groupBudgets: { groupYearlyBudgetsList: [] } });
-
     const date = new Date();
     const year = date.getFullYear();
-
     const groupId = 1;
     const signal = axios.CancelToken.source();
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${year}`;
+    const url = `/groups/${groupId}/budgets/${year}`;
 
     const fetchedGroupYearlyBudgetsList = groupYearlyBudgets;
 
@@ -218,17 +213,11 @@ describe('async actions groupBudgets', () => {
   });
 
   it('Get groupCustomBudgets if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-
     const selectYear = '2020';
     const selectMonth = '01';
-    const store = mockStore({ groupBudgets: { groupCustomBudgetsList: [] } });
-
     const groupId = 1;
     const signal = axios.CancelToken.source();
-    const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+    const url = `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
 
     const fetchedGroupCustomBudgesList = groupCustomBudgets;
 
@@ -260,18 +249,12 @@ describe('async actions groupBudgets', () => {
   });
 
   it('Add groupCustomBudgets if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-
     const groupId = 1;
     const selectYear = '2020';
     const selectMonth = '02';
-    const signal = axios.CancelToken.source();
-    const store = mockStore({ groupBudgets: { groupYearlyBudgetsList: groupYearlyBudgets } });
-    const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
-    const fetchCustomUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
-    const fetchYearlyUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`;
+    const addUrl = `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+    const fetchCustomUrl = `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+    const fetchYearlyUrl = `/groups/${groupId}/budgets/${selectYear}`;
 
     const addedGroupCustomBudgetsList = groupAddedCustomBudgets;
 
@@ -376,28 +359,18 @@ describe('async actions groupBudgets', () => {
       selectYear,
       selectMonth,
       groupId,
-      signal,
       mockRequest.custom_budgets
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
   it('Edit groupCustomBudgets  if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-
     const selectYear = '2020';
     const selectMonth = '02';
-    const signal = axios.CancelToken.source();
-    const store = mockStore({
-      groupBudgets: { groupYearlyBudgetsList: addGroupCustomBudgetPayload },
-    });
-
     const groupId = 1;
-    const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
-    const fetchCustomUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
-    const fetchYearlyUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`;
+    const editUrl = `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+    const fetchCustomUrl = `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+    const fetchYearlyUrl = `/groups/${groupId}/budgets/${selectYear}`;
 
     const mockRequest = {
       custom_budgets: [
@@ -502,30 +475,17 @@ describe('async actions groupBudgets', () => {
       selectYear,
       selectMonth,
       groupId,
-      signal,
       mockRequest.custom_budgets
     )(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
   it('Delete groupCustomBudgets if fetch succeeds', async () => {
-    beforeEach(() => {
-      store.clearActions();
-    });
-
-    const store = mockStore({
-      groupBudgets: {
-        groupYearlyBudgetsList: groupYearlyBudgets,
-        groupStandardBudgetsList: groupEditedStandardBudgets.standard_budgets,
-      },
-    });
-
     const selectYear = '2020';
     const selectMonth = '02';
     const groupId = 1;
-    const signal = axios.CancelToken.source();
-    const deleteUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
-    const fetchYearlyUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/budgets/${selectYear}`;
+    const deleteUrl = `/groups/${groupId}/custom-budgets/${selectYear}-${selectMonth}`;
+    const fetchYearlyUrl = `/groups/${groupId}/budgets/${selectYear}`;
 
     const deletedGroupCustomBudgetsMessage = groupDeletedCustomBudgets.message;
 
@@ -620,7 +580,7 @@ describe('async actions groupBudgets', () => {
     axiosMock.onDelete(deleteUrl).reply(200, deletedGroupCustomBudgetsMessage);
     axiosMock.onGet(fetchYearlyUrl).reply(200, deletedYearlyBudgetsList);
 
-    await deleteGroupCustomBudgets(selectYear, selectMonth, groupId, signal)(store.dispatch);
+    await deleteGroupCustomBudgets(selectYear, selectMonth, groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 });

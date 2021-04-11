@@ -104,11 +104,6 @@ export const budgetsReducer = (state = initialState.budgets, action: budgetsActi
         ...state,
         ...action.payload,
       };
-    case Actions.COPY_STANDARD_BUDGETS:
-      return {
-        ...state,
-        ...action.payload,
-      };
     case Actions.START_FETCH_YEARLY_BUDGETS:
       return {
         ...state,

@@ -1,18 +1,14 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
-import { useLocation, useParams } from 'react-router';
+import { useLocation } from 'react-router';
 import { useHistory } from 'react-router-dom';
 import axios from 'axios';
-import { getCustomBudgets, getTotalStandardBudget } from '../../reducks/budgets/selectors';
+import { getInitialCustomBudgets, getTotalStandardBudget } from '../../reducks/budgets/selectors';
 import {
   addCustomBudgets,
-  copyStandardBudgets,
+  fetchCustomBudgets,
   fetchStandardBudgets,
 } from '../../reducks/budgets/operations';
-import {
-  copyGroupStandardBudgets,
-  fetchGroupStandardBudgets,
-} from '../../reducks/groupBudgets/operations';
 import { CustomBudgetsList } from '../../reducks/budgets/types';
 import AddCustomBudgets from '../../components/budget/AddCustomBudgets';
 
@@ -23,75 +19,74 @@ interface AddCustomBudgetsContainerProps {
 const AddCustomBudgetsContainer = (props: AddCustomBudgetsContainerProps) => {
   const dispatch = useDispatch();
   const history = useHistory();
-  const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
-  const searchLocation = useLocation().search;
-  const getQuery = new URLSearchParams(searchLocation);
-  const queryMonth = getQuery.get('month');
-  const customBudgetsList = useSelector(getCustomBudgets);
+  const searchQuery = new URLSearchParams(useLocation().search);
+  const queryMonth = searchQuery.get('month');
+  const initialCustomBudgets = useSelector(getInitialCustomBudgets);
   const totalStandardBudget = useSelector(getTotalStandardBudget);
-  const [customBudgets, setCustomBudgets] = useState<CustomBudgetsList>([]);
+  const [initialCustomBudgetsList, setInitialCustomBudgetsList] = useState<CustomBudgetsList>([]);
   const yearsInPersonal = `${props.budgetsYear}年${queryMonth}月`;
-  const unInputBudgets = customBudgets === customBudgetsList;
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    async function fetch() {
-      if (pathName !== 'group') {
-        await dispatch(fetchStandardBudgets(signal));
-        dispatch(copyStandardBudgets());
-      } else {
-        await dispatch(fetchGroupStandardBudgets(Number(group_id), signal));
-        dispatch(copyGroupStandardBudgets());
-      }
-    }
-    fetch();
+
+    dispatch(fetchCustomBudgets(String(props.budgetsYear), String(queryMonth), signal));
+    dispatch(fetchStandardBudgets(signal));
 
     return () => signal.cancel();
   }, []);
 
   useEffect(() => {
-    setCustomBudgets(customBudgetsList);
-  }, [customBudgetsList]);
+    setInitialCustomBudgetsList(initialCustomBudgets);
+  }, [initialCustomBudgets]);
+
+  const disabledAddCustomBudget = () => {
+    const totalCustomBudget = initialCustomBudgetsList.reduce(
+      (prevBudget, currentBudget) => prevBudget + Number(currentBudget.budget),
+      0
+    );
+
+    return totalCustomBudget === totalStandardBudget || queryMonth === null;
+  };
+
+  const handleBackPage = () => {
+    history.push({
+      pathname: '/budgets',
+      search: `?yearly&year=${props.budgetsYear}`,
+    });
+  };
+
+  const handleAddCustomBudget = () => {
+    dispatch(
+      addCustomBudgets(
+        String(props.budgetsYear),
+        String(queryMonth),
+        initialCustomBudgetsList.map((budget) => {
+          const {
+            big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
+            last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
+            ...rest
+          } = budget;
+          return {
+            big_category_id: rest.big_category_id,
+            budget: Number(rest.budget),
+          };
+        })
+      )
+    );
+  };
 
   return (
     <AddCustomBudgets
       pathName={pathName}
       budgetsYear={props.budgetsYear}
-      customBudgets={customBudgets}
-      setCustomBudgets={setCustomBudgets}
-      unInputBudgets={unInputBudgets}
+      customBudgets={initialCustomBudgetsList}
+      setCustomBudgets={setInitialCustomBudgetsList}
+      unInputBudgets={disabledAddCustomBudget()}
       totalStandardBudget={totalStandardBudget}
       yearsInPersonal={yearsInPersonal}
-      backPageOperation={() =>
-        history.push({
-          pathname: '/budgets',
-          search: `?yearly&year=${props.budgetsYear}`,
-        })
-      }
-      addCustomBudgetOperation={() => {
-        if (queryMonth != null) {
-          const signal = axios.CancelToken.source();
-          dispatch(
-            addCustomBudgets(
-              String(props.budgetsYear),
-              queryMonth,
-              signal,
-              customBudgets.map((budget) => {
-                const {
-                  big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
-                  last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
-                  ...rest
-                } = budget;
-                return {
-                  big_category_id: rest.big_category_id,
-                  budget: Number(rest.budget),
-                };
-              })
-            )
-          );
-        }
-      }}
+      backPageOperation={handleBackPage}
+      addCustomBudgetOperation={handleAddCustomBudget}
     />
   );
 };

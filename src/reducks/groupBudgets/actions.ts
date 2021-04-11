@@ -8,7 +8,6 @@ export type groupBudgetsActions = ReturnType<
   | typeof startEditGroupStandardBudgetsActions
   | typeof editGroupStandardBudgetsActions
   | typeof failedEditGroupStandardBudgetsActions
-  | typeof copyGroupStandardBudgetsActions
   | typeof startFetchGroupCustomBudgetsActions
   | typeof fetchGroupCustomBudgetsActions
   | typeof cancelFetchGroupCustomBudgetsActions
@@ -265,16 +264,6 @@ export const failedEditGroupCustomBudgetsActions = (statusCode: number, errorMes
         statusCode: statusCode,
         errorMessage: errorMessage,
       },
-    },
-  };
-};
-
-export const COPY_GROUP_STANDARD_BUDGETS = 'COPY_GROUP_STANDARD_BUDGETS';
-export const copyGroupStandardBudgetsActions = (groupCustomBudgetsList: GroupCustomBudgetsList) => {
-  return {
-    type: COPY_GROUP_STANDARD_BUDGETS,
-    payload: {
-      groupCustomBudgetsList: groupCustomBudgetsList,
     },
   };
 };

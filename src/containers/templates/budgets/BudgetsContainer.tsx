@@ -30,24 +30,28 @@ const BudgetsContainer = () => {
     };
   }, []);
 
+  const routingStandardBudgetPage = () => {
+    pathName !== 'group'
+      ? dispatch(push('/budgets?standard'))
+      : dispatch(push(`/group/${group_id}/budgets?standard`));
+  };
+
+  const routingYearlyBudgetPage = () => {
+    pathName !== 'group'
+      ? history.push({ pathname: '/budgets', search: `?yearly&year=${budgetsYear}` })
+      : history.push({
+          pathname: `/group/${group_id}/budgets`,
+          search: `?yearly&year=${budgetsYear}`,
+        });
+  };
+
   return (
     <Budgets
       query={query}
       budgetsYear={budgetsYear}
       setBudgetsYear={setBudgetsYear}
-      routingStandard={() =>
-        pathName !== 'group'
-          ? dispatch(push('/budgets?standard'))
-          : dispatch(push(`/group/${group_id}/budgets?standard`))
-      }
-      routingYearly={() => {
-        pathName !== 'group'
-          ? history.push({ pathname: '/budgets', search: `?yearly&year=${budgetsYear}` })
-          : history.push({
-              pathname: `/group/${group_id}/budgets`,
-              search: `?yearly&year=${budgetsYear}`,
-            });
-      }}
+      routingStandard={routingStandardBudgetPage}
+      routingYearly={routingYearlyBudgetPage}
     />
   );
 };

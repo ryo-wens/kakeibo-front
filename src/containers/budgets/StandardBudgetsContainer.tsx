@@ -12,8 +12,7 @@ const StandardBudgetsContainer = () => {
   const pathName = useLocation().pathname.split('/')[1];
   const standardBudgets = useSelector(getStandardBudgets);
   const totalStandardBudget = useSelector(getTotalStandardBudget);
-  const [budgets, setBudgets] = useState<StandardBudgetsList>([]);
-  const unEditBudgets = budgets === standardBudgets;
+  const [standardBudgetsList, setStandardBudgetsList] = useState<StandardBudgetsList>([]);
 
   useEffect(() => {
     if (!standardBudgets.length && pathName !== 'group') {
@@ -25,35 +24,44 @@ const StandardBudgetsContainer = () => {
   }, []);
 
   useEffect(() => {
-    setBudgets(standardBudgets);
+    setStandardBudgetsList(standardBudgets);
   }, [standardBudgets]);
+
+  const disabledEditStandardBudget = () => {
+    const totalBudget = standardBudgetsList.reduce(
+      (prevBudget, currentBudget) => prevBudget + Number(currentBudget.budget),
+      0
+    );
+
+    return totalBudget === totalStandardBudget;
+  };
+
+  const handleEditStandardBudget = () => {
+    dispatch(
+      editStandardBudgets(
+        standardBudgetsList.map((budget) => {
+          const {
+            big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
+            last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
+            ...rest
+          } = budget;
+          return {
+            big_category_id: rest.big_category_id,
+            budget: Number(rest.budget),
+          };
+        })
+      )
+    );
+  };
 
   return (
     <StandardBudgets
-      budgets={budgets}
-      setBudgets={setBudgets}
+      budgets={standardBudgetsList}
+      setBudgets={setStandardBudgetsList}
       pathName={pathName}
-      unEditBudgets={unEditBudgets}
+      unEditBudgets={disabledEditStandardBudget()}
       totalStandardBudget={totalStandardBudget}
-      editStandardBudgetOperation={() => {
-        const signal = axios.CancelToken.source();
-        dispatch(
-          editStandardBudgets(
-            budgets.map((budget) => {
-              const {
-                big_category_name: _big_category_name, // eslint-disable-line @typescript-eslint/no-unused-vars
-                last_month_expenses: _last_month_expenses, // eslint-disable-line @typescript-eslint/no-unused-vars
-                ...rest
-              } = budget;
-              return {
-                big_category_id: rest.big_category_id,
-                budget: Number(rest.budget),
-              };
-            }),
-            signal
-          )
-        );
-      }}
+      editStandardBudgetOperation={handleEditStandardBudget}
     />
   );
 };
