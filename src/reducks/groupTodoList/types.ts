@@ -33,17 +33,6 @@ export interface AddGroupTodoListItemReq {
   todo_content: string;
 }
 
-export interface AddGroupTodoListItemRes {
-  id: number;
-  posted_date: Date | null;
-  updated_date: Date | null;
-  implementation_date: string;
-  due_date: string;
-  todo_content: string;
-  complete_flag: boolean;
-  user_id: string;
-}
-
 export interface EditGroupTodoListItemReq {
   implementation_date: Date | null;
   due_date: Date | null;
@@ -69,4 +58,13 @@ export interface DeleteGroupTodoListItemRes {
 export interface FetchGroupSearchTodoListRes {
   search_todo_list: GroupTodoList;
   message: string;
+}
+
+export interface FetchGroupTodoListParams {
+  groupId: number;
+  currentYear: string;
+  currentMonth: string;
+  currentDate: string;
+  selectedYear: string;
+  selectedMonth: string;
 }

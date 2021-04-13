@@ -8,9 +8,6 @@ import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse/f
 import fetchGroupMonthlyTodoListResponse from './fetchGroupMonthlyTodoListResponse/fetchGroupMonthlyTodoListResponse.json';
 import fetchGroupSearchTodoListResponse from './fetchGroupSearchTodoListResponse/fetchGroupSearchTodoListResponse.json';
 import addGroupTodoListItemResponse from './addGroupTodoListItemResponse/addGroupTodoListItemResponse.json';
-import addGroupExpiredTodoListResponse from './addGroupTodoListItemResponse/addGroupExpiredTodoListResponse.json';
-import addGroupTodayTodoListResponse from './addGroupTodoListItemResponse/addGroupTodayTodoListResponse.json';
-import addGroupMonthlyTodoListResponse from './addGroupTodoListItemResponse/addGroupMonthlyTodoListResponse.json';
 import editGroupTodoListItemResponse from './editGroupTodoListItemResponse/editGroupTodoListItemResponse.json';
 import editGroupExpiredTodoListResponse from './editGroupTodoListItemResponse/editGroupExpiredTodoListResponse.json';
 import editGroupTodayTodoListResponse from './editGroupTodoListItemResponse/editGroupTodayTodoListResponse.json';
@@ -207,11 +204,6 @@ describe('async actions groupTodoLists', () => {
 
   it('add groupTodoList if fetch succeeds.', async () => {
     const groupId = 1;
-    const year = '2020';
-    const month = '09';
-    const date = '27';
-    const currentYear = '2020';
-    const currentMonth = '09';
 
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-29T00:00:00');
@@ -223,10 +215,7 @@ describe('async actions groupTodoLists', () => {
       todo_content: todoContent,
     };
 
-    const addUrl = `/groups/${groupId}/todo-list`;
-    const fetchExpiredUrl = `/groups/${groupId}/todo-list/expired`;
-    const fetchTodayUrl = `/groups/${groupId}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
+    const url = `/groups/${groupId}/todo-list`;
 
     const expectedAction = [
       {
@@ -240,34 +229,14 @@ describe('async actions groupTodoLists', () => {
       {
         type: GroupTodoListActions.ADD_GROUP_TODO_LIST_ITEM,
         payload: {
-          groupExpiredTodoListLoading: false,
-          groupExpiredTodoList: addGroupExpiredTodoListResponse.expired_group_todo_list,
-          groupTodayTodoListLoading: false,
-          groupTodayImplementationTodoList: addGroupTodayTodoListResponse.implementation_todo_list,
-          groupTodayDueTodoList: addGroupTodayTodoListResponse.due_todo_list,
-          groupMonthlyTodoListLoading: false,
-          groupMonthlyImplementationTodoList:
-            addGroupMonthlyTodoListResponse.implementation_todo_list,
-          groupMonthlyDueTodoList: addGroupMonthlyTodoListResponse.due_todo_list,
+          groupTodoListItem: addGroupTodoListItemResponse,
         },
       },
     ];
 
-    axiosMock.onPost(addUrl).reply(200, addGroupTodoListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, addGroupExpiredTodoListResponse);
-    axiosMock.onGet(fetchTodayUrl).reply(200, addGroupTodayTodoListResponse);
-    axiosMock.onGet(fetchMonthlyUrl).reply(200, addGroupMonthlyTodoListResponse);
+    axiosMock.onPost(url).reply(200, addGroupTodoListItemResponse);
 
-    await addGroupTodoListItem(
-      groupId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth,
-      requestData
-      // @ts-ignore
-    )(store.dispatch);
+    await addGroupTodoListItem(groupId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
