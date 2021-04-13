@@ -38,16 +38,16 @@ const RecentInputBody = (props: RecentInputBodyProps) => {
             <dt>
               <span className="recent-input__item-font">店名: </span>
               {transaction.shop !== null
-                ? transaction.shop.length > 13
-                  ? transaction.shop.substring(0, 12) + '...'
+                ? transaction.shop.length > 12
+                  ? transaction.shop.substring(0, 11) + '...'
                   : transaction.shop
                 : '-'}
             </dt>
             <dt>
               <span className="recent-input__item-font">メモ: </span>
               {transaction.memo !== null
-                ? transaction.memo.length > 13
-                  ? transaction.memo.substring(0, 12) + '...'
+                ? transaction.memo.length > 12
+                  ? transaction.memo.substring(0, 11) + '...'
                   : transaction.memo
                 : '-'}
             </dt>

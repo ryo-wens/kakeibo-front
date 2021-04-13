@@ -8,7 +8,7 @@ import { groupTransactionsReducer } from '../groupTransactions/reducers';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import thunk from 'redux-thunk';
 import { History } from 'history';
-import { createLogger } from 'redux-logger';
+import logger from 'redux-logger';
 import { modalReducer } from '../modal/reducers';
 import { budgetsReducer } from '../budgets/reducers';
 import { groupBudgetsReducer } from '../groupBudgets/reducers';
@@ -28,11 +28,6 @@ const composeEnhancers =
   (typeof window === 'object' && window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
 
 export default function createStore(history: History) {
-  const logger = createLogger({
-    collapsed: true,
-    diff: true,
-  });
-
   const appReducer = combineReducers({
     router: connectRouter(history),
     users: usersReducer,
@@ -58,8 +53,10 @@ export default function createStore(history: History) {
     return appReducer(state, action);
   };
 
-  return reduxCreateStore(
-    rootReducer,
-    composeEnhancers(applyMiddleware(routerMiddleware(history), thunk, logger))
-  );
+  return process.env.NODE_ENV !== 'production'
+    ? reduxCreateStore(
+        rootReducer,
+        composeEnhancers(applyMiddleware(routerMiddleware(history), thunk, logger))
+      )
+    : reduxCreateStore(rootReducer, applyMiddleware(routerMiddleware(history), thunk));
 }

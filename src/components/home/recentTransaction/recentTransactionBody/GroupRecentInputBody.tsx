@@ -57,16 +57,16 @@ const GroupRecentInputBody = (props: RecentInputBodyProps) => {
             <dt>
               <span className="recent-input__item-font">店名: </span>
               {groupTransaction.shop !== null
-                ? groupTransaction.shop.length > 13
-                  ? groupTransaction.shop.substring(0, 12) + '...'
+                ? groupTransaction.shop.length > 12
+                  ? groupTransaction.shop.substring(0, 11) + '...'
                   : groupTransaction.shop
                 : '-'}
             </dt>
             <dt>
               <span className="recent-input__item-font">メモ :</span>
               {groupTransaction.memo !== null
-                ? groupTransaction.memo.length > 13
-                  ? groupTransaction.memo.substring(0, 12) + '...'
+                ? groupTransaction.memo.length > 12
+                  ? groupTransaction.memo.substring(0, 11) + '...'
                   : groupTransaction.memo
                 : '-'}
             </dt>
