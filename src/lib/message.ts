@@ -1,5 +1,4 @@
 export const autoAddTransactionMessage =
   '購入完了時のチェックをつけると、 自動的に家計簿に追加されるようになります。';
 
-export const payerColorDescriptionMessage =
-  '支払者が分かるように、メンバーに割り当てられた色の下線を金額に引いています。';
+export const payerColorDescriptionMessage = '金額の下線の色は、支払いを行った人を表しています。';
