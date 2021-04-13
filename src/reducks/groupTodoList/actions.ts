@@ -1,4 +1,4 @@
-import { GroupTodoList } from './types';
+import { GroupTodoList, GroupTodoListItem } from './types';
 import { TodoList } from '../todoList/types';
 export type groupTodoListsActions = ReturnType<
   | typeof startFetchGroupExpiredTodoListAction
@@ -235,24 +235,11 @@ export const startAddGroupTodoListItemAction = () => {
 };
 
 export const ADD_GROUP_TODO_LIST_ITEM = 'ADD_GROUP_TODO_LIST_ITEM';
-export const addGroupTodoListItemAction = (
-  expiredTodoList: GroupTodoList,
-  todayImplementationTodoList: GroupTodoList,
-  todayDueTodoList: GroupTodoList,
-  monthlyImplementationTodoList: GroupTodoList,
-  monthlyDueTodoList: GroupTodoList
-) => {
+export const addGroupTodoListItemAction = (groupTodoListItem: GroupTodoListItem) => {
   return {
     type: ADD_GROUP_TODO_LIST_ITEM,
     payload: {
-      groupExpiredTodoListLoading: false,
-      groupExpiredTodoList: expiredTodoList,
-      groupTodayTodoListLoading: false,
-      groupTodayImplementationTodoList: todayImplementationTodoList,
-      groupTodayDueTodoList: todayDueTodoList,
-      groupMonthlyTodoListLoading: false,
-      groupMonthlyImplementationTodoList: monthlyImplementationTodoList,
-      groupMonthlyDueTodoList: monthlyDueTodoList,
+      groupTodoListItem: groupTodoListItem,
     },
   };
 };

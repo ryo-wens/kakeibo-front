@@ -331,6 +331,16 @@ export interface State {
       message: string;
       statusCode: number;
     };
+    groupTodoListItem: {
+      id: number;
+      posted_date: Date | null;
+      updated_date: Date | null;
+      implementation_date: string;
+      due_date: string;
+      todo_content: string;
+      complete_flag: boolean;
+      user_id: string;
+    };
     groupTodoListError: {
       message: string;
       statusCode: number;

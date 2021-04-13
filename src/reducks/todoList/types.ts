@@ -1,3 +1,5 @@
+import { FetchGroupTodoListParams } from '../groupTodoList/types';
+
 export interface TodoListItem {
   id: number;
   posted_date: Date | null;
@@ -76,10 +78,4 @@ export interface DisplayTodoListItem {
 
 export interface DisplayTodoList extends Array<DisplayTodoListItem> {}
 
-export interface FetchTodoListParams {
-  currentYear: string;
-  currentMonth: string;
-  currentDate: string;
-  selectedYear: string;
-  selectedMonth: string;
-}
+export type FetchTodoListParams = Omit<FetchGroupTodoListParams, 'groupId'>;

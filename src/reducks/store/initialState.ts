@@ -329,6 +329,16 @@ const initialState = {
       message: '',
       statusCode: 0,
     },
+    groupTodoListItem: {
+      id: 0,
+      posted_date: date,
+      updated_date: date,
+      implementation_date: '',
+      due_date: '',
+      todo_content: '',
+      complete_flag: false,
+      user_id: '',
+    },
     groupTodoListError: {
       message: '',
       statusCode: 0,

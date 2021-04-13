@@ -55,12 +55,9 @@ export const fetchExpiredTodoList = (signal?: CancelTokenSource) => {
     dispatch(startFetchExpiredTodoListAction());
 
     try {
-      const result = await todoServiceInstance.get<FetchExpiredTodoListRes>(
-        `/todo-list/expired`,
-        signal && {
-          cancelToken: signal.token,
-        }
-      );
+      const result = await todoServiceInstance.get<FetchExpiredTodoListRes>(`/todo-list/expired`, {
+        cancelToken: signal?.token,
+      });
       const expiredTodoList: TodoList = result.data.expired_todo_list;
 
       dispatch(fetchExpiredTodoListAction(expiredTodoList));
@@ -88,8 +85,8 @@ export const fetchTodayTodoList = (
     try {
       const result = await todoServiceInstance.get<FetchTodayTodoListRes>(
         `/todo-list/${year}-${month}-${date}`,
-        signal && {
-          cancelToken: signal.token,
+        {
+          cancelToken: signal?.token,
         }
       );
       const message = result.data.message;
@@ -116,8 +113,8 @@ export const fetchMonthlyTodoList = (year: string, month: string, signal?: Cance
     try {
       const result = await todoServiceInstance.get<FetchMonthlyTodoListRes>(
         `/todo-list/${year}-${month}`,
-        signal && {
-          cancelToken: signal.token,
+        {
+          cancelToken: signal?.token,
         }
       );
       const message = result.data.message;

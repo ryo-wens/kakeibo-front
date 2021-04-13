@@ -7,6 +7,8 @@ import { useLocation, useParams } from 'react-router';
 import AddTodoListItemForm from '../../../../components/todo/modules/form/addTodoListItemForm/AddTodoListItemForm';
 import { AddTodoListItemReq, FetchTodoListParams } from '../../../../reducks/todoList/types';
 import { useFetchTodoList } from '../../../../hooks/todo/useFetchTodoList';
+import { useFetchGroupTodoList } from '../../../../hooks/todo/useFetchGroupTodoList';
+import { FetchGroupTodoListParams } from '../../../../reducks/groupTodoList/types';
 
 interface AddTodoListItemFormContainerProps {
   selectedYearParam: string;
@@ -24,6 +26,9 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams<{ group_id: string }>();
   const inputTodoRef = useRef<HTMLDivElement>(null);
+
+  const { fetchTodoList } = useFetchTodoList();
+  const { fetchGroupTodoList } = useFetchGroupTodoList();
 
   const [openAddTodoForm, setOpenAddTodoForm] = useState(false);
   const [implementationDate, setImplementationDate] = useState<Date | null>(
@@ -62,8 +67,6 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     }
   };
 
-  const { fetchTodoList } = useFetchTodoList();
-
   const disabledButton =
     implementationDate === null ||
     dueDate === null ||
@@ -85,18 +88,13 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     };
 
     if (pathName === 'group') {
+      const groupId = Number(group_id);
+      const groupParams: FetchGroupTodoListParams = { groupId, ...params };
+
       try {
-        await dispatch(
-          addGroupTodoListItem(
-            Number(group_id),
-            String(year),
-            customMonth,
-            customDate,
-            props.selectedYearParam,
-            props.selectedMonthParam,
-            addRequestData
-          )
-        );
+        await dispatch(addGroupTodoListItem(groupId, addRequestData));
+        await fetchGroupTodoList(groupParams);
+
         setOpenAddTodoForm(false);
       } catch (error) {
         alert(error.response.data.error.message.toString());
