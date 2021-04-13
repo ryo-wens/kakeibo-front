@@ -1,3 +1,5 @@
+import { date } from '../../lib/constant';
+
 const initialState = {
   users: {
     user_id: '',
@@ -285,6 +287,15 @@ const initialState = {
     searchTodoListError: {
       message: '',
       statusCode: 0,
+    },
+    todoListItem: {
+      id: 0,
+      posted_date: date,
+      updated_date: date,
+      implementation_date: '',
+      due_date: '',
+      todo_content: '',
+      complete_flag: false,
     },
     todoListError: {
       message: '',

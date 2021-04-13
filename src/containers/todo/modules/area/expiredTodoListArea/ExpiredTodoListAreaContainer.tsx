@@ -13,10 +13,11 @@ import {
 import { useLocation } from 'react-router';
 import { fetchExpiredTodoList } from '../../../../../reducks/todoList/operations';
 import { DisplayTodoList, DisplayTodoListItem } from '../../../../../reducks/todoList/types';
+import { generateZeroPaddingMonth } from '../../../../../lib/date';
 
 interface ExpiredTodoListAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   readMoreBtnClassName: string;
 }
@@ -24,6 +25,8 @@ interface ExpiredTodoListAreaContainerProps {
 const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) => {
   const dispatch = useDispatch();
   const pathName = useLocation().pathname.split('/')[1];
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
 
   const expiredTodoList = useSelector(getExpiredTodoList);
   const groupExpiredTodoList = useSelector(getGroupExpiredTodoList);
@@ -93,8 +96,8 @@ const ExpiredTodoListAreaContainer = (props: ExpiredTodoListAreaContainerProps) 
     <ExpiredTodoListArea
       expiredTodoList={todoList}
       displayExpiredTodoList={displayTodoList}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       readMore={readMore}
       setReadMore={setReadMore}
       setEditing={props.setEditing}

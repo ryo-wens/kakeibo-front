@@ -11,8 +11,8 @@ interface MonthlyTodoListAreaProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
@@ -21,8 +21,8 @@ const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
     <>
       <div className={styles.addButton}>
         <AddTodoListItemFormContainer
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
+          selectedYearParam={props.selectedYearParam}
+          selectedMonthParam={props.selectedMonthParam}
         />
       </div>
       <div className={styles.switchItem}>
@@ -44,16 +44,16 @@ const MonthlyTodoListArea = (props: MonthlyTodoListAreaProps) => {
             leftItem={
               <MonthlyImplementationDateTodoListContainer
                 selectedMonth={props.selectedMonth}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYearParam={props.selectedYearParam}
+                selectedMonthParam={props.selectedMonthParam}
                 setEditing={props.setEditing}
               />
             }
             rightItem={
               <MonthlyDueDateTodoListContainer
                 selectedMonth={props.selectedMonth}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYearParam={props.selectedYearParam}
+                selectedMonthParam={props.selectedMonthParam}
                 setEditing={props.setEditing}
               />
             }

@@ -11,8 +11,8 @@ interface TodayScheduleProps {
   todoEditing: boolean;
   setTodoEditing: React.Dispatch<React.SetStateAction<boolean>>;
   pathName: string;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   implementationTodoList: TodoListItem[];
   dueTodoList: TodoListItem[];
 }
@@ -29,8 +29,8 @@ const TodaySchedule = (props: TodayScheduleProps) => {
           leftItem={
             <TodayScheduleTodoListArea
               todoList={props.implementationTodoList}
-              currentYear={props.currentYear}
-              currentMonth={props.currentMonth}
+              selectedYearParam={props.selectedYearParam}
+              selectedMonthParam={props.selectedMonthParam}
               message={'今日の実施予定のToDoリストは、登録されていません。'}
               setEditing={props.setTodoEditing}
             />
@@ -38,8 +38,8 @@ const TodaySchedule = (props: TodayScheduleProps) => {
           rightItem={
             <TodayScheduleTodoListArea
               todoList={props.dueTodoList}
-              currentYear={props.currentYear}
-              currentMonth={props.currentMonth}
+              selectedYearParam={props.selectedYearParam}
+              selectedMonthParam={props.selectedMonthParam}
               message={'今日の締切予定のToDoリストは、登録されていません。'}
               setEditing={props.setTodoEditing}
             />
@@ -51,13 +51,13 @@ const TodaySchedule = (props: TodayScheduleProps) => {
         <h4>買い物リスト</h4>
         {props.pathName === 'group' ? (
           <GroupTodayScheduleShoppingListAreaContainer
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
+            currentYear={props.selectedYearParam}
+            currentMonth={props.selectedMonthParam}
           />
         ) : (
           <TodayScheduleShoppingListAreaContainer
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
+            currentYear={props.selectedYearParam}
+            currentMonth={props.selectedMonthParam}
           />
         )}
       </div>

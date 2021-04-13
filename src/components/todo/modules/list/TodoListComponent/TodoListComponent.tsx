@@ -5,8 +5,8 @@ import TodoListItemComponentContainer from '../../../../../containers/todo/modul
 
 interface TodoListComponentProps {
   todoList: DisplayTodoListItem[];
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -27,8 +27,8 @@ const TodoListComponent = (props: TodoListComponentProps) => {
                     return (
                       <TodoListItemComponentContainer
                         listItem={item}
-                        currentYear={props.currentYear}
-                        currentMonth={props.currentMonth}
+                        selectedYearParam={props.selectedYearParam}
+                        selectedMonthParam={props.selectedMonthParam}
                         setEditing={props.setEditing}
                         formClassName={styles.childFormClassName}
                         key={item.id}

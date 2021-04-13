@@ -10,10 +10,11 @@ import { useDispatch } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import { customDate, customMonth, year } from '../../../../../lib/constant';
 import TodayTodoListArea from '../../../../../components/todo/modules/area/todayTodoListArea/TodayTodoListArea';
+import { generateZeroPaddingMonth } from '../../../../../lib/date';
 
 interface TodayTodoAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -23,14 +24,18 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
   const pathName = useLocation().pathname.split('/')[1];
   const { group_id } = useParams<{ group_id: string }>();
 
-  const todayYear = String(year);
-  const todayMonth = customMonth;
-  const todayDate = customDate;
+  const currentYear = String(year);
+  const currentMonth = customMonth;
+  const currentDate = customDate;
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
 
   const fetchGroupTodoList = (signal: CancelTokenSource) => {
     dispatch(fetchGroups(signal));
     dispatch(fetchGroupExpiredTodoList(Number(group_id), signal));
-    dispatch(fetchGroupTodayTodoList(Number(group_id), todayYear, todayMonth, todayDate, signal));
+    dispatch(
+      fetchGroupTodayTodoList(Number(group_id), currentYear, currentMonth, currentDate, signal)
+    );
   };
 
   useEffect(() => {
@@ -45,20 +50,20 @@ const TodayTodoAreaContainer = (props: TodayTodoAreaContainerProps) => {
         clearInterval(interval);
       };
     }
-  }, [todayYear, todayMonth, todayDate, props.editing]);
+  }, [currentYear, currentMonth, currentDate, props.editing]);
 
   useEffect(() => {
     if (pathName !== 'group') {
       const signal = axios.CancelToken.source();
-      dispatch(fetchTodayTodoList(todayYear, todayMonth, todayDate, signal));
+      dispatch(fetchTodayTodoList(currentYear, currentMonth, currentDate, signal));
       return () => signal.cancel();
     }
-  }, [todayYear, todayMonth, todayDate]);
+  }, [currentYear, currentMonth, currentDate]);
 
   return (
     <TodayTodoListArea
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       editing={props.editing}
       setEditing={props.setEditing}
     />
