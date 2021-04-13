@@ -1,4 +1,4 @@
-import { TodoList } from './types';
+import { TodoList, TodoListItem } from './types';
 export type todoListsActions = ReturnType<
   | typeof startFetchExpiredTodoListAction
   | typeof fetchExpiredTodoListAction
@@ -234,25 +234,10 @@ export const startAddTodoListItemAction = () => {
 };
 
 export const ADD_TODO_LIST_ITEM = 'ADD_TODO_LIST_ITEM';
-export const addTodoListItemAction = (
-  expiredTodoList: TodoList,
-  todayImplementationTodoList: TodoList,
-  todayDueTodoList: TodoList,
-  monthlyImplementationTodoList: TodoList,
-  monthlyDueTodoList: TodoList
-) => {
+export const addTodoListItemAction = (todoListItem: TodoListItem) => {
   return {
     type: ADD_TODO_LIST_ITEM,
-    payload: {
-      expiredTodoListLoading: false,
-      expiredTodoList: expiredTodoList,
-      todayTodoListLoading: false,
-      todayImplementationTodoList: todayImplementationTodoList,
-      todayDueTodoList: todayDueTodoList,
-      monthlyTodoListLoading: false,
-      monthlyImplementationTodoList: monthlyImplementationTodoList,
-      monthlyDueTodoList: monthlyDueTodoList,
-    },
+    payload: { todoListItem: todoListItem },
   };
 };
 

@@ -6,8 +6,8 @@ import AddTodoListItemFormContainer from '../../../../../containers/todo/modules
 import styles from './TodayTodoListArea.module.scss';
 
 interface TodayTodoListAreaProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -17,8 +17,8 @@ const TodayTodoListArea = (props: TodayTodoListAreaProps) => {
     <>
       <div className={styles.addButton}>
         <AddTodoListItemFormContainer
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
+          selectedYearParam={props.selectedYearParam}
+          selectedMonthParam={props.selectedMonthParam}
         />
       </div>
       <div className={styles.switchItem}>
@@ -28,15 +28,15 @@ const TodayTodoListArea = (props: TodayTodoListAreaProps) => {
             rightButtonLabel={'締切予定のToDo'}
             leftItem={
               <TodayImplementationDateTodoListContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYearParam={props.selectedYearParam}
+                selectedMonthParam={props.selectedMonthParam}
                 setEditing={props.setEditing}
               />
             }
             rightItem={
               <TodayDueDateTodoListContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYearParam={props.selectedYearParam}
+                selectedMonthParam={props.selectedMonthParam}
                 setEditing={props.setEditing}
               />
             }

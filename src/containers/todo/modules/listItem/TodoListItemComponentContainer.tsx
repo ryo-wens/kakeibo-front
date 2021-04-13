@@ -10,10 +10,11 @@ import { dateStringToDate } from '../../../../lib/date';
 import { customDate, customMonth, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
+
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   formClassName?: string;
 }
@@ -121,8 +122,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             String(year),
             customMonth,
             customDate,
-            props.currentYear,
-            props.currentMonth,
+            props.selectedYearParam,
+            props.selectedMonthParam,
             requestData
           )
         );
@@ -139,8 +140,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             String(year),
             customMonth,
             customDate,
-            props.currentYear,
-            props.currentMonth,
+            props.selectedYearParam,
+            props.selectedMonthParam,
             requestData
           )
         );
@@ -169,8 +170,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             String(year),
             customMonth,
             customDate,
-            props.currentYear,
-            props.currentMonth,
+            props.selectedYearParam,
+            props.selectedMonthParam,
             requestData
           )
         );
@@ -186,8 +187,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             String(year),
             customMonth,
             customDate,
-            props.currentYear,
-            props.currentMonth,
+            props.selectedYearParam,
+            props.selectedMonthParam,
             requestData
           )
         );
@@ -209,8 +210,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             String(year),
             customMonth,
             customDate,
-            props.currentYear,
-            props.currentMonth
+            props.selectedYearParam,
+            props.selectedMonthParam
           )
         );
       } catch (error) {
@@ -224,8 +225,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
             String(year),
             customMonth,
             customDate,
-            props.currentYear,
-            props.currentMonth
+            props.selectedYearParam,
+            props.selectedMonthParam
           )
         );
       } catch (error) {

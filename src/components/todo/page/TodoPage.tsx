@@ -21,8 +21,6 @@ interface TodoPageProps {
   setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
   handleOpenSearch: () => void;
   handleCloseSearch: () => void;
-  currentYear: string;
-  currentMonth: string;
   pathName: string;
 }
 
@@ -42,8 +40,8 @@ const TodoPage = (props: TodoPageProps) => {
                   setCurrentItems={props.setCurrentTodayOrMonthly}
                   leftItem={
                     <TodayTodoAreaContainer
-                      currentYear={props.currentYear}
-                      currentMonth={props.currentMonth}
+                      selectedYear={props.selectedYear}
+                      selectedMonth={props.selectedMonth}
                       editing={props.editing}
                       setEditing={props.setEditing}
                     />
@@ -54,8 +52,6 @@ const TodoPage = (props: TodoPageProps) => {
                       selectedMonth={props.selectedMonth}
                       setSelectedYear={props.setSelectedYear}
                       setSelectedMonth={props.setSelectedMonth}
-                      currentYear={props.currentYear}
-                      currentMonth={props.currentMonth}
                       editing={props.editing}
                       setEditing={props.setEditing}
                     />
@@ -68,8 +64,8 @@ const TodoPage = (props: TodoPageProps) => {
             <div className={styles.rightContent}>
               <h4>期限切れToDoリスト</h4>
               <ExpiredTodoListAreaContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYear={props.selectedYear}
+                selectedMonth={props.selectedMonth}
                 setEditing={props.setEditing}
                 readMoreBtnClassName={styles.childReadBtn}
               />

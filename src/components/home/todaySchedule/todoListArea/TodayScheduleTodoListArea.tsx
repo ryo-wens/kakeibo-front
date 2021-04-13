@@ -5,8 +5,8 @@ import TodoListItemComponentContainer from '../../../../containers/todo/modules/
 
 interface TodayScheduleTodoListAreaProps {
   todoList: TodoListItem[];
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
 }
@@ -22,8 +22,8 @@ const TodayScheduleTodoListArea = (props: TodayScheduleTodoListAreaProps) => {
             return (
               <TodoListItemComponentContainer
                 listItem={listItem}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYearParam={props.selectedYearParam}
+                selectedMonthParam={props.selectedMonthParam}
                 setEditing={props.setEditing}
                 key={listItem.id}
               />

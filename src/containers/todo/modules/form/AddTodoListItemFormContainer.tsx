@@ -5,11 +5,12 @@ import { addGroupTodoListItem } from '../../../../reducks/groupTodoList/operatio
 import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import AddTodoListItemForm from '../../../../components/todo/modules/form/addTodoListItemForm/AddTodoListItemForm';
-import { AddTodoListItemReq } from '../../../../reducks/todoList/types';
+import { AddTodoListItemReq, FetchTodoListParams } from '../../../../reducks/todoList/types';
+import { useFetchTodoList } from '../../../../hooks/todo/useFetchTodoList';
 
 interface AddTodoListItemFormContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const initialState = {
@@ -61,12 +62,22 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
     }
   };
 
+  const { fetchTodoList } = useFetchTodoList();
+
   const disabledButton =
     implementationDate === null ||
     dueDate === null ||
     todoContent === initialState.initialTodoContent;
 
   const handleAddTodoListItem = async () => {
+    const params: FetchTodoListParams = {
+      currentYear: String(year),
+      currentMonth: customMonth,
+      currentDate: customDate,
+      selectedYear: props.selectedYearParam,
+      selectedMonth: props.selectedMonthParam,
+    };
+
     const addRequestData: AddTodoListItemReq = {
       implementation_date: implementationDate,
       due_date: dueDate,
@@ -81,8 +92,8 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
             String(year),
             customMonth,
             customDate,
-            props.currentYear,
-            props.currentMonth,
+            props.selectedYearParam,
+            props.selectedMonthParam,
             addRequestData
           )
         );
@@ -92,16 +103,9 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
       }
     } else {
       try {
-        await dispatch(
-          addTodoListItem(
-            String(year),
-            customMonth,
-            customDate,
-            props.currentYear,
-            props.currentMonth,
-            addRequestData
-          )
-        );
+        await dispatch(addTodoListItem(addRequestData));
+        await fetchTodoList(params);
+
         setOpenAddTodoForm(false);
       } catch (error) {
         alert(error.response.data.error.message.toString());
