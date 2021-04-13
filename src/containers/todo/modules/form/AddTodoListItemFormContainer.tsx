@@ -92,7 +92,7 @@ const AddTodoListItemFormContainer = (props: AddTodoListItemFormContainerProps) 
       const groupParams: FetchGroupTodoListParams = { groupId, ...params };
 
       try {
-        await dispatch(addGroupTodoListItem(Number(group_id), addRequestData));
+        await dispatch(addGroupTodoListItem(groupId, addRequestData));
         await fetchGroupTodoList(groupParams);
 
         setOpenAddTodoForm(false);

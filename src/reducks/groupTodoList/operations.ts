@@ -56,8 +56,8 @@ export const fetchGroupExpiredTodoList = (groupId: number, signal?: CancelTokenS
     try {
       const result = await todoServiceInstance.get<FetchGroupExpiredTodoListRes>(
         `/groups/${groupId}/todo-list/expired`,
-        signal && {
-          cancelToken: signal.token,
+        {
+          cancelToken: signal?.token,
         }
       );
       const groupExpiredTodoList: GroupTodoList = result.data.expired_group_todo_list;
@@ -91,8 +91,8 @@ export const fetchGroupTodayTodoList = (
     try {
       const result = await todoServiceInstance.get<FetchGroupTodayTodoListRes>(
         `/groups/${groupId}/todo-list/${year}-${month}-${date}`,
-        signal && {
-          cancelToken: signal.token,
+        {
+          cancelToken: signal?.token,
         }
       );
 
@@ -128,8 +128,8 @@ export const fetchGroupMonthlyTodoList = (
     try {
       const result = await todoServiceInstance.get<FetchGroupMonthlyTodoListRes>(
         `/groups/${groupId}/todo-list/${year}-${month}`,
-        signal && {
-          cancelToken: signal.token,
+        {
+          cancelToken: signal?.token,
         }
       );
 
