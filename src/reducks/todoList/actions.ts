@@ -1,4 +1,5 @@
 import { TodoList, TodoListItem } from './types';
+import { date } from '../../lib/constant';
 export type todoListsActions = ReturnType<
   | typeof startFetchExpiredTodoListAction
   | typeof fetchExpiredTodoListAction
@@ -270,24 +271,11 @@ export const startEditTodoListItemAction = () => {
 };
 
 export const EDIT_TODO_LIST_ITEM = 'EDIT_TODO_LIST_ITEM';
-export const editTodoListItemAction = (
-  expiredTodoList: TodoList,
-  todayImplementationTodoList: TodoList,
-  todayDueTodoList: TodoList,
-  monthlyImplementationTodoList: TodoList,
-  monthlyDueTodoList: TodoList
-) => {
+export const editTodoListItemAction = (todoListItem: TodoListItem) => {
   return {
     type: EDIT_TODO_LIST_ITEM,
     payload: {
-      expiredTodoListLoading: false,
-      expiredTodoList: expiredTodoList,
-      todayTodoListLoading: false,
-      todayImplementationTodoList: todayImplementationTodoList,
-      todayDueTodoList: todayDueTodoList,
-      monthlyTodoListLoading: false,
-      monthlyImplementationTodoList: monthlyImplementationTodoList,
-      monthlyDueTodoList: monthlyDueTodoList,
+      todoListItem: todoListItem,
     },
   };
 };
@@ -321,24 +309,19 @@ export const startDeleteTodoListItemAction = () => {
 };
 
 export const DELETE_TODO_LIST_ITEM = 'DELETE_TODO_LIST_ITEM';
-export const deleteTodoListItemAction = (
-  expiredTodoList: TodoList,
-  todayImplementationTodoList: TodoList,
-  todayDueTodoList: TodoList,
-  monthlyImplementationTodoList: TodoList,
-  monthlyDueTodoList: TodoList
-) => {
+export const deleteTodoListItemAction = () => {
   return {
     type: DELETE_TODO_LIST_ITEM,
     payload: {
-      expiredTodoListLoading: false,
-      expiredTodoList: expiredTodoList,
-      todayTodoListLoading: false,
-      todayImplementationTodoList: todayImplementationTodoList,
-      todayDueTodoList: todayDueTodoList,
-      monthlyTodoListLoading: false,
-      monthlyImplementationTodoList: monthlyImplementationTodoList,
-      monthlyDueTodoList: monthlyDueTodoList,
+      todoListItem: {
+        id: 0,
+        posted_date: date,
+        updated_date: date,
+        implementation_date: '',
+        due_date: '',
+        todo_content: '',
+        complete_flag: false,
+      },
     },
   };
 };

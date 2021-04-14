@@ -20,22 +20,14 @@ import fetchTodayTodoListResponse from './fetchTodayTodoListResponse/fetchTodayT
 import fetchMonthlyTodoListResponse from './fetchMonthlyTodoListResponse/fetchMonthlyTodoListResponse.json';
 import fetchSearchTodoListResponse from './fetchSearchTodoListResponse/fetchSearchTodoListResponse.json';
 import addTodoListItemResponse from './addTodoListItemResponse/addTodoListItemResponse.json';
-import addExpiredTodoListResponse from './addTodoListItemResponse/addExpiredTodoListResponse.json';
-import addTodayTodoListResponse from './addTodoListItemResponse/addTodayTodoListResponse.json';
-import addMonthlyTodoListResponse from './addTodoListItemResponse/addMonthlyTodoListResponse.json';
 import editTodoListItemResponse from './editTodoListItemResponse/editTodoListItemResponse.json';
-import editExpiredTodoListResponse from './editTodoListItemResponse/editExpiredTodoListResponse.json';
-import editTodayTodoListResponse from './editTodoListItemResponse/editTodayTodoListResponse.json';
-import editMonthlyTodoListResponse from './editTodoListItemResponse/editMonthlyTodoListResponse.json';
 import deleteTodoListItemResponse from './deleteTodoListItemResponse/deleteTodoListItemResponse.json';
-import deleteExpiredTodoListResponse from './deleteTodoListItemResponse/deleteExpiredTodoListResponse.json';
-import deleteTodayTodoListResponse from './deleteTodoListItemResponse/deleteTodayTodoListResponse.json';
-import deleteMonthlyTodoListResponse from './deleteTodoListItemResponse/deleteMonthlyTodoListResponse.json';
 import editSearchTodoListItemResponse from './editSearchTodoListItemResponse/editSearchTodoListItemResponse.json';
 import editSearchTodoListResponse from './editSearchTodoListItemResponse/editSearchTodoListResponse.json';
 import deleteSearchTodoListResponse from './deleteSearchTodoListItemResponse/deleteSearchTodoListResponse.json';
 import { AddTodoListItemReq, EditTodoListItemReq } from '../../src/reducks/todoList/types';
 import { todoServiceInstance } from '../../src/reducks/axiosConfig';
+import { date } from '../../src/lib/constant';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -234,12 +226,6 @@ describe('async actions todoLists', () => {
   it('edit todoList if fetch succeeds.', async () => {
     const todoListItemId = 2;
 
-    const year = '2020';
-    const month = '09';
-    const date = '27';
-    const currentYear = '2020';
-    const currentMonth = '09';
-
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
     const todoContent = 'お掃除';
@@ -252,10 +238,7 @@ describe('async actions todoLists', () => {
       complete_flag: completeFlag,
     };
 
-    const editUrl = `/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `/todo-list/expired`;
-    const fetchTodayUrl = `/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `/todo-list/${currentYear}-${currentMonth}`;
+    const url = `/todo-list/${todoListItemId}`;
 
     const expectedAction = [
       {
@@ -269,48 +252,21 @@ describe('async actions todoLists', () => {
       {
         type: TodoListActions.EDIT_TODO_LIST_ITEM,
         payload: {
-          expiredTodoListLoading: false,
-          expiredTodoList: editExpiredTodoListResponse.expired_todo_list,
-          todayTodoListLoading: false,
-          todayImplementationTodoList: editTodayTodoListResponse.implementation_todo_list,
-          todayDueTodoList: editTodayTodoListResponse.due_todo_list,
-          monthlyTodoListLoading: false,
-          monthlyImplementationTodoList: editMonthlyTodoListResponse.implementation_todo_list,
-          monthlyDueTodoList: editMonthlyTodoListResponse.due_todo_list,
+          todoListItem: editTodoListItemResponse,
         },
       },
     ];
 
-    axiosMock.onPut(editUrl).reply(200, editTodoListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, editExpiredTodoListResponse);
-    axiosMock.onGet(fetchTodayUrl).reply(200, editTodayTodoListResponse);
-    axiosMock.onGet(fetchMonthlyUrl).reply(200, editMonthlyTodoListResponse);
+    axiosMock.onPut(url).reply(200, editTodoListItemResponse);
 
-    await editTodoListItem(
-      todoListItemId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth,
-      requestData
-    )(store.dispatch);
+    await editTodoListItem(todoListItemId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
   it('delete todoList if fetch succeeds.', async () => {
     const todoListItemId = 2;
 
-    const year = '2020';
-    const month = '09';
-    const date = '27';
-    const currentYear = '2020';
-    const currentMonth = '09';
-
-    const deleteUrl = `/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `/todo-list/expired`;
-    const fetchTodayUrl = `/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `/todo-list/${currentYear}-${currentMonth}`;
+    const url = `/todo-list/${todoListItemId}`;
 
     const expectedAction = [
       {
@@ -324,14 +280,15 @@ describe('async actions todoLists', () => {
       {
         type: TodoListActions.DELETE_TODO_LIST_ITEM,
         payload: {
-          expiredTodoListLoading: false,
-          expiredTodoList: deleteExpiredTodoListResponse.expired_todo_list,
-          todayTodoListLoading: false,
-          todayImplementationTodoList: deleteTodayTodoListResponse.implementation_todo_list,
-          todayDueTodoList: deleteTodayTodoListResponse.due_todo_list,
-          monthlyTodoListLoading: false,
-          monthlyImplementationTodoList: deleteMonthlyTodoListResponse.implementation_todo_list,
-          monthlyDueTodoList: deleteMonthlyTodoListResponse.due_todo_list,
+          todoListItem: {
+            id: 0,
+            posted_date: date,
+            updated_date: date,
+            implementation_date: '',
+            due_date: '',
+            todo_content: '',
+            complete_flag: false,
+          },
         },
       },
       {
@@ -343,20 +300,9 @@ describe('async actions todoLists', () => {
       },
     ];
 
-    axiosMock.onDelete(deleteUrl).reply(200, deleteTodoListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, deleteExpiredTodoListResponse);
-    axiosMock.onGet(fetchTodayUrl).reply(200, deleteTodayTodoListResponse);
-    axiosMock.onGet(fetchMonthlyUrl).reply(200, deleteMonthlyTodoListResponse);
+    axiosMock.onDelete(url).reply(200, deleteTodoListItemResponse);
 
-    // @ts-ignore
-    await deleteTodoListItem(
-      todoListItemId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth
-    )(store.dispatch);
+    await deleteTodoListItem(todoListItemId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
