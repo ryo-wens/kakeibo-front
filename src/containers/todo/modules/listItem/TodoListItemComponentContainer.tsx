@@ -1,5 +1,9 @@
 import React, { useEffect, useRef, useState } from 'react';
-import { EditTodoListItemReq, TodoListItem } from '../../../../reducks/todoList/types';
+import {
+  EditTodoListItemReq,
+  FetchTodoListParams,
+  TodoListItem,
+} from '../../../../reducks/todoList/types';
 import { useDispatch } from 'react-redux';
 import { deleteTodoListItem, editTodoListItem } from '../../../../reducks/todoList/operations';
 import {
@@ -10,6 +14,7 @@ import { dateStringToDate } from '../../../../lib/date';
 import { customDate, customMonth, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
+import { useFetchTodoList } from '../../../../hooks/todo/useFetchTodoList';
 
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
@@ -33,6 +38,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   const { group_id } = useParams<{ group_id: string }>();
   const unmountRef = useRef(false);
   const inputTodoRef = useRef<HTMLDivElement>(null);
+
+  const { fetchTodoList } = useFetchTodoList();
 
   const [openEditTodoForm, setOpenEditTodoForm] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
@@ -105,6 +112,14 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     }
   };
 
+  const params: FetchTodoListParams = {
+    currentYear: String(year),
+    currentMonth: customMonth,
+    currentDate: customDate,
+    selectedYear: props.selectedYearParam,
+    selectedMonth: props.selectedMonthParam,
+  };
+
   const handleChangeChecked = async (event: React.ChangeEvent<HTMLInputElement>) => {
     const requestData: EditTodoListItemReq = {
       implementation_date: implementationDate,
@@ -134,17 +149,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       }
     } else {
       try {
-        dispatch(
-          editTodoListItem(
-            props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.selectedYearParam,
-            props.selectedMonthParam,
-            requestData
-          )
-        );
+        await dispatch(editTodoListItem(props.listItem.id, requestData));
+        await fetchTodoList(params);
 
         setChecked(event.target.checked);
       } catch (error) {
@@ -181,17 +187,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       }
     } else {
       try {
-        dispatch(
-          editTodoListItem(
-            props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.selectedYearParam,
-            props.selectedMonthParam,
-            requestData
-          )
-        );
+        await dispatch(editTodoListItem(props.listItem.id, requestData));
+        await fetchTodoList(params);
 
         setOpenEditTodoForm(false);
       } catch (error) {
@@ -200,7 +197,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     }
   };
 
-  const handleDeleteTodoListItem = () => {
+  const handleDeleteTodoListItem = async () => {
     if (pathName === 'group') {
       try {
         dispatch(
@@ -219,16 +216,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
       }
     } else {
       try {
-        dispatch(
-          deleteTodoListItem(
-            props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.selectedYearParam,
-            props.selectedMonthParam
-          )
-        );
+        await dispatch(deleteTodoListItem(props.listItem.id));
+        await fetchTodoList(params);
       } catch (error) {
         alert(error.response.data.error.message.toString());
       }
