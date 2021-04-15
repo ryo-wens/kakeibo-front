@@ -1,0 +1,57 @@
+@import "../../../assets/variable";
+
+.position {
+  display: flex;
+}
+
+.listItem {
+  display: flex;
+  align-items: center;
+  padding: 7px 12px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: $color-blackSqueeze;
+  }
+}
+
+.group {
+  display: inline-block;
+  width: 100%;
+  padding: 10px 0 10px 0;
+  text-align: center;
+  color: $color-tundora;
+  font-size: 12px;
+}
+
+.groupList {
+  width: 100%;
+  padding: 0;
+}
+
+.button {
+  border: 2px solid;
+  cursor: pointer;
+  width: auto;
+  height: 30px;
+  padding: 5px 25px 5px 25px;
+  background-color: white;
+  text-transform: none;
+
+  &:focus {
+    outline: none;
+  }
+}
+
+.groupIcon {
+  padding-right: 4px;
+  vertical-align: -10px;
+}
+
+.checkIcon {
+  margin-right: 8px;
+}
+
+.transparencyIcon {
+  opacity: 0;
+}

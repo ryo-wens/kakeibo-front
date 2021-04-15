@@ -1,27 +1,25 @@
 import React from 'react';
-import { Group } from '../../../reducks/groups/types';
+import { Group } from '../../../../../../reducks/groups/types';
 import Menu from '@material-ui/core/Menu';
-import { IconButton } from '@material-ui/core';
-import MoreHorizIcon from '@material-ui/icons/MoreHoriz';
-import { GenericModal } from '../../uikit';
-import EditGroupNameContainer from '../../../containers/header/group/EditGroupNameContainer';
-import EditGroupMembersContainer from '../../../containers/header/group/EditGroupMembersContainer';
+import { GenericModal } from '../../../../../uikit';
+import EditGroupNameContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupNameContainer';
+import EditGroupMembersContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupMembersContainer';
+import EditIcon from '@material-ui/icons/Edit';
+import styles from './GroupMenuButton.module.scss';
 
 interface MenuButtonProps {
   approvedGroup: Group;
-  anchorEl: HTMLElement | null;
+  anchorEl: SVGElement | null;
   closeMenu: () => void;
   closeGroupMenu: () => void;
   onClickGroupWithdrawal: () => void;
-  openGroupMenu: (event: React.MouseEvent<HTMLButtonElement>) => void;
+  openGroupMenu: (event: React.MouseEvent<SVGElement>) => void;
 }
 
 const GroupMenuButton = (props: MenuButtonProps) => {
   return (
     <>
-      <IconButton aria-controls="simple-menu" aria-haspopup="true" onClick={props.openGroupMenu}>
-        <MoreHorizIcon />
-      </IconButton>
+      <EditIcon className={styles.editIcon} onClick={props.openGroupMenu} fontSize={'small'} />
       <Menu
         id="simple-menu"
         anchorEl={props.anchorEl}

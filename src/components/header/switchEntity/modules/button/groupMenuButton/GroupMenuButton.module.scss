@@ -1,0 +1,6 @@
+@import "../../../../../../assets/mixin/icon-btn";
+
+.editIcon {
+  @include icon-btn($color-scorpion, 0.5rem, 0.7);
+  padding: 3px;
+}

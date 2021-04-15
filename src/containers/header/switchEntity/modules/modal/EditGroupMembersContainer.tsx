@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Group } from '../../../reducks/groups/types';
-import EditGroupMembers from '../../../components/header/group/editGroupMembers/EditGroupMembers';
-import { inviteGroupUsers } from '../../../reducks/groups/operations';
+import { Group } from '../../../../../reducks/groups/types';
+import EditGroupMembers from '../../../../../components/header/switchEntity/modules/modal/editGroupMembers/EditGroupMembers';
+import { inviteGroupUsers } from '../../../../../reducks/groups/operations';
 
 interface EditGroupMembersProps {
   approvedGroup: Group;
