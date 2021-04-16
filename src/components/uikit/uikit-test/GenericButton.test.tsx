@@ -1,12 +1,10 @@
 import React from 'react';
-import Enzyme, { mount } from 'enzyme';
-import Adapter from '@wojtekmaj/enzyme-adapter-react-17';
+import { mount } from 'enzyme';
 import GenericButton from '../GenericButton';
-
-Enzyme.configure({ adapter: new Adapter() });
+import '../../../setupTests';
 
 describe('Testing GenericButton', () => {
-  it('Test that the onClick function is not executed when disabled', () => {
+  test('Test that the onClick function is not executed when disabled', () => {
     const onClickMock = jest.fn();
     const wrapper = mount(
       <GenericButton disabled={true} label={'追加する'} onClick={onClickMock} />
@@ -16,13 +14,36 @@ describe('Testing GenericButton', () => {
     expect(onClickMock).not.toHaveBeenCalled();
   });
 
-  it('Test that the onClick function is executed when enabled', () => {
-    const onClickMock = jest.fn();
+  test('Test that the onClick function is executed when enabled', () => {
+    const onClickMock = jest.fn().mockImplementation((message: string) => {
+      return message;
+    });
+
     const wrapper = mount(
-      <GenericButton disabled={false} label={'追加する'} onClick={onClickMock} />
+      <GenericButton
+        disabled={false}
+        label={'追加する'}
+        onClick={() => onClickMock('click success')}
+      />
     );
 
     wrapper.find('button').simulate('click');
-    expect(onClickMock).toHaveBeenCalled();
+    expect(onClickMock).toHaveBeenCalledTimes(1);
+    expect(onClickMock).toHaveBeenCalledWith('click success');
+  });
+
+  test('Test that the labels received by props are displayed', () => {
+    const onClickMock = jest.fn();
+    const mockLabel = '追加する';
+
+    const wrapper = mount(
+      <GenericButton
+        disabled={false}
+        label={mockLabel}
+        onClick={() => onClickMock('click success')}
+      />
+    );
+
+    expect(wrapper.text()).toEqual('追加する');
   });
 });
