@@ -43,7 +43,7 @@ export interface updateGroupNameRes {
 export interface fetchGroupsRes {
   approved_group_list: Groups;
   unapproved_group_list: Groups;
-  message: string;
+  // message: string;
 }
 
 export interface inviteGroupUsersReq {

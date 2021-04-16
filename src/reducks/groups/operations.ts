@@ -6,6 +6,9 @@ import {
   inviteGroupRejectAction,
   inviteGroupParticipateAction,
   groupWithdrawalAction,
+  startFetchGroupsAction,
+  cancelFetchGroupsAction,
+  failedFetchGroupsAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
@@ -30,6 +33,30 @@ import { State } from '../store/types';
 import { openTextModalAction } from '../modal/actions';
 import { push } from 'connected-react-router';
 import { errorHandling } from '../../lib/validation';
+import { userServiceInstance } from '../axiosConfig';
+
+export const fetchGroups = (signal?: CancelTokenSource) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startFetchGroupsAction());
+
+    try {
+      const res = await userServiceInstance.get<fetchGroupsRes>(`/groups`, {
+        cancelToken: signal?.token,
+      });
+
+      const approvedGroups = res.data.approved_group_list;
+      const unapprovedGroups = res.data.unapproved_group_list;
+
+      dispatch(fetchGroupsAction(approvedGroups, unapprovedGroups));
+    } catch (error) {
+      if (axios.isCancel(error)) {
+        dispatch(cancelFetchGroupsAction());
+      } else {
+        dispatch(failedFetchGroupsAction(error.response.status, error.response.data.error.message));
+      }
+    }
+  };
+};
 
 export const createGroup = (groupName: string) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
@@ -41,12 +68,9 @@ export const createGroup = (groupName: string) => {
     };
 
     try {
-      const result = await axios.post<createGroupRes>(
-        `${process.env.REACT_APP_USER_API_HOST}/groups`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      const result = await userServiceInstance.post<createGroupRes>(
+        `/groups`,
+        JSON.stringify(data)
       );
       const prevApprovedGroups: Groups = getState().groups.approvedGroups;
       const currentUser = getState().users;
@@ -85,12 +109,9 @@ export const updateGroupName = (groupId: number, groupName: string) => {
     };
 
     try {
-      const result = await axios.put<updateGroupNameRes>(
-        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}`,
-        JSON.stringify(data),
-        {
-          withCredentials: true,
-        }
+      const result = await userServiceInstance.put<updateGroupNameRes>(
+        `/groups/${groupId}`,
+        JSON.stringify(data)
       );
 
       const prevApprovedGroups: Groups = getState().groups.approvedGroups;
@@ -116,36 +137,6 @@ export const updateGroupName = (groupId: number, groupName: string) => {
   };
 };
 
-export const fetchGroups = (signal: CancelTokenSource) => {
-  return async (dispatch: Dispatch<Action>) => {
-    try {
-      const result = await axios.get<fetchGroupsRes>(
-        `${process.env.REACT_APP_USER_API_HOST}/groups`,
-        { cancelToken: signal.token, withCredentials: true }
-      );
-
-      const approvedGroups = result.data.approved_group_list;
-      const unapprovedGroups = result.data.unapproved_group_list;
-      const message = result.data.message;
-
-      if (approvedGroups !== undefined && unapprovedGroups !== undefined) {
-        const message = '';
-        dispatch(fetchGroupsAction(approvedGroups, unapprovedGroups, message));
-      } else {
-        const approvedGroups: Groups = [];
-        const unapprovedGroups: Groups = [];
-        dispatch(fetchGroupsAction(approvedGroups, unapprovedGroups, message));
-      }
-    } catch (error) {
-      if (axios.isCancel(error)) {
-        return;
-      } else {
-        errorHandling(dispatch, error);
-      }
-    }
-  };
-};
-
 export const inviteGroupUsers = (groupId: number, userId: string) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     if (userId === '') {
@@ -156,10 +147,9 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
     };
 
     try {
-      const result = await axios.post<inviteGroupUsersRes>(
-        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`,
-        JSON.stringify(data),
-        { withCredentials: true }
+      const result = await userServiceInstance.post<inviteGroupUsersRes>(
+        `/groups/${groupId}/users`,
+        JSON.stringify(data)
       );
 
       const prevApprovedGroups: Groups = getState().groups.approvedGroups;
@@ -196,11 +186,8 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
 export const groupWithdrawal = (groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
-      const result = await axios.delete<groupWithdrawalRes>(
-        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`,
-        {
-          withCredentials: true,
-        }
+      const result = await userServiceInstance.delete<groupWithdrawalRes>(
+        `/groups/${groupId}/users`
       );
       const prevApprovedGroups = getState().groups.approvedGroups;
 
@@ -219,12 +206,9 @@ export const groupWithdrawal = (groupId: number) => {
 export const inviteGroupParticipate = (groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
-      const result = await axios.post<inviteGroupParticipateRes>(
-        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/approved`,
-        null,
-        {
-          withCredentials: true,
-        }
+      const result = await userServiceInstance.post<inviteGroupParticipateRes>(
+        `/groups/${groupId}/users/approved`,
+        null
       );
 
       const prevApprovedGroups: Groups = getState().groups.approvedGroups;
@@ -274,11 +258,8 @@ export const inviteGroupParticipate = (groupId: number) => {
 export const inviteGroupReject = (groupId: number) => {
   return async (dispatch: Dispatch<Action>, getState: () => State) => {
     try {
-      const result = await axios.delete<inviteGroupRejectRes>(
-        `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/unapproved`,
-        {
-          withCredentials: true,
-        }
+      const result = await userServiceInstance.delete<inviteGroupRejectRes>(
+        `/groups/${groupId}/users/unapproved`
       );
 
       const prevUnapprovedGroups = getState().groups.unapprovedGroups;

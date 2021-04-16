@@ -1,12 +1,61 @@
 import { Groups } from './types';
 export type groupActions = ReturnType<
+  | typeof startFetchGroupsAction
+  | typeof fetchGroupsAction
+  | typeof cancelFetchGroupsAction
+  | typeof failedFetchGroupsAction
   | typeof createGroupAction
   | typeof updateGroupNameAction
-  | typeof fetchGroupsAction
   | typeof inviteGroupUsersAction
   | typeof groupWithdrawalAction
   | typeof inviteGroupRejectAction
 >;
+
+export const START_FETCH_GROUPS = 'START_FETCH_GROUPS';
+export const startFetchGroupsAction = () => {
+  return {
+    type: START_FETCH_GROUPS,
+    payload: {
+      groupsLoading: true,
+    },
+  };
+};
+
+export const FETCH_GROUPS = 'FETCH_GROUPS';
+export const fetchGroupsAction = (approvedGroups: Groups, unapprovedGroups: Groups) => {
+  return {
+    type: FETCH_GROUPS,
+    payload: {
+      groupsLoading: false,
+      approvedGroups: approvedGroups,
+      unapprovedGroups: unapprovedGroups,
+    },
+  };
+};
+
+export const CANCEL_FETCH_GROUPS = 'CANCEL_FETCH_GROUPS';
+export const cancelFetchGroupsAction = () => {
+  return {
+    type: CANCEL_FETCH_GROUPS,
+    payload: {
+      groupsLoading: false,
+    },
+  };
+};
+
+export const FAILED_FETCH_GROUPS = 'FAILED_FETCH_GROUPS';
+export const failedFetchGroupsAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: START_FETCH_GROUPS,
+    payload: {
+      groupsLoading: false,
+      groupsError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
+    },
+  };
+};
 
 export const CREATE_GROUP = 'CREATE_GROUP';
 export const createGroupAction = (groups: Groups) => {
@@ -24,22 +73,6 @@ export const updateGroupNameAction = (groups: Groups) => {
     type: UPDATE_GROUP_NAME,
     payload: {
       approvedGroups: groups,
-    },
-  };
-};
-
-export const FETCH_GROUPS = 'FETCH_GROUPS';
-export const fetchGroupsAction = (
-  approvedGroups: Groups,
-  unapprovedGroups: Groups,
-  message: string
-) => {
-  return {
-    type: FETCH_GROUPS,
-    payload: {
-      approvedGroups: approvedGroups,
-      unapprovedGroups: unapprovedGroups,
-      message: message,
     },
   };
 };
