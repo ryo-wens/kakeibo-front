@@ -13,11 +13,21 @@ describe('Testing GenericButton', () => {
   });
 
   test('Test that the onClick function is executed when enabled', () => {
-    const onClickMock = jest.fn();
-    const wrapper = mount(<SaveButton disabled={false} label={'保存する'} onClick={onClickMock} />);
+    const onClickMock = jest.fn().mockImplementation((message: string) => {
+      return message;
+    });
+
+    const wrapper = mount(
+      <SaveButton
+        disabled={false}
+        label={'保存する'}
+        onClick={() => onClickMock('click success')}
+      />
+    );
 
     wrapper.find('button').simulate('click');
-    expect(onClickMock).toHaveBeenCalled();
+    expect(onClickMock).toHaveBeenCalledTimes(1);
+    expect(onClickMock).toHaveBeenCalledWith('click success');
   });
 
   test('Test that the labels received by props are displayed', () => {
