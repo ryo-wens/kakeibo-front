@@ -4,17 +4,32 @@ import initialState from '../store/initialState';
 
 export const groupsReducer = (state = initialState.groups, action: groupActions) => {
   switch (action.type) {
+    case Actions.START_FETCH_GROUPS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FETCH_GROUPS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.CANCEL_FETCH_GROUPS:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_FETCH_GROUPS:
+      return {
+        ...state,
+        ...action.payload,
+      };
     case Actions.CREATE_GROUP:
       return {
         ...state,
         ...action.payload,
       };
     case Actions.UPDATE_GROUP_NAME:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.FETCH_GROUPS:
       return {
         ...state,
         ...action.payload,

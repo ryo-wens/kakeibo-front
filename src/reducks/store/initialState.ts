@@ -14,7 +14,17 @@ const initialState = {
   groups: {
     approvedGroups: [],
     unapprovedGroups: [],
-    message: '',
+    groupsLoading: false,
+    group: {
+      groupId: 0,
+      groupName: '',
+      approvedUsersList: [],
+      unapprovedUsersList: [],
+    },
+    groupsError: {
+      statusCode: null,
+      errorMessage: '',
+    },
   },
   categories: {
     incomeList: [],

@@ -21,11 +21,12 @@ import inviteGroupParticipateResponse from './inviteGroupParticipateResponse.jso
 import inviteGroupRejectResponse from './inviteGroupRejectResponse.json';
 import inviteGroupUsersResponse from './inviteGroupUsersResponse.json';
 import updateGroupNameResponse from './updateGroupNameResponse.json';
+import { userServiceInstance } from '../../src/reducks/axiosConfig';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
 
-const axiosMock = new MockAdapter(axios);
+const axiosMock = new MockAdapter(userServiceInstance);
 
 const store = mockStore({ users: [], groups: [], router: [] });
 
@@ -98,8 +99,35 @@ describe('async actions groups', () => {
     store.clearActions();
   });
 
+  it('get approvedGroups and unapprovedGroups if fetch succeeds.', async () => {
+    const url = `/groups`;
+    const signal = axios.CancelToken.source();
+
+    const expectedActions = [
+      {
+        type: GroupsActions.START_FETCH_GROUPS,
+        payload: {
+          groupsLoading: true,
+        },
+      },
+      {
+        type: GroupsActions.FETCH_GROUPS,
+        payload: {
+          groupsLoading: false,
+          approvedGroups: fetchGroupsResponse.approved_group_list,
+          unapprovedGroups: fetchGroupsResponse.unapproved_group_list,
+        },
+      },
+    ];
+
+    axiosMock.onGet(url).reply(200, fetchGroupsResponse);
+
+    await fetchGroups(signal)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
   it('Created group is added to approvedGroups when CREATE_GROUP succeeds.', async () => {
-    const url = `${process.env.REACT_APP_USER_API_HOST}/groups`;
+    const url = `/groups`;
     const groupName = '古澤家';
 
     const mockRequest = {
@@ -161,7 +189,7 @@ describe('async actions groups', () => {
   it('When UPDATE_GROUP_NAME is successful, get the changed group name and change the store.', async () => {
     const groupId = 1;
     const groupName = 'エミリア家';
-    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}`;
+    const url = `/groups/${groupId}`;
 
     const mockRequest = {
       group_name: groupName,
@@ -199,72 +227,10 @@ describe('async actions groups', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('Get approvedGroups and unapprovedGroups when fetch is successful', async () => {
-    const url = `${process.env.REACT_APP_USER_API_HOST}/groups`;
-    const signal = axios.CancelToken.source();
-
-    const mockResponse = JSON.stringify(fetchGroupsResponse);
-    const expectedActions = [
-      {
-        type: GroupsActions.FETCH_GROUPS,
-        payload: {
-          approvedGroups: [
-            {
-              group_id: 1,
-              group_name: 'シェアハウス',
-              approved_users_list: [
-                {
-                  group_id: 1,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                  color_code: '#FF0000',
-                },
-              ],
-              unapproved_users_list: [
-                {
-                  group_id: 1,
-                  user_id: 'go2',
-                  user_name: '郷ひろみ',
-                },
-              ],
-            },
-          ],
-          unapprovedGroups: [
-            {
-              group_id: 2,
-              group_name: '代表',
-              approved_users_list: [
-                {
-                  group_id: 2,
-                  user_id: 'honda',
-                  user_name: '本田',
-                  color_code: '#FF0000',
-                },
-              ],
-              unapproved_users_list: [
-                {
-                  group_id: 2,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                },
-              ],
-            },
-          ],
-          message: '',
-        },
-      },
-    ];
-
-    axiosMock.onGet(url).reply(200, mockResponse);
-
-    await fetchGroups(signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedActions);
-  });
-
   it('When INVITE_GROUP_USERS is successful, it will receive the invited users and update the store.', async () => {
     const groupId = 1;
     const userId = `anraku8`;
-    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`;
+    const url = `/groups/${groupId}/users`;
 
     const mockRequest = {
       user_id: userId,
@@ -308,7 +274,7 @@ describe('async actions groups', () => {
   it('When GROUP_WITHDRAWAL is successful, send the approved groups except the requested group_id to groupWithdrawalAction and send the response message to openTextModalAction.', async () => {
     const groupId = 1;
     const nextGroupId = 0;
-    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users`;
+    const url = `/groups/${groupId}/users`;
 
     const mockResponse = JSON.stringify(groupWithdrawalResponse);
 
@@ -337,7 +303,7 @@ describe('async actions groups', () => {
 
   it('When INVITE_GROUP_PARTICIPATE is successful, it receives approved user and updates the store.', async () => {
     const groupId = 2;
-    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/approved`;
+    const url = `/groups/${groupId}/users/approved`;
 
     const mockResponse = JSON.stringify(inviteGroupParticipateResponse);
 
@@ -400,7 +366,7 @@ describe('async actions groups', () => {
 
   it('When INVITE_GROUP_REJECT succeeds,sends the approved groups except the requested group_id to inviteGroupRejectAction, and sends the response message to openTextModalAction', async () => {
     const groupId = 2;
-    const url = `${process.env.REACT_APP_USER_API_HOST}/groups/${groupId}/users/unapproved`;
+    const url = `/groups/${groupId}/users/unapproved`;
 
     const mockResponse = JSON.stringify(inviteGroupRejectResponse);
 
