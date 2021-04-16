@@ -111,6 +111,7 @@ export const updateGroupName = (groupId: number, groupName: string) => {
       dispatch(updateGroupNameAction(updateGroups));
     } catch (error) {
       errorHandling(dispatch, error);
+      throw error;
     }
   };
 };

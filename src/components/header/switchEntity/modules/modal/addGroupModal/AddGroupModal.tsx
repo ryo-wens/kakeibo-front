@@ -1,8 +1,8 @@
 import React, { useState, useCallback } from 'react';
 import { useDispatch } from 'react-redux';
 import Modal from '@material-ui/core/Modal';
-import { TextInput } from '../../../uikit';
-import { createGroup } from '../../../../reducks/groups/operations';
+import { TextInput } from '../../../../../uikit';
+import { createGroup } from '../../../../../../reducks/groups/operations';
 import AddIcon from '@material-ui/icons/Add';
 import './add-group-modal.scss';
 import CloseIcon from '@material-ui/icons/Close';

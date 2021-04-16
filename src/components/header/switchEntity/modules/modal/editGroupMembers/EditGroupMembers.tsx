@@ -7,7 +7,7 @@ import IconButton from '@material-ui/core/IconButton';
 import { List, ListItem } from '@material-ui/core';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Group } from '../../../../reducks/groups/types';
+import { Group } from '../../../../../../reducks/groups/types';
 import ListItemText from '@material-ui/core/ListItemText';
 import './edit-group-members.scss';
 

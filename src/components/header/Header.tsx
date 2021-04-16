@@ -8,15 +8,13 @@ import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
 import { InvitationNotifications } from './index';
-import SwitchEntityContainer from '../../containers/header/group/SwitchEntityContainer';
+import SwitchEntityContainer from '../../containers/header/switchEntity/SwitchEntityContainer';
 import { month, year } from '../../lib/constant';
 import './header.scss';
 
 interface HeaderProps {
   pathName: string;
   group_id: number;
-  name: string;
-  setName: React.Dispatch<React.SetStateAction<string>>;
   approvedGroups: Groups;
   logOutCheck: () => void;
   homeButtonClick: () => void;
@@ -106,12 +104,7 @@ const Header = (props: HeaderProps) => {
               </a>
             </li>
             <div className="header__global-menu--sub-menu">
-              <SwitchEntityContainer
-                approvedGroups={props.approvedGroups}
-                entityType={props.pathName}
-                name={props.name}
-                setName={props.setName}
-              />
+              <SwitchEntityContainer approvedGroups={props.approvedGroups} />
               <InvitationNotifications />
               <li
                 className="header__upper-content--nav-item header__upper-content--nav-item--logout"

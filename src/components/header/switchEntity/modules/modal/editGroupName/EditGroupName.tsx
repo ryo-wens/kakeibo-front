@@ -1,8 +1,8 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
-import { Group } from '../../../../reducks/groups/types';
-import { TextInput } from '../../../uikit';
+import { Group } from '../../../../../../reducks/groups/types';
+import { TextInput } from '../../../../../uikit';
 import './edit-group-name.scss';
 
 interface EditGroupNameProps {

@@ -1,8 +1,8 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { Group } from '../../../reducks/groups/types';
-import { updateGroupName } from '../../../reducks/groups/operations';
-import EditGroupName from '../../../components/header/group/editGroupName/EditGroupName';
+import { Group } from '../../../../../reducks/groups/types';
+import { updateGroupName } from '../../../../../reducks/groups/operations';
+import EditGroupName from '../../../../../components/header/switchEntity/modules/modal/editGroupName/EditGroupName';
 
 interface EditGroupNameContainerProps {
   approvedGroup: Group;
@@ -35,10 +35,15 @@ const EditGroupNameContainer = (props: EditGroupNameContainerProps) => {
     setGroupName(event.target.value);
   };
 
-  const onClickSaveButton = () => {
-    dispatch(updateGroupName(groupId, groupName));
-    closeModal();
-    props.closeGroupMenu();
+  const onClickSaveButton = async () => {
+    try {
+      await dispatch(updateGroupName(groupId, groupName));
+
+      closeModal();
+      props.closeGroupMenu();
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   return (
