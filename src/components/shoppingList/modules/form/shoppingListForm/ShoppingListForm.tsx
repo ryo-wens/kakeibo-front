@@ -64,7 +64,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
   };
 
   return (
-    <div className={styles.modalWrapper}>
+    <div className={styles.wrapper}>
       <div className={styles.position}>
         <h3>{props.titleLabel}</h3>
         <button onClick={props.handleCloseModal}>

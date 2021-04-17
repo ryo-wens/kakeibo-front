@@ -1,74 +1,51 @@
-import React, { useState, useCallback } from 'react';
-import { useDispatch } from 'react-redux';
+import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import { TextInput } from '../../../../../uikit';
-import { createGroup } from '../../../../../../reducks/groups/operations';
 import AddIcon from '@material-ui/icons/Add';
-import './add-group-modal.scss';
+import styles from './AddGroupModal.module.scss';
 import CloseIcon from '@material-ui/icons/Close';
 
-interface CreateGroupsProps {
-  modalTitleLabel: string;
-  modalTextFieldLabel: string;
-  closeMenu: () => void;
+interface AddGroupProps {
+  titleLabel: string;
+  open: boolean;
+  groupName: string;
+  handleOpen: () => void;
+  handleClose: () => void;
+  handleGroupName: (event: React.ChangeEvent<HTMLInputElement>) => void;
+  handleAddGroup: () => void;
+  isBlankGroupName: boolean;
 }
 
-const AddGroupModal = (props: CreateGroupsProps) => {
-  const dispatch = useDispatch();
-  const [open, setOpen] = useState<boolean>(false);
-  const [groupName, setGroupName] = useState<string>('');
-
-  const handleOpen = () => {
-    setOpen(true);
-  };
-
-  const handleClose = () => {
-    setOpen(false);
-    setGroupName('');
-  };
-
-  const inputGroupName = useCallback(
-    (event) => {
-      setGroupName(event.target.value);
-    },
-    [setGroupName]
-  );
-
-  const onClickCreateButton = () => {
-    props.closeMenu();
-    handleClose();
-    dispatch(createGroup(groupName));
-  };
-
-  const isBlankGroupName = groupName === '';
-
+const AddGroupModal = (props: AddGroupProps) => {
   const body = (
-    <div className="add-group-modal">
-      <div className="add-group-modal__position">
-        <h3 id="simple-modal-title">{props.modalTitleLabel}</h3>
-        <button onClick={() => handleClose()}>
+    <div className={styles.modalWrapper}>
+      <div className={styles.position}>
+        <h3>{props.titleLabel}</h3>
+        <button onClick={props.handleClose}>
           <CloseIcon />
         </button>
       </div>
-      <TextInput
-        id="group-name"
-        label={''}
-        value={groupName}
-        onChange={inputGroupName}
-        required={true}
-        type={'text'}
-        fullWidth={false}
-        disabled={false}
-      />
-      <div className="add-group-modal__btn">
+      <div className={styles.textInput}>
+        <TextInput
+          id="group-name"
+          label={'グループ名'}
+          value={props.groupName}
+          onChange={props.handleGroupName}
+          required={true}
+          type={'text'}
+          fullWidth={false}
+          disabled={false}
+        />
+      </div>
+      <div className={styles.operationBtn}>
         <button
-          className="add-group-modal__btn--add"
-          disabled={isBlankGroupName}
-          onClick={() => onClickCreateButton()}
+          className={styles.operationBtn__add}
+          disabled={props.isBlankGroupName}
+          onClick={props.handleAddGroup}
         >
           追加
         </button>
-        <button className="add-group-modal__btn--cancel" onClick={handleClose}>
+        <button className={styles.operationBtn__cancel} onClick={props.handleClose}>
           キャンセル
         </button>
       </div>
@@ -77,16 +54,11 @@ const AddGroupModal = (props: CreateGroupsProps) => {
 
   return (
     <>
-      <button className="add-group-modal__add-btn" onClick={() => handleOpen()}>
+      <button className={styles.addGroupBtn} onClick={props.handleOpen}>
         <AddIcon />
         グループを追加
       </button>
-      <Modal
-        open={open}
-        onClose={handleClose}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
+      <Modal open={props.open} onClose={props.handleClose}>
         {body}
       </Modal>
     </>

@@ -18,8 +18,6 @@ const initialState = {
     group: {
       groupId: 0,
       groupName: '',
-      approvedUsersList: [],
-      unapprovedUsersList: [],
     },
     groupsError: {
       statusCode: null,

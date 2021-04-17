@@ -22,11 +22,11 @@ export interface Groups extends Array<Group> {}
 export interface ApprovedGroupUsers extends Array<ApprovedGroupUser> {}
 export interface UnapprovedGroupUsers extends Array<UnapprovedGroupUser> {}
 
-export interface createGroupReq {
+export interface AddGroupReq {
   group_name: string;
 }
 
-export interface createGroupRes {
+export interface AddGroupRes {
   group_id: number;
   group_name: string;
 }

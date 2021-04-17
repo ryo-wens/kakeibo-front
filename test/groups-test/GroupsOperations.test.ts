@@ -1,4 +1,3 @@
-import React from 'react';
 import thunk from 'redux-thunk';
 import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
@@ -6,7 +5,7 @@ import axios from 'axios';
 import * as GroupsActions from '../../src/reducks/groups/actions';
 import * as ModalActions from '../../src/reducks/modal/actions';
 import {
-  createGroup,
+  addGroup,
   fetchGroups,
   groupWithdrawal,
   inviteGroupParticipate,
@@ -14,7 +13,7 @@ import {
   inviteGroupUsers,
   updateGroupName,
 } from '../../src/reducks/groups/operations';
-import createGroupResponse from './createGroupResponse.json';
+import addGroupResponse from './addGroupResponse.json';
 import fetchGroupsResponse from './fetchGroupsResponse.json';
 import groupWithdrawalResponse from './groupWithdrawalResponse.json';
 import inviteGroupParticipateResponse from './inviteGroupParticipateResponse.json';
@@ -22,6 +21,7 @@ import inviteGroupRejectResponse from './inviteGroupRejectResponse.json';
 import inviteGroupUsersResponse from './inviteGroupUsersResponse.json';
 import updateGroupNameResponse from './updateGroupNameResponse.json';
 import { userServiceInstance } from '../../src/reducks/axiosConfig';
+import { AddGroupReq } from '../../src/reducks/groups/types';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -126,63 +126,44 @@ describe('async actions groups', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('Created group is added to approvedGroups when CREATE_GROUP succeeds.', async () => {
+  it('fetch groupId and groupName if add succeeds.', async () => {
     const url = `/groups`;
     const groupName = '古澤家';
 
-    const mockRequest = {
+    const requestData: AddGroupReq = {
       group_name: groupName,
     };
 
-    const mockResponse = JSON.stringify(createGroupResponse);
+    const mockResponse = JSON.stringify(addGroupResponse);
 
     const expectedAction = [
       {
-        type: GroupsActions.CREATE_GROUP,
+        type: GroupsActions.START_ADD_GROUP,
         payload: {
-          approvedGroups: [
-            {
-              group_id: 1,
-              group_name: 'シェアハウス',
-              approved_users_list: [
-                {
-                  group_id: 1,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                  color_code: '#FF0000',
-                },
-              ],
-              unapproved_users_list: [{ group_id: 1, user_id: 'go2', user_name: '郷ひろみ' }],
-            },
-            {
-              group_id: 3,
-              group_name: '古澤家',
-              approved_users_list: [
-                {
-                  group_id: 3,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                  color_code: '#FF0000',
-                },
-              ],
-              unapproved_users_list: [],
-            },
-          ],
+          groupsLoading: true,
+        },
+      },
+      {
+        type: GroupsActions.ADD_GROUP,
+        payload: {
+          group: {
+            groupId: addGroupResponse.group_id,
+            groupName: addGroupResponse.group_name,
+          },
         },
       },
       {
         type: '@@router/CALL_HISTORY_METHOD',
         payload: {
-          args: ['/group/3/home'],
+          args: [`/group/${addGroupResponse.group_id}/home`],
           method: 'push',
         },
       },
     ];
 
-    axiosMock.onPost(url, mockRequest).reply(200, mockResponse);
+    axiosMock.onPost(url).reply(200, mockResponse);
 
-    // @ts-ignore
-    await createGroup(groupName)(store.dispatch, getState);
+    await addGroup(requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
