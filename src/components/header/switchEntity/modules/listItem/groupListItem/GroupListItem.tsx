@@ -1,6 +1,6 @@
 import React from 'react';
 import CheckIcon from '@material-ui/icons/Check';
-import GroupMenuButtonContainer from '../../../../../../containers/header/switchEntity/modules/button/GrouopMenuButtonContainer';
+import GroupMenuButtonContainer from '../../../../../../containers/header/switchEntity/modules/button/GroupMenuButtonContainer';
 import { Group } from '../../../../../../reducks/groups/types';
 import styles from './GroupListItem.module.scss';
 import cn from 'classnames';

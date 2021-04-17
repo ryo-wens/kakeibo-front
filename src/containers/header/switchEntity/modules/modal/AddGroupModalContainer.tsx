@@ -44,7 +44,6 @@ const AddGroupModalContainer = () => {
 
   return (
     <AddGroupModal
-      titleLabel={'グループを作成'}
       open={open}
       groupName={groupName}
       handleOpen={handleOpen}

@@ -2,12 +2,12 @@ import React from 'react';
 import { Group } from '../../../../../../reducks/groups/types';
 import Menu from '@material-ui/core/Menu';
 import { GenericModal } from '../../../../../uikit';
-import EditGroupNameContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupNameContainer';
+import EditGroupNameContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupNameModalContainer';
 import EditGroupMembersContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupMembersContainer';
 import EditIcon from '@material-ui/icons/Edit';
 import styles from './GroupMenuButton.module.scss';
 
-interface MenuButtonProps {
+interface GroupMenuButtonProps {
   approvedGroup: Group;
   anchorEl: SVGElement | null;
   closeMenu: () => void;
@@ -16,7 +16,7 @@ interface MenuButtonProps {
   openGroupMenu: (event: React.MouseEvent<SVGElement>) => void;
 }
 
-const GroupMenuButton = (props: MenuButtonProps) => {
+const GroupMenuButton = (props: GroupMenuButtonProps) => {
   return (
     <>
       <EditIcon className={styles.editIcon} onClick={props.openGroupMenu} fontSize={'small'} />
@@ -30,8 +30,6 @@ const GroupMenuButton = (props: MenuButtonProps) => {
         <EditGroupNameContainer
           approvedGroup={props.approvedGroup}
           closeGroupMenu={props.closeGroupMenu}
-          modalTitleLabel={'グループ名を編集'}
-          modalTextFieldLabel={'グループ名'}
         />
         <EditGroupMembersContainer
           modalTitleLabel={'メンバーの編集'}
