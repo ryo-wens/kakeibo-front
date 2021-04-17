@@ -1,10 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import SaveButton from '../SaveButton';
-import '../../../setupTests';
 
 describe('Testing GenericButton', () => {
-  test('Test that the onClick function is not executed when disabled', () => {
+  test('Test that the onClick function of SaveButton is not executed when disabled', () => {
     const onClickMock = jest.fn();
     const wrapper = mount(<SaveButton disabled={true} label={'保存する'} onClick={onClickMock} />);
 
@@ -12,7 +11,7 @@ describe('Testing GenericButton', () => {
     expect(onClickMock).not.toHaveBeenCalled();
   });
 
-  test('Test that the onClick function is executed when enabled', () => {
+  test('Test that the onClick function of SaveButton is executed when enabled', () => {
     const onClickMock = jest.fn().mockImplementation((message: string) => {
       return message;
     });
@@ -30,7 +29,7 @@ describe('Testing GenericButton', () => {
     expect(onClickMock).toHaveBeenCalledWith('click success');
   });
 
-  test('Test that the labels received by props are displayed', () => {
+  test('Test that the labels of SaveButton received by props are displayed', () => {
     const onClickMock = jest.fn();
     const wrapper = mount(<SaveButton disabled={false} label={'保存する'} onClick={onClickMock} />);
 

@@ -1,10 +1,9 @@
 import React from 'react';
 import { mount } from 'enzyme';
 import GenericButton from '../GenericButton';
-import '../../../setupTests';
 
 describe('Testing GenericButton', () => {
-  test('Test that the onClick function is not executed when disabled', () => {
+  test('Test that the onClick function of GenericButton is not executed when disabled', () => {
     const onClickMock = jest.fn();
     const wrapper = mount(
       <GenericButton disabled={true} label={'追加する'} onClick={onClickMock} />
@@ -14,7 +13,7 @@ describe('Testing GenericButton', () => {
     expect(onClickMock).not.toHaveBeenCalled();
   });
 
-  test('Test that the onClick function is executed when enabled', () => {
+  test('Test that the onClick function of GenericButton is executed when enabled', () => {
     const onClickMock = jest.fn().mockImplementation((message: string) => {
       return message;
     });
@@ -32,7 +31,7 @@ describe('Testing GenericButton', () => {
     expect(onClickMock).toHaveBeenCalledWith('click success');
   });
 
-  test('Test that the labels received by props are displayed', () => {
+  test('Test that the labels of GenericButton received by props are displayed', () => {
     const onClickMock = jest.fn();
     const mockLabel = '追加する';
 
