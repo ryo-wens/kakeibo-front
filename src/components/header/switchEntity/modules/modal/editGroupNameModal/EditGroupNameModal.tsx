@@ -1,38 +1,35 @@
 import React from 'react';
 import Modal from '@material-ui/core/Modal';
-import AddIcon from '@material-ui/icons/Add';
-import styles from './AddGroupModal.module.scss';
+import MenuItem from '@material-ui/core/MenuItem';
+import styles from './EditGroupNameModal.module.scss';
 import GroupNameForm from '../../form/groupNameForm/GroupNameForm';
 
-interface AddGroupModalProps {
+interface EditGroupNameModalProps {
   open: boolean;
   groupName: string;
   handleOpen: () => void;
   handleClose: () => void;
   handleGroupName: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  handleAddGroup: () => void;
-  isBlankGroupName: boolean;
+  handleEditGroupName: () => void;
+  disabledEditButton: boolean;
 }
 
-const AddGroupModal = (props: AddGroupModalProps) => {
+const EditGroupNameModal = (props: EditGroupNameModalProps) => {
   return (
     <>
-      <button className={styles.addGroupBtn} onClick={props.handleOpen}>
-        <AddIcon />
-        グループを追加
-      </button>
+      <MenuItem onClick={props.handleOpen}>グループ名の編集</MenuItem>
       <Modal open={props.open} onClose={props.handleClose}>
         <div className={styles.modalWrapper}>
           <GroupNameForm
-            titleLabel={'グループを追加'}
-            buttonLabel={'追加'}
+            titleLabel={'グループ名を編集'}
+            buttonLabel={'保存'}
             open={props.open}
             groupName={props.groupName}
             handleOpen={props.handleOpen}
             handleClose={props.handleClose}
             handleGroupName={props.handleGroupName}
-            handleGroup={props.handleAddGroup}
-            disabledButton={props.isBlankGroupName}
+            handleGroup={props.handleEditGroupName}
+            disabledButton={props.disabledEditButton}
           />
         </div>
       </Modal>
@@ -40,4 +37,4 @@ const AddGroupModal = (props: AddGroupModalProps) => {
   );
 };
 
-export default AddGroupModal;
+export default EditGroupNameModal;

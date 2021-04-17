@@ -7,7 +7,9 @@ export type groupActions = ReturnType<
   | typeof startAddGroupAction
   | typeof addGroupAction
   | typeof failedAddGroupAction
-  | typeof updateGroupNameAction
+  | typeof startEditGroupNameAction
+  | typeof editGroupNameAction
+  | typeof failedEditGroupNameAction
   | typeof inviteGroupUsersAction
   | typeof groupWithdrawalAction
   | typeof inviteGroupRejectAction
@@ -96,12 +98,39 @@ export const failedAddGroupAction = (statusCode: number, errorMessage: string) =
   };
 };
 
-export const UPDATE_GROUP_NAME = 'UPDATE_GROUP_NAME';
-export const updateGroupNameAction = (groups: Groups) => {
+export const START_EDIT_GROUP_NAME = 'START_EDIT_GROUP_NAME';
+export const startEditGroupNameAction = () => {
   return {
-    type: UPDATE_GROUP_NAME,
+    type: START_EDIT_GROUP_NAME,
     payload: {
-      approvedGroups: groups,
+      groupsLoading: true,
+    },
+  };
+};
+
+export const EDIT_GROUP_NAME = 'EDIT_GROUP_NAME';
+export const editGroupNameAction = (groupId: number, groupName: string) => {
+  return {
+    type: EDIT_GROUP_NAME,
+    payload: {
+      group: {
+        groupId: groupId,
+        groupName: groupName,
+      },
+    },
+  };
+};
+
+export const FAILED_EDIT_GROUP_NAME = 'FAILED_EDIT_GROUP_NAME';
+export const failedEditGroupNameAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_EDIT_GROUP_NAME,
+    payload: {
+      groupsLoading: false,
+      groupsError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
     },
   };
 };

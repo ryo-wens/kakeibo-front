@@ -30,7 +30,7 @@ const GroupMenuButtonContainer = (props: GroupMenuButtonContainerProps) => {
     props.closeMenu();
     dispatch(groupWithdrawal(groupId));
     if (pathGroupId === groupId) {
-      dispatch(push('/'));
+      dispatch(push('/home'));
     }
   };
 

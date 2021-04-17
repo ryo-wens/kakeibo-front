@@ -1,5 +1,4 @@
 import {
-  updateGroupNameAction,
   fetchGroupsAction,
   inviteGroupUsersAction,
   inviteGroupRejectAction,
@@ -11,6 +10,9 @@ import {
   startAddGroupAction,
   addGroupAction,
   failedAddGroupAction,
+  startEditGroupNameAction,
+  editGroupNameAction,
+  failedEditGroupNameAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
@@ -18,7 +20,9 @@ import {
   AddGroupReq,
   AddGroupRes,
   ApprovedGroupUser,
-  fetchGroupsRes,
+  EditGroupNameReq,
+  EditGroupNameRes,
+  FetchGroupsRes,
   Group,
   Groups,
   groupWithdrawalRes,
@@ -28,8 +32,6 @@ import {
   inviteGroupUsersRes,
   UnapprovedGroupUser,
   UnapprovedGroupUsers,
-  updateGroupNameReq,
-  updateGroupNameRes,
 } from './types';
 import { State } from '../store/types';
 import { openTextModalAction } from '../modal/actions';
@@ -42,7 +44,7 @@ export const fetchGroups = (signal?: CancelTokenSource) => {
     dispatch(startFetchGroupsAction());
 
     try {
-      const res = await userServiceInstance.get<fetchGroupsRes>(`/groups`, {
+      const res = await userServiceInstance.get<FetchGroupsRes>(`/groups`, {
         cancelToken: signal?.token,
       });
 
@@ -79,39 +81,19 @@ export const addGroup = (requestData: AddGroupReq) => {
   };
 };
 
-export const updateGroupName = (groupId: number, groupName: string) => {
-  return async (dispatch: Dispatch, getState: () => State) => {
-    if (groupName === '') {
-      return;
-    }
-    const data: updateGroupNameReq = {
-      group_name: groupName,
-    };
+export const editGroupName = (groupId: number, requestData: EditGroupNameReq) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(startEditGroupNameAction());
 
     try {
-      const result = await userServiceInstance.put<updateGroupNameRes>(
+      const res = await userServiceInstance.put<EditGroupNameRes>(
         `/groups/${groupId}`,
-        JSON.stringify(data)
+        JSON.stringify(requestData)
       );
 
-      const prevApprovedGroups: Groups = getState().groups.approvedGroups;
-
-      const updateGroups = prevApprovedGroups.map((prevApprovedGroup) => {
-        if (prevApprovedGroup.group_id === groupId) {
-          const updateGroup: Group = {
-            group_id: result.data.group_id,
-            group_name: result.data.group_name,
-            approved_users_list: prevApprovedGroup.approved_users_list,
-            unapproved_users_list: prevApprovedGroup.unapproved_users_list,
-          };
-          return updateGroup;
-        } else {
-          return prevApprovedGroup;
-        }
-      });
-      dispatch(updateGroupNameAction(updateGroups));
+      dispatch(editGroupNameAction(res.data.group_id, res.data.group_name));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(failedEditGroupNameAction(error.response.status, error.response.data.error.message));
       throw error;
     }
   };

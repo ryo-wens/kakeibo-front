@@ -2,7 +2,7 @@ import React from 'react';
 import { Group } from '../../../../../../reducks/groups/types';
 import Menu from '@material-ui/core/Menu';
 import { GenericModal } from '../../../../../uikit';
-import EditGroupNameContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupNameContainer';
+import EditGroupNameContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupNameModalContainer';
 import EditGroupMembersContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupMembersContainer';
 import EditIcon from '@material-ui/icons/Edit';
 import styles from './GroupMenuButton.module.scss';
