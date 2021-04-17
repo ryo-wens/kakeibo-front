@@ -8,3 +8,5 @@ export const getUnapprovedGroups = createSelector(
   [groupSelector],
   (state) => state.unapprovedGroups
 );
+
+export const getGroup = createSelector([groupSelector], (state) => state.group);

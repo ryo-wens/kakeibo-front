@@ -1,6 +1,6 @@
 import { Categories } from '../categories/types';
 import { GroupCategories } from '../groupCategories/types';
-import { ApprovedGroupUsers, Groups, UnapprovedGroupUsers } from '../groups/types';
+import { Groups } from '../groups/types';
 import { TransactionsList } from '../transactions/types';
 import {
   GroupTransactionsList,
@@ -41,8 +41,6 @@ export interface State {
     group: {
       groupId: number;
       groupName: string;
-      approvedUsersList: ApprovedGroupUsers;
-      unapprovedUsersList: UnapprovedGroupUsers;
     };
     groupsError: {
       statusCode: number | null;

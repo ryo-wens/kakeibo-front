@@ -4,9 +4,9 @@ import { Groups } from '../../../reducks/groups/types';
 import GroupIcon from '@material-ui/icons/Group';
 import CheckIcon from '@material-ui/icons/Check';
 import styles from './SwitchEntity.module.scss';
-import AddGroupModal from './modules/modal/addGroupModal/AddGroupModal';
 import cn from 'classnames';
 import GroupListItemContainer from '../../../containers/header/switchEntity/modules/listItem/GroupListItemContainer';
+import AddGroupModalContainer from '../../../containers/header/switchEntity/modules/modal/AddGroupModalContainer';
 
 interface SwitchEntityProps {
   approvedGroups: Groups;
@@ -56,11 +56,7 @@ const SwitchEntity = (props: SwitchEntityProps) => {
             </span>
           </li>
         </ul>
-        <AddGroupModal
-          modalTitleLabel={'グループ作成'}
-          modalTextFieldLabel={'グループ名'}
-          closeMenu={props.closeMenu}
-        />
+        <AddGroupModalContainer />
       </Menu>
     </div>
   );

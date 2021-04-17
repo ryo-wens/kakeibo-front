@@ -24,7 +24,17 @@ export const groupsReducer = (state = initialState.groups, action: groupActions)
         ...state,
         ...action.payload,
       };
-    case Actions.CREATE_GROUP:
+    case Actions.START_ADD_GROUP:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.ADD_GROUP:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_ADD_GROUP:
       return {
         ...state,
         ...action.payload,

@@ -4,7 +4,9 @@ export type groupActions = ReturnType<
   | typeof fetchGroupsAction
   | typeof cancelFetchGroupsAction
   | typeof failedFetchGroupsAction
-  | typeof createGroupAction
+  | typeof startAddGroupAction
+  | typeof addGroupAction
+  | typeof failedAddGroupAction
   | typeof updateGroupNameAction
   | typeof inviteGroupUsersAction
   | typeof groupWithdrawalAction
@@ -57,12 +59,39 @@ export const failedFetchGroupsAction = (statusCode: number, errorMessage: string
   };
 };
 
-export const CREATE_GROUP = 'CREATE_GROUP';
-export const createGroupAction = (groups: Groups) => {
+export const START_ADD_GROUP = 'START_ADD_GROUP';
+export const startAddGroupAction = () => {
   return {
-    type: CREATE_GROUP,
+    type: START_ADD_GROUP,
     payload: {
-      approvedGroups: groups,
+      groupsLoading: true,
+    },
+  };
+};
+
+export const ADD_GROUP = 'ADD_GROUP';
+export const addGroupAction = (groupId: number, groupName: string) => {
+  return {
+    type: ADD_GROUP,
+    payload: {
+      group: {
+        groupId: groupId,
+        groupName: groupName,
+      },
+    },
+  };
+};
+
+export const FAILED_ADD_GROUP = 'FAILED_ADD_GROUP';
+export const failedAddGroupAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_ADD_GROUP,
+    payload: {
+      groupsLoading: false,
+      groupsError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
     },
   };
 };

@@ -1,5 +1,4 @@
 import {
-  createGroupAction,
   updateGroupNameAction,
   fetchGroupsAction,
   inviteGroupUsersAction,
@@ -9,13 +8,16 @@ import {
   startFetchGroupsAction,
   cancelFetchGroupsAction,
   failedFetchGroupsAction,
+  startAddGroupAction,
+  addGroupAction,
+  failedAddGroupAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
 import {
+  AddGroupReq,
+  AddGroupRes,
   ApprovedGroupUser,
-  createGroupReq,
-  createGroupRes,
   fetchGroupsRes,
   Group,
   Groups,
@@ -58,43 +60,21 @@ export const fetchGroups = (signal?: CancelTokenSource) => {
   };
 };
 
-export const createGroup = (groupName: string) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (groupName === '') {
-      return;
-    }
-    const data: createGroupReq = {
-      group_name: groupName,
-    };
+export const addGroup = (requestData: AddGroupReq) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startAddGroupAction());
 
     try {
-      const result = await userServiceInstance.post<createGroupRes>(
+      const res = await userServiceInstance.post<AddGroupRes>(
         `/groups`,
-        JSON.stringify(data)
+        JSON.stringify(requestData)
       );
-      const prevApprovedGroups: Groups = getState().groups.approvedGroups;
-      const currentUser = getState().users;
 
-      const user: ApprovedGroupUser = {
-        group_id: result.data.group_id,
-        user_id: currentUser.user_id,
-        user_name: currentUser.name,
-        color_code: `#FF0000`,
-      };
-
-      const newGroup: Group = {
-        group_id: result.data.group_id,
-        group_name: result.data.group_name,
-        approved_users_list: [user],
-        unapproved_users_list: [],
-      };
-
-      const nextApprovedGroups = [...prevApprovedGroups, newGroup];
-
-      dispatch(createGroupAction(nextApprovedGroups));
-      dispatch(push(`/group/${result.data.group_id}/home`));
+      dispatch(addGroupAction(res.data.group_id, res.data.group_name));
+      dispatch(push(`/group/${res.data.group_id}/home`));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(failedAddGroupAction(error.response.status, error.response.data.error.message));
+      throw error;
     }
   };
 };
