@@ -1,0 +1,42 @@
+@import "../../../../assets/mixin/icon-btn";
+
+.wrapper {
+  background-color: white;
+  border-radius: 0.4rem;
+  padding: 15px 0;
+  margin: 20px auto auto auto;
+  outline: none;
+}
+
+.defaultWidth {
+  width: 400px;
+}
+
+.position {
+  display: flex;
+  border-bottom: $color-geyser solid 1px;
+  justify-content: space-between;
+  padding: 0 0 10px 0;
+  margin: 0 0 25px 0;
+
+  > h3 {
+    color: $color-scorpion;
+    font-weight: 500;
+    font-size: 1.0rem;
+    margin: 0;
+  }
+}
+
+.backBtn {
+  @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  margin-left: 10px;
+}
+
+.hideBackBtn {
+  visibility: hidden;
+}
+
+.closeBtn {
+  @include icon-btn($color-scorpion, 0.8rem, 0.5);
+  margin-right: 10px;
+}

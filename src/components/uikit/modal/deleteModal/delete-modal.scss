@@ -8,7 +8,7 @@
   margin: 20px auto auto auto;
   padding: 15px 0;
   outline: none;
-  border-radius: 0.5rem;
+  border-radius: 0.3rem;
 
 
   &__position {
@@ -20,14 +20,14 @@
     margin: 0 0 25px 0;
 
     > h3 {
-      color: $color-lynch;
-      font-size: $task-title-font_size;
+      color: $color-tundora;
+      font-weight: 500;
       margin: 0;
     }
   }
 
   &__close-btn {
-    @include icon-btn($color-lynch, 0.8rem, 0.5);
+    @include icon-btn($color-tundora, 0.8rem, 0.5);
     position: absolute;
     right: 0;
     margin-right: 10px;
@@ -35,7 +35,7 @@
 
   &__title {
     margin: 0;
-    color: $color-lynch;
+    color: $color-tundora;
     font-size: $task-title-font_size;
   }
 
@@ -56,7 +56,7 @@
     }
 
     &--cancel {
-      @include operation-btn(white, $color-lynch,$color-geyser);
+      @include operation-btn(white, $color-tundora,$color-geyser);
       margin: 0 0 0 10px;
     }
   }

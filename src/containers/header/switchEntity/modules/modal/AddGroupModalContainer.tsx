@@ -34,7 +34,9 @@ const AddGroupModalContainer = () => {
 
     try {
       await dispatch(addGroup(requestData));
-      dispatch(fetchGroups());
+      await dispatch(fetchGroups());
+
+      handleClose();
     } catch (error) {
       alert(error.response.data.error.message);
     }

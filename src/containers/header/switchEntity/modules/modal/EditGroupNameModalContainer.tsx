@@ -6,11 +6,11 @@ import EditGroupNameModal from '../../../../../components/header/switchEntity/mo
 
 interface EditGroupNameModalContainerProps {
   approvedGroup: Group;
-  closeGroupMenu: () => void;
+  handleCloseGroupMenu: () => void;
 }
 
 const EditGroupNameModalContainer = (props: EditGroupNameModalContainerProps) => {
-  const { approvedGroup, closeGroupMenu } = props;
+  const { approvedGroup, handleCloseGroupMenu } = props;
 
   const initialState = {
     initialGroupName: approvedGroup.group_name,
@@ -45,7 +45,7 @@ const EditGroupNameModalContainer = (props: EditGroupNameModalContainerProps) =>
       await dispatch(fetchGroups());
 
       handleClose();
-      closeGroupMenu();
+      handleCloseGroupMenu();
     } catch (error) {
       alert(error.response.data.error.message.toString());
     }

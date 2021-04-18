@@ -1,7 +1,7 @@
 import React from 'react';
 import { TextInput } from '../../../../../uikit';
 import styles from './GroupNameForm.module.scss';
-import CloseIcon from '@material-ui/icons/Close';
+import ModalFormLayout from '../../../../../uikit/form/formLayout/ModalFormLayout';
 
 interface GroupNameFormProps {
   titleLabel: string;
@@ -17,13 +17,7 @@ interface GroupNameFormProps {
 
 const GroupNameForm = (props: GroupNameFormProps) => {
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.position}>
-        <h3>{props.titleLabel}</h3>
-        <button onClick={props.handleClose}>
-          <CloseIcon />
-        </button>
-      </div>
+    <ModalFormLayout titleLabel={props.titleLabel} handleClose={props.handleClose}>
       <div className={styles.textInput}>
         <TextInput
           id="group-name"
@@ -48,7 +42,7 @@ const GroupNameForm = (props: GroupNameFormProps) => {
           キャンセル
         </button>
       </div>
-    </div>
+    </ModalFormLayout>
   );
 };
 

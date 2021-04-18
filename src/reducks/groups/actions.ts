@@ -10,8 +10,10 @@ export type groupActions = ReturnType<
   | typeof startEditGroupNameAction
   | typeof editGroupNameAction
   | typeof failedEditGroupNameAction
+  | typeof startUnsubscribeGroupAction
+  | typeof unsubscribeGroupAction
+  | typeof failedUnsubscribeGroupAction
   | typeof inviteGroupUsersAction
-  | typeof groupWithdrawalAction
   | typeof inviteGroupRejectAction
 >;
 
@@ -135,20 +137,47 @@ export const failedEditGroupNameAction = (statusCode: number, errorMessage: stri
   };
 };
 
-export const INVITE_GROUP_USERS = 'INVITE_GROUP_USERS';
-export const inviteGroupUsersAction = (approvedGroups: Groups) => {
+export const START_UNSUBSCRIBE_GROUP = 'START_UNSUBSCRIBE_GROUP';
+export const startUnsubscribeGroupAction = () => {
   return {
-    type: INVITE_GROUP_USERS,
+    type: START_UNSUBSCRIBE_GROUP,
     payload: {
-      approvedGroups: approvedGroups,
+      groupsLoading: true,
     },
   };
 };
 
-export const GROUP_WITHDRAWAL = 'GROUP_WITHDRAWAL';
-export const groupWithdrawalAction = (approvedGroups: Groups) => {
+export const UNSUBSCRIBE_GROUP = 'UNSUBSCRIBE_GROUP';
+export const unsubscribeGroupAction = () => {
   return {
-    type: GROUP_WITHDRAWAL,
+    type: UNSUBSCRIBE_GROUP,
+    payload: {
+      group: {
+        groupId: 0,
+        groupName: '',
+      },
+    },
+  };
+};
+
+export const FAILED_UNSUBSCRIBE_GROUP = 'FAILED_UNSUBSCRIBE_GROUP';
+export const failedUnsubscribeGroupAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_UNSUBSCRIBE_GROUP,
+    payload: {
+      groupsLoading: false,
+      groupsError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const INVITE_GROUP_USERS = 'INVITE_GROUP_USERS';
+export const inviteGroupUsersAction = (approvedGroups: Groups) => {
+  return {
+    type: INVITE_GROUP_USERS,
     payload: {
       approvedGroups: approvedGroups,
     },

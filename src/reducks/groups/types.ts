@@ -62,7 +62,7 @@ export interface inviteGroupParticipateRes {
   color_code: string;
 }
 
-export interface groupWithdrawalRes {
+export interface UnsubscribeGroupRes {
   message: string;
 }
 
