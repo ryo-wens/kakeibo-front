@@ -54,12 +54,22 @@ export const groupsReducer = (state = initialState.groups, action: groupActions)
         ...state,
         ...action.payload,
       };
-    case Actions.INVITE_GROUP_USERS:
+    case Actions.START_UNSUBSCRIBE_GROUP:
       return {
         ...state,
         ...action.payload,
       };
-    case Actions.GROUP_WITHDRAWAL:
+    case Actions.UNSUBSCRIBE_GROUP:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_UNSUBSCRIBE_GROUP:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.INVITE_GROUP_USERS:
       return {
         ...state,
         ...action.payload,
