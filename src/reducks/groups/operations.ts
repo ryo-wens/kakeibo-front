@@ -1,16 +1,20 @@
 import {
-  updateGroupNameAction,
   fetchGroupsAction,
   inviteGroupUsersAction,
   inviteGroupRejectAction,
   inviteGroupParticipateAction,
-  groupWithdrawalAction,
   startFetchGroupsAction,
   cancelFetchGroupsAction,
   failedFetchGroupsAction,
   startAddGroupAction,
   addGroupAction,
   failedAddGroupAction,
+  startEditGroupNameAction,
+  editGroupNameAction,
+  failedEditGroupNameAction,
+  unsubscribeGroupAction,
+  failedUnsubscribeGroupAction,
+  startUnsubscribeGroupAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
@@ -18,18 +22,18 @@ import {
   AddGroupReq,
   AddGroupRes,
   ApprovedGroupUser,
-  fetchGroupsRes,
+  EditGroupNameReq,
+  EditGroupNameRes,
+  FetchGroupsRes,
   Group,
   Groups,
-  groupWithdrawalRes,
   inviteGroupParticipateRes,
   inviteGroupRejectRes,
   inviteGroupUsersReq,
   inviteGroupUsersRes,
   UnapprovedGroupUser,
   UnapprovedGroupUsers,
-  updateGroupNameReq,
-  updateGroupNameRes,
+  UnsubscribeGroupRes,
 } from './types';
 import { State } from '../store/types';
 import { openTextModalAction } from '../modal/actions';
@@ -42,7 +46,7 @@ export const fetchGroups = (signal?: CancelTokenSource) => {
     dispatch(startFetchGroupsAction());
 
     try {
-      const res = await userServiceInstance.get<fetchGroupsRes>(`/groups`, {
+      const res = await userServiceInstance.get<FetchGroupsRes>(`/groups`, {
         cancelToken: signal?.token,
       });
 
@@ -79,39 +83,37 @@ export const addGroup = (requestData: AddGroupReq) => {
   };
 };
 
-export const updateGroupName = (groupId: number, groupName: string) => {
-  return async (dispatch: Dispatch, getState: () => State) => {
-    if (groupName === '') {
-      return;
-    }
-    const data: updateGroupNameReq = {
-      group_name: groupName,
-    };
+export const editGroupName = (groupId: number, requestData: EditGroupNameReq) => {
+  return async (dispatch: Dispatch) => {
+    dispatch(startEditGroupNameAction());
 
     try {
-      const result = await userServiceInstance.put<updateGroupNameRes>(
+      const res = await userServiceInstance.put<EditGroupNameRes>(
         `/groups/${groupId}`,
-        JSON.stringify(data)
+        JSON.stringify(requestData)
       );
 
-      const prevApprovedGroups: Groups = getState().groups.approvedGroups;
-
-      const updateGroups = prevApprovedGroups.map((prevApprovedGroup) => {
-        if (prevApprovedGroup.group_id === groupId) {
-          const updateGroup: Group = {
-            group_id: result.data.group_id,
-            group_name: result.data.group_name,
-            approved_users_list: prevApprovedGroup.approved_users_list,
-            unapproved_users_list: prevApprovedGroup.unapproved_users_list,
-          };
-          return updateGroup;
-        } else {
-          return prevApprovedGroup;
-        }
-      });
-      dispatch(updateGroupNameAction(updateGroups));
+      dispatch(editGroupNameAction(res.data.group_id, res.data.group_name));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(failedEditGroupNameAction(error.response.status, error.response.data.error.message));
+      throw error;
+    }
+  };
+};
+
+export const unsubscribeGroup = (groupId: number) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startUnsubscribeGroupAction());
+
+    try {
+      const res = await userServiceInstance.delete<UnsubscribeGroupRes>(`/groups/${groupId}/users`);
+
+      dispatch(unsubscribeGroupAction());
+      dispatch(openTextModalAction(res.data.message));
+    } catch (error) {
+      dispatch(
+        failedUnsubscribeGroupAction(error.response.status, error.response.data.error.message)
+      );
       throw error;
     }
   };
@@ -157,26 +159,6 @@ export const inviteGroupUsers = (groupId: number, userId: string) => {
         }
       });
       dispatch(inviteGroupUsersAction(updateApprovedGroups));
-    } catch (error) {
-      errorHandling(dispatch, error);
-    }
-  };
-};
-
-export const groupWithdrawal = (groupId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    try {
-      const result = await userServiceInstance.delete<groupWithdrawalRes>(
-        `/groups/${groupId}/users`
-      );
-      const prevApprovedGroups = getState().groups.approvedGroups;
-
-      const updateApprovedGroups: Groups = prevApprovedGroups.filter((prevApprovedGroup) => {
-        return prevApprovedGroup.group_id !== groupId;
-      });
-
-      dispatch(groupWithdrawalAction(updateApprovedGroups));
-      dispatch(openTextModalAction(result.data.message));
     } catch (error) {
       errorHandling(dispatch, error);
     }

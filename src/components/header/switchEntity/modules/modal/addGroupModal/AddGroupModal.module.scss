@@ -1,41 +1,6 @@
 @import "../../../../../../assets/mixin/icon-btn";
 @import "../../../../../../assets/mixin/operation-btn";
 
-.modalWrapper {
-  width: 400px;
-  background-color: white;
-  padding: 15px 0;
-  margin: 20px auto auto auto;
-  outline: none;
-}
-
-.position {
-  display: flex;
-  border-bottom: $color-geyser solid 1px;
-  justify-content: center;
-  position: relative;
-  padding: 0 0 10px 0;
-  margin: 0 0 25px 0;
-
-  > h3 {
-    color: $color-scorpion;
-    font-size: 1.0rem;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  > button {
-    @include icon-btn($color-scorpion, 0.8rem, 0.5);
-    position: absolute;
-    right: 0;
-    margin: 0 20px 0 0;
-  }
-}
-
-.textInput {
-  margin: 0 20px 25px;
-}
-
 .addGroupBtn {
   display: flex;
   align-items: center;
@@ -52,19 +17,5 @@
 
   &:hover {
     opacity: 0.9;
-  }
-}
-
-.operationBtn {
-  display: flex;
-  margin: 0 20px;
-
-  &__add {
-    @include operation-btn($color-sushi, white, $color-sushi);
-  }
-
-  &__cancel {
-    @include operation-btn(white, $color-scorpion,$color-geyser);
-    margin: 0 0 0 10px;
   }
 }

@@ -6,22 +6,22 @@ import * as GroupsActions from '../../src/reducks/groups/actions';
 import * as ModalActions from '../../src/reducks/modal/actions';
 import {
   addGroup,
+  editGroupName,
   fetchGroups,
-  groupWithdrawal,
   inviteGroupParticipate,
   inviteGroupReject,
   inviteGroupUsers,
-  updateGroupName,
+  unsubscribeGroup,
 } from '../../src/reducks/groups/operations';
 import addGroupResponse from './addGroupResponse.json';
 import fetchGroupsResponse from './fetchGroupsResponse.json';
-import groupWithdrawalResponse from './groupWithdrawalResponse.json';
+import unsubscribeGroupResponse from './unsubscribeGroupResponse.json';
 import inviteGroupParticipateResponse from './inviteGroupParticipateResponse.json';
 import inviteGroupRejectResponse from './inviteGroupRejectResponse.json';
 import inviteGroupUsersResponse from './inviteGroupUsersResponse.json';
-import updateGroupNameResponse from './updateGroupNameResponse.json';
+import editGroupNameResponse from './editGroupNameResponse.json';
 import { userServiceInstance } from '../../src/reducks/axiosConfig';
-import { AddGroupReq } from '../../src/reducks/groups/types';
+import { AddGroupReq, EditGroupNameReq } from '../../src/reducks/groups/types';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -134,8 +134,6 @@ describe('async actions groups', () => {
       group_name: groupName,
     };
 
-    const mockResponse = JSON.stringify(addGroupResponse);
-
     const expectedAction = [
       {
         type: GroupsActions.START_ADD_GROUP,
@@ -161,50 +159,77 @@ describe('async actions groups', () => {
       },
     ];
 
-    axiosMock.onPost(url).reply(200, mockResponse);
+    axiosMock.onPost(url, requestData).reply(200, addGroupResponse);
 
     await addGroup(requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('When UPDATE_GROUP_NAME is successful, get the changed group name and change the store.', async () => {
+  it('fetch groupId and groupName if edit group name succeeds.', async () => {
     const groupId = 1;
     const groupName = 'エミリア家';
     const url = `/groups/${groupId}`;
 
-    const mockRequest = {
+    const requestData: EditGroupNameReq = {
       group_name: groupName,
     };
 
-    const mockResponse = JSON.stringify(updateGroupNameResponse);
-
     const expectedActions = [
       {
-        type: GroupsActions.UPDATE_GROUP_NAME,
+        type: GroupsActions.START_EDIT_GROUP_NAME,
         payload: {
-          approvedGroups: [
-            {
-              group_id: 1,
-              group_name: 'エミリア家',
-              approved_users_list: [
-                {
-                  group_id: 1,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                  color_code: '#FF0000',
-                },
-              ],
-              unapproved_users_list: [{ group_id: 1, user_id: 'go2', user_name: '郷ひろみ' }],
-            },
-          ],
+          groupsLoading: true,
+        },
+      },
+      {
+        type: GroupsActions.EDIT_GROUP_NAME,
+        payload: {
+          group: {
+            groupId: editGroupNameResponse.group_id,
+            groupName: editGroupNameResponse.group_name,
+          },
         },
       },
     ];
 
-    axiosMock.onPut(url, mockRequest).reply(200, mockResponse);
+    axiosMock.onPut(url, requestData).reply(200, editGroupNameResponse);
 
-    // @ts-ignore
-    await updateGroupName(groupId, groupName)(store.dispatch, getState);
+    await editGroupName(groupId, requestData)(store.dispatch);
+    expect(store.getActions()).toEqual(expectedActions);
+  });
+
+  it('fetch message if unsubscribe group succeeds.', async () => {
+    const groupId = 1;
+    const url = `/groups/${groupId}/users`;
+
+    const expectedActions = [
+      {
+        type: GroupsActions.START_UNSUBSCRIBE_GROUP,
+        payload: {
+          groupsLoading: true,
+        },
+      },
+      {
+        type: GroupsActions.UNSUBSCRIBE_GROUP,
+        payload: {
+          group: {
+            groupId: 0,
+            groupName: '',
+          },
+        },
+      },
+      {
+        type: ModalActions.OPEN_TEXT_MODAL,
+        payload: {
+          message: unsubscribeGroupResponse.message,
+          open: true,
+        },
+      },
+    ];
+
+    axiosMock.onDelete(url).reply(200, unsubscribeGroupResponse);
+
+    await unsubscribeGroup(groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 
@@ -249,36 +274,6 @@ describe('async actions groups', () => {
 
     // @ts-ignore
     await inviteGroupUsers(groupId, userId)(store.dispatch, getState);
-    expect(store.getActions()).toEqual(expectedActions);
-  });
-
-  it('When GROUP_WITHDRAWAL is successful, send the approved groups except the requested group_id to groupWithdrawalAction and send the response message to openTextModalAction.', async () => {
-    const groupId = 1;
-    const nextGroupId = 0;
-    const url = `/groups/${groupId}/users`;
-
-    const mockResponse = JSON.stringify(groupWithdrawalResponse);
-
-    const expectedActions = [
-      {
-        type: GroupsActions.GROUP_WITHDRAWAL,
-        payload: {
-          approvedGroups: [],
-        },
-      },
-      {
-        type: ModalActions.OPEN_TEXT_MODAL,
-        payload: {
-          message: 'グループを退会しました。',
-          open: true,
-        },
-      },
-    ];
-
-    axiosMock.onDelete(url).reply(200, mockResponse);
-
-    // @ts-ignore
-    await groupWithdrawal(groupId, nextGroupId)(store.dispatch, getState);
     expect(store.getActions()).toEqual(expectedActions);
   });
 

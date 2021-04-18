@@ -31,19 +31,18 @@ export interface AddGroupRes {
   group_name: string;
 }
 
-export interface updateGroupNameReq {
+export interface EditGroupNameReq {
   group_name: string;
 }
 
-export interface updateGroupNameRes {
+export interface EditGroupNameRes {
   group_id: number;
   group_name: string;
 }
 
-export interface fetchGroupsRes {
+export interface FetchGroupsRes {
   approved_group_list: Groups;
   unapproved_group_list: Groups;
-  // message: string;
 }
 
 export interface inviteGroupUsersReq {
@@ -63,7 +62,7 @@ export interface inviteGroupParticipateRes {
   color_code: string;
 }
 
-export interface groupWithdrawalRes {
+export interface UnsubscribeGroupRes {
   message: string;
 }
 
