@@ -45,15 +45,11 @@ export interface FetchGroupsRes {
   unapproved_group_list: Groups;
 }
 
-export interface inviteGroupUsersReq {
+export interface inviteUsersToGroupReq {
   user_id: string;
 }
 
-export interface inviteGroupUsersRes {
-  group_id: number;
-  user_id: string;
-  user_name: string;
-}
+export type inviteUsersToGroupRes = Omit<inviteGroupParticipateRes, 'color_code'>;
 
 export interface inviteGroupParticipateRes {
   group_id: number;

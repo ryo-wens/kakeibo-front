@@ -1,6 +1,5 @@
 import {
   fetchGroupsAction,
-  inviteGroupUsersAction,
   inviteGroupRejectAction,
   inviteGroupParticipateAction,
   startFetchGroupsAction,
@@ -15,6 +14,9 @@ import {
   unsubscribeGroupAction,
   failedUnsubscribeGroupAction,
   startUnsubscribeGroupAction,
+  startInviteUsersToGroupAction,
+  inviteUsersToGroupAction,
+  failedInviteUsersToGroupAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
@@ -29,8 +31,8 @@ import {
   Groups,
   inviteGroupParticipateRes,
   inviteGroupRejectRes,
-  inviteGroupUsersReq,
-  inviteGroupUsersRes,
+  inviteUsersToGroupReq,
+  inviteUsersToGroupRes,
   UnapprovedGroupUser,
   UnapprovedGroupUsers,
   UnsubscribeGroupRes,
@@ -119,48 +121,24 @@ export const unsubscribeGroup = (groupId: number) => {
   };
 };
 
-export const inviteGroupUsers = (groupId: number, userId: string) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
-    if (userId === '') {
-      return;
-    }
-    const data: inviteGroupUsersReq = {
-      user_id: userId,
-    };
+export const inviteUsersToGroup = (groupId: number, requestData: inviteUsersToGroupReq) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startInviteUsersToGroupAction());
 
     try {
-      const result = await userServiceInstance.post<inviteGroupUsersRes>(
+      const res = await userServiceInstance.post<inviteUsersToGroupRes>(
         `/groups/${groupId}/users`,
-        JSON.stringify(data)
+        JSON.stringify(requestData)
       );
 
-      const prevApprovedGroups: Groups = getState().groups.approvedGroups;
+      const { data } = res;
 
-      const updateApprovedGroups: Groups = prevApprovedGroups.map((prevApprovedGroup: Group) => {
-        if (prevApprovedGroup.group_id === groupId && result.data.user_id === userId) {
-          const inviteUser: UnapprovedGroupUser = {
-            group_id: result.data.group_id,
-            user_id: result.data.user_id,
-            user_name: result.data.user_name,
-          };
-
-          const prevUnapprovedUserList: UnapprovedGroupUsers =
-            prevApprovedGroup.unapproved_users_list;
-
-          const updateApprovedGroup: Group = {
-            group_id: prevApprovedGroup.group_id,
-            group_name: prevApprovedGroup.group_name,
-            approved_users_list: prevApprovedGroup.approved_users_list,
-            unapproved_users_list: [...prevUnapprovedUserList, inviteUser],
-          };
-          return updateApprovedGroup;
-        } else {
-          return prevApprovedGroup;
-        }
-      });
-      dispatch(inviteGroupUsersAction(updateApprovedGroups));
+      dispatch(inviteUsersToGroupAction(data.group_id, data.user_id, data.user_name));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedInviteUsersToGroupAction(error.response.status, error.response.data.error.message)
+      );
+      throw error;
     }
   };
 };

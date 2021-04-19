@@ -1,7 +1,7 @@
 import React from 'react';
 import { Group } from '../../../../../../reducks/groups/types';
 import Menu from '@material-ui/core/Menu';
-import EditGroupMembersContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupMembersContainer';
+import EditGroupUsersModalContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupUsersModalContainer';
 import EditIcon from '@material-ui/icons/Edit';
 import styles from './GroupMenuButton.module.scss';
 import EditGroupNameModalContainer from '../../../../../../containers/header/switchEntity/modules/modal/EditGroupNameModalContainer';
@@ -33,7 +33,7 @@ const GroupMenuButton = (props: GroupMenuButtonProps) => {
           approvedGroup={props.approvedGroup}
           handleCloseGroupMenu={props.handleCloseGroupMenu}
         />
-        <EditGroupMembersContainer
+        <EditGroupUsersModalContainer
           modalTitleLabel={'メンバーの編集'}
           approvedGroup={props.approvedGroup}
         />
