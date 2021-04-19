@@ -10,7 +10,7 @@ import {
   fetchGroups,
   inviteGroupParticipate,
   inviteGroupReject,
-  inviteGroupUsers,
+  inviteUsersToGroup,
   unsubscribeGroup,
 } from '../../src/reducks/groups/operations';
 import addGroupResponse from './addGroupResponse.json';
@@ -18,10 +18,14 @@ import fetchGroupsResponse from './fetchGroupsResponse.json';
 import unsubscribeGroupResponse from './unsubscribeGroupResponse.json';
 import inviteGroupParticipateResponse from './inviteGroupParticipateResponse.json';
 import inviteGroupRejectResponse from './inviteGroupRejectResponse.json';
-import inviteGroupUsersResponse from './inviteGroupUsersResponse.json';
+import inviteUsersToGroupResponse from './inviteUsersToGroupResponse.json';
 import editGroupNameResponse from './editGroupNameResponse.json';
 import { userServiceInstance } from '../../src/reducks/axiosConfig';
-import { AddGroupReq, EditGroupNameReq } from '../../src/reducks/groups/types';
+import {
+  AddGroupReq,
+  EditGroupNameReq,
+  inviteUsersToGroupReq,
+} from '../../src/reducks/groups/types';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -233,47 +237,38 @@ describe('async actions groups', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('When INVITE_GROUP_USERS is successful, it will receive the invited users and update the store.', async () => {
+  it('fetch groupId and userId and userName  if invite user to group succeeds.', async () => {
     const groupId = 1;
     const userId = `anraku8`;
     const url = `/groups/${groupId}/users`;
 
-    const mockRequest = {
+    const requestData: inviteUsersToGroupReq = {
       user_id: userId,
     };
 
-    const mockResponse = JSON.stringify(inviteGroupUsersResponse);
-
     const expectedActions = [
       {
-        type: GroupsActions.INVITE_GROUP_USERS,
+        type: GroupsActions.START_INVITE_USERS_TO_GROUP,
         payload: {
-          approvedGroups: [
-            {
-              group_id: 1,
-              group_name: 'シェアハウス',
-              approved_users_list: [
-                {
-                  group_id: 1,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                  color_code: '#FF0000',
-                },
-              ],
-              unapproved_users_list: [
-                { group_id: 1, user_id: 'go2', user_name: '郷ひろみ' },
-                { group_id: 1, user_id: 'anraku8', user_name: '安楽亮佑' },
-              ],
-            },
-          ],
+          groupsLoading: true,
+        },
+      },
+      {
+        type: GroupsActions.INVITE_USERS_TO_GROUP,
+        payload: {
+          groupUser: {
+            groupId: inviteUsersToGroupResponse.group_id,
+            userId: inviteUsersToGroupResponse.user_id,
+            userName: inviteUsersToGroupResponse.user_name,
+            colorCode: '',
+          },
         },
       },
     ];
 
-    axiosMock.onPost(url, mockRequest).reply(200, mockResponse);
+    axiosMock.onPost(url).reply(200, inviteUsersToGroupResponse);
 
-    // @ts-ignore
-    await inviteGroupUsers(groupId, userId)(store.dispatch, getState);
+    await inviteUsersToGroup(groupId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 

@@ -19,6 +19,12 @@ const initialState = {
       groupId: 0,
       groupName: '',
     },
+    groupUser: {
+      groupId: 0,
+      userId: '',
+      userName: '',
+      colorCode: '',
+    },
     groupsError: {
       statusCode: null,
       errorMessage: '',

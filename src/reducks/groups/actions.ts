@@ -13,6 +13,9 @@ export type groupActions = ReturnType<
   | typeof startUnsubscribeGroupAction
   | typeof unsubscribeGroupAction
   | typeof failedUnsubscribeGroupAction
+  | typeof startInviteUsersToGroupAction
+  | typeof inviteUsersToGroupAction
+  | typeof failedInviteUsersToGroupAction
   | typeof inviteGroupUsersAction
   | typeof inviteGroupRejectAction
 >;
@@ -164,6 +167,45 @@ export const FAILED_UNSUBSCRIBE_GROUP = 'FAILED_UNSUBSCRIBE_GROUP';
 export const failedUnsubscribeGroupAction = (statusCode: number, errorMessage: string) => {
   return {
     type: FAILED_UNSUBSCRIBE_GROUP,
+    payload: {
+      groupsLoading: false,
+      groupsError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
+    },
+  };
+};
+
+export const START_INVITE_USERS_TO_GROUP = 'START_INVITE_USERS_TO_GROUP';
+export const startInviteUsersToGroupAction = () => {
+  return {
+    type: START_INVITE_USERS_TO_GROUP,
+    payload: {
+      groupsLoading: true,
+    },
+  };
+};
+
+export const INVITE_USERS_TO_GROUP = 'INVITE_USERS_TO_GROUP';
+export const inviteUsersToGroupAction = (groupId: number, userId: string, userName: string) => {
+  return {
+    type: INVITE_USERS_TO_GROUP,
+    payload: {
+      groupUser: {
+        groupId: groupId,
+        userId: userId,
+        userName: userName,
+        colorCode: '',
+      },
+    },
+  };
+};
+
+export const FAILED_INVITE_USERS_TO_GROUP = 'FAILED_INVITE_USERS_TO_GROUP';
+export const failedInviteUsersToGroupAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_INVITE_USERS_TO_GROUP,
     payload: {
       groupsLoading: false,
       groupsError: {

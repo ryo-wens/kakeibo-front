@@ -37,10 +37,16 @@ export interface State {
   groups: {
     approvedGroups: Groups;
     unapprovedGroups: Groups;
-    groupsLoading: false;
+    groupsLoading: boolean;
     group: {
       groupId: number;
       groupName: string;
+    };
+    groupUser: {
+      groupId: number;
+      userId: string;
+      userName: string;
+      colorCode: string;
     };
     groupsError: {
       statusCode: number | null;
