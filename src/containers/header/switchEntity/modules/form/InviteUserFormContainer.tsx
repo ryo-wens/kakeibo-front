@@ -32,7 +32,7 @@ const InviteUserFormContainer = (props: InviteUserFormContainerProps) => {
 
     try {
       await dispatch(inviteUsersToGroup(groupId, requestData));
-      await fetchGroups();
+      await dispatch(fetchGroups());
 
       handleCloseInviteForm();
     } catch (error) {
