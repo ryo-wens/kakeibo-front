@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { Group, inviteUsersToGroupReq } from '../../../../../reducks/groups/types';
+import { Group, InviteUsersToGroupReq } from '../../../../../reducks/groups/types';
 import { fetchGroups, inviteUsersToGroup } from '../../../../../reducks/groups/operations';
 import { useDispatch } from 'react-redux';
 import InviteUserForm from '../../../../../components/header/switchEntity/modules/form/inviteUserForm/InviteUserForm';
@@ -26,7 +26,7 @@ const InviteUserFormContainer = (props: InviteUserFormContainerProps) => {
   };
 
   const handleInviteUsersToGroup = async () => {
-    const requestData: inviteUsersToGroupReq = {
+    const requestData: InviteUsersToGroupReq = {
       user_id: userId,
     };
 

@@ -1,4 +1,4 @@
-import { Groups } from './types';
+import { ApprovedGroupUser, Groups, UnapprovedGroupUser } from './types';
 export type groupActions = ReturnType<
   | typeof startFetchGroupsAction
   | typeof fetchGroupsAction
@@ -16,7 +16,9 @@ export type groupActions = ReturnType<
   | typeof startInviteUsersToGroupAction
   | typeof inviteUsersToGroupAction
   | typeof failedInviteUsersToGroupAction
-  | typeof inviteGroupUsersAction
+  | typeof startJoinInvitationGroupAction
+  | typeof joinInvitationGroupAction
+  | typeof failedJoinInvitationGroupAction
   | typeof inviteGroupRejectAction
 >;
 
@@ -188,14 +190,14 @@ export const startInviteUsersToGroupAction = () => {
 };
 
 export const INVITE_USERS_TO_GROUP = 'INVITE_USERS_TO_GROUP';
-export const inviteUsersToGroupAction = (groupId: number, userId: string, userName: string) => {
+export const inviteUsersToGroupAction = (unapprovedUser: UnapprovedGroupUser) => {
   return {
     type: INVITE_USERS_TO_GROUP,
     payload: {
       groupUser: {
-        groupId: groupId,
-        userId: userId,
-        userName: userName,
+        groupId: unapprovedUser.group_id,
+        userId: unapprovedUser.user_id,
+        userName: unapprovedUser.user_name,
         colorCode: '',
       },
     },
@@ -216,23 +218,41 @@ export const failedInviteUsersToGroupAction = (statusCode: number, errorMessage:
   };
 };
 
-export const INVITE_GROUP_USERS = 'INVITE_GROUP_USERS';
-export const inviteGroupUsersAction = (approvedGroups: Groups) => {
+export const START_JOIN_INVITATION_GROUP = 'START_JOIN_INVITATION_GROUP';
+export const startJoinInvitationGroupAction = () => {
   return {
-    type: INVITE_GROUP_USERS,
+    type: START_JOIN_INVITATION_GROUP,
     payload: {
-      approvedGroups: approvedGroups,
+      groupsLoading: true,
     },
   };
 };
 
-export const INVITE_GROUP_PARTICIPATE = 'INVITE_GROUP_PARTICIPATE';
-export const inviteGroupParticipateAction = (approvedGroups: Groups, unapprovedGroups: Groups) => {
+export const JOIN_INVITATION_GROUP = 'JOIN_INVITATION_GROUP';
+export const joinInvitationGroupAction = (approvedUser: ApprovedGroupUser) => {
   return {
-    type: INVITE_GROUP_PARTICIPATE,
+    type: JOIN_INVITATION_GROUP,
     payload: {
-      approvedGroups: approvedGroups,
-      unapprovedGroups: unapprovedGroups,
+      groupUser: {
+        groupId: approvedUser.group_id,
+        userId: approvedUser.user_id,
+        userName: approvedUser.user_name,
+        colorCode: approvedUser.color_code,
+      },
+    },
+  };
+};
+
+export const FAILED_JOIN_INVITATION_GROUP = 'FAILED_JOIN_INVITATION_GROUP';
+export const failedJoinInvitationGroupAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_JOIN_INVITATION_GROUP,
+    payload: {
+      groupsLoading: false,
+      groupsError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
     },
   };
 };
