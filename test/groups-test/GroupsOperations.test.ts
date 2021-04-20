@@ -8,15 +8,15 @@ import {
   addGroup,
   editGroupName,
   fetchGroups,
-  inviteGroupParticipate,
   inviteGroupReject,
   inviteUsersToGroup,
+  joinInvitationGroup,
   unsubscribeGroup,
 } from '../../src/reducks/groups/operations';
 import addGroupResponse from './addGroupResponse.json';
 import fetchGroupsResponse from './fetchGroupsResponse.json';
 import unsubscribeGroupResponse from './unsubscribeGroupResponse.json';
-import inviteGroupParticipateResponse from './inviteGroupParticipateResponse.json';
+import joinInvitationGroupResponse from './joinInvitationGroupResponse.json';
 import inviteGroupRejectResponse from './inviteGroupRejectResponse.json';
 import inviteUsersToGroupResponse from './inviteUsersToGroupResponse.json';
 import editGroupNameResponse from './editGroupNameResponse.json';
@@ -24,7 +24,7 @@ import { userServiceInstance } from '../../src/reducks/axiosConfig';
 import {
   AddGroupReq,
   EditGroupNameReq,
-  inviteUsersToGroupReq,
+  InviteUsersToGroupReq,
 } from '../../src/reducks/groups/types';
 
 const middlewares = [thunk];
@@ -242,7 +242,7 @@ describe('async actions groups', () => {
     const userId = `anraku8`;
     const url = `/groups/${groupId}/users`;
 
-    const requestData: inviteUsersToGroupReq = {
+    const requestData: InviteUsersToGroupReq = {
       user_id: userId,
     };
 
@@ -272,66 +272,34 @@ describe('async actions groups', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('When INVITE_GROUP_PARTICIPATE is successful, it receives approved user and updates the store.', async () => {
+  it('fetch groupId and userId and userName and colorCode  if join invitation group succeeds.', async () => {
     const groupId = 2;
     const url = `/groups/${groupId}/users/approved`;
 
-    const mockResponse = JSON.stringify(inviteGroupParticipateResponse);
-
     const expectedActions = [
       {
-        type: GroupsActions.INVITE_GROUP_PARTICIPATE,
+        type: GroupsActions.START_JOIN_INVITATION_GROUP,
         payload: {
-          approvedGroups: [
-            {
-              group_id: 1,
-              group_name: 'シェアハウス',
-              approved_users_list: [
-                {
-                  group_id: 1,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                  color_code: '#FF0000',
-                },
-              ],
-              unapproved_users_list: [{ group_id: 1, user_id: 'go2', user_name: '郷ひろみ' }],
-            },
-            {
-              group_id: 2,
-              group_name: '代表',
-              approved_users_list: [
-                {
-                  group_id: 2,
-                  user_id: 'honda',
-                  user_name: '本田',
-                  color_code: '#FF0000',
-                },
-                {
-                  group_id: 2,
-                  user_id: 'furusawa',
-                  user_name: '古澤',
-                  color_code: '#00FFFF',
-                },
-              ],
-              unapproved_users_list: [],
-            },
-          ],
-          unapprovedGroups: [],
+          groupsLoading: true,
         },
       },
       {
-        type: '@@router/CALL_HISTORY_METHOD',
+        type: GroupsActions.JOIN_INVITATION_GROUP,
         payload: {
-          args: ['/group/2/home'],
-          method: 'push',
+          groupUser: {
+            groupId: joinInvitationGroupResponse.group_id,
+            userId: joinInvitationGroupResponse.user_id,
+            userName: joinInvitationGroupResponse.user_name,
+            colorCode: joinInvitationGroupResponse.color_code,
+          },
         },
       },
     ];
 
-    axiosMock.onPost(url).reply(200, mockResponse);
+    axiosMock.onPost(url).reply(200, joinInvitationGroupResponse);
 
     // @ts-ignore
-    await inviteGroupParticipate(groupId)(store.dispatch, getState);
+    await joinInvitationGroup(groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedActions);
   });
 

@@ -7,10 +7,10 @@ import HistoryIcon from '@material-ui/icons/History';
 import ExitToAppIcon from '@material-ui/icons/ExitToApp';
 import CreditCardIcon from '@material-ui/icons/CreditCard';
 import PlaylistAddCheckIcon from '@material-ui/icons/PlaylistAddCheck';
-import { InvitationNotifications } from './index';
 import SwitchEntityContainer from '../../containers/header/switchEntity/SwitchEntityContainer';
 import { month, year } from '../../lib/constant';
 import './header.scss';
+import NotificationMenuContainer from '../../containers/header/notificationMenu/NotificationMenuContainer';
 
 interface HeaderProps {
   pathName: string;
@@ -105,7 +105,7 @@ const Header = (props: HeaderProps) => {
             </li>
             <div className="header__global-menu--sub-menu">
               <SwitchEntityContainer approvedGroups={props.approvedGroups} />
-              <InvitationNotifications />
+              <NotificationMenuContainer />
               <li
                 className="header__upper-content--nav-item header__upper-content--nav-item--logout"
                 onClick={() => props.logOutCheck()}

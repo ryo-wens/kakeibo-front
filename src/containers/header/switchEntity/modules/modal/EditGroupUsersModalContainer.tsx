@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { Group } from '../../../../../reducks/groups/types';
-import EditGroupUsersModal from '../../../../../components/header/switchEntity/modules/modal/editGroupMembers/EditGroupUsersModal';
+import EditGroupUsersModal from '../../../../../components/header/switchEntity/modules/modal/editGroupUsersModal/EditGroupUsersModal';
 
 interface EditGroupUsersModalContainerProps {
   approvedGroup: Group;

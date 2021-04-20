@@ -1,7 +1,6 @@
 import {
   fetchGroupsAction,
   inviteGroupRejectAction,
-  inviteGroupParticipateAction,
   startFetchGroupsAction,
   cancelFetchGroupsAction,
   failedFetchGroupsAction,
@@ -17,6 +16,9 @@ import {
   startInviteUsersToGroupAction,
   inviteUsersToGroupAction,
   failedInviteUsersToGroupAction,
+  joinInvitationGroupAction,
+  failedJoinInvitationGroupAction,
+  startJoinInvitationGroupAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
@@ -29,12 +31,9 @@ import {
   FetchGroupsRes,
   Group,
   Groups,
-  inviteGroupParticipateRes,
   inviteGroupRejectRes,
-  inviteUsersToGroupReq,
-  inviteUsersToGroupRes,
+  InviteUsersToGroupReq,
   UnapprovedGroupUser,
-  UnapprovedGroupUsers,
   UnsubscribeGroupRes,
 } from './types';
 import { State } from '../store/types';
@@ -121,19 +120,17 @@ export const unsubscribeGroup = (groupId: number) => {
   };
 };
 
-export const inviteUsersToGroup = (groupId: number, requestData: inviteUsersToGroupReq) => {
+export const inviteUsersToGroup = (groupId: number, requestData: InviteUsersToGroupReq) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startInviteUsersToGroupAction());
 
     try {
-      const res = await userServiceInstance.post<inviteUsersToGroupRes>(
+      const res = await userServiceInstance.post<UnapprovedGroupUser>(
         `/groups/${groupId}/users`,
         JSON.stringify(requestData)
       );
 
-      const { data } = res;
-
-      dispatch(inviteUsersToGroupAction(data.group_id, data.user_id, data.user_name));
+      dispatch(inviteUsersToGroupAction(res.data));
     } catch (error) {
       dispatch(
         failedInviteUsersToGroupAction(error.response.status, error.response.data.error.message)
@@ -143,54 +140,21 @@ export const inviteUsersToGroup = (groupId: number, requestData: inviteUsersToGr
   };
 };
 
-export const inviteGroupParticipate = (groupId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+export const joinInvitationGroup = (groupId: number) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startJoinInvitationGroupAction());
+
     try {
-      const result = await userServiceInstance.post<inviteGroupParticipateRes>(
-        `/groups/${groupId}/users/approved`,
-        null
+      const res = await userServiceInstance.post<ApprovedGroupUser>(
+        `/groups/${groupId}/users/approved`
       );
 
-      const prevApprovedGroups: Groups = getState().groups.approvedGroups;
-      const prevUnapprovedGroups: Groups = getState().groups.unapprovedGroups;
-
-      const matchedGroups = prevUnapprovedGroups.filter((prevUnapprovedGroup: Group) => {
-        return prevUnapprovedGroup.group_id === result.data.group_id;
-      });
-
-      const matchedGroup: Group = matchedGroups[0];
-
-      const updateUnapprovedUserList: UnapprovedGroupUsers = matchedGroup.unapproved_users_list.filter(
-        (unapprovedUser: UnapprovedGroupUser) => {
-          return unapprovedUser.user_id !== result.data.user_id;
-        }
-      );
-
-      const participateUser: ApprovedGroupUser = {
-        group_id: result.data.group_id,
-        user_id: result.data.user_id,
-        user_name: result.data.user_name,
-        color_code: result.data.color_code,
-      };
-
-      const participateGroup: Group = {
-        group_id: matchedGroup.group_id,
-        group_name: matchedGroup.group_name,
-        approved_users_list: [...matchedGroup.approved_users_list, participateUser],
-        unapproved_users_list: updateUnapprovedUserList,
-      };
-
-      const updateApprovedGroups: Groups = [...prevApprovedGroups, participateGroup];
-
-      const updateUnapprovedGroups: Groups = prevUnapprovedGroups.filter(
-        (prevUnapprovedGroup: Group) => {
-          return prevUnapprovedGroup.group_id !== result.data.group_id;
-        }
-      );
-      dispatch(inviteGroupParticipateAction(updateApprovedGroups, updateUnapprovedGroups));
-      dispatch(push(`/group/${result.data.group_id}/home`));
+      dispatch(joinInvitationGroupAction(res.data));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedJoinInvitationGroupAction(error.response.status, error.response.data.error.message)
+      );
+      throw error;
     }
   };
 };
