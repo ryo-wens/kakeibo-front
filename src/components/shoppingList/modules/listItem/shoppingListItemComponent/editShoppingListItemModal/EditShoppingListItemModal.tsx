@@ -37,59 +37,50 @@ interface EditShoppingListItemModalProps {
 }
 
 const EditShoppingListItemModal = (props: EditShoppingListItemModalProps) => {
-  const body = (
-    <div className={styles.modalWrapper}>
-      {props.openDeleteForm ? (
-        <ShoppingListDeleteForm
-          titleLabel={'買い物リストアイテムを削除'}
-          purchase={props.initialPurchase}
-          handleCloseModal={props.handleCloseModal}
-          handleCloseDeleteForm={props.handleCloseDeleteForm}
-          handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
-        />
-      ) : (
-        <ShoppingListFormContainer
-          titleLabel={'買い物リストアイテムを編集'}
-          buttonLabel={'保存'}
-          expectedPurchaseDate={props.expectedPurchaseDate}
-          purchase={props.purchase}
-          shop={props.shop}
-          amount={props.amount}
-          bigCategoryId={props.bigCategoryId}
-          bigCategory={props.bigCategory}
-          transactionAutoAdd={props.transactionAutoAdd}
-          associatedCategory={props.associatedCategory}
-          handlePurchaseChange={props.handlePurchaseChange}
-          handleDateChange={props.handleDateChange}
-          handleAmountChange={props.handleAmountChange}
-          handleShopChange={props.handleShopChange}
-          handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-          handleCloseModal={props.handleCloseModal}
-          unInput={props.unInput}
-          minDate={new Date('1900-01-01')}
-          handleShoppingListItem={props.handleEditShoppingListItem}
-          displayInputAmountMessage={false}
-          setBigCategory={props.setBigCategory}
-          setBigCategoryId={props.setBigCategoryId}
-          setCustomCategoryId={props.setCustomCategoryId}
-          setMediumCategoryId={props.setMediumCategoryId}
-          setAssociatedCategory={props.setAssociatedCategory}
-          handleOpenDeleteForm={props.handleOpenDeleteForm}
-        />
-      )}
-    </div>
-  );
-
   return (
     <>
       <EditIcon className={styles.editIcon} onClick={() => props.handleOpenModal()} />
-      <Modal
-        open={props.open}
-        onClose={props.handleCloseModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
+      <Modal open={props.open} onClose={props.handleCloseModal}>
+        <div className={styles.modalWrapper}>
+          {props.openDeleteForm ? (
+            <ShoppingListDeleteForm
+              titleLabel={'買い物リストアイテムを削除'}
+              purchase={props.initialPurchase}
+              handleCloseModal={props.handleCloseModal}
+              handleCloseDeleteForm={props.handleCloseDeleteForm}
+              handleDeleteShoppingListItem={props.handleDeleteShoppingListItem}
+            />
+          ) : (
+            <ShoppingListFormContainer
+              titleLabel={'買い物リストアイテムを編集'}
+              buttonLabel={'保存'}
+              expectedPurchaseDate={props.expectedPurchaseDate}
+              purchase={props.purchase}
+              shop={props.shop}
+              amount={props.amount}
+              bigCategoryId={props.bigCategoryId}
+              bigCategory={props.bigCategory}
+              transactionAutoAdd={props.transactionAutoAdd}
+              associatedCategory={props.associatedCategory}
+              handlePurchaseChange={props.handlePurchaseChange}
+              handleDateChange={props.handleDateChange}
+              handleAmountChange={props.handleAmountChange}
+              handleShopChange={props.handleShopChange}
+              handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
+              handleCloseModal={props.handleCloseModal}
+              unInput={props.unInput}
+              minDate={new Date('1900-01-01')}
+              handleShoppingListItem={props.handleEditShoppingListItem}
+              displayInputAmountMessage={false}
+              setBigCategory={props.setBigCategory}
+              setBigCategoryId={props.setBigCategoryId}
+              setCustomCategoryId={props.setCustomCategoryId}
+              setMediumCategoryId={props.setMediumCategoryId}
+              setAssociatedCategory={props.setAssociatedCategory}
+              handleOpenDeleteForm={props.handleOpenDeleteForm}
+            />
+          )}
+        </div>
       </Modal>
     </>
   );

@@ -8,21 +8,15 @@ interface ModalFormLayoutProps {
   titleLabel: string;
   handleClose: () => void;
   handleBack?: () => void;
-  modalFormWidthClassName?: string;
 }
 
 const ModalFormLayout: React.FC<ModalFormLayoutProps> = (props) => {
-  const { titleLabel, handleClose, handleBack, modalFormWidthClassName, children } = props;
-
-  const wrapperClassName = cn(styles.wrapper, {
-    modalFormWidthClassName: modalFormWidthClassName,
-    [styles.defaultWidth]: !modalFormWidthClassName,
-  });
+  const { titleLabel, handleClose, handleBack, children } = props;
 
   const backButtonClassName = cn(styles.backBtn, { [styles.hideBackBtn]: !handleBack });
 
   return (
-    <div className={wrapperClassName}>
+    <div className={styles.wrapper}>
       <div className={styles.position}>
         <button className={backButtonClassName} onClick={handleBack}>
           <ChevronLeftIcon />

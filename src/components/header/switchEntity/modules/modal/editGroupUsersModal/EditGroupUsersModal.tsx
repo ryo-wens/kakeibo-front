@@ -19,11 +19,12 @@ interface EditGroupUsersModalProps {
 
 const EditGroupUsersModal = (props: EditGroupUsersModalProps) => {
   const existInviteUsers = props.approvedGroup.unapproved_users_list.length > 0;
+
   return (
     <>
       <MenuItem onClick={props.handleOpenModal}>グループユーザーの編集</MenuItem>
       <Modal open={props.open} onClose={props.handleCloseModal}>
-        <>
+        <div className={styles.modalWrapper}>
           {!props.openInviteForm && (
             <ModalFormLayout
               titleLabel={'グループユーザーの編集'}
@@ -31,23 +32,15 @@ const EditGroupUsersModal = (props: EditGroupUsersModalProps) => {
             >
               <ul className={styles.userList}>
                 {props.approvedGroup.approved_users_list.map((approvedUser) => {
-                  return (
-                    <li className={styles.userListItem} key={approvedUser.user_id}>
-                      {approvedUser.user_name}
-                    </li>
-                  );
+                  return <li key={approvedUser.user_id}>{approvedUser.user_name}</li>;
                 })}
               </ul>
               {existInviteUsers && (
-                <div className={styles.inviteUserListArea}>
-                  <p className={styles.inviteUserListText}>招待中のユーザー</p>
-                  <ul className={styles.inviteUserList}>
+                <div className={styles.invitationUserListArea}>
+                  <p className={styles.invitationUserListText}>招待中のユーザー</p>
+                  <ul className={styles.invitationUserList}>
                     {props.approvedGroup.unapproved_users_list.map((unapprovedUser) => {
-                      return (
-                        <li className={styles.inviteUser} key={unapprovedUser.user_id}>
-                          {unapprovedUser.user_name}
-                        </li>
-                      );
+                      return <li key={unapprovedUser.user_id}>{unapprovedUser.user_name}</li>;
                     })}
                   </ul>
                 </div>
@@ -65,7 +58,7 @@ const EditGroupUsersModal = (props: EditGroupUsersModalProps) => {
               handleCloseInviteForm={props.handleCloseInviteForm}
             />
           )}
-        </>
+        </div>
       </Modal>
     </>
   );
