@@ -99,7 +99,17 @@ export const groupsReducer = (state = initialState.groups, action: groupActions)
         ...state,
         ...action.payload,
       };
-    case Actions.INVITE_GROUP_REJECT:
+    case Actions.START_REFUSE_INVITATION_GROUP:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.REFUSE_INVITATION_GROUP:
+      return {
+        ...state,
+        ...action.payload,
+      };
+    case Actions.FAILED_REFUSE_INVITATION_GROUP:
       return {
         ...state,
         ...action.payload,

@@ -1,17 +1,23 @@
 @import "../../../../../../assets/mixin/operation-btn";
 
+.modalWrapper {
+  width: 400px;
+  margin: 20px auto auto auto;
+  outline: none;
+}
+
 .userList {
   list-style: none;
   margin: 0;
   padding: 0;
-}
 
-.userListItem {
-  margin: 0 0 20px 25px;
-  color: $color-denim;
-  font-size: 1.0rem;
-  font-weight: 500;
-  letter-spacing: 0.05rem;
+  > li {
+    margin: 0 0 20px 25px;
+    color: $color-scorpion;
+    font-size: 1.0rem;
+    font-weight: 500;
+    letter-spacing: 0.05rem;
+  }
 }
 
 .inviteBtn{
@@ -39,7 +45,7 @@
   }
 }
 
-.inviteUserListArea {
+.invitationUserListArea {
   background-color: white;
   border-radius: 0.6rem;
   border: $color-geyser solid 1px;
@@ -48,7 +54,7 @@
   box-shadow: $section-box_shadow;
 }
 
-.inviteUserListText {
+.invitationUserListText {
   font-size: 0.8rem;
   text-align: center;
   background-color: $color-blackSqueeze;
@@ -60,18 +66,18 @@
   margin: 0 0 10px;
 }
 
-.inviteUserList {
+.invitationUserList {
   list-style-type: none;
   padding: 0;
   margin: 0;
-}
 
-.inviteUser {
-  font-size: 0.9rem;
-  color: $color-tundora;
-  margin: 0 20px 10px;
+   > li {
+     font-size: 0.9rem;
+     color: $color-tundora;
+     margin: 0 20px 10px;
 
-  &:last-child {
-    margin-bottom: 0;
-  }
+     &:last-child {
+       margin-bottom: 0;
+     }
+   }
 }

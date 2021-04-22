@@ -14,6 +14,7 @@ const JoinInvitationGroupModalContainer = (props: JoinInvitationGroupModalContai
   const dispatch = useDispatch();
 
   const [open, setOpen] = useState(false);
+  const [openRefuseForm, setOpenRefuseForm] = useState(false);
 
   const handleOpenModal = () => {
     setOpen(true);
@@ -21,6 +22,14 @@ const JoinInvitationGroupModalContainer = (props: JoinInvitationGroupModalContai
 
   const handleCloseModal = () => {
     setOpen(false);
+  };
+
+  const handleOpenRefuseForm = () => {
+    setOpenRefuseForm(true);
+  };
+
+  const handleCloseRefuseForm = () => {
+    setOpenRefuseForm(false);
   };
 
   const handleJoinInvitationGroup = async () => {
@@ -37,9 +46,12 @@ const JoinInvitationGroupModalContainer = (props: JoinInvitationGroupModalContai
   return (
     <JoinInvitationGroupModal
       open={open}
+      openRefuseForm={openRefuseForm}
       unapprovedGroup={group}
       handleOpenModal={handleOpenModal}
       handleCloseModal={handleCloseModal}
+      handleOpenRefuseForm={handleOpenRefuseForm}
+      handleCloseRefuseForm={handleCloseRefuseForm}
       handleJoinInvitationGroup={handleJoinInvitationGroup}
     />
   );

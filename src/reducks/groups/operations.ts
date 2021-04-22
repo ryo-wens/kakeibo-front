@@ -1,6 +1,5 @@
 import {
   fetchGroupsAction,
-  inviteGroupRejectAction,
   startFetchGroupsAction,
   cancelFetchGroupsAction,
   failedFetchGroupsAction,
@@ -19,6 +18,9 @@ import {
   joinInvitationGroupAction,
   failedJoinInvitationGroupAction,
   startJoinInvitationGroupAction,
+  failedRefuseInvitationGroupAction,
+  refuseInvitationGroupAction,
+  startRefuseInvitationGroupAction,
 } from './actions';
 import { Dispatch, Action } from 'redux';
 import axios, { CancelTokenSource } from 'axios';
@@ -29,17 +31,13 @@ import {
   EditGroupNameReq,
   EditGroupNameRes,
   FetchGroupsRes,
-  Group,
-  Groups,
   inviteGroupRejectRes,
   InviteUsersToGroupReq,
   UnapprovedGroupUser,
   UnsubscribeGroupRes,
 } from './types';
-import { State } from '../store/types';
 import { openTextModalAction } from '../modal/actions';
 import { push } from 'connected-react-router';
-import { errorHandling } from '../../lib/validation';
 import { userServiceInstance } from '../axiosConfig';
 
 export const fetchGroups = (signal?: CancelTokenSource) => {
@@ -159,24 +157,22 @@ export const joinInvitationGroup = (groupId: number) => {
   };
 };
 
-export const inviteGroupReject = (groupId: number) => {
-  return async (dispatch: Dispatch<Action>, getState: () => State) => {
+export const refuseInvitationGroup = (groupId: number) => {
+  return async (dispatch: Dispatch<Action>) => {
+    dispatch(startRefuseInvitationGroupAction());
+
     try {
-      const result = await userServiceInstance.delete<inviteGroupRejectRes>(
+      const res = await userServiceInstance.delete<inviteGroupRejectRes>(
         `/groups/${groupId}/users/unapproved`
       );
 
-      const prevUnapprovedGroups = getState().groups.unapprovedGroups;
-
-      const updateUnapprovedGroups: Groups = prevUnapprovedGroups.filter(
-        (prevUnapprovedGroup: Group) => {
-          return prevUnapprovedGroup.group_id !== groupId;
-        }
-      );
-      dispatch(inviteGroupRejectAction(updateUnapprovedGroups));
-      dispatch(openTextModalAction(result.data.message));
+      dispatch(refuseInvitationGroupAction());
+      dispatch(openTextModalAction(res.data.message));
     } catch (error) {
-      errorHandling(dispatch, error);
+      dispatch(
+        failedRefuseInvitationGroupAction(error.response.status, error.response.data.error.message)
+      );
+      throw error;
     }
   };
 };

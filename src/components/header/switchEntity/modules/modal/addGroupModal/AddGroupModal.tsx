@@ -22,17 +22,19 @@ const AddGroupModal = (props: AddGroupModalProps) => {
         グループを追加
       </button>
       <Modal open={props.open} onClose={props.handleClose}>
-        <GroupNameForm
-          titleLabel={'グループを追加'}
-          buttonLabel={'追加'}
-          open={props.open}
-          groupName={props.groupName}
-          handleOpen={props.handleOpen}
-          handleClose={props.handleClose}
-          handleGroupName={props.handleGroupName}
-          handleGroup={props.handleAddGroup}
-          disabledButton={props.isBlankGroupName}
-        />
+        <div className={styles.modalWrapper}>
+          <GroupNameForm
+            titleLabel={'グループを追加'}
+            buttonLabel={'追加'}
+            open={props.open}
+            groupName={props.groupName}
+            handleOpen={props.handleOpen}
+            handleClose={props.handleClose}
+            handleGroupName={props.handleGroupName}
+            handleGroup={props.handleAddGroup}
+            disabledButton={props.isBlankGroupName}
+          />
+        </div>
       </Modal>
     </>
   );

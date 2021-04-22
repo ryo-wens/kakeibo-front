@@ -1,7 +1,6 @@
 import React from 'react';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import CloseIcon from '@material-ui/icons/Close';
-import './shopping-list-delete-form.scss';
+import styles from './ShoppingListDeleteForm.module.scss';
+import ModalFormLayout from '../../../../uikit/form/formLayout/ModalFormLayout';
 
 interface ShoppingListDeleteFormProps {
   titleLabel: string;
@@ -12,28 +11,30 @@ interface ShoppingListDeleteFormProps {
 }
 
 const ShoppingListDeleteForm = (props: ShoppingListDeleteFormProps) => {
+  const {
+    titleLabel,
+    purchase,
+    handleCloseModal,
+    handleCloseDeleteForm,
+    handleDeleteShoppingListItem,
+  } = props;
+
   return (
-    <div className="shopping-list-delete-form">
-      <div className="shopping-list-delete-form__position">
-        <button
-          className="shopping-list-delete-form__back-btn"
-          onClick={props.handleCloseDeleteForm}
-        >
-          <ChevronLeftIcon />
+    <ModalFormLayout
+      titleLabel={titleLabel}
+      handleClose={handleCloseModal}
+      handleBack={handleCloseDeleteForm}
+    >
+      <p className={styles.message}>{purchase}を削除しますか？</p>
+      <div className={styles.operationBtn}>
+        <button className={styles.operationBtn__delete} onClick={handleDeleteShoppingListItem}>
+          削除
         </button>
-        <h3 className="shopping-list-delete-form__title">{props.titleLabel}</h3>
-        <button className="shopping-list-delete-form__close-btn" onClick={props.handleCloseModal}>
-          <CloseIcon />
+        <button className={styles.operationBtn__cancel} onClick={handleCloseDeleteForm}>
+          キャンセル
         </button>
       </div>
-      <p className="shopping-list-delete-form__message">{props.purchase}を削除しますか？</p>
-      <button
-        className="shopping-list-delete-form__delete-btn"
-        onClick={props.handleDeleteShoppingListItem}
-      >
-        削除
-      </button>
-    </div>
+    </ModalFormLayout>
   );
 };
 

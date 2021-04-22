@@ -30,17 +30,19 @@ const UnsubscribeGroupModal = (props: UnsubscribeGroupModalProps) => {
       <MenuItem onClick={handleOpenModal}>グループを退会</MenuItem>
       <ModalInform message={modalMessage} />
       <Modal open={open} onClose={handleCloseModal}>
-        <ModalFormLayout titleLabel={'グループを退会'} handleClose={handleCloseModal}>
-          <p className={styles.message}>{approvedGroup.group_name}を退会しますか？</p>
-          <div className={styles.operationBtn}>
-            <button className={styles.operationBtn__unsubscribe} onClick={handleUnsubscribeGroup}>
-              退会
-            </button>
-            <button className={styles.operationBtn__cancel} onClick={handleCloseModal}>
-              キャンセル
-            </button>
-          </div>
-        </ModalFormLayout>
+        <div className={styles.modalWrapper}>
+          <ModalFormLayout titleLabel={'グループを退会'} handleClose={handleCloseModal}>
+            <p className={styles.message}>{approvedGroup.group_name}を退会しますか？</p>
+            <div className={styles.operationBtn}>
+              <button className={styles.operationBtn__unsubscribe} onClick={handleUnsubscribeGroup}>
+                退会
+              </button>
+              <button className={styles.operationBtn__cancel} onClick={handleCloseModal}>
+                キャンセル
+              </button>
+            </div>
+          </ModalFormLayout>
+        </div>
       </Modal>
     </>
   );

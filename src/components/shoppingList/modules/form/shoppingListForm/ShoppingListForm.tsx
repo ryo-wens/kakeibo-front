@@ -1,5 +1,4 @@
 import React from 'react';
-import CloseIcon from '@material-ui/icons/Close';
 import { DatePicker, TextInput } from '../../../../uikit';
 import styles from './ShoppingListForm.module.scss';
 import { Categories } from '../../../../../reducks/categories/types';
@@ -7,6 +6,7 @@ import ToolTipIcon from '../../toolTip/ToolTipIcon';
 import BigCategoryListContainer from '../../../../../containers/modules/BigCategoryListContainer';
 import MediumCategoryListContainer from '../../../../../containers/modules/MediumCategoryListContainer';
 import cn from 'classnames';
+import ModalFormLayout from '../../../../uikit/form/formLayout/ModalFormLayout';
 
 interface ShoppingListFormProps {
   message: string;
@@ -64,13 +64,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
   };
 
   return (
-    <div className={styles.wrapper}>
-      <div className={styles.position}>
-        <h3>{props.titleLabel}</h3>
-        <button onClick={props.handleCloseModal}>
-          <CloseIcon />
-        </button>
-      </div>
+    <ModalFormLayout titleLabel={props.titleLabel} handleClose={props.handleCloseModal}>
       <dl>
         <div className={styles.selectContent}>
           <dt>購入品</dt>
@@ -237,7 +231,7 @@ const ShoppingListForm = (props: ShoppingListFormProps) => {
           </button>
         )}
       </div>
-    </div>
+    </ModalFormLayout>
   );
 };
 
