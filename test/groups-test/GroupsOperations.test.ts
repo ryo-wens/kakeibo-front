@@ -8,7 +8,7 @@ import {
   addGroup,
   editGroupName,
   fetchGroups,
-  inviteGroupReject,
+  refuseInvitationGroup,
   inviteUsersToGroup,
   joinInvitationGroup,
   unsubscribeGroup,
@@ -17,7 +17,7 @@ import addGroupResponse from './addGroupResponse.json';
 import fetchGroupsResponse from './fetchGroupsResponse.json';
 import unsubscribeGroupResponse from './unsubscribeGroupResponse.json';
 import joinInvitationGroupResponse from './joinInvitationGroupResponse.json';
-import inviteGroupRejectResponse from './inviteGroupRejectResponse.json';
+import refuseInvitationGroupResponse from './refuseInvitationGroupResponse.json';
 import inviteUsersToGroupResponse from './inviteUsersToGroupResponse.json';
 import editGroupNameResponse from './editGroupNameResponse.json';
 import { userServiceInstance } from '../../src/reducks/axiosConfig';
@@ -303,32 +303,40 @@ describe('async actions groups', () => {
     expect(store.getActions()).toEqual(expectedActions);
   });
 
-  it('When INVITE_GROUP_REJECT succeeds,sends the approved groups except the requested group_id to inviteGroupRejectAction, and sends the response message to openTextModalAction', async () => {
+  it('fetch message if invitation group refuse succeeds.', async () => {
     const groupId = 2;
     const url = `/groups/${groupId}/users/unapproved`;
 
-    const mockResponse = JSON.stringify(inviteGroupRejectResponse);
-
     const expectedGroupActions = [
       {
-        type: GroupsActions.INVITE_GROUP_REJECT,
+        type: GroupsActions.START_REFUSE_INVITATION_GROUP,
         payload: {
-          unapprovedGroups: [],
+          groupsLoading: true,
+        },
+      },
+      {
+        type: GroupsActions.REFUSE_INVITATION_GROUP,
+        payload: {
+          groupUser: {
+            groupId: 0,
+            userId: '',
+            userName: '',
+            colorCode: '',
+          },
         },
       },
       {
         type: ModalActions.OPEN_TEXT_MODAL,
         payload: {
-          message: 'グループ招待を拒否しました。',
+          message: refuseInvitationGroupResponse.message,
           open: true,
         },
       },
     ];
 
-    axiosMock.onDelete(url).reply(200, mockResponse);
+    axiosMock.onDelete(url).reply(200, refuseInvitationGroupResponse);
 
-    // @ts-ignore
-    await inviteGroupReject(groupId)(store.dispatch, getState);
+    await refuseInvitationGroup(groupId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedGroupActions);
   });
 });

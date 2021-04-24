@@ -1,6 +1,12 @@
 @import "../../../../assets/mixin/icon-btn";
 @import "../../../../assets/mixin/operation-btn";
 
+.modalWrapper {
+  width: 400px;
+  margin: 20px auto auto auto;
+  outline: none;
+}
+
 .notificationItem {
   color: $color-tundora;
   letter-spacing: 0.08rem;
@@ -26,23 +32,23 @@
   color: $color-tundora;
   letter-spacing: 0.08rem;
   margin: 0 0 30px 20px;
-
-  > span {
-    color: $color-mariner;
-    font-weight: 500;
-  }
 }
 
 .operationBtn {
   display: flex;
+  justify-content: space-between;
   margin: 0 20px;
 
-  &__add {
+  &__join {
     @include operation-btn($color-sushi, white, $color-sushi);
   }
 
   &__cancel {
     @include operation-btn(white, $color-scorpion,$color-geyser);
     margin: 0 0 0 10px;
+  }
+
+  &__refuse {
+    @include operation-btn($color-cinnabar, white, $color-cinnabar);
   }
 }

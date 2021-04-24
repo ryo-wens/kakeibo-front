@@ -1,20 +1,15 @@
-@import "../../../../../../assets/mixin/operation-btn";
-
-.modalWrapper {
-  width: 400px;
-  margin: 20px auto auto auto;
-  outline: none;
-}
+@import "../../../../../assets/mixin/operation-btn";
 
 .message {
-  margin-left: 20px;
+  color: $color-tundora;
+  text-align: center;
 }
 
 .operationBtn {
   display: flex;
   margin: 0 20px;
 
-  &__unsubscribe {
+  &__delete {
     @include operation-btn($color-cinnabar, white, $color-cinnabar);
   }
 

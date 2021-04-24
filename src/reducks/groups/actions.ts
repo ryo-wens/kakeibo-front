@@ -19,7 +19,9 @@ export type groupActions = ReturnType<
   | typeof startJoinInvitationGroupAction
   | typeof joinInvitationGroupAction
   | typeof failedJoinInvitationGroupAction
-  | typeof inviteGroupRejectAction
+  | typeof startRefuseInvitationGroupAction
+  | typeof refuseInvitationGroupAction
+  | typeof failedRefuseInvitationGroupAction
 >;
 
 export const START_FETCH_GROUPS = 'START_FETCH_GROUPS';
@@ -257,12 +259,41 @@ export const failedJoinInvitationGroupAction = (statusCode: number, errorMessage
   };
 };
 
-export const INVITE_GROUP_REJECT = 'INVITE_GROUP_REJECT';
-export const inviteGroupRejectAction = (unapprovedGroups: Groups) => {
+export const START_REFUSE_INVITATION_GROUP = 'START_REFUSE_INVITATION_GROUP';
+export const startRefuseInvitationGroupAction = () => {
   return {
-    type: INVITE_GROUP_REJECT,
+    type: START_REFUSE_INVITATION_GROUP,
     payload: {
-      unapprovedGroups: unapprovedGroups,
+      groupsLoading: true,
+    },
+  };
+};
+
+export const REFUSE_INVITATION_GROUP = 'REFUSE_INVITATION_GROUP';
+export const refuseInvitationGroupAction = () => {
+  return {
+    type: REFUSE_INVITATION_GROUP,
+    payload: {
+      groupUser: {
+        groupId: 0,
+        userId: '',
+        userName: '',
+        colorCode: '',
+      },
+    },
+  };
+};
+
+export const FAILED_REFUSE_INVITATION_GROUP = 'FAILED_REFUSE_INVITATION_GROUP';
+export const failedRefuseInvitationGroupAction = (statusCode: number, errorMessage: string) => {
+  return {
+    type: FAILED_REFUSE_INVITATION_GROUP,
+    payload: {
+      groupsLoading: false,
+      groupsError: {
+        statusCode: statusCode,
+        errorMessage: errorMessage,
+      },
     },
   };
 };

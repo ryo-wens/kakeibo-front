@@ -2,6 +2,7 @@ import React from 'react';
 import Modal from '@material-ui/core/Modal';
 import MenuItem from '@material-ui/core/MenuItem';
 import GroupNameForm from '../../form/groupNameForm/GroupNameForm';
+import styles from './EditGroupNameModal.module.scss';
 
 interface EditGroupNameModalProps {
   open: boolean;
@@ -18,17 +19,19 @@ const EditGroupNameModal = (props: EditGroupNameModalProps) => {
     <>
       <MenuItem onClick={props.handleOpen}>グループ名の編集</MenuItem>
       <Modal open={props.open} onClose={props.handleClose}>
-        <GroupNameForm
-          titleLabel={'グループ名を編集'}
-          buttonLabel={'保存'}
-          open={props.open}
-          groupName={props.groupName}
-          handleOpen={props.handleOpen}
-          handleClose={props.handleClose}
-          handleGroupName={props.handleGroupName}
-          handleGroup={props.handleEditGroupName}
-          disabledButton={props.disabledEditButton}
-        />
+        <div className={styles.modalWrapper}>
+          <GroupNameForm
+            titleLabel={'グループ名を編集'}
+            buttonLabel={'保存'}
+            open={props.open}
+            groupName={props.groupName}
+            handleOpen={props.handleOpen}
+            handleClose={props.handleClose}
+            handleGroupName={props.handleGroupName}
+            handleGroup={props.handleEditGroupName}
+            disabledButton={props.disabledEditButton}
+          />
+        </div>
       </Modal>
     </>
   );
