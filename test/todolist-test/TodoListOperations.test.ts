@@ -23,6 +23,7 @@ import deleteTodoListItemResponse from './deleteTodoListItemResponse.json';
 import { AddTodoListItemReq, EditTodoListItemReq } from '../../src/reducks/todoList/types';
 import { todoServiceInstance } from '../../src/reducks/axiosConfig';
 import { date } from '../../src/lib/constant';
+import dayjs from 'dayjs';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -153,8 +154,8 @@ describe('async actions todoLists', () => {
 
     const params = {
       date_type: 'implementation_date',
-      start_date: new Date('2020-09-01T00:00:00'),
-      end_date: new Date('2020-09-30T00:00:00'),
+      start_date: dayjs(new Date('2020-09-01T00:00:00')).format(),
+      end_date: dayjs(new Date('2020-09-30T00:00:00')).format(),
       sort: 'implementation_date',
       sort_type: 'desc',
     };

@@ -403,18 +403,7 @@ export const deleteGroupSearchTodoListItem = (
 
       const fetchSearchResult = await todoServiceInstance.get<FetchGroupSearchTodoListRes>(
         `/groups/${groupId}/todo-list/search`,
-        {
-          params: {
-            date_type: searchRequestData.date_type,
-            start_date: dayjs(String(searchRequestData.start_date)).format(),
-            end_date: dayjs(String(searchRequestData.end_date)).format(),
-            complete_flag: searchRequestData.complete_flag,
-            todo_content: searchRequestData.todo_content,
-            sort: searchRequestData.sort,
-            sort_type: searchRequestData.sort_type,
-            limit: searchRequestData.limit,
-          },
-        }
+        { params: searchRequestData }
       );
 
       const searchTodoList = fetchSearchResult.data.message
