@@ -17,8 +17,6 @@ interface TodoPageProps {
   editing: boolean;
   setEditing: React.Dispatch<React.SetStateAction<boolean>>;
   openSearchTodoList: boolean;
-  openSearchResultTodoList: boolean;
-  setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
   handleOpenSearch: () => void;
   handleCloseSearch: () => void;
   pathName: string;
@@ -73,11 +71,7 @@ const TodoPage = (props: TodoPageProps) => {
           </div>
         </div>
       ) : (
-        <SearchTodoListAreaContainer
-          openSearchResultTodoList={props.openSearchResultTodoList}
-          setOpenSearchResultTodoList={props.setOpenSearchResultTodoList}
-          handleCloseSearch={props.handleCloseSearch}
-        />
+        <SearchTodoListAreaContainer handleCloseSearch={props.handleCloseSearch} />
       )}
     </>
   );

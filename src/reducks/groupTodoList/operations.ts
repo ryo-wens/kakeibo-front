@@ -46,7 +46,7 @@ import {
   startDeleteGroupTodoListItemAction,
 } from './actions';
 import { openTextModalAction } from '../modal/actions';
-import { EditTodoListItemReq, SearchTodoRequestData } from '../todoList/types';
+import { EditTodoListItemReq, FetchSearchTodoListReq } from '../todoList/types';
 import { todoServiceInstance } from '../axiosConfig';
 
 export const fetchGroupExpiredTodoList = (groupId: number, signal?: CancelTokenSource) => {
@@ -56,9 +56,7 @@ export const fetchGroupExpiredTodoList = (groupId: number, signal?: CancelTokenS
     try {
       const result = await todoServiceInstance.get<FetchGroupExpiredTodoListRes>(
         `/groups/${groupId}/todo-list/expired`,
-        {
-          cancelToken: signal?.token,
-        }
+        { cancelToken: signal?.token }
       );
       const groupExpiredTodoList: GroupTodoList = result.data.expired_group_todo_list;
 
@@ -91,9 +89,7 @@ export const fetchGroupTodayTodoList = (
     try {
       const result = await todoServiceInstance.get<FetchGroupTodayTodoListRes>(
         `/groups/${groupId}/todo-list/${year}-${month}-${date}`,
-        {
-          cancelToken: signal?.token,
-        }
+        { cancelToken: signal?.token }
       );
 
       const message = result.data.message;
@@ -128,9 +124,7 @@ export const fetchGroupMonthlyTodoList = (
     try {
       const result = await todoServiceInstance.get<FetchGroupMonthlyTodoListRes>(
         `/groups/${groupId}/todo-list/${year}-${month}`,
-        {
-          cancelToken: signal?.token,
-        }
+        { cancelToken: signal?.token }
       );
 
       const message = result.data.message;
@@ -153,39 +147,16 @@ export const fetchGroupMonthlyTodoList = (
   };
 };
 
-export const fetchGroupSearchTodoList = (
-  groupId: number,
-  searchGroupRequestData: {
-    date_type: string;
-    start_date: Date | null;
-    end_date: Date | null;
-    sort: string;
-    sort_type: string;
-    complete_flag?: boolean | string;
-    todo_content?: string;
-    limit?: string;
-  }
-) => {
+export const fetchGroupSearchTodoList = (groupId: number, requestData: FetchSearchTodoListReq) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupSearchTodoListAction());
 
     try {
-      const result = await todoServiceInstance.get<FetchGroupSearchTodoListRes>(
+      const res = await todoServiceInstance.get<FetchGroupSearchTodoListRes>(
         `/groups/${groupId}/todo-list/search`,
-        {
-          params: {
-            date_type: searchGroupRequestData.date_type,
-            start_date: dayjs(String(searchGroupRequestData.start_date)).format(),
-            end_date: dayjs(String(searchGroupRequestData.end_date)).format(),
-            complete_flag: searchGroupRequestData.complete_flag,
-            todo_content: searchGroupRequestData.todo_content,
-            sort: searchGroupRequestData.sort,
-            sort_type: searchGroupRequestData.sort_type,
-            limit: searchGroupRequestData.limit,
-          },
-        }
+        { params: requestData }
       );
-      const searchTodoList: GroupTodoList = result.data.message ? [] : result.data.search_todo_list;
+      const searchTodoList: GroupTodoList = res.data.message ? [] : res.data.search_todo_list;
 
       dispatch(fetchGroupSearchTodoListAction(searchTodoList));
     } catch (error) {
@@ -377,7 +348,7 @@ export const editGroupSearchTodoListItem = (
   groupId: number,
   todoListItemId: number,
   requestData: EditTodoListItemReq,
-  searchRequestData: SearchTodoRequestData
+  searchRequestData: FetchSearchTodoListReq
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startEditGroupSearchTodoListItemAction());
@@ -397,18 +368,7 @@ export const editGroupSearchTodoListItem = (
 
       const fetchSearchResult = await todoServiceInstance.get<FetchGroupSearchTodoListRes>(
         `/groups/${groupId}/todo-list/search`,
-        {
-          params: {
-            date_type: searchRequestData.date_type,
-            start_date: dayjs(String(searchRequestData.start_date)).format(),
-            end_date: dayjs(String(searchRequestData.end_date)).format(),
-            complete_flag: searchRequestData.complete_flag,
-            todo_content: searchRequestData.todo_content,
-            sort: searchRequestData.sort,
-            sort_type: searchRequestData.sort_type,
-            limit: searchRequestData.limit,
-          },
-        }
+        { params: searchRequestData }
       );
 
       const searchTodoList = fetchSearchResult.data.message
@@ -431,7 +391,7 @@ export const editGroupSearchTodoListItem = (
 export const deleteGroupSearchTodoListItem = (
   groupId: number,
   todoListItemId: number,
-  searchRequestData: SearchTodoRequestData
+  searchRequestData: FetchSearchTodoListReq
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startDeleteGroupSearchTodoListItemAction());

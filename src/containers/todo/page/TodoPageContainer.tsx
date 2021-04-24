@@ -12,7 +12,6 @@ const TodoPageContainer = () => {
   const pathName = useLocation().pathname.split('/')[1];
 
   const [openSearchTodoList, setOpenSearchTodoList] = useState<boolean>(false);
-  const [openSearchResultTodoList, setOpenSearchResultTodoList] = useState<boolean>(false);
   const [currentTodayOrMonthly, setCurrentTodayOrMonthly] = useState<TodayOrMonthly>('today');
   const [editing, setEditing] = useState(false);
   const [selectedYear, setSelectedYear] = useState<number>(year);
@@ -39,7 +38,6 @@ const TodoPageContainer = () => {
 
   const handleCloseSearch = () => {
     setOpenSearchTodoList(false);
-    setOpenSearchResultTodoList(false);
   };
 
   return (
@@ -53,8 +51,6 @@ const TodoPageContainer = () => {
       editing={editing}
       setEditing={setEditing}
       openSearchTodoList={openSearchTodoList}
-      openSearchResultTodoList={openSearchResultTodoList}
-      setOpenSearchResultTodoList={setOpenSearchResultTodoList}
       handleOpenSearch={handleOpenSearch}
       handleCloseSearch={handleCloseSearch}
       pathName={pathName}

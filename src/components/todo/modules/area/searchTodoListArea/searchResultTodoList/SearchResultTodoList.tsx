@@ -1,6 +1,6 @@
 import React from 'react';
 import {
-  SearchTodoRequestData,
+  FetchSearchTodoListReq,
   TodoList,
   TodoListItem,
 } from '../../../../../../reducks/todoList/types';
@@ -12,7 +12,7 @@ interface SearchResultTodoListProps {
   searchTodoList: TodoList;
   equalsDisplayDate: (listItem: TodoListItem) => boolean;
   displayDate: (listItem: TodoListItem) => string;
-  fetchSearchTodoListRequestData: SearchTodoRequestData;
+  fetchSearchTodoListRequestData: FetchSearchTodoListReq;
   message: string;
 }
 

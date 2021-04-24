@@ -1,13 +1,14 @@
 import React, { useEffect, useRef, useState } from 'react';
 import {
   EditTodoListItemReq,
-  SearchTodoRequestData,
+  FetchSearchTodoListReq,
   TodoListItem,
 } from '../../../../../../../reducks/todoList/types';
 import { useDispatch } from 'react-redux';
 import {
-  deleteSearchTodoListItem,
-  editSearchTodoListItem,
+  deleteTodoListItem,
+  editTodoListItem,
+  fetchSearchTodoList,
 } from '../../../../../../../reducks/todoList/operations';
 import {
   deleteGroupSearchTodoListItem,
@@ -21,7 +22,7 @@ interface SearchTodoListItemComponentContainerProps {
   listItem: TodoListItem;
   currentYear: string;
   currentMonth: string;
-  fetchSearchTodoListRequestData: SearchTodoRequestData;
+  fetchSearchTodoListRequestData: FetchSearchTodoListReq;
   formClassName: string;
 }
 
@@ -129,13 +130,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       }
     } else {
       try {
-        await dispatch(
-          editSearchTodoListItem(
-            props.listItem.id,
-            requestData,
-            props.fetchSearchTodoListRequestData
-          )
-        );
+        await dispatch(editTodoListItem(props.listItem.id, requestData));
+        await dispatch(fetchSearchTodoList(props.fetchSearchTodoListRequestData));
 
         setChecked(event.target.checked);
       } catch (error) {
@@ -169,13 +165,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       }
     } else {
       try {
-        await dispatch(
-          editSearchTodoListItem(
-            props.listItem.id,
-            requestData,
-            props.fetchSearchTodoListRequestData
-          )
-        );
+        await dispatch(editTodoListItem(props.listItem.id, requestData));
+        await dispatch(fetchSearchTodoList(props.fetchSearchTodoListRequestData));
 
         setOpenEditTodoForm(false);
       } catch (error) {
@@ -184,7 +175,7 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     }
   };
 
-  const handleDeleteTodoListItem = () => {
+  const handleDeleteTodoListItem = async () => {
     if (pathName === 'group') {
       try {
         dispatch(
@@ -199,7 +190,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       }
     } else {
       try {
-        dispatch(deleteSearchTodoListItem(props.listItem.id, props.fetchSearchTodoListRequestData));
+        await dispatch(deleteTodoListItem(props.listItem.id));
+        dispatch(fetchSearchTodoList(props.fetchSearchTodoListRequestData));
       } catch (error) {
         alert(error.response.data.error.message.toString());
       }

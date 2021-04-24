@@ -10,7 +10,7 @@ import SearchResultTodoListContainer from '../../../../../containers/todo/module
 import SelectSortItem from '../../select/SelectSortItem';
 import SelectCompleteFlag from '../../select/SelectCompleteFlag';
 import SelectDateType from '../../../../../components/todo/modules/select/SelectDateType';
-import { SearchTodoRequestData } from '../../../../../reducks/todoList/types';
+import { FetchSearchTodoListReq } from '../../../../../reducks/todoList/types';
 import styles from './SearchTodoListArea.module.scss';
 
 interface SearchTodoListAreaProps {
@@ -23,7 +23,6 @@ interface SearchTodoListAreaProps {
   sortItem: string;
   sortType: string;
   limit: string;
-  setOpenSearchResultTodoList: React.Dispatch<React.SetStateAction<boolean>>;
   handleSelectDateTypeChange: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleStartDateChange: (selectStartDate: Date | null) => void;
   handleEndDateChange: (selectEndDate: Date | null) => void;
@@ -33,8 +32,8 @@ interface SearchTodoListAreaProps {
   handleSelectSortType: (event: React.ChangeEvent<{ value: unknown }>) => void;
   handleSelectLimit: (event: React.ChangeEvent<{ value: unknown }>) => void;
   openSearchResultTodoList: boolean;
-  getSearchResultTodoList: () => void;
-  fetchSearchTodoListRequestData: SearchTodoRequestData;
+  handleFetchSearchTodoList: () => void;
+  fetchSearchTodoListRequestData: FetchSearchTodoListReq;
   handleCloseSearch: () => void;
 }
 
@@ -135,7 +134,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
         );
       })}
       <div className={styles.searchBtnPosition}>
-        <button className={styles.searchBtn} onClick={props.getSearchResultTodoList}>
+        <button className={styles.searchBtn} onClick={props.handleFetchSearchTodoList}>
           この条件で検索
         </button>
       </div>
