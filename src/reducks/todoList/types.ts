@@ -55,10 +55,10 @@ export interface DeleteTodoListItemRes {
   message: string;
 }
 
-export interface SearchTodoRequestData {
+export interface FetchSearchTodoListReq {
   date_type: string;
-  start_date: Date | null;
-  end_date: Date | null;
+  start_date: string;
+  end_date: string;
   sort: string;
   sort_type: string;
   complete_flag?: boolean | string;

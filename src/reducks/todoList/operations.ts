@@ -6,14 +6,10 @@ import {
   cancelFetchMonthlyTodoListAction,
   cancelFetchSearchTodoListAction,
   cancelFetchTodayTodoListAction,
-  deleteSearchTodoListItemAction,
   deleteTodoListItemAction,
-  editSearchTodoListItemAction,
   editTodoListItemAction,
   failedAddTodoListItemAction,
-  failedDeleteSearchTodoListItemAction,
   failedDeleteTodoListItemAction,
-  failedEditSearchTodoListItemAction,
   failedEditTodoListItemAction,
   failedFetchExpiredTodoListAction,
   failedFetchMonthlyTodoListAction,
@@ -24,9 +20,7 @@ import {
   fetchSearchTodoListAction,
   fetchTodayTodoListAction,
   startAddTodoListItemAction,
-  startDeleteSearchTodoListItemAction,
   startDeleteTodoListItemAction,
-  startEditSearchTodoListItemAction,
   startEditTodoListItemAction,
   startFetchExpiredTodoListAction,
   startFetchMonthlyTodoListAction,
@@ -37,12 +31,11 @@ import {
   AddTodoListItemReq,
   DeleteTodoListItemRes,
   EditTodoListItemReq,
-  EditTodoListItemRes,
   FetchExpiredTodoListRes,
   FetchMonthlyTodoListRes,
+  FetchSearchTodoListReq,
   FetchSearchTodoListRes,
   FetchTodayTodoListRes,
-  SearchTodoRequestData,
   TodoList,
   TodoListItem,
 } from './types';
@@ -85,9 +78,7 @@ export const fetchTodayTodoList = (
     try {
       const result = await todoServiceInstance.get<FetchTodayTodoListRes>(
         `/todo-list/${year}-${month}-${date}`,
-        {
-          cancelToken: signal?.token,
-        }
+        { cancelToken: signal?.token }
       );
       const message = result.data.message;
       const implementationTodoList = message ? [] : result.data.implementation_todo_list;
@@ -113,9 +104,7 @@ export const fetchMonthlyTodoList = (year: string, month: string, signal?: Cance
     try {
       const result = await todoServiceInstance.get<FetchMonthlyTodoListRes>(
         `/todo-list/${year}-${month}`,
-        {
-          cancelToken: signal?.token,
-        }
+        { cancelToken: signal?.token }
       );
       const message = result.data.message;
       const monthlyImplementationTodoList = message ? [] : result.data.implementation_todo_list;
@@ -134,33 +123,15 @@ export const fetchMonthlyTodoList = (year: string, month: string, signal?: Cance
   };
 };
 
-export const fetchSearchTodoList = (searchRequestData: {
-  date_type: string;
-  start_date: Date | null;
-  end_date: Date | null;
-  sort: string;
-  sort_type: string;
-  complete_flag?: boolean | string;
-  todo_content?: string;
-  limit?: string;
-}) => {
+export const fetchSearchTodoList = (requestData: FetchSearchTodoListReq) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchSearchTodoListAction());
 
     try {
-      const result = await todoServiceInstance.get<FetchSearchTodoListRes>(`/todo-list/search`, {
-        params: {
-          date_type: searchRequestData.date_type,
-          start_date: dayjs(String(searchRequestData.start_date)).format(),
-          end_date: dayjs(String(searchRequestData.end_date)).format(),
-          complete_flag: searchRequestData.complete_flag,
-          todo_content: searchRequestData.todo_content,
-          sort: searchRequestData.sort,
-          sort_type: searchRequestData.sort_type,
-          limit: searchRequestData.limit,
-        },
+      const res = await todoServiceInstance.get<FetchSearchTodoListRes>(`/todo-list/search`, {
+        params: requestData,
       });
-      const searchTodoList: TodoList = result.data.message ? [] : result.data.search_todo_list;
+      const searchTodoList: TodoList = res.data.message ? [] : res.data.search_todo_list;
 
       dispatch(fetchSearchTodoListAction(searchTodoList));
     } catch (error) {
@@ -243,103 +214,6 @@ export const deleteTodoListItem = (todoListItemId: number) => {
     } catch (error) {
       dispatch(
         failedDeleteTodoListItemAction(error.response.status, error.response.data.error.message)
-      );
-      throw error;
-    }
-  };
-};
-
-export const editSearchTodoListItem = (
-  todoListItemId: number,
-  requestData: EditTodoListItemReq,
-  searchRequestData: SearchTodoRequestData
-) => {
-  return async (dispatch: Dispatch<Action>) => {
-    dispatch(startEditSearchTodoListItemAction());
-
-    try {
-      await todoServiceInstance.put<EditTodoListItemRes>(
-        `/todo-list/${todoListItemId}`,
-        JSON.stringify(requestData, function (key, value) {
-          if (key === 'implementation_date') {
-            return dayjs(new Date(value)).format();
-          } else if (key === 'due_date') {
-            return dayjs(new Date(value)).format();
-          }
-          return value;
-        })
-      );
-
-      const fetchSearchResult = await todoServiceInstance.get<FetchSearchTodoListRes>(
-        `/todo-list/search`,
-        {
-          params: {
-            date_type: searchRequestData.date_type,
-            start_date: dayjs(String(searchRequestData.start_date)).format(),
-            end_date: dayjs(String(searchRequestData.end_date)).format(),
-            complete_flag: searchRequestData.complete_flag,
-            todo_content: searchRequestData.todo_content,
-            sort: searchRequestData.sort,
-            sort_type: searchRequestData.sort_type,
-            limit: searchRequestData.limit,
-          },
-        }
-      );
-
-      const searchTodoList = fetchSearchResult.data.message
-        ? []
-        : fetchSearchResult.data.search_todo_list;
-
-      dispatch(editSearchTodoListItemAction(searchTodoList));
-    } catch (error) {
-      dispatch(
-        failedEditSearchTodoListItemAction(error.response.status, error.response.data.error.message)
-      );
-      throw error;
-    }
-  };
-};
-
-export const deleteSearchTodoListItem = (
-  todoListItemId: number,
-  searchRequestData: SearchTodoRequestData
-) => {
-  return async (dispatch: Dispatch<Action>) => {
-    dispatch(startDeleteSearchTodoListItemAction());
-
-    try {
-      const deleteTodoListItemResult = await todoServiceInstance.delete<DeleteTodoListItemRes>(
-        `/todo-list/${todoListItemId}`
-      );
-
-      const fetchSearchResult = await todoServiceInstance.get<FetchSearchTodoListRes>(
-        `/todo-list/search`,
-        {
-          params: {
-            date_type: searchRequestData.date_type,
-            start_date: dayjs(String(searchRequestData.start_date)).format(),
-            end_date: dayjs(String(searchRequestData.end_date)).format(),
-            complete_flag: searchRequestData.complete_flag,
-            todo_content: searchRequestData.todo_content,
-            sort: searchRequestData.sort,
-            sort_type: searchRequestData.sort_type,
-            limit: searchRequestData.limit,
-          },
-        }
-      );
-
-      const searchTodoList: TodoList = fetchSearchResult.data.message
-        ? []
-        : fetchSearchResult.data.search_todo_list;
-
-      dispatch(deleteSearchTodoListItemAction(searchTodoList));
-      dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
-    } catch (error) {
-      dispatch(
-        failedDeleteSearchTodoListItemAction(
-          error.response.status,
-          error.response.data.error.message
-        )
       );
       throw error;
     }

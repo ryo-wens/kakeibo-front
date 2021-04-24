@@ -19,6 +19,7 @@ import deleteGroupMonthlyTodoListResponse from './deleteGroupTodoListItemRespons
 import editGroupSearchTodoListItemResponse from './editGroupSearchTodoListItemResponse/editGroupSearchTodoListItemResponse.json';
 import editGroupSearchTodoListResponse from './editGroupSearchTodoListItemResponse/editGroupSearchTodoListResponse.json';
 import deleteGroupSearchTodoListResponse from './deleteGroupSearchTodoListItemResponse/deleteGroupSearchTodoListResponse.json';
+import dayjs from 'dayjs';
 
 import {
   addGroupTodoListItem,
@@ -173,8 +174,8 @@ describe('async actions groupTodoLists', () => {
 
     const params = {
       date_type: 'implementation_date',
-      start_date: new Date('2020-09-01T00:00:00'),
-      end_date: new Date('2020-09-30T00:00:00'),
+      start_date: dayjs(new Date('2020-09-01T00:00:00')).format(),
+      end_date: dayjs(new Date('2020-09-30T00:00:00')).format(),
       sort: 'implementation_date',
       sort_type: 'desc',
     };
@@ -393,8 +394,8 @@ describe('async actions groupTodoLists', () => {
 
     const params = {
       date_type: 'implementation_date',
-      start_date: new Date('2020-09-01T00:00:00'),
-      end_date: new Date('2020-09-30T00:00:00'),
+      start_date: dayjs(new Date('2020-09-01T00:00:00')).format(),
+      end_date: dayjs(new Date('2020-09-30T00:00:00')).format(),
       sort: 'implementation_date',
       sort_type: 'desc',
     };
@@ -437,8 +438,8 @@ describe('async actions groupTodoLists', () => {
 
     const params = {
       date_type: 'implementation_date',
-      start_date: new Date('2020-09-01T00:00:00'),
-      end_date: new Date('2020-09-30T00:00:00'),
+      start_date: dayjs(new Date('2020-09-01T00:00:00')).format(),
+      end_date: dayjs(new Date('2020-09-30T00:00:00')).format(),
       sort: 'implementation_date',
       sort_type: 'desc',
     };

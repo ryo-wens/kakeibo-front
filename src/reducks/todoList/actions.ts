@@ -26,12 +26,6 @@ export type todoListsActions = ReturnType<
   | typeof startDeleteTodoListItemAction
   | typeof deleteTodoListItemAction
   | typeof failedDeleteTodoListItemAction
-  | typeof startEditSearchTodoListItemAction
-  | typeof editSearchTodoListItemAction
-  | typeof failedEditSearchTodoListItemAction
-  | typeof startDeleteSearchTodoListItemAction
-  | typeof deleteSearchTodoListItemAction
-  | typeof failedDeleteSearchTodoListItemAction
 >;
 
 export const START_FETCH_EXPIRED_TODO_LIST = 'START_FETCH_EXPIRED_TODO_LIST';
@@ -334,76 +328,6 @@ export const failedDeleteTodoListItemAction = (statusCode: number, errorMessage:
       expiredTodoListLoading: false,
       todayTodoListLoading: false,
       monthlyTodoListLoading: false,
-      todoListError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-    },
-  };
-};
-
-export const START_EDIT_SEARCH_TODO_LIST_ITEM = 'START_EDIT_SEARCH_TODO_LIST_ITEM';
-export const startEditSearchTodoListItemAction = () => {
-  return {
-    type: START_EDIT_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      searchTodoListLoading: true,
-    },
-  };
-};
-
-export const EDIT_SEARCH_TODO_LIST_ITEM = 'EDIT_SEARCH_TODO_LIST_ITEM';
-export const editSearchTodoListItemAction = (searchTodoList: TodoList) => {
-  return {
-    type: EDIT_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      searchTodoListLoading: false,
-      searchTodoList: searchTodoList,
-    },
-  };
-};
-
-export const FAILED_EDIT_SEARCH_TODO_LIST_ITEM = 'FAILED_EDIT_SEARCH_TODO_LIST_ITEM';
-export const failedEditSearchTodoListItemAction = (statusCode: number, errorMessage: string) => {
-  return {
-    type: FAILED_EDIT_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      searchTodoListLoading: false,
-      todoListError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-    },
-  };
-};
-
-export const START_DELETE_SEARCH_TODO_LIST_ITEM = 'START_DELETE_SEARCH_TODO_LIST_ITEM';
-export const startDeleteSearchTodoListItemAction = () => {
-  return {
-    type: START_DELETE_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      searchTodoListLoading: true,
-    },
-  };
-};
-
-export const DELETE_SEARCH_TODO_LIST_ITEM = 'DELETE_SEARCH_TODO_LIST_ITEM';
-export const deleteSearchTodoListItemAction = (searchTodoList: TodoList) => {
-  return {
-    type: DELETE_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      searchTodoListLoading: false,
-      searchTodoList: searchTodoList,
-    },
-  };
-};
-
-export const FAILED_DELETE_SEARCH_TODO_LIST_ITEM = 'FAILED_DELETE_SEARCH_TODO_LIST_ITEM';
-export const failedDeleteSearchTodoListItemAction = (statusCode: number, errorMessage: string) => {
-  return {
-    type: FAILED_DELETE_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      searchTodoListLoading: false,
       todoListError: {
         statusCode: statusCode,
         errorMessage: errorMessage,
