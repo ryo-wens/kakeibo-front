@@ -57,7 +57,7 @@ export const cancelFetchGroupsAction = () => {
 export const FAILED_FETCH_GROUPS = 'FAILED_FETCH_GROUPS';
 export const failedFetchGroupsAction = (statusCode: number, errorMessage: string) => {
   return {
-    type: START_FETCH_GROUPS,
+    type: FAILED_FETCH_GROUPS,
     payload: {
       groupsLoading: false,
       groupsError: {

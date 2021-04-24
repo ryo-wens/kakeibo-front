@@ -36,14 +36,3 @@ export interface CrudCustomCategoryRes {
 export interface DeletedMessage {
   message: string;
 }
-
-export interface CategoryName {
-  mediumCategory: string | null;
-  customCategory: string | null;
-}
-
-export interface CategoryId {
-  bigCategoryId: number;
-  mediumCategoryId: number | null;
-  customCategoryId: number | null;
-}

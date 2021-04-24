@@ -10,7 +10,6 @@ import { Dispatch, Action } from 'redux';
 import { push } from 'connected-react-router';
 import { SignupReq, UserRes, LoginReq, LogoutRes, ConflictMessage, UserInfo } from './types';
 import axios, { CancelTokenSource } from 'axios';
-import { errorHandling } from '../../lib/validation';
 
 export const signUp = (
   userId: string,
@@ -114,7 +113,7 @@ export const fetchUserInfo = (signal: CancelTokenSource) => {
       if (axios.isCancel(error)) {
         return;
       } else {
-        errorHandling(dispatch, error);
+        throw error;
       }
     }
   };

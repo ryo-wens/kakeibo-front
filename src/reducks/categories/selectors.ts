@@ -12,6 +12,3 @@ export const getExpenseCategories = createSelector(
   [categoriesSelector],
   (state) => state.expenseList
 );
-
-export const getCategoriesErrorMessage = (state: State) =>
-  state.categories.categoriesError.errorMessage;

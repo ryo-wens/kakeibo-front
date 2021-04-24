@@ -1,11 +1,12 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import { push } from 'connected-react-router';
 import { Groups } from '../../reducks/groups/types';
 import { getApprovedGroups } from '../../reducks/groups/selectors';
-import { logOut } from '../../reducks/users/operations';
+import { logOut, fetchUserInfo } from '../../reducks/users/operations';
 import Header from '../../components/header/Header';
+import axios from 'axios';
 
 const HeaderContainer = () => {
   const dispatch = useDispatch();
@@ -13,6 +14,27 @@ const HeaderContainer = () => {
   const currentPath = useLocation().pathname;
   const pathName = useLocation().pathname.split('/')[1];
   const approvedGroups: Groups = useSelector(getApprovedGroups);
+
+  useEffect(() => {
+    const signal = axios.CancelToken.source();
+
+    const fetchUser = async () => {
+      try {
+        await dispatch(fetchUserInfo(signal));
+      } catch (error) {
+        if (error.response.status === 401) {
+          alert(error.response.data.error.message.toString());
+          dispatch(push('/login'));
+        }
+      }
+    };
+
+    fetchUser();
+
+    return () => {
+      signal.cancel();
+    };
+  }, []);
 
   const existsGroupWhenRouting = (path: string) => {
     if (pathName !== 'group') {

@@ -32,7 +32,7 @@ const HistoryContainer = () => {
   const fetchGroupHistoryData = (signal: CancelTokenSource) => {
     const years: SelectYears = {
       selectedYear: String(selectedYear),
-      selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
+      selectedMonth: dayjs(String(selectedMonth)).format('MM'),
     };
     dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
     dispatch(fetchGroupCategories(Number(group_id), signal));
@@ -59,7 +59,7 @@ const HistoryContainer = () => {
       const signal = axios.CancelToken.source();
       const selectYears: SelectYears = {
         selectedYear: String(selectedYear),
-        selectedMonth: selectedMonth <= 9 ? '0' + selectedMonth : String(selectedMonth),
+        selectedMonth: dayjs(String(selectedMonth)).format('MM'),
       };
 
       dispatch(fetchTransactionsList(selectYears, signal));
@@ -71,6 +71,7 @@ const HistoryContainer = () => {
     if (pathName !== 'group' && !incomeCategories.length && !expenseCategories.length) {
       const signal = axios.CancelToken.source();
       dispatch(fetchCategories(signal));
+
       return () => signal.cancel();
     }
   }, [pathName]);
@@ -99,6 +100,24 @@ const HistoryContainer = () => {
     setNotSpecified(false);
   };
 
+  const routingDailyHistory = () => {
+    pathName !== 'group'
+      ? history.push({
+          pathname: '/history',
+          search: `?daily&year=${selectedYear}&month=${dayjs(String(selectedMonth)).format('MM')}`,
+        })
+      : history.push({ pathname: `/group/${group_id}/history`, search: '?daily' });
+  };
+
+  const routingWeeklyHistory = () => {
+    pathName !== 'group'
+      ? history.push({
+          pathname: '/history',
+          search: `?weekly&year=${selectedYear}&month=${dayjs(String(selectedMonth)).format('MM')}`,
+        })
+      : history.push({ pathname: `/group/${group_id}/history`, search: '?weekly' });
+  };
+
   return (
     <History
       query={query.split('&')[0]}
@@ -113,26 +132,8 @@ const HistoryContainer = () => {
       selectedMonth={selectedMonth}
       setSelectedYear={setSelectedYear}
       setSelectedMonth={setSelectedMonth}
-      routingDailyHistory={() => {
-        pathName !== 'group'
-          ? history.push({
-              pathname: '/history',
-              search: `?daily&year=${selectedYear}&month=${dayjs(String(selectedMonth)).format(
-                'MM'
-              )}`,
-            })
-          : history.push({ pathname: `/group/${group_id}/history`, search: '?daily' });
-      }}
-      routingWeeklyHistory={() => {
-        pathName !== 'group'
-          ? history.push({
-              pathname: '/history',
-              search: `?weekly&year=${selectedYear}&month=${dayjs(String(selectedMonth)).format(
-                'MM'
-              )}`,
-            })
-          : history.push({ pathname: `/group/${group_id}/history`, search: '?weekly' });
-      }}
+      routingDailyHistory={routingDailyHistory}
+      routingWeeklyHistory={routingWeeklyHistory}
     />
   );
 };

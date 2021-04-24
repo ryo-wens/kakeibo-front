@@ -23,6 +23,7 @@ import {
 import { month, year } from '../../../lib/constant';
 import { SelectYears } from '../../../lib/date';
 import Home from '../../../templates/home/Home';
+import dayjs from 'dayjs';
 
 const HomeContainer = () => {
   const dispatch = useDispatch();
@@ -43,6 +44,7 @@ const HomeContainer = () => {
       const signal = axios.CancelToken.source();
       dispatch(fetchYearlyBudgets(year, signal));
       dispatch(fetchCategories(signal));
+
       return () => {
         signal.cancel();
       };
@@ -54,16 +56,19 @@ const HomeContainer = () => {
     if (pathName === 'group' && !todoEditing) {
       const years: SelectYears = {
         selectedYear: String(year),
-        selectedMonth: month <= 9 ? '0' + month : String(month),
+        selectedMonth: dayjs(String(month)).format('MM'),
       };
+
       dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
       dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
       dispatch(fetchGroups(signal));
+
       const interval = setInterval(() => {
         dispatch(fetchGroupTransactionsList(Number(group_id), years, signal));
         dispatch(fetchGroupYearlyBudgets(Number(group_id), year, signal));
         dispatch(fetchGroups(signal));
       }, 3000);
+
       return () => {
         signal.cancel();
         clearInterval(interval);
@@ -75,9 +80,11 @@ const HomeContainer = () => {
     const signal = axios.CancelToken.source();
     if (pathName !== 'group') {
       dispatch(fetchGroups(signal));
+
       const interval = setInterval(() => {
         dispatch(fetchGroups(signal));
       }, 3000);
+
       return () => {
         signal.cancel();
         clearInterval(interval);
