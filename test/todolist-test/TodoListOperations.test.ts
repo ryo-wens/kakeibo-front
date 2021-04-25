@@ -259,7 +259,7 @@ describe('async actions todoLists', () => {
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('delete todoList if fetch succeeds.', async () => {
+  it('delete todoListItem if fetch succeeds.', async () => {
     const todoListItemId = 2;
 
     const url = `/todo-list/${todoListItemId}`;
