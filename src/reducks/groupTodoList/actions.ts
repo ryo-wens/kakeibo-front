@@ -1,5 +1,6 @@
 import { GroupTodoList, GroupTodoListItem } from './types';
 import { TodoList } from '../todoList/types';
+import { date } from '../../lib/constant';
 export type groupTodoListsActions = ReturnType<
   | typeof startFetchGroupExpiredTodoListAction
   | typeof fetchGroupExpiredTodoListAction
@@ -273,24 +274,11 @@ export const startEditGroupTodoListItemAction = () => {
 };
 
 export const EDIT_GROUP_TODO_LIST_ITEM = 'EDIT_GROUP_TODO_LIST_ITEM';
-export const editGroupTodoListItemAction = (
-  expiredTodoList: GroupTodoList,
-  todayImplementationTodoList: GroupTodoList,
-  todayDueTodoList: GroupTodoList,
-  monthlyImplementationTodoList: GroupTodoList,
-  monthlyDueTodoList: GroupTodoList
-) => {
+export const editGroupTodoListItemAction = (groupTodoListItem: GroupTodoListItem) => {
   return {
     type: EDIT_GROUP_TODO_LIST_ITEM,
     payload: {
-      groupExpiredTodoListLoading: false,
-      groupExpiredTodoList: expiredTodoList,
-      groupTodayTodoListLoading: false,
-      groupTodayImplementationTodoList: todayImplementationTodoList,
-      groupTodayDueTodoList: todayDueTodoList,
-      groupMonthlyTodoListLoading: false,
-      groupMonthlyImplementationTodoList: monthlyImplementationTodoList,
-      groupMonthlyDueTodoList: monthlyDueTodoList,
+      groupTodoListItem: groupTodoListItem,
     },
   };
 };
@@ -324,24 +312,20 @@ export const startDeleteGroupTodoListItemAction = () => {
 };
 
 export const DELETE_GROUP_TODO_LIST_ITEM = 'DELETE_GROUP_TODO_LIST_ITEM';
-export const deleteGroupTodoListItemAction = (
-  expiredTodoList: GroupTodoList,
-  todayImplementationTodoList: GroupTodoList,
-  todayDueTodoList: GroupTodoList,
-  monthlyImplementationTodoList: GroupTodoList,
-  monthlyDueTodoList: GroupTodoList
-) => {
+export const deleteGroupTodoListItemAction = () => {
   return {
     type: DELETE_GROUP_TODO_LIST_ITEM,
     payload: {
-      groupExpiredTodoListLoading: false,
-      groupExpiredTodoList: expiredTodoList,
-      groupTodayTodoListLoading: false,
-      groupTodayImplementationTodoList: todayImplementationTodoList,
-      groupTodayDueTodoList: todayDueTodoList,
-      groupMonthlyTodoListLoading: false,
-      groupMonthlyImplementationTodoList: monthlyImplementationTodoList,
-      groupMonthlyDueTodoList: monthlyDueTodoList,
+      groupTodoListItem: {
+        id: 0,
+        posted_date: date,
+        updated_date: date,
+        implementation_date: '',
+        due_date: '',
+        todo_content: '',
+        complete_flag: false,
+        user_id: '',
+      },
     },
   };
 };

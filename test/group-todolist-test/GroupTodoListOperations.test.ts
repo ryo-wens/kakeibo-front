@@ -9,13 +9,7 @@ import fetchGroupMonthlyTodoListResponse from './fetchGroupMonthlyTodoListRespon
 import fetchGroupSearchTodoListResponse from './fetchGroupSearchTodoListResponse/fetchGroupSearchTodoListResponse.json';
 import addGroupTodoListItemResponse from './addGroupTodoListItemResponse/addGroupTodoListItemResponse.json';
 import editGroupTodoListItemResponse from './editGroupTodoListItemResponse/editGroupTodoListItemResponse.json';
-import editGroupExpiredTodoListResponse from './editGroupTodoListItemResponse/editGroupExpiredTodoListResponse.json';
-import editGroupTodayTodoListResponse from './editGroupTodoListItemResponse/editGroupTodayTodoListResponse.json';
-import editGroupMonthlyTodoListResponse from './editGroupTodoListItemResponse/editGroupMonthlyTodoListResponse.json';
 import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse/deleteGroupTodoListItemResponse.json';
-import deleteGroupExpiredTodoListResponse from './deleteGroupTodoListItemResponse/deleteGroupExpiredTodoListResponse.json';
-import deleteGroupTodayTodoListResponse from './deleteGroupTodoListItemResponse/deleteGroupTodayTodoListResponse.json';
-import deleteGroupMonthlyTodoListResponse from './deleteGroupTodoListItemResponse/deleteGroupMonthlyTodoListResponse.json';
 import editGroupSearchTodoListItemResponse from './editGroupSearchTodoListItemResponse/editGroupSearchTodoListItemResponse.json';
 import editGroupSearchTodoListResponse from './editGroupSearchTodoListItemResponse/editGroupSearchTodoListResponse.json';
 import deleteGroupSearchTodoListResponse from './deleteGroupSearchTodoListItemResponse/deleteGroupSearchTodoListResponse.json';
@@ -38,6 +32,7 @@ import {
   EditGroupTodoListItemReq,
 } from '../../src/reducks/groupTodoList/types';
 import { todoServiceInstance } from '../../src/reducks/axiosConfig';
+import { date } from '../../src/lib/constant';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -244,11 +239,6 @@ describe('async actions groupTodoLists', () => {
   it('edit groupTodoList if fetch succeeds.', async () => {
     const groupId = 1;
     const todoListItemId = 2;
-    const year = '2020';
-    const month = '09';
-    const date = '27';
-    const currentYear = '2020';
-    const currentMonth = '09';
 
     const implementationDate = new Date('2020-09-27T00:00:00');
     const dueDate = new Date('2020-09-28T00:00:00');
@@ -262,10 +252,7 @@ describe('async actions groupTodoLists', () => {
       complete_flag: completeFlag,
     };
 
-    const editUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `/groups/${groupId}/todo-list/expired`;
-    const fetchTodayUrl = `/groups/${groupId}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
+    const url = `/groups/${groupId}/todo-list/${todoListItemId}`;
 
     const expectedAction = [
       {
@@ -279,51 +266,22 @@ describe('async actions groupTodoLists', () => {
       {
         type: GroupTodoListActions.EDIT_GROUP_TODO_LIST_ITEM,
         payload: {
-          groupExpiredTodoListLoading: false,
-          groupExpiredTodoList: editGroupExpiredTodoListResponse.expired_group_todo_list,
-          groupTodayTodoListLoading: false,
-          groupTodayImplementationTodoList: editGroupTodayTodoListResponse.implementation_todo_list,
-          groupTodayDueTodoList: editGroupTodayTodoListResponse.due_todo_list,
-          groupMonthlyTodoListLoading: false,
-          groupMonthlyImplementationTodoList:
-            editGroupMonthlyTodoListResponse.implementation_todo_list,
-          groupMonthlyDueTodoList: editGroupMonthlyTodoListResponse.due_todo_list,
+          groupTodoListItem: editGroupTodoListItemResponse,
         },
       },
     ];
 
-    axiosMock.onPut(editUrl).reply(200, editGroupTodoListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, editGroupExpiredTodoListResponse);
-    axiosMock.onGet(fetchTodayUrl).reply(200, editGroupTodayTodoListResponse);
-    axiosMock.onGet(fetchMonthlyUrl).reply(200, editGroupMonthlyTodoListResponse);
+    axiosMock.onPut(url).reply(200, editGroupTodoListItemResponse);
 
-    await editGroupTodoListItem(
-      groupId,
-      todoListItemId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth,
-      requestData
-      // @ts-ignore
-    )(store.dispatch);
+    await editGroupTodoListItem(groupId, todoListItemId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
-  it('delete groupTodoList if fetch succeeds.', async () => {
+  it('delete groupTodoListItem if fetch succeeds.', async () => {
     const groupId = 1;
     const todoListItemId = 2;
-    const year = '2020';
-    const month = '09';
-    const date = '27';
-    const currentYear = '2020';
-    const currentMonth = '09';
 
-    const deleteUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchExpiredUrl = `/groups/${groupId}/todo-list/expired`;
-    const fetchTodayUrl = `/groups/${groupId}/todo-list/${year}-${month}-${date}`;
-    const fetchMonthlyUrl = `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`;
+    const url = `/groups/${groupId}/todo-list/${todoListItemId}`;
 
     const expectedAction = [
       {
@@ -337,16 +295,16 @@ describe('async actions groupTodoLists', () => {
       {
         type: GroupTodoListActions.DELETE_GROUP_TODO_LIST_ITEM,
         payload: {
-          groupExpiredTodoListLoading: false,
-          groupExpiredTodoList: deleteGroupExpiredTodoListResponse.expired_group_todo_list,
-          groupTodayTodoListLoading: false,
-          groupTodayImplementationTodoList:
-            deleteGroupTodayTodoListResponse.implementation_todo_list,
-          groupTodayDueTodoList: deleteGroupTodayTodoListResponse.due_todo_list,
-          groupMonthlyTodoListLoading: false,
-          groupMonthlyImplementationTodoList:
-            deleteGroupMonthlyTodoListResponse.implementation_todo_list,
-          groupMonthlyDueTodoList: deleteGroupMonthlyTodoListResponse.due_todo_list,
+          groupTodoListItem: {
+            id: 0,
+            posted_date: date,
+            updated_date: date,
+            implementation_date: '',
+            due_date: '',
+            todo_content: '',
+            complete_flag: false,
+            user_id: '',
+          },
         },
       },
       {
@@ -358,21 +316,9 @@ describe('async actions groupTodoLists', () => {
       },
     ];
 
-    axiosMock.onDelete(deleteUrl).reply(200, deleteGroupTodoListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, deleteGroupExpiredTodoListResponse);
-    axiosMock.onGet(fetchTodayUrl).reply(200, deleteGroupTodayTodoListResponse);
-    axiosMock.onGet(fetchMonthlyUrl).reply(200, deleteGroupMonthlyTodoListResponse);
+    axiosMock.onDelete(url).reply(200, deleteGroupTodoListItemResponse);
 
-    await deleteGroupTodoListItem(
-      groupId,
-      todoListItemId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth
-      // @ts-ignore
-    )(store.dispatch);
+    await deleteGroupTodoListItem(groupId, todoListItemId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

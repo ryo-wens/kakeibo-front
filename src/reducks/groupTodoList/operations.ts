@@ -204,18 +204,13 @@ export const addGroupTodoListItem = (groupId: number, requestData: AddGroupTodoL
 export const editGroupTodoListItem = (
   groupId: number,
   todoListItemId: number,
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string,
   requestData: EditTodoListItemReq
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startEditGroupTodoListItemAction());
 
     try {
-      await todoServiceInstance.put<EditGroupTodoListItemRes>(
+      const res = await todoServiceInstance.put<GroupTodoListItem>(
         `/groups/${groupId}/todo-list/${todoListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'implementation_date') {
@@ -227,45 +222,7 @@ export const editGroupTodoListItem = (
         })
       );
 
-      const fetchExpiredResult = todoServiceInstance.get<FetchGroupExpiredTodoListRes>(
-        `/groups/${groupId}/todo-list/expired`
-      );
-
-      const fetchTodayResult = todoServiceInstance.get<FetchGroupTodayTodoListRes>(
-        `/groups/${groupId}/todo-list/${year}-${month}-${date}`
-      );
-
-      const fetchMonthlyResult = todoServiceInstance.get<FetchGroupMonthlyTodoListRes>(
-        `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`
-      );
-
-      const expiredResponse = await fetchExpiredResult;
-      const todayResponse = await fetchTodayResult;
-      const monthlyResponse = await fetchMonthlyResult;
-
-      const expiredTodoList = expiredResponse.data.expired_group_todo_list;
-
-      const todayMessage = todayResponse.data.message;
-      const todayImplementationTodoList = todayMessage
-        ? []
-        : todayResponse.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
-
-      const monthlyMessage = monthlyResponse.data.message;
-      const monthlyImplementationTodoList = monthlyMessage
-        ? []
-        : monthlyResponse.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
-
-      dispatch(
-        editGroupTodoListItemAction(
-          expiredTodoList,
-          todayImplementationTodoList,
-          todayDuesTodoList,
-          monthlyImplementationTodoList,
-          monthlyDuesTodoList
-        )
-      );
+      dispatch(editGroupTodoListItemAction(res.data));
     } catch (error) {
       dispatch(
         failedEditGroupTodoListItemAction(error.response.status, error.response.data.error.message)
@@ -275,63 +232,17 @@ export const editGroupTodoListItem = (
   };
 };
 
-export const deleteGroupTodoListItem = (
-  groupId: number,
-  todoListItemId: number,
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string
-) => {
+export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startDeleteGroupTodoListItemAction());
 
     try {
-      const deleteTodoListItemResult = await todoServiceInstance.delete<DeleteGroupTodoListItemRes>(
+      const res = await todoServiceInstance.delete<DeleteGroupTodoListItemRes>(
         `/groups/${groupId}/todo-list/${todoListItemId}`
       );
 
-      const fetchExpiredResult = todoServiceInstance.get<FetchGroupExpiredTodoListRes>(
-        `/groups/${groupId}/todo-list/expired`
-      );
-
-      const fetchTodayResult = todoServiceInstance.get<FetchGroupTodayTodoListRes>(
-        `/groups/${groupId}/todo-list/${year}-${month}-${date}`
-      );
-
-      const fetchMonthlyResult = todoServiceInstance.get<FetchGroupMonthlyTodoListRes>(
-        `/groups/${groupId}/todo-list/${currentYear}-${currentMonth}`
-      );
-
-      const expiredResponse = await fetchExpiredResult;
-      const todayResponse = await fetchTodayResult;
-      const monthlyResponse = await fetchMonthlyResult;
-
-      const expiredTodoList = expiredResponse.data.expired_group_todo_list;
-
-      const todayMessage = todayResponse.data.message;
-      const todayImplementationTodoList = todayMessage
-        ? []
-        : todayResponse.data.implementation_todo_list;
-      const todayDuesTodoList = todayMessage ? [] : todayResponse.data.due_todo_list;
-
-      const monthlyMessage = monthlyResponse.data.message;
-      const monthlyImplementationTodoList = monthlyMessage
-        ? []
-        : monthlyResponse.data.implementation_todo_list;
-      const monthlyDuesTodoList = monthlyMessage ? [] : monthlyResponse.data.due_todo_list;
-
-      dispatch(
-        deleteGroupTodoListItemAction(
-          expiredTodoList,
-          todayImplementationTodoList,
-          todayDuesTodoList,
-          monthlyImplementationTodoList,
-          monthlyDuesTodoList
-        )
-      );
-      dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
+      dispatch(deleteGroupTodoListItemAction());
+      dispatch(openTextModalAction(res.data.message));
     } catch (error) {
       dispatch(
         failedDeleteGroupTodoListItemAction(

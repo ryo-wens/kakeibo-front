@@ -15,6 +15,8 @@ import { customDate, customMonth, year } from '../../../../lib/constant';
 import { useLocation, useParams } from 'react-router';
 import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
 import { useFetchTodoList } from '../../../../hooks/todo/useFetchTodoList';
+import { useFetchGroupTodoList } from '../../../../hooks/todo/useFetchGroupTodoList';
+import { FetchGroupTodoListParams } from '../../../../reducks/groupTodoList/types';
 
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
@@ -40,6 +42,7 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
   const { fetchTodoList } = useFetchTodoList();
+  const { fetchGroupTodoList } = useFetchGroupTodoList();
 
   const [openEditTodoForm, setOpenEditTodoForm] = useState<boolean>(false);
   const [checked, setChecked] = useState<boolean>(false);
@@ -129,19 +132,12 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     };
 
     if (pathName === 'group') {
+      const groupId = Number(group_id);
+      const groupParams: FetchGroupTodoListParams = { groupId, ...params };
+
       try {
-        await dispatch(
-          editGroupTodoListItem(
-            Number(group_id),
-            props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.selectedYearParam,
-            props.selectedMonthParam,
-            requestData
-          )
-        );
+        await dispatch(editGroupTodoListItem(groupId, props.listItem.id, requestData));
+        await fetchGroupTodoList(groupParams);
 
         setChecked(event.target.checked);
       } catch (error) {
@@ -168,19 +164,13 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     };
 
     if (pathName === 'group') {
+      const groupId = Number(group_id);
+      const groupParams: FetchGroupTodoListParams = { groupId, ...params };
+
       try {
-        await dispatch(
-          editGroupTodoListItem(
-            Number(group_id),
-            props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.selectedYearParam,
-            props.selectedMonthParam,
-            requestData
-          )
-        );
+        await dispatch(editGroupTodoListItem(Number(group_id), props.listItem.id, requestData));
+        await fetchGroupTodoList(groupParams);
+
         setOpenEditTodoForm(false);
       } catch (error) {
         alert(error.response.data.error.message.toString());
@@ -199,25 +189,21 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
 
   const handleDeleteTodoListItem = async () => {
     if (pathName === 'group') {
+      const groupId = Number(group_id);
+      const groupParams: FetchGroupTodoListParams = { groupId, ...params };
+
       try {
-        dispatch(
-          deleteGroupTodoListItem(
-            Number(group_id),
-            props.listItem.id,
-            String(year),
-            customMonth,
-            customDate,
-            props.selectedYearParam,
-            props.selectedMonthParam
-          )
-        );
+        await dispatch(deleteGroupTodoListItem(Number(group_id), props.listItem.id));
+
+        fetchGroupTodoList(groupParams);
       } catch (error) {
         alert(error.response.data.error.message.toString());
       }
     } else {
       try {
         await dispatch(deleteTodoListItem(props.listItem.id));
-        await fetchTodoList(params);
+
+        fetchTodoList(params);
       } catch (error) {
         alert(error.response.data.error.message.toString());
       }
