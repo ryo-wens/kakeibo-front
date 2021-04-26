@@ -3,16 +3,13 @@ import configureMockStore from 'redux-mock-store';
 import MockAdapter from 'axios-mock-adapter';
 import axios from 'axios';
 import * as GroupTodoListActions from '../../src/reducks/groupTodoList/actions';
-import fetchGroupExpiredTodoListResponse from './fetchGroupExpiredTodoListResponse/fetchGroupExpiredTodoListResponse.json';
-import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse/fetchGroupTodayTodoListResponse.json';
-import fetchGroupMonthlyTodoListResponse from './fetchGroupMonthlyTodoListResponse/fetchGroupMonthlyTodoListResponse.json';
-import fetchGroupSearchTodoListResponse from './fetchGroupSearchTodoListResponse/fetchGroupSearchTodoListResponse.json';
-import addGroupTodoListItemResponse from './addGroupTodoListItemResponse/addGroupTodoListItemResponse.json';
-import editGroupTodoListItemResponse from './editGroupTodoListItemResponse/editGroupTodoListItemResponse.json';
-import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse/deleteGroupTodoListItemResponse.json';
-import editGroupSearchTodoListItemResponse from './editGroupSearchTodoListItemResponse/editGroupSearchTodoListItemResponse.json';
-import editGroupSearchTodoListResponse from './editGroupSearchTodoListItemResponse/editGroupSearchTodoListResponse.json';
-import deleteGroupSearchTodoListResponse from './deleteGroupSearchTodoListItemResponse/deleteGroupSearchTodoListResponse.json';
+import fetchGroupExpiredTodoListResponse from './fetchGroupExpiredTodoListResponse.json';
+import fetchGroupTodayTodoListResponse from './fetchGroupTodayTodoListResponse.json';
+import fetchGroupMonthlyTodoListResponse from './fetchGroupMonthlyTodoListResponse.json';
+import fetchGroupSearchTodoListResponse from './fetchGroupSearchTodoListResponse.json';
+import addGroupTodoListItemResponse from './addGroupTodoListItemResponse.json';
+import editGroupTodoListItemResponse from './editGroupTodoListItemResponse.json';
+import deleteGroupTodoListItemResponse from './deleteGroupTodoListItemResponse.json';
 import dayjs from 'dayjs';
 
 import {
@@ -23,8 +20,6 @@ import {
   fetchGroupExpiredTodoList,
   fetchGroupMonthlyTodoList,
   fetchGroupSearchTodoList,
-  editGroupSearchTodoListItem,
-  deleteGroupSearchTodoListItem,
 } from '../../src/reducks/groupTodoList/operations';
 import * as ModalActions from '../../src/reducks/modal/actions';
 import {
@@ -319,108 +314,6 @@ describe('async actions groupTodoLists', () => {
     axiosMock.onDelete(url).reply(200, deleteGroupTodoListItemResponse);
 
     await deleteGroupTodoListItem(groupId, todoListItemId)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedAction);
-  });
-
-  it('edit groupSearchTodoList if fetch succeeds.', async () => {
-    const groupId = 1;
-    const todoListItemId = 2;
-
-    const implementationDate = new Date('2020-09-27T00:00:00');
-    const dueDate = new Date('2020-09-28T00:00:00');
-    const todoContent = '買い物へ行く';
-    const completeFlag = false;
-
-    const editRequestData: EditGroupTodoListItemReq = {
-      implementation_date: implementationDate,
-      due_date: dueDate,
-      todo_content: todoContent,
-      complete_flag: completeFlag,
-    };
-
-    const params = {
-      date_type: 'implementation_date',
-      start_date: dayjs(new Date('2020-09-01T00:00:00')).format(),
-      end_date: dayjs(new Date('2020-09-30T00:00:00')).format(),
-      sort: 'implementation_date',
-      sort_type: 'desc',
-    };
-
-    const editUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchSearchUrl = `/groups/${groupId}/todo-list/search`;
-
-    const expectedAction = [
-      {
-        type: GroupTodoListActions.START_EDIT_GROUP_SEARCH_TODO_LIST_ITEM,
-        payload: {
-          groupSearchTodoListLoading: true,
-        },
-      },
-      {
-        type: GroupTodoListActions.EDIT_GROUP_SEARCH_TODO_LIST_ITEM,
-        payload: {
-          groupSearchTodoListLoading: false,
-          groupSearchTodoList: editGroupSearchTodoListResponse.search_todo_list,
-        },
-      },
-    ];
-
-    axiosMock.onPut(editUrl).reply(200, editGroupSearchTodoListItemResponse);
-    axiosMock.onGet(fetchSearchUrl).reply(200, editGroupSearchTodoListResponse);
-
-    // @ts-ignore
-    await editGroupSearchTodoListItem(
-      groupId,
-      todoListItemId,
-      editRequestData,
-      params
-    )(store.dispatch);
-    expect(store.getActions()).toEqual(expectedAction);
-  });
-
-  it('delete groupSearchTodoList if fetch succeeds.', async () => {
-    const groupId = 1;
-    const todoListItemId = 2;
-
-    const params = {
-      date_type: 'implementation_date',
-      start_date: dayjs(new Date('2020-09-01T00:00:00')).format(),
-      end_date: dayjs(new Date('2020-09-30T00:00:00')).format(),
-      sort: 'implementation_date',
-      sort_type: 'desc',
-    };
-
-    const deleteUrl = `/groups/${groupId}/todo-list/${todoListItemId}`;
-    const fetchSearchUrl = `/groups/${groupId}/todo-list/search`;
-
-    const expectedAction = [
-      {
-        type: GroupTodoListActions.START_DELETE_GROUP_SEARCH_TODO_LIST_ITEM,
-        payload: {
-          groupSearchTodoListLoading: true,
-        },
-      },
-      {
-        type: GroupTodoListActions.DELETE_GROUP_SEARCH_TODO_LIST_ITEM,
-        payload: {
-          groupSearchTodoListLoading: false,
-          groupSearchTodoList: deleteGroupSearchTodoListResponse.search_todo_list,
-        },
-      },
-      {
-        type: ModalActions.OPEN_TEXT_MODAL,
-        payload: {
-          message: deleteGroupTodoListItemResponse.message,
-          open: true,
-        },
-      },
-    ];
-
-    axiosMock.onDelete(deleteUrl).reply(200, deleteGroupTodoListItemResponse);
-    axiosMock.onGet(fetchSearchUrl).reply(200, deleteGroupSearchTodoListResponse);
-
-    // @ts-ignore
-    await deleteGroupSearchTodoListItem(groupId, todoListItemId, params)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 });

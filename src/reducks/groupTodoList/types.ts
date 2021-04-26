@@ -40,17 +40,6 @@ export interface EditGroupTodoListItemReq {
   complete_flag: boolean;
 }
 
-export interface EditGroupTodoListItemRes {
-  id: number;
-  posted_date: Date | null;
-  updated_date: Date | null;
-  implementation_date: string;
-  due_date: string;
-  todo_content: string;
-  complete_flag: boolean;
-  user_id: string;
-}
-
 export interface DeleteGroupTodoListItemRes {
   message: string;
 }

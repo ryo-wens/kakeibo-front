@@ -5,7 +5,7 @@ import {
   TodoListItem,
 } from '../../../../../../reducks/todoList/types';
 import { customMonth, year } from '../../../../../../lib/constant';
-import SearchTodoListItemComponentContainer from '../../../../../../containers/todo/modules/area/searchTodoListArea/searchResultTodoList/searchResultTodoListItem/SearchTodoListItemComponentContainer';
+import SearchTodoListItemComponentContainer from '../../../../../../containers/todo/modules/listItem/SearchTodoListItemComponentContainer';
 import styles from './SarchResultTodoList.module.scss';
 
 interface SearchResultTodoListProps {

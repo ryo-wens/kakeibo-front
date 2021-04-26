@@ -132,37 +132,6 @@ export const groupTodoListsReducer = (
         ...state,
         ...action.payload,
       };
-    case Actions.START_EDIT_GROUP_SEARCH_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.EDIT_GROUP_SEARCH_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.FAILED_EDIT_GROUP_SEARCH_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.START_DELETE_GROUP_SEARCH_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.DELETE_GROUP_SEARCH_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-    case Actions.FAILED_DELETE_GROUP_SEARCH_TODO_LIST_ITEM:
-      return {
-        ...state,
-        ...action.payload,
-      };
-
     default:
       return state;
   }
