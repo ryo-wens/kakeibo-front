@@ -5,9 +5,9 @@ import '../../../../../../assets/modules/task-btn.scss';
 import { GroupTaskListForEachUser, TaskUsers } from '../../../../../../reducks/groupTasks/types';
 import { Group } from '../../../../../../reducks/groups/types';
 import ChevronRightIcon from '@material-ui/icons/ChevronRight';
-import CloseIcon from '@material-ui/icons/Close';
 import AddTaskUserFormContainer from '../../../../../../containers/task/page/taskToolBarArea/editTaskUserModalContainer/taskUserForm/AddTaskUserFormContainer';
 import DeleteTaskUserFormContainer from '../../../../../../containers/task/page/taskToolBarArea/editTaskUserModalContainer/taskUserForm/DeleteTaskUserFormContainer';
+import ModalFormLayout from '../../../../../uikit/form/formLayout/ModalFormLayout';
 
 interface EditTaskUserModalProps {
   open: boolean;
@@ -31,21 +31,13 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
       <button className={styles.btn} disabled={false} onClick={props.handleOpenModal}>
         タスクユーザーを編集
       </button>
-      <Modal
-        open={props.open}
-        onClose={props.handleCloseModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
+      <Modal open={props.open} onClose={props.handleCloseModal}>
         <div className={styles.modalWrapper}>
           {props.openEditUserForm && (
-            <>
-              <div className={styles.position}>
-                <h3>タスクユーザーリスト</h3>
-                <button onClick={props.handleCloseModal}>
-                  <CloseIcon />
-                </button>
-              </div>
+            <ModalFormLayout
+              titleLabel={'タスクユーザーリスト'}
+              handleClose={props.handleCloseModal}
+            >
               <div className={styles.content}>
                 {!props.groupTasksListForEachUser.length ? (
                   <p className={styles.message}>現在、タスクに参加しているメンバーはいません。</p>
@@ -69,7 +61,7 @@ const EditTaskUserModal = (props: EditTaskUserModalProps) => {
                   <ChevronRightIcon />
                 </button>
               </div>
-            </>
+            </ModalFormLayout>
           )}
           {!props.openEditUserForm && props.openAddUserForm && (
             <AddTaskUserFormContainer

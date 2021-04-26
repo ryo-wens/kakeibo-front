@@ -1,11 +1,11 @@
 import React from 'react';
-import CloseIcon from '@material-ui/icons/Close';
 import styles from './AssignTaskForm.module.scss';
 import { DatePicker } from '../../../../uikit';
 import { TaskCycleType, TaskUsers } from '../../../../../reducks/groupTasks/types';
 import SelectTaskCycleType from '../../select/SelectTaskCycleType';
 import SelectTaskUser from '../../select/SelectTaskUser';
 import InputTaskCycle from '../../input/inputTaskCycle/InputTaskCycle';
+import ModalFormLayout from '../../../../uikit/form/formLayout/ModalFormLayout';
 
 interface AssignTaskFormProps {
   participatingTaskUsers: TaskUsers;
@@ -82,13 +82,7 @@ const AssignTaskForm = (props: AssignTaskFormProps) => {
   ];
 
   return (
-    <div className={styles.modalWrapper}>
-      <div className={styles.position}>
-        <h3 className={styles.title}>{props.title}</h3>
-        <button className={styles.btnPosition} onClick={props.handleCloseModal}>
-          <CloseIcon />
-        </button>
-      </div>
+    <ModalFormLayout titleLabel={props.title} handleClose={props.handleCloseModal}>
       <dl>
         {selectContents.map((selectContent) => {
           return (
@@ -118,7 +112,7 @@ const AssignTaskForm = (props: AssignTaskFormProps) => {
           </button>
         )}
       </div>
-    </div>
+    </ModalFormLayout>
   );
 };
 

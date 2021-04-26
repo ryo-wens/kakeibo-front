@@ -32,24 +32,26 @@ const AssignTaskModal = (props: AssignTaskModalProps) => {
         タスクを割り当てる
       </button>
       <Modal open={props.open} onClose={props.handleCloseModal}>
-        <AssignTaskForm
-          participatingTaskUsers={props.participatingTaskUsers}
-          taskNameFormElement={props.taskNameFormElement}
-          buttonLabel={'追加'}
-          baseDate={props.baseDate}
-          cycleType={props.cycleType}
-          cycle={props.cycle}
-          taskUserId={props.taskUserId}
-          handleChangeDate={props.handleChangeDate}
-          handleChangeCycleType={props.handleChangeCycleType}
-          handleChangeCycle={props.handleChangeCycle}
-          handleChangeTaskUser={props.handleChangeTaskUser}
-          handleAssignTaskItem={props.handleAssignTaskItem}
-          handleCloseModal={props.handleCloseModal}
-          disabledButton={props.disabledButton}
-          title={'タスクの割り当て'}
-          message={props.message}
-        />
+        <div className={styles.modalWrapper}>
+          <AssignTaskForm
+            participatingTaskUsers={props.participatingTaskUsers}
+            taskNameFormElement={props.taskNameFormElement}
+            buttonLabel={'追加'}
+            baseDate={props.baseDate}
+            cycleType={props.cycleType}
+            cycle={props.cycle}
+            taskUserId={props.taskUserId}
+            handleChangeDate={props.handleChangeDate}
+            handleChangeCycleType={props.handleChangeCycleType}
+            handleChangeCycle={props.handleChangeCycle}
+            handleChangeTaskUser={props.handleChangeTaskUser}
+            handleAssignTaskItem={props.handleAssignTaskItem}
+            handleCloseModal={props.handleCloseModal}
+            disabledButton={props.disabledButton}
+            title={'タスクの割り当て'}
+            message={props.message}
+          />
+        </div>
       </Modal>
     </>
   );

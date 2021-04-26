@@ -1,5 +1,4 @@
 import React from 'react';
-import CloseIcon from '@material-ui/icons/Close';
 import { DatePicker, TextInput } from '../../../../uikit';
 import ShoppingListPayerSelect from '../../select/shoppingListPayerSelect/ShoppingListPayerSelect';
 import ToolTipIcon from '../../../../shoppingList/modules/toolTip/ToolTipIcon';
@@ -9,6 +8,7 @@ import BigCategoryListContainer from '../../../../../containers/modules/BigCateg
 import MediumCategoryListContainer from '../../../../../containers/modules/MediumCategoryListContainer';
 import styles from '../../../../shoppingList/modules/form/shoppingListForm/ShoppingListForm.module.scss';
 import cn from 'classnames';
+import ModalFormLayout from '../../../../uikit/form/formLayout/ModalFormLayout';
 
 interface GroupShoppingListFormProps {
   message: string;
@@ -70,13 +70,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
   };
 
   return (
-    <div className={styles.modalWrapper}>
-      <div className={styles.position}>
-        <h3>{props.titleLabel}</h3>
-        <button onClick={props.handleCloseModal}>
-          <CloseIcon />
-        </button>
-      </div>
+    <ModalFormLayout titleLabel={props.titleLabel} handleClose={props.handleCloseModal}>
       <dl>
         <div className={styles.selectContent}>
           <dt>購入品</dt>
@@ -260,7 +254,7 @@ const GroupShoppingListForm = (props: GroupShoppingListFormProps) => {
           </button>
         )}
       </div>
-    </div>
+    </ModalFormLayout>
   );
 };
 
