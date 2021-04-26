@@ -17,6 +17,7 @@ import TodoListItemComponent from '../../../../components/todo/modules/listItem/
 import { useFetchTodoList } from '../../../../hooks/todo/useFetchTodoList';
 import { useFetchGroupTodoList } from '../../../../hooks/todo/useFetchGroupTodoList';
 import { FetchGroupTodoListParams } from '../../../../reducks/groupTodoList/types';
+import dayjs from 'dayjs';
 
 interface TodoListItemComponentContainerProps {
   listItem: TodoListItem;
@@ -62,8 +63,8 @@ const TodoListItemComponentContainer = (props: TodoListItemComponentContainerPro
     if (
       implementationDate !== null &&
       dueDate !== null &&
-      implementationDate.getTime() === initialState.initialImplementationDate.getTime() &&
-      dueDate.getTime() === initialState.initialDueDate.getTime() &&
+      dayjs(implementationDate).isSame(initialState.initialImplementationDate) &&
+      dayjs(dueDate).isSame(initialState.initialDueDate) &&
       todoContent === initialState.initialTodoContent
     ) {
       return true;

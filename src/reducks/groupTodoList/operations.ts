@@ -7,7 +7,6 @@ import {
   FetchGroupMonthlyTodoListRes,
   FetchGroupExpiredTodoListRes,
   AddGroupTodoListItemReq,
-  EditGroupTodoListItemRes,
   DeleteGroupTodoListItemRes,
   FetchGroupSearchTodoListRes,
   GroupTodoListItem,
@@ -33,12 +32,6 @@ import {
   failedAddGroupTodoListItemAction,
   failedEditGroupTodoListItemAction,
   failedDeleteGroupTodoListItemAction,
-  failedEditGroupSearchTodoListItemAction,
-  editGroupSearchTodoListItemAction,
-  startEditGroupSearchTodoListItemAction,
-  startDeleteGroupSearchTodoListItemAction,
-  failedDeleteGroupSearchTodoListItemAction,
-  deleteGroupSearchTodoListItemAction,
   startFetchGroupSearchTodoListAction,
   cancelFetchGroupSearchTodoListAction,
   failedFetchGroupSearchTodoListAction,
@@ -246,86 +239,6 @@ export const deleteGroupTodoListItem = (groupId: number, todoListItemId: number)
     } catch (error) {
       dispatch(
         failedDeleteGroupTodoListItemAction(
-          error.response.status,
-          error.response.data.error.message
-        )
-      );
-      throw error;
-    }
-  };
-};
-
-export const editGroupSearchTodoListItem = (
-  groupId: number,
-  todoListItemId: number,
-  requestData: EditTodoListItemReq,
-  searchRequestData: FetchSearchTodoListReq
-) => {
-  return async (dispatch: Dispatch<Action>) => {
-    dispatch(startEditGroupSearchTodoListItemAction());
-
-    try {
-      await todoServiceInstance.put<EditGroupTodoListItemRes>(
-        `/groups/${groupId}/todo-list/${todoListItemId}`,
-        JSON.stringify(requestData, function (key, value) {
-          if (key === 'implementation_date') {
-            return dayjs(new Date(value)).format();
-          } else if (key === 'due_date') {
-            return dayjs(new Date(value)).format();
-          }
-          return value;
-        })
-      );
-
-      const fetchSearchResult = await todoServiceInstance.get<FetchGroupSearchTodoListRes>(
-        `/groups/${groupId}/todo-list/search`,
-        { params: searchRequestData }
-      );
-
-      const searchTodoList = fetchSearchResult.data.message
-        ? []
-        : fetchSearchResult.data.search_todo_list;
-
-      dispatch(editGroupSearchTodoListItemAction(searchTodoList));
-    } catch (error) {
-      dispatch(
-        failedEditGroupSearchTodoListItemAction(
-          error.response.status,
-          error.response.data.error.message
-        )
-      );
-      throw error;
-    }
-  };
-};
-
-export const deleteGroupSearchTodoListItem = (
-  groupId: number,
-  todoListItemId: number,
-  searchRequestData: FetchSearchTodoListReq
-) => {
-  return async (dispatch: Dispatch<Action>) => {
-    dispatch(startDeleteGroupSearchTodoListItemAction());
-
-    try {
-      const deleteTodoListItemResult = await todoServiceInstance.delete<DeleteGroupTodoListItemRes>(
-        `/groups/${groupId}/todo-list/${todoListItemId}`
-      );
-
-      const fetchSearchResult = await todoServiceInstance.get<FetchGroupSearchTodoListRes>(
-        `/groups/${groupId}/todo-list/search`,
-        { params: searchRequestData }
-      );
-
-      const searchTodoList = fetchSearchResult.data.message
-        ? []
-        : fetchSearchResult.data.search_todo_list;
-
-      dispatch(deleteGroupSearchTodoListItemAction(searchTodoList));
-      dispatch(openTextModalAction(deleteTodoListItemResult.data.message));
-    } catch (error) {
-      dispatch(
-        failedDeleteGroupSearchTodoListItemAction(
           error.response.status,
           error.response.data.error.message
         )

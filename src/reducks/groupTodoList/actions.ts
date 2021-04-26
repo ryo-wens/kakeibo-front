@@ -1,5 +1,4 @@
 import { GroupTodoList, GroupTodoListItem } from './types';
-import { TodoList } from '../todoList/types';
 import { date } from '../../lib/constant';
 export type groupTodoListsActions = ReturnType<
   | typeof startFetchGroupExpiredTodoListAction
@@ -27,12 +26,6 @@ export type groupTodoListsActions = ReturnType<
   | typeof startDeleteGroupTodoListItemAction
   | typeof deleteGroupTodoListItemAction
   | typeof failedDeleteGroupTodoListItemAction
-  | typeof startEditGroupSearchTodoListItemAction
-  | typeof editGroupSearchTodoListItemAction
-  | typeof failedEditGroupSearchTodoListItemAction
-  | typeof startDeleteGroupSearchTodoListItemAction
-  | typeof deleteGroupSearchTodoListItemAction
-  | typeof failedDeleteGroupSearchTodoListItemAction
 >;
 
 export const START_FETCH_GROUP_EXPIRED_TODO_LIST = 'START_FETCH_GROUP_EXPIRED_TODO_LIST';
@@ -338,83 +331,6 @@ export const failedDeleteGroupTodoListItemAction = (statusCode: number, errorMes
       groupExpiredTodoListLoading: false,
       groupTodayTodoListLoading: false,
       groupMonthlyTodoListLoading: false,
-      groupTodoListError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-    },
-  };
-};
-
-export const START_EDIT_GROUP_SEARCH_TODO_LIST_ITEM = 'START_EDIT_GROUP_SEARCH_TODO_LIST_ITEM';
-export const startEditGroupSearchTodoListItemAction = () => {
-  return {
-    type: START_EDIT_GROUP_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      groupSearchTodoListLoading: true,
-    },
-  };
-};
-
-export const EDIT_GROUP_SEARCH_TODO_LIST_ITEM = 'EDIT_GROUP_SEARCH_TODO_LIST_ITEM';
-export const editGroupSearchTodoListItemAction = (searchTodoList: GroupTodoList) => {
-  return {
-    type: EDIT_GROUP_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      groupSearchTodoListLoading: false,
-      groupSearchTodoList: searchTodoList,
-    },
-  };
-};
-
-export const FAILED_EDIT_GROUP_SEARCH_TODO_LIST_ITEM = 'FAILED_EDIT_GROUP_SEARCH_TODO_LIST_ITEM';
-export const failedEditGroupSearchTodoListItemAction = (
-  statusCode: number,
-  errorMessage: string
-) => {
-  return {
-    type: FAILED_EDIT_GROUP_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      groupSearchTodoListLoading: false,
-      groupTodoListError: {
-        statusCode: statusCode,
-        errorMessage: errorMessage,
-      },
-    },
-  };
-};
-
-export const START_DELETE_GROUP_SEARCH_TODO_LIST_ITEM = 'START_DELETE_GROUP_SEARCH_TODO_LIST_ITEM';
-export const startDeleteGroupSearchTodoListItemAction = () => {
-  return {
-    type: START_DELETE_GROUP_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      groupSearchTodoListLoading: true,
-    },
-  };
-};
-
-export const DELETE_GROUP_SEARCH_TODO_LIST_ITEM = 'DELETE_GROUP_SEARCH_TODO_LIST_ITEM';
-export const deleteGroupSearchTodoListItemAction = (searchTodoList: TodoList) => {
-  return {
-    type: DELETE_GROUP_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      groupSearchTodoListLoading: false,
-      groupSearchTodoList: searchTodoList,
-    },
-  };
-};
-
-export const FAILED_DELETE_GROUP_SEARCH_TODO_LIST_ITEM =
-  'FAILED_DELETE_GROUP_SEARCH_TODO_LIST_ITEM';
-export const failedDeleteGroupSearchTodoListItemAction = (
-  statusCode: number,
-  errorMessage: string
-) => {
-  return {
-    type: FAILED_DELETE_GROUP_SEARCH_TODO_LIST_ITEM,
-    payload: {
-      groupSearchTodoListLoading: false,
       groupTodoListError: {
         statusCode: statusCode,
         errorMessage: errorMessage,

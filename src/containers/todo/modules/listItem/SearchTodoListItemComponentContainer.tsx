@@ -3,20 +3,22 @@ import {
   EditTodoListItemReq,
   FetchSearchTodoListReq,
   TodoListItem,
-} from '../../../../../../../reducks/todoList/types';
+} from '../../../../reducks/todoList/types';
 import { useDispatch } from 'react-redux';
 import {
   deleteTodoListItem,
   editTodoListItem,
   fetchSearchTodoList,
-} from '../../../../../../../reducks/todoList/operations';
+} from '../../../../reducks/todoList/operations';
 import {
-  deleteGroupSearchTodoListItem,
-  editGroupSearchTodoListItem,
-} from '../../../../../../../reducks/groupTodoList/operations';
-import { dateStringToDate } from '../../../../../../../lib/date';
+  deleteGroupTodoListItem,
+  editGroupTodoListItem,
+  fetchGroupSearchTodoList,
+} from '../../../../reducks/groupTodoList/operations';
+import { dateStringToDate } from '../../../../lib/date';
 import { useLocation, useParams } from 'react-router';
-import TodoListItemComponent from '../../../../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
+import TodoListItemComponent from '../../../../components/todo/modules/listItem/todoListItemComponent/TodoListItemComponent';
+import dayjs from 'dayjs';
 
 interface SearchTodoListItemComponentContainerProps {
   listItem: TodoListItem;
@@ -38,6 +40,7 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
   const pathName = pathNames[1];
   const currentPage = pathNames.slice(-1)[0];
   const { group_id } = useParams<{ group_id: string }>();
+  const groupId = Number(group_id);
   const unmountRef = useRef(false);
   const inputTodoRef = useRef<HTMLDivElement>(null);
 
@@ -59,8 +62,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
     if (
       implementationDate !== null &&
       dueDate !== null &&
-      implementationDate.getTime() === initialState.initialImplementationDate.getTime() &&
-      dueDate.getTime() === initialState.initialDueDate.getTime() &&
+      dayjs(implementationDate).isSame(initialState.initialImplementationDate) &&
+      dayjs(dueDate).isSame(initialState.initialDueDate) &&
       todoContent === initialState.initialTodoContent
     ) {
       return true;
@@ -115,14 +118,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
 
     if (pathName === 'group') {
       try {
-        await dispatch(
-          editGroupSearchTodoListItem(
-            Number(group_id),
-            props.listItem.id,
-            requestData,
-            props.fetchSearchTodoListRequestData
-          )
-        );
+        await dispatch(editGroupTodoListItem(groupId, props.listItem.id, requestData));
+        await dispatch(fetchGroupSearchTodoList(groupId, props.fetchSearchTodoListRequestData));
 
         setChecked(event.target.checked);
       } catch (error) {
@@ -150,14 +147,8 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
 
     if (pathName === 'group') {
       try {
-        await dispatch(
-          editGroupSearchTodoListItem(
-            Number(group_id),
-            props.listItem.id,
-            requestData,
-            props.fetchSearchTodoListRequestData
-          )
-        );
+        await dispatch(editGroupTodoListItem(groupId, props.listItem.id, requestData));
+        await dispatch(fetchGroupSearchTodoList(groupId, props.fetchSearchTodoListRequestData));
 
         setOpenEditTodoForm(false);
       } catch (error) {
@@ -178,19 +169,16 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
   const handleDeleteTodoListItem = async () => {
     if (pathName === 'group') {
       try {
-        dispatch(
-          deleteGroupSearchTodoListItem(
-            Number(group_id),
-            props.listItem.id,
-            props.fetchSearchTodoListRequestData
-          )
-        );
+        await dispatch(deleteGroupTodoListItem(groupId, props.listItem.id));
+
+        dispatch(fetchGroupSearchTodoList(groupId, props.fetchSearchTodoListRequestData));
       } catch (error) {
         alert(error.response.data.error.message.toString());
       }
     } else {
       try {
         await dispatch(deleteTodoListItem(props.listItem.id));
+
         dispatch(fetchSearchTodoList(props.fetchSearchTodoListRequestData));
       } catch (error) {
         alert(error.response.data.error.message.toString());
