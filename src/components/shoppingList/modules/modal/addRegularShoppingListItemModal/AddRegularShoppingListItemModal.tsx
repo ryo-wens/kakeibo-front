@@ -43,43 +43,6 @@ interface AddRegularShoppingListModalProps {
 }
 
 const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps) => {
-  const body = (
-    <div className={styles.modalWrapper}>
-      <RegularShoppingListFormContainer
-        expectedPurchaseDate={props.expectedPurchaseDate}
-        cycleType={props.cycleType}
-        cycle={props.cycle}
-        purchase={props.purchase}
-        shop={props.shop}
-        amount={props.amount}
-        bigCategoryId={props.bigCategoryId}
-        bigCategory={props.bigCategory}
-        bigCategoryIndex={props.bigCategoryIndex}
-        transactionAutoAdd={props.transactionAutoAdd}
-        associatedCategory={props.associatedCategory}
-        handleDateChange={props.handleDateChange}
-        handleCycleTypeChange={props.handleCycleTypeChange}
-        handleCycleChange={props.handleCycleChange}
-        handlePurchaseChange={props.handlePurchaseChange}
-        handleAmountChange={props.handleAmountChange}
-        handleShopChange={props.handleShopChange}
-        handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
-        titleLabel={'定期買い物リストに追加'}
-        buttonLabel={'追加'}
-        handleCloseModal={props.handleCloseModal}
-        unInput={props.unInput}
-        minDate={date}
-        handleRegularShoppingListItem={props.handleAddRegularShoppingListItem}
-        setBigCategory={props.setBigCategory}
-        setAssociatedCategory={props.setAssociatedCategory}
-        setBigCategoryId={props.setBigCategoryId}
-        setCustomCategoryId={props.setCustomCategoryId}
-        setMediumCategoryId={props.setMediumCategoryId}
-        setBigCategoryIndex={props.setBigCategoryIndex}
-      />
-    </div>
-  );
-
   return (
     <>
       <button
@@ -90,13 +53,41 @@ const AddRegularShoppingListItemModal = (props: AddRegularShoppingListModalProps
         <AddIcon />
         定期買い物リストに追加
       </button>
-      <Modal
-        open={props.open}
-        onClose={props.handleCloseModal}
-        aria-labelledby="simple-modal-title"
-        aria-describedby="simple-modal-description"
-      >
-        {body}
+      <Modal open={props.open} onClose={props.handleCloseModal}>
+        <div className={styles.modalWrapper}>
+          <RegularShoppingListFormContainer
+            expectedPurchaseDate={props.expectedPurchaseDate}
+            cycleType={props.cycleType}
+            cycle={props.cycle}
+            purchase={props.purchase}
+            shop={props.shop}
+            amount={props.amount}
+            bigCategoryId={props.bigCategoryId}
+            bigCategory={props.bigCategory}
+            bigCategoryIndex={props.bigCategoryIndex}
+            transactionAutoAdd={props.transactionAutoAdd}
+            associatedCategory={props.associatedCategory}
+            handleDateChange={props.handleDateChange}
+            handleCycleTypeChange={props.handleCycleTypeChange}
+            handleCycleChange={props.handleCycleChange}
+            handlePurchaseChange={props.handlePurchaseChange}
+            handleAmountChange={props.handleAmountChange}
+            handleShopChange={props.handleShopChange}
+            handleAutoAddTransitionChange={props.handleAutoAddTransitionChange}
+            titleLabel={'定期買い物リストに追加'}
+            buttonLabel={'追加'}
+            handleCloseModal={props.handleCloseModal}
+            unInput={props.unInput}
+            minDate={date}
+            handleRegularShoppingListItem={props.handleAddRegularShoppingListItem}
+            setBigCategory={props.setBigCategory}
+            setAssociatedCategory={props.setAssociatedCategory}
+            setBigCategoryId={props.setBigCategoryId}
+            setCustomCategoryId={props.setCustomCategoryId}
+            setMediumCategoryId={props.setMediumCategoryId}
+            setBigCategoryIndex={props.setBigCategoryIndex}
+          />
+        </div>
       </Modal>
     </>
   );

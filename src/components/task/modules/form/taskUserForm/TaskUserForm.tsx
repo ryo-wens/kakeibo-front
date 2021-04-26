@@ -1,8 +1,7 @@
 import React from 'react';
-import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
-import CloseIcon from '@material-ui/icons/Close';
 import styles from './TaskUserForm.module.scss';
 import { ApprovedGroupUsers } from '../../../../../reducks/groups/types';
+import ModalFormLayout from '../../../../uikit/form/formLayout/ModalFormLayout';
 
 interface TaskUserFormProps {
   title: string;
@@ -20,16 +19,11 @@ interface TaskUserFormProps {
 
 const TaskUserForm = (props: TaskUserFormProps) => {
   return (
-    <>
-      <div className={styles.position}>
-        <button className={styles.backBtn} onClick={props.handleCloseTaskUserForm}>
-          <ChevronLeftIcon />
-        </button>
-        <h3 className={styles.title}>{props.title}</h3>
-        <button className={styles.closeBtn} onClick={props.handleCloseModal}>
-          <CloseIcon />
-        </button>
-      </div>
+    <ModalFormLayout
+      titleLabel={props.title}
+      handleClose={props.handleCloseModal}
+      handleBack={props.handleCloseTaskUserForm}
+    >
       {props.existsDisplayTaskUsers ? (
         <>
           <ul className={styles.items}>
@@ -61,7 +55,7 @@ const TaskUserForm = (props: TaskUserFormProps) => {
       ) : (
         <p className={styles.message}>{props.message}</p>
       )}
-    </>
+    </ModalFormLayout>
   );
 };
 

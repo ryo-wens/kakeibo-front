@@ -1,36 +1,6 @@
 @import "../../../../../assets/mixin/icon-btn";
 @import "../../../../../assets/mixin/operation-btn";
 
-.modalWrapper {
-  width: 400px;
-  background-color: white;
-  padding: 20px 0;
-  margin: 20px auto auto auto;
-}
-
-.position {
-  display: flex;
-  border-bottom: $color-geyser solid 1px;
-  justify-content: center;
-  position: relative;
-  padding: 0 0 10px 0;
-  margin: 0 0 25px 0;
-}
-
-.btnPosition{
-  @include icon-btn($color-scorpion, 0.8rem, 0.7);
-  position: absolute;
-  right: 0;
-  margin: 0 20px 0 0;
-}
-
-.title {
-  color: $color-scorpion;
-  font-size: 1.0rem;
-  font-weight: 500;
-  margin: 0;
-}
-
 .message {
   color: $color-cinnabar;
   font-size: 0.85rem;

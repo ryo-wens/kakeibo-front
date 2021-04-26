@@ -32,25 +32,27 @@ const EditAssignTaskModal = (props: EditAssignTaskModalProps) => {
         <span>{props.initialTaskName}</span>
       </th>
       <Modal open={props.open} onClose={props.handleCloseModal}>
-        <AssignTaskForm
-          participatingTaskUsers={props.participatingTaskUsers}
-          taskNameFormElement={props.taskNameFormElement}
-          buttonLabel={'保存'}
-          baseDate={props.baseDate}
-          cycleType={props.cycleType}
-          cycle={props.cycle}
-          taskUserId={props.taskUserId}
-          handleChangeDate={props.handleChangeDate}
-          handleChangeCycleType={props.handleChangeCycleType}
-          handleChangeCycle={props.handleChangeCycle}
-          handleChangeTaskUser={props.handleChangeTaskUser}
-          handleCloseModal={props.handleCloseModal}
-          handleAssignTaskItem={props.handleEditAssignTaskItem}
-          disabledButton={props.disabledButton}
-          title={'割り当てたタスクの編集'}
-          message={props.message}
-          handleReleaseTaskItem={props.handleReleaseTaskItem}
-        />
+        <div className={styles.modalWrapper}>
+          <AssignTaskForm
+            participatingTaskUsers={props.participatingTaskUsers}
+            taskNameFormElement={props.taskNameFormElement}
+            buttonLabel={'保存'}
+            baseDate={props.baseDate}
+            cycleType={props.cycleType}
+            cycle={props.cycle}
+            taskUserId={props.taskUserId}
+            handleChangeDate={props.handleChangeDate}
+            handleChangeCycleType={props.handleChangeCycleType}
+            handleChangeCycle={props.handleChangeCycle}
+            handleChangeTaskUser={props.handleChangeTaskUser}
+            handleCloseModal={props.handleCloseModal}
+            handleAssignTaskItem={props.handleEditAssignTaskItem}
+            disabledButton={props.disabledButton}
+            title={'割り当てたタスクの編集'}
+            message={props.message}
+            handleReleaseTaskItem={props.handleReleaseTaskItem}
+          />
+        </div>
       </Modal>
     </>
   );

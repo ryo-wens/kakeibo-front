@@ -1,35 +1,5 @@
-@import "../../../../../assets/mixin/icon-btn";
 @import "../../../../../assets/mixin/operation-btn";
 @import "../../../../../assets/mixin/check-box";
-
-.wrapper {
-  width: 450px;
-  padding: 15px 0;
-}
-
-.position {
-  display: flex;
-  border-bottom: $color-geyser solid 1px;
-  justify-content: center;
-  position: relative;
-  padding: 0 0 10px 0;
-  margin: 0 0 25px 0;
-
-  > h3 {
-    color: $color-scorpion;
-    font-size: 1.0rem;
-    font-weight: 500;
-    margin: 0;
-  }
-
-  > button {
-    @include icon-btn($color-scorpion, 0.8rem, 0.5);
-    position: absolute;
-    right: 0;
-    margin: 0 20px 0 0;
-  }
-
-}
 
 .selectContent {
   display: flex;
@@ -90,7 +60,7 @@
   }
 
   &__cancel {
-    @include operation-btn(white, $color-lynch,$color-geyser);
+    @include operation-btn(white, $color-scorpion,$color-geyser);
     margin: 0 0 0 10px;
   }
 
