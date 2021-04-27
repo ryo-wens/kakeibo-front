@@ -16,7 +16,12 @@ import {
 import { TodoList } from '../todoList/types';
 import { GroupTodoList } from '../groupTodoList/types';
 import { GroupTaskList, GroupTaskListForEachUser } from '../groupTasks/types';
-import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from '../shoppingList/types';
+import {
+  RegularShoppingList,
+  RelatedTransactionData,
+  ShoppingList,
+  ShoppingListByCategories,
+} from '../shoppingList/types';
 import {
   GroupRegularShoppingList,
   GroupShoppingList,
@@ -271,6 +276,25 @@ export interface State {
     groupMonthlyShoppingListByCategoriesError: {
       message: string;
       statusCode: number;
+    };
+    shoppingListItem: {
+      id: number;
+      posted_date: Date;
+      updated_date: Date;
+      expected_purchase_date: string;
+      complete_flag: boolean;
+      purchase: string;
+      shop: string | null;
+      amount: number | null;
+      big_category_id: number;
+      big_category_name: string;
+      medium_category_id: number | null;
+      medium_category_name: string | null;
+      custom_category_id: number | null;
+      custom_category_name: string | null;
+      regular_shopping_list_id: number | null;
+      transaction_auto_add: boolean;
+      related_transaction_data: RelatedTransactionData | null;
     };
     groupShoppingListError: {
       message: string;

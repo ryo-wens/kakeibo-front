@@ -6,10 +6,11 @@ import axios from 'axios';
 import { fetchTodayShoppingListByCategories } from '../../../../../../reducks/shoppingList/operations';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import { useLocation } from 'react-router';
+import { generateZeroPaddingMonth } from '../../../../../../lib/date';
 
 interface TodayShoppingListByCategoriesContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const TodayShoppingListByCategoriesContainer = (
@@ -22,6 +23,8 @@ const TodayShoppingListByCategoriesContainer = (
   const todayYear = String(year);
   const todayMonth = customMonth;
   const todayDate = customDate;
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
 
   useEffect(() => {
     const notExistsTodayShoppingListByCategories = todayShoppingListByCategories.length === 0;
@@ -36,8 +39,8 @@ const TodayShoppingListByCategoriesContainer = (
   return (
     <ShoppingListByCategoriesComponent
       shoppingListByCategories={todayShoppingListByCategories}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       message={'今日の買い物リストは、登録されていません。'}
       pathName={pathName}
     />

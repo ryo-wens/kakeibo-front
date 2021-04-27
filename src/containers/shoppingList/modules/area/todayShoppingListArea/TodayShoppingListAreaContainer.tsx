@@ -2,13 +2,13 @@ import React from 'react';
 import TodayShoppingListArea from '../../../../../components/shoppingList/modules/area/TodayShoppingListArea/TodayShoppingListArea';
 
 interface TodayShoppingListAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const TodayShoppingListAreaContainer = (props: TodayShoppingListAreaContainerProps) => {
   return (
-    <TodayShoppingListArea currentYear={props.currentYear} currentMonth={props.currentMonth} />
+    <TodayShoppingListArea selectedYear={props.selectedYear} selectedMonth={props.selectedMonth} />
   );
 };
 

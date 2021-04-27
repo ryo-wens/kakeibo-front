@@ -5,10 +5,11 @@ import { getDisplayTodayShoppingListByDate } from '../../../../../../reducks/sho
 import axios from 'axios';
 import { fetchTodayShoppingList } from '../../../../../../reducks/shoppingList/operations';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
+import { generateZeroPaddingMonth } from '../../../../../../lib/date';
 
 interface TodayShoppingListByDateContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContainerProps) => {
@@ -18,6 +19,8 @@ const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContaine
   const todayYear = String(year);
   const todayMonth = customMonth;
   const todayDate = customDate;
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
 
   useEffect(() => {
     const notExistsTodayShoppingListByDate = todayShoppingListByDate.length === 0;
@@ -32,8 +35,8 @@ const TodayShoppingListByDateContainer = (props: TodayShoppingListByDateContaine
   return (
     <ShoppingListByDate
       shoppingListByDate={todayShoppingListByDate}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       message={'今日の買い物リストは、登録されていません。'}
     />
   );

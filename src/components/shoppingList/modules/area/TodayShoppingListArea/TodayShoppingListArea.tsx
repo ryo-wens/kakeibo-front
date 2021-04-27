@@ -6,8 +6,8 @@ import TodayShoppingListByDateContainer from '../../../../../containers/shopping
 import TodayShoppingListByCategoriesContainer from '../../../../../containers/shoppingList/modules/area/todayShoppingListArea/TodayShoppingListByCategoriesContainer/TodayShoppingListByCategoriesContainer';
 
 interface TodayShoppingListAreaProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
@@ -15,8 +15,8 @@ const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
     <>
       <div className={styles.addButton}>
         <AddShoppingListItemModalContainer
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
+          selectedYear={props.selectedYear}
+          selectedMonth={props.selectedMonth}
         />
       </div>
       <div className={styles.switchItem}>
@@ -26,14 +26,14 @@ const TodayShoppingListArea = (props: TodayShoppingListAreaProps) => {
             rightButtonLabel={'カテゴリ別'}
             leftItem={
               <TodayShoppingListByDateContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYear={props.selectedYear}
+                selectedMonth={props.selectedMonth}
               />
             }
             rightItem={
               <TodayShoppingListByCategoriesContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYear={props.selectedYear}
+                selectedMonth={props.selectedMonth}
               />
             }
             tabsBtnClassName={styles.childTabsBtn}

@@ -8,12 +8,11 @@ import {
   AddRegularShoppingListItemReq,
   PurchaseCycleType,
 } from '../../../../reducks/shoppingList/types';
+import { generateZeroPaddingMonth } from '../../../../lib/date';
 
 interface AddRegularShoppingListModalContainerProps {
   selectedYear: number;
   selectedMonth: number;
-  currentYear: string;
-  currentMonth: string;
   addBtnClassName?: string;
 }
 
@@ -37,6 +36,8 @@ const AddRegularShoppingListItemModalContainer = (
   props: AddRegularShoppingListModalContainerProps
 ) => {
   const dispatch = useDispatch();
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -160,8 +161,8 @@ const AddRegularShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          selectedYearParam,
+          selectedMonthParam,
           requestData
         )
       );

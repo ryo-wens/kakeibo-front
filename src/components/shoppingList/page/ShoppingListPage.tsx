@@ -13,8 +13,6 @@ interface ShoppingListPageProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentYear: string;
-  currentMonth: string;
   currentItem: TodayOrMonthly;
   setCurrentItem: React.Dispatch<React.SetStateAction<TodayOrMonthly>>;
 }
@@ -29,8 +27,8 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
             setCurrentItems={props.setCurrentItem}
             leftItem={
               <TodayShoppingListAreaContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYear={props.selectedYear}
+                selectedMonth={props.selectedMonth}
               />
             }
             rightItem={
@@ -39,8 +37,6 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
                 selectedMonth={props.selectedMonth}
                 setSelectedYear={props.setSelectedYear}
                 setSelectedMonth={props.setSelectedMonth}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
               />
             }
           />
@@ -52,21 +48,19 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           <AddRegularShoppingListItemModalContainer
             selectedYear={props.selectedYear}
             selectedMonth={props.selectedMonth}
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
             addBtnClassName={styles.childAddRegularBtn}
           />
           <RegularShoppingListAreaContainer
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
+            selectedYear={props.selectedYear}
+            selectedMonth={props.selectedMonth}
             currentTodayOrMonthly={props.currentItem}
           />
         </div>
         <div className={styles.rightContent}>
           <h3>期限切れ買い物リスト</h3>
           <ExpiredShoppingListAreaContainer
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
+            selectedYear={props.selectedYear}
+            selectedMonth={props.selectedMonth}
             readMoreBtnClassName={styles.childReadBtn}
           />
         </div>

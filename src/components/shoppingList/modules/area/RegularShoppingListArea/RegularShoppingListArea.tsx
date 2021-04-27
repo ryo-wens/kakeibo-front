@@ -8,8 +8,8 @@ import styles from './RegularShoppingListArea.module.scss';
 import RegularShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/listItem/regularShoppingListItemComponentContainer/RegularShoppingListItemComponentContainer';
 
 interface RegularShoppingListAreaProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   currentTodayOrMonthly: TodayOrMonthly;
   regularShoppingList: RegularShoppingList;
 }
@@ -23,8 +23,8 @@ const RegularShoppingListArea = (props: RegularShoppingListAreaProps) => {
             return (
               <RegularShoppingListItemComponentContainer
                 listItem={listItem}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                currentYear={props.selectedMonthParam}
+                currentMonth={props.selectedMonthParam}
                 key={listItem.id}
               />
             );

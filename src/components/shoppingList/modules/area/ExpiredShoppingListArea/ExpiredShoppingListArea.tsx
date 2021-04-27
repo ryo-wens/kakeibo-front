@@ -9,8 +9,8 @@ import cn from 'classnames';
 interface ExpiredShoppingListAreaProps {
   expiredShoppingList: ShoppingList;
   displayExpiredShoppingList: DisplayShoppingListByDate;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   readMore: boolean;
   setReadMore: React.Dispatch<React.SetStateAction<boolean>>;
   initialDisplayNumberShoppingList: number;
@@ -34,8 +34,8 @@ const ExpiredShoppingListArea = (props: ExpiredShoppingListAreaProps) => {
                       return (
                         <ShoppingListItemComponentContainer
                           listItem={item}
-                          currentYear={props.currentYear}
-                          currentMonth={props.currentMonth}
+                          selectedYearParam={props.selectedYearParam}
+                          selectedMonthParam={props.selectedMonthParam}
                           purchaseClassName={styles.childPurchase}
                           amountClassName={styles.childAmount}
                           key={item.id}

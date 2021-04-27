@@ -4,7 +4,6 @@ import {
   AddRegularShoppingListItemReq,
   AddRegularShoppingListItemRes,
   AddShoppingListItemReq,
-  AddShoppingListItemRes,
   DeleteRegularShoppingListItemRes,
   DeleteShoppingListItemRes,
   EditRegularShoppingListItemReq,
@@ -64,16 +63,14 @@ import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
 import { todoServiceInstance } from '../axiosConfig';
 
-export const fetchExpiredShoppingList = (signal: CancelTokenSource) => {
+export const fetchExpiredShoppingList = (signal?: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchExpiredShoppingListAction());
 
     try {
       const result = await todoServiceInstance.get<FetchExpiredShoppingListRes>(
         `/shopping-list/expired`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
       const expiredShoppingList: ShoppingList = result.data.expired_shopping_list;
 
@@ -97,7 +94,7 @@ export const fetchTodayShoppingList = (
   year: string,
   month: string,
   date: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchTodayShoppingListAction());
@@ -105,9 +102,7 @@ export const fetchTodayShoppingList = (
     try {
       const result = await todoServiceInstance.get<FetchTodayShoppingListRes>(
         `/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
       const todayShoppingList: ShoppingList = result.data.shopping_list;
@@ -132,7 +127,7 @@ export const fetchTodayShoppingListByCategories = (
   year: string,
   month: string,
   date: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchTodayShoppingListByCategoriesAction());
@@ -140,9 +135,7 @@ export const fetchTodayShoppingListByCategories = (
     try {
       const result = await todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
         `/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
       const todayShoppingListByCategories: ShoppingListByCategories =
@@ -169,7 +162,7 @@ export const fetchTodayShoppingListByCategories = (
 export const fetchMonthlyShoppingList = (
   year: string,
   month: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchMonthlyShoppingListAction());
@@ -177,9 +170,7 @@ export const fetchMonthlyShoppingList = (
     try {
       const result = await todoServiceInstance.get<FetchMonthlyShoppingListRes>(
         `/shopping-list/${year}-${month}/daily`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
       const monthlyShoppingList: ShoppingList = result.data.shopping_list;
@@ -203,7 +194,7 @@ export const fetchMonthlyShoppingList = (
 export const fetchMonthlyShoppingListByCategories = (
   year: string,
   month: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchMonthlyShoppingListByCategoriesAction());
@@ -211,9 +202,7 @@ export const fetchMonthlyShoppingListByCategories = (
     try {
       const result = await todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
         `/shopping-list/${year}-${month}/categories`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
       const regularShoppingList: RegularShoppingList = result.data.regular_shopping_list;
       const monthlyShoppingListByCategories: ShoppingListByCategories =
@@ -240,19 +229,12 @@ export const fetchMonthlyShoppingListByCategories = (
   };
 };
 
-export const addShoppingListItem = (
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string,
-  requestData: AddShoppingListItemReq
-) => {
+export const addShoppingListItem = (requestData: AddShoppingListItemReq) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startAddShoppingListItemAction());
 
     try {
-      await todoServiceInstance.post<AddShoppingListItemRes>(
+      const res = await todoServiceInstance.post<ShoppingListItem>(
         `/shopping-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
@@ -262,35 +244,7 @@ export const addShoppingListItem = (
         })
       );
 
-      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
-        `/shopping-list/${year}-${month}-${date}/daily`
-      );
-
-      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
-        `/shopping-list/${year}-${month}-${date}/categories`
-      );
-
-      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/daily`
-      );
-
-      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/categories`
-      );
-
-      const todayShoppingListResponse = await fetchTodayListResult;
-      const todayShoppingListByCategoriesResponse = await fetchTodayListByCategoriesResult;
-      const monthlyShoppingListResponse = await fetchMonthlyListResult;
-      const monthlyShoppingListByCategoriesResponse = await fetchMonthlyListByCategoriesResult;
-
-      dispatch(
-        addShoppingListItemAction(
-          todayShoppingListResponse.data.shopping_list,
-          todayShoppingListByCategoriesResponse.data.shopping_list_by_categories,
-          monthlyShoppingListResponse.data.shopping_list,
-          monthlyShoppingListByCategoriesResponse.data.shopping_list_by_categories
-        )
-      );
+      dispatch(addShoppingListItemAction(res.data));
     } catch (error) {
       dispatch(
         failedAddShoppingListItemAction(error.response.status, error.response.data.error.message)

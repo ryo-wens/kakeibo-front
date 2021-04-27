@@ -10,8 +10,8 @@ import styles from './ShoppingListByCategoriesComponent.module.scss';
 
 interface ShoppingListByCategoriesComponentProps {
   shoppingListByCategories: DisplayShoppingListByCategories;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
   pathName: string;
 }
@@ -50,8 +50,8 @@ const ShoppingListByCategoriesComponent = (props: ShoppingListByCategoriesCompon
                                 return (
                                   <ShoppingListItemComponentContainer
                                     listItem={item}
-                                    currentYear={props.currentYear}
-                                    currentMonth={props.currentMonth}
+                                    selectedYearParam={props.selectedYearParam}
+                                    selectedMonthParam={props.selectedMonthParam}
                                     purchaseClassName={styles.childPurchase}
                                     amountClassName={styles.childAmount}
                                     key={item.id}
