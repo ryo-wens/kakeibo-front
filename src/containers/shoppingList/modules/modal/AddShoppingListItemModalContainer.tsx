@@ -3,11 +3,16 @@ import { customDate, customMonth, date, year } from '../../../../lib/constant';
 import AddShoppingListItemModal from '../../../../components/shoppingList/modules/modal/addShoppingListItemModal/AddShoppingListItemModal';
 import { useDispatch } from 'react-redux';
 import { addShoppingListItem } from '../../../../reducks/shoppingList/operations';
-import { AddShoppingListItemReq } from '../../../../reducks/shoppingList/types';
+import {
+  AddShoppingListItemReq,
+  FetchShoppingListParams,
+} from '../../../../reducks/shoppingList/types';
+import { useFetchShoppingList } from '../../../../hooks/shoppingList/useFetchShoppingList';
+import { generateZeroPaddingMonth } from '../../../../lib/date';
 
 interface AddShoppingListItemFormContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const initialState = {
@@ -26,6 +31,11 @@ const initialState = {
 
 const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContainerProps) => {
   const dispatch = useDispatch();
+  const { fetchShoppingList } = useFetchShoppingList();
+
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
+
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
     initialState.initialExpectedPurchaseDate
@@ -100,6 +110,14 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
   };
 
   const handleAddShoppingListItem = async () => {
+    const params: FetchShoppingListParams = {
+      currentYear: String(year),
+      currentMonth: customMonth,
+      currentDate: customDate,
+      selectedYear: selectedYearParam,
+      selectedMonth: selectedMonthParam,
+    };
+
     const requestData: AddShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       purchase: purchase,
@@ -112,16 +130,8 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
     };
 
     try {
-      await dispatch(
-        addShoppingListItem(
-          String(year),
-          customMonth,
-          customDate,
-          props.currentYear,
-          props.currentMonth,
-          requestData
-        )
-      );
+      await dispatch(addShoppingListItem(requestData));
+      await fetchShoppingList(params);
 
       handleCloseModal();
     } catch (error) {
@@ -160,7 +170,7 @@ const AddShoppingListItemModalContainer = (props: AddShoppingListItemFormContain
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      handleAddShoppingListItem={() => handleAddShoppingListItem()}
+      handleAddShoppingListItem={handleAddShoppingListItem}
     />
   );
 };

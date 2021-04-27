@@ -6,8 +6,6 @@ interface MonthlyShoppingListAreaContainerProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentYear: string;
-  currentMonth: string;
 }
 
 const MonthlyShoppingListAreaContainer = (props: MonthlyShoppingListAreaContainerProps) => {
@@ -17,8 +15,6 @@ const MonthlyShoppingListAreaContainer = (props: MonthlyShoppingListAreaContaine
       selectedMonth={props.selectedMonth}
       setSelectedMonth={props.setSelectedMonth}
       setSelectedYear={props.setSelectedYear}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
     />
   );
 };

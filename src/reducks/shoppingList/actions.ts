@@ -1,4 +1,9 @@
-import { RegularShoppingList, ShoppingList, ShoppingListByCategories } from './types';
+import {
+  RegularShoppingList,
+  ShoppingList,
+  ShoppingListByCategories,
+  ShoppingListItem,
+} from './types';
 export type ShoppingListActions = ReturnType<
   | typeof startFetchExpiredShoppingListAction
   | typeof fetchExpiredShoppingListAction
@@ -324,23 +329,11 @@ export const startAddShoppingListItemAction = () => {
 };
 
 export const ADD_SHOPPING_LIST_ITEM = 'ADD_SHOPPING_LIST_ITEM';
-export const addShoppingListItemAction = (
-  todayShoppingList: ShoppingList,
-  todayShoppingListByCategories: ShoppingListByCategories,
-  monthlyShoppingList: ShoppingList,
-  monthlyShoppingListByCategories: ShoppingListByCategories
-) => {
+export const addShoppingListItemAction = (shoppingListItem: ShoppingListItem) => {
   return {
     type: ADD_SHOPPING_LIST_ITEM,
     payload: {
-      todayShoppingListLoading: false,
-      todayShoppingList: todayShoppingList,
-      todayShoppingListByCategoriesLoading: false,
-      todayShoppingListByCategories: todayShoppingListByCategories,
-      monthlyShoppingListLoading: false,
-      monthlyShoppingList: monthlyShoppingList,
-      monthlyShoppingListByCategoriesLoading: false,
-      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+      shoppingListItem: shoppingListItem,
     },
   };
 };

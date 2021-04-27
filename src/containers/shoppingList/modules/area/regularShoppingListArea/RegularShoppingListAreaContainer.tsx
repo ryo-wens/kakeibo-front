@@ -3,20 +3,24 @@ import { RegularShoppingList, TodayOrMonthly } from '../../../../../reducks/shop
 import { useSelector } from 'react-redux';
 import { getRegularShoppingList } from '../../../../../reducks/shoppingList/selectors';
 import RegularShoppingListArea from '../../../../../components/shoppingList/modules/area/RegularShoppingListArea/RegularShoppingListArea';
+import { generateZeroPaddingMonth } from '../../../../../lib/date';
 
 interface RegularShoppingListAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
   currentTodayOrMonthly: TodayOrMonthly;
 }
 
 const RegularShoppingListAreaContainer = (props: RegularShoppingListAreaContainerProps) => {
   const regularShoppingList: RegularShoppingList = useSelector(getRegularShoppingList);
 
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
+
   return (
     <RegularShoppingListArea
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       currentTodayOrMonthly={props.currentTodayOrMonthly}
       regularShoppingList={regularShoppingList}
     />

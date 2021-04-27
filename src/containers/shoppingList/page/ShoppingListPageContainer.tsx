@@ -7,7 +7,6 @@ import axios from 'axios';
 import { fetchCategories } from '../../../reducks/categories/operations';
 import ShoppingListPage from '../../../components/shoppingList/page/ShoppingListPage';
 import { fetchGroups } from '../../../reducks/groups/operations';
-import { generateZeroPaddingMonth } from '../../../lib/date';
 
 const ShoppingListPageContainer = () => {
   const dispatch = useDispatch();
@@ -17,9 +16,6 @@ const ShoppingListPageContainer = () => {
   const [currentItem, setCurrentItem] = useState<TodayOrMonthly>('today');
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
-
-  const currentYear = String(selectedYear);
-  const currentMonth = generateZeroPaddingMonth(selectedMonth);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -50,8 +46,6 @@ const ShoppingListPageContainer = () => {
       setSelectedMonth={setSelectedMonth}
       currentItem={currentItem}
       setCurrentItem={setCurrentItem}
-      currentYear={currentYear}
-      currentMonth={currentMonth}
     />
   );
 };

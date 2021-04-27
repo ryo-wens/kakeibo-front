@@ -5,12 +5,11 @@ import { getDisplayMonthlyShoppingListByCategories } from '../../../../../../red
 import axios from 'axios';
 import { fetchMonthlyShoppingListByCategories } from '../../../../../../reducks/shoppingList/operations';
 import { useLocation } from 'react-router';
+import { generateZeroPaddingMonth } from '../../../../../../lib/date';
 
 interface MonthlyShoppingListByCategoriesContainerProps {
   selectedYear: number;
   selectedMonth: number;
-  currentYear: string;
-  currentMonth: string;
 }
 
 const MonthlyShoppingListByCategoriesContainer = (
@@ -20,17 +19,20 @@ const MonthlyShoppingListByCategoriesContainer = (
   const pathName = useLocation().pathname.split('/')[1];
   const monthlyShoppingListByCategories = useSelector(getDisplayMonthlyShoppingListByCategories);
 
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
+
   useEffect(() => {
     const signal = axios.CancelToken.source();
-    dispatch(fetchMonthlyShoppingListByCategories(props.currentYear, props.currentMonth, signal));
+    dispatch(fetchMonthlyShoppingListByCategories(selectedYearParam, selectedMonthParam, signal));
     return () => signal.cancel();
-  }, [props.currentYear, props.currentMonth]);
+  }, [selectedYearParam, selectedMonthParam]);
 
   return (
     <ShoppingListByCategoriesComponent
       shoppingListByCategories={monthlyShoppingListByCategories}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       message={`${props.selectedMonth}月の買い物リストは、登録されていません。`}
       pathName={pathName}
     />

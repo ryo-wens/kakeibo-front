@@ -17,15 +17,11 @@ import {
 import axios from 'axios';
 import * as ShoppingListActions from '../../src/reducks/shoppingList/actions';
 import fetchExpiredShoppingListResponse from './fetchExpiredShoppingListResponse/fetchExpiredShoppingListResponse.json';
-import fetchTodayShoppingListResponse from './fetchTodayShoppingListResponse/fetchTodayShoppingListResponse.json';
-import fetchTodayShoppingListByCategoriesResponse from './fetchTodayShoppingListByCategoriesResponse/fetchTodayShoppingListByCategoriesResponse.json';
-import fetchMonthlyShoppingListResponse from './fetchMonthlyShoppingListResponse/fetchMonthlyShoppingListResponse.json';
-import fetchMonthlyShoppingListByCategoriesResponse from './fetchMonthlyShoppingListByCategoriesResponse/fetchMonthlyShoppingListByCategoriesResponse.json';
-import addShoppingListItemResponse from './addShoppingListItemResponse/addShoppingListItemResponse.json';
-import addTodayShoppingListByDateResponse from './addShoppingListItemResponse/addTodayShoppingListByDateResponse.json';
-import addTodayShoppingListByCategoriesResponse from './addShoppingListItemResponse/addTodayShoppingListByCategoriesResponse.json';
-import addMonthlyShoppingListByDateResponse from './addShoppingListItemResponse/addMonthlyShoppingListByDateResponse.json';
-import addMonthlyShoppingListByCategoriesResponse from './addShoppingListItemResponse/addMonthlyShoppingListByCategoriesResponse.json';
+import fetchTodayShoppingListResponse from './fetchTodayShoppingListResponse.json';
+import fetchTodayShoppingListByCategoriesResponse from './fetchTodayShoppingListByCategoriesResponse.json';
+import fetchMonthlyShoppingListResponse from './fetchMonthlyShoppingListResponse.json';
+import fetchMonthlyShoppingListByCategoriesResponse from './fetchMonthlyShoppingListByCategoriesResponse.json';
+import addShoppingListItemResponse from './addShoppingListItemResponse.json';
 import editShoppingListItemResponse from './editShoppingListItemResponse/editShoppingListItemResponse.json';
 import editExpiredShoppingListResponse from './editShoppingListItemResponse/editExpiredShoppingListResponse.json';
 import editTodayShoppingListByDateResponse from './editShoppingListItemResponse/editTodayShoppingListByDateResponse.json';
@@ -257,12 +253,6 @@ describe('async actions shoppingList', () => {
   });
 
   it('add shoppingListItem if fetch succeeds', async () => {
-    const year = '2020';
-    const month = '12';
-    const date = '24';
-    const currentYear = '2020';
-    const currentMonth = '12';
-
     const expectedPurchaseDate = new Date('2020-12-26T10:00:00');
     const purchase = '鶏肉3kg';
     const shop = 'コストコ';
@@ -283,11 +273,7 @@ describe('async actions shoppingList', () => {
       transaction_auto_add: transactionAutoAdd,
     };
 
-    const addUrl = `/shopping-list`;
-    const fetchTodayByDateUrl = `/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `/shopping-list/${year}-${month}/categories`;
+    const url = `/shopping-list`;
 
     const expectedAction = [
       {
@@ -302,37 +288,14 @@ describe('async actions shoppingList', () => {
       {
         type: ShoppingListActions.ADD_SHOPPING_LIST_ITEM,
         payload: {
-          todayShoppingListLoading: false,
-          todayShoppingList: addTodayShoppingListByDateResponse.shopping_list,
-          todayShoppingListByCategoriesLoading: false,
-          todayShoppingListByCategories:
-            addTodayShoppingListByCategoriesResponse.shopping_list_by_categories,
-          monthlyShoppingListLoading: false,
-          monthlyShoppingList: addMonthlyShoppingListByDateResponse.shopping_list,
-          monthlyShoppingListByCategoriesLoading: false,
-          monthlyShoppingListByCategories:
-            addMonthlyShoppingListByCategoriesResponse.shopping_list_by_categories,
+          shoppingListItem: addShoppingListItemResponse,
         },
       },
     ];
 
-    axiosMock.onPost(addUrl).reply(200, addShoppingListItemResponse);
-    axiosMock.onGet(fetchTodayByDateUrl).reply(200, addTodayShoppingListByDateResponse);
-    axiosMock.onGet(fetchTodayByCategoriesUrl).reply(200, addTodayShoppingListByCategoriesResponse);
-    axiosMock.onGet(fetchMonthlyByDateUrl).reply(200, addMonthlyShoppingListByDateResponse);
-    axiosMock
-      .onGet(fetchMonthlyByCategoriesUrl)
-      .reply(200, addMonthlyShoppingListByCategoriesResponse);
+    axiosMock.onPost(url).reply(200, addShoppingListItemResponse);
 
-    await addShoppingListItem(
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth,
-      requestData
-      // @ts-ignore
-    )(store.dispatch);
+    await addShoppingListItem(requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

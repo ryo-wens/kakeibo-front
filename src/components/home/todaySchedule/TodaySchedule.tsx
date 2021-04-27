@@ -56,8 +56,8 @@ const TodaySchedule = (props: TodayScheduleProps) => {
           />
         ) : (
           <TodayScheduleShoppingListAreaContainer
-            currentYear={props.selectedYearParam}
-            currentMonth={props.selectedMonthParam}
+            selectedYearParam={props.selectedYearParam}
+            selectedMonthParam={props.selectedMonthParam}
           />
         )}
       </div>

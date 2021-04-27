@@ -12,8 +12,8 @@ import dayjs from 'dayjs';
 
 interface CheckedShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const CheckedShoppingListItemModalContainer = (
@@ -174,8 +174,8 @@ const CheckedShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          props.selectedYearParam,
+          props.selectedMonthParam,
           requestData
         )
       );
@@ -206,8 +206,8 @@ const CheckedShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          props.selectedYearParam,
+          props.selectedMonthParam,
           requestData
         )
       );

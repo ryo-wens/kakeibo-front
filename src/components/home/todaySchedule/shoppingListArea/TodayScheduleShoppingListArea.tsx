@@ -10,8 +10,8 @@ import ShoppingListItemComponentContainer from '../../../../containers/shoppingL
 
 interface TodayScheduleShoppingListByCategoriesProps {
   shoppingListByCategories: ShoppingListByCategories;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
 }
 
@@ -41,8 +41,8 @@ const TodayScheduleShoppingListArea = (props: TodayScheduleShoppingListByCategor
                         return (
                           <ShoppingListItemComponentContainer
                             listItem={shoppingListItem}
-                            currentYear={props.currentYear}
-                            currentMonth={props.currentMonth}
+                            selectedYearParam={props.selectedYearParam}
+                            selectedMonthParam={props.selectedMonthParam}
                             purchaseClassName={styles.childPurchase}
                             amountClassName={styles.childAmount}
                             key={shoppingListItem.id}

@@ -5,8 +5,8 @@ import { useLocation } from 'react-router';
 
 interface ShoppingListItemComponentContainerProps {
   listItem: ShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   purchaseClassName: string;
   amountClassName: string;
 }
@@ -18,8 +18,8 @@ const ShoppingListItemComponentContainer = (props: ShoppingListItemComponentCont
   return (
     <ShoppingListItemComponent
       listItem={props.listItem}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={props.selectedYearParam}
+      selectedMonthParam={props.selectedMonthParam}
       currentPage={currentPage}
       purchaseClassName={props.purchaseClassName}
       amountClassName={props.amountClassName}

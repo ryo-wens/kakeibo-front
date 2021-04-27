@@ -5,8 +5,8 @@ import ShoppingListItemComponentContainer from '../../../../../containers/shoppi
 
 interface ShoppingListByDateProps {
   shoppingListByDate: DisplayShoppingListByDate;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
 }
 
@@ -26,8 +26,8 @@ const ShoppingListByDate = (props: ShoppingListByDateProps) => {
                     return (
                       <ShoppingListItemComponentContainer
                         listItem={item}
-                        currentYear={props.currentYear}
-                        currentMonth={props.currentMonth}
+                        selectedYearParam={props.selectedYearParam}
+                        selectedMonthParam={props.selectedMonthParam}
                         purchaseClassName={styles.childPurchase}
                         amountClassName={styles.childAmount}
                         key={item.id}

@@ -8,8 +8,8 @@ import cn from 'classnames';
 
 interface ShoppingListItemComponentProps {
   listItem: ShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   currentPage: string;
   purchaseClassName: string;
   amountClassName: string;
@@ -39,8 +39,8 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
       <div className={styles.checkBox}>
         <CheckedShoppingListItemModalContainer
           listItem={props.listItem}
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
+          selectedYearParam={props.selectedYearParam}
+          selectedMonthParam={props.selectedMonthParam}
         />
       </div>
       <div className={styles.content}>
@@ -52,8 +52,8 @@ const ShoppingListItemComponent = (props: ShoppingListItemComponentProps) => {
           <span className={styles.editIcon}>
             <EditShoppingListItemModalContainer
               listItem={props.listItem}
-              currentYear={props.currentYear}
-              currentMonth={props.currentMonth}
+              selectedYearParam={props.selectedYearParam}
+              selectedMonthParam={props.selectedMonthParam}
             />
           </span>
         </div>

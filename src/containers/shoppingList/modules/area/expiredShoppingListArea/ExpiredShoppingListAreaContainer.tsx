@@ -9,10 +9,11 @@ import {
 import { fetchExpiredShoppingList } from '../../../../../reducks/shoppingList/operations';
 import ExpiredShoppingListArea from '../../../../../components/shoppingList/modules/area/ExpiredShoppingListArea/ExpiredShoppingListArea';
 import { DisplayShoppingListByDate, ShoppingList } from '../../../../../reducks/shoppingList/types';
+import { generateZeroPaddingMonth } from '../../../../../lib/date';
 
 interface ExpiredShoppingListAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
   readMoreBtnClassName: string;
 }
 
@@ -21,6 +22,9 @@ const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContaine
   const expiredShoppingList = useSelector(getExpiredShoppingList);
   const displayExpiredShoppingList = useSelector(getDisplayExpiredShoppingList);
   const slicedExpiredShoppingList = useSelector(getSlicedExpiredShoppingList);
+
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
   const initialDisplayNumberShoppingList = 3;
 
   const [readMore, setReadMore] = useState(false);
@@ -61,8 +65,8 @@ const ExpiredShoppingListAreaContainer = (props: ExpiredShoppingListAreaContaine
     <ExpiredShoppingListArea
       expiredShoppingList={expiredShoppingList}
       displayExpiredShoppingList={displayShoppingList}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       readMore={readMore}
       setReadMore={setReadMore}
       initialDisplayNumberShoppingList={initialDisplayNumberShoppingList}
