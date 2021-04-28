@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { editShoppingListItem } from '../../../../../../reducks/shoppingList/operations';
 import {
   EditShoppingListItemReq,
+  FetchShoppingListParams,
   ShoppingListItem,
 } from '../../../../../../reducks/shoppingList/types';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
@@ -9,6 +10,7 @@ import { useDispatch } from 'react-redux';
 import CheckedShoppingListItemModal from '../../../../../../components/shoppingList/modules/listItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedShoppingListItemModal';
 import { dateStringToDate } from '../../../../../../lib/date';
 import dayjs from 'dayjs';
+import { useFetchShoppingList } from '../../../../../../hooks/shoppingList/useFetchShoppingList';
 
 interface CheckedShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
@@ -32,6 +34,7 @@ const CheckedShoppingListItemModalContainer = (
   };
 
   const dispatch = useDispatch();
+  const { fetchShoppingList } = useFetchShoppingList();
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -143,6 +146,14 @@ const CheckedShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
+  const params: FetchShoppingListParams = {
+    currentYear: String(year),
+    currentMonth: customMonth,
+    currentDate: customDate,
+    selectedYear: props.selectedYearParam,
+    selectedMonth: props.selectedMonthParam,
+  };
+
   const handleCheckedChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
@@ -168,17 +179,8 @@ const CheckedShoppingListItemModalContainer = (
     };
 
     try {
-      await dispatch(
-        editShoppingListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(editShoppingListItem(props.listItem.id, requestData));
+      fetchShoppingList(params);
     } catch (error) {
       alert(error.response.data.error.message.toString());
     }
@@ -200,17 +202,8 @@ const CheckedShoppingListItemModalContainer = (
     };
 
     try {
-      await dispatch(
-        editShoppingListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(editShoppingListItem(props.listItem.id, requestData));
+      await fetchShoppingList(params);
 
       setOpen(false);
     } catch (error) {
