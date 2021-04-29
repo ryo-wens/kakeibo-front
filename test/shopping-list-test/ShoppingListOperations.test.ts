@@ -26,12 +26,7 @@ import editShoppingListItemResponse from './editShoppingListItemResponse.json';
 import deleteShoppingListItemResponse from './deleteShoppingListItemResponse.json';
 import addRegularShoppingListItemResponse from './addRegularShoppingListItemResponse.json';
 import editRegularShoppingListItemResponse from './editRegularShoppingListItemResponse.json';
-import deleteRegularShoppingListItemResponse from './deleteRegularShoppingListItemResponse/deleteRegularShoppingListItemResponse.json';
-import deleteRegularExpiredShoppingListResponse from './deleteRegularShoppingListItemResponse/deleteRegularExpiredShoppingListResponse.json';
-import deleteRegularTodayShoppingListByDateResponse from './deleteRegularShoppingListItemResponse/deleteRegularTodayShoppingListByDateResponse.json';
-import deleteRegularTodayShoppingListByCategoriesResponse from './deleteRegularShoppingListItemResponse/deleteRegularTodayShoppingListByCategoriesResponse.json';
-import deleteRegularMonthlyShoppingListByDateResponse from './deleteRegularShoppingListItemResponse/deleteRegularMonthlyShoppingListByDateResponse.json';
-import deleteRegularMonthlyShoppingListByCategoriesResponse from './deleteRegularShoppingListItemResponse/deleteRegularMonthlyShoppingListByCategoriesResponse.json';
+import deleteRegularShoppingListItemResponse from './deleteRegularShoppingListItemResponse.json';
 import * as ModalActions from '../../src/reducks/modal/actions';
 import {
   AddRegularShoppingListItemReq,
