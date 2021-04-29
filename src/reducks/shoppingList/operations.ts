@@ -302,19 +302,12 @@ export const deleteShoppingListItem = (shoppingListItemId: number) => {
   };
 };
 
-export const addRegularShoppingListItem = (
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string,
-  requestData: AddRegularShoppingListItemReq
-) => {
+export const addRegularShoppingListItem = (requestData: AddRegularShoppingListItemReq) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startAddRegularShoppingListItemAction());
 
     try {
-      await todoServiceInstance.post<AddRegularShoppingListItemRes>(
+      const res = await todoServiceInstance.post<AddRegularShoppingListItemRes>(
         `/shopping-list/regular`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
@@ -324,36 +317,7 @@ export const addRegularShoppingListItem = (
         })
       );
 
-      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
-        `/shopping-list/${year}-${month}-${date}/daily`
-      );
-
-      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
-        `/shopping-list/${year}-${month}-${date}/categories`
-      );
-
-      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/daily`
-      );
-
-      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/categories`
-      );
-
-      const todayShoppingListResponse = await fetchTodayListResult;
-      const todayShoppingListByCategoriesResponse = await fetchTodayListByCategoriesResult;
-      const monthlyShoppingListResponse = await fetchMonthlyListResult;
-      const monthlyShoppingListByCategoriesResponse = await fetchMonthlyListByCategoriesResult;
-
-      dispatch(
-        addRegularShoppingListItemAction(
-          todayShoppingListResponse.data.regular_shopping_list,
-          todayShoppingListResponse.data.shopping_list,
-          todayShoppingListByCategoriesResponse.data.shopping_list_by_categories,
-          monthlyShoppingListResponse.data.shopping_list,
-          monthlyShoppingListByCategoriesResponse.data.shopping_list_by_categories
-        )
-      );
+      dispatch(addRegularShoppingListItemAction(res.data.regular_shopping_item));
     } catch (error) {
       dispatch(
         failedAddRegularShoppingListItemAction(
@@ -368,18 +332,13 @@ export const addRegularShoppingListItem = (
 
 export const editRegularShoppingListItem = (
   regularShoppingListItemId: number,
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string,
   requestData: EditRegularShoppingListItemReq
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startEditRegularShoppingListItemAction());
 
     try {
-      await todoServiceInstance.put<EditRegularShoppingListItemRes>(
+      const res = await todoServiceInstance.put<EditRegularShoppingListItemRes>(
         `/shopping-list/regular/${regularShoppingListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
@@ -389,42 +348,7 @@ export const editRegularShoppingListItem = (
         })
       );
 
-      const fetchExpiredListResult = todoServiceInstance.get<FetchExpiredShoppingListRes>(
-        `/shopping-list/expired`
-      );
-
-      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
-        `/shopping-list/${year}-${month}-${date}/daily`
-      );
-
-      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
-        `/shopping-list/${year}-${month}-${date}/categories`
-      );
-
-      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/daily`
-      );
-
-      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/categories`
-      );
-
-      const expiredShoppingListResponse = await fetchExpiredListResult;
-      const todayShoppingListResponse = await fetchTodayListResult;
-      const todayShoppingListByCategoriesResponse = await fetchTodayListByCategoriesResult;
-      const monthlyShoppingListResponse = await fetchMonthlyListResult;
-      const monthlyShoppingListByCategoriesResponse = await fetchMonthlyListByCategoriesResult;
-
-      dispatch(
-        editRegularShoppingListItemAction(
-          todayShoppingListResponse.data.regular_shopping_list,
-          expiredShoppingListResponse.data.expired_shopping_list,
-          todayShoppingListResponse.data.shopping_list,
-          todayShoppingListByCategoriesResponse.data.shopping_list_by_categories,
-          monthlyShoppingListResponse.data.shopping_list,
-          monthlyShoppingListByCategoriesResponse.data.shopping_list_by_categories
-        )
-      );
+      dispatch(editRegularShoppingListItemAction(res.data.regular_shopping_item));
     } catch (error) {
       dispatch(
         failedEditRegularShoppingListItemAction(
@@ -437,62 +361,17 @@ export const editRegularShoppingListItem = (
   };
 };
 
-export const deleteRegularShoppingListItem = (
-  regularShoppingListItemId: number,
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string
-) => {
+export const deleteRegularShoppingListItem = (regularShoppingListItemId: number) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startDeleteRegularShoppingListItemAction());
 
     try {
-      const deleteRegularShoppingListItemResult = await todoServiceInstance.delete<DeleteRegularShoppingListItemRes>(
-        `/shopping-list/regular/${regularShoppingListItemId}`,
-        {
-          withCredentials: true,
-        }
+      const res = await todoServiceInstance.delete<DeleteRegularShoppingListItemRes>(
+        `/shopping-list/regular/${regularShoppingListItemId}`
       );
 
-      const fetchExpiredListResult = todoServiceInstance.get<FetchExpiredShoppingListRes>(
-        `/shopping-list/expired`
-      );
-
-      const fetchTodayListResult = todoServiceInstance.get<FetchTodayShoppingListRes>(
-        `/shopping-list/${year}-${month}-${date}/daily`
-      );
-
-      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchTodayShoppingListByCategoriesRes>(
-        `/shopping-list/${year}-${month}-${date}/categories`
-      );
-
-      const fetchMonthlyListResult = todoServiceInstance.get<FetchMonthlyShoppingListRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/daily`
-      );
-
-      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchMonthlyShoppingListByCategoriesRes>(
-        `/shopping-list/${currentYear}-${currentMonth}/categories`
-      );
-
-      const expiredShoppingListResponse = await fetchExpiredListResult;
-      const todayShoppingListResponse = await fetchTodayListResult;
-      const todayShoppingListByCategoriesResponse = await fetchTodayListByCategoriesResult;
-      const monthlyShoppingListResponse = await fetchMonthlyListResult;
-      const monthlyShoppingListByCategoriesResponse = await fetchMonthlyListByCategoriesResult;
-
-      dispatch(
-        deleteRegularShoppingListItemAction(
-          todayShoppingListResponse.data.regular_shopping_list,
-          expiredShoppingListResponse.data.expired_shopping_list,
-          todayShoppingListResponse.data.shopping_list,
-          todayShoppingListByCategoriesResponse.data.shopping_list_by_categories,
-          monthlyShoppingListResponse.data.shopping_list,
-          monthlyShoppingListByCategoriesResponse.data.shopping_list_by_categories
-        )
-      );
-      dispatch(openTextModalAction(deleteRegularShoppingListItemResult.data.message));
+      dispatch(deleteRegularShoppingListItemAction());
+      dispatch(openTextModalAction(res.data.message));
     } catch (error) {
       dispatch(
         failedDeleteRegularShoppingListItemAction(

@@ -5,8 +5,8 @@ import EditRegularShoppingListItemModalContainer from '../../../../../containers
 
 interface RegularShoppingListItemComponentProps {
   listItem: RegularShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const RegularShoppingListItemComponent = (props: RegularShoppingListItemComponentProps) => {
@@ -16,8 +16,8 @@ const RegularShoppingListItemComponent = (props: RegularShoppingListItemComponen
       <span className={styles.amount}>{`￥ ${props.listItem.amount ?? '-'}`}</span>
       <EditRegularShoppingListItemModalContainer
         listItem={props.listItem}
-        currentYear={props.currentYear}
-        currentMonth={props.currentMonth}
+        selectedYearParam={props.selectedYearParam}
+        selectedMonthParam={props.selectedMonthParam}
       />
     </li>
   );

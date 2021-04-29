@@ -1,5 +1,6 @@
 import {
   RegularShoppingList,
+  RegularShoppingListItem,
   ShoppingList,
   ShoppingListByCategories,
   ShoppingListItem,
@@ -474,25 +475,12 @@ export const startAddRegularShoppingListItemAction = () => {
 
 export const ADD_REGULAR_SHOPPING_LIST_ITEM = 'ADD_REGULAR_SHOPPING_LIST_ITEM';
 export const addRegularShoppingListItemAction = (
-  regularShoppingList: RegularShoppingList,
-  todayShoppingList: ShoppingList,
-  todayShoppingListByCategories: ShoppingListByCategories,
-  monthlyShoppingList: ShoppingList,
-  monthlyShoppingListByCategories: ShoppingListByCategories
+  regularShoppingListItem: RegularShoppingListItem
 ) => {
   return {
     type: ADD_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      regularShoppingListLoading: false,
-      regularShoppingList: regularShoppingList,
-      todayShoppingListLoading: false,
-      todayShoppingList: todayShoppingList,
-      todayShoppingListByCategoriesLoading: false,
-      todayShoppingListByCategories: todayShoppingListByCategories,
-      monthlyShoppingListLoading: false,
-      monthlyShoppingList: monthlyShoppingList,
-      monthlyShoppingListByCategoriesLoading: false,
-      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+      regularShoppingListItem: regularShoppingListItem,
     },
   };
 };
@@ -535,28 +523,32 @@ export const startEditRegularShoppingListItemAction = () => {
 
 export const EDIT_REGULAR_SHOPPING_LIST_ITEM = 'EDIT_REGULAR_SHOPPING_LIST_ITEM';
 export const editRegularShoppingListItemAction = (
-  regularShoppingList: RegularShoppingList,
-  expiredShoppingList: ShoppingList,
-  todayShoppingList: ShoppingList,
-  todayShoppingListByCategories: ShoppingListByCategories,
-  monthlyShoppingList: ShoppingList,
-  monthlyShoppingListByCategories: ShoppingListByCategories
+  regularShoppingListItem: RegularShoppingListItem
+
+  // regularShoppingList: RegularShoppingList,
+  // expiredShoppingList: ShoppingList,
+  // todayShoppingList: ShoppingList,
+  // todayShoppingListByCategories: ShoppingListByCategories,
+  // monthlyShoppingList: ShoppingList,
+  // monthlyShoppingListByCategories: ShoppingListByCategories
 ) => {
   return {
     type: EDIT_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      regularShoppingListLoading: false,
-      regularShoppingList: regularShoppingList,
-      expiredShoppingListLoading: false,
-      expiredShoppingList: expiredShoppingList,
-      todayShoppingListLoading: false,
-      todayShoppingList: todayShoppingList,
-      todayShoppingListByCategoriesLoading: false,
-      todayShoppingListByCategories: todayShoppingListByCategories,
-      monthlyShoppingListLoading: false,
-      monthlyShoppingList: monthlyShoppingList,
-      monthlyShoppingListByCategoriesLoading: false,
-      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+      regularShoppingListItem: regularShoppingListItem,
+
+      // regularShoppingListLoading: false,
+      // regularShoppingList: regularShoppingList,
+      // expiredShoppingListLoading: false,
+      // expiredShoppingList: expiredShoppingList,
+      // todayShoppingListLoading: false,
+      // todayShoppingList: todayShoppingList,
+      // todayShoppingListByCategoriesLoading: false,
+      // todayShoppingListByCategories: todayShoppingListByCategories,
+      // monthlyShoppingListLoading: false,
+      // monthlyShoppingList: monthlyShoppingList,
+      // monthlyShoppingListByCategoriesLoading: false,
+      // monthlyShoppingListByCategories: monthlyShoppingListByCategories,
     },
   };
 };
@@ -599,29 +591,28 @@ export const startDeleteRegularShoppingListItemAction = () => {
 };
 
 export const DELETE_REGULAR_SHOPPING_LIST_ITEM = 'DELETE_REGULAR_SHOPPING_LIST_ITEM';
-export const deleteRegularShoppingListItemAction = (
-  regularShoppingList: RegularShoppingList,
-  expiredShoppingList: ShoppingList,
-  todayShoppingList: ShoppingList,
-  todayShoppingListByCategories: ShoppingListByCategories,
-  monthlyShoppingList: ShoppingList,
-  monthlyShoppingListByCategories: ShoppingListByCategories
-) => {
+export const deleteRegularShoppingListItemAction = () => {
   return {
     type: DELETE_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      regularShoppingListLoading: false,
-      regularShoppingList: regularShoppingList,
-      expiredShoppingListLoading: false,
-      expiredShoppingList: expiredShoppingList,
-      todayShoppingListLoading: false,
-      todayShoppingList: todayShoppingList,
-      todayShoppingListByCategoriesLoading: false,
-      todayShoppingListByCategories: todayShoppingListByCategories,
-      monthlyShoppingListLoading: false,
-      monthlyShoppingList: monthlyShoppingList,
-      monthlyShoppingListByCategoriesLoading: false,
-      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+      regularShoppingListItem: {
+        id: 0,
+        posted_date: date,
+        updated_date: date,
+        expected_purchase_date: '',
+        cycle_type: '',
+        cycle: null,
+        purchase: '',
+        shop: null,
+        amount: null,
+        big_category_id: 0,
+        big_category_name: '',
+        medium_category_id: null,
+        medium_category_name: null,
+        custom_category_id: null,
+        custom_category_name: null,
+        transaction_auto_add: false,
+      },
     },
   };
 };
