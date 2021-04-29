@@ -4,6 +4,7 @@ import {
   ShoppingListByCategories,
   ShoppingListItem,
 } from './types';
+import { date } from '../../lib/constant';
 export type ShoppingListActions = ReturnType<
   | typeof startFetchExpiredShoppingListAction
   | typeof fetchExpiredShoppingListAction
@@ -370,26 +371,11 @@ export const startEditShoppingListItemAction = () => {
 };
 
 export const EDIT_SHOPPING_LIST_ITEM = 'EDIT_SHOPPING_LIST_ITEM';
-export const editShoppingListItemAction = (
-  expiredShoppingList: ShoppingList,
-  todayShoppingList: ShoppingList,
-  todayShoppingListByCategories: ShoppingListByCategories,
-  monthlyShoppingList: ShoppingList,
-  monthlyShoppingListByCategories: ShoppingListByCategories
-) => {
+export const editShoppingListItemAction = (shoppingListItem: ShoppingListItem) => {
   return {
     type: EDIT_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: false,
-      expiredShoppingList,
-      todayShoppingListLoading: false,
-      todayShoppingList: todayShoppingList,
-      todayShoppingListByCategoriesLoading: false,
-      todayShoppingListByCategories: todayShoppingListByCategories,
-      monthlyShoppingListLoading: false,
-      monthlyShoppingList: monthlyShoppingList,
-      monthlyShoppingListByCategoriesLoading: false,
-      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+      shoppingListItem: shoppingListItem,
     },
   };
 };
@@ -427,26 +413,29 @@ export const startDeleteShoppingListItemAction = () => {
 };
 
 export const DELETE_SHOPPING_LIST_ITEM = 'DELETE_SHOPPING_LIST_ITEM';
-export const deleteShoppingListItemAction = (
-  expiredShoppingList: ShoppingList,
-  todayShoppingList: ShoppingList,
-  todayShoppingListByCategories: ShoppingListByCategories,
-  monthlyShoppingList: ShoppingList,
-  monthlyShoppingListByCategories: ShoppingListByCategories
-) => {
+export const deleteShoppingListItemAction = () => {
   return {
     type: DELETE_SHOPPING_LIST_ITEM,
     payload: {
-      expiredShoppingListLoading: false,
-      expiredShoppingList: expiredShoppingList,
-      todayShoppingListLoading: false,
-      todayShoppingList: todayShoppingList,
-      todayShoppingListByCategoriesLoading: false,
-      todayShoppingListByCategories: todayShoppingListByCategories,
-      monthlyShoppingListLoading: false,
-      monthlyShoppingList: monthlyShoppingList,
-      monthlyShoppingListByCategoriesLoading: false,
-      monthlyShoppingListByCategories: monthlyShoppingListByCategories,
+      shoppingListItem: {
+        id: 0,
+        posted_date: date,
+        updated_date: date,
+        expected_purchase_date: '',
+        complete_flag: false,
+        purchase: '',
+        shop: null,
+        amount: null,
+        big_category_id: 0,
+        big_category_name: '',
+        medium_category_id: null,
+        medium_category_name: null,
+        custom_category_id: null,
+        custom_category_name: null,
+        regular_shopping_list_id: null,
+        transaction_auto_add: false,
+        related_transaction_data: null,
+      },
     },
   };
 };

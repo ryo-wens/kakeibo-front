@@ -5,6 +5,7 @@ import {
 } from '../../../../../../reducks/shoppingList/operations';
 import {
   EditShoppingListItemReq,
+  FetchShoppingListParams,
   ShoppingListItem,
 } from '../../../../../../reducks/shoppingList/types';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
@@ -12,6 +13,7 @@ import EditShoppingListItemModal from '../../../../../../components/shoppingList
 import { useDispatch } from 'react-redux';
 import { dateStringToDate } from '../../../../../../lib/date';
 import dayjs from 'dayjs';
+import { useFetchShoppingList } from '../../../../../../hooks/shoppingList/useFetchShoppingList';
 
 interface EditShoppingListItemModalContainerProps {
   listItem: ShoppingListItem;
@@ -33,6 +35,7 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
   };
 
   const dispatch = useDispatch();
+  const { fetchShoppingList } = useFetchShoppingList();
 
   const [open, setOpen] = useState(false);
   const [openDeleteForm, setOpenDeleteForm] = useState(false);
@@ -146,6 +149,14 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
     setTransactionAutoAdd(event.target.checked);
   };
 
+  const params: FetchShoppingListParams = {
+    currentYear: String(year),
+    currentMonth: customMonth,
+    currentDate: customDate,
+    selectedYear: props.selectedYearParam,
+    selectedMonth: props.selectedMonthParam,
+  };
+
   const handleEditShoppingListItem = async () => {
     const requestData: EditShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
@@ -162,17 +173,8 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
     };
 
     try {
-      await dispatch(
-        editShoppingListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(editShoppingListItem(props.listItem.id, requestData));
+      await fetchShoppingList(params);
 
       setOpen(false);
     } catch (error) {
@@ -182,16 +184,8 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
 
   const handleDeleteShoppingListItem = async () => {
     try {
-      await dispatch(
-        deleteShoppingListItem(
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam
-        )
-      );
+      await dispatch(deleteShoppingListItem(props.listItem.id));
+      await fetchShoppingList(params);
 
       setOpen(false);
     } catch (error) {
@@ -227,8 +221,8 @@ const EditShoppingListItemModalContainer = (props: EditShoppingListItemModalCont
       setCustomCategoryId={setCustomCategoryId}
       setMediumCategoryId={setMediumCategoryId}
       setAssociatedCategory={setAssociatedCategory}
-      handleEditShoppingListItem={() => handleEditShoppingListItem()}
-      handleDeleteShoppingListItem={() => handleDeleteShoppingListItem()}
+      handleEditShoppingListItem={handleEditShoppingListItem}
+      handleDeleteShoppingListItem={handleDeleteShoppingListItem}
     />
   );
 };
