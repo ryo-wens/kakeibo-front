@@ -23,8 +23,8 @@ const RegularShoppingListArea = (props: RegularShoppingListAreaProps) => {
             return (
               <RegularShoppingListItemComponentContainer
                 listItem={listItem}
-                currentYear={props.selectedMonthParam}
-                currentMonth={props.selectedMonthParam}
+                selectedYearParam={props.selectedYearParam}
+                selectedMonthParam={props.selectedMonthParam}
                 key={listItem.id}
               />
             );

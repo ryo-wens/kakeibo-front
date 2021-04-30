@@ -6,9 +6,11 @@ import AddRegularShoppingListItemModal from '../../../../components/shoppingList
 import {
   AddRegularShoppingListItemModalInitialState,
   AddRegularShoppingListItemReq,
+  FetchShoppingListParams,
   PurchaseCycleType,
 } from '../../../../reducks/shoppingList/types';
 import { generateZeroPaddingMonth } from '../../../../lib/date';
+import { useFetchShoppingList } from '../../../../hooks/shoppingList/useFetchShoppingList';
 
 interface AddRegularShoppingListModalContainerProps {
   selectedYear: number;
@@ -38,6 +40,7 @@ const AddRegularShoppingListItemModalContainer = (
   const dispatch = useDispatch();
   const selectedYearParam = String(props.selectedYear);
   const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
+  const { fetchShoppingList } = useFetchShoppingList();
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -142,6 +145,14 @@ const AddRegularShoppingListItemModalContainer = (
   };
 
   const handleAddRegularShoppingListItem = async () => {
+    const params: FetchShoppingListParams = {
+      currentYear: String(year),
+      currentMonth: customMonth,
+      currentDate: customDate,
+      selectedYear: selectedYearParam,
+      selectedMonth: selectedMonthParam,
+    };
+
     const requestData: AddRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       cycle_type: cycleType,
@@ -156,16 +167,8 @@ const AddRegularShoppingListItemModalContainer = (
     };
 
     try {
-      await dispatch(
-        addRegularShoppingListItem(
-          String(year),
-          customMonth,
-          customDate,
-          selectedYearParam,
-          selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(addRegularShoppingListItem(requestData));
+      await fetchShoppingList(params);
 
       handleCloseModal();
     } catch (error) {
@@ -205,7 +208,7 @@ const AddRegularShoppingListItemModalContainer = (
       setCustomCategoryId={setCustomCategoryId}
       setBigCategory={setBigCategory}
       setAssociatedCategory={setAssociatedCategory}
-      handleAddRegularShoppingListItem={() => handleAddRegularShoppingListItem()}
+      handleAddRegularShoppingListItem={handleAddRegularShoppingListItem}
       addBtnClassName={props.addBtnClassName}
     />
   );

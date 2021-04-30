@@ -4,8 +4,8 @@ import RegularShoppingListItemComponent from '../../../../../components/shopping
 
 interface RegularShoppingListItemComponentContainerProps {
   listItem: RegularShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const RegularShoppingListItemComponentContainer = (
@@ -14,8 +14,8 @@ const RegularShoppingListItemComponentContainer = (
   return (
     <RegularShoppingListItemComponent
       listItem={props.listItem}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={props.selectedYearParam}
+      selectedMonthParam={props.selectedMonthParam}
     />
   );
 };
