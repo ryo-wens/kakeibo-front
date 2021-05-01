@@ -4,8 +4,8 @@ import { getGroupTodayShoppingListByCategories } from '../../../../reducks/group
 import GroupTodayScheduleShoppingListArea from '../../../../components/home/todaySchedule/groupShoppingListArea/GroupTodayScheduleShoppingListArea';
 
 interface GroupTodayScheduleShoppingListAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const GroupTodayScheduleShoppingListAreaContainer = (
@@ -16,8 +16,8 @@ const GroupTodayScheduleShoppingListAreaContainer = (
   return (
     <GroupTodayScheduleShoppingListArea
       shoppingListByCategories={groupTodayShoppingListByCategories}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={props.selectedYearParam}
+      selectedMonthParam={props.selectedMonthParam}
       message={'今日の買い物リストは、登録されていません。'}
     />
   );

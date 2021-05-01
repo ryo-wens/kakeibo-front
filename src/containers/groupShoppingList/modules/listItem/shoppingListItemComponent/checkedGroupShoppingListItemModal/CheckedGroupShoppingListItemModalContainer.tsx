@@ -13,8 +13,8 @@ import dayjs from 'dayjs';
 
 interface CheckedGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const CheckedGroupShoppingListItemModalContainer = (
@@ -196,8 +196,8 @@ const CheckedGroupShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          props.selectedYearParam,
+          props.selectedMonthParam,
           requestData
         )
       );
@@ -230,8 +230,8 @@ const CheckedGroupShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          props.selectedYearParam,
+          props.selectedMonthParam,
           requestData
         )
       );

@@ -13,10 +13,11 @@ import {
   GroupDisplayShoppingListByDate,
   GroupShoppingList,
 } from '../../../../../reducks/groupShoppingList/types';
+import { generateZeroPaddingMonth } from '../../../../../lib/date';
 
 interface GroupExpiredShoppingListAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
   readMoreBtnClassName: string;
 }
 
@@ -28,6 +29,9 @@ const GroupExpiredShoppingListAreaContainer = (
   const groupDisplayExpiredShoppingList = useSelector(getGroupDisplayExpiredShoppingList);
   const groupSlicedExpiredShoppingList = useSelector(getGroupSlicedExpiredShoppingList);
   const { group_id } = useParams<{ group_id: string }>();
+
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
   const initialDisplayNumberShoppingList = 3;
 
   const [readMore, setReadMore] = useState(false);
@@ -72,8 +76,8 @@ const GroupExpiredShoppingListAreaContainer = (
     <GroupExpiredShoppingListArea
       expiredShoppingList={groupExpiredShoppingList}
       displayExpiredShoppingList={displayExpiredShoppingList}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       readMore={readMore}
       setReadMore={setReadMore}
       initialDisplayNumberShoppingList={initialDisplayNumberShoppingList}

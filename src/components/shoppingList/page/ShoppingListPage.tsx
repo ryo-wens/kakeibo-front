@@ -53,7 +53,6 @@ const ShoppingListPage = (props: ShoppingListPageProps) => {
           <RegularShoppingListAreaContainer
             selectedYear={props.selectedYear}
             selectedMonth={props.selectedMonth}
-            currentTodayOrMonthly={props.currentItem}
           />
         </div>
         <div className={styles.rightContent}>

@@ -4,14 +4,12 @@ import {
   GroupRegularShoppingList,
   GroupRegularShoppingListItem,
 } from '../../../../../reducks/groupShoppingList/types';
-import { TodayOrMonthly } from '../../../../../reducks/shoppingList/types';
 import GroupRegularShoppingListItemComponentContainer from '../../../../../containers/groupShoppingList/modules/listItem/regularShoppingListItemComponent/GroupRegularShoppingListItemComponentContainer';
 
 interface GroupRegularShoppingListAreaProps {
   regularShoppingList: GroupRegularShoppingList;
-  currentYear: string;
-  currentMonth: string;
-  currentTodayOrMonthly: TodayOrMonthly;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const GroupRegularShoppingListArea = (props: GroupRegularShoppingListAreaProps) => {
@@ -23,9 +21,8 @@ const GroupRegularShoppingListArea = (props: GroupRegularShoppingListAreaProps) 
             return (
               <GroupRegularShoppingListItemComponentContainer
                 listItem={listItem}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
-                currentTodayOrMonthly={props.currentTodayOrMonthly}
+                selectedYearParam={props.selectedYearParam}
+                selectedMonthParam={props.selectedMonthParam}
                 key={listItem.id}
               />
             );

@@ -1,3 +1,5 @@
+import { FetchGroupShoppingListParams } from '../groupShoppingList/types';
+
 export interface RegularShoppingListItem {
   id: number;
   posted_date: Date;
@@ -193,10 +195,4 @@ export interface DisplayShoppingListItemByCategories {
 export interface DisplayShoppingListByCategories
   extends Array<DisplayShoppingListItemByCategories> {}
 
-export interface FetchShoppingListParams {
-  currentYear: string;
-  currentMonth: string;
-  currentDate: string;
-  selectedYear: string;
-  selectedMonth: string;
-}
+export type FetchShoppingListParams = Omit<FetchGroupShoppingListParams, 'groupId'>;

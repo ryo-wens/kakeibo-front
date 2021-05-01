@@ -51,8 +51,8 @@ const TodaySchedule = (props: TodayScheduleProps) => {
         <h4>買い物リスト</h4>
         {props.pathName === 'group' ? (
           <GroupTodayScheduleShoppingListAreaContainer
-            currentYear={props.selectedYearParam}
-            currentMonth={props.selectedMonthParam}
+            selectedYearParam={props.selectedYearParam}
+            selectedMonthParam={props.selectedMonthParam}
           />
         ) : (
           <TodayScheduleShoppingListAreaContainer

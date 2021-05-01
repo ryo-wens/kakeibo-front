@@ -2,6 +2,7 @@ import {
   GroupRegularShoppingList,
   GroupShoppingList,
   GroupShoppingListByCategories,
+  GroupShoppingListItem,
 } from './types';
 export type GroupShoppingListActions = ReturnType<
   | typeof startFetchGroupExpiredShoppingListAction
@@ -340,23 +341,11 @@ export const startAddGroupShoppingListItemAction = () => {
 };
 
 export const ADD_GROUP_SHOPPING_LIST_ITEM = 'ADD_GROUP_SHOPPING_LIST_ITEM';
-export const addGroupShoppingListItemAction = (
-  groupTodayShoppingList: GroupShoppingList,
-  groupTodayShoppingListByCategories: GroupShoppingListByCategories,
-  groupMonthlyShoppingList: GroupShoppingList,
-  groupMonthlyShoppingListByCategories: GroupShoppingListByCategories
-) => {
+export const addGroupShoppingListItemAction = (groupShoppingListItem: GroupShoppingListItem) => {
   return {
     type: ADD_GROUP_SHOPPING_LIST_ITEM,
     payload: {
-      groupTodayShoppingListLoading: false,
-      groupTodayShoppingList: groupTodayShoppingList,
-      groupTodayShoppingListByCategoriesLoading: false,
-      groupTodayShoppingListByCategories: groupTodayShoppingListByCategories,
-      groupMonthlyShoppingListLoading: false,
-      groupMonthlyShoppingList: groupMonthlyShoppingList,
-      groupMonthlyShoppingListByCategoriesLoading: false,
-      groupMonthlyShoppingListByCategories: groupMonthlyShoppingListByCategories,
+      groupShoppingListItem: groupShoppingListItem,
     },
   };
 };

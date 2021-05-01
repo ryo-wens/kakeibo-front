@@ -6,8 +6,8 @@ import GroupTodayShoppingListByDateContainer from '../../../../../containers/gro
 import styles from '../../../../shoppingList/modules/area/TodayShoppingListArea/TodayShoppingListArea.module.scss';
 
 interface GroupTodayShoppingListAreaProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
@@ -15,8 +15,8 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
     <>
       <div className={styles.addButton}>
         <AddGroupShoppingListItemModalContainer
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
+          selectedYear={props.selectedYear}
+          selectedMonth={props.selectedMonth}
         />
       </div>
       <div className={styles.switchItem}>
@@ -26,14 +26,14 @@ const GroupTodayShoppingListArea = (props: GroupTodayShoppingListAreaProps) => {
             rightButtonLabel={'カテゴリ別'}
             leftItem={
               <GroupTodayShoppingListByDateContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYear={props.selectedYear}
+                selectedMonth={props.selectedMonth}
               />
             }
             rightItem={
               <GroupTodayShoppingListByCategoriesContainer
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYear={props.selectedYear}
+                selectedMonth={props.selectedMonth}
               />
             }
             tabsBtnClassName={styles.childTabsBtn}

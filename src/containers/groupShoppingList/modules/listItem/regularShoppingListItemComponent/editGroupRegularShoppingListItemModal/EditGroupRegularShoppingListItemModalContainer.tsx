@@ -16,8 +16,8 @@ import { customDate, customMonth, year } from '../../../../../../lib/constant';
 
 interface EditGroupRegularShoppingListItemModalContainerProps {
   listItem: GroupRegularShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const EditGroupRegularShoppingListItemModalContainer = (
@@ -201,8 +201,8 @@ const EditGroupRegularShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          props.selectedYearParam,
+          props.selectedMonthParam,
           requestData
         )
       );
@@ -222,8 +222,8 @@ const EditGroupRegularShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth
+          props.selectedYearParam,
+          props.selectedMonthParam
         )
       );
 

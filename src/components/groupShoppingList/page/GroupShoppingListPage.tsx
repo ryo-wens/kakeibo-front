@@ -13,8 +13,6 @@ interface GroupShoppingListPageProps {
   selectedMonth: number;
   setSelectedYear: React.Dispatch<React.SetStateAction<number>>;
   setSelectedMonth: React.Dispatch<React.SetStateAction<number>>;
-  currentYear: string;
-  currentMonth: string;
   currentItem: TodayOrMonthly;
   setCurrentItem: React.Dispatch<React.SetStateAction<TodayOrMonthly>>;
 }
@@ -29,8 +27,8 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
             setCurrentItems={props.setCurrentItem}
             leftItem={
               <GroupTodayShoppingListArea
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
+                selectedYear={props.selectedYear}
+                selectedMonth={props.selectedMonth}
               />
             }
             rightItem={
@@ -39,8 +37,6 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
                 selectedMonth={props.selectedMonth}
                 setSelectedYear={props.setSelectedYear}
                 setSelectedMonth={props.setSelectedMonth}
-                currentYear={props.currentYear}
-                currentMonth={props.currentMonth}
               />
             }
           />
@@ -50,21 +46,20 @@ const GroupShoppingListPage = (props: GroupShoppingListPageProps) => {
         <div className={styles.rightContent}>
           <h3>定期買い物リスト</h3>
           <AddGroupRegularShoppingListModalContainer
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
+            selectedYear={props.selectedYear}
+            selectedMonth={props.selectedMonth}
             addBtnClassName={styles.childAddRegularBtn}
           />
           <GroupRegularShoppingListAreaContainer
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
-            currentTodayOrMonthly={props.currentItem}
+            selectedYear={props.selectedYear}
+            selectedMonth={props.selectedMonth}
           />
         </div>
         <div className={styles.rightContent}>
           <h3>期限切れ買い物リスト</h3>
           <GroupExpiredShoppingListAreaContainer
-            currentYear={props.currentYear}
-            currentMonth={props.currentMonth}
+            selectedYear={props.selectedYear}
+            selectedMonth={props.selectedMonth}
             readMoreBtnClassName={styles.childReadBtn}
           />
         </div>

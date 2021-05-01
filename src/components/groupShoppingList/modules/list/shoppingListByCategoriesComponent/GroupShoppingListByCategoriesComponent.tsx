@@ -10,8 +10,8 @@ import styles from '../../../../shoppingList/modules/list/shoppingListByCategori
 
 interface GroupShoppingListByCategoriesComponentProps {
   shoppingListByCategories: GroupDisplayShoppingListByCategories;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
 }
 
@@ -51,8 +51,8 @@ const GroupShoppingListByCategoriesComponent = (
                                 return (
                                   <GroupShoppingListItemComponentContainer
                                     listItem={item}
-                                    currentYear={props.currentYear}
-                                    currentMonth={props.currentMonth}
+                                    selectedYearParam={props.selectedYearParam}
+                                    selectedMonthParam={props.selectedMonthParam}
                                     purchaseClassName={styles.childPurchase}
                                     amountClassName={styles.childAmount}
                                     key={item.id}

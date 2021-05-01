@@ -6,8 +6,8 @@ import styles from '../../../../shoppingList/modules/list/shoppingListByDate/Sho
 
 interface GroupShoppingListByDateProps {
   shoppingListByDate: GroupDisplayShoppingListByDate;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
 }
 
@@ -27,8 +27,8 @@ const GroupShoppingListByDate = (props: GroupShoppingListByDateProps) => {
                     return (
                       <GroupShoppingListItemComponentContainer
                         listItem={item}
-                        currentYear={props.currentYear}
-                        currentMonth={props.currentMonth}
+                        selectedYearParam={props.selectedYearParam}
+                        selectedMonthParam={props.selectedMonthParam}
                         purchaseClassName={styles.childPurchase}
                         amountClassName={styles.childAmount}
                         key={item.id}
