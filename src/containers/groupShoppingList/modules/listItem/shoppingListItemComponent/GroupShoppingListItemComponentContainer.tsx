@@ -7,8 +7,8 @@ import GroupShoppingListItemComponent from '../../../../../components/groupShopp
 
 interface GroupShoppingListItemComponentContainerProps {
   listItem: GroupShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   purchaseClassName: string;
   amountClassName: string;
 }
@@ -26,8 +26,8 @@ const GroupShoppingListItemComponentContainer = (
       approvedGroups={approvedGroups}
       groupId={Number(group_id)}
       listItem={props.listItem}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={props.selectedYearParam}
+      selectedMonthParam={props.selectedMonthParam}
       currentPage={currentPage}
       purchaseClassName={props.purchaseClassName}
       amountClassName={props.amountClassName}

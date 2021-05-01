@@ -1,13 +1,11 @@
 import React from 'react';
-import { TodayOrMonthly } from '../../../../../reducks/shoppingList/types';
 import { GroupRegularShoppingListItem } from '../../../../../reducks/groupShoppingList/types';
 import GroupRegularShoppingListItemComponent from '../../../../../components/groupShoppingList/modules/listItem/regularShoppingListItemComponent/GroupRegularShoppingListItemComponent';
 
 interface GroupRegularShoppingListItemComponentContainerProps {
   listItem: GroupRegularShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
-  currentTodayOrMonthly: TodayOrMonthly;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const GroupRegularShoppingListItemComponentContainer = (
@@ -16,8 +14,8 @@ const GroupRegularShoppingListItemComponentContainer = (
   return (
     <GroupRegularShoppingListItemComponent
       listItem={props.listItem}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={props.selectedYearParam}
+      selectedMonthParam={props.selectedMonthParam}
     />
   );
 };

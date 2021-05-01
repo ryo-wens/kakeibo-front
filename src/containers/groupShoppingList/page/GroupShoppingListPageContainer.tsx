@@ -6,7 +6,6 @@ import { useParams } from 'react-router';
 import { TodayOrMonthly } from '../../../reducks/shoppingList/types';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
 import GroupShoppingListPage from '../../../components/groupShoppingList/page/GroupShoppingListPage';
-import { generateZeroPaddingMonth } from '../../../lib/date';
 
 const GroupShoppingListPageContainer = () => {
   const dispatch = useDispatch();
@@ -15,9 +14,6 @@ const GroupShoppingListPageContainer = () => {
   const [currentItem, setCurrentItem] = useState<TodayOrMonthly>('today');
   const [selectedYear, setSelectedYear] = useState<number>(year);
   const [selectedMonth, setSelectedMonth] = useState<number>(month);
-
-  const currentYear = String(selectedYear);
-  const currentMonth = generateZeroPaddingMonth(selectedMonth);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -31,8 +27,6 @@ const GroupShoppingListPageContainer = () => {
       selectedMonth={selectedMonth}
       setSelectedYear={setSelectedYear}
       setSelectedMonth={setSelectedMonth}
-      currentYear={currentYear}
-      currentMonth={currentMonth}
       currentItem={currentItem}
       setCurrentItem={setCurrentItem}
     />

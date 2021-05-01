@@ -63,16 +63,14 @@ import dayjs from 'dayjs';
 import { openTextModalAction } from '../modal/actions';
 import { todoServiceInstance } from '../axiosConfig';
 
-export const fetchGroupExpiredShoppingList = (groupId: number, signal: CancelTokenSource) => {
+export const fetchGroupExpiredShoppingList = (groupId: number, signal?: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupExpiredShoppingListAction());
 
     try {
       const result = await todoServiceInstance.get<FetchGroupExpiredShoppingListRes>(
         `/groups/${groupId}/shopping-list/expired`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
 
       const resGroupExpiredShoppingList: GroupShoppingList = result.data.expired_shopping_list;
@@ -98,7 +96,7 @@ export const fetchGroupTodayShoppingList = (
   year: string,
   month: string,
   date: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupTodayShoppingListAction());
@@ -106,9 +104,7 @@ export const fetchGroupTodayShoppingList = (
     try {
       const result = await todoServiceInstance.get<FetchGroupTodayShoppingListRes>(
         `/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
 
       const resGroupRegularShoppingList: GroupRegularShoppingList =
@@ -138,7 +134,7 @@ export const fetchGroupTodayShoppingListByCategories = (
   year: string,
   month: string,
   date: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupTodayShoppingListByCategoriesAction());
@@ -146,9 +142,7 @@ export const fetchGroupTodayShoppingListByCategories = (
     try {
       const result = await todoServiceInstance.get<FetchGroupTodayShoppingListByCategoriesRes>(
         `/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
 
       const resGroupRegularShoppingList: GroupRegularShoppingList =
@@ -181,7 +175,7 @@ export const fetchGroupMonthlyShoppingList = (
   groupId: number,
   year: string,
   month: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupMonthlyShoppingListAction());
@@ -189,9 +183,7 @@ export const fetchGroupMonthlyShoppingList = (
     try {
       const result = await todoServiceInstance.get<FetchGroupMonthlyShoppingListRes>(
         `/groups/${groupId}/shopping-list/${year}-${month}/daily`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
 
       const resGroupRegularShoppingList: GroupRegularShoppingList =
@@ -223,7 +215,7 @@ export const fetchGroupMonthlyShoppingListByCategories = (
   groupId: number,
   year: string,
   month: string,
-  signal: CancelTokenSource
+  signal?: CancelTokenSource
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupMonthlyShoppingListByCategoriesAction());
@@ -231,9 +223,7 @@ export const fetchGroupMonthlyShoppingListByCategories = (
     try {
       const result = await todoServiceInstance.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
         `/groups/${groupId}/shopping-list/${year}-${month}/categories`,
-        {
-          cancelToken: signal.token,
-        }
+        { cancelToken: signal?.token }
       );
 
       const resGroupRegularShoppingList: GroupRegularShoppingList =
@@ -264,18 +254,13 @@ export const fetchGroupMonthlyShoppingListByCategories = (
 
 export const addGroupShoppingListItem = (
   groupId: number,
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string,
   requestData: AddGroupShoppingListItemReq
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startAddGroupShoppingListItemAction());
 
     try {
-      await todoServiceInstance.post<GroupShoppingListItem>(
+      const res = await todoServiceInstance.post<GroupShoppingListItem>(
         `/groups/${groupId}/shopping-list`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
@@ -285,35 +270,7 @@ export const addGroupShoppingListItem = (
         })
       );
 
-      const fetchTodayListResult = todoServiceInstance.get<FetchGroupTodayShoppingListRes>(
-        `/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`
-      );
-
-      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchGroupTodayShoppingListByCategoriesRes>(
-        `/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`
-      );
-
-      const fetchMonthlyListResult = todoServiceInstance.get<FetchGroupMonthlyShoppingListRes>(
-        `/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/daily`
-      );
-
-      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
-        `/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`
-      );
-
-      const todayShoppingListResponse = await fetchTodayListResult;
-      const todayShoppingListByCategoriesResponse = await fetchTodayListByCategoriesResult;
-      const monthlyShoppingListResponse = await fetchMonthlyListResult;
-      const monthlyShoppingListByCategoriesResponse = await fetchMonthlyListByCategoriesResult;
-
-      dispatch(
-        addGroupShoppingListItemAction(
-          todayShoppingListResponse.data.shopping_list,
-          todayShoppingListByCategoriesResponse.data.shopping_list_by_categories,
-          monthlyShoppingListResponse.data.shopping_list,
-          monthlyShoppingListByCategoriesResponse.data.shopping_list_by_categories
-        )
-      );
+      dispatch(addGroupShoppingListItemAction(res.data));
     } catch (error) {
       dispatch(
         failedAddGroupShoppingListItemAction(

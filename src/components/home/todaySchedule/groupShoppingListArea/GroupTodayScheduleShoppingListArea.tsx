@@ -10,8 +10,8 @@ import styles from '../shoppingListArea/TodayScheduleShoppingListArea.module.scs
 
 interface GroupTodayScheduleShoppingListByCategoriesProps {
   shoppingListByCategories: GroupShoppingListByCategories;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   message: string;
 }
 
@@ -43,8 +43,8 @@ const GroupTodayScheduleShoppingListArea = (
                         return (
                           <GroupShoppingListItemComponentContainer
                             listItem={shoppingListItem}
-                            currentYear={props.currentYear}
-                            currentMonth={props.currentMonth}
+                            selectedYearParam={props.selectedYearParam}
+                            selectedMonthParam={props.selectedMonthParam}
                             purchaseClassName={styles.childPurchase}
                             amountClassName={styles.childAmount}
                             key={shoppingListItem.id}

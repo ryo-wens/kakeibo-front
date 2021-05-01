@@ -1,13 +1,12 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { getGroupRegularShoppingList } from '../../../../../reducks/groupShoppingList/selectors';
-import { TodayOrMonthly } from '../../../../../reducks/shoppingList/types';
 import GroupRegularShoppingListArea from '../../../../../components/groupShoppingList/modules/area/regularShoppingListArea/GroupRegularShoppingListArea';
+import { generateZeroPaddingMonth } from '../../../../../lib/date';
 
 interface GroupRegularShoppingListAreaContainerProps {
-  currentYear: string;
-  currentMonth: string;
-  currentTodayOrMonthly: TodayOrMonthly;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const GroupRegularShoppingListAreaContainer = (
@@ -15,12 +14,14 @@ const GroupRegularShoppingListAreaContainer = (
 ) => {
   const groupRegularShoppingList = useSelector(getGroupRegularShoppingList);
 
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
+
   return (
     <GroupRegularShoppingListArea
       regularShoppingList={groupRegularShoppingList}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
-      currentTodayOrMonthly={props.currentTodayOrMonthly}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
     />
   );
 };

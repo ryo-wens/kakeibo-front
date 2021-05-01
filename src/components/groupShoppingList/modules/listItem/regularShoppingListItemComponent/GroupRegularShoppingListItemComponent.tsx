@@ -5,8 +5,8 @@ import EditGroupRegularShoppingListItemModalContainer from '../../../../../conta
 
 interface GroupRegularShoppingListItemComponentProps {
   listItem: GroupRegularShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const GroupRegularShoppingListItemComponent = (
@@ -18,8 +18,8 @@ const GroupRegularShoppingListItemComponent = (
       <span className={styles.amount}>{`￥ ${props.listItem.amount ?? '-'}`}</span>
       <EditGroupRegularShoppingListItemModalContainer
         listItem={props.listItem}
-        currentYear={props.currentYear}
-        currentMonth={props.currentMonth}
+        selectedYearParam={props.selectedYearParam}
+        selectedMonthParam={props.selectedMonthParam}
       />
     </li>
   );

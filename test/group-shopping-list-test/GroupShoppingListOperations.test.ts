@@ -21,11 +21,7 @@ import fetchGroupTodayShoppingListResponse from './fetchGroupTodayShoppingListRe
 import fetchGroupTodayShoppingListByCategoriesResponse from './fetchGroupTodayShoppingListByCategoriesResponse/fetchGroupTodayShoppingListByCategoriesResponse.json';
 import fetchGroupMonthlyShoppingListResponse from './fetchGroupMonthlyShoppingListResponse/fetchGroupMonthlyShoppingListResponse.json';
 import fetchGroupMonthlyShoppingListByCategoriesResponse from './fetchGroupMonthlyShoppingListByCategoriesResponse/fetchGroupMonthlyShoppingListByCategoriesResponse.json';
-import addGroupShoppingListItemResponse from './addGroupShoppingListItemResponse/addGroupShoppingListItemResponse.json';
-import addGroupTodayShoppingListByDateResponse from './addGroupShoppingListItemResponse/addGroupTodayShoppingListByDateResponse.json';
-import addGroupTodayShoppingListByCategoriesResponse from './addGroupShoppingListItemResponse/addGroupTodayShoppingListByCategoriesResponse.json';
-import addGroupMonthlyShoppingListByDateResponse from './addGroupShoppingListItemResponse/addGroupMonthlyShoppingListByDateResponse.json';
-import addGroupMonthlyShoppingListByCategoriesResponse from './addGroupShoppingListItemResponse/addGroupMonthlyShoppingListByCategoriesResponse.json';
+import addGroupShoppingListItemResponse from './addGroupShoppingListItemResponse.json';
 import editGroupShoppingListItemResponse from './editGroupShoppingListItemResponse/editGroupShoppingListItemResponse.json';
 import editGroupExpiredShoppingListResponse from './editGroupShoppingListItemResponse/editGroupExpiredShoppingListResponse.json';
 import editGroupTodayShoppingListByDateResponse from './editGroupShoppingListItemResponse/editGroupTodayShoppingListByDateResponse.json';
@@ -272,11 +268,6 @@ describe('async actions shoppingList', () => {
 
   it('add groupShoppingListItem if fetch succeeds', async () => {
     const groupId = 1;
-    const year = '2020';
-    const month = '12';
-    const date = '24';
-    const currentYear = '2020';
-    const currentMonth = '12';
 
     const expectedPurchaseDate = new Date('2020-12-26T10:00:00');
     const purchase = '鶏肉3kg';
@@ -300,11 +291,7 @@ describe('async actions shoppingList', () => {
       transaction_auto_add: transactionAutoAdd,
     };
 
-    const addUrl = `/groups/${groupId}/shopping-list`;
-    const fetchTodayByDateUrl = `/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `/groups/${groupId}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `/groups/${groupId}/shopping-list/${year}-${month}/categories`;
+    const url = `/groups/${groupId}/shopping-list`;
 
     const expectedAction = [
       {
@@ -319,39 +306,14 @@ describe('async actions shoppingList', () => {
       {
         type: GroupShoppingListActions.ADD_GROUP_SHOPPING_LIST_ITEM,
         payload: {
-          groupTodayShoppingListLoading: false,
-          groupTodayShoppingList: addGroupTodayShoppingListByDateResponse.shopping_list,
-          groupTodayShoppingListByCategoriesLoading: false,
-          groupTodayShoppingListByCategories:
-            addGroupTodayShoppingListByCategoriesResponse.shopping_list_by_categories,
-          groupMonthlyShoppingListLoading: false,
-          groupMonthlyShoppingList: addGroupMonthlyShoppingListByDateResponse.shopping_list,
-          groupMonthlyShoppingListByCategoriesLoading: false,
-          groupMonthlyShoppingListByCategories:
-            addGroupMonthlyShoppingListByCategoriesResponse.shopping_list_by_categories,
+          groupShoppingListItem: addGroupShoppingListItemResponse,
         },
       },
     ];
 
-    axiosMock.onPost(addUrl).reply(200, addGroupShoppingListItemResponse);
-    axiosMock.onGet(fetchTodayByDateUrl).reply(200, addGroupTodayShoppingListByDateResponse);
-    axiosMock
-      .onGet(fetchTodayByCategoriesUrl)
-      .reply(200, addGroupTodayShoppingListByCategoriesResponse);
-    axiosMock.onGet(fetchMonthlyByDateUrl).reply(200, addGroupMonthlyShoppingListByDateResponse);
-    axiosMock
-      .onGet(fetchMonthlyByCategoriesUrl)
-      .reply(200, addGroupMonthlyShoppingListByCategoriesResponse);
+    axiosMock.onPost(url).reply(200, addGroupShoppingListItemResponse);
 
-    await addGroupShoppingListItem(
-      groupId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth,
-      requestData
-    )(store.dispatch);
+    await addGroupShoppingListItem(groupId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

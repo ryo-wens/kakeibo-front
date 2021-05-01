@@ -2,7 +2,6 @@ import React from 'react';
 import {
   RegularShoppingList,
   RegularShoppingListItem,
-  TodayOrMonthly,
 } from '../../../../../reducks/shoppingList/types';
 import styles from './RegularShoppingListArea.module.scss';
 import RegularShoppingListItemComponentContainer from '../../../../../containers/shoppingList/modules/listItem/regularShoppingListItemComponentContainer/RegularShoppingListItemComponentContainer';
@@ -10,7 +9,6 @@ import RegularShoppingListItemComponentContainer from '../../../../../containers
 interface RegularShoppingListAreaProps {
   selectedYearParam: string;
   selectedMonthParam: string;
-  currentTodayOrMonthly: TodayOrMonthly;
   regularShoppingList: RegularShoppingList;
 }
 

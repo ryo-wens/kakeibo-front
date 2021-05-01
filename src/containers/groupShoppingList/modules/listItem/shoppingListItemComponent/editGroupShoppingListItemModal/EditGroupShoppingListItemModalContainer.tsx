@@ -16,8 +16,8 @@ import dayjs from 'dayjs';
 
 interface EditGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
 }
 
 const EditGroupShoppingListItemModalContainer = (
@@ -189,8 +189,8 @@ const EditGroupShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          props.selectedYearParam,
+          props.selectedMonthParam,
           requestData
         )
       );
@@ -209,8 +209,8 @@ const EditGroupShoppingListItemModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth
+          props.selectedYearParam,
+          props.selectedMonthParam
         )
       );
 

@@ -7,10 +7,11 @@ import { useParams } from 'react-router';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import { getGroupDisplayTodayShoppingListByCategories } from '../../../../../../reducks/groupShoppingList/selectors';
 import GroupShoppingListByCategoriesComponent from '../../../../../../components/groupShoppingList/modules/list/shoppingListByCategoriesComponent/GroupShoppingListByCategoriesComponent';
+import { generateZeroPaddingMonth } from '../../../../../../lib/date';
 
 interface GroupTodayShoppingListByCategoriesContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
 }
 
 const GroupTodayShoppingListByCategoriesContainer = (
@@ -25,6 +26,8 @@ const GroupTodayShoppingListByCategoriesContainer = (
   const todayYear = String(year);
   const todayMonth = customMonth;
   const todayDate = customDate;
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
 
   const fetchData = (
     groupId: number,
@@ -52,8 +55,8 @@ const GroupTodayShoppingListByCategoriesContainer = (
   return (
     <GroupShoppingListByCategoriesComponent
       shoppingListByCategories={groupTodayShoppingListByCategories}
-      currentYear={props.currentYear}
-      currentMonth={props.currentMonth}
+      selectedYearParam={selectedYearParam}
+      selectedMonthParam={selectedMonthParam}
       message={'今日の買い物リストは、登録されていません。'}
     />
   );

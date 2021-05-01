@@ -9,10 +9,11 @@ import {
   AddGroupRegularShoppingListItemModalInitialState,
   AddGroupRegularShoppingListItemReq,
 } from '../../../../reducks/groupShoppingList/types';
+import { generateZeroPaddingMonth } from '../../../../lib/date';
 
 interface AddGroupRegularShoppingListModalContainerProps {
-  currentYear: string;
-  currentMonth: string;
+  selectedYear: number;
+  selectedMonth: number;
   addBtnClassName?: string;
 }
 
@@ -37,6 +38,8 @@ const AddGroupRegularShoppingListModalContainer = (
   props: AddGroupRegularShoppingListModalContainerProps
 ) => {
   const dispatch = useDispatch();
+  const selectedYearParam = String(props.selectedYear);
+  const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
   const { group_id } = useParams<{ group_id: string }>();
 
   const [open, setOpen] = useState(false);
@@ -174,8 +177,8 @@ const AddGroupRegularShoppingListModalContainer = (
           String(year),
           customMonth,
           customDate,
-          props.currentYear,
-          props.currentMonth,
+          selectedYearParam,
+          selectedMonthParam,
           requestData
         )
       );

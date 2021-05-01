@@ -11,8 +11,8 @@ interface GroupShoppingListItemComponentProps {
   approvedGroups: Groups;
   groupId: number;
   listItem: GroupShoppingListItem;
-  currentYear: string;
-  currentMonth: string;
+  selectedYearParam: string;
+  selectedMonthParam: string;
   currentPage: string;
   purchaseClassName: string;
   amountClassName: string;
@@ -42,8 +42,8 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
       <div className={styles.checkBox}>
         <CheckedGroupShoppingListItemModalContainer
           listItem={props.listItem}
-          currentYear={props.currentYear}
-          currentMonth={props.currentMonth}
+          selectedYearParam={props.selectedYearParam}
+          selectedMonthParam={props.selectedMonthParam}
         />
       </div>
       <div className={styles.content}>
@@ -55,8 +55,8 @@ const GroupShoppingListItemComponent = (props: GroupShoppingListItemComponentPro
           <div className={styles.editIcon}>
             <EditGroupShoppingListItemModalContainer
               listItem={props.listItem}
-              currentYear={props.currentYear}
-              currentMonth={props.currentMonth}
+              selectedYearParam={props.selectedYearParam}
+              selectedMonthParam={props.selectedMonthParam}
             />
           </div>
         </div>

@@ -27,6 +27,7 @@ import {
   GroupRegularShoppingList,
   GroupShoppingList,
   GroupShoppingListByCategories,
+  GroupShoppingListItem,
 } from '../groupShoppingList/types';
 
 export interface State {
@@ -280,6 +281,7 @@ export interface State {
       message: string;
       statusCode: number;
     };
+    groupShoppingListItem: GroupShoppingListItem;
     groupShoppingListError: {
       message: string;
       statusCode: number;

@@ -200,3 +200,12 @@ export interface GroupDisplayShoppingListItemByCategories {
 
 export interface GroupDisplayShoppingListByCategories
   extends Array<GroupDisplayShoppingListItemByCategories> {}
+
+export interface FetchGroupShoppingListParams {
+  groupId: number;
+  currentYear: string;
+  currentMonth: string;
+  currentDate: string;
+  selectedYear: string;
+  selectedMonth: string;
+}
