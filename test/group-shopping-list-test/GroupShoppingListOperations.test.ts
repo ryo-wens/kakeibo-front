@@ -16,24 +16,14 @@ import {
 } from '../../src/reducks/groupShoppingList/operations';
 import axios from 'axios';
 import * as GroupShoppingListActions from '../../src/reducks/groupShoppingList/actions';
-import fetchGroupExpiredShoppingListResponse from './fetchGroupExpiredShoppingListResponse/fetchGroupExpiredShoppingListResponse.json';
-import fetchGroupTodayShoppingListResponse from './fetchGroupTodayShoppingListResponse/fetchGroupTodayShoppingListResponse.json';
-import fetchGroupTodayShoppingListByCategoriesResponse from './fetchGroupTodayShoppingListByCategoriesResponse/fetchGroupTodayShoppingListByCategoriesResponse.json';
-import fetchGroupMonthlyShoppingListResponse from './fetchGroupMonthlyShoppingListResponse/fetchGroupMonthlyShoppingListResponse.json';
-import fetchGroupMonthlyShoppingListByCategoriesResponse from './fetchGroupMonthlyShoppingListByCategoriesResponse/fetchGroupMonthlyShoppingListByCategoriesResponse.json';
+import fetchGroupExpiredShoppingListResponse from './fetchGroupExpiredShoppingListResponse.json';
+import fetchGroupTodayShoppingListResponse from './fetchGroupTodayShoppingListResponse.json';
+import fetchGroupTodayShoppingListByCategoriesResponse from './fetchGroupTodayShoppingListByCategoriesResponse.json';
+import fetchGroupMonthlyShoppingListResponse from './fetchGroupMonthlyShoppingListResponse.json';
+import fetchGroupMonthlyShoppingListByCategoriesResponse from './fetchGroupMonthlyShoppingListByCategoriesResponse.json';
 import addGroupShoppingListItemResponse from './addGroupShoppingListItemResponse.json';
-import editGroupShoppingListItemResponse from './editGroupShoppingListItemResponse/editGroupShoppingListItemResponse.json';
-import editGroupExpiredShoppingListResponse from './editGroupShoppingListItemResponse/editGroupExpiredShoppingListResponse.json';
-import editGroupTodayShoppingListByDateResponse from './editGroupShoppingListItemResponse/editGroupTodayShoppingListByDateResponse.json';
-import editGroupTodayShoppingListByCategoriesResponse from './editGroupShoppingListItemResponse/editGroupTodayShoppingListByCategoriesResponse.json';
-import editGroupMonthlyShoppingListByDateResponse from './editGroupShoppingListItemResponse/editGroupMonthlyShoppingListByDateResponse.json';
-import editGroupMonthlyShoppingListByCategoriesResponse from './editGroupShoppingListItemResponse/editGroupMonthlyShoppingListByCategoriesResponse.json';
-import deleteGroupShoppingListItemResponse from './deleteGroupShoppingListItemResponse/deleteGroupShoppingListItemResponse.json';
-import deleteGroupExpiredShoppingListResponse from './deleteGroupShoppingListItemResponse/deleteGroupExpiredShoppingListResponse.json';
-import deleteGroupTodayShoppingListByDateResponse from './deleteGroupShoppingListItemResponse/deleteGroupTodayShoppingListByDateResponse.json';
-import deleteGroupTodayShoppingListByCategoriesResponse from './deleteGroupShoppingListItemResponse/deleteGroupTodayShoppingListByCategoriesResponse.json';
-import deleteGroupMonthlyShoppingListByDateResponse from './deleteGroupShoppingListItemResponse/deleteGroupMonthlyShoppingListByDateResponse.json';
-import deleteGroupMonthlyShoppingListByCategoriesResponse from './deleteGroupShoppingListItemResponse/deleteGroupMonthlyShoppingListByCategoriesResponse.json';
+import editGroupShoppingListItemResponse from './editGroupShoppingListItemResponse.json';
+import deleteGroupShoppingListItemResponse from './deleteGroupShoppingListItemResponse.json';
 import addGroupRegularShoppingListItemResponse from './addGroupRegularShoppingListItemResponse/addGroupRegularShoppingListItemResponse.json';
 import addGroupRegularTodayShoppingListByDateResponse from './addGroupRegularShoppingListItemResponse/addGroupRegularTodayShoppingListByDateResponse.json';
 import addGroupRegularTodayShoppingListByCategoriesResponse from './addGroupRegularShoppingListItemResponse/addGroupRegularTodayShoppingListByCategoriesResponse.json';
@@ -59,6 +49,7 @@ import {
   EditGroupShoppingListItemReq,
 } from '../../src/reducks/groupShoppingList/types';
 import { todoServiceInstance } from '../../src/reducks/axiosConfig';
+import { date } from '../../src/lib/constant';
 
 const middlewares = [thunk];
 const mockStore = configureMockStore(middlewares);
@@ -319,13 +310,8 @@ describe('async actions shoppingList', () => {
 
   it('edit groupShoppingListItem if fetch succeeds', async () => {
     const groupId = 1;
-    const year = '2020';
-    const month = '12';
-    const date = '24';
-    const currentYear = '2020';
-    const currentMonth = '12';
-
     const shoppingListItemId = 1;
+
     const expectedPurchaseDate = new Date('2020-12-26T10:00:00');
     const checked = true;
     const purchase = '鶏肉3kg';
@@ -354,12 +340,7 @@ describe('async actions shoppingList', () => {
       related_transaction_data: relatedTransactionData,
     };
 
-    const editUrl = `/groups/${groupId}/shopping-list/${shoppingListItemId}`;
-    const fetchExpiredUrl = `/groups/${groupId}/shopping-list/expired`;
-    const fetchTodayByDateUrl = `/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `/groups/${groupId}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `/groups/${groupId}/shopping-list/${year}-${month}/categories`;
+    const url = `/groups/${groupId}/shopping-list/${shoppingListItemId}`;
 
     const expectedAction = [
       {
@@ -375,62 +356,22 @@ describe('async actions shoppingList', () => {
       {
         type: GroupShoppingListActions.EDIT_GROUP_SHOPPING_LIST_ITEM,
         payload: {
-          groupExpiredShoppingListLoading: false,
-          groupExpiredShoppingList: editGroupExpiredShoppingListResponse.expired_shopping_list,
-          groupTodayShoppingListLoading: false,
-          groupTodayShoppingList: editGroupTodayShoppingListByDateResponse.shopping_list,
-          groupTodayShoppingListByCategoriesLoading: false,
-          groupTodayShoppingListByCategories:
-            editGroupTodayShoppingListByCategoriesResponse.shopping_list_by_categories,
-          groupMonthlyShoppingListLoading: false,
-          groupMonthlyShoppingList: editGroupMonthlyShoppingListByDateResponse.shopping_list,
-          groupMonthlyShoppingListByCategoriesLoading: false,
-          groupMonthlyShoppingListByCategories:
-            editGroupMonthlyShoppingListByCategoriesResponse.shopping_list_by_categories,
+          groupShoppingListItem: editGroupShoppingListItemResponse,
         },
       },
     ];
 
-    axiosMock.onPut(editUrl).reply(200, editGroupShoppingListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, editGroupExpiredShoppingListResponse);
-    axiosMock.onGet(fetchTodayByDateUrl).reply(200, editGroupTodayShoppingListByDateResponse);
-    axiosMock
-      .onGet(fetchTodayByCategoriesUrl)
-      .reply(200, editGroupTodayShoppingListByCategoriesResponse);
-    axiosMock.onGet(fetchMonthlyByDateUrl).reply(200, editGroupMonthlyShoppingListByDateResponse);
-    axiosMock
-      .onGet(fetchMonthlyByCategoriesUrl)
-      .reply(200, editGroupMonthlyShoppingListByCategoriesResponse);
+    axiosMock.onPut(url).reply(200, editGroupShoppingListItemResponse);
 
-    await editGroupShoppingListItem(
-      groupId,
-      shoppingListItemId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth,
-      requestData
-    )(store.dispatch);
+    await editGroupShoppingListItem(groupId, shoppingListItemId, requestData)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 
   it('delete groupShoppingListItem if fetch succeeds', async () => {
     const groupId = 1;
-    const year = '2020';
-    const month = '12';
-    const date = '24';
-    const currentYear = '2020';
-    const currentMonth = '12';
-
     const shoppingListItemId = 1;
 
-    const deleteUrl = `/groups/${groupId}/shopping-list/${shoppingListItemId}`;
-    const fetchExpiredUrl = `/groups/${groupId}/shopping-list/expired`;
-    const fetchTodayByDateUrl = `/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`;
-    const fetchTodayByCategoriesUrl = `/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`;
-    const fetchMonthlyByDateUrl = `/groups/${groupId}/shopping-list/${year}-${month}/daily`;
-    const fetchMonthlyByCategoriesUrl = `/groups/${groupId}/shopping-list/${year}-${month}/categories`;
+    const url = `/groups/${groupId}/shopping-list/${shoppingListItemId}`;
 
     const expectedAction = [
       {
@@ -446,18 +387,26 @@ describe('async actions shoppingList', () => {
       {
         type: GroupShoppingListActions.DELETE_GROUP_SHOPPING_LIST_ITEM,
         payload: {
-          groupExpiredShoppingListLoading: false,
-          groupExpiredShoppingList: deleteGroupExpiredShoppingListResponse.expired_shopping_list,
-          groupTodayShoppingListLoading: false,
-          groupTodayShoppingList: deleteGroupTodayShoppingListByDateResponse.shopping_list,
-          groupTodayShoppingListByCategoriesLoading: false,
-          groupTodayShoppingListByCategories:
-            deleteGroupTodayShoppingListByCategoriesResponse.shopping_list_by_categories,
-          groupMonthlyShoppingListLoading: false,
-          groupMonthlyShoppingList: deleteGroupMonthlyShoppingListByDateResponse.shopping_list,
-          groupMonthlyShoppingListByCategoriesLoading: false,
-          groupMonthlyShoppingListByCategories:
-            deleteGroupMonthlyShoppingListByCategoriesResponse.shopping_list_by_categories,
+          groupShoppingListItem: {
+            id: 0,
+            posted_date: date,
+            updated_date: date,
+            expected_purchase_date: '',
+            complete_flag: false,
+            purchase: '',
+            shop: null,
+            amount: null,
+            big_category_id: 0,
+            big_category_name: '',
+            medium_category_id: null,
+            medium_category_name: null,
+            custom_category_id: null,
+            custom_category_name: null,
+            regular_shopping_list_id: null,
+            payment_user_id: null,
+            transaction_auto_add: false,
+            related_transaction_data: null,
+          },
         },
       },
       {
@@ -469,26 +418,9 @@ describe('async actions shoppingList', () => {
       },
     ];
 
-    axiosMock.onDelete(deleteUrl).reply(200, deleteGroupShoppingListItemResponse);
-    axiosMock.onGet(fetchExpiredUrl).reply(200, deleteGroupExpiredShoppingListResponse);
-    axiosMock.onGet(fetchTodayByDateUrl).reply(200, deleteGroupTodayShoppingListByDateResponse);
-    axiosMock
-      .onGet(fetchTodayByCategoriesUrl)
-      .reply(200, deleteGroupTodayShoppingListByCategoriesResponse);
-    axiosMock.onGet(fetchMonthlyByDateUrl).reply(200, deleteGroupMonthlyShoppingListByDateResponse);
-    axiosMock
-      .onGet(fetchMonthlyByCategoriesUrl)
-      .reply(200, deleteGroupMonthlyShoppingListByCategoriesResponse);
+    axiosMock.onDelete(url).reply(200, deleteGroupShoppingListItemResponse);
 
-    await deleteGroupShoppingListItem(
-      groupId,
-      shoppingListItemId,
-      year,
-      month,
-      date,
-      currentYear,
-      currentMonth
-    )(store.dispatch);
+    await deleteGroupShoppingListItem(groupId, shoppingListItemId)(store.dispatch);
     expect(store.getActions()).toEqual(expectedAction);
   });
 

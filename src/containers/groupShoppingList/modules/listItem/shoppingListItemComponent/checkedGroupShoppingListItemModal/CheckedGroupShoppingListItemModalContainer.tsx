@@ -3,6 +3,7 @@ import { customDate, customMonth, year } from '../../../../../../lib/constant';
 import { useDispatch } from 'react-redux';
 import {
   EditGroupShoppingListItemReq,
+  FetchGroupShoppingListParams,
   GroupShoppingListItem,
 } from '../../../../../../reducks/groupShoppingList/types';
 import { editGroupShoppingListItem } from '../../../../../../reducks/groupShoppingList/operations';
@@ -10,6 +11,7 @@ import { useParams } from 'react-router';
 import CheckedGroupShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/shoppingListItemComponent/checkedShoppingListItemModal/CheckedGroupShoppingListItemModal';
 import { dateStringToDate } from '../../../../../../lib/date';
 import dayjs from 'dayjs';
+import { useFetchGroupShoppingList } from '../../../../../../hooks/groupShoppingList/useFetchGroupShoppingList';
 
 interface CheckedGroupShoppingListItemModalContainerProps {
   listItem: GroupShoppingListItem;
@@ -35,6 +37,9 @@ const CheckedGroupShoppingListItemModalContainer = (
 
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
+  const groupId = Number(group_id);
+
+  const { fetchGroupShoppingList } = useFetchGroupShoppingList();
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -162,6 +167,15 @@ const CheckedGroupShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
+  const params: FetchGroupShoppingListParams = {
+    groupId: groupId,
+    currentYear: String(year),
+    currentMonth: customMonth,
+    currentDate: customDate,
+    selectedYear: props.selectedYearParam,
+    selectedMonth: props.selectedMonthParam,
+  };
+
   const handleCheckedChange = async (event: React.ChangeEvent<HTMLInputElement>) => {
     if (
       event.target.checked &&
@@ -171,7 +185,6 @@ const CheckedGroupShoppingListItemModalContainer = (
     ) {
       return openModal();
     }
-    setChecked(event.target.checked);
 
     const requestData: EditGroupShoppingListItemReq = {
       expected_purchase_date: initialState.initialExpectedPurchaseDate,
@@ -189,18 +202,10 @@ const CheckedGroupShoppingListItemModalContainer = (
     };
 
     try {
-      await dispatch(
-        editGroupShoppingListItem(
-          Number(group_id),
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(editGroupShoppingListItem(groupId, props.listItem.id, requestData));
+      await fetchGroupShoppingList(params);
+
+      setChecked(event.target.checked);
     } catch (error) {
       alert(error.response.data.error.message.toString());
     }
@@ -223,18 +228,8 @@ const CheckedGroupShoppingListItemModalContainer = (
     };
 
     try {
-      await dispatch(
-        editGroupShoppingListItem(
-          Number(group_id),
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(editGroupShoppingListItem(groupId, props.listItem.id, requestData));
+      await fetchGroupShoppingList(params);
 
       setOpen(false);
     } catch (error) {
@@ -269,7 +264,7 @@ const CheckedGroupShoppingListItemModalContainer = (
       setBigCategoryId={setBigCategoryId}
       setMediumCategoryId={setMediumCategoryId}
       setCustomCategoryId={setCustomCategoryId}
-      handleEditShoppingListItem={() => handleEditShoppingListItem()}
+      handleEditShoppingListItem={handleEditShoppingListItem}
     />
   );
 };
