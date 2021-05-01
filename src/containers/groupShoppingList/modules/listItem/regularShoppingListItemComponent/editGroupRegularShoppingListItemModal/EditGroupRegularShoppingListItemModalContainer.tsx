@@ -3,6 +3,7 @@ import { dateStringToDate } from '../../../../../../lib/date';
 import { useDispatch } from 'react-redux';
 import {
   EditGroupRegularShoppingListItemReq,
+  FetchGroupShoppingListParams,
   GroupRegularShoppingListItem,
 } from '../../../../../../reducks/groupShoppingList/types';
 import { useParams } from 'react-router';
@@ -13,6 +14,7 @@ import {
 import { PurchaseCycleType } from '../../../../../../reducks/shoppingList/types';
 import EditGroupRegularShoppingListItemModal from '../../../../../../components/groupShoppingList/modules/listItem/regularShoppingListItemComponent/editRegularShoppingListItemModal/EditGroupRegularShoppingListItemModal';
 import { customDate, customMonth, year } from '../../../../../../lib/constant';
+import { useFetchGroupShoppingList } from '../../../../../../hooks/groupShoppingList/useFetchGroupShoppingList';
 
 interface EditGroupRegularShoppingListItemModalContainerProps {
   listItem: GroupRegularShoppingListItem;
@@ -25,6 +27,9 @@ const EditGroupRegularShoppingListItemModalContainer = (
 ) => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
+  const groupId = Number(group_id);
+
+  const { fetchGroupShoppingList } = useFetchGroupShoppingList();
 
   const initialState = {
     initialExpectedPurchaseDate: dateStringToDate(props.listItem.expected_purchase_date),
@@ -178,6 +183,15 @@ const EditGroupRegularShoppingListItemModalContainer = (
     setTransactionAutoAdd(event.target.checked);
   };
 
+  const params: FetchGroupShoppingListParams = {
+    groupId: groupId,
+    currentYear: String(year),
+    currentMonth: customMonth,
+    currentDate: customDate,
+    selectedYear: props.selectedYearParam,
+    selectedMonth: props.selectedMonthParam,
+  };
+
   const handleEditRegularShoppingListItem = async () => {
     const requestData: EditGroupRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
@@ -194,18 +208,8 @@ const EditGroupRegularShoppingListItemModalContainer = (
     };
 
     try {
-      await dispatch(
-        editGroupRegularShoppingListItem(
-          Number(group_id),
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(editGroupRegularShoppingListItem(groupId, props.listItem.id, requestData));
+      await fetchGroupShoppingList(params);
 
       setOpen(false);
     } catch (error) {
@@ -215,17 +219,8 @@ const EditGroupRegularShoppingListItemModalContainer = (
 
   const handleDeleteRegularShoppingListItem = async () => {
     try {
-      await dispatch(
-        deleteGroupRegularShoppingListItem(
-          Number(group_id),
-          props.listItem.id,
-          String(year),
-          customMonth,
-          customDate,
-          props.selectedYearParam,
-          props.selectedMonthParam
-        )
-      );
+      await dispatch(deleteGroupRegularShoppingListItem(groupId, props.listItem.id));
+      await fetchGroupShoppingList(params);
 
       setOpen(false);
     } catch (error) {
@@ -273,8 +268,8 @@ const EditGroupRegularShoppingListItemModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      handleEditRegularShoppingListItem={() => handleEditRegularShoppingListItem()}
-      handleDeleteShoppingListItem={() => handleDeleteRegularShoppingListItem()}
+      handleEditRegularShoppingListItem={handleEditRegularShoppingListItem}
+      handleDeleteShoppingListItem={handleDeleteRegularShoppingListItem}
     />
   );
 };

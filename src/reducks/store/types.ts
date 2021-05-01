@@ -25,6 +25,7 @@ import {
 } from '../shoppingList/types';
 import {
   GroupRegularShoppingList,
+  GroupRegularShoppingListItem,
   GroupShoppingList,
   GroupShoppingListByCategories,
   GroupShoppingListItem,
@@ -282,6 +283,7 @@ export interface State {
       statusCode: number;
     };
     groupShoppingListItem: GroupShoppingListItem;
+    groupRegularShoppingListItem: GroupRegularShoppingListItem;
     groupShoppingListError: {
       message: string;
       statusCode: number;
