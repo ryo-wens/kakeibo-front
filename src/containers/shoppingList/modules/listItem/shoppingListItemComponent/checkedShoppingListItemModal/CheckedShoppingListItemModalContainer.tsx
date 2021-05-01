@@ -162,7 +162,6 @@ const CheckedShoppingListItemModalContainer = (
     ) {
       return openModal();
     }
-    setChecked(event.target.checked);
 
     const requestData: EditShoppingListItemReq = {
       expected_purchase_date: initialState.initialExpectedPurchaseDate,
@@ -180,7 +179,9 @@ const CheckedShoppingListItemModalContainer = (
 
     try {
       await dispatch(editShoppingListItem(props.listItem.id, requestData));
-      fetchShoppingList(params);
+      await fetchShoppingList(params);
+
+      setChecked(event.target.checked);
     } catch (error) {
       alert(error.response.data.error.message.toString());
     }
@@ -236,7 +237,7 @@ const CheckedShoppingListItemModalContainer = (
       setCustomCategoryId={setCustomCategoryId}
       setMediumCategoryId={setMediumCategoryId}
       setAssociatedCategory={setAssociatedCategory}
-      handleEditShoppingListItem={() => handleEditShoppingListItem()}
+      handleEditShoppingListItem={handleEditShoppingListItem}
     />
   );
 };

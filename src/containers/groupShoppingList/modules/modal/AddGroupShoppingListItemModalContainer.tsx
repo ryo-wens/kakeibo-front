@@ -37,10 +37,10 @@ const AddGroupShoppingListItemModalContainer = (
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
   const groupId = Number(group_id);
-  const { fetchGroupShoppingList } = useFetchGroupShoppingList();
-
   const selectedYearParam = String(props.selectedYear);
   const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
+
+  const { fetchGroupShoppingList } = useFetchGroupShoppingList();
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -189,7 +189,7 @@ const AddGroupShoppingListItemModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      handleAddShoppingListItem={() => handleAddShoppingListItem()}
+      handleAddShoppingListItem={handleAddShoppingListItem}
     />
   );
 };

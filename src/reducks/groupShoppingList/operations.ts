@@ -286,18 +286,13 @@ export const addGroupShoppingListItem = (
 export const editGroupShoppingListItem = (
   groupId: number,
   shoppingListItemId: number,
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string,
   requestData: EditGroupShoppingListItemReq
 ) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startEditGroupShoppingListItemAction());
 
     try {
-      await todoServiceInstance.put<GroupShoppingListItem>(
+      const res = await todoServiceInstance.put<GroupShoppingListItem>(
         `/groups/${groupId}/shopping-list/${shoppingListItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'expected_purchase_date') {
@@ -307,41 +302,7 @@ export const editGroupShoppingListItem = (
         })
       );
 
-      const fetchExpiredListResult = todoServiceInstance.get<FetchGroupExpiredShoppingListRes>(
-        `/groups/${groupId}/shopping-list/expired`
-      );
-
-      const fetchTodayListResult = todoServiceInstance.get<FetchGroupTodayShoppingListRes>(
-        `/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`
-      );
-
-      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchGroupTodayShoppingListByCategoriesRes>(
-        `/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`
-      );
-
-      const fetchMonthlyListResult = todoServiceInstance.get<FetchGroupMonthlyShoppingListRes>(
-        `/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/daily`
-      );
-
-      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
-        `/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`
-      );
-
-      const expiredShoppingListResponse = await fetchExpiredListResult;
-      const todayShoppingListResponse = await fetchTodayListResult;
-      const todayShoppingListByCategoriesResponse = await fetchTodayListByCategoriesResult;
-      const monthlyShoppingListResponse = await fetchMonthlyListResult;
-      const monthlyShoppingListByCategoriesResponse = await fetchMonthlyListByCategoriesResult;
-
-      dispatch(
-        editGroupShoppingListItemAction(
-          expiredShoppingListResponse.data.expired_shopping_list,
-          todayShoppingListResponse.data.shopping_list,
-          todayShoppingListByCategoriesResponse.data.shopping_list_by_categories,
-          monthlyShoppingListResponse.data.shopping_list,
-          monthlyShoppingListByCategoriesResponse.data.shopping_list_by_categories
-        )
-      );
+      dispatch(editGroupShoppingListItemAction(res.data));
     } catch (error) {
       dispatch(
         failedEditGroupShoppingListItemAction(
@@ -354,58 +315,17 @@ export const editGroupShoppingListItem = (
   };
 };
 
-export const deleteGroupShoppingListItem = (
-  groupId: number,
-  shoppingListItemId: number,
-  year: string,
-  month: string,
-  date: string,
-  currentYear: string,
-  currentMonth: string
-) => {
+export const deleteGroupShoppingListItem = (groupId: number, shoppingListItemId: number) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startDeleteGroupShoppingListItemAction());
 
     try {
-      const deleteShoppingListItemResult = await todoServiceInstance.delete<DeleteGroupShoppingListItemRes>(
+      const res = await todoServiceInstance.delete<DeleteGroupShoppingListItemRes>(
         `/groups/${groupId}/shopping-list/${shoppingListItemId}`
       );
-      const fetchExpiredListResult = todoServiceInstance.get<FetchGroupExpiredShoppingListRes>(
-        `/groups/${groupId}/shopping-list/expired`
-      );
 
-      const fetchTodayListResult = todoServiceInstance.get<FetchGroupTodayShoppingListRes>(
-        `/groups/${groupId}/shopping-list/${year}-${month}-${date}/daily`
-      );
-
-      const fetchTodayListByCategoriesResult = todoServiceInstance.get<FetchGroupTodayShoppingListByCategoriesRes>(
-        `/groups/${groupId}/shopping-list/${year}-${month}-${date}/categories`
-      );
-
-      const fetchMonthlyListResult = todoServiceInstance.get<FetchGroupMonthlyShoppingListRes>(
-        `/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/daily`
-      );
-
-      const fetchMonthlyListByCategoriesResult = todoServiceInstance.get<FetchGroupMonthlyShoppingListByCategoriesRes>(
-        `/groups/${groupId}/shopping-list/${currentYear}-${currentMonth}/categories`
-      );
-
-      const expiredShoppingListResponse = await fetchExpiredListResult;
-      const todayShoppingListResponse = await fetchTodayListResult;
-      const todayShoppingListByCategoriesResponse = await fetchTodayListByCategoriesResult;
-      const monthlyShoppingListResponse = await fetchMonthlyListResult;
-      const monthlyShoppingListByCategoriesResponse = await fetchMonthlyListByCategoriesResult;
-
-      dispatch(
-        deleteGroupShoppingListItemAction(
-          expiredShoppingListResponse.data.expired_shopping_list,
-          todayShoppingListResponse.data.shopping_list,
-          todayShoppingListByCategoriesResponse.data.shopping_list_by_categories,
-          monthlyShoppingListResponse.data.shopping_list,
-          monthlyShoppingListByCategoriesResponse.data.shopping_list_by_categories
-        )
-      );
-      dispatch(openTextModalAction(deleteShoppingListItemResult.data.message));
+      dispatch(deleteGroupShoppingListItemAction());
+      dispatch(openTextModalAction(res.data.message));
     } catch (error) {
       dispatch(
         failedDeleteGroupShoppingListItemAction(
