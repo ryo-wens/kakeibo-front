@@ -13,6 +13,7 @@ import { month, year } from '../../../lib/constant';
 import { SelectYears } from '../../../lib/date';
 import History from '../../../templates/history/History';
 import { useHistory } from 'react-router-dom';
+import CheckAuth from '../../auth/CheckAuth';
 import dayjs from 'dayjs';
 
 const HistoryContainer = () => {
@@ -119,22 +120,25 @@ const HistoryContainer = () => {
   };
 
   return (
-    <History
-      query={query.split('&')[0]}
-      pathName={pathName}
-      groupId={group_id}
-      openSearchField={openSearchField}
-      notSpecified={notSpecified}
-      groupTransactionsList={groupTransactionsList}
-      searchFieldOpen={searchFieldOpen}
-      searchFieldClose={searchFieldClose}
-      selectedYear={selectedYear}
-      selectedMonth={selectedMonth}
-      setSelectedYear={setSelectedYear}
-      setSelectedMonth={setSelectedMonth}
-      routingDailyHistory={routingDailyHistory}
-      routingWeeklyHistory={routingWeeklyHistory}
-    />
+    <>
+      <CheckAuth />
+      <History
+        query={query.split('&')[0]}
+        pathName={pathName}
+        groupId={group_id}
+        openSearchField={openSearchField}
+        notSpecified={notSpecified}
+        groupTransactionsList={groupTransactionsList}
+        searchFieldOpen={searchFieldOpen}
+        searchFieldClose={searchFieldClose}
+        selectedYear={selectedYear}
+        selectedMonth={selectedMonth}
+        setSelectedYear={setSelectedYear}
+        setSelectedMonth={setSelectedMonth}
+        routingDailyHistory={routingDailyHistory}
+        routingWeeklyHistory={routingWeeklyHistory}
+      />
+    </>
   );
 };
 export default HistoryContainer;

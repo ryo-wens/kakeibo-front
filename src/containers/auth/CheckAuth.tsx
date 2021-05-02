@@ -1,14 +1,15 @@
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { push } from 'connected-react-router';
 import { fetchUserInfo } from '../../reducks/users/operations';
+import { push } from 'connected-react-router';
 import axios from 'axios';
 
-export const useFetchUserInfo = () => {
+const CheckAuth = () => {
   const dispatch = useDispatch();
-  const signal = axios.CancelToken.source();
 
   useEffect(() => {
+    const signal = axios.CancelToken.source();
+
     const fetchUser = async () => {
       try {
         await dispatch(fetchUserInfo(signal));
@@ -26,4 +27,7 @@ export const useFetchUserInfo = () => {
       signal.cancel();
     };
   }, []);
+
+  return <></>;
 };
+export default CheckAuth;

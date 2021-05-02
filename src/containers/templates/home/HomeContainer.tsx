@@ -23,6 +23,7 @@ import {
 import { month, year } from '../../../lib/constant';
 import { SelectYears } from '../../../lib/date';
 import Home from '../../../templates/home/Home';
+import CheckAuth from '../../auth/CheckAuth';
 import dayjs from 'dayjs';
 
 const HomeContainer = () => {
@@ -93,19 +94,22 @@ const HomeContainer = () => {
   }, [pathName]);
 
   return (
-    <Home
-      pathName={pathName}
-      todoEditing={todoEditing}
-      amountPerDay={amountPerDay}
-      setTodoEditing={setTodoEditing}
-      groupAmountPerDay={groupAmountPerDay}
-      currentMonthBudgetStatus={currentMonthBudgetStatus}
-      currentMonthGroupBudgetStatus={currentMonthGroupBudgetStatus}
-      sortCategoryTransactionsList={sortCategoryTransactionsList}
-      sortCategoryGroupTransactionsList={sortCategoryGroupTransactionsList}
-      thisMonthTotalExpense={thisMonthTotalExpense}
-      thisMonthGroupTotalExpense={thisMonthGroupTotalExpense}
-    />
+    <>
+      <CheckAuth />
+      <Home
+        pathName={pathName}
+        todoEditing={todoEditing}
+        amountPerDay={amountPerDay}
+        setTodoEditing={setTodoEditing}
+        groupAmountPerDay={groupAmountPerDay}
+        currentMonthBudgetStatus={currentMonthBudgetStatus}
+        currentMonthGroupBudgetStatus={currentMonthGroupBudgetStatus}
+        sortCategoryTransactionsList={sortCategoryTransactionsList}
+        sortCategoryGroupTransactionsList={sortCategoryGroupTransactionsList}
+        thisMonthTotalExpense={thisMonthTotalExpense}
+        thisMonthGroupTotalExpense={thisMonthGroupTotalExpense}
+      />
+    </>
   );
 };
 export default HomeContainer;

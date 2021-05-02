@@ -9,6 +9,7 @@ import { fetchGroups } from '../../../reducks/groups/operations';
 import { fetchGroupYearlyAccountList } from '../../../reducks/groupTransactions/operations';
 import { GroupYearlyAccountList } from '../../../reducks/groupTransactions/types';
 import YearlyAccount from '../../../templates/account/YearlyAccount';
+import CheckAuth from '../../auth/CheckAuth';
 
 const YearlyAccountContainer = () => {
   const dispatch = useDispatch();
@@ -64,24 +65,27 @@ const YearlyAccountContainer = () => {
   };
 
   return (
-    <YearlyAccount
-      monthIndex={monthIndex}
-      currentItem={currentItem}
-      setCurrentItem={setCurrentItem}
-      selectedYear={selectedYear}
-      setSelectedYear={setSelectedYear}
-      yearlyAccount={yearlyAccount}
-      searchLocation={searchLocation}
-      singleDigitMonth={singleDigitMonth}
-      queryParams={queryParams}
-      queryParamsLength={queryParamsLength}
-      defaultStyle={defaultStyle}
-      routingPayOff={(nextQueryPageQuery) =>
-        history.push({
-          search: decodeURIComponent(qs.stringify(nextQueryPageQuery)),
-        })
-      }
-    />
+    <>
+      <CheckAuth />
+      <YearlyAccount
+        monthIndex={monthIndex}
+        currentItem={currentItem}
+        setCurrentItem={setCurrentItem}
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        yearlyAccount={yearlyAccount}
+        searchLocation={searchLocation}
+        singleDigitMonth={singleDigitMonth}
+        queryParams={queryParams}
+        queryParamsLength={queryParamsLength}
+        defaultStyle={defaultStyle}
+        routingPayOff={(nextQueryPageQuery) =>
+          history.push({
+            search: decodeURIComponent(qs.stringify(nextQueryPageQuery)),
+          })
+        }
+      />
+    </>
   );
 };
 export default YearlyAccountContainer;

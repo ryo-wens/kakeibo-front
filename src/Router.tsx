@@ -15,6 +15,11 @@ const Router = (): JSX.Element => {
       <Route exact path={'/'} component={InitialScreen} />
       <Route exact path={'/signup'} component={SignUpContainer} />
       <Route exact path={'/login'} component={LogInContainer} />
+
+      {/*
+       以下のコンポーネントはログイン時のみ表示される
+       未ログイン状態で遷移した場合はリダイレクト処理が実行される
+      */}
       <Route exact path={'/home'} component={HomeContainer} />
       <Route exact path={'/history'} component={HistoryContainer} />
       <Route exact path={'/budgets'} component={BudgetsContainer} />
