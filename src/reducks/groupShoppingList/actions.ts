@@ -1,5 +1,6 @@
 import {
   GroupRegularShoppingList,
+  GroupRegularShoppingListItem,
   GroupShoppingList,
   GroupShoppingListByCategories,
   GroupShoppingListItem,
@@ -491,25 +492,12 @@ export const startAddGroupRegularShoppingListItemAction = () => {
 
 export const ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM = 'ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM';
 export const addGroupRegularShoppingListItemAction = (
-  groupRegularShoppingList: GroupRegularShoppingList,
-  groupTodayShoppingList: GroupShoppingList,
-  groupTodayShoppingListByCategories: GroupShoppingListByCategories,
-  groupMonthlyShoppingList: GroupShoppingList,
-  groupMonthlyShoppingListByCategories: GroupShoppingListByCategories
+  groupRegularShoppingListItem: GroupRegularShoppingListItem
 ) => {
   return {
     type: ADD_GROUP_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      groupRegularShoppingListLoading: false,
-      groupRegularShoppingList: groupRegularShoppingList,
-      groupTodayShoppingListLoading: false,
-      groupTodayShoppingList: groupTodayShoppingList,
-      groupTodayShoppingListByCategoriesLoading: false,
-      groupTodayShoppingListByCategories: groupTodayShoppingListByCategories,
-      groupMonthlyShoppingListLoading: false,
-      groupMonthlyShoppingList: groupMonthlyShoppingList,
-      groupMonthlyShoppingListByCategoriesLoading: false,
-      groupMonthlyShoppingListByCategories: groupMonthlyShoppingListByCategories,
+      groupRegularShoppingListItem: groupRegularShoppingListItem,
     },
   };
 };
@@ -554,28 +542,12 @@ export const startEditGroupRegularShoppingListItemAction = () => {
 
 export const EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM = 'EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM';
 export const editGroupRegularShoppingListItemAction = (
-  groupRegularShoppingList: GroupRegularShoppingList,
-  groupExpiredShoppingList: GroupShoppingList,
-  groupTodayShoppingList: GroupShoppingList,
-  groupTodayShoppingListByCategories: GroupShoppingListByCategories,
-  groupMonthlyShoppingList: GroupShoppingList,
-  groupMonthlyShoppingListByCategories: GroupShoppingListByCategories
+  groupRegularShoppingListItem: GroupRegularShoppingListItem
 ) => {
   return {
     type: EDIT_GROUP_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      groupRegularShoppingListLoading: false,
-      groupRegularShoppingList: groupRegularShoppingList,
-      groupExpiredShoppingListLoading: false,
-      groupExpiredShoppingList: groupExpiredShoppingList,
-      groupTodayShoppingListLoading: false,
-      groupTodayShoppingList: groupTodayShoppingList,
-      groupTodayShoppingListByCategoriesLoading: false,
-      groupTodayShoppingListByCategories: groupTodayShoppingListByCategories,
-      groupMonthlyShoppingListLoading: false,
-      groupMonthlyShoppingList: groupMonthlyShoppingList,
-      groupMonthlyShoppingListByCategoriesLoading: false,
-      groupMonthlyShoppingListByCategories: groupMonthlyShoppingListByCategories,
+      groupRegularShoppingListItem: groupRegularShoppingListItem,
     },
   };
 };
@@ -620,29 +592,29 @@ export const startDeleteGroupRegularShoppingListItemAction = () => {
 };
 
 export const DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM = 'DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM';
-export const deleteGroupRegularShoppingListItemAction = (
-  groupRegularShoppingList: GroupRegularShoppingList,
-  groupExpiredShoppingList: GroupShoppingList,
-  groupTodayShoppingList: GroupShoppingList,
-  groupTodayShoppingListByCategories: GroupShoppingListByCategories,
-  groupMonthlyShoppingList: GroupShoppingList,
-  groupMonthlyShoppingListByCategories: GroupShoppingListByCategories
-) => {
+export const deleteGroupRegularShoppingListItemAction = () => {
   return {
     type: DELETE_GROUP_REGULAR_SHOPPING_LIST_ITEM,
     payload: {
-      groupRegularShoppingListLoading: false,
-      groupRegularShoppingList: groupRegularShoppingList,
-      groupExpiredShoppingListLoading: false,
-      groupExpiredShoppingList: groupExpiredShoppingList,
-      groupTodayShoppingListLoading: false,
-      groupTodayShoppingList: groupTodayShoppingList,
-      groupTodayShoppingListByCategoriesLoading: false,
-      groupTodayShoppingListByCategories: groupTodayShoppingListByCategories,
-      groupMonthlyShoppingListLoading: false,
-      groupMonthlyShoppingList: groupMonthlyShoppingList,
-      groupMonthlyShoppingListByCategoriesLoading: false,
-      groupMonthlyShoppingListByCategories: groupMonthlyShoppingListByCategories,
+      groupRegularShoppingListItem: {
+        id: 0,
+        posted_date: date,
+        updated_date: date,
+        expected_purchase_date: '',
+        cycle_type: '',
+        cycle: null,
+        purchase: '',
+        shop: null,
+        amount: null,
+        big_category_id: 0,
+        big_category_name: '',
+        medium_category_id: null,
+        medium_category_name: null,
+        custom_category_id: null,
+        custom_category_name: null,
+        payment_user_id: null,
+        transaction_auto_add: false,
+      },
     },
   };
 };

@@ -1,4 +1,4 @@
-import { PurchaseCycleType, RegularShoppingListItem, ShoppingList } from '../shoppingList/types';
+import { PurchaseCycleType, ShoppingList } from '../shoppingList/types';
 
 export interface GroupRegularShoppingListItem {
   id: number;
@@ -161,7 +161,7 @@ export interface EditGroupRegularShoppingListItemReq {
 }
 
 export interface EditGroupRegularShoppingListItemRes {
-  regular_shopping_item: RegularShoppingListItem;
+  regular_shopping_item: GroupRegularShoppingListItem;
   shopping_list: ShoppingList;
 }
 

@@ -8,8 +8,10 @@ import { addGroupRegularShoppingListItem } from '../../../../reducks/groupShoppi
 import {
   AddGroupRegularShoppingListItemModalInitialState,
   AddGroupRegularShoppingListItemReq,
+  FetchGroupShoppingListParams,
 } from '../../../../reducks/groupShoppingList/types';
 import { generateZeroPaddingMonth } from '../../../../lib/date';
+import { useFetchGroupShoppingList } from '../../../../hooks/groupShoppingList/useFetchGroupShoppingList';
 
 interface AddGroupRegularShoppingListModalContainerProps {
   selectedYear: number;
@@ -38,9 +40,12 @@ const AddGroupRegularShoppingListModalContainer = (
   props: AddGroupRegularShoppingListModalContainerProps
 ) => {
   const dispatch = useDispatch();
+  const { group_id } = useParams<{ group_id: string }>();
+  const groupId = Number(group_id);
   const selectedYearParam = String(props.selectedYear);
   const selectedMonthParam = generateZeroPaddingMonth(props.selectedMonth);
-  const { group_id } = useParams<{ group_id: string }>();
+
+  const { fetchGroupShoppingList } = useFetchGroupShoppingList();
 
   const [open, setOpen] = useState(false);
   const [expectedPurchaseDate, setExpectedPurchaseDate] = useState<Date | null>(
@@ -156,6 +161,15 @@ const AddGroupRegularShoppingListModalContainer = (
   };
 
   const handleAddRegularShoppingListItem = async () => {
+    const params: FetchGroupShoppingListParams = {
+      groupId: groupId,
+      currentYear: String(year),
+      currentMonth: customMonth,
+      currentDate: customDate,
+      selectedYear: selectedYearParam,
+      selectedMonth: selectedMonthParam,
+    };
+
     const requestData: AddGroupRegularShoppingListItemReq = {
       expected_purchase_date: expectedPurchaseDate,
       cycle_type: cycleType,
@@ -171,17 +185,8 @@ const AddGroupRegularShoppingListModalContainer = (
     };
 
     try {
-      await dispatch(
-        addGroupRegularShoppingListItem(
-          Number(group_id),
-          String(year),
-          customMonth,
-          customDate,
-          selectedYearParam,
-          selectedMonthParam,
-          requestData
-        )
-      );
+      await dispatch(addGroupRegularShoppingListItem(Number(group_id), requestData));
+      await fetchGroupShoppingList(params);
 
       setOpen(false);
     } catch (error) {
@@ -227,7 +232,7 @@ const AddGroupRegularShoppingListModalContainer = (
       setMediumCategoryId={setMediumCategoryId}
       setBigCategoryIndex={setBigCategoryIndex}
       setAssociatedCategory={setAssociatedCategory}
-      handleAddRegularShoppingListItem={() => handleAddRegularShoppingListItem()}
+      handleAddRegularShoppingListItem={handleAddRegularShoppingListItem}
       addBtnClassName={props.addBtnClassName}
     />
   );
