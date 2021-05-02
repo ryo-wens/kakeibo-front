@@ -2,7 +2,7 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import AddTaskNameForm from '../../../../components/task/modules/area/taskListArea/addTaskNameForm/AddTaskNameForm';
-import { addTaskItem } from '../../../../reducks/groupTasks/operations';
+import { addTaskItem, fetchGroupTaskList } from '../../../../reducks/groupTasks/operations';
 import { AddTaskItemReq } from '../../../../reducks/groupTasks/types';
 
 const initialState = {
@@ -39,12 +39,15 @@ const AddTaskNameFormContainer = () => {
   const disabledButton = taskName === initialState.initialTodoContent;
 
   const handleAddTaskItem = async () => {
+    const groupId = Number(group_id);
+
     const requestData: AddTaskItemReq = {
       task_name: taskName,
     };
 
     try {
-      await dispatch(addTaskItem(Number(group_id), requestData));
+      await dispatch(addTaskItem(groupId, requestData));
+      await dispatch(fetchGroupTaskList(groupId));
 
       setOpenForm(false);
     } catch (error) {
@@ -63,7 +66,7 @@ const AddTaskNameFormContainer = () => {
       handleOpenInputTaskForm={handleOpenInputTaskForm}
       handleCloseInputTaskForm={handleCloseInputTaskForm}
       onClickCloseInputTaskNameForm={onClickCloseInputTaskNameForm}
-      handleAddTaskItem={() => handleAddTaskItem()}
+      handleAddTaskItem={handleAddTaskItem}
       inputTaskRef={inputTaskRef}
     />
   );

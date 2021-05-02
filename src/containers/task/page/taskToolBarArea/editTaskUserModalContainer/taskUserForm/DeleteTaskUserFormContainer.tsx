@@ -8,6 +8,7 @@ import {
 import { useDispatch } from 'react-redux';
 import TaskUserForm from '../../../../../../components/task/modules/form/taskUserForm/TaskUserForm';
 import { deleteTaskUsers } from '../../../../../../reducks/groupTasks/operations';
+import { useFetchTaskToRelatedAll } from '../../../../../../hooks/task/useFetchTaskToRelatedAll';
 
 interface DeleteTaskUserFormContainerProps {
   approvedGroup: Group;
@@ -19,6 +20,8 @@ interface DeleteTaskUserFormContainerProps {
 
 const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) => {
   const dispatch = useDispatch();
+  const { fetchTaskToRelatedAll } = useFetchTaskToRelatedAll();
+
   const [checkedUserIds, setCheckedUserIds] = useState<string[]>([]);
 
   const handleChangeChecked = (event: React.ChangeEvent<HTMLInputElement>) => {
@@ -59,12 +62,15 @@ const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) =>
   );
 
   const handleDeleteTaskUsers = async () => {
+    const groupId = props.approvedGroup.group_id;
+
     const requestData: DeleteGroupTaskUsersReq = {
       users_list: checkedUserIds,
     };
 
     try {
-      await dispatch(deleteTaskUsers(props.approvedGroup.group_id, requestData));
+      await dispatch(deleteTaskUsers(groupId, requestData));
+      await fetchTaskToRelatedAll(groupId);
 
       props.handleCloseDeleteTaskUserForm();
     } catch (error) {
@@ -80,7 +86,7 @@ const DeleteTaskUserFormContainer = (props: DeleteTaskUserFormContainerProps) =>
       handleCloseModal={props.handleCloseModal}
       handleCloseTaskUserForm={props.handleCloseDeleteTaskUserForm}
       displayTaskUserList={participatingTaskUsers}
-      handleTaskUsers={() => handleDeleteTaskUsers()}
+      handleTaskUsers={handleDeleteTaskUsers}
       handleChangeChecked={handleChangeChecked}
       existsDisplayTaskUsers={participatingTaskUsers.length !== 0}
       message={'現在、タスクに参加しているメンバーはいません。'}

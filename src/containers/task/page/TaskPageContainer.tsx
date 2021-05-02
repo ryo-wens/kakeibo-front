@@ -47,13 +47,13 @@ const TaskPageContainer = () => {
 
     if (!editing) {
       fetchGroupTasks(signal);
-      const interval = setInterval(() => {
-        fetchGroupTasks(signal);
-      }, 3000);
+      // const interval = setInterval(() => {
+      //   fetchGroupTasks(signal);
+      // }, 3000);
 
       return () => {
         signal.cancel();
-        clearInterval(interval);
+        // clearInterval(interval);
       };
     }
   }, [selectedDate, editing]);

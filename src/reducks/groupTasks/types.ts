@@ -2,7 +2,7 @@ import { ApprovedGroupUsers } from '../groups/types';
 
 export type TaskCycleType = 'every' | 'consecutive' | 'none';
 
-export interface UserTaskListItem {
+export interface UserTaskList {
   id: number;
   user_id: string;
   group_id: number;
@@ -19,7 +19,7 @@ export interface TaskListItem {
   group_tasks_users_id: number | null;
 }
 
-export interface GroupTaskListForEachUser extends Array<UserTaskListItem> {}
+export interface GroupTaskListForEachUser extends Array<UserTaskList> {}
 export interface TaskListForEachUser extends Array<TaskListItem> {}
 export interface GroupTaskList extends Array<TaskListItem> {}
 
@@ -51,31 +51,11 @@ export interface AddTaskItemReq {
   task_name: string;
 }
 
-export interface AddTaskItemRes {
-  id: number;
-  base_date: Date | null;
-  cycle_type: TaskCycleType | null;
-  cycle: number | null;
-  task_name: string;
-  group_id: number;
-  group_tasks_users_id: number | null;
-}
-
 export interface EditTaskItemReq {
   base_date: Date | null;
   cycle_type: TaskCycleType | null;
   cycle: number | null;
   task_name: string;
-  group_tasks_users_id: number | null;
-}
-
-export interface EditTaskItemRes {
-  id: number;
-  base_date: Date | null;
-  cycle_type: TaskCycleType | null;
-  cycle: number | null;
-  task_name: string;
-  group_id: number;
   group_tasks_users_id: number | null;
 }
 

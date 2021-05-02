@@ -11,6 +11,7 @@ import { getGroupTaskList } from '../../../../../reducks/groupTasks/selectors';
 import AssignTaskModal from '../../../../../components/task/modules/area/taskTableArea/assignTaskModal/AssignTaskModal';
 import SelectTaskName from '../../../../../components/task/modules/select/SelectTaskName';
 import { editTaskItem } from '../../../../../reducks/groupTasks/operations';
+import { useFetchTaskToRelatedAll } from '../../../../../hooks/task/useFetchTaskToRelatedAll';
 
 interface AssignmentTaskModalContainerProps {
   participatingTaskUsers: TaskUsers;
@@ -29,6 +30,8 @@ const initialState: AssignmentTaskModalInitialState = {
 const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) => {
   const dispatch = useDispatch();
   const taskList = useSelector(getGroupTaskList);
+
+  const { fetchTaskToRelatedAll } = useFetchTaskToRelatedAll();
 
   const [open, setOpen] = useState<boolean>(false);
   const [taskItemId, setTaskItemId] = useState<number>(initialState.initialTaskItemId);
@@ -90,6 +93,8 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
   };
 
   const handleAssignTaskItem = async () => {
+    const groupId = props.groupId;
+
     const requestData: EditTaskItemReq = {
       base_date: baseDate,
       cycle_type: cycleType,
@@ -99,7 +104,8 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
     };
 
     try {
-      await dispatch(editTaskItem(props.groupId, taskItemId, requestData));
+      await dispatch(editTaskItem(groupId, taskItemId, requestData));
+      await fetchTaskToRelatedAll(groupId);
 
       setOpen(false);
     } catch (error) {
@@ -130,7 +136,7 @@ const AssignmentTaskModalContainer = (props: AssignmentTaskModalContainerProps) 
       handleChangeCycleType={handleChangeCycleType}
       handleChangeCycle={handleChangeCycle}
       handleChangeTaskUser={handleChangeTaskUser}
-      handleAssignTaskItem={() => handleAssignTaskItem()}
+      handleAssignTaskItem={handleAssignTaskItem}
       disabledButton={disabledButton}
       message={message}
     />
