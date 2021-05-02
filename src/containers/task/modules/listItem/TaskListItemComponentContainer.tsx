@@ -2,7 +2,11 @@ import React, { useRef, useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { EditTaskItemReq, TaskListItem } from '../../../../reducks/groupTasks/types';
 import TaskListItemComponent from '../../../../components/task/modules/listItem/TaskListItemComponent/TaskListItemComponent';
-import { deleteTaskItem, editTaskItem } from '../../../../reducks/groupTasks/operations';
+import {
+  deleteTaskItem,
+  editTaskItem,
+  fetchGroupTaskList,
+} from '../../../../reducks/groupTasks/operations';
 
 interface TaskListItemComponentContainerProps {
   listItem: TaskListItem;
@@ -18,6 +22,7 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
 
   const dispatch = useDispatch();
   const inputTaskRef = useRef<HTMLDivElement>(null);
+  const groupId = props.listItem.group_id;
 
   const [openForm, setOpenForm] = useState(false);
   const [taskName, setTaskName] = useState<string>(initialState.initialTaskName);
@@ -53,7 +58,8 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
     };
 
     try {
-      await dispatch(editTaskItem(props.listItem.group_id, props.listItem.id, requestData));
+      await dispatch(editTaskItem(groupId, props.listItem.id, requestData));
+      await dispatch(fetchGroupTaskList(groupId));
 
       setOpenForm(false);
     } catch (error) {
@@ -64,6 +70,8 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
   const handleDeleteTaskItem = async () => {
     try {
       await dispatch(deleteTaskItem(props.listItem.group_id, props.listItem.id));
+
+      dispatch(fetchGroupTaskList(groupId));
     } catch (error) {
       alert(error.response.data.error.message.toString());
     }
@@ -83,8 +91,8 @@ const TaskListItemComponentContainer = (props: TaskListItemComponentContainerPro
       handleCloseInputTaskForm={handleCloseInputTaskForm}
       disabledButton={disabledButton}
       onClickCloseInputTaskNameForm={onClickCloseInputTaskNameForm}
-      handleEditTaskItem={() => handleEditTaskItem()}
-      handleDeleteTaskItem={() => handleDeleteTaskItem()}
+      handleEditTaskItem={handleEditTaskItem}
+      handleDeleteTaskItem={handleDeleteTaskItem}
       inputTaskRef={inputTaskRef}
       listItemClassName={props.listItemClassName}
       formClassName={props.formClassName}

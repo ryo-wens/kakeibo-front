@@ -186,6 +186,16 @@ const initialState = {
       statusCode: null,
       errorMessage: '',
     },
+    taskUsers: [],
+    taskListItem: {
+      id: 0,
+      base_date: null,
+      cycle_type: null,
+      cycle: null,
+      task_name: '',
+      group_id: 0,
+      group_tasks_users_id: null,
+    },
     groupTaskError: {
       statusCode: null,
       errorMessage: '',

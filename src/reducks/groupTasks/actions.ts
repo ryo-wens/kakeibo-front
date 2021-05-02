@@ -1,4 +1,4 @@
-import { GroupTaskList, GroupTaskListForEachUser } from './types';
+import { GroupTaskList, GroupTaskListForEachUser, TaskListItem } from './types';
 export type groupTasksActions = ReturnType<
   | typeof startFetchGroupTaskListForEachUserAction
   | typeof fetchGroupTaskListForEachUserAction
@@ -94,17 +94,11 @@ export const startAddTaskUsersAction = () => {
 };
 
 export const ADD_TASK_USERS = 'ADD_TASK_USERS';
-export const addTaskUsersAction = (
-  groupTaskList: GroupTaskList,
-  groupTaskListForEachUser: GroupTaskListForEachUser
-) => {
+export const addTaskUsersAction = (taskUsers: GroupTaskListForEachUser) => {
   return {
     type: ADD_TASK_USERS,
     payload: {
-      groupTaskListLoading: false,
-      groupTaskList: groupTaskList,
-      groupTaskListForEachUserLoading: false,
-      groupTaskListForEachUser: groupTaskListForEachUser,
+      taskUsers: taskUsers,
     },
   };
 };
@@ -136,17 +130,11 @@ export const startDeleteTaskUsersAction = () => {
 };
 
 export const DELETE_TASK_USERS = 'DELETE_TASK_USERS';
-export const deleteTaskUsersAction = (
-  groupTaskList: GroupTaskList,
-  groupTaskListForEachUser: GroupTaskListForEachUser
-) => {
+export const deleteTaskUsersAction = () => {
   return {
     type: DELETE_TASK_USERS,
     payload: {
-      groupTaskListLoading: false,
-      groupTaskList: groupTaskList,
-      groupTaskListForEachUserLoading: false,
-      groupTaskListForEachUser: groupTaskListForEachUser,
+      taskUsers: [],
     },
   };
 };
@@ -226,12 +214,11 @@ export const startAddTaskItemAction = () => {
 };
 
 export const ADD_TASK_ITEM = 'ADD_TASK_ITEM';
-export const addTaskItemAction = (groupTaskList: GroupTaskList) => {
+export const addTaskItemAction = (taskListItem: TaskListItem) => {
   return {
     type: ADD_TASK_ITEM,
     payload: {
-      groupTaskListLoading: false,
-      groupTaskList: groupTaskList,
+      taskListItem: taskListItem,
     },
   };
 };
@@ -262,17 +249,11 @@ export const startEditTaskItemAction = () => {
 };
 
 export const EDIT_TASK_ITEM = 'EDIT_TASK_ITEM';
-export const editTaskItemAction = (
-  groupTaskList: GroupTaskList,
-  groupTaskListForEachUser: GroupTaskListForEachUser
-) => {
+export const editTaskItemAction = (taskListItem: TaskListItem) => {
   return {
     type: EDIT_TASK_ITEM,
     payload: {
-      groupTaskListLoading: false,
-      groupTaskList: groupTaskList,
-      groupTaskListForEachUserLoading: false,
-      groupTaskListForEachUser: groupTaskListForEachUser,
+      taskListItem: taskListItem,
     },
   };
 };
@@ -304,17 +285,19 @@ export const startDeleteTaskItemAction = () => {
 };
 
 export const DELETE_TASK_ITEM = 'DELETE_TASK_ITEM';
-export const deleteTaskItemAction = (
-  groupTaskList: GroupTaskList,
-  groupTaskListForEachUser: GroupTaskListForEachUser
-) => {
+export const deleteTaskItemAction = () => {
   return {
     type: DELETE_TASK_ITEM,
     payload: {
-      groupTaskListLoading: false,
-      groupTaskList: groupTaskList,
-      groupTaskListForEachUserLoading: false,
-      groupTaskListForEachUser: groupTaskListForEachUser,
+      taskListItem: {
+        id: 0,
+        base_date: null,
+        cycle_type: null,
+        cycle: null,
+        task_name: '',
+        group_id: 0,
+        group_tasks_users_id: null,
+      },
     },
   };
 };

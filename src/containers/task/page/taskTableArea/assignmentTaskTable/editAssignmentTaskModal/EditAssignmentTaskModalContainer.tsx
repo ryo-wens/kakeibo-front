@@ -9,6 +9,7 @@ import {
 import { useDispatch } from 'react-redux';
 import { editTaskItem } from '../../../../../../reducks/groupTasks/operations';
 import EditAssignmentTaskModal from '../../../../../../components/task/modules/area/taskTableArea/assignTaskTable/editAssignTaskModal/EditAssignTaskModal';
+import { useFetchTaskToRelatedAll } from '../../../../../../hooks/task/useFetchTaskToRelatedAll';
 
 interface EditAssignmentTaskModalContainerProps {
   participatingTaskUsers: TaskUsers;
@@ -17,16 +18,18 @@ interface EditAssignmentTaskModalContainerProps {
 }
 
 const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContainerProps) => {
+  const { participatingTaskUsers, groupId, taskItem } = props;
+
   const dispatch = useDispatch();
+  const { fetchTaskToRelatedAll } = useFetchTaskToRelatedAll();
 
   const initialState: AssignmentTaskModalInitialState = {
-    initialTaskItemId: props.taskItem.id,
-    initialTaskName: props.taskItem.task_name,
-    initialBaseDate: props.taskItem.base_date,
-    initialCycleType: props.taskItem.cycle_type !== null ? props.taskItem.cycle_type : 'none',
-    initialCycle: props.taskItem.cycle !== null ? props.taskItem.cycle : 0,
-    initialUserId:
-      props.taskItem.group_tasks_users_id !== null ? props.taskItem.group_tasks_users_id : 0,
+    initialTaskItemId: taskItem.id,
+    initialTaskName: taskItem.task_name,
+    initialBaseDate: taskItem.base_date,
+    initialCycleType: taskItem.cycle_type !== null ? taskItem.cycle_type : 'none',
+    initialCycle: taskItem.cycle !== null ? taskItem.cycle : 0,
+    initialUserId: taskItem.group_tasks_users_id !== null ? taskItem.group_tasks_users_id : 0,
   };
 
   const [open, setOpen] = useState<boolean>(false);
@@ -90,7 +93,8 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
     };
 
     try {
-      await dispatch(editTaskItem(props.groupId, taskItemId, requestData));
+      await dispatch(editTaskItem(groupId, taskItemId, requestData));
+      await fetchTaskToRelatedAll(groupId);
 
       setOpen(false);
     } catch (error) {
@@ -108,7 +112,9 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
     };
 
     try {
-      await dispatch(editTaskItem(props.groupId, taskItemId, requestData));
+      await dispatch(editTaskItem(groupId, taskItemId, requestData));
+
+      fetchTaskToRelatedAll(groupId);
     } catch (error) {
       alert(error.response.data.error.message.toString());
     }
@@ -132,7 +138,7 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
 
   return (
     <EditAssignmentTaskModal
-      participatingTaskUsers={props.participatingTaskUsers}
+      participatingTaskUsers={participatingTaskUsers}
       taskNameFormElement={
         <input
           id="filled-basic"
@@ -154,10 +160,10 @@ const EditAssignmentTaskModalContainer = (props: EditAssignmentTaskModalContaine
       handleChangeCycleType={handleChangeCycleType}
       handleChangeCycle={handleChangeCycle}
       handleChangeTaskUser={handleChangeTaskUser}
-      handleEditAssignTaskItem={() => handleEditAssignTaskItem()}
+      handleEditAssignTaskItem={handleEditAssignTaskItem}
       disabledButton={disabledButton()}
       message={message}
-      handleReleaseTaskItem={() => handleReleaseTaskItem()}
+      handleReleaseTaskItem={handleReleaseTaskItem}
     />
   );
 };

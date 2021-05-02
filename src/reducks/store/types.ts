@@ -15,7 +15,7 @@ import {
 } from '../groupBudgets/types';
 import { TodoList } from '../todoList/types';
 import { GroupTodoList } from '../groupTodoList/types';
-import { GroupTaskList, GroupTaskListForEachUser } from '../groupTasks/types';
+import { GroupTaskList, GroupTaskListForEachUser, TaskListItem } from '../groupTasks/types';
 import {
   RegularShoppingList,
   RegularShoppingListItem,
@@ -196,6 +196,8 @@ export interface State {
       statusCode: number | null;
       errorMessage: string;
     };
+    taskUsers: GroupTaskListForEachUser;
+    taskListItem: TaskListItem;
     groupTaskError: {
       statusCode: number | null;
       errorMessage: string;

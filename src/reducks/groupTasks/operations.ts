@@ -4,16 +4,14 @@ import {
   AddGroupTaskUsersReq,
   AddGroupTaskUsersRes,
   AddTaskItemReq,
-  AddTaskItemRes,
   DeleteGroupTaskUsersReq,
   DeleteGroupTaskUsersRes,
   DeleteTaskItemRes,
   EditTaskItemReq,
-  EditTaskItemRes,
   FetchGroupTaskListForEachUserRes,
   FetchGroupTaskListRes,
   GroupTaskList,
-  GroupTaskListForEachUser,
+  TaskListItem,
 } from './types';
 import {
   addTaskUsersAction,
@@ -44,20 +42,17 @@ import { openTextModalAction } from '../modal/actions';
 import dayjs from 'dayjs';
 import { todoServiceInstance } from '../axiosConfig';
 
-export const fetchGroupTaskListForEachUser = (groupId: number, signal: CancelTokenSource) => {
+export const fetchGroupTaskListForEachUser = (groupId: number, signal?: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupTaskListForEachUserAction());
 
     try {
-      const fetchResult = await todoServiceInstance.get<FetchGroupTaskListForEachUserRes>(
+      const res = await todoServiceInstance.get<FetchGroupTaskListForEachUserRes>(
         `/groups/${groupId}/tasks/users`,
-        { cancelToken: signal.token }
+        { cancelToken: signal?.token }
       );
 
-      const groupTasksListForEachUser: GroupTaskListForEachUser =
-        fetchResult.data.group_tasks_list_for_each_user;
-
-      dispatch(fetchGroupTaskListForEachUserAction(groupTasksListForEachUser));
+      dispatch(fetchGroupTaskListForEachUserAction(res.data.group_tasks_list_for_each_user));
     } catch (error) {
       if (axios.isCancel(error)) {
         dispatch(cancelFetchGroupTaskListForEachUserAction());
@@ -78,27 +73,12 @@ export const addTaskUsers = (groupId: number, requestData: AddGroupTaskUsersReq)
     dispatch(startAddTaskUsersAction());
 
     try {
-      await todoServiceInstance.post<AddGroupTaskUsersRes>(
+      const res = await todoServiceInstance.post<AddGroupTaskUsersRes>(
         `/groups/${groupId}/tasks/users`,
         JSON.stringify(requestData)
       );
 
-      const fetchTaskListResult = todoServiceInstance.get<FetchGroupTaskListRes>(
-        `/groups/${groupId}/tasks`
-      );
-
-      const fetchTaskListForEachUserResult = todoServiceInstance.get<FetchGroupTaskListForEachUserRes>(
-        `/groups/${groupId}/tasks/users`
-      );
-
-      const taskListResponse = await fetchTaskListResult;
-      const taskListForEachUserResponse = await fetchTaskListForEachUserResult;
-
-      const nextFetchTaskList: GroupTaskList = taskListResponse.data.group_tasks_list ?? [];
-      const nextTaskListForEachUser: GroupTaskListForEachUser =
-        taskListForEachUserResponse.data.group_tasks_list_for_each_user;
-
-      dispatch(addTaskUsersAction(nextFetchTaskList, nextTaskListForEachUser));
+      dispatch(addTaskUsersAction(res.data.group_tasks_list_for_each_user));
     } catch (error) {
       dispatch(failedAddTaskUsersAction(error.response.status, error.response.data.error.message));
       throw error;
@@ -111,28 +91,13 @@ export const deleteTaskUsers = (groupId: number, requestData: DeleteGroupTaskUse
     dispatch(startDeleteTaskUsersAction());
 
     try {
-      const deleteResult = await todoServiceInstance.delete<DeleteGroupTaskUsersRes>(
+      const res = await todoServiceInstance.delete<DeleteGroupTaskUsersRes>(
         `/groups/${groupId}/tasks/users`,
         { data: JSON.stringify(requestData) }
       );
 
-      const fetchTaskListResult = todoServiceInstance.get<FetchGroupTaskListRes>(
-        `/groups/${groupId}/tasks`
-      );
-
-      const fetchTaskListForEachUserResult = todoServiceInstance.get<FetchGroupTaskListForEachUserRes>(
-        `/groups/${groupId}/tasks/users`
-      );
-
-      const taskListResponse = await fetchTaskListResult;
-      const taskListForEachUserResponse = await fetchTaskListForEachUserResult;
-
-      const nextFetchTaskList: GroupTaskList = taskListResponse.data.group_tasks_list ?? [];
-      const nextTaskListForEachUser: GroupTaskListForEachUser =
-        taskListForEachUserResponse.data.group_tasks_list_for_each_user;
-
-      dispatch(deleteTaskUsersAction(nextFetchTaskList, nextTaskListForEachUser));
-      dispatch(openTextModalAction(deleteResult.data.message));
+      dispatch(deleteTaskUsersAction());
+      dispatch(openTextModalAction(res.data.message));
     } catch (error) {
       dispatch(
         failedDeleteTaskUsersAction(error.response.status, error.response.data.error.message)
@@ -142,14 +107,14 @@ export const deleteTaskUsers = (groupId: number, requestData: DeleteGroupTaskUse
   };
 };
 
-export const fetchGroupTaskList = (groupId: number, signal: CancelTokenSource) => {
+export const fetchGroupTaskList = (groupId: number, signal?: CancelTokenSource) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startFetchGroupTaskListAction());
 
     try {
       const fetchResult = await todoServiceInstance.get<FetchGroupTaskListRes>(
         `/groups/${groupId}/tasks`,
-        { cancelToken: signal.token }
+        { cancelToken: signal?.token }
       );
 
       const nextFetchTaskList: GroupTaskList = fetchResult.data.group_tasks_list ?? [];
@@ -172,18 +137,12 @@ export const addTaskItem = (groupId: number, requestData: AddTaskItemReq) => {
     dispatch(startAddTaskItemAction());
 
     try {
-      await todoServiceInstance.post<AddTaskItemRes>(
+      const res = await todoServiceInstance.post<TaskListItem>(
         `/groups/${groupId}/tasks`,
         JSON.stringify(requestData)
       );
 
-      const fetchResult = await todoServiceInstance.get<FetchGroupTaskListRes>(
-        `/groups/${groupId}/tasks`
-      );
-
-      const nextFetchTaskList: GroupTaskList = fetchResult.data.group_tasks_list ?? [];
-
-      dispatch(addTaskItemAction(nextFetchTaskList));
+      dispatch(addTaskItemAction(res.data));
     } catch (error) {
       dispatch(failedAddTaskItemAction(error.response.status, error.response.data.error.message));
       throw error;
@@ -196,7 +155,7 @@ export const editTaskItem = (groupId: number, taskItemId: number, requestData: E
     dispatch(startEditTaskItemAction());
 
     try {
-      await todoServiceInstance.put<EditTaskItemRes>(
+      const res = await todoServiceInstance.put<TaskListItem>(
         `/groups/${groupId}/tasks/${taskItemId}`,
         JSON.stringify(requestData, function (key, value) {
           if (key === 'base_date' && value !== null) {
@@ -206,22 +165,7 @@ export const editTaskItem = (groupId: number, taskItemId: number, requestData: E
         })
       );
 
-      const fetchTaskListResult = todoServiceInstance.get<FetchGroupTaskListRes>(
-        `/groups/${groupId}/tasks`
-      );
-
-      const fetchTaskListForEachUserResult = todoServiceInstance.get<FetchGroupTaskListForEachUserRes>(
-        `/groups/${groupId}/tasks/users`
-      );
-
-      const taskListResponse = await fetchTaskListResult;
-      const taskListForEachUserResponse = await fetchTaskListForEachUserResult;
-
-      const nextFetchTaskList: GroupTaskList = taskListResponse.data.group_tasks_list ?? [];
-      const nextTaskListForEachUser: GroupTaskListForEachUser =
-        taskListForEachUserResponse.data.group_tasks_list_for_each_user;
-
-      dispatch(editTaskItemAction(nextFetchTaskList, nextTaskListForEachUser));
+      dispatch(editTaskItemAction(res.data));
     } catch (error) {
       dispatch(failedEditTaskItemAction(error.response.status, error.response.data.error.message));
       throw error;
@@ -234,27 +178,12 @@ export const deleteTaskItem = (groupId: number, taskItemId: number) => {
     dispatch(startDeleteTaskItemAction());
 
     try {
-      const deleteResult = await todoServiceInstance.delete<DeleteTaskItemRes>(
+      const res = await todoServiceInstance.delete<DeleteTaskItemRes>(
         `/groups/${groupId}/tasks/${taskItemId}`
       );
 
-      const fetchTaskListResult = todoServiceInstance.get<FetchGroupTaskListRes>(
-        `/groups/${groupId}/tasks`
-      );
-
-      const fetchTaskListForEachUserResult = todoServiceInstance.get<FetchGroupTaskListForEachUserRes>(
-        `/groups/${groupId}/tasks/users`
-      );
-
-      const taskListResponse = await fetchTaskListResult;
-      const taskListForEachUserResponse = await fetchTaskListForEachUserResult;
-
-      const nextFetchTaskList: GroupTaskList = taskListResponse.data.group_tasks_list ?? [];
-      const nextTaskListForEachUser: GroupTaskListForEachUser =
-        taskListForEachUserResponse.data.group_tasks_list_for_each_user;
-
-      dispatch(deleteTaskItemAction(nextFetchTaskList, nextTaskListForEachUser));
-      dispatch(openTextModalAction(deleteResult.data.message));
+      dispatch(deleteTaskItemAction());
+      dispatch(openTextModalAction(res.data.message));
     } catch (error) {
       dispatch(
         failedDeleteTaskItemAction(error.response.status, error.response.data.error.message)
