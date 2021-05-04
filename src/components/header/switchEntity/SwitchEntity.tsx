@@ -19,6 +19,8 @@ interface SwitchEntityProps {
 }
 
 const SwitchEntity = (props: SwitchEntityProps) => {
+  const existsApprovedGroups = props.approvedGroups.length !== 0;
+
   const checkIconClassName = cn(styles.checkIcon, {
     [styles.transparencyIcon]: props.name !== 'グループ選択なし',
   });
@@ -39,16 +41,17 @@ const SwitchEntity = (props: SwitchEntityProps) => {
       >
         <span className={styles.group}>グループ</span>
         <ul className={styles.groupList}>
-          {props.approvedGroups.map((approvedGroup) => {
-            return (
-              <GroupListItemContainer
-                approvedGroup={approvedGroup}
-                switchToGroup={props.switchToGroup}
-                closeMenu={props.closeMenu}
-                key={approvedGroup.group_id}
-              />
-            );
-          })}
+          {existsApprovedGroups &&
+            props.approvedGroups.map((approvedGroup) => {
+              return (
+                <GroupListItemContainer
+                  approvedGroup={approvedGroup}
+                  switchToGroup={props.switchToGroup}
+                  closeMenu={props.closeMenu}
+                  key={approvedGroup.group_id}
+                />
+              );
+            })}
           <li className={styles.listItem}>
             <CheckIcon className={checkIconClassName} fontSize="inherit" />
             <span onClick={() => props.switchToIndividual('グループ選択なし')}>

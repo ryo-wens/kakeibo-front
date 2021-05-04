@@ -50,7 +50,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
           <EditIcon className={styles.editIcon} onClick={() => props.handleOpenEditTodoForm()} />
         </li>
       ) : (
-        <div className={props.formClassName}>
+        <li className={props.formClassName}>
           <TodoListItemFormContainer
             titleLabel={'ToDoを編集'}
             buttonLabel={'保存'}
@@ -68,7 +68,7 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
             datePickersClassName={childDatePickersClassName}
             inputTodoRef={props.inputTodoRef}
           />
-        </div>
+        </li>
       )}
     </>
   );
