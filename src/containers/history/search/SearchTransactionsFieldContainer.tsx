@@ -72,6 +72,16 @@ interface SearchTransactionsFieldContainerProps {
 const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContainerProps) => {
   const dispatch = useDispatch();
 
+  const searchOperation = () => {
+    const signal = axios.CancelToken.source();
+    dispatch(searchTransactions(signal, props.searchRequestData));
+  };
+
+  const groupSearchOperation = () => {
+    const signal = axios.CancelToken.source();
+    dispatch(searchGroupTransactions(props.groupId, signal, props.groupSearchRequestData));
+  };
+
   return (
     <SearchTransactionsField
       groupId={props.groupId}
@@ -105,14 +115,8 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
       changeSortItem={props.changeSortItem}
       changeSortType={props.changeSortType}
       selectLimit={props.selectLimit}
-      searchOperation={() => {
-        const signal = axios.CancelToken.source();
-        dispatch(searchTransactions(signal, props.searchRequestData));
-      }}
-      groupSearchOperation={() => {
-        const signal = axios.CancelToken.source();
-        dispatch(searchGroupTransactions(props.groupId, signal, props.groupSearchRequestData));
-      }}
+      searchOperation={searchOperation}
+      groupSearchOperation={groupSearchOperation}
     />
   );
 };
