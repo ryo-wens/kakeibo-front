@@ -69,7 +69,6 @@ describe('async actions categories', () => {
   });
 
   it('Add customCategory in income_categories_list if fetch succeeds', async () => {
-    const signal = axios.CancelToken.source();
     const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`;
     const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`;
 
@@ -107,12 +106,11 @@ describe('async actions categories', () => {
     axiosMock.onPost(addUrl, reqIncomeCategory).reply(201, mockAddIncomeResponse);
     axiosMock.onGet(fetchUrl).reply(200, addCategories);
 
-    await addCustomCategories('失業手当', 1, signal)(store.dispatch);
+    await addCustomCategories('失業手当', 1)(store.dispatch);
     expect(store.getActions()).toEqual(expectedIncomeActions);
   });
 
   it('Add customCategory in expense_categories_list if fetch succeeds', async () => {
-    const signal = axios.CancelToken.source();
     const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`;
     const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`;
 
@@ -150,12 +148,11 @@ describe('async actions categories', () => {
     axiosMock.onPost(addUrl, reqExpenseCategory).reply(201, mockAddExpenseResponse);
     axiosMock.onGet(fetchUrl).reply(200, addCategories);
 
-    await addCustomCategories('調味料', 2, signal)(store.dispatch);
+    await addCustomCategories('調味料', 2)(store.dispatch);
     expect(store.getActions()).toEqual(expectedExpenseActions);
   });
 
   it('If the incomeCategory you added already exists, it will output an error message and status code', async () => {
-    const signal = axios.CancelToken.source();
     const addedStore = mockStore({
       categories: {
         incomeList: addCategories.income_categories_list,
@@ -207,14 +204,13 @@ describe('async actions categories', () => {
     axiosMock.onPost(addUrl, addRequestIncomeCategory).reply(409, errorResponse);
 
     try {
-      await addCustomCategories('失業手当', 1, signal)(addedStore.dispatch);
+      await addCustomCategories('失業手当', 1)(addedStore.dispatch);
     } catch (error) {
       expect(addedStore.getActions()).toEqual(expectedAddIncomeCategoryFailActions);
     }
   });
 
   it('If the expenseCategory you added already exists, it will output an error message and status code', async () => {
-    const signal = axios.CancelToken.source();
     const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`;
 
     const addRequestExpenseCategory = {
@@ -260,7 +256,7 @@ describe('async actions categories', () => {
     axiosMock.onPost(addUrl, addRequestExpenseCategory).reply(409, errorResponse);
 
     try {
-      await addCustomCategories('調味料', 2, signal)(store.dispatch);
+      await addCustomCategories('調味料', 2)(store.dispatch);
     } catch (error) {
       expect(store.getActions()).toEqual(expectedAddExpenseCategoryFailActions);
     }
@@ -274,7 +270,6 @@ describe('async actions categories', () => {
 
     const mockIncomeResponse = editResponse.categories.incomeResponse;
     const id = mockIncomeResponse.id;
-    const signal = axios.CancelToken.source();
     const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
     const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`;
 
@@ -305,7 +300,7 @@ describe('async actions categories', () => {
     axiosMock.onPut(editUrl, reqIncomeCategory).reply(200, mockIncomeResponse);
     axiosMock.onGet(fetchUrl).reply(200, editCategories);
 
-    await editCustomCategories(16, '株配当金', 1, signal)(store.dispatch);
+    await editCustomCategories(16, '株配当金', 1)(store.dispatch);
     expect(store.getActions()).toEqual(expectedIncomeActions);
   });
 
@@ -317,7 +312,6 @@ describe('async actions categories', () => {
 
     const mockExpenseResponse = editResponse.categories.expenseResponse;
     const id = mockExpenseResponse.id;
-    const signal = axios.CancelToken.source();
     const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
     const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`;
 
@@ -348,12 +342,11 @@ describe('async actions categories', () => {
     axiosMock.onPut(editUrl, reqExpenseCategory).reply(200, mockExpenseResponse);
     axiosMock.onGet(fetchUrl).reply(200, editCategories);
 
-    await editCustomCategories(17, '牛肉ブロック', 2, signal)(store.dispatch);
+    await editCustomCategories(17, '牛肉ブロック', 2)(store.dispatch);
     expect(store.getActions()).toEqual(expectedExpenseActions);
   });
 
   it('If the incomeCategory you edited already exists, it will output an error message and status code', async () => {
-    const signal = axios.CancelToken.source();
     const id = 14;
     const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
@@ -400,14 +393,13 @@ describe('async actions categories', () => {
     axiosMock.onPut(editUrl, editRequestIncomeCategory).reply(409, errorResponse);
 
     try {
-      await editCustomCategories(14, '事業所得', 1, signal)(store.dispatch);
+      await editCustomCategories(14, '事業所得', 1)(store.dispatch);
     } catch (error) {
       expect(store.getActions()).toEqual(expectedEditIncomeCategoryFailActions);
     }
   });
 
   it('If the expenseCategory you edited already exists, it will output an error message and status code', async () => {
-    const signal = axios.CancelToken.source();
     const id = 21;
     const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
@@ -454,14 +446,13 @@ describe('async actions categories', () => {
     axiosMock.onPut(editUrl, editRequestExpenseCategory).reply(409, errorResponse);
 
     try {
-      await editCustomCategories(21, '消耗品', 3, signal)(store.dispatch);
+      await editCustomCategories(21, '消耗品', 3)(store.dispatch);
     } catch (error) {
       expect(store.getActions()).toEqual(expectedEditExpenseCategoryFailActions);
     }
   });
 
   it('If the id specified when deleting incomeCategory does not exist in the specified bigCategoryId, an error message and status code will be output', async () => {
-    const signal = axios.CancelToken.source();
     const id = 16;
     const deleteUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
@@ -501,12 +492,11 @@ describe('async actions categories', () => {
 
     axiosMock.onDelete(deleteUrl).reply(404, errorResponse);
 
-    await deleteCustomCategories(16, 1, signal)(store.dispatch);
+    await deleteCustomCategories(16, 1)(store.dispatch);
     expect(store.getActions()).toEqual(expectedDeleteIncomeCategoryFailActions);
   });
 
   it('If the id specified when deleting expenseCategory does not exist in the specified bigCategoryId, an error message and status code will be output', async () => {
-    const signal = axios.CancelToken.source();
     const id = 17;
     const deleteUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
 
@@ -546,12 +536,11 @@ describe('async actions categories', () => {
 
     axiosMock.onDelete(deleteUrl).reply(404, errorResponse);
 
-    await deleteCustomCategories(17, 2, signal)(store.dispatch);
+    await deleteCustomCategories(17, 2)(store.dispatch);
     expect(store.getActions()).toEqual(expectedDeleteExpenseCategoryFailActions);
   });
 
   it('Delete customCategory in income_categories_list if fetch succeeds', async () => {
-    const signal = axios.CancelToken.source();
     const deletedResponse = deleteResponse.message;
     const deleteCategories = JSON.parse(JSON.stringify(categories));
 
@@ -586,13 +575,12 @@ describe('async actions categories', () => {
     axiosMock.onDelete(deleteUrl).reply(200, deletedResponse);
     axiosMock.onGet(fetchUrl).reply(200, deleteCategories);
 
-    await deleteCustomCategories(16, 1, signal)(store.dispatch);
+    await deleteCustomCategories(16, 1)(store.dispatch);
     expect(store.getActions()).toEqual(expectedIncomeActions);
   });
 
   it('Delete customCategory in expense_categories_list if fetch succeeds', async () => {
     const id = 17;
-    const signal = axios.CancelToken.source();
     const url = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories/${id}`;
     const fetchUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`;
 
@@ -625,7 +613,7 @@ describe('async actions categories', () => {
     axiosMock.onDelete(url).reply(200, deletedResponse);
     axiosMock.onGet(fetchUrl).reply(200, deleteCategories);
 
-    await deleteCustomCategories(17, 2, signal)(store.dispatch);
+    await deleteCustomCategories(17, 2)(store.dispatch);
     expect(store.getActions()).toEqual(expectedExpenseActions);
   });
 });

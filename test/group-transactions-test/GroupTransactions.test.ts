@@ -544,7 +544,6 @@ describe('async actions groupTransactions', () => {
 
   it('Get groupTransactionsList search criteria match in  if fetch succeeds', async () => {
     const groupId = 1;
-    const signal = axios.CancelToken.source();
     const url = `/groups/${groupId}/transactions/search`;
 
     const searchRequest = {
@@ -580,7 +579,7 @@ describe('async actions groupTransactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await searchGroupTransactions(groupId, signal, searchRequest)(store.dispatch);
+    await searchGroupTransactions(groupId, searchRequest)(store.dispatch);
     expect(store.getActions()).toEqual(expectActions);
   });
 
