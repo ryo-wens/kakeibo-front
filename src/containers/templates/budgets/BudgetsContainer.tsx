@@ -7,7 +7,6 @@ import axios from 'axios';
 import { fetchGroups } from '../../../reducks/groups/operations';
 import { year } from '../../../lib/constant';
 import { useHistory } from 'react-router-dom';
-import CheckAuth from '../../auth/CheckAuth';
 
 const BudgetsContainer = () => {
   const dispatch = useDispatch();
@@ -47,16 +46,13 @@ const BudgetsContainer = () => {
   };
 
   return (
-    <>
-      <CheckAuth />
-      <Budgets
-        query={query}
-        budgetsYear={budgetsYear}
-        setBudgetsYear={setBudgetsYear}
-        routingStandard={routingStandardBudgetPage}
-        routingYearly={routingYearlyBudgetPage}
-      />
-    </>
+    <Budgets
+      query={query}
+      budgetsYear={budgetsYear}
+      setBudgetsYear={setBudgetsYear}
+      routingStandard={routingStandardBudgetPage}
+      routingYearly={routingYearlyBudgetPage}
+    />
   );
 };
 export default BudgetsContainer;

@@ -8,6 +8,7 @@ import HistoryContainer from './containers/templates/history/HistoryContainer';
 import TodoContainer from './containers/templates/Todo/TodoContainer';
 import YearlyAccountContainer from './containers/templates/account/YearlyAccountContainer';
 import BudgetsContainer from './containers/templates/budgets/BudgetsContainer';
+import CheckAuth from './containers/auth/CheckAuth';
 
 const Router = (): JSX.Element => {
   return (
@@ -20,16 +21,16 @@ const Router = (): JSX.Element => {
        以下のコンポーネントはログイン時のみ表示される
        未ログイン状態で遷移した場合はリダイレクト処理が実行される
       */}
-      <Route exact path={'/home'} component={HomeContainer} />
-      <Route exact path={'/history'} component={HistoryContainer} />
-      <Route exact path={'/budgets'} component={BudgetsContainer} />
-      <Route exact path={'/todo'} component={TodoContainer} />
-      <Route exact path={'/group/:group_id/home'} component={HomeContainer} />
-      <Route exact path={'/group/:group_id/history'} component={HistoryContainer} />
-      <Route exact path={'/group/:group_id/budgets'} component={BudgetsContainer} />
-      <Route exact path={'/group/:group_id/accounting'} component={YearlyAccountContainer} />
-      <Route exact path={'/group/:group_id/task'} component={Task} />
-      <Route exact path={'/group/:group_id/todo'} component={TodoContainer} />
+      <CheckAuth exact path={'/home'} component={HomeContainer} />
+      <CheckAuth exact path={'/history'} component={HistoryContainer} />
+      <CheckAuth exact path={'/budgets'} component={BudgetsContainer} />
+      <CheckAuth exact path={'/todo'} component={TodoContainer} />
+      <CheckAuth exact path={'/group/:group_id/home'} component={HomeContainer} />
+      <CheckAuth exact path={'/group/:group_id/history'} component={HistoryContainer} />
+      <CheckAuth exact path={'/group/:group_id/budgets'} component={BudgetsContainer} />
+      <CheckAuth exact path={'/group/:group_id/accounting'} component={YearlyAccountContainer} />
+      <CheckAuth exact path={'/group/:group_id/task'} component={Task} />
+      <CheckAuth exact path={'/group/:group_id/todo'} component={TodoContainer} />
     </Switch>
   );
 };

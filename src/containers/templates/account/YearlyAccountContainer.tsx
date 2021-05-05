@@ -9,7 +9,6 @@ import { fetchGroups } from '../../../reducks/groups/operations';
 import { fetchGroupYearlyAccountList } from '../../../reducks/groupTransactions/operations';
 import { GroupYearlyAccountList } from '../../../reducks/groupTransactions/types';
 import YearlyAccount from '../../../templates/account/YearlyAccount';
-import CheckAuth from '../../auth/CheckAuth';
 
 const YearlyAccountContainer = () => {
   const dispatch = useDispatch();
@@ -64,9 +63,14 @@ const YearlyAccountContainer = () => {
     return { color: style.color, borderBottom: style.underLine };
   };
 
+  const routingPayOff = (nextQueryPageQuery: { month: string }) => {
+    history.push({
+      search: decodeURIComponent(qs.stringify(nextQueryPageQuery)),
+    });
+  };
+
   return (
     <>
-      <CheckAuth />
       <YearlyAccount
         monthIndex={monthIndex}
         currentItem={currentItem}
@@ -79,11 +83,7 @@ const YearlyAccountContainer = () => {
         queryParams={queryParams}
         queryParamsLength={queryParamsLength}
         defaultStyle={defaultStyle}
-        routingPayOff={(nextQueryPageQuery) =>
-          history.push({
-            search: decodeURIComponent(qs.stringify(nextQueryPageQuery)),
-          })
-        }
+        routingPayOff={routingPayOff}
       />
     </>
   );

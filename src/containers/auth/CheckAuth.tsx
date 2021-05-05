@@ -1,11 +1,13 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useDispatch } from 'react-redux';
-import { fetchUserInfo } from '../../reducks/users/operations';
-import { push } from 'connected-react-router';
+import { Route, RouteProps } from 'react-router';
+import { Redirect } from 'react-router-dom';
 import axios from 'axios';
+import { fetchUserInfo } from '../../reducks/users/operations';
 
-const CheckAuth = () => {
+const CheckAuth: React.FC<RouteProps> = ({ ...rest }) => {
   const dispatch = useDispatch();
+  const [isLogin, setIsLogin] = useState(false);
 
   useEffect(() => {
     const signal = axios.CancelToken.source();
@@ -16,7 +18,7 @@ const CheckAuth = () => {
       } catch (error) {
         if (error.response.status === 401) {
           alert(error.response.data.error.message.toString());
-          dispatch(push('/login'));
+          setIsLogin(true);
         }
       }
     };
@@ -28,6 +30,6 @@ const CheckAuth = () => {
     };
   }, []);
 
-  return <></>;
+  return <Route>{!isLogin ? <Route {...rest} /> : <Redirect to={{ pathname: '/login' }} />}</Route>;
 };
 export default CheckAuth;
