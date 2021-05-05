@@ -98,6 +98,7 @@ export const addCustomCategories = (
       dispatch(
         failedAddCustomCategoryActions(error.response.status, error.response.data.error.message)
       );
+      throw error;
     }
   };
 };
@@ -146,6 +147,7 @@ export const editCustomCategories = (
       dispatch(
         failedEditCustomCategoryActions(error.response.status, error.response.data.error.message)
       );
+      throw error;
     }
   };
 };

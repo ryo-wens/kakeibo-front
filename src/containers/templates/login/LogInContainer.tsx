@@ -30,6 +30,14 @@ const LogInContainer = () => {
     return () => {}; // eslint-disable-line @typescript-eslint/no-empty-function
   }, [errorMessage]);
 
+  useEffect(() => {
+    const resetMessage = setTimeout(() => setMessage(''), 4000);
+
+    return () => {
+      clearTimeout(resetMessage);
+    };
+  }, [submit]);
+
   const inputEmail = (event: React.ChangeEvent<HTMLInputElement>) => {
     setEmail(event.target.value);
     setSubmit(false);
@@ -51,6 +59,20 @@ const LogInContainer = () => {
     minPasswordLength ||
     !isValidEmailFormat(email);
 
+  const logInOperation = () => {
+    dispatch(logIn(email, password));
+    setSubmit(true);
+  };
+
+  const guestLogInOperation = () => {
+    dispatch(logIn('kakeibo@gmail.com', 'kakeibo1'));
+  };
+
+  const routingSignUp = () => {
+    dispatch(push('/signup'));
+    dispatch(informErrorAction(''));
+  };
+
   return (
     <LogIn
       submit={submit}
@@ -66,16 +88,9 @@ const LogInContainer = () => {
       setEmailMessage={setEmailMessage}
       setPassWordMessage={setPassWordMessage}
       displayErrorIndication={displayErrorIndication}
-      logInOperation={() => {
-        dispatch(logIn(email, password));
-        setSubmit(true);
-        setTimeout(() => setMessage(''), 4500);
-      }}
-      guestLogInOperation={() => dispatch(logIn('kakeibo@gmail.com', 'kakeibo1'))}
-      routingSignUp={() => {
-        dispatch(push('/signup'));
-        dispatch(informErrorAction(''));
-      }}
+      logInOperation={logInOperation}
+      guestLogInOperation={guestLogInOperation}
+      routingSignUp={routingSignUp}
     />
   );
 };

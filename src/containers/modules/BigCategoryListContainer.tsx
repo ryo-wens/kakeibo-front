@@ -1,7 +1,6 @@
 import React, { useEffect } from 'react';
 import BigCategoryList from '../../components/modules/category/BigCategroyList';
 import { AssociatedCategory, Category } from '../../reducks/categories/types';
-import { Action, Dispatch } from 'redux';
 import axios from 'axios';
 import {
   addCustomCategories,
@@ -15,18 +14,11 @@ import {
 } from '../../reducks/groupCategories/operations';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
+import { getExpenseCategories, getIncomeCategories } from '../../reducks/categories/selectors';
 import {
-  getCategoriesErrorMessage,
-  getExpenseCategories,
-  getIncomeCategories,
-} from '../../reducks/categories/selectors';
-import {
-  getGroupCategoriesErrorMessage,
   getGroupExpenseCategories,
   getGroupIncomeCategories,
 } from '../../reducks/groupCategories/selectors';
-import { resetCategoriesErrorActions } from '../../reducks/categories/actions';
-import { resetGroupCategoriesErrorActions } from '../../reducks/groupCategories/actions';
 
 interface BigCategoryListContainerProps {
   transactionType: string;
@@ -62,24 +54,6 @@ const BigCategoryListContainer = (props: BigCategoryListContainerProps) => {
   const expenseCategories = useSelector(getExpenseCategories);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
-  const categoriesErrorMessage = useSelector(getCategoriesErrorMessage);
-  const groupCategoriesErrorMessage = useSelector(getGroupCategoriesErrorMessage);
-
-  useEffect(() => {
-    if (pathName !== 'group') {
-      if (categoriesErrorMessage.length) {
-        alert(categoriesErrorMessage);
-
-        dispatch(resetCategoriesErrorActions());
-      }
-    } else {
-      if (groupCategoriesErrorMessage.length) {
-        alert(groupCategoriesErrorMessage);
-
-        dispatch(resetGroupCategoriesErrorActions());
-      }
-    }
-  }, [categoriesErrorMessage, groupCategoriesErrorMessage]);
 
   const handleCloseBigCategoryMenu = (event: Event) => {
     if (
@@ -154,17 +128,6 @@ const BigCategoryListContainer = (props: BigCategoryListContainerProps) => {
     }
   };
 
-  const categoryOperationSwitching = (
-    operationFunction: (dispatch: Dispatch<Action>) => Promise<void>,
-    groupOperationFunction: (dispatch: Dispatch<Action>) => Promise<void>
-  ) => {
-    if (pathName !== 'group') {
-      dispatch(operationFunction);
-    } else if (pathName === 'group') {
-      dispatch(groupOperationFunction);
-    }
-  };
-
   const handleOpenEditCustomCategoryField = (
     event: React.MouseEvent<SVGSVGElement, MouseEvent>,
     associatedCategoryName: string,
@@ -182,55 +145,72 @@ const BigCategoryListContainer = (props: BigCategoryListContainerProps) => {
     props.setBigEditCategoryIndex(bigCategoriesIndex);
   };
 
-  const handleAddCustomCategory = (
+  const handleAddCustomCategory = async (
     event: React.MouseEvent<HTMLButtonElement, MouseEvent>,
     bigCategoryId: number,
     categoryType: string
   ) => {
-    const signal = axios.CancelToken.source();
-    event.stopPropagation();
-    document.removeEventListener(
-      'click',
-      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
-    );
-    props.setCustomCategoryName('');
-    categoryOperationSwitching(
-      addCustomCategories(props.customCategoryName, bigCategoryId, signal),
-      addGroupCustomCategories(props.customCategoryName, bigCategoryId, Number(group_id), signal)
-    );
+    try {
+      const signal = axios.CancelToken.source();
+      event.stopPropagation();
+      document.removeEventListener(
+        'click',
+        categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+      );
+      props.setCustomCategoryName('');
+      pathName !== 'group'
+        ? await dispatch(addCustomCategories(props.customCategoryName, bigCategoryId, signal))
+        : await dispatch(
+            addGroupCustomCategories(
+              props.customCategoryName,
+              bigCategoryId,
+              Number(group_id),
+              signal
+            )
+          );
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
-  const handleEditCustomCategory = (
+  const handleEditCustomCategory = async (
     event: React.MouseEvent<SVGSVGElement, MouseEvent>,
     associatedCategoryId: number,
     bigCategoryId: number,
     categoryType: string
   ) => {
-    const signal = axios.CancelToken.source();
-    event.stopPropagation();
-    document.removeEventListener(
-      'click',
-      categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
-    );
-    props.setEditCustomCategoryName('');
-    props.setAssociatedIndex(null);
-    props.setBigEditCategoryIndex(null);
+    try {
+      const signal = axios.CancelToken.source();
+      event.stopPropagation();
+      document.removeEventListener(
+        'click',
+        categoryType === 'bigCategory' ? handleCloseBigCategoryMenu : handleCloseMediumCategoryMenu
+      );
+      props.setEditCustomCategoryName('');
+      props.setAssociatedIndex(null);
+      props.setBigEditCategoryIndex(null);
 
-    categoryOperationSwitching(
-      editCustomCategories(
-        associatedCategoryId,
-        props.editCustomCategoryName,
-        bigCategoryId,
-        signal
-      ),
-      editGroupCustomCategories(
-        associatedCategoryId,
-        props.editCustomCategoryName,
-        bigCategoryId,
-        Number(group_id),
-        signal
-      )
-    );
+      pathName !== 'group'
+        ? await dispatch(
+            editCustomCategories(
+              associatedCategoryId,
+              props.editCustomCategoryName,
+              bigCategoryId,
+              signal
+            )
+          )
+        : await dispatch(
+            editGroupCustomCategories(
+              associatedCategoryId,
+              props.editCustomCategoryName,
+              bigCategoryId,
+              Number(group_id),
+              signal
+            )
+          );
+    } catch (error) {
+      alert(error.response.data.error.message.toString());
+    }
   };
 
   const handleDeleteCustomCategory = (
@@ -242,10 +222,16 @@ const BigCategoryListContainer = (props: BigCategoryListContainerProps) => {
     event.stopPropagation();
 
     if (window.confirm('カスタムカテゴリーを削除しますか？')) {
-      categoryOperationSwitching(
-        deleteCustomCategories(associatedCategoryId, bigCategoryId, signal),
-        deleteGroupCustomCategories(associatedCategoryId, bigCategoryId, Number(group_id), signal)
-      );
+      pathName !== 'group'
+        ? dispatch(deleteCustomCategories(associatedCategoryId, bigCategoryId, signal))
+        : dispatch(
+            deleteGroupCustomCategories(
+              associatedCategoryId,
+              bigCategoryId,
+              Number(group_id),
+              signal
+            )
+          );
     }
   };
 

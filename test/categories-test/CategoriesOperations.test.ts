@@ -156,10 +156,16 @@ describe('async actions categories', () => {
 
   it('If the incomeCategory you added already exists, it will output an error message and status code', async () => {
     const signal = axios.CancelToken.source();
+    const addedStore = mockStore({
+      categories: {
+        incomeList: addCategories.income_categories_list,
+        expenseList: addCategories.expense_categories_list,
+      },
+    });
     const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`;
 
     const addRequestIncomeCategory = {
-      name: '給与',
+      name: '失業手当',
       big_category_id: 1,
     };
 
@@ -200,8 +206,11 @@ describe('async actions categories', () => {
 
     axiosMock.onPost(addUrl, addRequestIncomeCategory).reply(409, errorResponse);
 
-    await addCustomCategories('給与', 1, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedAddIncomeCategoryFailActions);
+    try {
+      await addCustomCategories('失業手当', 1, signal)(addedStore.dispatch);
+    } catch (error) {
+      expect(addedStore.getActions()).toEqual(expectedAddIncomeCategoryFailActions);
+    }
   });
 
   it('If the expenseCategory you added already exists, it will output an error message and status code', async () => {
@@ -209,7 +218,7 @@ describe('async actions categories', () => {
     const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories/custom-categories`;
 
     const addRequestExpenseCategory = {
-      name: 'カフェ',
+      name: '調味料',
       big_category_id: 2,
     };
 
@@ -250,8 +259,11 @@ describe('async actions categories', () => {
 
     axiosMock.onPost(addUrl, addRequestExpenseCategory).reply(409, errorResponse);
 
-    await addCustomCategories('カフェ', 2, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedAddExpenseCategoryFailActions);
+    try {
+      await addCustomCategories('調味料', 2, signal)(store.dispatch);
+    } catch (error) {
+      expect(store.getActions()).toEqual(expectedAddExpenseCategoryFailActions);
+    }
   });
 
   it('Edit customCategory in income_categories_list if fetch succeeds', async () => {
@@ -387,8 +399,11 @@ describe('async actions categories', () => {
 
     axiosMock.onPut(editUrl, editRequestIncomeCategory).reply(409, errorResponse);
 
-    await editCustomCategories(14, '事業所得', 1, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedEditIncomeCategoryFailActions);
+    try {
+      await editCustomCategories(14, '事業所得', 1, signal)(store.dispatch);
+    } catch (error) {
+      expect(store.getActions()).toEqual(expectedEditIncomeCategoryFailActions);
+    }
   });
 
   it('If the expenseCategory you edited already exists, it will output an error message and status code', async () => {
@@ -438,8 +453,11 @@ describe('async actions categories', () => {
 
     axiosMock.onPut(editUrl, editRequestExpenseCategory).reply(409, errorResponse);
 
-    await editCustomCategories(21, '消耗品', 3, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedEditExpenseCategoryFailActions);
+    try {
+      await editCustomCategories(21, '消耗品', 3, signal)(store.dispatch);
+    } catch (error) {
+      expect(store.getActions()).toEqual(expectedEditExpenseCategoryFailActions);
+    }
   });
 
   it('If the id specified when deleting incomeCategory does not exist in the specified bigCategoryId, an error message and status code will be output', async () => {
