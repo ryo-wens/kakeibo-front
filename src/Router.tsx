@@ -8,7 +8,7 @@ import HistoryContainer from './containers/templates/history/HistoryContainer';
 import TodoContainer from './containers/templates/Todo/TodoContainer';
 import YearlyAccountContainer from './containers/templates/account/YearlyAccountContainer';
 import BudgetsContainer from './containers/templates/budgets/BudgetsContainer';
-import CheckAuth from './containers/auth/CheckAuth';
+import { PrivateRouter } from './containers/auth/PrivateRouter';
 
 const Router = (): JSX.Element => {
   return (
@@ -21,16 +21,20 @@ const Router = (): JSX.Element => {
        以下のコンポーネントはログイン時のみ表示される
        未ログイン状態で遷移した場合はリダイレクト処理が実行される
       */}
-      <CheckAuth exact path={'/home'} component={HomeContainer} />
-      <CheckAuth exact path={'/history'} component={HistoryContainer} />
-      <CheckAuth exact path={'/budgets'} component={BudgetsContainer} />
-      <CheckAuth exact path={'/todo'} component={TodoContainer} />
-      <CheckAuth exact path={'/group/:group_id/home'} component={HomeContainer} />
-      <CheckAuth exact path={'/group/:group_id/history'} component={HistoryContainer} />
-      <CheckAuth exact path={'/group/:group_id/budgets'} component={BudgetsContainer} />
-      <CheckAuth exact path={'/group/:group_id/accounting'} component={YearlyAccountContainer} />
-      <CheckAuth exact path={'/group/:group_id/task'} component={Task} />
-      <CheckAuth exact path={'/group/:group_id/todo'} component={TodoContainer} />
+      <PrivateRouter exact path={'/home'} component={HomeContainer} />
+      <PrivateRouter exact path={'/history'} component={HistoryContainer} />
+      <PrivateRouter exact path={'/budgets'} component={BudgetsContainer} />
+      <PrivateRouter exact path={'/todo'} component={TodoContainer} />
+      <PrivateRouter exact path={'/group/:group_id/home'} component={HomeContainer} />
+      <PrivateRouter exact path={'/group/:group_id/history'} component={HistoryContainer} />
+      <PrivateRouter exact path={'/group/:group_id/budgets'} component={BudgetsContainer} />
+      <PrivateRouter
+        exact
+        path={'/group/:group_id/accounting'}
+        component={YearlyAccountContainer}
+      />
+      <PrivateRouter exact path={'/group/:group_id/task'} component={Task} />
+      <PrivateRouter exact path={'/group/:group_id/todo'} component={TodoContainer} />
     </Switch>
   );
 };

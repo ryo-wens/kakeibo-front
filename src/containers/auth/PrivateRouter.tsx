@@ -5,7 +5,7 @@ import { Redirect } from 'react-router-dom';
 import axios from 'axios';
 import { fetchUserInfo } from '../../reducks/users/operations';
 
-const CheckAuth: React.FC<RouteProps> = ({ ...rest }) => {
+export const PrivateRouter: React.FC<RouteProps> = ({ ...rest }) => {
   const dispatch = useDispatch();
   const [isLogin, setIsLogin] = useState(false);
 
@@ -32,4 +32,3 @@ const CheckAuth: React.FC<RouteProps> = ({ ...rest }) => {
 
   return <Route>{!isLogin ? <Route {...rest} /> : <Redirect to={{ pathname: '/login' }} />}</Route>;
 };
-export default CheckAuth;
