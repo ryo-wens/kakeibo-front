@@ -268,22 +268,19 @@ export const deleteTransactions = (
   };
 };
 
-export const searchTransactions = (
-  signal: CancelTokenSource,
-  searchRequestData: {
-    transaction_type?: string | null;
-    start_date?: Date | null;
-    end_date?: Date | null;
-    shop?: string | null;
-    memo?: string | null;
-    low_amount?: string | number | null;
-    high_amount?: string | number | null;
-    big_category_id?: number | null;
-    sort?: string | null;
-    sort_type?: string | null;
-    limit?: string | null;
-  }
-) => {
+export const searchTransactions = (searchRequestData: {
+  transaction_type?: string | null;
+  start_date?: Date | null;
+  end_date?: Date | null;
+  shop?: string | null;
+  memo?: string | null;
+  low_amount?: string | number | null;
+  high_amount?: string | number | null;
+  big_category_id?: number | null;
+  sort?: string | null;
+  sort_type?: string | null;
+  limit?: string | null;
+}) => {
   return async (dispatch: Dispatch<Action>) => {
     dispatch(startSearchTransactionsActions());
 
@@ -291,7 +288,6 @@ export const searchTransactions = (
       const result = await accountServiceInstance.get<FetchTransactionsRes>(
         `/transactions/search`,
         {
-          cancelToken: signal.token,
           params: {
             start_date:
               searchRequestData.start_date !== null

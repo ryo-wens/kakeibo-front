@@ -55,11 +55,7 @@ export const fetchCategories = (signal: CancelTokenSource) => {
   };
 };
 
-export const addCustomCategories = (
-  name: string,
-  bigCategoryId: number,
-  signal: CancelTokenSource
-) => {
+export const addCustomCategories = (name: string, bigCategoryId: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const data: CrudCustomCategoryReq = {
       name: name.trim(),
@@ -80,7 +76,6 @@ export const addCustomCategories = (
       const fetchResult = await axios.get<FetchCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
         {
-          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -103,12 +98,7 @@ export const addCustomCategories = (
   };
 };
 
-export const editCustomCategories = (
-  id: number,
-  name: string,
-  bigCategoryId: number,
-  signal: CancelTokenSource
-) => {
+export const editCustomCategories = (id: number, name: string, bigCategoryId: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const data: CrudCustomCategoryReq = {
       name: name.trim(),
@@ -129,7 +119,6 @@ export const editCustomCategories = (
       const fetchResult = await axios.get<FetchCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
         {
-          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -152,11 +141,7 @@ export const editCustomCategories = (
   };
 };
 
-export const deleteCustomCategories = (
-  id: number,
-  bigCategoryId: number,
-  signal: CancelTokenSource
-) => {
+export const deleteCustomCategories = (id: number, bigCategoryId: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     dispatch(startDeleteCustomCategoryActions());
 
@@ -171,7 +156,6 @@ export const deleteCustomCategories = (
       const fetchResult = await axios.get<FetchCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/categories`,
         {
-          cancelToken: signal.token,
           withCredentials: true,
         }
       );

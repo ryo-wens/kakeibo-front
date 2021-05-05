@@ -31,7 +31,6 @@ const PayOffContainer = (props: PayOffContainerProps) => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
   const history = useHistory();
-  const signal: CancelTokenSource = axios.CancelToken.source();
   const groupAccountList = useSelector(getGroupAccountList);
   const badRequestMessage = useSelector(getStatusNotFoundMessage);
   const monthWithoutSplitList = useSelector(getMonthWithoutSplitList);
@@ -63,6 +62,7 @@ const PayOffContainer = (props: PayOffContainerProps) => {
   };
 
   useEffect(() => {
+    const signal: CancelTokenSource = axios.CancelToken.source();
     dispatch(fetchGroups(signal));
     if (selectMonth != null && selectYear !== null) {
       dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, selectMonth, signal));

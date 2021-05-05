@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import axios from 'axios';
 import {
   addCustomCategories,
   deleteCustomCategories,
@@ -147,7 +146,6 @@ const MediumCategoryListContainer = (props: MediumCategoryListContainerProps) =>
     categoryType: string
   ) => {
     try {
-      const signal = axios.CancelToken.source();
       event.stopPropagation();
       document.removeEventListener(
         'click',
@@ -155,14 +153,9 @@ const MediumCategoryListContainer = (props: MediumCategoryListContainerProps) =>
       );
       props.setCustomCategoryName('');
       pathName !== 'group'
-        ? await dispatch(addCustomCategories(props.customCategoryName, bigCategoryId, signal))
+        ? await dispatch(addCustomCategories(props.customCategoryName, bigCategoryId))
         : await dispatch(
-            addGroupCustomCategories(
-              props.customCategoryName,
-              bigCategoryId,
-              Number(group_id),
-              signal
-            )
+            addGroupCustomCategories(props.customCategoryName, bigCategoryId, Number(group_id))
           );
     } catch (error) {
       alert(error.response.data.error.message.toString());
@@ -176,7 +169,6 @@ const MediumCategoryListContainer = (props: MediumCategoryListContainerProps) =>
     categoryType: string
   ) => {
     try {
-      const signal = axios.CancelToken.source();
       event.stopPropagation();
       document.removeEventListener(
         'click',
@@ -188,20 +180,14 @@ const MediumCategoryListContainer = (props: MediumCategoryListContainerProps) =>
 
       pathName !== 'group'
         ? await dispatch(
-            editCustomCategories(
-              associatedCategoryId,
-              props.editCustomCategoryName,
-              bigCategoryId,
-              signal
-            )
+            editCustomCategories(associatedCategoryId, props.editCustomCategoryName, bigCategoryId)
           )
         : await dispatch(
             editGroupCustomCategories(
               associatedCategoryId,
               props.editCustomCategoryName,
               bigCategoryId,
-              Number(group_id),
-              signal
+              Number(group_id)
             )
           );
     } catch (error) {
@@ -214,19 +200,13 @@ const MediumCategoryListContainer = (props: MediumCategoryListContainerProps) =>
     associatedCategoryId: number,
     bigCategoryId: number
   ) => {
-    const signal = axios.CancelToken.source();
     event.stopPropagation();
 
     if (window.confirm('カスタムカテゴリーを削除しますか？')) {
       pathName !== 'group'
-        ? dispatch(deleteCustomCategories(associatedCategoryId, bigCategoryId, signal))
+        ? dispatch(deleteCustomCategories(associatedCategoryId, bigCategoryId))
         : dispatch(
-            deleteGroupCustomCategories(
-              associatedCategoryId,
-              bigCategoryId,
-              Number(group_id),
-              signal
-            )
+            deleteGroupCustomCategories(associatedCategoryId, bigCategoryId, Number(group_id))
           );
     }
   };
