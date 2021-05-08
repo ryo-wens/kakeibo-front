@@ -1,6 +1,4 @@
 import React from 'react';
-import { push } from 'connected-react-router';
-import { Action, Dispatch } from 'redux';
 
 export const isValidBudgetFormat = (budget: number) => {
   const regex = /^([1-9]\d*|0)$/;
@@ -30,22 +28,6 @@ export const isValidUserInfoFormat = (userId: string) => {
 export const isValidPreventBeginningZero = (value: number) => {
   const regexp = /^0/;
   return regexp.test(String(value));
-};
-
-export const errorHandling = (
-  dispatch: Dispatch<Action>,
-  error: {
-    response: { data: { error: { message: string } }; status: number };
-  }
-) => {
-  if (error && error.response) {
-    alert(error.response.data.error.message);
-    if (error.response.status === 401) {
-      dispatch(push('/login'));
-    }
-  } else {
-    alert(error);
-  }
 };
 
 export const totalStandardBudget = (standardBudget: number[]): number => {

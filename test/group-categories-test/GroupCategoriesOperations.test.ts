@@ -163,7 +163,7 @@ describe('async actions groupCategories', () => {
     const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories`;
 
     const requestGroupIncomeCategory = {
-      name: '賞与',
+      name: '給付金',
       big_category_id: 1,
     };
 
@@ -204,8 +204,11 @@ describe('async actions groupCategories', () => {
 
     axiosMock.onPost(addUrl, requestGroupIncomeCategory).reply(409, errorResponse);
 
-    await addGroupCustomCategories('賞与', 1, groupId, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedAddGroupIncomeCategoryFailActions);
+    try {
+      await addGroupCustomCategories('給付金', 1, groupId, signal)(store.dispatch);
+    } catch (error) {
+      expect(store.getActions()).toEqual(expectedAddGroupIncomeCategoryFailActions);
+    }
   });
 
   it('If the groupExpenseCategory you added already exists, it will output an error message and status code', async () => {
@@ -214,7 +217,7 @@ describe('async actions groupCategories', () => {
     const addUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories`;
 
     const requestGroupExpenseCategory = {
-      name: '朝食',
+      name: '宮崎牛',
       big_category_id: 2,
     };
 
@@ -255,8 +258,11 @@ describe('async actions groupCategories', () => {
 
     axiosMock.onPost(addUrl, requestGroupExpenseCategory).reply(409, errorResponse);
 
-    await addGroupCustomCategories('朝食', 2, groupId, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedAddGroupExpenseCategoryFailActions);
+    try {
+      await addGroupCustomCategories('宮崎牛', 2, groupId, signal)(store.dispatch);
+    } catch (error) {
+      expect(store.getActions()).toEqual(expectedAddGroupExpenseCategoryFailActions);
+    }
   });
 
   it('Edit groupCustomGroupCategory in income_categories_list if fetch succeeds', async () => {
@@ -355,7 +361,7 @@ describe('async actions groupCategories', () => {
     const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`;
 
     const requestGroupIncomeCategory = {
-      name: '給与',
+      name: '宝くじ',
       big_category_id: 1,
     };
 
@@ -396,8 +402,11 @@ describe('async actions groupCategories', () => {
 
     axiosMock.onPut(editUrl, requestGroupIncomeCategory).reply(409, errorResponse);
 
-    await editGroupCustomCategories(24, '給与', 1, groupId, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedEditGroupIncomeCategoryFailActions);
+    try {
+      await editGroupCustomCategories(24, '宝くじ', 1, groupId, signal)(store.dispatch);
+    } catch (error) {
+      expect(store.getActions()).toEqual(expectedEditGroupIncomeCategoryFailActions);
+    }
   });
 
   it('If the groupExpenseCategory you edited already exists, it will output an error message and status code', async () => {
@@ -407,8 +416,8 @@ describe('async actions groupCategories', () => {
     const editUrl = `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories/custom-categories/${id}`;
 
     const requestGroupExpenseCategory = {
-      name: '飲み会',
-      big_category_id: 5,
+      name: 'シュークリーム',
+      big_category_id: 2,
     };
 
     const errorResponse = {
@@ -448,8 +457,11 @@ describe('async actions groupCategories', () => {
 
     axiosMock.onPut(editUrl, requestGroupExpenseCategory).reply(409, errorResponse);
 
-    await editGroupCustomCategories(29, '飲み会', 5, groupId, signal)(store.dispatch);
-    expect(store.getActions()).toEqual(expectedEditGroupIncomeCategoryFailActions);
+    try {
+      await editGroupCustomCategories(29, 'シュークリーム', 2, groupId, signal)(store.dispatch);
+    } catch (error) {
+      expect(store.getActions()).toEqual(expectedEditGroupIncomeCategoryFailActions);
+    }
   });
 
   it('If the id specified when deleting groupIncomeCategory does not exist in the specified bigCategoryId, an error message and status code will be output', async () => {

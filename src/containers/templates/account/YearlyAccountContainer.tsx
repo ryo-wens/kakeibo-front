@@ -63,25 +63,29 @@ const YearlyAccountContainer = () => {
     return { color: style.color, borderBottom: style.underLine };
   };
 
+  const routingPayOff = (nextQueryPageQuery: { month: string }) => {
+    history.push({
+      search: decodeURIComponent(qs.stringify(nextQueryPageQuery)),
+    });
+  };
+
   return (
-    <YearlyAccount
-      monthIndex={monthIndex}
-      currentItem={currentItem}
-      setCurrentItem={setCurrentItem}
-      selectedYear={selectedYear}
-      setSelectedYear={setSelectedYear}
-      yearlyAccount={yearlyAccount}
-      searchLocation={searchLocation}
-      singleDigitMonth={singleDigitMonth}
-      queryParams={queryParams}
-      queryParamsLength={queryParamsLength}
-      defaultStyle={defaultStyle}
-      routingPayOff={(nextQueryPageQuery) =>
-        history.push({
-          search: decodeURIComponent(qs.stringify(nextQueryPageQuery)),
-        })
-      }
-    />
+    <>
+      <YearlyAccount
+        monthIndex={monthIndex}
+        currentItem={currentItem}
+        setCurrentItem={setCurrentItem}
+        selectedYear={selectedYear}
+        setSelectedYear={setSelectedYear}
+        yearlyAccount={yearlyAccount}
+        searchLocation={searchLocation}
+        singleDigitMonth={singleDigitMonth}
+        queryParams={queryParams}
+        queryParamsLength={queryParamsLength}
+        defaultStyle={defaultStyle}
+        routingPayOff={routingPayOff}
+      />
+    </>
   );
 };
 export default YearlyAccountContainer;

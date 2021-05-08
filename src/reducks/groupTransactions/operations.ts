@@ -62,7 +62,7 @@ import {
   GroupTransactionsList,
   GroupYearlyAccountList,
 } from './types';
-import { errorHandling, isValidAmountFormat } from '../../lib/validation';
+import { isValidAmountFormat } from '../../lib/validation';
 import dayjs from 'dayjs';
 
 export const fetchGroupTransactionsList = (
@@ -486,7 +486,6 @@ export const deleteGroupAccount = (groupId: number, year: string, customMonth: s
       dispatch(
         failedDeleteGroupAccountAction(error.response.status, error.response.data.error.message)
       );
-      errorHandling(dispatch, error);
     }
   };
 };

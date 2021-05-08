@@ -10,7 +10,6 @@ import {
   getGroupIncomeCategories,
 } from '../../../reducks/groupCategories/selectors';
 import { getYearlyAccountListStatus } from '../../../reducks/groupTransactions/selectors';
-import { fetchUserInfo } from '../../../reducks/users/operations';
 import { fetchGroupCategories } from '../../../reducks/groupCategories/operations';
 import { addTransactions } from '../../../reducks/transactions/operations';
 import {
@@ -88,11 +87,6 @@ const InputFormContainer = () => {
   };
 
   const displayMessageDecision = displayMessage();
-
-  useEffect(() => {
-    const signal = axios.CancelToken.source();
-    dispatch(fetchUserInfo(signal));
-  }, []);
 
   useEffect(() => {
     setPaymentUserId(userId);

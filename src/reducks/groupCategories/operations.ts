@@ -99,6 +99,8 @@ export const addGroupCustomCategories = (
       dispatch(
         failedAddGroupCategoriesActions(error.response.status, error.response.data.error.message)
       );
+
+      throw error;
     }
   };
 };
@@ -146,6 +148,8 @@ export const editGroupCustomCategories = (
       }
     } catch (error) {
       dispatch(failedEditGroupCategories(error.response.status, error.response.data.error.message));
+
+      throw error;
     }
   };
 };
