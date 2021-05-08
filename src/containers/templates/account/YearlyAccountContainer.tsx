@@ -21,7 +21,6 @@ const YearlyAccountContainer = () => {
   const queryParams = qs.parse(searchLocation);
   const getQuery = new URLSearchParams(searchLocation);
   const queryYear = getQuery.get('year');
-  const signal: CancelTokenSource = axios.CancelToken.source();
   const yearlyAccountList = useSelector(getGroupYearlyAccountList);
   const [selectedYear, setSelectedYear] = useState<number>(Number(queryYear));
   const [currentItem, setCurrentItem] = useState<boolean>(false);
@@ -31,6 +30,7 @@ const YearlyAccountContainer = () => {
   });
 
   useEffect(() => {
+    const signal: CancelTokenSource = axios.CancelToken.source();
     const interval = setInterval(() => {
       dispatch(fetchGroups(signal));
       dispatch(fetchGroupYearlyAccountList(Number(group_id), Number(queryYear), signal));
@@ -42,6 +42,7 @@ const YearlyAccountContainer = () => {
   }, [group_id, queryYear]);
 
   useEffect(() => {
+    const signal: CancelTokenSource = axios.CancelToken.source();
     dispatch(fetchGroupYearlyAccountList(Number(group_id), Number(queryYear), signal));
   }, [queryYear]);
 

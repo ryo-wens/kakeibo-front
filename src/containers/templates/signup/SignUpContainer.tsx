@@ -131,6 +131,20 @@ const SignUpContainer = () => {
     userIdConflictCheck ||
     emailConflictCheck;
 
+  const signUpOperation = () => {
+    dispatch(signUp(userId, userName, email, password, confirmPassword));
+    const emptyMessage: ConflictMessage = { id: '', email: '' };
+    dispatch(conflictMessageAction(emptyMessage));
+    setSubmit(true);
+  };
+
+  const routingLogin = () => {
+    const emptyMessage: ConflictMessage = { id: '', email: '' };
+    dispatch(informErrorAction(''));
+    dispatch(conflictMessageAction(emptyMessage));
+    dispatch(push('/login'));
+  };
+
   return (
     <SignUp
       submit={submit}
@@ -162,18 +176,8 @@ const SignUpContainer = () => {
       setPassWordMessage={setPassWordMessage}
       setConfirmPasswordMessage={setConfirmPasswordMessage}
       displayErrorIndication={displayErrorIndication}
-      signUpOperation={() => {
-        dispatch(signUp(userId, userName, email, password, confirmPassword));
-        const emptyMessage: ConflictMessage = { id: '', email: '' };
-        dispatch(conflictMessageAction(emptyMessage));
-        setSubmit(true);
-      }}
-      routingLogin={() => {
-        const emptyMessage: ConflictMessage = { id: '', email: '' };
-        dispatch(informErrorAction(''));
-        dispatch(conflictMessageAction(emptyMessage));
-        dispatch(push('/login'));
-      }}
+      signUpOperation={signUpOperation}
+      routingLogin={routingLogin}
     />
   );
 };

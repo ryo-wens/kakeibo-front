@@ -4,7 +4,6 @@ import { Groups } from '../../../reducks/groups/types';
 import SearchTransactionsField from '../../../components/history/search/SearchTransactionsField';
 import { searchTransactions } from '../../../reducks/transactions/operations';
 import { searchGroupTransactions } from '../../../reducks/groupTransactions/operations';
-import axios from 'axios';
 
 interface SearchTransactionsFieldContainerProps {
   pathName: string;
@@ -72,6 +71,14 @@ interface SearchTransactionsFieldContainerProps {
 const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContainerProps) => {
   const dispatch = useDispatch();
 
+  const searchOperation = () => {
+    dispatch(searchTransactions(props.searchRequestData));
+  };
+
+  const groupSearchOperation = () => {
+    dispatch(searchGroupTransactions(props.groupId, props.groupSearchRequestData));
+  };
+
   return (
     <SearchTransactionsField
       groupId={props.groupId}
@@ -105,14 +112,8 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
       changeSortItem={props.changeSortItem}
       changeSortType={props.changeSortType}
       selectLimit={props.selectLimit}
-      searchOperation={() => {
-        const signal = axios.CancelToken.source();
-        dispatch(searchTransactions(signal, props.searchRequestData));
-      }}
-      groupSearchOperation={() => {
-        const signal = axios.CancelToken.source();
-        dispatch(searchGroupTransactions(props.groupId, signal, props.groupSearchRequestData));
-      }}
+      searchOperation={searchOperation}
+      groupSearchOperation={groupSearchOperation}
     />
   );
 };
