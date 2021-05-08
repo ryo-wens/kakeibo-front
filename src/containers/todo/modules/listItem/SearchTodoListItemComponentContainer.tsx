@@ -193,17 +193,17 @@ const SearchTodoListItemComponentContainer = (props: SearchTodoListItemComponent
       dueDate={dueDate}
       todoContent={todoContent}
       checked={checked}
+      listItemTodoContent={props.listItem.todo_content}
       handleImplementationDate={handleImplementationDate}
       handleDueDate={handleDueDate}
       handleTodoContentChange={handleTodoContentChange}
       handleChangeChecked={handleChangeChecked}
-      listItem={props.listItem}
       handleOpenEditTodoForm={handleOpenEditTodoForm}
       handleCloseEditTodoForm={handleCloseEditTodoForm}
       onClickCloseInputTodoForm={onClickCloseInputTodoForm}
       disabledButton={disabledButton()}
-      handleEditTodoListItem={() => handleEditTodoListItem()}
-      handleDeleteTodoListItem={() => handleDeleteTodoListItem()}
+      handleEditTodoListItem={handleEditTodoListItem}
+      handleDeleteTodoListItem={handleDeleteTodoListItem}
       currentPage={currentPage}
       formClassName={props.formClassName}
       inputTodoRef={inputTodoRef}
