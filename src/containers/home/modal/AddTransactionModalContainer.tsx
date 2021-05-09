@@ -2,7 +2,6 @@ import React, { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import axios from 'axios';
-import { getApprovedGroups } from '../../../reducks/groups/selectors';
 import { getUserId } from '../../../reducks/users/selectors';
 import { getExpenseCategories, getIncomeCategories } from '../../../reducks/categories/selectors';
 import {
@@ -20,6 +19,7 @@ import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { customMonth, year } from '../../../lib/constant';
 import { isValidAmountFormat } from '../../../lib/validation';
 import AddTransactionModal from '../../../components/home/modal/AddTransactionModal';
+import { useCreateGroupUserList } from '../../../hooks/groupUsers/useCreateGroupUserList';
 
 interface AddTransactionModalContainerProps {
   open: boolean;
@@ -41,7 +41,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const pathName = useLocation().pathname.split('/')[1];
   const groupCurrentPage = useLocation().pathname.split('/')[2];
   const userId = useSelector(getUserId);
-  const approvedGroup = useSelector(getApprovedGroups);
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
@@ -72,6 +71,9 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
+  const { createUsersList } = useCreateGroupUserList();
+
+  const selectUsersItemList = createUsersList(Number(group_id));
 
   const addTransactionDate = {
     addTransactionYear: 0,
@@ -290,7 +292,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       open={props.open}
       onClose={props.onClose}
       selectDate={props.selectDate}
-      groupId={Number(group_id)}
       pathName={pathName}
       unInput={unInput}
       addDisabled={transactionsDisabled.addDisabled}
@@ -324,7 +325,6 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       changePayer={changePayer}
       changeShop={changeShop}
       changeMemo={changeMemo}
-      approvedGroup={approvedGroup}
       incomeCategories={incomeCategories}
       expenseCategories={expenseCategories}
       groupIncomeCategories={groupIncomeCategories}
@@ -344,6 +344,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
       setAssociatedIndex={setAssociatedIndex}
       setBigEditCategoryIndex={setBigEditCategoryIndex}
       setEditCustomCategoryName={setEditCustomCategoryName}
+      selectUsersItemList={selectUsersItemList}
     />
   );
 };

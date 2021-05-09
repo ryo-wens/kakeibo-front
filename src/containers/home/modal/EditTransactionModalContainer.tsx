@@ -14,7 +14,6 @@ import {
   deleteTransactions,
   deleteSearchTransactions,
 } from '../../../reducks/transactions/operations';
-import { getApprovedGroups } from '../../../reducks/groups/selectors';
 import { getExpenseCategories, getIncomeCategories } from '../../../reducks/categories/selectors';
 import {
   getGroupExpenseCategories,
@@ -27,6 +26,7 @@ import EditTransactionModal from '../../../components/home/modal/EditTransaction
 import { isValidAmountFormat } from '../../../lib/validation';
 import { year, customMonth } from '../../../lib/constant';
 import axios from 'axios';
+import { useCreateGroupUserList } from '../../../hooks/groupUsers/useCreateGroupUserList';
 
 interface EditTransactionModalContainerProps {
   open: boolean;
@@ -87,7 +87,6 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
   const groupExpenseCategories = useSelector(getGroupExpenseCategories);
   const accountingStatus = useSelector(getYearlyAccountListStatusModals);
-  const approvedGroup = useSelector(getApprovedGroups);
   const expenseBigCategoryIndex = props.bigCategoryId - 2;
   const adjustTransactionDate = props.transactionDate.replace('/', '-').slice(0, 10);
   const changeTypeTransactionDate = new Date(adjustTransactionDate);
@@ -117,6 +116,9 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
+  const { createUsersList } = useCreateGroupUserList();
+
+  const selectUsersItemList = createUsersList(Number(group_id));
 
   const unEditValue = {
     unEditBigCategory: '',
@@ -439,9 +441,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
       unInput={editDisabled}
       unEditInputForm={editDisabledOnPayOff.unEditInputForm}
       editDisabled={editDisabledOnPayOff.editDisabled}
-      group_id={Number(group_id)}
       pathName={pathName}
-      approvedGroups={approvedGroup}
       transactionId={transactionId}
       open={props.open}
       onClose={props.onClose}
@@ -492,6 +492,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
       setAssociatedCategory={setAssociatedCategory}
       setCustomCategoryName={setCustomCategoryName}
       setEditCustomCategoryName={setEditCustomCategoryName}
+      selectUsersItemList={selectUsersItemList}
     />
   );
 };

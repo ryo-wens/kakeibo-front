@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from 'react';
-import { Groups } from '../../../reducks/groups/types';
 import SearchTransaction from '../../../components/history/search/SearchTransaction';
 import { useSelector } from 'react-redux';
 import { getSearchTransactions } from '../../../reducks/transactions/selectors';
@@ -36,7 +35,6 @@ interface SearchTransactionContainerProps {
   category: string;
   bigCategoryId: number;
   transactionType: string;
-  approvedGroup: Groups;
   paymentUserId: string;
   sortItem: string;
   sortType: string;
@@ -50,7 +48,7 @@ const SearchTransactionContainer = (props: SearchTransactionContainerProps) => {
   const [searchTransaction, setSearchTransaction] = useState<TransactionsList>([]);
   const [groupSearchTransaction, setGroupSearchTransaction] = useState<GroupTransactionsList>([]);
   const searchResults = searchTransaction.length === 0;
-  const displaySearchTransactionResult = props.submit && props.openSearchField && !searchResults;
+  const displaySearchTransactionResult = props.submit && props.openSearchField;
 
   useEffect(() => {
     setSearchTransaction(searchTransactions);
@@ -95,7 +93,9 @@ const SearchTransactionContainer = (props: SearchTransactionContainerProps) => {
 
   const resetSearchTransactionsList = () => {
     props.closeSearch();
+    props.setSearchSubmit(false);
     setSearchTransaction([]);
+    setGroupSearchTransaction([]);
   };
 
   return (
@@ -107,7 +107,6 @@ const SearchTransactionContainer = (props: SearchTransactionContainerProps) => {
       openSearch={props.openSearch}
       closeSearch={props.closeSearch}
       displaySearchTransactionResult={displaySearchTransactionResult}
-      approvedGroup={props.approvedGroup}
       selectStartDate={props.selectStartDate}
       selectEndDate={props.selectEndDate}
       transactionType={props.transactionType}

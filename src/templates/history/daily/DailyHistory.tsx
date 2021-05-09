@@ -1,5 +1,4 @@
 import React from 'react';
-import { Groups } from '../../../reducks/groups/types';
 import { TransactionsList } from '../../../reducks/transactions/types';
 import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
 import SearchTransactionContainer from '../../../containers/history/search/SearchTransactionContainer';
@@ -31,7 +30,6 @@ interface DailyHistoryProps {
   notSpecified: boolean;
   displayPersonalTransactions: boolean;
   displayGroupTransactions: boolean;
-  approvedGroup: Groups;
   transactionsList: TransactionsList;
   groupTransactionsList: GroupTransactionsList;
   searchFieldOpen: () => void;
@@ -79,7 +77,6 @@ const DailyHistory = (props: DailyHistoryProps) => {
           inputHighAmount={props.inputHighAmount}
           inputLowAmount={props.inputLowAmount}
           groupId={props.group_id}
-          approvedGroup={props.approvedGroup}
           paymentUserId={props.paymentUserId}
           changePayer={props.changePayer}
           changeSortItem={props.changeSortItem}

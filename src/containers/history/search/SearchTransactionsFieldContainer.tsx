@@ -1,9 +1,9 @@
 import React from 'react';
 import { useDispatch } from 'react-redux';
-import { Groups } from '../../../reducks/groups/types';
 import SearchTransactionsField from '../../../components/history/search/SearchTransactionsField';
 import { searchTransactions } from '../../../reducks/transactions/operations';
 import { searchGroupTransactions } from '../../../reducks/groupTransactions/operations';
+import { useCreateGroupUserList } from '../../../hooks/groupUsers/useCreateGroupUserList';
 
 interface SearchTransactionsFieldContainerProps {
   pathName: string;
@@ -34,7 +34,6 @@ interface SearchTransactionsFieldContainerProps {
   category: string;
   bigCategoryId: number;
   transactionType: string;
-  approvedGroup: Groups;
   paymentUserId: string;
   sortItem: string;
   sortType: string;
@@ -70,6 +69,10 @@ interface SearchTransactionsFieldContainerProps {
 
 const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContainerProps) => {
   const dispatch = useDispatch();
+  const { createUsersList } = useCreateGroupUserList();
+
+  const selectUsersItemList = createUsersList(props.groupId);
+  selectUsersItemList.unshift({ value: '', label: '指定しない' });
 
   const searchOperation = () => {
     dispatch(searchTransactions(props.searchRequestData));
@@ -97,7 +100,6 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
       sortItem={props.sortItem}
       sortType={props.sortType}
       limit={props.limit}
-      approvedGroup={props.approvedGroup}
       resetSearchTransactionsList={props.resetSearchTransactionsList}
       setSearchSubmit={props.setSearchSubmit}
       selectStartDateChange={props.selectStartDateChange}
@@ -114,6 +116,7 @@ const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContaine
       selectLimit={props.selectLimit}
       searchOperation={searchOperation}
       groupSearchOperation={groupSearchOperation}
+      selectUsersItemList={selectUsersItemList}
     />
   );
 };

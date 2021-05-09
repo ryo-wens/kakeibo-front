@@ -1,5 +1,5 @@
 import React from 'react';
-import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../../uikit';
+import { GenericButton, DatePicker, TextInput } from '../../uikit';
 import Modal from '@material-ui/core/Modal';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import { TransactionsReq } from '../../../reducks/transactions/types';
@@ -7,10 +7,12 @@ import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import CloseIcon from '@material-ui/icons/Close';
 import { Categories } from '../../../reducks/categories/types';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
-import { Groups } from '../../../reducks/groups/types';
 import './transaction-modal.scss';
 import BigCategoryListContainer from '../../../containers/modules/BigCategoryListContainer';
 import MediumCategoryListContainer from '../../../containers/modules/MediumCategoryListContainer';
+import { Select } from '../../uikit/Select';
+import { selectTransactionsType } from '../../../lib/constant';
+import { SelectItemList } from '../../../lib/types';
 
 interface AddTransactionModalProps {
   open: boolean;
@@ -19,7 +21,6 @@ interface AddTransactionModalProps {
   year: number;
   month: number;
   resetForm: () => void;
-  groupId: number;
   pathName: string;
   unInput: boolean;
   addDisabled: boolean;
@@ -44,7 +45,6 @@ interface AddTransactionModalProps {
   setCustomCategoryName: React.Dispatch<React.SetStateAction<string>>;
   setBigCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
   setMediumCategoryMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  approvedGroup: Groups;
   incomeCategories: Categories;
   expenseCategories: Categories;
   groupIncomeCategories: GroupCategories;
@@ -72,6 +72,7 @@ interface AddTransactionModalProps {
   associatedIndex: number | null;
   customCategoryName: string;
   editCustomCategoryName: string;
+  selectUsersItemList: SelectItemList;
 }
 
 const AddTransactionModal = (props: AddTransactionModalProps) => {
@@ -107,12 +108,11 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
             minDate={new Date('1900-01-01')}
           />
           <div className="transaction-modal__form-content--spacer-small" />
-          <KindSelectBox
-            onChange={props.changeTransactionType}
-            required={true}
-            value={props.transactionType}
+          <Select
+            defaultValue={'expense'}
             disabled={props.unEditInputForm}
-            currentPage={''}
+            changeItem={props.changeTransactionType}
+            selectItemList={selectTransactionsType}
           />
           <div className="transaction-modal__form-content--spacer-small" />
           <TextInput
@@ -128,15 +128,11 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           <div className="transaction-modal__form-content--spacer-medium" />
           {props.pathName === 'group' && (
             <>
-              <SelectPayer
-                approvedGroups={props.approvedGroup}
-                groupId={props.groupId}
-                onChange={props.changePayer}
-                pathName={props.pathName}
-                required={true}
-                value={props.paymentUserId}
+              <Select
                 disabled={props.unEditInputForm}
-                notSpecified={false}
+                defaultValue={props.paymentUserId}
+                selectItemList={props.selectUsersItemList}
+                changeItem={props.changePayer}
               />
               <div className="transaction-modal__form-content--spacer-medium" />
             </>

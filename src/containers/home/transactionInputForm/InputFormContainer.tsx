@@ -21,6 +21,7 @@ import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { isValidAmountFormat } from '../../../lib/validation';
 import { year, customMonth } from '../../../lib/constant';
 import InputForm from '../../../components/home/transactionInputForm/InputForm';
+import { useCreateGroupUserList } from '../../../hooks/groupUsers/useCreateGroupUserList';
 
 const initialState = {
   initialAmount: '',
@@ -61,6 +62,9 @@ const InputFormContainer = () => {
   const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
+  const { createUsersList } = useCreateGroupUserList();
+
+  const selectUsersItemList = createUsersList(Number(group_id));
 
   const addTransactionDate = {
     addTransactionYear: 0,
@@ -257,6 +261,7 @@ const InputFormContainer = () => {
       setAssociatedIndex={setAssociatedIndex}
       setBigCategoryIndex={setBigCategoryIndex}
       setBigEditCategoryIndex={setBigEditCategoryIndex}
+      selectUsersItemList={selectUsersItemList}
     />
   );
 };

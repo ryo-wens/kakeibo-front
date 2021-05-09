@@ -2,11 +2,14 @@ import React from 'react';
 import { Groups } from '../../../reducks/groups/types';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
 import { Categories } from '../../../reducks/categories/types';
-import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../../uikit';
+import { GenericButton, DatePicker, TextInput } from '../../uikit';
 import AddCircleOutlineIcon from '@material-ui/icons/AddCircleOutline';
 import './input-form.scss';
 import BigCategoryListContainer from '../../../containers/modules/BigCategoryListContainer';
 import MediumCategoryListContainer from '../../../containers/modules/MediumCategoryListContainer';
+import { Select } from '../../uikit/Select';
+import { selectTransactionsType } from '../../../lib/constant';
+import { SelectItemList } from '../../../lib/types';
 
 interface InputFormProps {
   group_id: number;
@@ -60,6 +63,7 @@ interface InputFormProps {
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  selectUsersItemList: SelectItemList;
 }
 
 const InputForm = (props: InputFormProps) => {
@@ -83,12 +87,11 @@ const InputForm = (props: InputFormProps) => {
         />
         <div className="input-form__form-content--spacer-small" />
         <p className="input-form__form-title">収支タイプ(必須)</p>
-        <KindSelectBox
-          onChange={props.changeTransactionType}
-          required={true}
-          value={props.transactionsType}
+        <Select
           disabled={false}
-          currentPage={''}
+          defaultValue={'expense'}
+          selectItemList={selectTransactionsType}
+          changeItem={props.changeTransactionType}
         />
         <div className="input-form__form-content--spacer-small" />
         <TextInput
@@ -105,15 +108,11 @@ const InputForm = (props: InputFormProps) => {
         {props.pathName === 'group' && (
           <>
             <p className="input-form__form-title">支払者(必須)</p>
-            <SelectPayer
-              onChange={props.changePayer}
-              required={true}
-              value={props.paymentUserId}
-              approvedGroups={props.approvedGroups}
-              groupId={props.group_id}
-              pathName={props.pathName}
+            <Select
+              changeItem={props.changePayer}
+              defaultValue={props.paymentUserId}
               disabled={false}
-              notSpecified={false}
+              selectItemList={props.selectUsersItemList}
             />
             <div className="input-form__form-content--spacer-medium" />
           </>

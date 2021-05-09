@@ -1,5 +1,4 @@
 import React from 'react';
-import { Groups } from '../../../reducks/groups/types';
 import { TransactionsList } from '../../../reducks/transactions/types';
 import { GroupTransactionsList } from '../../../reducks/groupTransactions/types';
 import SearchTransactionsFieldContainer from '../../../containers/history/search/SearchTransactionsFieldContainer';
@@ -42,7 +41,6 @@ interface SearchTransactionProps {
   category: string;
   bigCategoryId: number;
   transactionType: string;
-  approvedGroup: Groups;
   paymentUserId: string;
   sortItem: string;
   sortType: string;
@@ -112,7 +110,6 @@ const SearchTransaction = (props: SearchTransactionProps) => {
           inputHighAmount={props.inputHighAmount}
           inputLowAmount={props.inputLowAmount}
           groupId={props.groupId}
-          approvedGroup={props.approvedGroup}
           paymentUserId={props.paymentUserId}
           changePayer={props.changePayer}
           changeSortItem={props.changeSortItem}

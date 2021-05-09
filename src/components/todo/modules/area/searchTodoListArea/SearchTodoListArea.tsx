@@ -1,16 +1,16 @@
 import React from 'react';
-import {
-  DatePicker,
-  SelectLimit,
-  SelectSortType,
-  TextInput,
-} from '../../../../../components/uikit';
+import { DatePicker, TextInput } from '../../../../../components/uikit';
+import { Select } from '../../../../uikit/Select';
 import ChevronLeftIcon from '@material-ui/icons/ChevronLeft';
 import SearchResultTodoListContainer from '../../../../../containers/todo/modules/area/searchTodoListArea/searchResultTodoList/SearchResultTodoListContainer';
-import SelectSortItem from '../../select/SelectSortItem';
-import SelectCompleteFlag from '../../select/SelectCompleteFlag';
-import SelectDateType from '../../../../../components/todo/modules/select/SelectDateType';
 import { FetchSearchTodoListReq } from '../../../../../reducks/todoList/types';
+import {
+  selectDateType,
+  selectLimitList,
+  selectSortTypeList,
+  selectSortItemList,
+  selectCompleteFlagList,
+} from '../../../../../lib/constant';
 import styles from './SearchTodoListArea.module.scss';
 
 interface SearchTodoListAreaProps {
@@ -43,10 +43,11 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       key: '日時の指定',
       value: (
         <div className={styles.dateDesignation}>
-          <SelectDateType
-            value={props.dateType}
-            id={'dateType'}
-            selectChange={props.handleSelectDateTypeChange}
+          <Select
+            disabled={false}
+            selectItemList={selectDateType}
+            defaultValue={'implementation_date'}
+            changeItem={props.handleSelectDateTypeChange}
           />
           <div className={styles.datePickers}>
             <DatePicker
@@ -75,10 +76,11 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
     {
       key: '実施の有無',
       value: (
-        <SelectCompleteFlag
-          id={'select-complete-flag'}
-          value={props.completeFlag}
-          selectChange={props.handleSelectCompleteFlagChange}
+        <Select
+          disabled={false}
+          defaultValue={'all'}
+          selectItemList={selectCompleteFlagList}
+          changeItem={props.handleSelectCompleteFlagChange}
         />
       ),
     },
@@ -100,20 +102,35 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
     {
       key: '並び替え項目',
       value: (
-        <SelectSortItem
-          id={'sortItem'}
-          value={props.sortItem}
-          selectChange={props.handleSelectSortItem}
+        <Select
+          disabled={false}
+          defaultValue={'implementation_date'}
+          selectItemList={selectSortItemList}
+          changeItem={props.handleSelectSortItem}
         />
       ),
     },
     {
       key: '並び順',
-      value: <SelectSortType selectSortType={props.handleSelectSortType} value={props.sortType} />,
+      value: (
+        <Select
+          disabled={false}
+          defaultValue={'desc'}
+          selectItemList={selectSortTypeList}
+          changeItem={props.handleSelectSortType}
+        />
+      ),
     },
     {
       key: '取得件数',
-      value: <SelectLimit selectLimit={props.handleSelectLimit} value={props.limit} />,
+      value: (
+        <Select
+          disabled={false}
+          defaultValue={''}
+          selectItemList={selectLimitList}
+          changeItem={props.handleSelectLimit}
+        />
+      ),
     },
   ];
 

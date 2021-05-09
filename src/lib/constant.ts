@@ -22,6 +22,215 @@ export const noTransactionMessage = 'この月には、まだ記録がありま�
 export const months = [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12];
 export const years = [year - 3, year - 2, year - 1, year, year + 1, year + 2, year + 3];
 
+export const selectSearchPayerList = ['指定しない', {}];
+
+export const selectCompleteFlagList = [
+  {
+    value: 'all',
+    label: 'すべて',
+  },
+  {
+    value: 'true',
+    label: '実施済',
+  },
+  {
+    value: 'false',
+    label: '未実施',
+  },
+];
+
+export const selectTransactionsType = [
+  {
+    value: 'expense',
+    label: '支出',
+  },
+  {
+    value: 'income',
+    label: '収入',
+  },
+];
+
+export const selectSearchTransactionType = [
+  {
+    value: '',
+    label: 'すべて',
+  },
+  {
+    value: 'expense',
+    label: '支出',
+  },
+  {
+    value: 'income',
+    label: '収入',
+  },
+];
+
+export const selectSortItemList = [
+  {
+    value: 'implementation_date',
+    label: '実施日',
+  },
+  {
+    value: 'due_date',
+    label: '締切日',
+  },
+  {
+    value: 'posted_date',
+    label: '投稿日',
+  },
+  {
+    value: 'updated_date',
+    label: '更新日',
+  },
+  {
+    value: 'todo_content',
+    label: 'Todo名',
+  },
+];
+
+export const selectDateType = [
+  {
+    value: 'implementation_date',
+    label: '実施日',
+  },
+  {
+    value: 'due_date',
+    label: '締切日',
+  },
+];
+
+export const selectLimitList = [
+  {
+    value: '',
+    label: '全件取得',
+  },
+  {
+    value: '10',
+    label: '10件',
+  },
+  {
+    value: '30',
+    label: '30件',
+  },
+  {
+    value: '50',
+    label: '50件',
+  },
+  {
+    value: '100',
+    label: '100件',
+  },
+];
+
+export const selectSortList = [
+  {
+    value: 'transaction_date',
+    label: '取引日',
+  },
+  {
+    value: 'updated_date',
+    label: '編集日',
+  },
+  {
+    value: 'amount',
+    label: '金額',
+  },
+  {
+    value: 'shop',
+    label: '店名',
+  },
+  {
+    value: 'memo',
+    label: 'メモ',
+  },
+];
+
+export const selectSortTypeList = [
+  {
+    value: 'desc',
+    label: '降順',
+  },
+  {
+    value: 'asc',
+    label: '昇順',
+  },
+];
+
+export const selectBigCategoryList = [
+  {
+    value: 0,
+    label: 'すべて',
+  },
+  {
+    value: 1,
+    label: '収入',
+  },
+  {
+    value: 2,
+    label: '食費',
+  },
+  {
+    value: 3,
+    label: '日用品',
+  },
+  {
+    value: 4,
+    label: '趣味・娯楽',
+  },
+  {
+    value: 5,
+    label: '交際費',
+  },
+  {
+    value: 6,
+    label: '交通費',
+  },
+  {
+    value: 7,
+    label: '衣服・美容',
+  },
+  {
+    value: 8,
+    label: '健康・医療',
+  },
+  {
+    value: 9,
+    label: '通信費',
+  },
+  {
+    value: 10,
+    label: '教養・教育',
+  },
+  {
+    value: 11,
+    label: '住宅',
+  },
+  {
+    value: 12,
+    label: '水道・光熱費',
+  },
+  {
+    value: 13,
+    label: '自動車',
+  },
+  {
+    value: 14,
+    label: '保険',
+  },
+  {
+    value: 15,
+    label: '税金・社会保険',
+  },
+  {
+    value: 16,
+    label: '現金・カード',
+  },
+  {
+    value: 17,
+    label: 'その他',
+  },
+];
+
 export const defaultIncomeCategoryList: AssociatedCategory[] = [
   {
     category_type: 'MediumCategory',

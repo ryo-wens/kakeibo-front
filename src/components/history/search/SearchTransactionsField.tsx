@@ -1,17 +1,15 @@
 import React from 'react';
-import { Groups } from '../../../reducks/groups/types';
 import CloseIcon from '@material-ui/icons/Close';
+import { DatePicker, GenericButton, TextInput } from '../../uikit';
+import { Select } from '../../uikit/Select';
 import {
-  DatePicker,
-  GenericButton,
-  KindSelectBox,
-  SelectBigCategory,
-  SelectLimit,
-  SelectPayer,
-  SelectSort,
-  SelectSortType,
-  TextInput,
-} from '../../uikit';
+  selectLimitList,
+  selectSortList,
+  selectSortTypeList,
+  selectBigCategoryList,
+  selectSearchTransactionType,
+} from '../../../lib/constant';
+import { SelectItemList } from '../../../lib/types';
 
 interface SearchTransactionsFieldProps {
   pathName: string;
@@ -40,13 +38,13 @@ interface SearchTransactionsFieldProps {
   category: string;
   bigCategoryId: number;
   transactionType: string;
-  approvedGroup: Groups;
   paymentUserId: string;
   sortItem: string;
   sortType: string;
   limit: string;
   searchOperation: () => void;
   groupSearchOperation: () => void;
+  selectUsersItemList: SelectItemList;
 }
 
 const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
@@ -86,12 +84,11 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">収支</div>
           <div className="search-transaction__selector">
-            <KindSelectBox
-              onChange={props.selectTransactionsType}
-              required={false}
-              value={props.transactionType}
+            <Select
               disabled={false}
-              currentPage={'search'}
+              defaultValue={''}
+              selectItemList={selectSearchTransactionType}
+              changeItem={props.selectTransactionsType}
             />
           </div>
         </div>
@@ -100,7 +97,12 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">カテゴリー</div>
           <div className="search-transaction__selector">
-            <SelectBigCategory category={props.category} onChange={props.changeCategory} />
+            <Select
+              disabled={false}
+              defaultValue={0}
+              changeItem={props.changeCategory}
+              selectItemList={selectBigCategoryList}
+            />
           </div>
         </div>
 
@@ -165,15 +167,11 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
             <div className="search-transaction__select-contents--value">
               <div className="search-transaction__select-contents--key">支払人</div>
               <div className="search-transaction__selector">
-                <SelectPayer
-                  value={props.paymentUserId}
-                  required={false}
-                  approvedGroups={props.approvedGroup}
-                  groupId={props.groupId}
-                  pathName={props.pathName}
-                  onChange={props.changePayer}
+                <Select
                   disabled={false}
-                  notSpecified={props.notSpecified}
+                  defaultValue={''}
+                  selectItemList={props.selectUsersItemList}
+                  changeItem={props.changePayer}
                 />
               </div>
             </div>
@@ -184,7 +182,12 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">並び替え項目</div>
           <div className="search-transaction__selector">
-            <SelectSort selectSortItem={props.changeSortItem} value={props.sortItem} />
+            <Select
+              disabled={false}
+              defaultValue={'transaction_date'}
+              selectItemList={selectSortList}
+              changeItem={props.changeSortItem}
+            />
           </div>
         </div>
 
@@ -192,7 +195,12 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">並び順</div>
           <div className="search-transaction__selector">
-            <SelectSortType selectSortType={props.changeSortType} value={props.sortType} />
+            <Select
+              disabled={false}
+              defaultValue={'desc'}
+              selectItemList={selectSortTypeList}
+              changeItem={props.changeSortType}
+            />
           </div>
         </div>
 
@@ -200,7 +208,12 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">取得件数</div>
           <div className="search-transaction__selector">
-            <SelectLimit value={props.limit} selectLimit={props.selectLimit} />
+            <Select
+              disabled={false}
+              defaultValue={''}
+              selectItemList={selectLimitList}
+              changeItem={props.selectLimit}
+            />
           </div>
         </div>
       </div>
