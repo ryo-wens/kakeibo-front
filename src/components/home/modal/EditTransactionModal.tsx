@@ -106,7 +106,6 @@ const EditTransactionModal = (props: InputModalProps) => {
           <p className="transaction-modal__form-title">収支タイプ</p>
           <Select
             disabled={props.unEditInputForm}
-            defaultValue={props.transactionsType}
             selectItemList={selectTransactionsType}
             changeItem={props.changeTransactionType}
           />

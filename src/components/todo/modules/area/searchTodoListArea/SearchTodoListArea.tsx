@@ -46,7 +46,6 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
           <Select
             disabled={false}
             selectItemList={selectDateType}
-            defaultValue={'implementation_date'}
             changeItem={props.handleSelectDateTypeChange}
           />
           <div className={styles.datePickers}>
@@ -78,7 +77,6 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       value: (
         <Select
           disabled={false}
-          defaultValue={'all'}
           selectItemList={selectCompleteFlagList}
           changeItem={props.handleSelectCompleteFlagChange}
         />
@@ -104,7 +102,6 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       value: (
         <Select
           disabled={false}
-          defaultValue={'implementation_date'}
           selectItemList={selectSortItemList}
           changeItem={props.handleSelectSortItem}
         />
@@ -115,7 +112,6 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       value: (
         <Select
           disabled={false}
-          defaultValue={'desc'}
           selectItemList={selectSortTypeList}
           changeItem={props.handleSelectSortType}
         />
@@ -126,7 +122,6 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       value: (
         <Select
           disabled={false}
-          defaultValue={''}
           selectItemList={selectLimitList}
           changeItem={props.handleSelectLimit}
         />

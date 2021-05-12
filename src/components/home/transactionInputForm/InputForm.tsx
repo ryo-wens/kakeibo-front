@@ -89,7 +89,6 @@ const InputForm = (props: InputFormProps) => {
         <p className="input-form__form-title">収支タイプ(必須)</p>
         <Select
           disabled={false}
-          defaultValue={'expense'}
           selectItemList={selectTransactionsType}
           changeItem={props.changeTransactionType}
         />
@@ -110,7 +109,6 @@ const InputForm = (props: InputFormProps) => {
             <p className="input-form__form-title">支払者(必須)</p>
             <Select
               changeItem={props.changePayer}
-              defaultValue={props.paymentUserId}
               disabled={false}
               selectItemList={props.selectUsersItemList}
             />

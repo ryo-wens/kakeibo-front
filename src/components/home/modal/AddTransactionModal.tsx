@@ -109,7 +109,6 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
           />
           <div className="transaction-modal__form-content--spacer-small" />
           <Select
-            defaultValue={'expense'}
             disabled={props.unEditInputForm}
             changeItem={props.changeTransactionType}
             selectItemList={selectTransactionsType}
@@ -130,7 +129,6 @@ const AddTransactionModal = (props: AddTransactionModalProps) => {
             <>
               <Select
                 disabled={props.unEditInputForm}
-                defaultValue={props.paymentUserId}
                 selectItemList={props.selectUsersItemList}
                 changeItem={props.changePayer}
               />

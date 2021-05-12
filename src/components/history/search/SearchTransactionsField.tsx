@@ -86,7 +86,6 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           <div className="search-transaction__selector">
             <Select
               disabled={false}
-              defaultValue={''}
               selectItemList={selectSearchTransactionType}
               changeItem={props.selectTransactionsType}
             />
@@ -99,7 +98,6 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           <div className="search-transaction__selector">
             <Select
               disabled={false}
-              defaultValue={0}
               changeItem={props.changeCategory}
               selectItemList={selectBigCategoryList}
             />
@@ -169,7 +167,6 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
               <div className="search-transaction__selector">
                 <Select
                   disabled={false}
-                  defaultValue={''}
                   selectItemList={props.selectUsersItemList}
                   changeItem={props.changePayer}
                 />
@@ -184,7 +181,6 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           <div className="search-transaction__selector">
             <Select
               disabled={false}
-              defaultValue={'transaction_date'}
               selectItemList={selectSortList}
               changeItem={props.changeSortItem}
             />
@@ -197,7 +193,6 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           <div className="search-transaction__selector">
             <Select
               disabled={false}
-              defaultValue={'desc'}
               selectItemList={selectSortTypeList}
               changeItem={props.changeSortType}
             />
@@ -210,7 +205,6 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           <div className="search-transaction__selector">
             <Select
               disabled={false}
-              defaultValue={''}
               selectItemList={selectLimitList}
               changeItem={props.selectLimit}
             />
