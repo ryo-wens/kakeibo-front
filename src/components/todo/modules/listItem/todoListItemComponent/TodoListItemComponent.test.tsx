@@ -2,6 +2,7 @@ import React from 'react';
 import TodoListItemComponent, { TodoListItemComponentProps } from './TodoListItemComponent';
 import { date } from '../../../../../lib/constant';
 import { mount } from 'enzyme';
+import renderer from 'react-test-renderer';
 
 const mockFunc = jest.fn();
 const defaultProps: TodoListItemComponentProps = {
@@ -25,9 +26,6 @@ const defaultProps: TodoListItemComponentProps = {
   inputTodoRef: { current: null },
 };
 
-let props: TodoListItemComponentProps;
-beforeEach(() => (props = { ...defaultProps }));
-
 jest.mock('./../../../../../containers/todo/modules/form/TodoListItemFormContainer', () => {
   return function DummyTodoListItemFormContainer() {
     return <div />;
@@ -35,25 +33,21 @@ jest.mock('./../../../../../containers/todo/modules/form/TodoListItemFormContain
 });
 
 describe('Testing TodoListItemComponent', () => {
-  test('Test that the display list item when openEditTodoForm is true', () => {
-    const wrapper = mount(<TodoListItemComponent {...props} />);
+  let props: TodoListItemComponentProps;
+  beforeEach(() => (props = { ...defaultProps }));
 
-    const labelChildren = wrapper.find('label').children();
+  test('Test that the list item is rendering when openEditTodoForm is true', () => {
+    const tree = renderer.create(<TodoListItemComponent {...props} />).toJSON();
 
-    expect(wrapper.exists('li')).toBeTruthy();
-    expect(wrapper.exists('label')).toBeTruthy();
-    expect(labelChildren.exists({ type: 'checkbox' })).toBeTruthy();
-    expect(labelChildren.exists('span')).toBeTruthy();
-    expect(wrapper.find('span').at(1).exists()).toBeTruthy();
-    expect(wrapper.find('span').at(1).text()).toEqual('買い物');
-    expect(wrapper.exists('svg')).toBeTruthy();
+    expect(tree).toMatchSnapshot();
   });
 
-  test('Test that the display TodoListItemFormContainer when openEditTodoForm is false', () => {
-    const wrapper = mount(<TodoListItemComponent {...props} openEditTodoForm={true} />);
+  test('Test that the TodoListItemFormContainer is rendering when openEditTodoForm is false', () => {
+    const tree = renderer
+      .create(<TodoListItemComponent {...props} openEditTodoForm={true} />)
+      .toJSON();
 
-    expect(wrapper.exists('li')).toBeTruthy();
-    expect(wrapper.exists('div')).toBeTruthy();
+    expect(tree).toMatchSnapshot();
   });
 
   test('Test that clicking on the edit icon hides the list item and displays the form. ', () => {
@@ -72,8 +66,8 @@ describe('Testing TodoListItemComponent', () => {
     expect(wrapper.exists('label')).toBeTruthy();
     expect(labelChildren.exists({ type: 'checkbox' })).toBeTruthy();
     expect(labelChildren.exists('span')).toBeTruthy();
-    expect(wrapper.find('span').at(1).exists()).toBeTruthy();
-    expect(wrapper.find('span').at(1).text()).toEqual('買い物');
+    expect(wrapper.find({ children: '買い物' }).exists()).toBeTruthy();
+    expect(wrapper.find({ children: '買い物' }).text()).toEqual('買い物');
     expect(wrapper.exists('svg')).toBeTruthy();
 
     // 編集フォーム が非表示
@@ -88,8 +82,8 @@ describe('Testing TodoListItemComponent', () => {
     expect(wrapper.find('#list-item').exists()).toBeFalsy();
     expect(wrapper.exists('label')).toBeFalsy();
     expect(wrapper.exists({ type: 'checkbox' })).toBeFalsy();
-    expect(wrapper.find('span').at(0).exists()).toBeFalsy();
-    expect(wrapper.find('span').at(1).exists()).toBeFalsy();
+    expect(wrapper.find('label').children().exists('span')).toBeFalsy();
+    expect(wrapper.find({ children: '買い物' }).exists()).toBeFalsy();
     expect(wrapper.exists('svg')).toBeFalsy();
 
     // 編集フォーム が表示
