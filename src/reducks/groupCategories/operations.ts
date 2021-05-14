@@ -55,12 +55,7 @@ export const fetchGroupCategories = (groupId: number, signal: CancelTokenSource)
   };
 };
 
-export const addGroupCustomCategories = (
-  name: string,
-  bigCategoryId: number,
-  groupId: number,
-  signal: CancelTokenSource
-) => {
+export const addGroupCustomCategories = (name: string, bigCategoryId: number, groupId: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const data: operationCategoriesReq = {
       name: name.trim(),
@@ -81,7 +76,6 @@ export const addGroupCustomCategories = (
       const fetchResult = await axios.get<fetchGroupCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories`,
         {
-          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -109,8 +103,7 @@ export const editGroupCustomCategories = (
   id: number,
   name: string,
   bigCategoryId: number,
-  groupId: number,
-  signal: CancelTokenSource
+  groupId: number
 ) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     const data: operationCategoriesReq = {
@@ -132,7 +125,6 @@ export const editGroupCustomCategories = (
       const fetchResult = await axios.get<fetchGroupCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories`,
         {
-          cancelToken: signal.token,
           withCredentials: true,
         }
       );
@@ -154,12 +146,7 @@ export const editGroupCustomCategories = (
   };
 };
 
-export const deleteGroupCustomCategories = (
-  id: number,
-  bigCategoryId: number,
-  groupId: number,
-  signal: CancelTokenSource
-) => {
+export const deleteGroupCustomCategories = (id: number, bigCategoryId: number, groupId: number) => {
   return async (dispatch: Dispatch<Action>): Promise<void> => {
     dispatch(startDeleteGroupCategoriesActions());
 
@@ -174,7 +161,6 @@ export const deleteGroupCustomCategories = (
       const fetchResult = await axios.get<fetchGroupCategoriesRes>(
         `${process.env.REACT_APP_ACCOUNT_API_HOST}/groups/${groupId}/categories`,
         {
-          cancelToken: signal.token,
           withCredentials: true,
         }
       );

@@ -31,7 +31,6 @@ const PayOffContainer = (props: PayOffContainerProps) => {
   const dispatch = useDispatch();
   const { group_id } = useParams<{ group_id: string }>();
   const history = useHistory();
-  const signal: CancelTokenSource = axios.CancelToken.source();
   const groupAccountList = useSelector(getGroupAccountList);
   const badRequestMessage = useSelector(getStatusNotFoundMessage);
   const monthWithoutSplitList = useSelector(getMonthWithoutSplitList);
@@ -63,6 +62,7 @@ const PayOffContainer = (props: PayOffContainerProps) => {
   };
 
   useEffect(() => {
+    const signal: CancelTokenSource = axios.CancelToken.source();
     dispatch(fetchGroups(signal));
     if (selectMonth != null && selectYear !== null) {
       dispatch(fetchGroupAccount(Number(group_id), props.selectedYear, selectMonth, signal));
@@ -122,6 +122,30 @@ const PayOffContainer = (props: PayOffContainerProps) => {
     }
   }, [groupAccountList.month.split('-')[getYearIndexNumber]]);
 
+  const backPageOperation = () => {
+    history.replace(`/group/${group_id}/accounting?year=${props.selectedYear}`);
+  };
+
+  const addAccountOperation = () => {
+    dispatch(
+      addGroupAccount(
+        Number(group_id),
+        String(props.selectedYear),
+        dayjs(String(selectedMonth)).format('MM')
+      )
+    );
+  };
+
+  const deleteAccountOperation = () => {
+    dispatch(
+      deleteGroupAccount(
+        Number(group_id),
+        String(props.selectedYear),
+        dayjs(String(selectedMonth)).format('MM')
+      )
+    );
+  };
+
   return (
     <PayOff
       noTransactions={noTransactions}
@@ -144,27 +168,9 @@ const PayOffContainer = (props: PayOffContainerProps) => {
       currentSelectMonth={currentSelectMonth}
       monthWithoutSplitList={monthWithoutSplitList}
       displayAmount={displayAmount}
-      backPageOperation={() =>
-        history.replace(`/group/${group_id}/accounting?year=${props.selectedYear}`)
-      }
-      addAccountOperation={() => {
-        dispatch(
-          addGroupAccount(
-            Number(group_id),
-            String(props.selectedYear),
-            dayjs(String(selectedMonth)).format('MM')
-          )
-        );
-      }}
-      deleteAccountOperation={() => {
-        dispatch(
-          deleteGroupAccount(
-            Number(group_id),
-            String(props.selectedYear),
-            dayjs(String(selectedMonth)).format('MM')
-          )
-        );
-      }}
+      backPageOperation={backPageOperation}
+      addAccountOperation={addAccountOperation}
+      deleteAccountOperation={deleteAccountOperation}
     />
   );
 };

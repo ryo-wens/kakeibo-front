@@ -492,7 +492,6 @@ export const deleteGroupAccount = (groupId: number, year: string, customMonth: s
 
 export const searchGroupTransactions = (
   groupId: number,
-  signal: CancelTokenSource,
   searchRequest: {
     transaction_type?: string | null;
     start_date?: Date | null;
@@ -514,7 +513,6 @@ export const searchGroupTransactions = (
       const result = await accountServiceInstance.get<FetchGroupTransactionsRes>(
         `/groups/${groupId}/transactions/search`,
         {
-          cancelToken: signal.token,
           params: {
             start_date:
               searchRequest.start_date !== null ? dayjs(searchRequest.start_date).format() : null,

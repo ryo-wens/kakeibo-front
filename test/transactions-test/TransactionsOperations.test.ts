@@ -332,7 +332,6 @@ describe('async actions transactions', () => {
     };
 
     const url = `/transactions/search`;
-    const signal = axios.CancelToken.source();
     const mockResponse = fetchResSearchTransaction;
 
     const expectSearchActions = [
@@ -359,7 +358,7 @@ describe('async actions transactions', () => {
 
     axiosMock.onGet(url).reply(200, mockResponse);
 
-    await searchTransactions(signal, searchRequest)(store.dispatch);
+    await searchTransactions(searchRequest)(store.dispatch);
     expect(store.getActions()).toEqual(expectSearchActions);
   });
 

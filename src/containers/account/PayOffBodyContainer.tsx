@@ -2,7 +2,11 @@ import React from 'react';
 import { useDispatch } from 'react-redux';
 import { useParams } from 'react-router';
 import { ApprovedGroupUsers, Groups } from '../../reducks/groups/types';
-import { GroupAccountList, MonthWithoutSplit } from '../../reducks/groupTransactions/types';
+import {
+  GroupAccount,
+  GroupAccountList,
+  MonthWithoutSplit,
+} from '../../reducks/groupTransactions/types';
 import PayOffBody from '../../components/account/PayOffBody';
 import { editGroupAccount } from '../../reducks/groupTransactions/operations';
 import dayjs from 'dayjs';
@@ -69,6 +73,17 @@ const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
     }
   };
 
+  const editAccountOperation = (account: GroupAccount) => {
+    dispatch(
+      editGroupAccount(
+        account,
+        Number(group_id),
+        props.selectYear,
+        dayjs(String(props.selectMonth)).format('MM')
+      )
+    );
+  };
+
   return (
     <PayOffBody
       noTransactions={props.noTransactions}
@@ -80,11 +95,7 @@ const PayOffBodyContainer = (props: PayOffBodyContainerProps) => {
       selectYear={props.selectYear}
       displayAccountList={displayAccountList}
       groupUserInfo={groupUserInfo}
-      editAccountOperation={(account) => {
-        dispatch(
-          editGroupAccount(account, Number(group_id), props.selectYear, String(props.selectMonth))
-        );
-      }}
+      editAccountOperation={editAccountOperation}
     />
   );
 };
