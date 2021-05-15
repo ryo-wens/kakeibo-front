@@ -1,9 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import SearchTransactionsField from '../../../components/history/search/SearchTransactionsField';
 import { searchTransactions } from '../../../reducks/transactions/operations';
 import { searchGroupTransactions } from '../../../reducks/groupTransactions/operations';
-import { useCreateGroupUserList } from '../../../hooks/groupUsers/useCreateGroupUserList';
+import { selectGroupUserList } from '../../../lib/function';
+import { getApprovedGroups } from '../../../reducks/groups/selectors';
 
 interface SearchTransactionsFieldContainerProps {
   pathName: string;
@@ -69,9 +70,9 @@ interface SearchTransactionsFieldContainerProps {
 
 const SearchTransactionsFieldContainer = (props: SearchTransactionsFieldContainerProps) => {
   const dispatch = useDispatch();
-  const { createUsersList } = useCreateGroupUserList();
+  const approvedGroups = useSelector(getApprovedGroups);
 
-  const selectUsersItemList = createUsersList(props.groupId);
+  const selectUsersItemList = selectGroupUserList(approvedGroups, props.groupId);
   selectUsersItemList.unshift({ value: '', label: '指定しない' });
 
   const searchOperation = () => {

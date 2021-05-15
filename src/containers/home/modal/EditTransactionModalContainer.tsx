@@ -26,7 +26,8 @@ import EditTransactionModal from '../../../components/home/modal/EditTransaction
 import { isValidAmountFormat } from '../../../lib/validation';
 import { year, customMonth } from '../../../lib/constant';
 import axios from 'axios';
-import { useCreateGroupUserList } from '../../../hooks/groupUsers/useCreateGroupUserList';
+import { selectGroupUserList } from '../../../lib/function';
+import { getApprovedGroups } from '../../../reducks/groups/selectors';
 
 interface EditTransactionModalContainerProps {
   open: boolean;
@@ -82,6 +83,7 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
   const groupCurrentPage = useLocation().pathname.split('/')[2];
+  const approvedGroups = useSelector(getApprovedGroups);
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
@@ -116,9 +118,8 @@ const EditTransactionModalContainer = (props: EditTransactionModalContainerProps
   const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
-  const { createUsersList } = useCreateGroupUserList();
 
-  const selectUsersItemList = createUsersList(Number(group_id));
+  const selectUsersItemList = selectGroupUserList(approvedGroups, Number(group_id));
 
   const unEditValue = {
     unEditBigCategory: '',

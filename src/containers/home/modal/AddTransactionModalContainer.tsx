@@ -19,7 +19,8 @@ import { GroupTransactionsReq } from '../../../reducks/groupTransactions/types';
 import { customMonth, year } from '../../../lib/constant';
 import { isValidAmountFormat } from '../../../lib/validation';
 import AddTransactionModal from '../../../components/home/modal/AddTransactionModal';
-import { useCreateGroupUserList } from '../../../hooks/groupUsers/useCreateGroupUserList';
+import { selectGroupUserList } from '../../../lib/function';
+import { getApprovedGroups } from '../../../reducks/groups/selectors';
 
 interface AddTransactionModalContainerProps {
   open: boolean;
@@ -41,6 +42,7 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const pathName = useLocation().pathname.split('/')[1];
   const groupCurrentPage = useLocation().pathname.split('/')[2];
   const userId = useSelector(getUserId);
+  const approvedGroups = useSelector(getApprovedGroups);
   const incomeCategories = useSelector(getIncomeCategories);
   const expenseCategories = useSelector(getExpenseCategories);
   const groupIncomeCategories = useSelector(getGroupIncomeCategories);
@@ -71,9 +73,8 @@ const AddTransactionModalContainer = (props: AddTransactionModalContainerProps) 
   const [editCustomCategoryName, setEditCustomCategoryName] = useState('');
   const [bigEditCategoryIndex, setBigEditCategoryIndex] = useState<number | null>(null);
   const [associatedIndex, setAssociatedIndex] = useState<number | null>(null);
-  const { createUsersList } = useCreateGroupUserList();
 
-  const selectUsersItemList = createUsersList(Number(group_id));
+  const selectUsersItemList = selectGroupUserList(approvedGroups, Number(group_id));
 
   const addTransactionDate = {
     addTransactionYear: 0,
