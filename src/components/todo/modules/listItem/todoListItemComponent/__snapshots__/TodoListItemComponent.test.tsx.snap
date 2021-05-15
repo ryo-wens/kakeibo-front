@@ -1,6 +1,6 @@
 // Jest Snapshot v1, https://goo.gl/fbAQLP
 
-exports[`Testing TodoListItemComponent Test that the TodoListItemFormContainer is rendering when openEditTodoForm is false 1`] = `
+exports[`Conditional rendering Test that the TodoListItemFormContainer is rendering when openEditTodoForm is false 1`] = `
 <li
   id="form"
 >
@@ -8,7 +8,7 @@ exports[`Testing TodoListItemComponent Test that the TodoListItemFormContainer i
 </li>
 `;
 
-exports[`Testing TodoListItemComponent Test that the list item is rendering when openEditTodoForm is true 1`] = `
+exports[`Conditional rendering Test that the list item is rendering when openEditTodoForm is true 1`] = `
 <li
   id="list-item"
 >

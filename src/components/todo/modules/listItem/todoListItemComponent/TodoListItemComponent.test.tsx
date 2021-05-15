@@ -32,7 +32,7 @@ jest.mock('./../../../../../containers/todo/modules/form/TodoListItemFormContain
   };
 });
 
-describe('Testing TodoListItemComponent', () => {
+describe('Conditional rendering', () => {
   let props: TodoListItemComponentProps;
   beforeEach(() => (props = { ...defaultProps }));
 
@@ -49,6 +49,11 @@ describe('Testing TodoListItemComponent', () => {
 
     expect(tree).toMatchSnapshot();
   });
+});
+
+describe('EditIcon onClick event', () => {
+  let props: TodoListItemComponentProps;
+  beforeEach(() => (props = { ...defaultProps }));
 
   test('Test that clicking on the edit icon hides the list item and displays the form. ', () => {
     const handleOpenEditTodoFormMock = jest.fn().mockImplementation(() => {
@@ -90,6 +95,11 @@ describe('Testing TodoListItemComponent', () => {
     expect(wrapper.find('#form').exists()).toBeTruthy();
     expect(wrapper.exists('div')).toBeTruthy();
   });
+});
+
+describe('Checkbox onChange event', () => {
+  let props: TodoListItemComponentProps;
+  beforeEach(() => (props = { ...defaultProps }));
 
   test('Test that the checked/unchecked when clicking a checkbox', () => {
     const handleChangeCheckedMock = jest
