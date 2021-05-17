@@ -1,21 +1,20 @@
 import React from 'react';
-import { TodoListItem } from '../../../../../reducks/todoList/types';
 import EditIcon from '@material-ui/icons/Edit';
 import styles from './TodoListItemComponent.module.scss';
 import TodoListItemFormContainer from '../../../../../containers/todo/modules/form/TodoListItemFormContainer';
 import cn from 'classnames';
 
-interface TodoListItemComponentProps {
+export interface TodoListItemComponentProps {
   openEditTodoForm: boolean;
   implementationDate: Date | null;
   dueDate: Date | null;
   todoContent: string;
   checked: boolean;
   handleImplementationDate: (date: Date | null) => void;
+  listItemTodoContent: string;
   handleDueDate: (date: Date | null) => void;
   handleTodoContentChange: (event: React.ChangeEvent<HTMLInputElement>) => void;
   handleChangeChecked: (event: React.ChangeEvent<HTMLInputElement>) => void;
-  listItem: TodoListItem;
   handleOpenEditTodoForm: () => void;
   handleCloseEditTodoForm: () => void;
   onClickCloseInputTodoForm: (event: Event) => void;
@@ -24,7 +23,6 @@ interface TodoListItemComponentProps {
   handleDeleteTodoListItem: () => void;
   currentPage: string;
   formClassName?: string;
-  setEditing?: React.Dispatch<React.SetStateAction<boolean>>;
   inputTodoRef: React.RefObject<HTMLDivElement>;
 }
 
@@ -41,16 +39,16 @@ const TodoListItemComponent = (props: TodoListItemComponentProps) => {
   return (
     <>
       {!props.openEditTodoForm ? (
-        <li className={styles.wrapper}>
+        <li className={styles.wrapper} id={'list-item'}>
           <label className={styles.check}>
             <input type="checkbox" checked={props.checked} onChange={props.handleChangeChecked} />
             <span />
           </label>
-          <span className={contentClassName}>{props.listItem.todo_content}</span>
-          <EditIcon className={styles.editIcon} onClick={() => props.handleOpenEditTodoForm()} />
+          <span className={contentClassName}>{props.listItemTodoContent}</span>
+          <EditIcon className={styles.editIcon} onClick={props.handleOpenEditTodoForm} />
         </li>
       ) : (
-        <li className={props.formClassName}>
+        <li className={props.formClassName} id={'form'}>
           <TodoListItemFormContainer
             titleLabel={'ToDoを編集'}
             buttonLabel={'保存'}
