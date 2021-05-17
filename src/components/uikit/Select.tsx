@@ -3,7 +3,7 @@ import '../../assets/modules/selector.scss';
 import { SelectItemList } from '../../lib/types';
 
 interface SelectProps {
-  disabled: boolean;
+  disabled?: boolean;
   selectItemList: SelectItemList;
   defaultValue?: string | number;
   changeItem: (event: React.ChangeEvent<{ value: unknown }>) => void;

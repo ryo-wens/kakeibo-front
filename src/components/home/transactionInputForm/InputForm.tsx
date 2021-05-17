@@ -87,11 +87,7 @@ const InputForm = (props: InputFormProps) => {
         />
         <div className="input-form__form-content--spacer-small" />
         <p className="input-form__form-title">収支タイプ(必須)</p>
-        <Select
-          disabled={false}
-          selectItemList={selectTransactionsType}
-          changeItem={props.changeTransactionType}
-        />
+        <Select selectItemList={selectTransactionsType} changeItem={props.changeTransactionType} />
         <div className="input-form__form-content--spacer-small" />
         <TextInput
           value={props.amount}
@@ -107,11 +103,7 @@ const InputForm = (props: InputFormProps) => {
         {props.pathName === 'group' && (
           <>
             <p className="input-form__form-title">支払者(必須)</p>
-            <Select
-              changeItem={props.changePayer}
-              disabled={false}
-              selectItemList={props.selectUsersItemList}
-            />
+            <Select changeItem={props.changePayer} selectItemList={props.selectUsersItemList} />
             <div className="input-form__form-content--spacer-medium" />
           </>
         )}

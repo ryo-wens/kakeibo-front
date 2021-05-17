@@ -43,11 +43,7 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       key: '日時の指定',
       value: (
         <div className={styles.dateDesignation}>
-          <Select
-            disabled={false}
-            selectItemList={selectDateType}
-            changeItem={props.handleSelectDateTypeChange}
-          />
+          <Select selectItemList={selectDateType} changeItem={props.handleSelectDateTypeChange} />
           <div className={styles.datePickers}>
             <DatePicker
               id={'startDate'}
@@ -76,7 +72,6 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       key: '実施の有無',
       value: (
         <Select
-          disabled={false}
           selectItemList={selectCompleteFlagList}
           changeItem={props.handleSelectCompleteFlagChange}
         />
@@ -99,33 +94,15 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
     },
     {
       key: '並び替え項目',
-      value: (
-        <Select
-          disabled={false}
-          selectItemList={selectSortItemList}
-          changeItem={props.handleSelectSortItem}
-        />
-      ),
+      value: <Select selectItemList={selectSortItemList} changeItem={props.handleSelectSortItem} />,
     },
     {
       key: '並び順',
-      value: (
-        <Select
-          disabled={false}
-          selectItemList={selectSortTypeList}
-          changeItem={props.handleSelectSortType}
-        />
-      ),
+      value: <Select selectItemList={selectSortTypeList} changeItem={props.handleSelectSortType} />,
     },
     {
       key: '取得件数',
-      value: (
-        <Select
-          disabled={false}
-          selectItemList={selectLimitList}
-          changeItem={props.handleSelectLimit}
-        />
-      ),
+      value: <Select selectItemList={selectLimitList} changeItem={props.handleSelectLimit} />,
     },
   ];
 

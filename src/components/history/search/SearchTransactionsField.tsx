@@ -85,7 +85,6 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
           <div className="search-transaction__select-contents--key">収支</div>
           <div className="search-transaction__selector">
             <Select
-              disabled={false}
               selectItemList={selectSearchTransactionType}
               changeItem={props.selectTransactionsType}
             />
@@ -96,11 +95,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">カテゴリー</div>
           <div className="search-transaction__selector">
-            <Select
-              disabled={false}
-              changeItem={props.changeCategory}
-              selectItemList={selectBigCategoryList}
-            />
+            <Select changeItem={props.changeCategory} selectItemList={selectBigCategoryList} />
           </div>
         </div>
 
@@ -165,11 +160,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
             <div className="search-transaction__select-contents--value">
               <div className="search-transaction__select-contents--key">支払人</div>
               <div className="search-transaction__selector">
-                <Select
-                  disabled={false}
-                  selectItemList={props.selectUsersItemList}
-                  changeItem={props.changePayer}
-                />
+                <Select selectItemList={props.selectUsersItemList} changeItem={props.changePayer} />
               </div>
             </div>
           </>
@@ -179,11 +170,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">並び替え項目</div>
           <div className="search-transaction__selector">
-            <Select
-              disabled={false}
-              selectItemList={selectSortList}
-              changeItem={props.changeSortItem}
-            />
+            <Select selectItemList={selectSortList} changeItem={props.changeSortItem} />
           </div>
         </div>
 
@@ -191,11 +178,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">並び順</div>
           <div className="search-transaction__selector">
-            <Select
-              disabled={false}
-              selectItemList={selectSortTypeList}
-              changeItem={props.changeSortType}
-            />
+            <Select selectItemList={selectSortTypeList} changeItem={props.changeSortType} />
           </div>
         </div>
 
@@ -203,11 +186,7 @@ const SearchTransactionsField = (props: SearchTransactionsFieldProps) => {
         <div className="search-transaction__select-contents--value">
           <div className="search-transaction__select-contents--key">取得件数</div>
           <div className="search-transaction__selector">
-            <Select
-              disabled={false}
-              selectItemList={selectLimitList}
-              changeItem={props.selectLimit}
-            />
+            <Select selectItemList={selectLimitList} changeItem={props.selectLimit} />
           </div>
         </div>
       </div>
