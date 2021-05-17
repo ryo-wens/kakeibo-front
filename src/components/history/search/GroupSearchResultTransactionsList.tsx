@@ -74,6 +74,7 @@ const GroupSearchResultTransactionsList = (props: GroupSearchResultTransactionsL
                   <CreateIcon color="primary" />
                 </IconButton>
                 <EditTransactionModalContainer
+                  paymentUserId={transaction.payment_user_id}
                   submitSearch={props.submit}
                   id={transaction.id}
                   onClose={props.closeModal}

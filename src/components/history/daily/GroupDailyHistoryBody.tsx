@@ -73,7 +73,7 @@ const GroupDailyHistoryBody = (props: GroupDailyHistoryBodyProps) => {
                       categoryName={categoryName}
                       transactionDate={groupTransaction.transaction_date}
                       transactionsType={groupTransaction.transaction_type}
-                      paymentUserId={props.userId}
+                      paymentUserId={groupTransaction.payment_user_id}
                       bigCategoryId={groupTransaction.big_category_id}
                       mediumCategoryId={groupTransaction.medium_category_id}
                       customCategoryId={groupTransaction.custom_category_id}

@@ -1,8 +1,7 @@
 import React from 'react';
 import { Categories } from '../../../reducks/categories/types';
 import { GroupCategories } from '../../../reducks/groupCategories/types';
-import { Groups } from '../../../reducks/groups/types';
-import { GenericButton, DatePicker, TextInput, KindSelectBox, SelectPayer } from '../../uikit';
+import { GenericButton, DatePicker, TextInput } from '../../uikit';
 import Modal from '@material-ui/core/Modal';
 import { IconButton } from '@material-ui/core';
 import DeleteIcon from '@material-ui/icons/Delete';
@@ -10,12 +9,14 @@ import CloseIcon from '@material-ui/icons/Close';
 import './transaction-modal.scss';
 import BigCategoryListContainer from '../../../containers/modules/BigCategoryListContainer';
 import MediumCategoryListContainer from '../../../containers/modules/MediumCategoryListContainer';
+import { Select } from '../../uikit/Select';
+import { selectTransactionsType } from '../../../lib/constant';
+import { SelectItemList } from '../../../lib/types';
 
 interface InputModalProps {
   open: boolean;
   onClose: () => void;
   transactionId: number;
-  group_id: number;
   pathName: string;
   editDisabled: boolean;
   unEditInputForm: boolean;
@@ -37,7 +38,6 @@ interface InputModalProps {
   paymentUserId: string;
   bigCategoryMenuRef: React.RefObject<HTMLDivElement>;
   mediumCategoryMenuRef: React.RefObject<HTMLDivElement>;
-  approvedGroups: Groups;
   incomeCategories: Categories;
   expenseCategories: Categories;
   groupIncomeCategories: GroupCategories;
@@ -68,6 +68,7 @@ interface InputModalProps {
   setCustomCategoryId: React.Dispatch<React.SetStateAction<number | null>>;
   setAssociatedIndex: React.Dispatch<React.SetStateAction<number | null>>;
   setBigEditCategoryIndex: React.Dispatch<React.SetStateAction<number | null>>;
+  selectUsersItemList: SelectItemList;
 }
 
 const EditTransactionModal = (props: InputModalProps) => {
@@ -103,12 +104,10 @@ const EditTransactionModal = (props: InputModalProps) => {
           />
           <div className="transaction-modal__form-content--spacer-small" />
           <p className="transaction-modal__form-title">収支タイプ</p>
-          <KindSelectBox
-            value={props.transactionsType}
-            onChange={props.changeTransactionType}
-            required={false}
+          <Select
             disabled={props.unEditInputForm}
-            currentPage={''}
+            selectItemList={selectTransactionsType}
+            changeItem={props.changeTransactionType}
           />
           <div className="transaction-modal__form-content--spacer-small" />
           <TextInput
@@ -125,15 +124,11 @@ const EditTransactionModal = (props: InputModalProps) => {
           {props.pathName === 'group' && props.transactionsType === 'expense' && (
             <>
               <p className="transaction-modal__form-title">支払者</p>
-              <SelectPayer
-                approvedGroups={props.approvedGroups}
-                groupId={props.group_id}
-                onChange={props.changePayer}
-                pathName={props.pathName}
-                required={true}
-                value={props.paymentUserId}
+              <Select
                 disabled={props.unEditInputForm}
-                notSpecified={false}
+                defaultValue={props.paymentUserId}
+                selectItemList={props.selectUsersItemList}
+                changeItem={props.changePayer}
               />
               <div className="transaction-modal__form-content--spacer-small" />
             </>

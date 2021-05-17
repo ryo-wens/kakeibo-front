@@ -1,4 +1,6 @@
 import { colors } from './colorConstant';
+import { Groups, ApprovedGroupUsers } from '../reducks/groups/types';
+import { SelectItemList } from './types';
 
 export const bigCategoryColor = (bigCategoryName: string) => {
   if (bigCategoryName === '食費') {
@@ -34,4 +36,24 @@ export const bigCategoryColor = (bigCategoryName: string) => {
   } else if (bigCategoryName === 'その他') {
     return { backgroundColor: colors[15] };
   }
+};
+
+export const selectGroupUserList = (approvedGroups: Groups, groupId: number) => {
+  let users: ApprovedGroupUsers = [];
+  const userItemList: SelectItemList = [];
+
+  for (const group of approvedGroups) {
+    if (groupId === group.group_id) {
+      users = group.approved_users_list;
+    }
+  }
+
+  users.forEach((user) => {
+    const userItem = { value: '', label: '' };
+    userItem.value = user.user_id;
+    userItem.label = user.user_name;
+    userItemList.push(userItem);
+  });
+
+  return userItemList;
 };

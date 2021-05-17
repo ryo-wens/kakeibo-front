@@ -3,7 +3,6 @@ import { useSelector } from 'react-redux';
 import { useLocation, useParams } from 'react-router';
 import { getTransactions } from '../../../reducks/transactions/selectors';
 import { getGroupTransactions } from '../../../reducks/groupTransactions/selectors';
-import { getApprovedGroups } from '../../../reducks/groups/selectors';
 import { month, year } from '../../../lib/constant';
 import DailyHistory from '../../../templates/history/daily/DailyHistory';
 
@@ -19,7 +18,6 @@ interface DailyHistoryContainerProps {
 const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
   const { group_id } = useParams<{ group_id: string }>();
   const pathName = useLocation().pathname.split('/')[1];
-  const approvedGroup = useSelector(getApprovedGroups);
   const transactionsList = useSelector(getTransactions);
   const groupTransactionsList = useSelector(getGroupTransactions);
   const [selectStartDate, setStartSelectDate] = useState<Date | null>(new Date(year, month - 1, 1));
@@ -130,7 +128,6 @@ const DailyHistoryContainer = (props: DailyHistoryContainerProps) => {
       openSearchField={props.openSearchField}
       displayPersonalTransactions={displayPersonalTransactions}
       displayGroupTransactions={displayGroupTransactions}
-      approvedGroup={approvedGroup}
       transactionsList={transactionsList}
       groupTransactionsList={groupTransactionsList}
       setSubmit={setSubmit}
