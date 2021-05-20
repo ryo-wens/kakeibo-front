@@ -15,7 +15,7 @@ TypeScript, Go, React, Redux, Kubernetesを用いたマイクロサービスア�
 
 https://www.shakepiper.com
 
-※ 火・木曜日11:00 ~ 17:00稼働  
+※ 土・日曜日11:00 ~ 17:00稼働  
 ※ ログインページのゲストユーザーログインより、「 **郷ひろみ** 」として簡単ログインできます。
 
 ## 開発形態
@@ -30,13 +30,13 @@ https://www.shakepiper.com
 https://github.com/ryo-wens/kakeibo-front
 
 - API / 平 侑祐（共同開発者）  
-https://github.com/paypay3/kakeibo-app-api
+https://github.com/hryze/kakeibo-app-api
 
 - Terraform / 平 侑祐（共同開発者）  
-https://github.com/paypay3/kakeibo-app-terraform
+https://github.com/hryze/kakeibo-app-terraform
 
 - Kubernetes / 平 侑祐（共同開発者）  
-https://github.com/paypay3/kakeibo-app-kubernetes
+https://github.com/hryze/kakeibo-app-kubernetes
 
 
 **<ins>開発手法</ins>**
@@ -68,7 +68,7 @@ https://github.com/paypay3/kakeibo-app-kubernetes
 
 ### 【 _Backend_ 】
 **<ins>Language</ins>**
-- Go v1.16.2
+- Go v1.16.3
 
 ### 【 _Infrastructure_ 】
 **<ins>Cloud Service</ins>**
