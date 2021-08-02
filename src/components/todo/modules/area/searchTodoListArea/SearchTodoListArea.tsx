@@ -43,7 +43,9 @@ const SearchTodoListArea = (props: SearchTodoListAreaProps) => {
       key: '日時の指定',
       value: (
         <div className={styles.dateDesignation}>
-          <Select selectItemList={selectDateType} changeItem={props.handleSelectDateTypeChange} />
+          <div className={styles.selectDateType}>
+            <Select selectItemList={selectDateType} changeItem={props.handleSelectDateTypeChange} />
+          </div>
           <div className={styles.datePickers}>
             <DatePicker
               id={'startDate'}
