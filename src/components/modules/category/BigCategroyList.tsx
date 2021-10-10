@@ -55,6 +55,7 @@ interface BigCategoryListProps {
 
 const BigCategoryList = React.forwardRef(
   (props: BigCategoryListProps, bigCategoryMenuRef: React.Ref<HTMLDivElement>) => {
+    console.log('git-test');
     return (
       <div
         className="category-input__btn-position"
